@@ -1,98 +1,135 @@
 'use client'
 
 import { useState } from 'react'
-import { ToolResult, ToolPrice } from '@/lib/types'
+import { ToolPrice, SearchResponse } from '@/lib/types'
 
-const POPULAR_SEARCHES = [
+const POPULAR = [
   'Milwaukee M18 drill',
-  'DeWalt circular saw',
+  'DeWalt 20V circular saw',
   'Makita impact driver',
   'RIDGID shop vac',
   'Milwaukee Packout',
   'DeWalt table saw',
+  'Bosch laser level',
+  'Milwaukee M12',
 ]
 
-const STORE_COLORS: Record<string, string> = {
-  'Canadian Tire': 'bg-red-100 text-red-800 border-red-200',
-  'Home Depot Canada': 'bg-orange-100 text-orange-800 border-orange-200',
-  'Amazon Canada': 'bg-yellow-100 text-yellow-800 border-yellow-200',
-  'Walmart Canada': 'bg-blue-100 text-blue-800 border-blue-200',
-  'RONA': 'bg-green-100 text-green-800 border-green-200',
-  'Princess Auto': 'bg-purple-100 text-purple-800 border-purple-200',
+const STORE_CONFIG: Record<string, { color: string; bg: string; border: string; text: string }> = {
+  'Walmart Canada':    { color: '#0071DC', bg: '#EFF6FF', border: '#BFDBFE', text: '#1D4ED8' },
+  'Home Depot Canada': { color: '#F96302', bg: '#FFF7ED', border: '#FED7AA', text: '#C2410C' },
+  'Amazon Canada':     { color: '#FF9900', bg: '#FFFBEB', border: '#FDE68A', text: '#B45309' },
+  'Canadian Tire':     { color: '#D52B1E', bg: '#FEF2F2', border: '#FECACA', text: '#B91C1C' },
+  'RONA':              { color: '#00703C', bg: '#F0FDF4', border: '#BBF7D0', text: '#15803D' },
+  'Princess Auto':     { color: '#7C3AED', bg: '#F5F3FF', border: '#DDD6FE', text: '#6D28D9' },
 }
 
-function PriceCard({ price, isLowest }: { price: ToolPrice; isLowest: boolean }) {
+function StoreIcon({ logo }: { logo: string }) {
+  const icons: Record<string, string> = {
+    walmart: '🛒',
+    homedepot: '🏠',
+    amazon: '📦',
+    canadiantire: '🍁',
+    rona: '🔨',
+    princessauto: '⚙️',
+  }
+  return <span className="text-lg">{icons[logo] ?? '🏪'}</span>
+}
+
+function PriceRow({ price, rank }: { price: ToolPrice; rank: number }) {
+  const cfg = STORE_CONFIG[price.store] ?? { color: '#6B7280', bg: '#F9FAFB', border: '#E5E7EB', text: '#374151' }
+  const isLowest = rank === 0 && !price.checkManually
+
   return (
     <a
       href={price.url}
       target="_blank"
       rel="noopener noreferrer"
-      className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all hover:shadow-md ${
-        isLowest
-          ? 'border-green-400 bg-green-50 shadow-sm'
-          : 'border-gray-200 bg-white hover:border-gray-300'
-      }`}
+      className="group flex items-center gap-3 p-4 rounded-2xl border-2 transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
+      style={{
+        borderColor: isLowest ? cfg.color : '#E5E7EB',
+        backgroundColor: isLowest ? cfg.bg : '#FFFFFF',
+      }}
     >
-      <div className="flex items-center gap-3">
+      {/* Rank */}
+      <div className="shrink-0 w-7 h-7 flex items-center justify-center rounded-full text-xs font-bold"
+        style={{ backgroundColor: isLowest ? cfg.color : '#F3F4F6', color: isLowest ? '#fff' : '#9CA3AF' }}>
+        {isLowest ? '★' : rank + 1}
+      </div>
+
+      {/* Store */}
+      <div className="flex items-center gap-2 w-44 shrink-0">
+        <StoreIcon logo={price.storeLogo} />
+        <span className="text-sm font-semibold text-gray-800 leading-tight">{price.store}</span>
+      </div>
+
+      {/* Name */}
+      <div className="flex-1 min-w-0">
+        {price.checkManually ? (
+          <span className="text-sm text-gray-400 italic">Click to check price</span>
+        ) : (
+          <span className="text-xs text-gray-500 truncate block">{price.name?.slice(0, 60)}</span>
+        )}
+      </div>
+
+      {/* Badges */}
+      <div className="flex items-center gap-2 shrink-0">
+        {price.discount && price.discount >= 10 && (
+          <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-700">
+            -{price.discount}%
+          </span>
+        )}
         {isLowest && (
-          <span className="text-xs font-bold bg-green-500 text-white px-2 py-0.5 rounded-full">
+          <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+            style={{ backgroundColor: cfg.color, color: '#fff' }}>
             BEST PRICE
           </span>
         )}
-        <span className={`text-xs font-semibold px-2 py-1 rounded-full border ${STORE_COLORS[price.store] ?? 'bg-gray-100 text-gray-700 border-gray-200'}`}>
-          {price.store}
-        </span>
-        {price.discount && price.discount >= 10 && (
-          <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
-            -{price.discount}% OFF
+        {price.checkManually && (
+          <span className="text-xs text-gray-400 border border-gray-200 px-2 py-0.5 rounded-full">
+            Check →
           </span>
         )}
-        {!price.inStock && (
-          <span className="text-xs text-gray-400">Out of stock</span>
-        )}
       </div>
-      <div className="text-right">
-        <div className={`text-xl font-bold ${isLowest ? 'text-green-700' : 'text-gray-900'}`}>
-          ${price.price.toFixed(2)}
-        </div>
-        {price.originalPrice && price.originalPrice > price.price && (
-          <div className="text-sm text-gray-400 line-through">
-            ${price.originalPrice.toFixed(2)}
-          </div>
+
+      {/* Price */}
+      <div className="text-right shrink-0 w-24">
+        {price.checkManually ? (
+          <span className="text-sm font-semibold text-gray-400">See site</span>
+        ) : (
+          <>
+            <div className="text-xl font-black" style={{ color: isLowest ? cfg.color : '#111827' }}>
+              ${price.price.toFixed(2)}
+            </div>
+            {price.originalPrice && price.originalPrice > price.price && (
+              <div className="text-xs text-gray-400 line-through">${price.originalPrice.toFixed(2)}</div>
+            )}
+          </>
         )}
       </div>
     </a>
   )
 }
 
-function ResultCard({ result }: { result: ToolResult }) {
-  const savings = result.prices.length >= 2
-    ? result.prices[result.prices.length - 1].price - result.prices[0].price
-    : 0
+function SavingsBar({ prices }: { prices: ToolPrice[] }) {
+  const realPrices = prices.filter(p => !p.checkManually && p.price > 0)
+  if (realPrices.length < 2) return null
+  const lowest = realPrices[0].price
+  const highest = realPrices[realPrices.length - 1].price
+  const savings = highest - lowest
+  const pct = Math.round((savings / highest) * 100)
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-      <div className="p-5 border-b border-gray-100">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2 className="text-lg font-bold text-gray-900">{result.name}</h2>
-            <p className="text-sm text-gray-500 mt-0.5">
-              {result.prices.length} store{result.prices.length !== 1 ? 's' : ''} compared
-            </p>
-          </div>
-          {savings > 0 && (
-            <div className="text-right shrink-0">
-              <div className="text-xs text-gray-500">Save up to</div>
-              <div className="text-lg font-bold text-green-600">${savings.toFixed(2)}</div>
-              <div className="text-xs text-gray-400">vs highest price</div>
-            </div>
-          )}
+    <div className="mb-4 p-4 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs font-semibold text-green-700 uppercase tracking-wide">Potential savings</p>
+          <p className="text-2xl font-black text-green-700">${savings.toFixed(2)}</p>
+          <p className="text-xs text-green-600">Buy at {realPrices[0].store} vs {realPrices[realPrices.length - 1].store}</p>
         </div>
-      </div>
-      <div className="p-4 flex flex-col gap-3">
-        {result.prices.map((price, i) => (
-          <PriceCard key={`${price.store}-${i}`} price={price} isLowest={i === 0} />
-        ))}
+        <div className="text-right">
+          <div className="text-4xl font-black text-green-600">{pct}%</div>
+          <div className="text-xs text-green-600">cheaper</div>
+        </div>
       </div>
     </div>
   )
@@ -101,21 +138,22 @@ function ResultCard({ result }: { result: ToolResult }) {
 export default function Home() {
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
-  const [results, setResults] = useState<ToolResult[] | null>(null)
+  const [data, setData] = useState<SearchResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [searchedQuery, setSearchedQuery] = useState('')
+  const [searched, setSearched] = useState('')
 
-  async function search(q: string) {
+  async function doSearch(q: string) {
     if (!q.trim() || q.trim().length < 2) return
     setLoading(true)
     setError(null)
-    setResults(null)
-    setSearchedQuery(q)
+    setData(null)
+    setSearched(q)
+    setQuery(q)
     try {
       const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`)
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error ?? 'Search failed')
-      setResults(data.results)
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error ?? 'Search failed')
+      setData(json)
     } catch (e: any) {
       setError(e.message ?? 'Something went wrong')
     } finally {
@@ -123,123 +161,161 @@ export default function Home() {
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    search(query)
-  }
+  const realPrices = data?.prices.filter(p => !p.checkManually && p.price > 0) ?? []
+  const manualPrices = data?.prices.filter(p => p.checkManually) ?? []
 
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Header */}
-      <header className="bg-red-600 text-white shadow-md">
-        <div className="max-w-3xl mx-auto px-4 py-5 flex items-center gap-3">
-          <span className="text-2xl">🔧</span>
-          <div>
-            <h1 className="text-xl font-bold leading-tight">Canadian Tool Deals</h1>
-            <p className="text-red-200 text-xs">Compare prices across 6 Canadian stores instantly</p>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen flex flex-col">
 
-      {/* Search */}
-      <div className="bg-red-600 pb-8 px-4">
-        <div className="max-w-3xl mx-auto">
-          <form onSubmit={handleSubmit} className="flex gap-2">
+      {/* Hero */}
+      <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white">
+        <div className="max-w-2xl mx-auto px-4 pt-12 pb-8">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="text-3xl">🍁</span>
+            <h1 className="text-2xl font-black tracking-tight">Canadian Tool Deals</h1>
+          </div>
+          <p className="text-slate-400 text-sm mb-8">
+            Compare prices across 6 Canadian stores instantly — Canadian Tire, Home Depot, Walmart, Amazon, RONA & Princess Auto
+          </p>
+
+          {/* Search box */}
+          <form onSubmit={e => { e.preventDefault(); doSearch(query) }} className="relative">
             <input
               type="text"
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder="Search tools... (e.g. Milwaukee M18 drill)"
-              className="flex-1 px-4 py-3 rounded-xl text-gray-900 text-sm font-medium shadow-inner focus:outline-none focus:ring-2 focus:ring-white/50"
+              placeholder='Try "Milwaukee M18 drill" or "DeWalt circular saw"...'
+              className="w-full px-5 py-4 pr-28 rounded-2xl text-gray-900 text-sm font-medium shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder:text-gray-400"
+              autoFocus
             />
             <button
               type="submit"
               disabled={loading || query.trim().length < 2}
-              className="px-5 py-3 bg-white text-red-600 font-bold rounded-xl shadow hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm"
+              className="absolute right-2 top-2 bottom-2 px-5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm disabled:opacity-40 transition-colors"
             >
-              {loading ? '...' : 'Search'}
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+                  </svg>
+                </span>
+              ) : 'Search'}
             </button>
           </form>
-        </div>
-      </div>
 
-      {/* Main content */}
-      <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-6">
-
-        {/* Popular searches */}
-        {!results && !loading && !error && (
-          <div>
-            <p className="text-sm font-semibold text-gray-500 mb-3">Popular searches</p>
-            <div className="flex flex-wrap gap-2">
-              {POPULAR_SEARCHES.map(s => (
-                <button
-                  key={s}
-                  onClick={() => { setQuery(s); search(s) }}
-                  className="px-3 py-1.5 bg-white border border-gray-200 rounded-full text-sm text-gray-700 hover:border-red-400 hover:text-red-600 transition-colors shadow-sm"
-                >
+          {/* Popular searches */}
+          {!loading && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {POPULAR.map(s => (
+                <button key={s} onClick={() => doSearch(s)}
+                  className="text-xs px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors border border-white/10">
                   {s}
                 </button>
               ))}
             </div>
+          )}
+        </div>
+      </div>
 
-            {/* Stores badge */}
-            <div className="mt-8">
-              <p className="text-sm font-semibold text-gray-500 mb-3">Stores we compare</p>
-              <div className="flex flex-wrap gap-2">
-                {Object.entries(STORE_COLORS).map(([store, cls]) => (
-                  <span key={store} className={`text-xs font-semibold px-3 py-1.5 rounded-full border ${cls}`}>
-                    {store}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+      {/* Results */}
+      <main className="flex-1 max-w-2xl mx-auto w-full px-4 py-6">
 
         {/* Loading */}
         {loading && (
-          <div className="flex flex-col items-center justify-center py-16 gap-3">
-            <div className="w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full animate-spin" />
+          <div className="flex flex-col items-center py-16 gap-4">
+            <div className="flex gap-1">
+              {['Walmart', 'Home Depot', 'Amazon', 'Canadian Tire', 'RONA', 'Princess Auto'].map((s, i) => (
+                <div key={s} className="w-2 h-2 rounded-full bg-blue-500 animate-bounce"
+                  style={{ animationDelay: `${i * 0.1}s` }} />
+              ))}
+            </div>
             <p className="text-sm text-gray-500">Checking prices across 6 stores...</p>
+            <div className="flex flex-wrap gap-2 justify-center mt-2">
+              {['Walmart CA', 'Home Depot', 'Amazon CA', 'Canadian Tire', 'RONA', 'Princess Auto'].map(s => (
+                <span key={s} className="text-xs px-2 py-1 bg-gray-100 rounded-full text-gray-500 animate-pulse">{s}</span>
+              ))}
+            </div>
           </div>
         )}
 
         {/* Error */}
         {error && (
-          <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">
+          <div className="p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700 text-sm">
             {error}
           </div>
         )}
 
         {/* Results */}
-        {results && !loading && (
+        {data && !loading && (
           <div>
-            <p className="text-sm text-gray-500 mb-4">
-              Results for <span className="font-semibold text-gray-800">"{searchedQuery}"</span>
-            </p>
-            {results.length === 0 ? (
-              <div className="text-center py-12 text-gray-400">
-                <p className="text-4xl mb-3">🔍</p>
-                <p className="font-medium">No results found</p>
-                <p className="text-sm mt-1">Try a different search term</p>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-4">
-                {results.map((r, i) => (
-                  <ResultCard key={i} result={r} />
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-sm text-gray-500">
+                Results for <span className="font-bold text-gray-900">"{searched}"</span>
+              </p>
+              <p className="text-xs text-gray-400">{realPrices.length} live prices</p>
+            </div>
+
+            {/* Savings banner */}
+            <SavingsBar prices={data.prices} />
+
+            {/* Real prices */}
+            {realPrices.length > 0 && (
+              <div className="flex flex-col gap-2 mb-6">
+                {realPrices.map((p, i) => (
+                  <PriceRow key={p.store} price={p} rank={i} />
                 ))}
               </div>
             )}
+
+            {/* Manual check stores */}
+            {manualPrices.length > 0 && (
+              <div>
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
+                  Also check these stores (prices loaded on their sites)
+                </p>
+                <div className="flex flex-col gap-2">
+                  {manualPrices.map((p, i) => (
+                    <PriceRow key={p.store} price={p} rank={realPrices.length + i} />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {realPrices.length === 0 && manualPrices.length === 0 && (
+              <div className="text-center py-12 text-gray-400">
+                <p className="text-4xl mb-3">🔍</p>
+                <p className="font-medium text-gray-600">No results found</p>
+                <p className="text-sm mt-1">Try a different search term</p>
+              </div>
+            )}
+
+            <p className="mt-6 text-xs text-gray-400 text-center">
+              Prices fetched in real-time · Links may include affiliate commissions
+            </p>
+          </div>
+        )}
+
+        {/* Empty state */}
+        {!data && !loading && !error && (
+          <div className="py-8">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">Stores covered</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {Object.entries(STORE_CONFIG).map(([name, cfg]) => (
+                <div key={name} className="p-3 rounded-xl border-2 text-sm font-semibold"
+                  style={{ borderColor: cfg.border, backgroundColor: cfg.bg, color: cfg.text }}>
+                  {name}
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-gray-200 py-6 px-4 mt-auto">
-        <div className="max-w-3xl mx-auto text-center text-xs text-gray-400">
-          <p>Prices updated in real-time. Links may include affiliate commissions — they help keep this site free.</p>
-          <p className="mt-1">Canadian Tool Deals is not affiliated with any store.</p>
-        </div>
+      <footer className="border-t border-gray-100 py-4 px-4">
+        <p className="text-center text-xs text-gray-400">
+          Canadian Tool Deals · Not affiliated with any store · © {new Date().getFullYear()}
+        </p>
       </footer>
     </div>
   )

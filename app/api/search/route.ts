@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { searchAllStores } from '@/lib/search'
 
+export const runtime = 'nodejs'
+export const maxDuration = 30
+
 export async function GET(req: NextRequest) {
   const query = req.nextUrl.searchParams.get('q')?.trim()
 
@@ -9,8 +12,10 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const results = await searchAllStores(query)
-    return NextResponse.json({ query, results, fetchedAt: new Date().toISOString() })
+    const data = await searchAllStores(query)
+    return NextResponse.json(data, {
+      headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400' }
+    })
   } catch (err) {
     console.error('Search error:', err)
     return NextResponse.json({ error: 'Search failed' }, { status: 500 })

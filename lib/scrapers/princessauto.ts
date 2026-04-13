@@ -1,49 +1,71 @@
 import { ToolPrice } from '../types'
 
 const STORE = 'Princess Auto'
-const STORE_LOGO = '/logos/princessauto.svg'
+const STORE_LOGO = 'princessauto'
 
 export async function scrapePrincessAuto(query: string): Promise<ToolPrice[]> {
-  const url = `https://www.princessauto.com/api/2/products?q=${encodeURIComponent(query)}&page=1&per_page=5&sort=relevance`
+  const url = `https://www.princessauto.com/en/search#q=${encodeURIComponent(query)}&t=All`
 
   try {
     const res = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'application/json',
-        'Accept-Language': 'en-CA',
-        'Referer': 'https://www.princessauto.com/',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml',
+        'Accept-Language': 'en-CA,en;q=0.9',
       },
       next: { revalidate: 3600 },
     })
 
-    if (!res.ok) return []
+    if (!res.ok) return princessFallback(query)
 
-    const data = await res.json()
-    const items = data?.products ?? data?.items ?? []
+    const html = await res.text()
 
-    return items.slice(0, 5).map((item: any) => {
-      const price = item?.price ?? item?.salePrice ?? 0
-      const originalPrice = item?.regularPrice ?? item?.compareAtPrice
-      const discount = originalPrice && price && originalPrice > price
-        ? Math.round(((originalPrice - price) / originalPrice) * 100)
-        : undefined
+    // Try JSON-LD
+    const results: ToolPrice[] = []
+    const jsonLdMatches = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)]
 
-      return {
-        store: STORE,
-        storeLogo: STORE_LOGO,
-        price,
-        originalPrice,
-        discount,
-        inStock: item?.available !== false,
-        url: item?.url
-          ? `https://www.princessauto.com${item.url}`
-          : `https://www.princessauto.com/en/search#q=${encodeURIComponent(query)}`,
-        lastUpdated: new Date().toISOString(),
-      } satisfies ToolPrice
-    }).filter((p: ToolPrice) => p.price > 0)
+    for (const match of jsonLdMatches) {
+      if (results.length >= 5) break
+      try {
+        const data = JSON.parse(match[1])
+        const items = Array.isArray(data) ? data : [data]
+        for (const item of items) {
+          if (item['@type'] !== 'Product') continue
+          const offer = Array.isArray(item.offers) ? item.offers[0] : item.offers
+          const price = parseFloat(offer?.price ?? '0')
+          if (price <= 0) continue
+          results.push({
+            store: STORE,
+            storeLogo: STORE_LOGO,
+            price,
+            inStock: offer?.availability?.includes('InStock') ?? true,
+            url: item.url ?? `https://www.princessauto.com/en/search#q=${encodeURIComponent(query)}`,
+            name: item.name ?? query,
+            image: item.image?.[0] ?? item.image,
+            lastUpdated: new Date().toISOString(),
+          })
+        }
+      } catch {
+        continue
+      }
+    }
+
+    return results.length > 0 ? results : princessFallback(query)
 
   } catch {
-    return []
+    return princessFallback(query)
   }
+}
+
+function princessFallback(query: string): ToolPrice[] {
+  return [{
+    store: 'Princess Auto',
+    storeLogo: 'princessauto',
+    price: 0,
+    inStock: true,
+    url: `https://www.princessauto.com/en/search#q=${encodeURIComponent(query)}`,
+    name: `Search "${query}" on Princess Auto`,
+    checkManually: true,
+    lastUpdated: new Date().toISOString(),
+  }]
 }

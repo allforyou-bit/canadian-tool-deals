@@ -6,20 +6,14 @@ export interface ToolPrice {
   discount?: number
   inStock: boolean
   url: string
+  name?: string
+  image?: string
+  checkManually?: boolean
   lastUpdated: string
 }
 
-export interface ToolResult {
-  name: string
-  brand: string
-  image?: string
-  prices: ToolPrice[]
-  lowestPrice: number
-  lowestStore: string
-}
-
-export interface SearchResult {
+export interface SearchResponse {
   query: string
-  results: ToolResult[]
+  prices: ToolPrice[]
   fetchedAt: string
 }
