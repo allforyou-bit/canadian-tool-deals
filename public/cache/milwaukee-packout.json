@@ -1,0 +1,66 @@
+{
+  "query": "Milwaukee Packout",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 40.56,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/Milwaukee-Tool-PACKOUT-5-Compartment-Low-Profile-Compact-Small-Parts-Organizer/6NK1ODDWB3QB?classType=REGULAR\\u0026athbdg=L1400",
+      "name": "Milwaukee Tool PACKOUT 5-Compartment Low-Profile Compact Small Parts Organizer",
+      "image": "https://i5.walmartimages.com/asr/0c7375b9-a2ed-46ea-b11d-d2b37db859c9.fdb4abc3da8ce26634af2cef8849d21f.webp",
+      "lastUpdated": "2026-04-13T19:13:15.427Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=Milwaukee%20Packout",
+      "name": "Search \"Milwaukee Packout\" on Home Depot Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:15.427Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Milwaukee%20Packout&i=tools&tag=canadiantool-20",
+      "name": "Search \"Milwaukee Packout\" on Amazon Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:15.427Z"
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Milwaukee%20Packout",
+      "name": "Search \"Milwaukee Packout\" on Canadian Tire",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:15.427Z"
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=Milwaukee%20Packout",
+      "name": "Search \"Milwaukee Packout\" on RONA",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:15.427Z"
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=Milwaukee%20Packout",
+      "name": "Search \"Milwaukee Packout\" on Princess Auto",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:15.427Z"
+    }
+  ],
+  "fetchedAt": "2026-04-13T19:13:15.427Z"
+}

@@ -1,0 +1,66 @@
+{
+  "query": "DeWalt cordless drill",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 69.99,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/MasterSpec-12V-Cordless-Drill-Driver-Kit-47-Pcs-Household-Hand-Tools-Includes-2x-1500mAh-Batteries-Sturdy-Storage-Case-Complete-DIY-Home-Repair-Maint/2KN2D7NDVLVB",
+      "name": "FIXTEC 20V Lithium-Ion Cordless Drill/Driver Kit with 1.5Ah Battery and Charger",
+      "image": "https://i5.walmartimages.com/asr/59576d0d-77da-4767-a0e5-ad15decba1e6.648e550b694dbc054f2f93357f13544c.jpeg",
+      "lastUpdated": "2026-04-13T19:13:27.662Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=DeWalt%20cordless%20drill",
+      "name": "Search \"DeWalt cordless drill\" on Home Depot Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:27.662Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=DeWalt%20cordless%20drill&i=tools&tag=canadiantool-20",
+      "name": "Search \"DeWalt cordless drill\" on Amazon Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:27.662Z"
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=DeWalt%20cordless%20drill",
+      "name": "Search \"DeWalt cordless drill\" on Canadian Tire",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:27.662Z"
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=DeWalt%20cordless%20drill",
+      "name": "Search \"DeWalt cordless drill\" on RONA",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:27.662Z"
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=DeWalt%20cordless%20drill",
+      "name": "Search \"DeWalt cordless drill\" on Princess Auto",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:27.662Z"
+    }
+  ],
+  "fetchedAt": "2026-04-13T19:13:27.662Z"
+}

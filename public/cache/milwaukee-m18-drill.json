@@ -1,0 +1,66 @@
+{
+  "query": "Milwaukee M18 drill",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 84.98,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/FIXTEC-20V-Lithium-Ion-Cordless-Drill-and-Project-Kit-with-1-5Ah-Battery-Charger-and-Storage-Case-221-Piece-Drill-Project-Kit/4AC933LFILCX",
+      "name": "FIXTEC 20V Lithium-Ion Cordless Drill and Project Kit with 1.5Ah Battery, Charger and Storage Case, 221 Piece Drill Project Kit",
+      "image": "https://i5.walmartimages.com/asr/48efceb2-124e-4ecf-a5c4-617be2e58786.ddcc4f3eb08978962f88d9ffa188eeab.jpeg",
+      "lastUpdated": "2026-04-13T19:13:02.291Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=Milwaukee%20M18%20drill",
+      "name": "Search \"Milwaukee M18 drill\" on Home Depot Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:02.291Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Milwaukee%20M18%20drill&i=tools&tag=canadiantool-20",
+      "name": "Search \"Milwaukee M18 drill\" on Amazon Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:02.291Z"
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Milwaukee%20M18%20drill",
+      "name": "Search \"Milwaukee M18 drill\" on Canadian Tire",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:02.291Z"
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=Milwaukee%20M18%20drill",
+      "name": "Search \"Milwaukee M18 drill\" on RONA",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:02.291Z"
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=Milwaukee%20M18%20drill",
+      "name": "Search \"Milwaukee M18 drill\" on Princess Auto",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:02.291Z"
+    }
+  ],
+  "fetchedAt": "2026-04-13T19:13:02.291Z"
+}

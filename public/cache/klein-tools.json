@@ -1,0 +1,66 @@
+{
+  "query": "Klein tools",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 49.99,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/Klein-Tools-KTSB11-Step-Drill-Bit-11-Double-Fluted-7-8-to-1-1-8-Inch/2DMDWCBYZX2L?classType=REGULAR\\u0026athbdg=L3014",
+      "name": "Klein Tools KTSB11 Step Drill Bit #11 Double-Fluted 7/8 to 1-1/8-Inch",
+      "image": "https://i5.walmartimages.com/asr/5df942c6-2145-498f-9208-2bd9d2fa6f97_1.1a06fbe124f9578b2b862947996824e3.jpeg",
+      "lastUpdated": "2026-04-13T19:13:42.236Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=Klein%20tools",
+      "name": "Search \"Klein tools\" on Home Depot Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:42.236Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Klein%20tools&i=tools&tag=canadiantool-20",
+      "name": "Search \"Klein tools\" on Amazon Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:42.236Z"
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Klein%20tools",
+      "name": "Search \"Klein tools\" on Canadian Tire",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:42.236Z"
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=Klein%20tools",
+      "name": "Search \"Klein tools\" on RONA",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:42.236Z"
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=Klein%20tools",
+      "name": "Search \"Klein tools\" on Princess Auto",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:42.236Z"
+    }
+  ],
+  "fetchedAt": "2026-04-13T19:13:42.236Z"
+}

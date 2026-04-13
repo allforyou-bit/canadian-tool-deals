@@ -1,0 +1,66 @@
+{
+  "query": "Bosch laser level",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 183.61,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/48-x8-Magnesium-Bull-Float-with-Adjustable-Handle-Bracket-70-9-Heavy-Duty-Concrete-Finishing-Tool-with-Extension-Poles-Carrying-Case/1Z1B6TEYKO1A",
+      "name": "Garvee Concrete Float Kit 48x8”, with 4 Handles and Bull Float Bracket, for Concrete Finishing",
+      "image": "https://i5.walmartimages.com/asr/d705e7a4-eeff-4d01-8975-da68558205c9.53bbabf538a110c9bcdb36c9c2bf455a.jpeg",
+      "lastUpdated": "2026-04-13T19:13:21.273Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=Bosch%20laser%20level",
+      "name": "Search \"Bosch laser level\" on Home Depot Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:21.274Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Bosch%20laser%20level&i=tools&tag=canadiantool-20",
+      "name": "Search \"Bosch laser level\" on Amazon Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:21.274Z"
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Bosch%20laser%20level",
+      "name": "Search \"Bosch laser level\" on Canadian Tire",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:21.274Z"
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=Bosch%20laser%20level",
+      "name": "Search \"Bosch laser level\" on RONA",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:21.274Z"
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=Bosch%20laser%20level",
+      "name": "Search \"Bosch laser level\" on Princess Auto",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:21.274Z"
+    }
+  ],
+  "fetchedAt": "2026-04-13T19:13:21.274Z"
+}

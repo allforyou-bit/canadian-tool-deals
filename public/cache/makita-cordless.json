@@ -1,0 +1,66 @@
+{
+  "query": "Makita cordless",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 843.7,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/Makita-XPH03MB-18V-LXT-Lithium-Ion-Cordless-1-2-Hammer-Driver-Drill-Kit-4-0Ah/7FL0CE1ECASN?classType=REGULAR",
+      "name": "Makita CT232 12V max CXTÂ® Lithium-Ion Cordless 2-Pc. Combo Kit (1.5Ah)",
+      "image": "https://i5.walmartimages.com/asr/1ea2d824-d22e-49e3-9ca5-ea2eecbe41f2.ca4603cd15aa2c54083c803b100b249e.jpeg",
+      "lastUpdated": "2026-04-13T19:13:30.579Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=Makita%20cordless",
+      "name": "Search \"Makita cordless\" on Home Depot Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:30.579Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Makita%20cordless&i=tools&tag=canadiantool-20",
+      "name": "Search \"Makita cordless\" on Amazon Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:30.579Z"
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Makita%20cordless",
+      "name": "Search \"Makita cordless\" on Canadian Tire",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:30.579Z"
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=Makita%20cordless",
+      "name": "Search \"Makita cordless\" on RONA",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:30.579Z"
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=Makita%20cordless",
+      "name": "Search \"Makita cordless\" on Princess Auto",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:30.579Z"
+    }
+  ],
+  "fetchedAt": "2026-04-13T19:13:30.579Z"
+}

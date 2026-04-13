@@ -1,0 +1,66 @@
+{
+  "query": "DeWalt 20V circular saw",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 59.98,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/FIXTEC-20V-Lithium-Ion-Cordless-Drill-Driver-Kit-with-1-5Ah-Battery-and-Charger/606FBRPJ0L2F",
+      "name": "FIXTEC 20V Lithium-Ion Cordless Drill/Driver Kit with 1.5Ah Battery and Charger",
+      "image": "https://i5.walmartimages.com/asr/129b6cf8-98ca-4e0e-93d5-6ef67c1ee1a7.4b6ef851222078738778d42ff6959af3.jpeg",
+      "lastUpdated": "2026-04-13T19:13:05.716Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=DeWalt%2020V%20circular%20saw",
+      "name": "Search \"DeWalt 20V circular saw\" on Home Depot Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:05.716Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=DeWalt%2020V%20circular%20saw&i=tools&tag=canadiantool-20",
+      "name": "Search \"DeWalt 20V circular saw\" on Amazon Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:05.716Z"
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=DeWalt%2020V%20circular%20saw",
+      "name": "Search \"DeWalt 20V circular saw\" on Canadian Tire",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:05.716Z"
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=DeWalt%2020V%20circular%20saw",
+      "name": "Search \"DeWalt 20V circular saw\" on RONA",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:05.716Z"
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=DeWalt%2020V%20circular%20saw",
+      "name": "Search \"DeWalt 20V circular saw\" on Princess Auto",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:05.716Z"
+    }
+  ],
+  "fetchedAt": "2026-04-13T19:13:05.716Z"
+}

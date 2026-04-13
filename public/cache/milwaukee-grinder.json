@@ -1,0 +1,66 @@
+{
+  "query": "Milwaukee grinder",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 229.99,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/Milwaukee-2486-20-M12-12V-Fuel-1-4-Straight-Die-Grinder-Cordless-Lithium-Ion/5D8VD2WQ4J7P?classType=REGULAR\\u0026athbdg=L3014",
+      "name": "49-40-6120 - LARGE ANGLE GRINDER CUTTING SHROUD 7/9IN",
+      "image": "https://i5.walmartimages.com/asr/6edf1093-41f1-4f3f-9eb9-b38734995c3e.0f52fc490733f670fb0d8829eac2e072.jpeg",
+      "lastUpdated": "2026-04-13T19:13:33.136Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=Milwaukee%20grinder",
+      "name": "Search \"Milwaukee grinder\" on Home Depot Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:33.136Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Milwaukee%20grinder&i=tools&tag=canadiantool-20",
+      "name": "Search \"Milwaukee grinder\" on Amazon Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:33.136Z"
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Milwaukee%20grinder",
+      "name": "Search \"Milwaukee grinder\" on Canadian Tire",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:33.136Z"
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=Milwaukee%20grinder",
+      "name": "Search \"Milwaukee grinder\" on RONA",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:33.136Z"
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=Milwaukee%20grinder",
+      "name": "Search \"Milwaukee grinder\" on Princess Auto",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:33.136Z"
+    }
+  ],
+  "fetchedAt": "2026-04-13T19:13:33.136Z"
+}

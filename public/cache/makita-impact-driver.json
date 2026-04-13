@@ -1,0 +1,66 @@
+{
+  "query": "Makita impact driver",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 249.99,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/FIXTEC-20V-Brushless-Impact-Hammer-Drill-with-2-Batteries-1-hr-Charger-Tool-Set/1GHIGMBE89LG",
+      "name": "FIXTEC 20V Brushless Impact (Hammer) Drill with (2) Batteries, 1 hr Charger, Tool Set",
+      "image": "https://i5.walmartimages.com/asr/dc1da900-bdcc-4d56-a54a-20d9880f3ca8.35c9569b9d18e1965da5c4ae7b9c4f28.jpeg",
+      "lastUpdated": "2026-04-13T19:13:09.537Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=Makita%20impact%20driver",
+      "name": "Search \"Makita impact driver\" on Home Depot Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:09.537Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Makita%20impact%20driver&i=tools&tag=canadiantool-20",
+      "name": "Search \"Makita impact driver\" on Amazon Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:09.537Z"
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Makita%20impact%20driver",
+      "name": "Search \"Makita impact driver\" on Canadian Tire",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:09.537Z"
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=Makita%20impact%20driver",
+      "name": "Search \"Makita impact driver\" on RONA",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:09.537Z"
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=Makita%20impact%20driver",
+      "name": "Search \"Makita impact driver\" on Princess Auto",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:09.537Z"
+    }
+  ],
+  "fetchedAt": "2026-04-13T19:13:09.537Z"
+}

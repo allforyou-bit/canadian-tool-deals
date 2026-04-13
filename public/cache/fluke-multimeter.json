@@ -1,0 +1,66 @@
+{
+  "query": "Fluke multimeter",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 1149.99,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/Digital-Multimeter-Fluke-87V-E2-Industrial-Electrician/5IU6U5W2YTUO?classType=REGULAR\\u0026athbdg=L1700",
+      "name": "Digital Multimeter Fluke 87V/E2 Industrial Electrician",
+      "image": "https://i5.walmartimages.com/asr/8fca5595-d302-45af-be22-702ca937d5b0.3dfb5d7b8283b323ce784b8ef0ad9d53.jpeg",
+      "lastUpdated": "2026-04-13T19:13:44.986Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=Fluke%20multimeter",
+      "name": "Search \"Fluke multimeter\" on Home Depot Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:44.986Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Fluke%20multimeter&i=tools&tag=canadiantool-20",
+      "name": "Search \"Fluke multimeter\" on Amazon Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:44.986Z"
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Fluke%20multimeter",
+      "name": "Search \"Fluke multimeter\" on Canadian Tire",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:44.986Z"
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=Fluke%20multimeter",
+      "name": "Search \"Fluke multimeter\" on RONA",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:44.986Z"
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=Fluke%20multimeter",
+      "name": "Search \"Fluke multimeter\" on Princess Auto",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:44.986Z"
+    }
+  ],
+  "fetchedAt": "2026-04-13T19:13:44.986Z"
+}

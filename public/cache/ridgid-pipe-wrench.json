@@ -1,0 +1,66 @@
+{
+  "query": "RIDGID pipe wrench",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 255.99,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/VEVOR-Solder-Fume-Extractor-85W-Brushless-Soldering-Smoke-Absorber-3-Stage-Filters/6RY087GEV9AA",
+      "name": "VEVOR Solder Fume Extractor 85W Brushless Soldering Smoke Absorber & 3-Stage Filters",
+      "image": "https://i5.walmartimages.com/asr/a68353a7-c157-43b1-a462-3a615e387414.fea3c0b2faa2912c4cbfeb2067ce77a3.jpeg",
+      "lastUpdated": "2026-04-13T19:13:38.771Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=RIDGID%20pipe%20wrench",
+      "name": "Search \"RIDGID pipe wrench\" on Home Depot Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:38.771Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=RIDGID%20pipe%20wrench&i=tools&tag=canadiantool-20",
+      "name": "Search \"RIDGID pipe wrench\" on Amazon Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:38.771Z"
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=RIDGID%20pipe%20wrench",
+      "name": "Search \"RIDGID pipe wrench\" on Canadian Tire",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:38.771Z"
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=RIDGID%20pipe%20wrench",
+      "name": "Search \"RIDGID pipe wrench\" on RONA",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:38.771Z"
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=RIDGID%20pipe%20wrench",
+      "name": "Search \"RIDGID pipe wrench\" on Princess Auto",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:38.771Z"
+    }
+  ],
+  "fetchedAt": "2026-04-13T19:13:38.771Z"
+}

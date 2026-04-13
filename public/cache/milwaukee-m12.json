@@ -1,0 +1,66 @@
+{
+  "query": "Milwaukee M12",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 49.99,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/Milwaukee-48-11-2402-M12-XC-High-Capacity-REDLITHIUM-Battery/15IN0MUA5KYK?classType=REGULAR\\u0026athbdg=L3014",
+      "name": "Milwaukee 48-11-2402 M12 XC High Capacity REDLITHIUM Battery",
+      "image": "https://i5.walmartimages.com/asr/6097751d-292b-49e3-801b-70c57d7480a3.39da136e5541622e74f4b517f8bb08f9.jpeg",
+      "lastUpdated": "2026-04-13T19:13:24.419Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=Milwaukee%20M12",
+      "name": "Search \"Milwaukee M12\" on Home Depot Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:24.419Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Milwaukee%20M12&i=tools&tag=canadiantool-20",
+      "name": "Search \"Milwaukee M12\" on Amazon Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:24.419Z"
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Milwaukee%20M12",
+      "name": "Search \"Milwaukee M12\" on Canadian Tire",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:24.419Z"
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=Milwaukee%20M12",
+      "name": "Search \"Milwaukee M12\" on RONA",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:24.419Z"
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=Milwaukee%20M12",
+      "name": "Search \"Milwaukee M12\" on Princess Auto",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:24.419Z"
+    }
+  ],
+  "fetchedAt": "2026-04-13T19:13:24.419Z"
+}

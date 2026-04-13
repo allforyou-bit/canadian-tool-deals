@@ -1,0 +1,66 @@
+{
+  "query": "RIDGID shop vac",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 132.59,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/RIDGID-11L-3-Gal-3-5-Peak-HP-Portable-Wet-Dry-Shop-Vacuum-with-Built-in-Dust-Pan-and-Accessories/4XFAQUH8K7SX?classType=REGULAR\\u0026athbdg=L1400",
+      "name": "RIDGID 11L (3 Gal.) 3.5 Peak HP Portable Wet/Dry Shop Vacuum with Built-in Dust Pan and Accessories",
+      "image": "https://i5.walmartimages.com/asr/8723b802-58fc-4e20-b42e-70acd81ccc88.afcce07bcade971768847982fb2d25d0.jpeg",
+      "lastUpdated": "2026-04-13T19:13:12.511Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=RIDGID%20shop%20vac",
+      "name": "Search \"RIDGID shop vac\" on Home Depot Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:12.511Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=RIDGID%20shop%20vac&i=tools&tag=canadiantool-20",
+      "name": "Search \"RIDGID shop vac\" on Amazon Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:12.511Z"
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=RIDGID%20shop%20vac",
+      "name": "Search \"RIDGID shop vac\" on Canadian Tire",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:12.511Z"
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=RIDGID%20shop%20vac",
+      "name": "Search \"RIDGID shop vac\" on RONA",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:12.511Z"
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=RIDGID%20shop%20vac",
+      "name": "Search \"RIDGID shop vac\" on Princess Auto",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:12.511Z"
+    }
+  ],
+  "fetchedAt": "2026-04-13T19:13:12.511Z"
+}

@@ -1,0 +1,66 @@
+{
+  "query": "DeWalt jigsaw",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 18.49,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/High-Quality-Stainless-Steel-Butcher-Saw-Blades-Versatile-Jigsaw-Blade-For-Frozen-Meat-Bone-Cutting-150x19x0-9Mm-Compatible-With-Major-Brands-Like-Bo/3Q7USHP89BYJ?classType=REGULAR\\u0026athbdg=L1700",
+      "name": "DeWalt Genuine OEM Dust Chute for DCS335B Jigsaw - N564892",
+      "image": "https://i5.walmartimages.com/asr/431d06b8-4923-495f-ba78-310437551024.4fd5a327eb49c7fc178555afb73c1c33.jpeg",
+      "lastUpdated": "2026-04-13T19:13:35.624Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=DeWalt%20jigsaw",
+      "name": "Search \"DeWalt jigsaw\" on Home Depot Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:35.624Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=DeWalt%20jigsaw&i=tools&tag=canadiantool-20",
+      "name": "Search \"DeWalt jigsaw\" on Amazon Canada",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:35.624Z"
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=DeWalt%20jigsaw",
+      "name": "Search \"DeWalt jigsaw\" on Canadian Tire",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:35.624Z"
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=DeWalt%20jigsaw",
+      "name": "Search \"DeWalt jigsaw\" on RONA",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:35.624Z"
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=DeWalt%20jigsaw",
+      "name": "Search \"DeWalt jigsaw\" on Princess Auto",
+      "checkManually": true,
+      "lastUpdated": "2026-04-13T19:13:35.624Z"
+    }
+  ],
+  "fetchedAt": "2026-04-13T19:13:35.624Z"
+}
