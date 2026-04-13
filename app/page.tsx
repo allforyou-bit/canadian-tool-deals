@@ -1,7 +1,39 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ToolPrice, SearchResponse } from '@/lib/types'
+
+// Chrome extension ID — update after publishing to Chrome Web Store
+const EXTENSION_ID = 'YOUR_EXTENSION_ID_HERE'
+
+declare const chrome: any
+
+async function searchViaExtension(query: string): Promise<SearchResponse | null> {
+  try {
+    if (typeof chrome === 'undefined' || !chrome?.runtime) return null
+    return await new Promise((resolve, reject) => {
+      chrome.runtime.sendMessage(EXTENSION_ID, { type: 'SEARCH', query }, (response: any) => {
+        if (chrome.runtime.lastError) reject(chrome.runtime.lastError)
+        else resolve(response)
+      })
+    })
+  } catch {
+    return null
+  }
+}
+
+async function pingExtension(): Promise<boolean> {
+  try {
+    if (typeof chrome === 'undefined' || !chrome?.runtime) return false
+    return await new Promise((resolve) => {
+      chrome.runtime.sendMessage(EXTENSION_ID, { type: 'PING' }, (response: any) => {
+        resolve(!chrome.runtime.lastError && response?.status === 'ok')
+      })
+    })
+  } catch {
+    return false
+  }
+}
 
 const POPULAR = [
   'Milwaukee M18 drill',
@@ -141,6 +173,11 @@ export default function Home() {
   const [data, setData] = useState<SearchResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [searched, setSearched] = useState('')
+  const [hasExtension, setHasExtension] = useState(false)
+
+  useEffect(() => {
+    pingExtension().then(setHasExtension)
+  }, [])
 
   async function doSearch(q: string) {
     if (!q.trim() || q.trim().length < 2) return
@@ -150,6 +187,12 @@ export default function Home() {
     setSearched(q)
     setQuery(q)
     try {
+      // Try extension first (live prices), fallback to cached API
+      const extResult = hasExtension ? await searchViaExtension(q) : null
+      if (extResult) {
+        setData(extResult)
+        return
+      }
       const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`)
       const json = await res.json()
       if (!res.ok) throw new Error(json.error ?? 'Search failed')
@@ -203,6 +246,24 @@ export default function Home() {
               ) : 'Search'}
             </button>
           </form>
+
+          {/* Extension status banner */}
+          {hasExtension ? (
+            <div className="mt-4 flex items-center gap-2 text-xs text-green-400">
+              <span className="w-2 h-2 bg-green-400 rounded-full inline-block animate-pulse" />
+              Extension connected — fetching live prices from all 6 stores
+            </div>
+          ) : (
+            <div className="mt-4 flex items-center justify-between gap-3 bg-white/10 rounded-xl px-4 py-2.5 border border-white/10">
+              <div className="flex items-center gap-2 text-xs text-slate-300">
+                <span>⚡</span>
+                <span>Install the extension for <strong className="text-white">live prices</strong> from all stores</span>
+              </div>
+              <a href="#install" className="text-xs font-bold bg-blue-500 hover:bg-blue-400 text-white px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap">
+                Get Extension
+              </a>
+            </div>
+          )}
 
           {/* Popular searches */}
           {!loading && (
