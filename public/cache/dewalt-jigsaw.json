@@ -5,17 +5,17 @@
     {
       "store": "Walmart Canada",
       "storeLogo": "walmart",
-      "price": 179.97,
+      "price": 34.18,
       "inStock": true,
       "url": "https://www.walmart.ca/search?q=DeWalt%20jigsaw",
-      "name": "DeWalt DCS389B FLEXVOLT 60V MAX Cordless Brushless Reciprocating Saw (Bare Tool)",
-      "image": "https://i5.walmartimages.com/asr/7fc047d4-0ec1-482e-ac65-37ec245e4a8e.e6fec22bb58467f3dbc003bf67d6288e.jpeg",
-      "lastUpdated": "2026-04-14T03:23:24.531Z"
+      "name": "DeWalt Genuine OEM Dust Chute for DCS335B Jigsaw - N564892",
+      "image": "https://i5.walmartimages.com/asr/fcf2f49e-8930-4f69-b736-8483ada9cc11.383b9b5e114cc99dca8cd02caf26f89e.jpeg",
+      "lastUpdated": "2026-04-14T09:21:12.192Z"
     },
     {
       "store": "Home Depot Canada",
       "storeLogo": "homedepot",
-      "lastUpdated": "2026-04-14T03:23:24.531Z",
+      "lastUpdated": "2026-04-14T09:21:12.192Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.homedepot.ca/search?q=DeWalt%20jigsaw",
@@ -25,7 +25,7 @@
     {
       "store": "Amazon Canada",
       "storeLogo": "amazon",
-      "lastUpdated": "2026-04-14T03:23:24.531Z",
+      "lastUpdated": "2026-04-14T09:21:12.192Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.amazon.ca/s?k=DeWalt%20jigsaw&i=tools&tag=canadiantool-20",
@@ -35,7 +35,7 @@
     {
       "store": "RONA",
       "storeLogo": "rona",
-      "lastUpdated": "2026-04-14T03:23:24.531Z",
+      "lastUpdated": "2026-04-14T09:21:12.192Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.rona.ca/en/search?q=DeWalt%20jigsaw",
@@ -45,7 +45,7 @@
     {
       "store": "Canadian Tire",
       "storeLogo": "canadiantire",
-      "lastUpdated": "2026-04-14T03:23:24.531Z",
+      "lastUpdated": "2026-04-14T09:21:12.192Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.canadiantire.ca/en/search-results.html?q=DeWalt%20jigsaw",
@@ -55,7 +55,7 @@
     {
       "store": "Princess Auto",
       "storeLogo": "princessauto",
-      "lastUpdated": "2026-04-14T03:23:24.531Z",
+      "lastUpdated": "2026-04-14T09:21:12.192Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.princessauto.com/en/search#q=DeWalt%20jigsaw",
@@ -63,5 +63,5 @@
       "notCarried": true
     }
   ],
-  "fetchedAt": "2026-04-14T03:23:24.531Z"
+  "fetchedAt": "2026-04-14T09:21:12.192Z"
 }

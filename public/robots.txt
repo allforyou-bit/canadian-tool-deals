@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://canadian-tool-deals.vercel.app/sitemap.xml

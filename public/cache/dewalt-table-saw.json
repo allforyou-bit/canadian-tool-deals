@@ -5,17 +5,17 @@
     {
       "store": "Walmart Canada",
       "storeLogo": "walmart",
-      "price": 999.99,
+      "price": 549.99,
       "inStock": true,
-      "url": "https://www.walmart.ca/en/ip/DEWALT-20V-MAX-Cordless-Reciprocating-Saw-Kit-DCS380P1/6QD14ZANTFEU?classType=REGULAR",
-      "name": "DEWALT 20V MAX* Cordless Reciprocating Saw Kit (DCS380P1)",
-      "image": "https://i5.walmartimages.com/asr/4badbaf6-5d9b-4576-850c-e522f4e16af4_1.011e7a6ec126cc723772261dff73f8b9.jpeg",
-      "lastUpdated": "2026-04-14T03:23:18.604Z"
+      "url": "https://www.walmart.ca/search?q=DeWalt%20table%20saw",
+      "name": "Dewalt OEM A26148 Table Saw Anti-Kickback DCS7485B DCS7485T1 DW744X DW744XRS DW745 DW745-B2 DWE7480 DWE7490X DWE7491RS DWE7499GD",
+      "image": "https://i5.walmartimages.com/asr/3e46a609-93e6-494b-b70d-3c8c3f813064.321c64a451e7d667f36cef3d8a455e3f.jpeg",
+      "lastUpdated": "2026-04-14T09:21:07.314Z"
     },
     {
       "store": "Home Depot Canada",
       "storeLogo": "homedepot",
-      "lastUpdated": "2026-04-14T03:23:18.605Z",
+      "lastUpdated": "2026-04-14T09:21:07.314Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.homedepot.ca/search?q=DeWalt%20table%20saw",
@@ -25,7 +25,7 @@
     {
       "store": "Amazon Canada",
       "storeLogo": "amazon",
-      "lastUpdated": "2026-04-14T03:23:18.605Z",
+      "lastUpdated": "2026-04-14T09:21:07.314Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.amazon.ca/s?k=DeWalt%20table%20saw&i=tools&tag=canadiantool-20",
@@ -35,7 +35,7 @@
     {
       "store": "RONA",
       "storeLogo": "rona",
-      "lastUpdated": "2026-04-14T03:23:18.605Z",
+      "lastUpdated": "2026-04-14T09:21:07.314Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.rona.ca/en/search?q=DeWalt%20table%20saw",
@@ -45,7 +45,7 @@
     {
       "store": "Canadian Tire",
       "storeLogo": "canadiantire",
-      "lastUpdated": "2026-04-14T03:23:18.605Z",
+      "lastUpdated": "2026-04-14T09:21:07.314Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.canadiantire.ca/en/search-results.html?q=DeWalt%20table%20saw",
@@ -55,7 +55,7 @@
     {
       "store": "Princess Auto",
       "storeLogo": "princessauto",
-      "lastUpdated": "2026-04-14T03:23:18.605Z",
+      "lastUpdated": "2026-04-14T09:21:07.314Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.princessauto.com/en/search#q=DeWalt%20table%20saw",
@@ -63,5 +63,5 @@
       "notCarried": true
     }
   ],
-  "fetchedAt": "2026-04-14T03:23:18.605Z"
+  "fetchedAt": "2026-04-14T09:21:07.314Z"
 }

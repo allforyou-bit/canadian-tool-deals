@@ -210,8 +210,105 @@ async function scrapeRONA(query, brand = null) {
   } catch { return [] }
 }
 
+async function scrapeAmazon(query, brand = null) {
+  try {
+    const res = await fetchWithTimeout(`https://www.amazon.ca/s?k=${encodeURIComponent(query)}&i=tools`, { headers: HEADERS })
+    if (!res.ok) return []
+    const html = await res.text()
+    if (html.includes('captcha') || html.includes('/errors/validateCaptcha')) return []
+    const results = []
+    const blocks = [...html.matchAll(/data-asin="([A-Z0-9]{10})"([\s\S]{0,2000}?)"a-price-whole">(\d[\d,]*)<\/span>/g)]
+    for (const block of blocks) {
+      const asin = block[1]
+      const context = block[2]
+      const price = parseFloat(block[3].replace(/,/g, ''))
+      if (!asin || price <= 0) continue
+      const fraction = context.match(/"a-price-fraction">(\d+)<\/span>/)
+      const fullPrice = fraction ? price + parseFloat(`0.${fraction[1]}`) : price
+      const nameMatch = context.match(/alt="([^"]{10,150})"/)
+      const productName = nameMatch?.[1]
+      if (productName && !isRelevant(productName, query, brand)) continue
+      const img = context.match(/src="(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+)"/)
+      results.push({
+        store: 'Amazon Canada', storeLogo: 'amazon', price: fullPrice, inStock: true,
+        url: `https://www.amazon.ca/dp/${asin}?tag=canadiantool-20`,
+        name: productName ?? query, image: img?.[1],
+        lastUpdated: new Date().toISOString(),
+      })
+      if (results.length >= 2) break
+    }
+    return results
+  } catch { return [] }
+}
+
+async function scrapeCanadianTire(query, brand = null) {
+  try {
+    const apiUrl = `https://api.canadiantire.ca/search/api/v0/product/en/?q=${encodeURIComponent(query)}&store=0144&lang=en&site=ct&format=json&numItems=5&fromPos=0`
+    const res = await fetchWithTimeout(apiUrl, {
+      headers: { ...HEADERS, 'Referer': 'https://www.canadiantire.ca/', 'Origin': 'https://www.canadiantire.ca' }
+    })
+    if (!res.ok) return []
+    const data = await res.json()
+    const items = data?.products ?? []
+    const results = []
+    for (const item of items) {
+      const name = item?.Name ?? ''
+      if (!isRelevant(name, query, brand)) continue
+      const price = item?.Price ?? 0
+      if (price <= 0) continue
+      const originalPrice = item?.WasPrice
+      results.push({
+        store: 'Canadian Tire', storeLogo: 'canadiantire', price, inStock: true,
+        originalPrice,
+        discount: originalPrice && originalPrice > price ? Math.round(((originalPrice - price) / originalPrice) * 100) : undefined,
+        url: `https://www.canadiantire.ca/en/pdp/${item?.Sku ?? ''}.html`,
+        name, image: item?.Thumbnail,
+        lastUpdated: new Date().toISOString(),
+      })
+      if (results.length >= 2) break
+    }
+    return results
+  } catch { return [] }
+}
+
+async function scrapePrincessAuto(query, brand = null) {
+  try {
+    const res = await fetchWithTimeout(`https://www.princessauto.com/en/search#q=${encodeURIComponent(query)}`, { headers: HEADERS })
+    if (!res.ok) return []
+    const html = await res.text()
+    const results = []
+    for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+      try {
+        const d = JSON.parse(m[1])
+        const items = Array.isArray(d) ? d : [d]
+        for (const item of items) {
+          if (item['@type'] !== 'Product') continue
+          if (!isRelevant(item.name, query, brand)) continue
+          const offer = Array.isArray(item.offers) ? item.offers[0] : item.offers
+          const price = parseFloat(offer?.price ?? '0')
+          if (price > 5) results.push({
+            store: 'Princess Auto', storeLogo: 'princessauto', price, inStock: true,
+            url: item.url ?? STORE_SEARCH_URLS.princessauto(query),
+            name: item.name ?? query,
+            lastUpdated: new Date().toISOString(),
+          })
+        }
+      } catch {}
+      if (results.length >= 2) break
+    }
+    return results
+  } catch { return [] }
+}
+
 // ── Build one query result ────────────────────────────────────────────────────
-const SCRAPERS = { walmart: scrapeWalmart, homedepot: scrapeHomeDepot, rona: scrapeRONA }
+const SCRAPERS = {
+  walmart: scrapeWalmart,
+  homedepot: scrapeHomeDepot,
+  amazon: scrapeAmazon,
+  canadiantire: scrapeCanadianTire,
+  rona: scrapeRONA,
+  princessauto: scrapePrincessAuto,
+}
 
 async function scrapeQuery(query) {
   const brandInfo = getApplicableStores(query)

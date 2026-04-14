@@ -8,14 +8,14 @@
       "price": 59.98,
       "inStock": true,
       "url": "https://www.walmart.ca/search?q=Worx%20drill",
-      "name": "Worx WX958L 20V Power Share Cordless Drill & Jigsaw with Flex Light Combo Kit",
-      "image": "https://i5.walmartimages.com/asr/cfdce108-b7a8-4f59-a7c9-98f73971ef50.ec236681057f1c0a658b5fa96185cde9.jpeg",
-      "lastUpdated": "2026-04-14T03:24:26.300Z"
+      "name": "Worx 4V Electric Screwdriver, Rechargeable Cordless Power Screwdriver Set with 6 Bits, Screw Holder, Charger - WX255L",
+      "image": "https://i5.walmartimages.com/asr/7d600b59-4c68-49be-9d49-32fd7ed7fbe4.5ed01e457666753f46059e202bbe2248.jpeg",
+      "lastUpdated": "2026-04-14T09:22:25.023Z"
     },
     {
       "store": "Amazon Canada",
       "storeLogo": "amazon",
-      "lastUpdated": "2026-04-14T03:24:26.300Z",
+      "lastUpdated": "2026-04-14T09:22:25.023Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.amazon.ca/s?k=Worx%20drill&i=tools&tag=canadiantool-20",
@@ -25,7 +25,7 @@
     {
       "store": "Home Depot Canada",
       "storeLogo": "homedepot",
-      "lastUpdated": "2026-04-14T03:24:26.300Z",
+      "lastUpdated": "2026-04-14T09:22:25.023Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.homedepot.ca/search?q=Worx%20drill",
@@ -35,7 +35,7 @@
     {
       "store": "Canadian Tire",
       "storeLogo": "canadiantire",
-      "lastUpdated": "2026-04-14T03:24:26.300Z",
+      "lastUpdated": "2026-04-14T09:22:25.023Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.canadiantire.ca/en/search-results.html?q=Worx%20drill",
@@ -45,7 +45,7 @@
     {
       "store": "RONA",
       "storeLogo": "rona",
-      "lastUpdated": "2026-04-14T03:24:26.300Z",
+      "lastUpdated": "2026-04-14T09:22:25.023Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.rona.ca/en/search?q=Worx%20drill",
@@ -55,7 +55,7 @@
     {
       "store": "Princess Auto",
       "storeLogo": "princessauto",
-      "lastUpdated": "2026-04-14T03:24:26.300Z",
+      "lastUpdated": "2026-04-14T09:22:25.023Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.princessauto.com/en/search#q=Worx%20drill",
@@ -63,5 +63,5 @@
       "notCarried": true
     }
   ],
-  "fetchedAt": "2026-04-14T03:24:26.300Z"
+  "fetchedAt": "2026-04-14T09:22:25.023Z"
 }

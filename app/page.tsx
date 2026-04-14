@@ -35,6 +35,29 @@ async function pingExtension(): Promise<boolean> {
   }
 }
 
+const BRAND_DISPLAY: Record<string, string> = {
+  'milwaukee': 'Milwaukee', 'm18': 'Milwaukee M18', 'm12': 'Milwaukee M12',
+  'milwaukee packout': 'Milwaukee Packout', 'milwaukee fuel': 'Milwaukee FUEL',
+  'mx fuel': 'Milwaukee MX FUEL', 'ryobi': 'RYOBI', 'ryobi one+': 'RYOBI ONE+',
+  'ridgid': 'RIDGID', 'husky': 'Husky', 'husqvarna': 'Husqvarna',
+  'klein': 'Klein Tools', 'klein tools': 'Klein Tools', 'ego': 'EGO',
+  'ego power+': 'EGO Power+', 'mastercraft': 'Mastercraft', 'maximum': 'Maximum',
+  'jobmate': 'Jobmate', 'yardworks': 'Yardworks', 'motomaster': 'MotoMaster',
+  'powerfist': 'Powerfist', 'dewalt': 'DeWalt', 'tough system': 'DeWalt ToughSystem',
+  'makita': 'Makita', 'bosch': 'Bosch', 'stanley': 'Stanley', 'stanley fatmax': 'Stanley FatMax',
+  'craftsman': 'Craftsman', 'gearwrench': 'GearWrench', 'lincoln': 'Lincoln',
+  'lincoln electric': 'Lincoln Electric', 'lincoln industrial': 'Lincoln Industrial',
+  'black+decker': 'Black+Decker', 'black decker': 'Black+Decker',
+  'black & decker': 'Black+Decker', 'fluke': 'Fluke', 'worx': 'WORX',
+  'irwin': 'IRWIN', 'metabo': 'Metabo HPT', 'hitachi': 'Hitachi',
+  'snap-on': 'Snap-on', 'snapon': 'Snap-on', 'channellock': 'Channellock',
+  'knipex': 'KNIPEX', 'wera': 'Wera', 'hart': 'Hart', 'greenworks': 'Greenworks',
+  'dremel': 'Dremel', 'leatherman': 'Leatherman',
+}
+function brandDisplay(brand: string): string {
+  return BRAND_DISPLAY[brand.toLowerCase()] ?? (brand.charAt(0).toUpperCase() + brand.slice(1))
+}
+
 const POPULAR = [
   'Milwaukee M18 drill',
   'DeWalt 20V circular saw',
@@ -323,7 +346,7 @@ export default function Home() {
               <div className="mb-3 flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-50 border border-blue-100 text-xs text-blue-700">
                 <span>🏷️</span>
                 <span>
-                  <strong className="capitalize">{data.brand}</strong> — showing only stores that carry this brand in Canada
+                  <strong>{brandDisplay(data.brand)}</strong> — showing only stores that carry this brand in Canada
                 </span>
               </div>
             )}
@@ -386,9 +409,13 @@ export default function Home() {
               </div>
             )}
 
-            <p className="mt-6 text-xs text-gray-400 text-center">
-              Prices fetched in real-time · Links may include affiliate commissions
-            </p>
+            <div className="mt-6 flex items-center justify-center gap-3 text-xs text-gray-400">
+              {data.fetchedAt && (
+                <span>Updated {new Date(data.fetchedAt).toLocaleString('en-CA', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+              )}
+              <span>·</span>
+              <span>Links may include affiliate commissions</span>
+            </div>
           </div>
         )}
 
