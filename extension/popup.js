@@ -1,7 +1,29 @@
 const POPULAR = [
-  'Milwaukee M18', 'DeWalt circular saw', 'Makita impact driver',
+  'Milwaukee M18 drill', 'DeWalt circular saw', 'Makita impact driver',
   'RIDGID shop vac', 'Milwaukee Packout', 'Bosch laser level',
+  'Mastercraft socket set', 'Craftsman wrench', 'Hart drill',
 ]
+
+const BRAND_DISPLAY = {
+  'milwaukee': 'Milwaukee', 'm18': 'Milwaukee M18', 'm12': 'Milwaukee M12',
+  'milwaukee packout': 'Milwaukee Packout', 'milwaukee fuel': 'Milwaukee FUEL',
+  'mx fuel': 'Milwaukee MX FUEL', 'ryobi': 'RYOBI', 'ridgid': 'RIDGID',
+  'husky': 'Husky', 'klein': 'Klein Tools', 'klein tools': 'Klein Tools',
+  'ego': 'EGO', 'ego power+': 'EGO Power+', 'mastercraft': 'Mastercraft',
+  'maximum': 'Maximum', 'jobmate': 'Jobmate', 'powerfist': 'Powerfist',
+  'dewalt': 'DeWalt', 'makita': 'Makita', 'bosch': 'Bosch',
+  'stanley': 'Stanley', 'craftsman': 'Craftsman', 'gearwrench': 'GearWrench',
+  'lincoln': 'Lincoln', 'lincoln electric': 'Lincoln Electric',
+  'black+decker': 'Black+Decker', 'fluke': 'Fluke', 'worx': 'WORX',
+  'irwin': 'IRWIN', 'metabo': 'Metabo HPT', 'snap-on': 'Snap-on',
+  'channellock': 'Channellock', 'knipex': 'KNIPEX', 'wera': 'Wera',
+  'hart': 'Hart', 'greenworks': 'Greenworks', 'dremel': 'Dremel',
+  'leatherman': 'Leatherman',
+}
+function getBrandDisplay(brand) {
+  if (!brand) return null
+  return BRAND_DISPLAY[brand.toLowerCase()] ?? (brand.charAt(0).toUpperCase() + brand.slice(1))
+}
 
 const STORE_COLORS = {
   'Walmart Canada': '#0071DC',
@@ -50,7 +72,7 @@ function renderResults(data) {
   // Brand detected notice
   if (brand) {
     html += `<div style="font-size:10px;color:#475569;margin-bottom:8px;padding:4px 8px;background:#1e293b;border-radius:6px;">
-      🏷️ <strong style="color:#94a3b8">${brand.charAt(0).toUpperCase() + brand.slice(1)}</strong> — showing stores that carry this brand
+      🏷️ <strong style="color:#94a3b8">${getBrandDisplay(brand)}</strong> — showing stores that carry this brand
     </div>`
   }
 
@@ -146,6 +168,7 @@ async function doSearch(query) {
   try {
     const data = await chrome.runtime.sendMessage({ type: 'SEARCH', query })
     renderResults(data)
+    chrome.storage.local.set({ lastQuery: query, lastResults: data })
   } catch (e) {
     content.innerHTML = `<div class="empty"><div class="icon">⚠️</div><p>Search failed</p><p style="font-size:11px;margin-top:4px">${e.message ?? 'Try again'}</p></div>`
   } finally {
