@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Canadian Tool Deals — Live Price Checker",
+  "version": "1.0.0",
+  "description": "Fetch live tool prices from Canadian Tire, Home Depot, Walmart, Amazon, RONA & Princess Auto directly from your browser.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://www.walmart.ca/*",
+    "https://www.homedepot.ca/*",
+    "https://www.amazon.ca/*",
+    "https://www.canadiantire.ca/*",
+    "https://www.rona.ca/*",
+    "https://www.princessauto.com/*"
+  ],
+  "externally_connectable": {
+    "matches": [
+      "https://canadian-tool-deals.vercel.app/*",
+      "http://localhost:3000/*"
+    ]
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Canadian Tool Deals",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
