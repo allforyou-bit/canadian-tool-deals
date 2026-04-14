@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { readFileSync, existsSync } from 'fs'
 import { join } from 'path'
+import { getApplicableStores, ALL_STORES, STORE_NAMES } from '@/lib/brands'
 
 export const runtime = 'nodejs'
 
@@ -8,25 +9,30 @@ function slugify(str: string) {
   return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 }
 
-function storeFallback(store: string, logo: string, query: string, url: string) {
-  return { store, storeLogo: logo, price: 0, inStock: true, url, name: `Search "${query}" on ${store}`, checkManually: true, lastUpdated: new Date().toISOString() }
+const STORE_URLS: Record<string, (q: string) => string> = {
+  walmart:      q => `https://www.walmart.ca/search?q=${q}`,
+  homedepot:    q => `https://www.homedepot.ca/search?q=${q}`,
+  amazon:       q => `https://www.amazon.ca/s?k=${q}&i=tools&tag=canadiantool-20`,
+  canadiantire: q => `https://www.canadiantire.ca/en/search-results.html?q=${q}`,
+  rona:         q => `https://www.rona.ca/en/search?q=${q}`,
+  princessauto: q => `https://www.princessauto.com/en/search#q=${q}`,
 }
 
 function buildFallbackResponse(query: string) {
   const q = encodeURIComponent(query)
-  return {
-    query,
-    cached: false,
-    prices: [
-      storeFallback('Walmart Canada', 'walmart', query, `https://www.walmart.ca/search?q=${q}`),
-      storeFallback('Home Depot Canada', 'homedepot', query, `https://www.homedepot.ca/search?q=${q}`),
-      storeFallback('Amazon Canada', 'amazon', query, `https://www.amazon.ca/s?k=${q}&i=tools&tag=canadiantool-20`),
-      storeFallback('Canadian Tire', 'canadiantire', query, `https://www.canadiantire.ca/en/search-results.html?q=${q}`),
-      storeFallback('RONA', 'rona', query, `https://www.rona.ca/en/search?q=${q}`),
-      storeFallback('Princess Auto', 'princessauto', query, `https://www.princessauto.com/en/search#q=${q}`),
-    ],
-    fetchedAt: new Date().toISOString(),
-  }
+  const brandInfo = getApplicableStores(query)
+  const applicable = brandInfo?.stores ?? ALL_STORES
+
+  const prices = ALL_STORES.map(id => {
+    const name = STORE_NAMES[id]
+    const url = STORE_URLS[id](q)
+    if (!applicable.includes(id)) {
+      return { store: name, storeLogo: id, price: 0, inStock: false, url, name: `${brandInfo?.brand ? `${brandInfo.brand} not sold at ${name}` : 'Not available'}`, notCarried: true, lastUpdated: new Date().toISOString() }
+    }
+    return { store: name, storeLogo: id, price: 0, inStock: true, url, name: `Search "${query}" on ${name}`, checkManually: true, lastUpdated: new Date().toISOString() }
+  })
+
+  return { query, brand: brandInfo?.brand ?? null, cached: false, prices, fetchedAt: new Date().toISOString() }
 }
 
 export async function GET(req: NextRequest) {

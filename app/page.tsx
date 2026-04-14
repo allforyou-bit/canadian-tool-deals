@@ -204,8 +204,9 @@ export default function Home() {
     }
   }
 
-  const realPrices = data?.prices.filter(p => !p.checkManually && p.price > 0) ?? []
+  const realPrices = data?.prices.filter(p => !p.checkManually && !p.notCarried && p.price > 0) ?? []
   const manualPrices = data?.prices.filter(p => p.checkManually) ?? []
+  const notCarriedPrices = data?.prices.filter(p => p.notCarried) ?? []
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -343,7 +344,23 @@ export default function Home() {
               </div>
             )}
 
-            {realPrices.length === 0 && manualPrices.length === 0 && (
+            {/* Not carried stores */}
+            {notCarriedPrices.length > 0 && (
+              <div className="mt-4">
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Not sold at these stores</p>
+                <div className="flex flex-col gap-1.5">
+                  {notCarriedPrices.map(p => (
+                    <div key={p.store} className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-gray-100 bg-gray-50 opacity-50">
+                      <span className="text-gray-300 text-sm font-bold">✕</span>
+                      <span className="text-sm font-semibold text-gray-400">{p.store}</span>
+                      <span className="text-xs text-gray-400 ml-auto">Brand not carried</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {realPrices.length === 0 && manualPrices.length === 0 && notCarriedPrices.length === 0 && (
               <div className="text-center py-12 text-gray-400">
                 <p className="text-4xl mb-3">🔍</p>
                 <p className="font-medium text-gray-600">No results found</p>
