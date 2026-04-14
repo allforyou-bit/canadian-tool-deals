@@ -1,21 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { readFileSync, existsSync } from 'fs'
 import { join } from 'path'
-import { getApplicableStores, ALL_STORES, STORE_NAMES } from '@/lib/brands'
+import { getApplicableStores, ALL_STORES, STORE_NAMES, STORE_URLS } from '@/lib/brands'
 
 export const runtime = 'nodejs'
 
 function slugify(str: string) {
   return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
-}
-
-const STORE_URLS: Record<string, (q: string) => string> = {
-  walmart:      q => `https://www.walmart.ca/search?q=${q}`,
-  homedepot:    q => `https://www.homedepot.ca/search?q=${q}`,
-  amazon:       q => `https://www.amazon.ca/s?k=${q}&i=tools&tag=canadiantool-20`,
-  canadiantire: q => `https://www.canadiantire.ca/en/search-results.html?q=${q}`,
-  rona:         q => `https://www.rona.ca/en/search?q=${q}`,
-  princessauto: q => `https://www.princessauto.com/en/search#q=${q}`,
 }
 
 function buildFallbackResponse(query: string) {
