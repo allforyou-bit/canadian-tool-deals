@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { ToolPrice, SearchResponse } from '@/lib/types'
 
 // Chrome extension ID — update after publishing to Chrome Web Store
-const EXTENSION_ID = 'YOUR_EXTENSION_ID_HERE'
+const EXTENSION_ID = 'pmnkaniabfpfenlihdfafembmadnjmfj'
 
 declare const chrome: any
 

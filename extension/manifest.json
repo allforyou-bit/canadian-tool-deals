@@ -3,6 +3,7 @@
   "name": "Canadian Tool Deals — Live Price Checker",
   "version": "1.0.0",
   "description": "Fetch live tool prices from Canadian Tire, Home Depot, Walmart, Amazon, RONA & Princess Auto directly from your browser.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmteIFmBKBMf8XP5c3UUeZ/ctCJxxo6xP4MJmPt1UaBBbWc3i8RGzqFhB2GqXPEtxjLg/Z7rGhat3o2oQt1hKHYbYqOQsXd2oT6jVarzAUutH9FoCrEZdh8VvOq6hrUo46h6hD0qN2hFoXZpt8BNPD6r2nFux0wkkmyHy1206gHZjJ844O+jJTXZH7VZZ0j2uBoiVq9lmHd+35PCnrj6wF6bMsOexIzbVJEZg2kbYwlDSxPsFhC7vPqrUN3Xvmti95nxXfvHjudDBp/a4xs2jGp1cOUSQxFnswElo84NRt4O66feOEkN58Ni7YPRqTQhY9k1k1egvHw0W6Be5GY1WTwIDAQAB",
   "permissions": ["storage"],
   "host_permissions": [
     "https://www.walmart.ca/*",
