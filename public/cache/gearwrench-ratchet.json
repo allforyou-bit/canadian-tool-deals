@@ -1,0 +1,67 @@
+{
+  "query": "GearWrench ratchet",
+  "brand": "gearwrench",
+  "prices": [
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:23:57.575Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=GearWrench%20ratchet&i=tools&tag=canadiantool-20",
+      "name": "Search \"GearWrench ratchet\" on Amazon Canada",
+      "checkManually": true
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:23:57.575Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=GearWrench%20ratchet",
+      "name": "Search \"GearWrench ratchet\" on Canadian Tire",
+      "checkManually": true
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:23:57.575Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=GearWrench%20ratchet",
+      "name": "Search \"GearWrench ratchet\" on RONA",
+      "checkManually": true
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:23:57.575Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=GearWrench%20ratchet",
+      "name": "Search \"GearWrench ratchet\" on Princess Auto",
+      "checkManually": true
+    },
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "lastUpdated": "2026-04-14T03:23:57.575Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.walmart.ca/search?q=GearWrench%20ratchet",
+      "name": "Gearwrench not sold at Walmart Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:23:57.575Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.homedepot.ca/search?q=GearWrench%20ratchet",
+      "name": "Gearwrench not sold at Home Depot Canada",
+      "notCarried": true
+    }
+  ],
+  "fetchedAt": "2026-04-14T03:23:57.575Z"
+}

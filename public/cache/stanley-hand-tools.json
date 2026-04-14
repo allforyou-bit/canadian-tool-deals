@@ -1,0 +1,67 @@
+{
+  "query": "Stanley hand tools",
+  "brand": "stanley",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 249.98,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/Stanley-Hand-Tools-Combination-Wrench-Set-7-Piece/6VO1W376UCLI?classType=REGULAR",
+      "name": "Stanley Hand Tools Combination Wrench Set, 7 Piece",
+      "image": "https://i5.walmartimages.com/asr/fe468599-4cfc-42e7-9e9f-f2486a7d9acc.1c8857a2d9dd96bf9e7a74f13c861a09.jpeg",
+      "lastUpdated": "2026-04-14T03:23:49.605Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:23:49.606Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Stanley%20hand%20tools&i=tools&tag=canadiantool-20",
+      "name": "Search \"Stanley hand tools\" on Amazon Canada",
+      "checkManually": true
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:23:49.606Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Stanley%20hand%20tools",
+      "name": "Search \"Stanley hand tools\" on Canadian Tire",
+      "checkManually": true
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:23:49.606Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=Stanley%20hand%20tools",
+      "name": "Search \"Stanley hand tools\" on RONA",
+      "checkManually": true
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:23:49.606Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.homedepot.ca/search?q=Stanley%20hand%20tools",
+      "name": "Stanley not sold at Home Depot Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:23:49.606Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.princessauto.com/en/search#q=Stanley%20hand%20tools",
+      "name": "Stanley not sold at Princess Auto",
+      "notCarried": true
+    }
+  ],
+  "fetchedAt": "2026-04-14T03:23:49.606Z"
+}

@@ -1,0 +1,67 @@
+{
+  "query": "Craftsman socket set",
+  "brand": "craftsman",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 179.98,
+      "inStock": true,
+      "url": "https://www.walmart.ca/search?q=Craftsman%20socket%20set",
+      "name": "CRAFTSMAN Socket Set, Universal, 1/4-Inch Drive, 22-Piece (CMMT12014)",
+      "image": "https://i5.walmartimages.com/asr/145d3446-71ab-416e-896e-3556607aa801.ec59fa0aea291fd4cd66d2a388995275.jpeg",
+      "lastUpdated": "2026-04-14T03:23:53.078Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:23:53.078Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Craftsman%20socket%20set&i=tools&tag=canadiantool-20",
+      "name": "Search \"Craftsman socket set\" on Amazon Canada",
+      "checkManually": true
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:23:53.078Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Craftsman%20socket%20set",
+      "name": "Search \"Craftsman socket set\" on Canadian Tire",
+      "checkManually": true
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:23:53.078Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.homedepot.ca/search?q=Craftsman%20socket%20set",
+      "name": "Craftsman not sold at Home Depot Canada",
+      "notCarried": true
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:23:53.078Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.rona.ca/en/search?q=Craftsman%20socket%20set",
+      "name": "Craftsman not sold at RONA",
+      "notCarried": true
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:23:53.078Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.princessauto.com/en/search#q=Craftsman%20socket%20set",
+      "name": "Craftsman not sold at Princess Auto",
+      "notCarried": true
+    }
+  ],
+  "fetchedAt": "2026-04-14T03:23:53.078Z"
+}

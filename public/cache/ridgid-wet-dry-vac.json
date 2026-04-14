@@ -1,67 +1,67 @@
 {
-  "query": "RIDGID shop vac",
+  "query": "RIDGID wet dry vac",
   "brand": "ridgid",
   "prices": [
     {
       "store": "Home Depot Canada",
       "storeLogo": "homedepot",
-      "lastUpdated": "2026-04-14T03:24:30.671Z",
+      "lastUpdated": "2026-04-14T03:24:32.047Z",
       "price": 0,
       "inStock": true,
-      "url": "https://www.homedepot.ca/search?q=RIDGID%20shop%20vac",
-      "name": "Search \"RIDGID shop vac\" on Home Depot Canada",
+      "url": "https://www.homedepot.ca/search?q=RIDGID%20wet%20dry%20vac",
+      "name": "Search \"RIDGID wet dry vac\" on Home Depot Canada",
       "checkManually": true
     },
     {
       "store": "Amazon Canada",
       "storeLogo": "amazon",
-      "lastUpdated": "2026-04-14T03:24:30.671Z",
+      "lastUpdated": "2026-04-14T03:24:32.047Z",
       "price": 0,
       "inStock": true,
-      "url": "https://www.amazon.ca/s?k=RIDGID%20shop%20vac&i=tools&tag=canadiantool-20",
-      "name": "Search \"RIDGID shop vac\" on Amazon Canada",
+      "url": "https://www.amazon.ca/s?k=RIDGID%20wet%20dry%20vac&i=tools&tag=canadiantool-20",
+      "name": "Search \"RIDGID wet dry vac\" on Amazon Canada",
       "checkManually": true
     },
     {
       "store": "Walmart Canada",
       "storeLogo": "walmart",
-      "lastUpdated": "2026-04-14T03:24:30.671Z",
+      "lastUpdated": "2026-04-14T03:24:32.047Z",
       "price": 0,
       "inStock": false,
-      "url": "https://www.walmart.ca/search?q=RIDGID%20shop%20vac",
+      "url": "https://www.walmart.ca/search?q=RIDGID%20wet%20dry%20vac",
       "name": "Ridgid not sold at Walmart Canada",
       "notCarried": true
     },
     {
       "store": "Canadian Tire",
       "storeLogo": "canadiantire",
-      "lastUpdated": "2026-04-14T03:24:30.671Z",
+      "lastUpdated": "2026-04-14T03:24:32.047Z",
       "price": 0,
       "inStock": false,
-      "url": "https://www.canadiantire.ca/en/search-results.html?q=RIDGID%20shop%20vac",
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=RIDGID%20wet%20dry%20vac",
       "name": "Ridgid not sold at Canadian Tire",
       "notCarried": true
     },
     {
       "store": "RONA",
       "storeLogo": "rona",
-      "lastUpdated": "2026-04-14T03:24:30.671Z",
+      "lastUpdated": "2026-04-14T03:24:32.047Z",
       "price": 0,
       "inStock": false,
-      "url": "https://www.rona.ca/en/search?q=RIDGID%20shop%20vac",
+      "url": "https://www.rona.ca/en/search?q=RIDGID%20wet%20dry%20vac",
       "name": "Ridgid not sold at RONA",
       "notCarried": true
     },
     {
       "store": "Princess Auto",
       "storeLogo": "princessauto",
-      "lastUpdated": "2026-04-14T03:24:30.671Z",
+      "lastUpdated": "2026-04-14T03:24:32.047Z",
       "price": 0,
       "inStock": false,
-      "url": "https://www.princessauto.com/en/search#q=RIDGID%20shop%20vac",
+      "url": "https://www.princessauto.com/en/search#q=RIDGID%20wet%20dry%20vac",
       "name": "Ridgid not sold at Princess Auto",
       "notCarried": true
     }
   ],
-  "fetchedAt": "2026-04-14T03:24:30.671Z"
+  "fetchedAt": "2026-04-14T03:24:32.047Z"
 }

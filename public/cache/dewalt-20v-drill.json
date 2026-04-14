@@ -1,0 +1,67 @@
+{
+  "query": "DeWalt 20V drill",
+  "brand": "dewalt",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 199.99,
+      "inStock": true,
+      "url": "https://www.walmart.ca/search?q=DeWalt%2020V%20drill",
+      "name": "DEWALT 60V MAX Cordless Drill for Concrete Mixing, E-Clutch System DCD130T1",
+      "image": "https://i5.walmartimages.com/asr/4fb24cd8-c2d1-412e-a8d3-8726334fe548.f92ddf1e9c7937aa41706b15d338b5c4.jpeg",
+      "lastUpdated": "2026-04-14T03:23:12.832Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:23:12.832Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=DeWalt%2020V%20drill",
+      "name": "Search \"DeWalt 20V drill\" on Home Depot Canada",
+      "checkManually": true
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:23:12.832Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=DeWalt%2020V%20drill&i=tools&tag=canadiantool-20",
+      "name": "Search \"DeWalt 20V drill\" on Amazon Canada",
+      "checkManually": true
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:23:12.832Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=DeWalt%2020V%20drill",
+      "name": "Search \"DeWalt 20V drill\" on RONA",
+      "checkManually": true
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:23:12.832Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=DeWalt%2020V%20drill",
+      "name": "Dewalt not sold at Canadian Tire",
+      "notCarried": true
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:23:12.832Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.princessauto.com/en/search#q=DeWalt%2020V%20drill",
+      "name": "Dewalt not sold at Princess Auto",
+      "notCarried": true
+    }
+  ],
+  "fetchedAt": "2026-04-14T03:23:12.832Z"
+}

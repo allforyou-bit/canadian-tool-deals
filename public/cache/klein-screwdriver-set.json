@@ -1,0 +1,67 @@
+{
+  "query": "Klein screwdriver set",
+  "brand": "klein",
+  "prices": [
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:24:36.237Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=Klein%20screwdriver%20set",
+      "name": "Search \"Klein screwdriver set\" on Home Depot Canada",
+      "checkManually": true
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:24:36.237Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Klein%20screwdriver%20set&i=tools&tag=canadiantool-20",
+      "name": "Search \"Klein screwdriver set\" on Amazon Canada",
+      "checkManually": true
+    },
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "lastUpdated": "2026-04-14T03:24:36.237Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.walmart.ca/search?q=Klein%20screwdriver%20set",
+      "name": "Klein not sold at Walmart Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:24:36.237Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Klein%20screwdriver%20set",
+      "name": "Klein not sold at Canadian Tire",
+      "notCarried": true
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:24:36.237Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.rona.ca/en/search?q=Klein%20screwdriver%20set",
+      "name": "Klein not sold at RONA",
+      "notCarried": true
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:24:36.237Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.princessauto.com/en/search#q=Klein%20screwdriver%20set",
+      "name": "Klein not sold at Princess Auto",
+      "notCarried": true
+    }
+  ],
+  "fetchedAt": "2026-04-14T03:24:36.237Z"
+}

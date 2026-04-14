@@ -1,0 +1,67 @@
+{
+  "query": "Hart drill",
+  "brand": "hart",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 204.9,
+      "inStock": true,
+      "url": "https://www.walmart.ca/search?q=Hart%20drill",
+      "name": "HART 20-Volt Cordless 1/2-inch Drill/Driver Kit (1) 1.5Ah Lithium-Ion Battery",
+      "image": "https://i5.walmartimages.com/asr/d455f1da-d263-407c-bc21-41a6cc92a3d3.8d7c73fd03334ed0325b20ef4774b06b.jpeg",
+      "lastUpdated": "2026-04-14T03:24:13.259Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:24:13.259Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.homedepot.ca/search?q=Hart%20drill",
+      "name": "Hart not sold at Home Depot Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:24:13.259Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.amazon.ca/s?k=Hart%20drill&i=tools&tag=canadiantool-20",
+      "name": "Hart not sold at Amazon Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:24:13.259Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Hart%20drill",
+      "name": "Hart not sold at Canadian Tire",
+      "notCarried": true
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:24:13.259Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.rona.ca/en/search?q=Hart%20drill",
+      "name": "Hart not sold at RONA",
+      "notCarried": true
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:24:13.259Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.princessauto.com/en/search#q=Hart%20drill",
+      "name": "Hart not sold at Princess Auto",
+      "notCarried": true
+    }
+  ],
+  "fetchedAt": "2026-04-14T03:24:13.259Z"
+}

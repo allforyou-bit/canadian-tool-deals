@@ -1,0 +1,67 @@
+{
+  "query": "Worx circular saw",
+  "brand": "worx",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 549.99,
+      "inStock": true,
+      "url": "https://www.walmart.ca/search?q=Worx%20circular%20saw",
+      "name": "WORX WX439L 4.5 Inch and 4.5 Amp One Hand Compact Circular Saw, Black and Orange",
+      "image": "https://i5.walmartimages.com/asr/8787075b-aab3-45cc-b6d2-0a53aac6a70e.03bff68b4435506542835c72626bafa0.jpeg",
+      "lastUpdated": "2026-04-14T03:24:29.221Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:24:29.221Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Worx%20circular%20saw&i=tools&tag=canadiantool-20",
+      "name": "Search \"Worx circular saw\" on Amazon Canada",
+      "checkManually": true
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:24:29.221Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.homedepot.ca/search?q=Worx%20circular%20saw",
+      "name": "Worx not sold at Home Depot Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:24:29.221Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Worx%20circular%20saw",
+      "name": "Worx not sold at Canadian Tire",
+      "notCarried": true
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:24:29.221Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.rona.ca/en/search?q=Worx%20circular%20saw",
+      "name": "Worx not sold at RONA",
+      "notCarried": true
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:24:29.221Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.princessauto.com/en/search#q=Worx%20circular%20saw",
+      "name": "Worx not sold at Princess Auto",
+      "notCarried": true
+    }
+  ],
+  "fetchedAt": "2026-04-14T03:24:29.221Z"
+}

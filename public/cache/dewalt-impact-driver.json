@@ -1,0 +1,67 @@
+{
+  "query": "DeWalt impact driver",
+  "brand": "dewalt",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 279.99,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/DEWALT-20V-BRUSHLESS-Impact-Driver-KIT/0Z4R3X5R6U6O?classType=REGULAR\\u0026athbdg=L1700",
+      "name": "DEWALT 20V BRUSHLESS Impact Driver KIT",
+      "image": "https://i5.walmartimages.com/asr/a34aca02-0db4-4601-bc08-328be9ceddf1.cc89eb61e22fa810d8ddfa0af7b9c262.jpeg",
+      "lastUpdated": "2026-04-14T03:23:21.826Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:23:21.826Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=DeWalt%20impact%20driver",
+      "name": "Search \"DeWalt impact driver\" on Home Depot Canada",
+      "checkManually": true
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:23:21.826Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=DeWalt%20impact%20driver&i=tools&tag=canadiantool-20",
+      "name": "Search \"DeWalt impact driver\" on Amazon Canada",
+      "checkManually": true
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:23:21.826Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=DeWalt%20impact%20driver",
+      "name": "Search \"DeWalt impact driver\" on RONA",
+      "checkManually": true
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:23:21.826Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=DeWalt%20impact%20driver",
+      "name": "Dewalt not sold at Canadian Tire",
+      "notCarried": true
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:23:21.826Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.princessauto.com/en/search#q=DeWalt%20impact%20driver",
+      "name": "Dewalt not sold at Princess Auto",
+      "notCarried": true
+    }
+  ],
+  "fetchedAt": "2026-04-14T03:23:21.826Z"
+}

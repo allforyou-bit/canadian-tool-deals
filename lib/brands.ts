@@ -123,6 +123,21 @@ export const BRAND_STORE_MAP: Record<string, string[]> = {
 
   // Milwaukee MX FUEL — Home Depot CA
   'mx fuel': ['homedepot'],
+
+  // Hart — Walmart Canada exclusive house brand
+  'hart': ['walmart'],
+
+  // Greenworks — Home Depot CA, Amazon
+  'greenworks': ['homedepot', 'amazon'],
+
+  // Dremel — Home Depot CA, Amazon, Canadian Tire
+  'dremel': ['homedepot', 'amazon', 'canadiantire'],
+
+  // Leatherman — Amazon, Canadian Tire
+  'leatherman': ['amazon', 'canadiantire'],
+
+  // Gerber — Amazon, Canadian Tire
+  'gerber': ['amazon', 'canadiantire'],
 }
 
 // All store IDs
@@ -162,11 +177,12 @@ export function getApplicableStores(query: string): { brand: string; stores: str
 
 /**
  * Verify a scraped product name is relevant to the query.
- * Prevents showing unrelated products from wrong categories.
+ * When brand is known, requires the brand name to appear in the product name.
  */
-export function isRelevant(productName: string | undefined, query: string): boolean {
+export function isRelevant(productName: string | undefined, query: string, brand?: string | null): boolean {
   if (!productName) return false
   const name = productName.toLowerCase()
+  if (brand && !name.includes(brand.toLowerCase())) return false
   const words = query.toLowerCase().split(/\s+/).filter(w => w.length > 2)
   return words.some(w => name.includes(w))
 }

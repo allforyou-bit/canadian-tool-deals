@@ -1,0 +1,67 @@
+{
+  "query": "Craftsman wrench",
+  "brand": "craftsman",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 22.69,
+      "inStock": true,
+      "url": "https://www.walmart.ca/search?q=Craftsman%20wrench",
+      "name": "CRAFTSMAN 7-Piece Combination Ratcheting Wrench Set, 12-Point Standard SAE (CMMT87020)",
+      "image": "https://i5.walmartimages.com/asr/2ce7ffc2-1d7e-44e5-a406-4bf71ee89cca.f7376d0cb07d79787c4f9aac870c7c93.jpeg",
+      "lastUpdated": "2026-04-14T03:23:56.308Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:23:56.308Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Craftsman%20wrench&i=tools&tag=canadiantool-20",
+      "name": "Search \"Craftsman wrench\" on Amazon Canada",
+      "checkManually": true
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:23:56.308Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Craftsman%20wrench",
+      "name": "Search \"Craftsman wrench\" on Canadian Tire",
+      "checkManually": true
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:23:56.308Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.homedepot.ca/search?q=Craftsman%20wrench",
+      "name": "Craftsman not sold at Home Depot Canada",
+      "notCarried": true
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:23:56.308Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.rona.ca/en/search?q=Craftsman%20wrench",
+      "name": "Craftsman not sold at RONA",
+      "notCarried": true
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:23:56.308Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.princessauto.com/en/search#q=Craftsman%20wrench",
+      "name": "Craftsman not sold at Princess Auto",
+      "notCarried": true
+    }
+  ],
+  "fetchedAt": "2026-04-14T03:23:56.308Z"
+}

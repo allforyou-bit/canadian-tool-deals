@@ -1,0 +1,67 @@
+{
+  "query": "Hart impact driver",
+  "brand": "hart",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 42.06,
+      "inStock": true,
+      "url": "https://www.walmart.ca/search?q=Hart%20impact%20driver",
+      "name": "HART 20-Volt Cordless Impact Driver Kit, (1) 1.5Ah Lithium-Ion Battery",
+      "image": "https://i5.walmartimages.com/asr/4de4180b-60ca-4e7d-a2b2-03bcd93a21f2.3da82b7ba73dce50bad0952062c52a7d.jpeg",
+      "lastUpdated": "2026-04-14T03:24:16.784Z"
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:24:16.784Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.homedepot.ca/search?q=Hart%20impact%20driver",
+      "name": "Hart not sold at Home Depot Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:24:16.784Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.amazon.ca/s?k=Hart%20impact%20driver&i=tools&tag=canadiantool-20",
+      "name": "Hart not sold at Amazon Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:24:16.784Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Hart%20impact%20driver",
+      "name": "Hart not sold at Canadian Tire",
+      "notCarried": true
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:24:16.784Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.rona.ca/en/search?q=Hart%20impact%20driver",
+      "name": "Hart not sold at RONA",
+      "notCarried": true
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:24:16.784Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.princessauto.com/en/search#q=Hart%20impact%20driver",
+      "name": "Hart not sold at Princess Auto",
+      "notCarried": true
+    }
+  ],
+  "fetchedAt": "2026-04-14T03:24:16.784Z"
+}

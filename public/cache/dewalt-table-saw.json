@@ -1,66 +1,67 @@
 {
   "query": "DeWalt table saw",
+  "brand": "dewalt",
   "prices": [
     {
       "store": "Walmart Canada",
       "storeLogo": "walmart",
-      "price": 699.99,
+      "price": 999.99,
       "inStock": true,
-      "url": "https://www.walmart.ca/en/ip/Greenworks-6pcs-6-5-Circular-saw-400in-lbs-drill-driver-flashlight-impact-driver-multi-tool-recip-saw-Combo-kit/1UT5QM08I8WK",
-      "name": "Greenworks 24V 5 PCS Power Tool Combo Kit",
-      "image": "https://i5.walmartimages.com/asr/95981b61-f3e6-4884-9f58-17964a775354.e927f82a001dee14cf01e0c3faaf68f2.jpeg",
-      "lastUpdated": "2026-04-13T19:13:18.431Z"
+      "url": "https://www.walmart.ca/en/ip/DEWALT-20V-MAX-Cordless-Reciprocating-Saw-Kit-DCS380P1/6QD14ZANTFEU?classType=REGULAR",
+      "name": "DEWALT 20V MAX* Cordless Reciprocating Saw Kit (DCS380P1)",
+      "image": "https://i5.walmartimages.com/asr/4badbaf6-5d9b-4576-850c-e522f4e16af4_1.011e7a6ec126cc723772261dff73f8b9.jpeg",
+      "lastUpdated": "2026-04-14T03:23:18.604Z"
     },
     {
       "store": "Home Depot Canada",
       "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:23:18.605Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.homedepot.ca/search?q=DeWalt%20table%20saw",
       "name": "Search \"DeWalt table saw\" on Home Depot Canada",
-      "checkManually": true,
-      "lastUpdated": "2026-04-13T19:13:18.431Z"
+      "checkManually": true
     },
     {
       "store": "Amazon Canada",
       "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:23:18.605Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.amazon.ca/s?k=DeWalt%20table%20saw&i=tools&tag=canadiantool-20",
       "name": "Search \"DeWalt table saw\" on Amazon Canada",
-      "checkManually": true,
-      "lastUpdated": "2026-04-13T19:13:18.431Z"
-    },
-    {
-      "store": "Canadian Tire",
-      "storeLogo": "canadiantire",
-      "price": 0,
-      "inStock": true,
-      "url": "https://www.canadiantire.ca/en/search-results.html?q=DeWalt%20table%20saw",
-      "name": "Search \"DeWalt table saw\" on Canadian Tire",
-      "checkManually": true,
-      "lastUpdated": "2026-04-13T19:13:18.431Z"
+      "checkManually": true
     },
     {
       "store": "RONA",
       "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:23:18.605Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.rona.ca/en/search?q=DeWalt%20table%20saw",
       "name": "Search \"DeWalt table saw\" on RONA",
-      "checkManually": true,
-      "lastUpdated": "2026-04-13T19:13:18.431Z"
+      "checkManually": true
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:23:18.605Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=DeWalt%20table%20saw",
+      "name": "Dewalt not sold at Canadian Tire",
+      "notCarried": true
     },
     {
       "store": "Princess Auto",
       "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:23:18.605Z",
       "price": 0,
-      "inStock": true,
+      "inStock": false,
       "url": "https://www.princessauto.com/en/search#q=DeWalt%20table%20saw",
-      "name": "Search \"DeWalt table saw\" on Princess Auto",
-      "checkManually": true,
-      "lastUpdated": "2026-04-13T19:13:18.431Z"
+      "name": "Dewalt not sold at Princess Auto",
+      "notCarried": true
     }
   ],
-  "fetchedAt": "2026-04-13T19:13:18.431Z"
+  "fetchedAt": "2026-04-14T03:23:18.605Z"
 }

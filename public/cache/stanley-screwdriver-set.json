@@ -1,0 +1,67 @@
+{
+  "query": "Stanley screwdriver set",
+  "brand": "stanley",
+  "prices": [
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "price": 39.99,
+      "inStock": true,
+      "url": "https://www.walmart.ca/en/ip/Stanley-Hand-Tools-Ratchet-Screwdriver-Set-Of-29/41TN9BSA265E?classType=REGULAR",
+      "name": "Stanley Hand Tools Ratchet Screwdriver Set Of 29",
+      "image": "https://i5.walmartimages.com/asr/7324b1f2-6be4-4c5b-8b81-9cc3ffee6cd6.c6cbe4a2690326236a3480613aada49d.jpeg",
+      "lastUpdated": "2026-04-14T03:23:44.192Z"
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:23:44.193Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Stanley%20screwdriver%20set&i=tools&tag=canadiantool-20",
+      "name": "Search \"Stanley screwdriver set\" on Amazon Canada",
+      "checkManually": true
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:23:44.193Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Stanley%20screwdriver%20set",
+      "name": "Search \"Stanley screwdriver set\" on Canadian Tire",
+      "checkManually": true
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:23:44.193Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.rona.ca/en/search?q=Stanley%20screwdriver%20set",
+      "name": "Search \"Stanley screwdriver set\" on RONA",
+      "checkManually": true
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:23:44.193Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.homedepot.ca/search?q=Stanley%20screwdriver%20set",
+      "name": "Stanley not sold at Home Depot Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:23:44.193Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.princessauto.com/en/search#q=Stanley%20screwdriver%20set",
+      "name": "Stanley not sold at Princess Auto",
+      "notCarried": true
+    }
+  ],
+  "fetchedAt": "2026-04-14T03:23:44.193Z"
+}

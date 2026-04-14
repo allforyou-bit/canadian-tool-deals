@@ -311,12 +311,30 @@ export default function Home() {
         {/* Results */}
         {data && !loading && (
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-3">
               <p className="text-sm text-gray-500">
                 Results for <span className="font-bold text-gray-900">"{searched}"</span>
               </p>
               <p className="text-xs text-gray-400">{realPrices.length} live prices</p>
             </div>
+
+            {/* Brand detection notice */}
+            {data.brand && (
+              <div className="mb-3 flex items-center gap-2 px-3 py-2 rounded-xl bg-blue-50 border border-blue-100 text-xs text-blue-700">
+                <span>🏷️</span>
+                <span>
+                  <strong className="capitalize">{data.brand}</strong> — showing only stores that carry this brand in Canada
+                </span>
+              </div>
+            )}
+
+            {/* Cached notice */}
+            {data.cached && !data.brand && (
+              <div className="mb-3 flex items-center gap-2 px-3 py-2 rounded-xl bg-amber-50 border border-amber-100 text-xs text-amber-700">
+                <span>⏱️</span>
+                <span>Showing cached prices — install the extension for live prices</span>
+              </div>
+            )}
 
             {/* Savings banner */}
             <SavingsBar prices={data.prices} />

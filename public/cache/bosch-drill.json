@@ -1,67 +1,67 @@
 {
-  "query": "Bosch laser level",
+  "query": "Bosch drill",
   "brand": "bosch",
   "prices": [
     {
       "store": "Home Depot Canada",
       "storeLogo": "homedepot",
-      "lastUpdated": "2026-04-14T03:24:01.627Z",
+      "lastUpdated": "2026-04-14T03:24:00.277Z",
       "price": 0,
       "inStock": true,
-      "url": "https://www.homedepot.ca/search?q=Bosch%20laser%20level",
-      "name": "Search \"Bosch laser level\" on Home Depot Canada",
+      "url": "https://www.homedepot.ca/search?q=Bosch%20drill",
+      "name": "Search \"Bosch drill\" on Home Depot Canada",
       "checkManually": true
     },
     {
       "store": "Amazon Canada",
       "storeLogo": "amazon",
-      "lastUpdated": "2026-04-14T03:24:01.627Z",
+      "lastUpdated": "2026-04-14T03:24:00.277Z",
       "price": 0,
       "inStock": true,
-      "url": "https://www.amazon.ca/s?k=Bosch%20laser%20level&i=tools&tag=canadiantool-20",
-      "name": "Search \"Bosch laser level\" on Amazon Canada",
+      "url": "https://www.amazon.ca/s?k=Bosch%20drill&i=tools&tag=canadiantool-20",
+      "name": "Search \"Bosch drill\" on Amazon Canada",
       "checkManually": true
     },
     {
       "store": "RONA",
       "storeLogo": "rona",
-      "lastUpdated": "2026-04-14T03:24:01.627Z",
+      "lastUpdated": "2026-04-14T03:24:00.277Z",
       "price": 0,
       "inStock": true,
-      "url": "https://www.rona.ca/en/search?q=Bosch%20laser%20level",
-      "name": "Search \"Bosch laser level\" on RONA",
+      "url": "https://www.rona.ca/en/search?q=Bosch%20drill",
+      "name": "Search \"Bosch drill\" on RONA",
       "checkManually": true
     },
     {
       "store": "Walmart Canada",
       "storeLogo": "walmart",
-      "lastUpdated": "2026-04-14T03:24:01.627Z",
+      "lastUpdated": "2026-04-14T03:24:00.277Z",
       "price": 0,
       "inStock": false,
-      "url": "https://www.walmart.ca/search?q=Bosch%20laser%20level",
+      "url": "https://www.walmart.ca/search?q=Bosch%20drill",
       "name": "Bosch not sold at Walmart Canada",
       "notCarried": true
     },
     {
       "store": "Canadian Tire",
       "storeLogo": "canadiantire",
-      "lastUpdated": "2026-04-14T03:24:01.627Z",
+      "lastUpdated": "2026-04-14T03:24:00.277Z",
       "price": 0,
       "inStock": false,
-      "url": "https://www.canadiantire.ca/en/search-results.html?q=Bosch%20laser%20level",
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Bosch%20drill",
       "name": "Bosch not sold at Canadian Tire",
       "notCarried": true
     },
     {
       "store": "Princess Auto",
       "storeLogo": "princessauto",
-      "lastUpdated": "2026-04-14T03:24:01.627Z",
+      "lastUpdated": "2026-04-14T03:24:00.277Z",
       "price": 0,
       "inStock": false,
-      "url": "https://www.princessauto.com/en/search#q=Bosch%20laser%20level",
+      "url": "https://www.princessauto.com/en/search#q=Bosch%20drill",
       "name": "Bosch not sold at Princess Auto",
       "notCarried": true
     }
   ],
-  "fetchedAt": "2026-04-14T03:24:01.627Z"
+  "fetchedAt": "2026-04-14T03:24:00.277Z"
 }

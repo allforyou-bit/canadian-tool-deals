@@ -1,0 +1,67 @@
+{
+  "query": "Maximum drill",
+  "brand": "maximum",
+  "prices": [
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:23:33.294Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Maximum%20drill",
+      "name": "Search \"Maximum drill\" on Canadian Tire",
+      "checkManually": true
+    },
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "lastUpdated": "2026-04-14T03:23:33.294Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.walmart.ca/search?q=Maximum%20drill",
+      "name": "Maximum not sold at Walmart Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:23:33.294Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.homedepot.ca/search?q=Maximum%20drill",
+      "name": "Maximum not sold at Home Depot Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:23:33.294Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.amazon.ca/s?k=Maximum%20drill&i=tools&tag=canadiantool-20",
+      "name": "Maximum not sold at Amazon Canada",
+      "notCarried": true
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:23:33.294Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.rona.ca/en/search?q=Maximum%20drill",
+      "name": "Maximum not sold at RONA",
+      "notCarried": true
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:23:33.294Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.princessauto.com/en/search#q=Maximum%20drill",
+      "name": "Maximum not sold at Princess Auto",
+      "notCarried": true
+    }
+  ],
+  "fetchedAt": "2026-04-14T03:23:33.294Z"
+}

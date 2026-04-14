@@ -1,0 +1,67 @@
+{
+  "query": "Powerfist air compressor",
+  "brand": "powerfist",
+  "prices": [
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:24:02.834Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.princessauto.com/en/search#q=Powerfist%20air%20compressor",
+      "name": "Search \"Powerfist air compressor\" on Princess Auto",
+      "checkManually": true
+    },
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "lastUpdated": "2026-04-14T03:24:02.834Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.walmart.ca/search?q=Powerfist%20air%20compressor",
+      "name": "Powerfist not sold at Walmart Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:24:02.834Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.homedepot.ca/search?q=Powerfist%20air%20compressor",
+      "name": "Powerfist not sold at Home Depot Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:24:02.834Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.amazon.ca/s?k=Powerfist%20air%20compressor&i=tools&tag=canadiantool-20",
+      "name": "Powerfist not sold at Amazon Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:24:02.834Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Powerfist%20air%20compressor",
+      "name": "Powerfist not sold at Canadian Tire",
+      "notCarried": true
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:24:02.834Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.rona.ca/en/search?q=Powerfist%20air%20compressor",
+      "name": "Powerfist not sold at RONA",
+      "notCarried": true
+    }
+  ],
+  "fetchedAt": "2026-04-14T03:24:02.834Z"
+}

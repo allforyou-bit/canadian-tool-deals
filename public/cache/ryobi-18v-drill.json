@@ -1,0 +1,67 @@
+{
+  "query": "Ryobi 18V drill",
+  "brand": "ryobi",
+  "prices": [
+    {
+      "store": "Home Depot Canada",
+      "storeLogo": "homedepot",
+      "lastUpdated": "2026-04-14T03:23:35.972Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.homedepot.ca/search?q=Ryobi%2018V%20drill",
+      "name": "Search \"Ryobi 18V drill\" on Home Depot Canada",
+      "checkManually": true
+    },
+    {
+      "store": "Amazon Canada",
+      "storeLogo": "amazon",
+      "lastUpdated": "2026-04-14T03:23:35.972Z",
+      "price": 0,
+      "inStock": true,
+      "url": "https://www.amazon.ca/s?k=Ryobi%2018V%20drill&i=tools&tag=canadiantool-20",
+      "name": "Search \"Ryobi 18V drill\" on Amazon Canada",
+      "checkManually": true
+    },
+    {
+      "store": "Walmart Canada",
+      "storeLogo": "walmart",
+      "lastUpdated": "2026-04-14T03:23:35.972Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.walmart.ca/search?q=Ryobi%2018V%20drill",
+      "name": "Ryobi not sold at Walmart Canada",
+      "notCarried": true
+    },
+    {
+      "store": "Canadian Tire",
+      "storeLogo": "canadiantire",
+      "lastUpdated": "2026-04-14T03:23:35.972Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.canadiantire.ca/en/search-results.html?q=Ryobi%2018V%20drill",
+      "name": "Ryobi not sold at Canadian Tire",
+      "notCarried": true
+    },
+    {
+      "store": "RONA",
+      "storeLogo": "rona",
+      "lastUpdated": "2026-04-14T03:23:35.972Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.rona.ca/en/search?q=Ryobi%2018V%20drill",
+      "name": "Ryobi not sold at RONA",
+      "notCarried": true
+    },
+    {
+      "store": "Princess Auto",
+      "storeLogo": "princessauto",
+      "lastUpdated": "2026-04-14T03:23:35.972Z",
+      "price": 0,
+      "inStock": false,
+      "url": "https://www.princessauto.com/en/search#q=Ryobi%2018V%20drill",
+      "name": "Ryobi not sold at Princess Auto",
+      "notCarried": true
+    }
+  ],
+  "fetchedAt": "2026-04-14T03:23:35.972Z"
+}
