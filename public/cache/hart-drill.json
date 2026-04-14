@@ -5,17 +5,17 @@
     {
       "store": "Walmart Canada",
       "storeLogo": "walmart",
-      "price": 25.99,
+      "lastUpdated": "2026-04-14T11:47:49.981Z",
+      "price": 0,
       "inStock": true,
       "url": "https://www.walmart.ca/search?q=Hart%20drill",
-      "name": "HART 200-Piece Assorted Drill and Drive Bit Set with Storage Case",
-      "image": "https://i5.walmartimages.com/asr/416d7927-f9b2-47e1-aa98-a7d78396b688.af2abdaa4ae34c625afce8e8496eb6ab.jpeg",
-      "lastUpdated": "2026-04-14T09:22:09.896Z"
+      "name": "Search \"Hart drill\" on Walmart Canada",
+      "checkManually": true
     },
     {
       "store": "Home Depot Canada",
       "storeLogo": "homedepot",
-      "lastUpdated": "2026-04-14T09:22:09.896Z",
+      "lastUpdated": "2026-04-14T11:47:49.981Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.homedepot.ca/search?q=Hart%20drill",
@@ -25,7 +25,7 @@
     {
       "store": "Amazon Canada",
       "storeLogo": "amazon",
-      "lastUpdated": "2026-04-14T09:22:09.896Z",
+      "lastUpdated": "2026-04-14T11:47:49.981Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.amazon.ca/s?k=Hart%20drill&i=tools&tag=canadiantool-20",
@@ -35,7 +35,7 @@
     {
       "store": "Canadian Tire",
       "storeLogo": "canadiantire",
-      "lastUpdated": "2026-04-14T09:22:09.896Z",
+      "lastUpdated": "2026-04-14T11:47:49.981Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.canadiantire.ca/en/search-results.html?q=Hart%20drill",
@@ -45,7 +45,7 @@
     {
       "store": "RONA",
       "storeLogo": "rona",
-      "lastUpdated": "2026-04-14T09:22:09.896Z",
+      "lastUpdated": "2026-04-14T11:47:49.981Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.rona.ca/en/search?q=Hart%20drill",
@@ -55,7 +55,7 @@
     {
       "store": "Princess Auto",
       "storeLogo": "princessauto",
-      "lastUpdated": "2026-04-14T09:22:09.896Z",
+      "lastUpdated": "2026-04-14T11:47:49.981Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.princessauto.com/en/search#q=Hart%20drill",
@@ -63,5 +63,5 @@
       "notCarried": true
     }
   ],
-  "fetchedAt": "2026-04-14T09:22:09.896Z"
+  "fetchedAt": "2026-04-14T11:47:49.981Z"
 }
