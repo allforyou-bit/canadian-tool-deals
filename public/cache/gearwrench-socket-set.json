@@ -5,7 +5,7 @@
     {
       "store": "Amazon Canada",
       "storeLogo": "amazon",
-      "lastUpdated": "2026-04-18T10:14:50.507Z",
+      "lastUpdated": "2026-04-19T10:14:26.244Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.amazon.ca/s?k=GearWrench%20socket%20set&i=tools&tag=canadiantool-20",
@@ -15,7 +15,7 @@
     {
       "store": "Canadian Tire",
       "storeLogo": "canadiantire",
-      "lastUpdated": "2026-04-18T10:14:50.507Z",
+      "lastUpdated": "2026-04-19T10:14:26.244Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.canadiantire.ca/en/search-results.html?q=GearWrench%20socket%20set",
@@ -25,7 +25,7 @@
     {
       "store": "RONA",
       "storeLogo": "rona",
-      "lastUpdated": "2026-04-18T10:14:50.507Z",
+      "lastUpdated": "2026-04-19T10:14:26.244Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.rona.ca/en/search?q=GearWrench%20socket%20set",
@@ -35,7 +35,7 @@
     {
       "store": "Princess Auto",
       "storeLogo": "princessauto",
-      "lastUpdated": "2026-04-18T10:14:50.507Z",
+      "lastUpdated": "2026-04-19T10:14:26.244Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.princessauto.com/en/search#q=GearWrench%20socket%20set",
@@ -45,7 +45,7 @@
     {
       "store": "Walmart Canada",
       "storeLogo": "walmart",
-      "lastUpdated": "2026-04-18T10:14:50.507Z",
+      "lastUpdated": "2026-04-19T10:14:26.244Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.walmart.ca/search?q=GearWrench%20socket%20set",
@@ -55,7 +55,7 @@
     {
       "store": "Home Depot Canada",
       "storeLogo": "homedepot",
-      "lastUpdated": "2026-04-18T10:14:50.507Z",
+      "lastUpdated": "2026-04-19T10:14:26.244Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.homedepot.ca/search?q=GearWrench%20socket%20set",
@@ -63,5 +63,5 @@
       "notCarried": true
     }
   ],
-  "fetchedAt": "2026-04-18T10:14:50.507Z"
+  "fetchedAt": "2026-04-19T10:14:26.244Z"
 }
