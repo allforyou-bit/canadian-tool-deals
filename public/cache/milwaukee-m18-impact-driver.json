@@ -5,7 +5,7 @@
     {
       "store": "Home Depot Canada",
       "storeLogo": "homedepot",
-      "lastUpdated": "2026-04-20T11:59:16.378Z",
+      "lastUpdated": "2026-04-21T11:45:27.893Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.homedepot.ca/search?q=Milwaukee%20M18%20impact%20driver",
@@ -15,7 +15,7 @@
     {
       "store": "Amazon Canada",
       "storeLogo": "amazon",
-      "lastUpdated": "2026-04-20T11:59:16.378Z",
+      "lastUpdated": "2026-04-21T11:45:27.893Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.amazon.ca/s?k=Milwaukee%20M18%20impact%20driver&i=tools&tag=canadiantool-20",
@@ -25,7 +25,7 @@
     {
       "store": "Walmart Canada",
       "storeLogo": "walmart",
-      "lastUpdated": "2026-04-20T11:59:16.378Z",
+      "lastUpdated": "2026-04-21T11:45:27.893Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.walmart.ca/search?q=Milwaukee%20M18%20impact%20driver",
@@ -35,7 +35,7 @@
     {
       "store": "Canadian Tire",
       "storeLogo": "canadiantire",
-      "lastUpdated": "2026-04-20T11:59:16.378Z",
+      "lastUpdated": "2026-04-21T11:45:27.893Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.canadiantire.ca/en/search-results.html?q=Milwaukee%20M18%20impact%20driver",
@@ -45,7 +45,7 @@
     {
       "store": "RONA",
       "storeLogo": "rona",
-      "lastUpdated": "2026-04-20T11:59:16.378Z",
+      "lastUpdated": "2026-04-21T11:45:27.893Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.rona.ca/en/search?q=Milwaukee%20M18%20impact%20driver",
@@ -55,7 +55,7 @@
     {
       "store": "Princess Auto",
       "storeLogo": "princessauto",
-      "lastUpdated": "2026-04-20T11:59:16.378Z",
+      "lastUpdated": "2026-04-21T11:45:27.893Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.princessauto.com/en/search#q=Milwaukee%20M18%20impact%20driver",
@@ -63,5 +63,5 @@
       "notCarried": true
     }
   ],
-  "fetchedAt": "2026-04-20T11:59:16.378Z"
+  "fetchedAt": "2026-04-21T11:45:27.894Z"
 }
