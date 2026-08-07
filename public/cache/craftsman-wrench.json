@@ -5,17 +5,16 @@
     {
       "store": "Walmart Canada",
       "storeLogo": "walmart",
-      "lastUpdated": "2026-08-06T10:40:55.640Z",
-      "price": 0,
+      "price": 11.98,
       "inStock": true,
-      "url": "https://www.walmart.ca/search?q=Craftsman%20wrench",
-      "name": "Search \"Craftsman wrench\" on Walmart Canada",
-      "checkManually": true
+      "url": "https://www.walmart.ca/en/ip/CRAFTSMAN-Adjustable-Wrench-15-Inch-CMMT81625/7J6RAVNUH7JA?classType=REGULAR",
+      "name": "CRAFTSMAN Adjustable Wrench, 15-Inch (CMMT81625)",
+      "lastUpdated": "2026-08-07T09:02:04.936Z"
     },
     {
       "store": "Amazon Canada",
       "storeLogo": "amazon",
-      "lastUpdated": "2026-08-06T10:40:55.640Z",
+      "lastUpdated": "2026-08-07T09:02:04.936Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.amazon.ca/s?k=Craftsman%20wrench&i=tools&tag=canadiantool-20",
@@ -25,7 +24,7 @@
     {
       "store": "Canadian Tire",
       "storeLogo": "canadiantire",
-      "lastUpdated": "2026-08-06T10:40:55.640Z",
+      "lastUpdated": "2026-08-07T09:02:04.936Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.canadiantire.ca/en/search-results.html?q=Craftsman%20wrench",
@@ -35,7 +34,7 @@
     {
       "store": "Home Depot Canada",
       "storeLogo": "homedepot",
-      "lastUpdated": "2026-08-06T10:40:55.640Z",
+      "lastUpdated": "2026-08-07T09:02:04.936Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.homedepot.ca/search?q=Craftsman%20wrench",
@@ -45,7 +44,7 @@
     {
       "store": "RONA",
       "storeLogo": "rona",
-      "lastUpdated": "2026-08-06T10:40:55.640Z",
+      "lastUpdated": "2026-08-07T09:02:04.936Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.rona.ca/en/search?q=Craftsman%20wrench",
@@ -55,7 +54,7 @@
     {
       "store": "Princess Auto",
       "storeLogo": "princessauto",
-      "lastUpdated": "2026-08-06T10:40:55.640Z",
+      "lastUpdated": "2026-08-07T09:02:04.936Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.princessauto.com/en/search#q=Craftsman%20wrench",
@@ -63,5 +62,5 @@
       "notCarried": true
     }
   ],
-  "fetchedAt": "2026-08-06T10:40:55.640Z"
+  "fetchedAt": "2026-08-07T09:02:04.936Z"
 }
