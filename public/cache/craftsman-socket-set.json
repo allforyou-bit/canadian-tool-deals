@@ -5,16 +5,17 @@
     {
       "store": "Walmart Canada",
       "storeLogo": "walmart",
-      "price": 68.99,
+      "lastUpdated": "2026-08-08T08:43:04.690Z",
+      "price": 0,
       "inStock": true,
       "url": "https://www.walmart.ca/search?q=Craftsman%20socket%20set",
-      "name": "CRAFTSMAN Socket Set, Universal, 1/4-Inch Drive, 22-Piece (CMMT12014)",
-      "lastUpdated": "2026-08-07T09:02:01.814Z"
+      "name": "Search \"Craftsman socket set\" on Walmart Canada",
+      "checkManually": true
     },
     {
       "store": "Amazon Canada",
       "storeLogo": "amazon",
-      "lastUpdated": "2026-08-07T09:02:01.814Z",
+      "lastUpdated": "2026-08-08T08:43:04.690Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.amazon.ca/s?k=Craftsman%20socket%20set&i=tools&tag=canadiantool-20",
@@ -24,7 +25,7 @@
     {
       "store": "Canadian Tire",
       "storeLogo": "canadiantire",
-      "lastUpdated": "2026-08-07T09:02:01.814Z",
+      "lastUpdated": "2026-08-08T08:43:04.690Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.canadiantire.ca/en/search-results.html?q=Craftsman%20socket%20set",
@@ -34,7 +35,7 @@
     {
       "store": "Home Depot Canada",
       "storeLogo": "homedepot",
-      "lastUpdated": "2026-08-07T09:02:01.814Z",
+      "lastUpdated": "2026-08-08T08:43:04.690Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.homedepot.ca/search?q=Craftsman%20socket%20set",
@@ -44,7 +45,7 @@
     {
       "store": "RONA",
       "storeLogo": "rona",
-      "lastUpdated": "2026-08-07T09:02:01.814Z",
+      "lastUpdated": "2026-08-08T08:43:04.690Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.rona.ca/en/search?q=Craftsman%20socket%20set",
@@ -54,7 +55,7 @@
     {
       "store": "Princess Auto",
       "storeLogo": "princessauto",
-      "lastUpdated": "2026-08-07T09:02:01.814Z",
+      "lastUpdated": "2026-08-08T08:43:04.690Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.princessauto.com/en/search#q=Craftsman%20socket%20set",
@@ -62,5 +63,5 @@
       "notCarried": true
     }
   ],
-  "fetchedAt": "2026-08-07T09:02:01.814Z"
+  "fetchedAt": "2026-08-08T08:43:04.690Z"
 }

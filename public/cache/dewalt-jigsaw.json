@@ -5,16 +5,17 @@
     {
       "store": "Walmart Canada",
       "storeLogo": "walmart",
-      "price": 79.98,
+      "lastUpdated": "2026-08-08T08:40:43.796Z",
+      "price": 0,
       "inStock": true,
-      "url": "https://www.walmart.ca/en/ip/DEWALT-20V-MAX-Jig-Saw-Barrel-Grip-Tool-Only-DCS335B-Black/6OV3IEEP1CRT?classType=REGULAR",
-      "name": "DEWALT 20V MAX Jig Saw, Barrel Grip, Tool Only (DCS335B) , Black",
-      "lastUpdated": "2026-08-07T08:59:21.596Z"
+      "url": "https://www.walmart.ca/search?q=DeWalt%20jigsaw",
+      "name": "Search \"DeWalt jigsaw\" on Walmart Canada",
+      "checkManually": true
     },
     {
       "store": "Home Depot Canada",
       "storeLogo": "homedepot",
-      "lastUpdated": "2026-08-07T08:59:34.938Z",
+      "lastUpdated": "2026-08-08T08:40:43.796Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.homedepot.ca/search?q=DeWalt%20jigsaw",
@@ -24,7 +25,7 @@
     {
       "store": "Amazon Canada",
       "storeLogo": "amazon",
-      "lastUpdated": "2026-08-07T08:59:34.938Z",
+      "lastUpdated": "2026-08-08T08:40:43.796Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.amazon.ca/s?k=DeWalt%20jigsaw&i=tools&tag=canadiantool-20",
@@ -34,7 +35,7 @@
     {
       "store": "RONA",
       "storeLogo": "rona",
-      "lastUpdated": "2026-08-07T08:59:34.938Z",
+      "lastUpdated": "2026-08-08T08:40:43.796Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.rona.ca/en/search?q=DeWalt%20jigsaw",
@@ -44,7 +45,7 @@
     {
       "store": "Canadian Tire",
       "storeLogo": "canadiantire",
-      "lastUpdated": "2026-08-07T08:59:34.938Z",
+      "lastUpdated": "2026-08-08T08:40:43.796Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.canadiantire.ca/en/search-results.html?q=DeWalt%20jigsaw",
@@ -54,7 +55,7 @@
     {
       "store": "Princess Auto",
       "storeLogo": "princessauto",
-      "lastUpdated": "2026-08-07T08:59:34.938Z",
+      "lastUpdated": "2026-08-08T08:40:43.796Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.princessauto.com/en/search#q=DeWalt%20jigsaw",
@@ -62,5 +63,5 @@
       "notCarried": true
     }
   ],
-  "fetchedAt": "2026-08-07T08:59:34.938Z"
+  "fetchedAt": "2026-08-08T08:40:43.796Z"
 }
