@@ -1,0 +1,19 @@
+{
+  "name": "간편 가계부",
+  "short_name": "가계부",
+  "description": "결제 문자 붙여넣기와 카드 명세서 CSV로 자동 정리되는 가계부",
+  "start_url": "/budget",
+  "scope": "/budget",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#111827",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "/budget-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
