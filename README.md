@@ -42,7 +42,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 | 화면 | 경로 | 하는 일 |
 | --- | --- | --- |
 | 홈 | `/budget` | 월 지출·수입·예산 진행률, 일별 지출 차트, 분류별 지출 |
-| 입력 | `/budget/add` | 카드 승인 문자 붙여넣기 자동 인식, 직접 입력 |
+| 입력 | `/budget/add` | 결제 문자 또는 은행 사이트 거래내역 표 붙여넣기 자동 인식, 직접 입력 |
 | 내역 | `/budget/list` | 월·분류·검색 필터, 수정/삭제 |
 | 가져오기 | `/budget/import` | 은행·카드사 거래내역 CSV 자동 인식 |
 | 설정 | `/budget/settings` | 통화, 예산, 분류 규칙, 자동화 안내, 백업/복원 |
@@ -58,5 +58,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - 국내 카드/은행 문자(신한·삼성·현대·KB국민·롯데·하나·우리·BC·NH농협·카카오·토스 등)
 - 캐나다 은행/카드 알림(TD·RBC·Scotiabank·CIBC·BMO·Amex·Tangerine·Simplii 등)
 - 헤더 유무와 열 순서가 다른 CSV(날짜/내용/금액 또는 출금·입금 분리 열, 금액 부호 자동 판별)
+- 은행 사이트에서 드래그해 복사한 거래내역 표(탭·쉼표·세미콜론·여러 칸 띄어쓰기 구분).
+  잔액 열은 행 간 차액이 거래 금액과 맞는지 보고 찾아내 금액에서 제외하고, 합계·보류 행은 건너뜁니다.
 
 파서 로직은 `lib/budget/parse.ts`, CSV는 `lib/budget/csv.ts`, 저장은 `lib/budget/store.ts`에 있습니다.

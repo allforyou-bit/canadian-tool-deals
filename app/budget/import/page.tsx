@@ -6,6 +6,7 @@ import type { CsvImportResult, SignMode } from '@/lib/budget/csv'
 import { addTxs, useBudget } from '@/lib/budget/store'
 import type { DraftTx } from '@/lib/budget/types'
 import { DraftReview } from '../DraftReview'
+import { SignModeToggle } from '../SignModeToggle'
 import { Button, Card, CardTitle, Toast, inputClass } from '../ui'
 
 export default function ImportPage() {
@@ -50,34 +51,14 @@ export default function ImportPage() {
           <CardTitle>자동 인식 결과</CardTitle>
           <p className="text-sm text-gray-600">
             전체 {result.totalRows}행 중 {result.drafts.length}건 인식
-            {result.skipped > 0 && ` · ${result.skipped}행 건너뜀(합계·잔액 행 등)`}
+            {result.skipped > 0 && ` · ${result.skipped}행 건너뜀(합계·보류 행 등)`}
+            {result.columns.balance >= 0 && ' · 잔액 열 자동 제외'}
           </p>
-          <div className="mt-3">
-            <span className="mb-1 block text-xs font-medium text-gray-500">금액 부호 해석</span>
-            <div className="grid grid-cols-3 gap-1 rounded-xl bg-gray-100 p-1">
-              {(
-                [
-                  ['auto', '자동'],
-                  ['positive-expense', '양수=지출'],
-                  ['negative-expense', '음수=지출'],
-                ] as Array<[SignMode, string]>
-              ).map(([value, label]) => (
-                <button
-                  key={value}
-                  type="button"
-                  onClick={() => flipSign(value)}
-                  className={`rounded-lg py-1.5 text-xs font-semibold ${
-                    signMode === value ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
+          {result.columns.amount >= 0 && (
+            <div className="mt-3">
+              <SignModeToggle value={signMode} onChange={flipSign} />
             </div>
-            <p className="mt-1.5 text-[11px] text-gray-400">
-              지출과 수입이 반대로 보이면 이 버튼으로 뒤집으세요.
-            </p>
-          </div>
+          )}
         </Card>
 
         <DraftReview
@@ -130,12 +111,16 @@ export default function ImportPage() {
       </Card>
 
       <Card>
-        <CardTitle>또는 직접 붙여넣기</CardTitle>
+        <CardTitle>또는 표 붙여넣기</CardTitle>
+        <p className="mb-2 text-xs text-gray-500">
+          은행 사이트의 입출금 내역을 드래그해 복사한 뒤 그대로 붙여넣어도 됩니다. 탭·쉼표·여러 칸 띄어쓰기
+          모두 인식하고, 잔액 열은 알아서 빼고 계산합니다.
+        </p>
         <textarea
           value={raw}
           onChange={(e) => setRaw(e.target.value)}
           rows={6}
-          placeholder={'Date,Description,Amount\n2026-08-12,TIM HORTONS,4.35'}
+          placeholder={'Date\tDescription\tWithdrawals\tDeposits\tBalance\nAug 12, 2026\tTIM HORTONS\t4.35\t\t3,204.55'}
           className={`${inputClass} resize-y font-mono text-xs`}
         />
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}

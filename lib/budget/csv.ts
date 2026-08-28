@@ -10,6 +10,8 @@ import type { DraftTx, Rule } from './types'
 
 export type SignMode = 'auto' | 'negative-expense' | 'positive-expense'
 
+export type Delimiter = ',' | '\t' | ';' | '|'
+
 export interface CsvColumns {
   date: number
   description: number
@@ -17,11 +19,55 @@ export interface CsvColumns {
   amount: number
   debit: number
   credit: number
+  /** Running-balance column, detected so it is never mistaken for the amount. */
+  balance: number
   hasHeader: boolean
 }
 
-/** RFC4180-ish parser: handles quoted fields, embedded commas and newlines. */
-export function parseCsv(text: string): string[][] {
+/**
+ * Works out how the columns are separated. Text copied from a bank website is
+ * usually tab-separated; some tables come across with runs of spaces instead,
+ * which get normalised to tabs.
+ */
+export function sniffDelimiter(text: string): { delimiter: Delimiter; normalized: string } {
+  /** How table-like the text is once split on this separator. */
+  const score = (candidate: string, source: string): number => {
+    const lines = source
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .slice(0, 20)
+    if (lines.length === 0) return 0
+
+    const widths = lines.map((line) => line.split(candidate).length)
+    const maxWidth = Math.max(...widths)
+    if (maxWidth < 2) return 0
+
+    const consistent = widths.filter((width) => width === maxWidth).length / lines.length
+    return consistent * 10 + Math.min(maxWidth, 8)
+  }
+
+  // Runs of spaces are how an HTML table usually lands in the clipboard.
+  const spaceNormalized = text.replace(/ {2,}/g, '\t')
+  const candidates: Array<{ delimiter: Delimiter; normalized: string }> = [
+    { delimiter: '\t', normalized: text },
+    { delimiter: ';', normalized: text },
+    { delimiter: '|', normalized: text },
+    { delimiter: ',', normalized: text },
+    { delimiter: '\t', normalized: spaceNormalized },
+  ]
+
+  let best = { delimiter: ',' as Delimiter, normalized: text, score: 0 }
+  for (const candidate of candidates) {
+    const value = score(candidate.delimiter, candidate.normalized)
+    if (value > best.score) best = { ...candidate, score: value }
+  }
+
+  return { delimiter: best.delimiter, normalized: best.normalized }
+}
+
+/** RFC4180-ish parser: handles quoted fields, embedded separators and newlines. */
+export function parseCsv(text: string, delimiter: Delimiter = ','): string[][] {
   const rows: string[][] = []
   let row: string[] = []
   let field = ''
@@ -46,7 +92,7 @@ export function parseCsv(text: string): string[][] {
     }
     if (char === '"') {
       inQuotes = true
-    } else if (char === ',') {
+    } else if (char === delimiter) {
       row.push(field.trim())
       field = ''
     } else if (char === '\n') {
@@ -71,6 +117,7 @@ const HEADER_HINTS = {
   amount: ['amount', 'cad$', 'value', '금액', '거래금액', '이용금액'],
   debit: ['debit', 'withdrawal', 'withdrawals', 'charge', 'money out', 'spent', '출금', '지출'],
   credit: ['credit', 'deposit', 'deposits', 'money in', 'received', '입금', '수입'],
+  balance: ['balance', 'running balance', '잔액', '잔고', '거래후잔액', '거래후 잔액'],
 }
 
 function headerMatch(cell: string, hints: string[]): boolean {
@@ -98,24 +145,94 @@ export function parseCsvDate(value: string): string {
     }
   }
 
-  const parsed = new Date(text)
-  if (!Number.isNaN(parsed.getTime())) return toISODate(parsed)
+  // "Aug 12, 2026" and friends. Guarded by the month-name test, otherwise Date
+  // happily turns a bare "12" into a date and every number becomes a date column.
+  if (/[A-Za-z]{3}/.test(text) && /\d/.test(text)) {
+    const parsed = new Date(text)
+    if (!Number.isNaN(parsed.getTime())) return toISODate(parsed)
+  }
 
   return ''
 }
 
-/** Reads "$1,234.56", "(45.00)" and "-45.00" as numbers. Returns NaN otherwise. */
+/** Reads "$1,234.56", "(45.00)", "-45.00" and "45.00-" as numbers. NaN otherwise. */
 export function parseMoney(value: string): number {
-  const text = value.replace(/[$₩\s]/g, '').replace(/,/g, '').replace(/(CAD|USD|KRW|원)/gi, '')
+  let text = value.replace(/[$₩\s]/g, '').replace(/,/g, '').replace(/(CAD|USD|KRW|원)/gi, '')
   if (!text) return NaN
-  const negative = /^\(.*\)$/.test(text)
-  const num = parseFloat(negative ? text.replace(/[()]/g, '') : text)
+
+  let negative = false
+  if (/^\(.*\)$/.test(text)) {
+    negative = true
+    text = text.replace(/[()]/g, '')
+  }
+  if (text.endsWith('-')) {
+    negative = true
+    text = text.slice(0, -1)
+  }
+  // Strict, so a date like "2026-08-12" is never read as the number 2026.
+  if (!/^[+-]?\d+(\.\d+)?$/.test(text)) return NaN
+
+  const num = Number(text)
   if (!Number.isFinite(num)) return NaN
-  return negative ? -num : num
+  return negative ? -Math.abs(num) : num
+}
+
+function isMoneyCell(cell: string): boolean {
+  return cell.trim() !== '' && Number.isFinite(parseMoney(cell))
+}
+
+/**
+ * A running-balance column moves by exactly the transaction amount from row to
+ * row. Spotting it keeps the balance from being imported as the spend.
+ */
+function isRunningBalance(body: string[][], column: number, otherColumns: number[]): boolean {
+  let comparable = 0
+  let matches = 0
+
+  for (let i = 0; i + 1 < body.length; i++) {
+    const current = parseMoney(body[i][column] ?? '')
+    const next = parseMoney(body[i + 1][column] ?? '')
+    if (!Number.isFinite(current) || !Number.isFinite(next)) continue
+
+    const delta = Math.abs(current - next)
+    if (delta === 0) continue
+    comparable++
+
+    const amounts = otherColumns
+      .flatMap((c) => [parseMoney(body[i][c] ?? ''), parseMoney(body[i + 1][c] ?? '')])
+      .filter(Number.isFinite)
+      .map(Math.abs)
+    if (amounts.some((value) => Math.abs(value - delta) < 0.02)) matches++
+  }
+
+  return comparable >= 2 && matches / comparable >= 0.6
+}
+
+/** Withdrawals and deposits sit in two columns that are rarely both filled. */
+function looksLikeDebitCreditPair(body: string[][], left: number, right: number): boolean {
+  let either = 0
+  let both = 0
+
+  for (const row of body) {
+    const hasLeft = isMoneyCell(row[left] ?? '')
+    const hasRight = isMoneyCell(row[right] ?? '')
+    if (hasLeft || hasRight) either++
+    if (hasLeft && hasRight) both++
+  }
+
+  return either >= 2 && both / either <= 0.2
 }
 
 export function detectColumns(rows: string[][]): CsvColumns {
-  const columns: CsvColumns = { date: -1, description: -1, amount: -1, debit: -1, credit: -1, hasHeader: false }
+  const columns: CsvColumns = {
+    date: -1,
+    description: -1,
+    amount: -1,
+    debit: -1,
+    credit: -1,
+    balance: -1,
+    hasHeader: false,
+  }
   if (rows.length === 0) return columns
 
   const header = rows[0]
@@ -125,6 +242,7 @@ export function detectColumns(rows: string[][]): CsvColumns {
     columns.hasHeader = true
     header.forEach((cell, i) => {
       if (columns.date < 0 && headerMatch(cell, HEADER_HINTS.date)) columns.date = i
+      else if (columns.balance < 0 && headerMatch(cell, HEADER_HINTS.balance)) columns.balance = i
       else if (columns.debit < 0 && headerMatch(cell, HEADER_HINTS.debit)) columns.debit = i
       else if (columns.credit < 0 && headerMatch(cell, HEADER_HINTS.credit)) columns.credit = i
       else if (columns.amount < 0 && headerMatch(cell, HEADER_HINTS.amount)) columns.amount = i
@@ -135,15 +253,18 @@ export function detectColumns(rows: string[][]): CsvColumns {
   const body = rows.slice(columns.hasHeader ? 1 : 0).slice(0, 30)
   const width = Math.max(...rows.map((r) => r.length))
 
-  const dateHits = new Array(width).fill(0)
-  const moneyHits = new Array(width).fill(0)
-  const textLength = new Array(width).fill(0)
+  const dateHits = new Array<number>(width).fill(0)
+  const moneyCells = new Array<number>(width).fill(0)
+  const filledCells = new Array<number>(width).fill(0)
+  const textLength = new Array<number>(width).fill(0)
 
   for (const row of body) {
     for (let i = 0; i < width; i++) {
-      const cell = row[i] ?? ''
+      const cell = (row[i] ?? '').trim()
+      if (cell === '') continue
+      filledCells[i]++
       if (parseCsvDate(cell)) dateHits[i]++
-      if (Number.isFinite(parseMoney(cell))) moneyHits[i]++
+      if (isMoneyCell(cell)) moneyCells[i]++
       else textLength[i] += cell.length
     }
   }
@@ -162,11 +283,41 @@ export function detectColumns(rows: string[][]): CsvColumns {
   }
 
   if (columns.date < 0) columns.date = bestIndex(dateHits, [])
-  if (columns.description < 0) {
-    columns.description = bestIndex(textLength, [columns.date, columns.amount, columns.debit, columns.credit])
+
+  // Columns whose every filled cell is a number are the money columns. A column
+  // that repeats one value is an account or card number, not an amount.
+  const moneyColumns: number[] = []
+  for (let i = 0; i < width; i++) {
+    if (i === columns.date || filledCells[i] === 0) continue
+    if (moneyCells[i] !== filledCells[i]) continue
+    const values = new Set(body.map((row) => (row[i] ?? '').trim()).filter(Boolean))
+    if (values.size === 1 && filledCells[i] > 1) continue
+    moneyColumns.push(i)
   }
+
+  if (columns.description < 0) {
+    columns.description = bestIndex(textLength, [columns.date, ...moneyColumns])
+  }
+
   if (columns.amount < 0 && columns.debit < 0 && columns.credit < 0) {
-    columns.amount = bestIndex(moneyHits, [columns.date, columns.description])
+    let candidates = moneyColumns.filter((c) => c !== columns.balance)
+
+    if (columns.balance < 0) {
+      const balance = candidates.find((c) =>
+        isRunningBalance(body, c, candidates.filter((other) => other !== c)),
+      )
+      if (balance !== undefined && candidates.length > 1) {
+        columns.balance = balance
+        candidates = candidates.filter((c) => c !== balance)
+      }
+    }
+
+    if (candidates.length === 2 && looksLikeDebitCreditPair(body, candidates[0], candidates[1])) {
+      columns.debit = candidates[0]
+      columns.credit = candidates[1]
+    } else if (candidates.length > 0) {
+      columns.amount = candidates[0]
+    }
   }
 
   return columns
@@ -187,8 +338,18 @@ export interface CsvImportResult {
   totalRows: number
 }
 
-export function csvToDrafts(text: string, rules: Rule[] = [], mode: SignMode = 'auto'): CsvImportResult {
-  const rows = parseCsv(text)
+/**
+ * Turns a statement export — or a table copied straight off a bank website —
+ * into draft transactions.
+ */
+export function csvToDrafts(
+  text: string,
+  rules: Rule[] = [],
+  mode: SignMode = 'auto',
+  accountLabel = 'CSV 가져오기',
+): CsvImportResult {
+  const { delimiter, normalized } = sniffDelimiter(text)
+  const rows = parseCsv(normalized, delimiter)
   const columns = detectColumns(rows)
   const body = rows.slice(columns.hasHeader ? 1 : 0)
 
@@ -239,7 +400,7 @@ export function csvToDrafts(text: string, rules: Rule[] = [], mode: SignMode = '
       type,
       merchant,
       category: type === 'income' ? 'income' : guessCategory(merchant, rules),
-      account: 'CSV 가져오기',
+      account: accountLabel,
       raw: row.join(', '),
       confidence: 0.9,
     })

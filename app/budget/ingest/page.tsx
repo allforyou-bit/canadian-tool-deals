@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { parseMessages } from '@/lib/budget/parse'
+import { parsePasted } from '@/lib/budget/paste'
 import { addTxs, useBudget, useHydrated } from '@/lib/budget/store'
 import { formatMoney } from '@/lib/budget/stats'
 import type { DraftTx } from '@/lib/budget/types'
@@ -36,7 +36,7 @@ export default function IngestPage() {
       return
     }
 
-    const parsed = parseMessages(text, settings.rules)
+    const { drafts: parsed } = parsePasted(text, settings.rules)
     if (parsed.length === 0) {
       setStatus('empty')
       return

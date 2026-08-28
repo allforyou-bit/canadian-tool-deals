@@ -3,11 +3,15 @@
 import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { EXPENSE_CATEGORIES, guessCategory } from '@/lib/budget/categories'
-import { parseMessages, today } from '@/lib/budget/parse'
+import type { SignMode } from '@/lib/budget/csv'
+import { today } from '@/lib/budget/parse'
+import { parsePasted } from '@/lib/budget/paste'
+import type { PasteResult } from '@/lib/budget/paste'
 import { addTxs, useBudget } from '@/lib/budget/store'
 import { formatMoney } from '@/lib/budget/stats'
 import type { DraftTx } from '@/lib/budget/types'
 import { DraftReview } from '../DraftReview'
+import { SignModeToggle } from '../SignModeToggle'
 import { Button, Card, Field, Toast, inputClass } from '../ui'
 
 type Tab = 'quick' | 'paste'
@@ -28,7 +32,7 @@ export default function AddPage() {
       <div className="grid grid-cols-2 gap-1 rounded-xl bg-gray-200/70 p-1">
         {(
           [
-            ['paste', '문자 붙여넣기'],
+            ['paste', '붙여넣기'],
             ['quick', '직접 입력'],
           ] as Array<[Tab, string]>
         ).map(([value, label]) => (
@@ -60,43 +64,83 @@ const SAMPLE = `[Web발신]
 function PasteForm({ onSaved }: { onSaved: (message: string) => void }) {
   const { settings } = useBudget()
   const [text, setText] = useState('')
+  const [result, setResult] = useState<PasteResult | null>(null)
   const [drafts, setDrafts] = useState<DraftTx[] | null>(null)
+  const [signMode, setSignMode] = useState<SignMode>('auto')
   const [error, setError] = useState<string | null>(null)
 
-  const parse = () => {
-    const parsed = parseMessages(text, settings.rules)
-    if (parsed.length === 0) {
-      setError('금액을 찾지 못했어요. 문자 전체를 그대로 붙여넣어 보세요.')
+  const parse = (mode: SignMode) => {
+    const parsed = parsePasted(text, settings.rules, mode)
+    if (parsed.drafts.length === 0) {
+      setError('금액을 찾지 못했어요. 문자나 표를 통째로 붙여넣어 보세요.')
+      setResult(null)
       setDrafts(null)
       return
     }
     setError(null)
-    setDrafts(parsed)
+    setResult(parsed)
+    setDrafts(parsed.drafts)
   }
 
-  if (drafts) {
+  const reset = () => {
+    setResult(null)
+    setDrafts(null)
+  }
+
+  if (drafts && result) {
+    // Only a single signed amount column is ambiguous; split 출금/입금 columns are not.
+    const showSignToggle = result.kind === 'table' && (result.columns?.amount ?? -1) >= 0
+
     return (
-      <DraftReview
-        drafts={drafts}
-        currency={settings.currency}
-        onChange={setDrafts}
-        onCancel={() => setDrafts(null)}
-        onSave={(selected) => {
-          const { added, duplicates } = addTxs(selected, 'sms')
-          setDrafts(null)
-          setText('')
-          onSaved(
-            duplicates > 0 ? `${added}건 저장 · 중복 ${duplicates}건 제외` : `${added}건 저장했어요`,
-          )
-        }}
-      />
+      <div className="space-y-3">
+        <Card>
+          <p className="text-sm text-gray-700">
+            {result.kind === 'table'
+              ? `표로 읽었어요 · 전체 ${result.totalRows}행 중 ${result.drafts.length}건 인식`
+              : '결제 문자로 읽었어요'}
+          </p>
+          {result.kind === 'table' && result.skipped > 0 && (
+            <p className="mt-1 text-xs text-gray-500">
+              합계·보류 등 {result.skipped}행은 건너뛰었어요.
+              {(result.columns?.balance ?? -1) >= 0 && ' 잔액 열은 금액에서 제외했습니다.'}
+            </p>
+          )}
+          {showSignToggle && (
+            <div className="mt-3">
+              <SignModeToggle
+                value={signMode}
+                onChange={(mode) => {
+                  setSignMode(mode)
+                  parse(mode)
+                }}
+              />
+            </div>
+          )}
+        </Card>
+
+        <DraftReview
+          drafts={drafts}
+          currency={settings.currency}
+          onChange={setDrafts}
+          onCancel={reset}
+          onSave={(selected) => {
+            const { added, duplicates } = addTxs(selected, result.kind === 'table' ? 'csv' : 'sms')
+            reset()
+            setText('')
+            onSaved(
+              duplicates > 0 ? `${added}건 저장 · 중복 ${duplicates}건 제외` : `${added}건 저장했어요`,
+            )
+          }}
+        />
+      </div>
     )
   }
 
   return (
     <Card>
       <p className="mb-2 text-sm text-gray-600">
-        카드 승인 문자나 은행 알림을 그대로 붙여넣으세요. 여러 건을 한 번에 붙여넣어도 됩니다.
+        카드 승인 문자, 은행 알림, 또는 은행 사이트에서 긁어온 거래내역 표를 그대로 붙여넣으세요. 여러 건을
+        한 번에 붙여넣어도 됩니다.
       </p>
       <textarea
         value={text}
@@ -107,7 +151,7 @@ function PasteForm({ onSaved }: { onSaved: (message: string) => void }) {
       />
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       <div className="mt-3 flex gap-2">
-        <Button onClick={parse} disabled={text.trim().length === 0} className="flex-1">
+        <Button onClick={() => parse(signMode)} disabled={text.trim().length === 0} className="flex-1">
           자동으로 읽기
         </Button>
         <Button variant="secondary" onClick={() => setText(SAMPLE)}>
