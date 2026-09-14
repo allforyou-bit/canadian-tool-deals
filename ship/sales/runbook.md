@@ -54,11 +54,27 @@ Work through these in order. None takes 30 minutes on its own.
 
 ### 2.1 Put your legal name in (5 min)
 
-Three files carry `REPLACE-WITH-YOUR-LEGAL-NAME`. Every build prints a warning
-until they are replaced, and the invoice tool refuses to run at all.
+Three files carry `REPLACE-WITH-YOUR-LEGAL-NAME`, and all three need your real
+legal name — the one you would put on an invoice:
+
+- `ship/briefs/_site.json`
+- `ship/briefs/sample-proposal-northbrook.json`
+- `ship/sales/invoices/_example.json`
 
 ```bash
-grep -rl 'REPLACE-WITH-YOUR-LEGAL-NAME' ship/
+grep -rl 'REPLACE-WITH-YOUR-LEGAL-NAME' ship/briefs ship/sales
+```
+
+That also lists this runbook, which mentions the token because it is documenting
+it — leave this file alone. And search `ship/briefs ship/sales` rather than
+`ship/`: the latter matches `ship/dist` too, which is generated output rewritten on
+every build, so editing anything in there accomplishes nothing.
+
+Every build warns until the three are replaced, and the invoice tool refuses to run
+at all. To confirm:
+
+```bash
+node ship/build.mjs --check   # no "still contains a placeholder" warnings
 ```
 
 Invoicing under your own legal name means no Ontario business-name registration is

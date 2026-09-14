@@ -107,7 +107,7 @@
       "id": "price",
       "eyebrow": "Price",
       "heading": "One number, in Canadian dollars",
-      "intro": "Canadian small-business page builds are commonly quoted between CAD 1,500 and CAD 5,000, with boutique packages from roughly CAD 599. This is cheaper for one reason: the scope is fixed and narrow, so there is nothing to estimate.",
+      "intro": "A one-page site in Canada is commonly quoted between CAD 500 and CAD 3,000, and a freelancer build of a small-business site runs CAD 1,500 to CAD 5,000. This is cheaper than any of that for one reason: the scope is fixed and narrow, so there is nothing to estimate.",
       "tiers": [
         {
           "name": "Ship",
@@ -197,7 +197,7 @@
       "items": [
         {
           "q": "Why would you take CAD 300 for this?",
-          "a": "Because the build is fixed-scope and genuinely fast, and because the hosting costs nothing. There is no agency overhead in the number, no account manager and no monthly retainer behind it. The trade you are making is scope: you get one excellent page, not a bespoke multi-page project."
+          "a": "Because the build is fixed-scope and genuinely fast, and because the hosting costs nothing. There is no agency overhead in the number, no account manager and no monthly retainer behind it. The trade you are making is scope: you get one excellent page, not a bespoke multi-page project. If you need the multi-page project, the CAD 500 to CAD 3,000 one-page quotes and the CAD 1,500 to CAD 5,000 freelancer site builds are the honest comparison, and I am not competing with them."
         },
         {
           "q": "Do I pay before or after?",
@@ -205,7 +205,7 @@
         },
         {
           "q": "What does hosting cost me afterwards?",
-          "a": "Nothing, on the free tier it is deployed to. Cloudflare's free plan permits commercial use and does not charge for bandwidth on static files, which is the entire reason this page can be hosted at no cost without breaking anyone's terms.\nA domain name is separate and costs roughly CAD 15 a year, paid to a registrar, not to us. You do not need one to go live."
+          "a": "Nothing, on the free tier it is deployed to. Cloudflare's free plan permits commercial use and does not charge for bandwidth on static files, which is the entire reason this page can be hosted at no cost without breaking anyone's terms.\nA domain name is separate and costs roughly CAD 12 to CAD 22 a year depending on the registrar, paid to them, not to us. You do not need one to go live."
         },
         {
           "q": "Can I edit it myself later?",
