@@ -54,12 +54,14 @@ Work through these in order. None takes 30 minutes on its own.
 
 ### 2.1 Put your legal name in (5 min)
 
-Three files carry `REPLACE-WITH-YOUR-LEGAL-NAME`, and all three need your real
-legal name — the one you would put on an invoice:
+Five files carry `REPLACE-WITH-YOUR-LEGAL-NAME`, and all five need your real legal
+name — the one you would put on an invoice:
 
-- `ship/briefs/_site.json`
-- `ship/briefs/sample-proposal-northbrook.json`
-- `ship/sales/invoices/_example.json`
+- `ship/briefs/_site.json` — the English landing page
+- `ship/briefs/ko.json` — the Korean landing page
+- `ship/briefs/agencies.json` — the white-label page
+- `ship/briefs/sample-proposal-northbrook.json` — the proposal-mode example
+- `ship/sales/invoices/_example.json` — the invoice template
 
 ```bash
 grep -rl 'REPLACE-WITH-YOUR-LEGAL-NAME' ship/briefs ship/sales

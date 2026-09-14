@@ -109,10 +109,17 @@ is the whole target in a single transaction; a net-30 on it lands around day 42.
 
 The irreducible list. Everything else is done.
 
-1. **Your legal name** into three files — `ship/briefs/_site.json`,
-   `ship/briefs/ko.json`, `ship/briefs/agencies.json`, plus
-   `ship/sales/invoices/_example.json`. The build warns until you do and the
-   invoice tool refuses to run. *(5 min)*
+1. **Your legal name** into five files:
+
+   - `ship/briefs/_site.json`
+   - `ship/briefs/ko.json`
+   - `ship/briefs/agencies.json`
+   - `ship/briefs/sample-proposal-northbrook.json`
+   - `ship/sales/invoices/_example.json`
+
+   The build warns on every run until you do, naming the field, and the invoice
+   tool refuses to run at all. Confirm with `node ship/build.mjs --check` — no
+   placeholder warnings means done. *(5 min)*
 2. **Interac Autodeposit on**, and confirm your bank does not charge for incoming
    transfers. *(10 min)*
 3. **Connect this repo to Cloudflare Pages** — build command `node
