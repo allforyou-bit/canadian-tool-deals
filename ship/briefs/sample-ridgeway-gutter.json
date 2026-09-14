@@ -1,0 +1,138 @@
+{
+  "slug": "sample-ridgeway-gutter",
+  "mode": "live",
+  "meta": {
+    "businessName": "Ridgeway Gutter Co.",
+    "monogram": "RG",
+    "tagline": "eavestrough cleaning and repair, booked in a minute",
+    "description": "Eavestrough cleaning, repair and guard installation for houses in the east end. Flat prices, photos before and after, booked online.",
+    "accent": "rust",
+    "locale": "en-CA"
+  },
+  "nav": [
+    { "label": "Services", "href": "#services" },
+    { "label": "How it works", "href": "#how-it-works" },
+    { "label": "Prices", "href": "#prices" },
+    { "label": "Book", "href": "#book" }
+  ],
+  "hero": {
+    "eyebrow": "Fictional sample build",
+    "headline": "Your gutters overflowed again last week.",
+    "sub": "Cleaning, repair and guard installation for two-storey houses. Flat price by roofline length, photos before and after, and a date you can actually hold us to.",
+    "primaryCta": { "label": "Book a clean", "href": "#book" },
+    "secondaryCta": { "label": "See prices", "href": "#prices" },
+    "note": "Fully insured. WSIB clearance on file, shown on request.",
+    "trust": [
+      "Flat price quoted before we start",
+      "Photos before and after, every job",
+      "Debris bagged and taken away",
+      "Ladder-safe two storeys"
+    ]
+  },
+  "sections": [
+    {
+      "type": "features",
+      "id": "services",
+      "eyebrow": "Services",
+      "heading": "Four things, done properly",
+      "items": [
+        { "title": "Gutter cleaning", "body": "Hand-cleared, flushed, downspouts tested. Debris bagged and taken with us rather than left on your lawn." },
+        { "title": "Repairs and resealing", "body": "Sagging runs re-hung, loose spikes replaced with screws and ferrules, joints resealed so they stop dripping down the siding." },
+        { "title": "Guard installation", "body": "Mesh guards fitted to the run, not clipped on loosely. Stops the maple keys and the shingle grit that cause most blockages." },
+        { "title": "Downspout extensions", "body": "Water moved away from the foundation instead of pooling against it. The cheapest basement repair anyone ever does." }
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "how-it-works",
+      "sunk": true,
+      "eyebrow": "Process",
+      "heading": "No sales visit, no surprise invoice",
+      "items": [
+        { "title": "Send your address", "body": "That is enough to measure the roofline from the property record and quote a flat price." },
+        { "title": "Get the price and a date", "body": "One number, in writing, before anything is booked. It does not change unless you add work." },
+        { "title": "We clean, you get photos", "body": "Before and after shots of every corner, sent the same day. You do not have to climb anything to check." },
+        { "title": "Pay after", "body": "E-transfer when the job is done and you have seen the photos." }
+      ]
+    },
+    {
+      "type": "pricing",
+      "id": "prices",
+      "eyebrow": "Prices",
+      "heading": "By roofline, not by guesswork",
+      "intro": "Measured from the property record before we quote. A bungalow is not charged like a three-storey semi.",
+      "tiers": [
+        {
+          "name": "Bungalow",
+          "amount": "$180",
+          "unit": "up to 120 ft",
+          "desc": "Single storey, standard 5-inch eavestrough.",
+          "includes": ["Full hand clean", "Downspouts flushed and tested", "Debris removed", "Before and after photos"],
+          "cta": { "label": "Book this", "href": "#book" }
+        },
+        {
+          "name": "Two storey",
+          "amount": "$280",
+          "unit": "up to 180 ft",
+          "tag": "Most houses",
+          "featured": true,
+          "desc": "Two storeys, including the back addition most quotes forget.",
+          "includes": ["Everything in Bungalow", "Upper and lower runs", "Valley and corner clearing", "Minor resealing included"],
+          "cta": { "label": "Book this", "href": "#book" }
+        },
+        {
+          "name": "Guards",
+          "amount": "$9",
+          "unit": "per foot, installed",
+          "desc": "Added to any clean. Priced per foot so you can do one problem side.",
+          "includes": ["Mesh fitted to the run", "Cleaned first, always", "Five-year workmanship"],
+          "cta": { "label": "Ask about guards", "href": "#book" },
+          "fine": "Minimum 40 ft."
+        }
+      ]
+    },
+    {
+      "type": "quote",
+      "id": "what-people-say",
+      "sunk": true,
+      "text": "They sent photos of the back corner I have never once seen in eleven years of owning this house. Turned out the downspout had never been connected.",
+      "attribution": "Invented testimonial — this is a sample page, not a real customer."
+    },
+    {
+      "type": "faq",
+      "id": "questions",
+      "eyebrow": "Questions",
+      "heading": "Before you book",
+      "items": [
+        { "q": "How often does this need doing?", "a": "Once a year for most houses, twice if you have mature maples or pines close to the roof. Booking in late autumn after the leaves are down does more good than booking in September." },
+        { "q": "Do you go on the roof?", "a": "Only when a job genuinely needs it, and only on a roof that is safe to walk. Most cleaning is done from ladders with standoffs, which is both safer and better for your shingles." },
+        { "q": "What if it rains?", "a": "We move the date and tell you before you have rearranged your day. Wet ladder work is how people get hurt." },
+        { "q": "Are you insured?", "a": "Yes, and the certificate plus a current WSIB clearance number go to you on request before the job, not after something has gone wrong." }
+      ]
+    },
+    {
+      "type": "final",
+      "id": "book",
+      "eyebrow": "Book",
+      "heading": "Send your address, get a flat price",
+      "intro": "No visit needed to quote. Most addresses get a price the same day.",
+      "primaryCta": { "label": "Email for a price", "href": "mailto:hello@example.invalid?subject=Gutter%20quote" },
+      "pairs": [
+        { "label": "Area", "value": "East end and the Beaches" },
+        { "label": "Season", "value": "April to late November" },
+        { "label": "Payment", "value": "E-transfer, after the job" },
+        { "label": "Insurance", "value": "Liability and WSIB, on request" }
+      ]
+    }
+  ],
+  "contact": { "email": "hello@example.invalid" },
+  "legal": {
+    "operator": "Ridgeway Gutter Co. (fictional)",
+    "jurisdiction": "Ontario, Canada",
+    "contactEmail": "hello@example.invalid",
+    "effective": "2026-09-14",
+    "deliverable": "the eavestrough services described on this site",
+    "collects": ["The address and message you send by email when asking for a quote. Nothing else — this page has no form, no analytics and no cookies."]
+  },
+  "footer": { "note": "Sample build. Ridgeway Gutter Co. is a fictional business invented to demonstrate the template — the prices, the area and the testimonial are not real." }
+}

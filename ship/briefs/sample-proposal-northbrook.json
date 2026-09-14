@@ -1,0 +1,118 @@
+{
+  "slug": "sample-proposal-northbrook",
+  "mode": "proposal",
+  "proposal": {
+    "preparedFor": "a fictional brief, to demonstrate what proposal mode renders",
+    "preparedBy": "REPLACE-WITH-YOUR-LEGAL-NAME",
+    "contact": "kay.kyeong.lee@gmail.com"
+  },
+  "meta": {
+    "businessName": "Northbrook Fence & Deck",
+    "monogram": "NF",
+    "tagline": "cedar fences and decks, quoted from your property line",
+    "description": "A worked example of proposal mode: what a prospect sees before anyone has been hired.",
+    "accent": "green",
+    "locale": "en-CA"
+  },
+  "nav": [
+    { "label": "Work", "href": "#work" },
+    { "label": "Prices", "href": "#prices" },
+    { "label": "Quote", "href": "#quote" }
+  ],
+  "hero": {
+    "eyebrow": "Cedar · Pressure-treated · Composite",
+    "headline": "The fence quote you asked three people for, in writing today.",
+    "sub": "Cedar and composite fencing and decks, quoted by the foot from your property survey, built by the same two people who quoted it.",
+    "primaryCta": { "label": "Get a written quote" },
+    "secondaryCta": { "label": "See prices", "href": "#prices" },
+    "note": "Every quote itemised: materials, labour, disposal, permit if one is needed.",
+    "trust": ["Quoted from your survey", "Itemised, not a single number", "Cedar from an Ontario mill", "Two-year workmanship"]
+  },
+  "sections": [
+    {
+      "type": "features",
+      "id": "work",
+      "eyebrow": "What we build",
+      "heading": "Fences and decks, nothing else",
+      "intro": "A narrow trade done well beats a general contractor doing it between other jobs.",
+      "items": [
+        { "title": "Board-on-board cedar", "body": "The fence that still looks square in year eight. Posts set below the frost line, not tamped into gravel and hoped for." },
+        { "title": "Pressure-treated privacy", "body": "The budget option, built the same way. Cheaper timber, identical post work, because that is the part that fails." },
+        { "title": "Composite decking", "body": "Framed in treated lumber, surfaced in composite, hidden fasteners. No annual staining weekend for the next twenty years." },
+        { "title": "Gates that keep closing", "body": "Braced properly and hung on hardware rated for the leaf weight. Most gate failures are hardware chosen by price." }
+      ]
+    },
+    {
+      "type": "pricing",
+      "id": "prices",
+      "sunk": true,
+      "eyebrow": "Prices",
+      "heading": "By the foot, before we visit",
+      "intro": "Ranges, not a single number, because slope and access genuinely change the cost. The written quote is exact.",
+      "tiers": [
+        {
+          "name": "Pressure-treated",
+          "amount": "$62 – $78",
+          "unit": "per linear foot",
+          "desc": "Six-foot privacy, posts in concrete below frost.",
+          "includes": ["Materials and labour", "Old fence removal and disposal", "Locates arranged", "Two-year workmanship"],
+          "cta": { "label": "Get a written quote" }
+        },
+        {
+          "name": "Cedar board-on-board",
+          "amount": "$95 – $120",
+          "unit": "per linear foot",
+          "tag": "Most requested",
+          "featured": true,
+          "desc": "Ontario cedar, no gaps when it dries out.",
+          "includes": ["Everything in pressure-treated", "Ontario mill cedar", "Stainless ring-shank fasteners", "Post caps included"],
+          "cta": { "label": "Get a written quote" }
+        },
+        {
+          "name": "Decks",
+          "amount": "from $48",
+          "unit": "per square foot",
+          "desc": "Framed, surfaced, railed and inspected.",
+          "includes": ["Treated frame", "Composite or cedar surface", "Permit drawings if required", "Final inspection attended"],
+          "cta": { "label": "Get a written quote" },
+          "fine": "Permit fees are paid to the municipality, not to us."
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "questions",
+      "eyebrow": "Questions",
+      "heading": "Asked at every first visit",
+      "items": [
+        { "q": "Do I need a permit?", "a": "A fence at standard height usually does not; a deck above a certain height above grade usually does. We say which applies to your job in the quote, and we do not start permit-required work without one." },
+        { "q": "Who talks to the neighbour?", "a": "You do, before we start, if the fence is on the line. It is a much shorter conversation before the posts go in than after." },
+        { "q": "How long does it take?", "a": "A typical city backyard is two days for the build after the locates clear. Locates are the part nobody can speed up." }
+      ]
+    },
+    {
+      "type": "final",
+      "id": "quote",
+      "eyebrow": "Quote",
+      "heading": "Send the survey. Get it in writing.",
+      "intro": "A photo of the property survey and the run you want is enough to price it.",
+      "primaryCta": { "label": "Get a written quote" },
+      "pairs": [
+        { "label": "Quote turnaround", "value": "Same day, in writing" },
+        { "label": "Season", "value": "April to November" },
+        { "label": "Payment", "value": "Deposit on materials, balance on completion" },
+        { "label": "Workmanship", "value": "Two years" }
+      ]
+    }
+  ],
+  "legal": {
+    "operator": "REPLACE-WITH-YOUR-LEGAL-NAME",
+    "jurisdiction": "Ontario, Canada",
+    "contactEmail": "kay.kyeong.lee@gmail.com",
+    "effective": "2026-09-14",
+    "deliverable": "nothing — this is an unaffiliated draft page, not a live business",
+    "collects": ["Nothing. This page is a draft with no forms, no analytics and no cookies, and no order can be placed on it."],
+    "refund": "Nothing is sold on this page. It is a draft prepared to show what a page could look like."
+  },
+  "footer": { "note": "Draft proposal for a fictional business. Not live, not affiliated with anyone, and no order can be placed here." }
+}

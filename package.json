@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "ship": "node ship/build.mjs",
+    "ship:check": "node ship/build.mjs --check",
+    "ship:preview": "node ship/tools/preview.mjs"
   },
   "dependencies": {
     "next": "16.2.3",

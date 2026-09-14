@@ -1,0 +1,41 @@
+name: Ship build
+
+on:
+  push:
+    paths:
+      - 'ship/**'
+      - '.github/workflows/ship.yml'
+  pull_request:
+    paths:
+      - 'ship/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # No install step: the generator has no dependencies.
+      - name: Validate briefs
+        run: node ship/build.mjs --check
+
+      - name: Build
+        run: node ship/build.mjs
+
+      # Every generated page claims to work on a phone. This is where that is
+      # checked rather than assumed: it loads each page at 390, 1280 light and
+      # 1280 dark and fails if anything overflows horizontally.
+      - name: Check responsive output
+        run: |
+          if [ -x /usr/bin/google-chrome ]; then
+            CHROME_PATH=/usr/bin/google-chrome node ship/tools/preview.mjs --check
+          elif [ -x /usr/bin/chromium-browser ]; then
+            CHROME_PATH=/usr/bin/chromium-browser node ship/tools/preview.mjs --check
+          else
+            echo "No browser on this runner; skipping the responsive check."
+          fi

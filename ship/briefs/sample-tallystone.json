@@ -1,0 +1,114 @@
+{
+  "slug": "sample-tallystone",
+  "mode": "live",
+  "meta": {
+    "businessName": "Tallystone",
+    "monogram": "T",
+    "tagline": "chase the invoice so you do not have to",
+    "description": "Polite, automatic invoice reminders for freelancers. Connects to the invoices you already send and follows up until you are paid.",
+    "accent": "violet",
+    "locale": "en-CA"
+  },
+  "nav": [
+    { "label": "What it does", "href": "#what-it-does" },
+    { "label": "How it works", "href": "#how-it-works" },
+    { "label": "Price", "href": "#price" },
+    { "label": "Questions", "href": "#questions" }
+  ],
+  "hero": {
+    "eyebrow": "Fictional sample build",
+    "headline": "The invoice is not late. You just stopped asking.",
+    "sub": "Tallystone follows up on unpaid invoices on a schedule you set, in wording you would actually send, and stops the moment the money lands.",
+    "primaryCta": { "label": "Start free for 30 days", "href": "#price" },
+    "secondaryCta": { "label": "See how it reads", "href": "#how-it-works" },
+    "note": "No card to start. Cancel from the account page in two clicks.",
+    "trust": ["Works with the invoices you already send", "Stops on payment", "Your wording, not ours", "Priced in CAD"]
+  },
+  "sections": [
+    {
+      "type": "features",
+      "id": "what-it-does",
+      "eyebrow": "The problem",
+      "heading": "Freelancers do not have a collections department",
+      "intro": "They have a nagging feeling on a Sunday night and a client who has gone quiet.",
+      "items": [
+        { "title": "Follows up on a schedule", "body": "Day 3 after due, day 10, day 21, then monthly. Or whatever cadence you set. It does not get embarrassed and it does not forget." },
+        { "title": "Sounds like you", "body": "Three tones — friendly, firm, final. You edit the wording once and every future reminder uses it." },
+        { "title": "Stops on payment", "body": "Mark it paid, or let the bank import do it. Nothing more goes out. Nobody gets chased for money they already sent." },
+        { "title": "Shows what is owed", "body": "One screen: what is outstanding, how old it is, and who has been reminded how many times." },
+        { "title": "Escalates on your say-so", "body": "Past a threshold you choose, it drafts the firmer message and waits for you to press send." },
+        { "title": "Keeps the paper trail", "body": "Every reminder is logged with its date and wording, which is what you need if it ever goes further." }
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "how-it-works",
+      "sunk": true,
+      "eyebrow": "Setup",
+      "heading": "Fifteen minutes, once",
+      "items": [
+        { "title": "Point it at your invoices", "body": "Forward them to a Tallystone address, or upload a CSV from whatever you bill with." },
+        { "title": "Set the schedule and the tone", "body": "Pick a cadence, edit the three templates until they sound like you rather than like software." },
+        { "title": "Let it run", "body": "It sends, logs and stops on payment. You get one weekly summary and nothing else." }
+      ]
+    },
+    {
+      "type": "pricing",
+      "id": "price",
+      "eyebrow": "Price",
+      "heading": "One plan, in Canadian dollars",
+      "intro": "No per-seat pricing, no usage tiers, no annual lock-in.",
+      "tiers": [
+        {
+          "name": "Tallystone",
+          "amount": "CAD 12",
+          "unit": "per month",
+          "tag": "Everything included",
+          "featured": true,
+          "desc": "Unlimited invoices, unlimited reminders, one person.",
+          "includes": ["30 days free, no card", "Unlimited invoices and clients", "All three tones", "Weekly summary", "Export everything, any time", "Cancel in two clicks"],
+          "cta": { "label": "Start free", "href": "https://example.invalid/checkout" },
+          "fine": "Cancel any time. No refund needed because you are never billed for a month you did not use."
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "questions",
+      "eyebrow": "Questions",
+      "heading": "The honest answers",
+      "items": [
+        { "q": "Will this annoy my clients?", "a": "A reminder about an invoice they agreed to pay is not annoying, and the tone is yours to set. Most people who go quiet are not refusing to pay — they lost the email." },
+        { "q": "Does it replace my invoicing tool?", "a": "No. It sits behind whatever you already use and handles only the part everybody avoids." },
+        { "q": "What happens if I cancel?", "a": "Reminders stop, and you can export everything as CSV. Your data is not held hostage to make leaving hard." },
+        { "q": "Is my client list used for anything else?", "a": "No. It is not sold, not used for advertising and not used to train anything." }
+      ]
+    },
+    {
+      "type": "final",
+      "id": "start",
+      "sunk": true,
+      "eyebrow": "Start",
+      "heading": "Thirty days free. No card.",
+      "intro": "If it has not collected something by day 30, it has not earned CAD 12.",
+      "primaryCta": { "label": "Start free for 30 days", "href": "https://example.invalid/checkout" },
+      "pairs": [
+        { "label": "Price", "value": "CAD 12 per month" },
+        { "label": "Trial", "value": "30 days, no card" },
+        { "label": "Cancel", "value": "Two clicks, any time" },
+        { "label": "Export", "value": "CSV, any time" }
+      ]
+    }
+  ],
+  "contact": { "email": "hello@example.invalid" },
+  "legal": {
+    "operator": "Tallystone (fictional)",
+    "jurisdiction": "Ontario, Canada",
+    "contactEmail": "hello@example.invalid",
+    "effective": "2026-09-14",
+    "deliverable": "the Tallystone subscription described on this site",
+    "collects": ["The email address and account details you enter when signing up, and the invoice data you choose to send in.", "Nothing is collected by simply reading this page: no analytics, no advertising, no cookies."],
+    "refund": "Billing is monthly and cancelling stops the next charge immediately, so there is nothing to claw back. If a charge went out after you cancelled, say so and it is returned."
+  },
+  "footer": { "note": "Sample build. Tallystone is a fictional product invented to demonstrate the template — the features, the price and the checkout link are not real." }
+}

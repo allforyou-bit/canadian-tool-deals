@@ -1,0 +1,126 @@
+{
+  "slug": "sample-maplewood-bread",
+  "mode": "live",
+  "meta": {
+    "businessName": "Maplewood Bread Co.",
+    "monogram": "MB",
+    "tagline": "sourdough baked overnight, collected before nine",
+    "description": "A two-oven neighbourhood bakery. Naturally leavened sourdough, pre-ordered by Thursday and collected Saturday morning.",
+    "accent": "amber",
+    "locale": "en-CA"
+  },
+  "nav": [
+    { "label": "The bread", "href": "#the-bread" },
+    { "label": "Collection", "href": "#collection" },
+    { "label": "Order", "href": "#order" },
+    { "label": "Questions", "href": "#questions" }
+  ],
+  "hero": {
+    "eyebrow": "Fictional sample build",
+    "headline": "We bake 140 loaves. Then we stop.",
+    "sub": "Naturally leavened, 30-hour ferment, baked overnight Friday. Order by Thursday evening and collect between seven and nine on Saturday morning, still warm.",
+    "primaryCta": { "label": "Order for Saturday", "href": "#order" },
+    "secondaryCta": { "label": "What we bake", "href": "#the-bread" },
+    "note": "Orders close Thursday at 8pm, or when the 140th loaf goes.",
+    "trust": ["Three ingredients in the country loaf", "No commercial yeast", "Milled in Ontario", "Collection only"]
+  },
+  "sections": [
+    {
+      "type": "features",
+      "id": "the-bread",
+      "eyebrow": "The bread",
+      "heading": "Four loaves, every week",
+      "intro": "The list does not change often. When it does, it is because something is in season, not because we are bored.",
+      "items": [
+        { "title": "Country loaf", "body": "Flour, water, salt. A 30-hour ferment, baked dark. This is the one to buy first." },
+        { "title": "Seeded rye", "body": "Forty percent rye with toasted sunflower, flax and caraway. Dense, sour, keeps for most of a week." },
+        { "title": "Olive and rosemary", "body": "Kalamata olives and rosemary cut into the country dough. Good enough to eat standing over the sink." },
+        { "title": "Saturday cinnamon buns", "body": "Six to a tray, iced while warm. They go first, every single week, so order them with the bread." }
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "collection",
+      "sunk": true,
+      "eyebrow": "How it works",
+      "heading": "Order Thursday, collect Saturday",
+      "items": [
+        { "title": "Order by Thursday 8pm", "body": "Through the order link. Pay then, so the count is real and nothing is wasted." },
+        { "title": "We bake overnight Friday", "body": "Shaped Friday evening, in the oven at three, out by six." },
+        { "title": "Collect 7 to 9 Saturday", "body": "Your name is on the shelf. After nine, anything uncollected goes to whoever is in the queue." }
+      ]
+    },
+    {
+      "type": "pricing",
+      "id": "order",
+      "eyebrow": "Order",
+      "heading": "Prices, and what a week costs",
+      "tiers": [
+        {
+          "name": "Single loaf",
+          "amount": "$9",
+          "unit": "each",
+          "desc": "Country, rye or olive. Pick at checkout.",
+          "includes": ["900 g, baked dark", "Paper bag, no plastic", "Collect Saturday 7 to 9"],
+          "cta": { "label": "Order a loaf", "href": "https://example.invalid/order" }
+        },
+        {
+          "name": "Weekly standing order",
+          "amount": "$32",
+          "unit": "per month",
+          "tag": "Regulars",
+          "featured": true,
+          "desc": "One loaf a week, your choice each week, never sold out.",
+          "includes": ["Four loaves a month", "Held back before general orders open", "Change or skip by Wednesday", "Pause any time"],
+          "cta": { "label": "Start a standing order", "href": "https://example.invalid/order" },
+          "fine": "Cheaper than four singles, because we know the count in advance."
+        },
+        {
+          "name": "Cinnamon buns",
+          "amount": "$16",
+          "unit": "tray of six",
+          "desc": "Saturday only. Order with bread.",
+          "includes": ["Iced warm", "Six to a tray", "Gone by 8am most weeks"],
+          "cta": { "label": "Add a tray", "href": "https://example.invalid/order" }
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "questions",
+      "eyebrow": "Questions",
+      "heading": "Asked at the door most weeks",
+      "items": [
+        { "q": "Can I just turn up?", "a": "You can, and some weeks there is bread left at half past eight. Most weeks there is not. The standing order exists because people got tired of finding out which kind of week it was." },
+        { "q": "Do you deliver?", "a": "No. Two ovens and one pair of hands means collection only. It is the reason the bread is what it is rather than what it could be at scale." },
+        { "q": "Is anything gluten free?", "a": "No, and it would not be safe to claim otherwise — everything is made in a room full of wheat flour." },
+        { "q": "What if I cannot make Saturday morning?", "a": "Tell us by Friday and it moves to the following week at no charge. Uncollected bread after nine goes to the queue rather than the bin." }
+      ]
+    },
+    {
+      "type": "final",
+      "id": "start",
+      "eyebrow": "Order",
+      "heading": "Orders close Thursday at 8pm",
+      "intro": "140 loaves, then the list closes. The standing order is the only way to be certain.",
+      "primaryCta": { "label": "Order for Saturday", "href": "https://example.invalid/order" },
+      "pairs": [
+        { "label": "Order by", "value": "Thursday, 8pm" },
+        { "label": "Collect", "value": "Saturday, 7 to 9am" },
+        { "label": "Payment", "value": "At order, card or e-transfer" },
+        { "label": "Delivery", "value": "Collection only" }
+      ]
+    }
+  ],
+  "contact": { "email": "hello@example.invalid" },
+  "legal": {
+    "operator": "Maplewood Bread Co. (fictional)",
+    "jurisdiction": "Ontario, Canada",
+    "contactEmail": "hello@example.invalid",
+    "effective": "2026-09-14",
+    "deliverable": "the bread and standing orders described on this site",
+    "collects": ["Your name, email address and order, entered at checkout so we know whose loaf is whose.", "Nothing is collected by reading this page: no analytics, no advertising, no cookies."],
+    "refund": "If something is wrong with what you collected, tell us that Saturday and it is replaced or refunded. Uncollected orders are not refunded, because the loaf was baked."
+  },
+  "footer": { "note": "Sample build. Maplewood Bread Co. is a fictional bakery invented to demonstrate the template — the prices, the hours and the order link are not real." }
+}

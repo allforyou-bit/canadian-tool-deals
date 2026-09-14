@@ -1,0 +1,270 @@
+{
+  "slug": "48-hour-ship",
+  "mode": "live",
+  "meta": {
+    "businessName": "48-Hour Ship",
+    "monogram": "48",
+    "tagline": "a one-page site with your checkout on it, live in 48 hours",
+    "title": "48-Hour Ship — one page, your checkout, live in 48 hours",
+    "description": "A flat CAD 300 one-page website with your own checkout wired in, live within 48 hours. You see it working on a real URL before you pay.",
+    "accent": "teal",
+    "locale": "en-CA"
+  },
+  "nav": [
+    { "label": "What you get", "href": "#what-you-get" },
+    { "label": "How it works", "href": "#how-it-works" },
+    { "label": "Price", "href": "#price" },
+    { "label": "Questions", "href": "#questions" }
+  ],
+  "hero": {
+    "eyebrow": "Fixed scope, fixed price, in CAD",
+    "headline": "You have the offer. You do not have a page that takes money.",
+    "sub": "One page, written and built around what you actually sell, with your own checkout link on it. Live on a real URL within 48 hours of the brief. CAD 300, flat.",
+    "primaryCta": { "label": "Start a brief", "href": "mailto:kay.kyeong.lee@gmail.com?subject=48-Hour%20Ship%20brief" },
+    "secondaryCta": { "label": "See the price", "href": "#price" },
+    "note": "You see the finished page working on a live URL before any money changes hands.",
+    "trust": [
+      "No deposit",
+      "No subscription, no retainer",
+      "No hosting bill after handover",
+      "Priced in CAD, not USD"
+    ]
+  },
+  "sections": [
+    {
+      "type": "features",
+      "id": "what-you-get",
+      "eyebrow": "Deliverable",
+      "heading": "What lands in your hands",
+      "intro": "Everything below is inside the flat price. Nothing here is an upsell.",
+      "items": [
+        {
+          "title": "Copy written for your offer",
+          "body": "Headline, the offer, what is included, objection handling, and a close. The copy is written from your brief, not dropped into a placeholder theme."
+        },
+        {
+          "title": "Your checkout, not ours",
+          "body": "Your Stripe, Square, Ko-fi, PayPal or booking link goes on the button. Our payment account never touches your page — the money moves from your customer to you."
+        },
+        {
+          "title": "Privacy and terms pages",
+          "body": "Written to match what the page actually does, with a real last-updated date. Most one-page sites ship without these and quietly need them."
+        },
+        {
+          "title": "No cookie banner",
+          "body": "Static files, no analytics, no advertising, no third-party script or font. Nothing to consent to, so nothing to interrupt the visitor with."
+        },
+        {
+          "title": "Fast by construction",
+          "body": "One HTML file with the stylesheet inlined and an SVG icon built in. No framework, no bundle, no render-blocking request to a CDN."
+        },
+        {
+          "title": "Real security headers",
+          "body": "Content-Security-Policy, Referrer-Policy, nosniff, frame-deny and a locked-down Permissions-Policy, configured at the edge rather than left at defaults."
+        },
+        {
+          "title": "Readable in dark mode",
+          "body": "The page follows the visitor's system theme instead of blinding half of them at night. Tested in both."
+        },
+        {
+          "title": "Works on a phone first",
+          "body": "Built narrow and scaled up, with real tap targets and no horizontal scroll at 320 pixels wide."
+        },
+        {
+          "title": "The files are yours",
+          "body": "On payment you get the source and the deploy configuration. You can hand it to anyone later. Nothing is locked to us."
+        }
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "how-it-works",
+      "sunk": true,
+      "eyebrow": "Process",
+      "heading": "Four steps, two days",
+      "intro": "No discovery call, no proposal deck, no scope negotiation. The scope is fixed before you start, which is why the price can be.",
+      "items": [
+        {
+          "title": "You send the brief",
+          "body": "What you sell, who buys it, the price, and where the money should go. A few paragraphs by email is enough. No form to fill in."
+        },
+        {
+          "title": "We build it",
+          "body": "Copy written, page built, privacy and terms generated, checkout wired to your link, deployed. You get a live URL you can open on your phone."
+        },
+        {
+          "title": "One round of changes",
+          "body": "You read it and send corrections in one message. Wording, prices, order of sections, the accent colour. Turned around same day."
+        },
+        {
+          "title": "You pay, then it is yours",
+          "body": "Interac e-Transfer, CAD 300. Then the page points at your domain if you have one, and the source and deploy config come to you."
+        }
+      ]
+    },
+    {
+      "type": "pricing",
+      "id": "price",
+      "eyebrow": "Price",
+      "heading": "One number, in Canadian dollars",
+      "intro": "Canadian small-business page builds are commonly quoted between CAD 1,500 and CAD 5,000, with boutique packages from roughly CAD 599. This is cheaper for one reason: the scope is fixed and narrow, so there is nothing to estimate.",
+      "tiers": [
+        {
+          "name": "Ship",
+          "amount": "CAD 300",
+          "unit": "one-time",
+          "tag": "Most people",
+          "featured": true,
+          "desc": "One page, your checkout on it, live in 48 hours.",
+          "includes": [
+            "One page, copy written from your brief",
+            "Your own checkout or booking link wired in",
+            "Privacy and terms pages",
+            "Deployed on a live URL, hosting included on a free tier",
+            "One round of changes",
+            "Source and deploy config handed over"
+          ],
+          "cta": { "label": "Start a brief", "href": "mailto:kay.kyeong.lee@gmail.com?subject=48-Hour%20Ship%20-%20Ship%20(CAD%20300)" },
+          "fine": "Paid on go-live, after you have seen it working."
+        },
+        {
+          "name": "Ship Two",
+          "amount": "CAD 450",
+          "unit": "one-time",
+          "desc": "Two pages — or the same page in English and Korean.",
+          "includes": [
+            "Everything in Ship",
+            "A second page, or a full Korean translation of the first",
+            "Cross-linked navigation",
+            "One round of changes across both"
+          ],
+          "cta": { "label": "Ask about Ship Two", "href": "mailto:kay.kyeong.lee@gmail.com?subject=48-Hour%20Ship%20-%20Ship%20Two%20(CAD%20450)" },
+          "fine": "Bilingual pages are written, not machine-translated."
+        },
+        {
+          "name": "Rush",
+          "amount": "+CAD 150",
+          "unit": "add-on",
+          "desc": "24 hours instead of 48.",
+          "includes": [
+            "Added to either package",
+            "Brief in by noon, live URL by noon the next day",
+            "Subject to a slot being free — ask before you count on it"
+          ],
+          "cta": { "label": "Check a rush slot", "href": "mailto:kay.kyeong.lee@gmail.com?subject=48-Hour%20Ship%20-%20Rush%20slot" }
+        }
+      ]
+    },
+    {
+      "type": "features",
+      "id": "not-included",
+      "sunk": true,
+      "eyebrow": "Boundaries",
+      "heading": "What this is not",
+      "intro": "Said up front, because a fixed price only works if both sides know where it stops.",
+      "items": [
+        {
+          "title": "Not a brand identity",
+          "body": "Your existing logo is used if you have one. If you do not, the page runs on clean type and a monogram, which looks deliberate rather than unfinished."
+        },
+        {
+          "title": "Not a photo shoot",
+          "body": "Your photos are used. No stock imagery is bought or invented, and no image of a person who did not agree to appear goes on your page."
+        },
+        {
+          "title": "Not a full storefront",
+          "body": "One offer, or a small handful, each pointing at your own checkout. A hundred-product storefront with inventory needs different tooling and an honest quote."
+        },
+        {
+          "title": "Not an app or database",
+          "body": "The page links out to whatever tool you already use for that. Building one is a different project."
+        },
+        {
+          "title": "Not ongoing edits",
+          "body": "One round of changes is included. After handover you hold the source, and further work is quoted separately or done by anyone you like."
+        },
+        {
+          "title": "Not professional advice",
+          "body": "The privacy and terms pages are plain-language descriptions of what your site does. If your situation needs a professional opinion, get one — we will say so rather than guess."
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "questions",
+      "eyebrow": "Questions",
+      "heading": "The ones that actually get asked",
+      "items": [
+        {
+          "q": "Why would you take CAD 300 for this?",
+          "a": "Because the build is fixed-scope and genuinely fast, and because the hosting costs nothing. There is no agency overhead in the number, no account manager and no monthly retainer behind it. The trade you are making is scope: you get one excellent page, not a bespoke multi-page project."
+        },
+        {
+          "q": "Do I pay before or after?",
+          "a": "After. You get a live URL, you open it, you read it, you send corrections. You pay when it is right. That removes the awkward part of hiring a stranger on the internet.\nUntil payment the page sits on our subdomain. On payment it points at your domain and the source comes to you."
+        },
+        {
+          "q": "What does hosting cost me afterwards?",
+          "a": "Nothing, on the free tier it is deployed to. Cloudflare's free plan permits commercial use and does not charge for bandwidth on static files, which is the entire reason this page can be hosted at no cost without breaking anyone's terms.\nA domain name is separate and costs roughly CAD 15 a year, paid to a registrar, not to us. You do not need one to go live."
+        },
+        {
+          "q": "Can I edit it myself later?",
+          "a": "Yes. It is plain HTML and CSS with no build step required to read it, plus a small generator if you want to regenerate the page from a JSON file. Anyone who writes HTML can change it. You are not locked into a proprietary editor."
+        },
+        {
+          "q": "Whose payment account is on the page?",
+          "a": "Yours, always. A link to your Stripe, Square, Ko-fi, PayPal, Calendly or whatever you already use. Our payment details never appear on your page and we never sit between you and your customer's money."
+        },
+        {
+          "q": "What if I do not like it?",
+          "a": "Send the corrections in one message and they get made. If you look at the result and decide you do not want it at all, you do not pay and nothing was ever live under your name. That is the point of paying on go-live."
+        },
+        {
+          "q": "Do you charge GST or HST?",
+          "a": "Not currently. Under the Canada Revenue Agency's small-supplier threshold of CAD 30,000 in revenue there is no obligation to register for or charge GST/HST, so the invoice has no tax line. If that changes, the price shown will change with it rather than a tax appearing on top."
+        },
+        {
+          "q": "Do you write Korean?",
+          "a": "Yes — written, not run through a translator. The Ship Two package covers the same page in English and Korean, which matters if your customers search in one language and walk in speaking the other."
+        },
+        {
+          "q": "Is the copy written by AI?",
+          "a": "AI is used as part of how the page is produced, which is exactly why the price is what it is. Every line is reviewed before you see it, and if you would rather it were not used, say so in the brief and it will not be."
+        }
+      ]
+    },
+    {
+      "type": "final",
+      "id": "start",
+      "sunk": true,
+      "eyebrow": "Next",
+      "heading": "Send the brief. See it live in 48 hours.",
+      "intro": "A few paragraphs is enough: what you sell, who buys it, the price, and where the money should go.",
+      "primaryCta": { "label": "Email the brief", "href": "mailto:kay.kyeong.lee@gmail.com?subject=48-Hour%20Ship%20brief" },
+      "pairs": [
+        { "label": "Price", "value": "CAD 300 flat, paid on go-live" },
+        { "label": "Turnaround", "value": "48 hours from the brief" },
+        { "label": "Payment", "value": "Interac e-Transfer" },
+        { "label": "Where it runs", "value": "Cloudflare Pages, free tier" }
+      ]
+    }
+  ],
+  "contact": {
+    "email": "kay.kyeong.lee@gmail.com"
+  },
+  "legal": {
+    "operator": "REPLACE-WITH-YOUR-LEGAL-NAME",
+    "jurisdiction": "Ontario, Canada",
+    "contactEmail": "kay.kyeong.lee@gmail.com",
+    "effective": "2026-09-14",
+    "deliverable": "the one-page website build described on this site",
+    "collects": [
+      "Whatever you put in an email you send to the address on this site: your name, your email address, and what you wrote.",
+      "Nothing else. This site has no forms, no analytics, no advertising and no cookies, so there is nothing collected from you by simply reading it."
+    ],
+    "refund": "Work is paid for on go-live, after you have seen the finished page on a live URL. If you look at it and decide not to proceed, you pay nothing and nothing was published under your name. Once you have paid and the source has been handed over, the work is delivered and cannot be returned, so ask anything you are unsure about before that point."
+  },
+  "footer": {
+    "note": "Built with the generator in this repository. No cookies, no trackers, no third-party requests."
+  }
+}

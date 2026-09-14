@@ -1,0 +1,33 @@
+{
+  "number": "2026-001",
+  "date": "2026-09-18",
+  "due": "2026-09-18",
+  "currency": "CAD",
+  "reference": "48-Hour Ship",
+  "from": {
+    "name": "REPLACE-WITH-YOUR-LEGAL-NAME",
+    "email": "kay.kyeong.lee@gmail.com"
+  },
+  "to": {
+    "name": "Client Name",
+    "company": "Client Company",
+    "email": "client@example.invalid"
+  },
+  "items": [
+    {
+      "description": "48-Hour Ship — one-page website build",
+      "detail": "One page with copy, privacy and terms pages, client's own checkout link wired in, deployed and handed over.",
+      "amount": 300
+    }
+  ],
+  "payment": {
+    "method": "Interac e-Transfer",
+    "address": "kay.kyeong.lee@gmail.com",
+    "reference": "2026-001",
+    "note": "Autodeposit is on, so no security question is needed. Put the invoice number in the message so it can be matched."
+  },
+  "notes": [
+    "Payable on go-live. The page was live and reviewed before this invoice was issued.",
+    "On payment the source files and deploy configuration are handed over and the work is complete. Delivered work cannot be returned."
+  ]
+}
