@@ -41,6 +41,7 @@ node ship/build.mjs --check            # brief validation, writes nothing
 node ship/tools/preview.mjs --check    # horizontal overflow at 390 / 1280, light and dark
 node ship/tools/contrast.mjs           # WCAG AA on the colours the browser computed
 node ship/tools/selftest.mjs           # escaping, href filtering, no cookies, no external requests
+node ship/tools/links.mjs              # serves the build and requests every internal link
 node ship/tools/preview.mjs --out ./shots   # the same run, with PNGs
 ```
 

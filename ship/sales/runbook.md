@@ -209,6 +209,26 @@ node ship/tools/invoice.mjs ship/sales/invoices/2026-002.json
 Send the PDF. Confirm the transfer landed. Then hand over the source, and only
 then.
 
+**Delivering Ship Two (the bilingual one).** This is two briefs, not one, and the
+build enforces that they link to each other:
+
+```bash
+cp ship/briefs/sample-hanok-kitchen.json    ship/briefs/client.json
+cp ship/briefs/sample-hanok-kitchen-ko.json ship/briefs/client-ko.json
+# set slug/meta/content in each, and point alternates at each other:
+#   client.json     -> "alternates": [{ "lang": "ko", "label": "한국어",  "href": "/client-ko/" }]
+#   client-ko.json  -> "alternates": [{ "lang": "en", "label": "English", "href": "/client/" }]
+node ship/build.mjs
+```
+
+Write the Korean; do not translate the English. That is the thing being sold, and
+it is the one part of this package a cheaper competitor cannot copy. `meta.locale:
+"ko-KR"` takes care of the rest — interface strings, date format, the whole privacy
+and terms copy in Korean, and the line-breaking rule that stops the browser
+splitting Korean words mid-syllable.
+
+If the two briefs do not link to each other the build refuses and names the fix.
+
 **Every evening, 5 minutes.** Write down: replies sent, replies answered, calls
 booked, money in. Three days of numbers tells you whether the channel works. A
 feeling does not.

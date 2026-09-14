@@ -141,9 +141,27 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 0; }
   background: var(--accent); color: var(--accent-ink);
   border-radius: 8px; font-size: 0.9rem; font-weight: 700; letter-spacing: 0;
 }
+.head-nav { display: flex; align-items: center; gap: clamp(0.9rem, 2.5vw, 1.8rem); flex-wrap: wrap; }
 .nav { display: flex; gap: clamp(0.75rem, 2vw, 1.5rem); align-items: center; flex-wrap: wrap; }
 .nav a { color: var(--ink-soft); text-decoration: none; font-size: 0.94rem; }
 .nav a:hover { color: var(--ink); }
+
+/* Language switcher. Only rendered when the brief declares a sibling language. */
+.langs { display: flex; gap: 0.5rem; align-items: center; }
+.langs a {
+  color: var(--ink-soft); text-decoration: none; font-size: 0.86rem; font-weight: 560;
+  border: 1px solid var(--line); border-radius: 999px; padding: 0.25rem 0.7rem;
+  white-space: nowrap;
+}
+.langs a:hover { color: var(--ink); border-color: var(--line-strong); background: var(--bg-sunk); }
+
+/*
+ * Korean does not break on spaces the way Latin scripts do. Without keep-all the
+ * browser splits inside words, which is the single most obvious tell that a
+ * Korean page was laid out by someone who does not read Korean.
+ */
+:lang(ko) { word-break: keep-all; line-break: strict; }
+:lang(ko) h1, :lang(ko) h2, :lang(ko) h3 { letter-spacing: -0.01em; }
 
 /* ── Buttons ─────────────────────────────────────────────────────────────── */
 .btn {

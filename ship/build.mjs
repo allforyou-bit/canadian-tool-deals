@@ -162,6 +162,36 @@ function main() {
     writes.push({ outDir, brief, isSite })
   }
 
+  // Language links must be reciprocal. A switcher that only points one way strands
+  // the reader in the language they just left, and it is the kind of mistake that
+  // survives every check that looks at one page at a time.
+  //
+  // Only enforced on a full build: a filtered build does not know about the
+  // siblings it was not asked to render.
+  if (!only.length) {
+    const bySlug = new Map(writes.map(w => [w.brief.slug, w.brief]))
+    for (const { brief } of writes) {
+      for (const alt of brief.alternates ?? []) {
+        const targetSlug = alt.href.replace(/^\/|\/$/g, '')
+        const target = bySlug.get(targetSlug)
+        if (!target) {
+          console.error(`${red('x')} ${brief.slug}: alternates points at "${alt.href}" but no brief builds that directory`)
+          failed++
+          continue
+        }
+        const back = (target.alternates ?? []).some(a => a.href.replace(/^\/|\/$/g, '') === brief.slug)
+        if (!back) {
+          console.error(`${red('x')} ${brief.slug}: "${targetSlug}" does not link back — add { href: "/${brief.slug}/" } to its alternates`)
+          failed++
+        }
+      }
+    }
+    if (failed) {
+      console.error(`\n${red(bold('Build aborted'))} — language links are not reciprocal. Nothing was written.`)
+      process.exit(1)
+    }
+  }
+
   // Rendering happens after every brief is known, so the root robots.txt can
   // disallow each proposal directory by path.
   const proposalPaths = writes

@@ -11,7 +11,8 @@
     "ship:check": "node ship/build.mjs --check",
     "ship:preview": "node ship/tools/preview.mjs",
     "ship:contrast": "node ship/tools/contrast.mjs",
-    "ship:test": "node ship/tools/selftest.mjs"
+    "ship:test": "node ship/tools/selftest.mjs",
+    "ship:links": "node ship/tools/links.mjs"
   },
   "dependencies": {
     "next": "16.2.3",

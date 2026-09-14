@@ -10,6 +10,51 @@
 import { esc, attr, jsonLd, each, inline, paragraphs, slugify } from './html.mjs'
 import { stylesheet, resolveAccent } from './css.mjs'
 
+/**
+ * Interface strings, per language.
+ *
+ * Only the chrome lives here — navigation, the skip link, the proposal banner.
+ * Page copy comes from the brief, because the bilingual package sells written
+ * Korean rather than a translation layer.
+ */
+const UI = {
+  en: {
+    skip: 'Skip to content',
+    sections: 'Sections',
+    pages: 'Pages',
+    legal: 'Legal',
+    languages: 'Language',
+    home: 'Home',
+    privacy: 'Privacy',
+    terms: 'Terms',
+    banner: (name, p) =>
+      `<strong>Draft proposal — not affiliated with, endorsed by or operated by ${name}.</strong> ` +
+      `Prepared for ${p.preparedFor} by ${p.preparedBy} (${p.contact}) as an example of what the page could look like. ` +
+      `Nothing here is live, no payment is collected and no order is taken.`,
+  },
+  ko: {
+    skip: '본문으로 건너뛰기',
+    sections: '섹션',
+    pages: '페이지',
+    legal: '약관',
+    languages: '언어',
+    home: '홈',
+    privacy: '개인정보 처리방침',
+    terms: '이용약관',
+    banner: (name, p) =>
+      `<strong>초안 제안서입니다 — ${name}와(과) 제휴·승인·운영 관계가 없습니다.</strong> ` +
+      `${p.preparedFor}을(를) 위해 ${p.preparedBy}(${p.contact})이(가) 페이지 예시로 만든 것입니다. ` +
+      `실제로 운영되는 페이지가 아니며, 결제도 주문도 이루어지지 않습니다.`,
+  },
+}
+
+/** The language a brief is written in. */
+function langOf(brief) {
+  return (brief.meta?.locale ?? 'en-CA').split('-')[0]
+}
+
+const stringsFor = brief => UI[langOf(brief)] ?? UI.en
+
 /** Derive a 1-2 character monogram from a business name. */
 export function monogramFor(name) {
   const words = String(name ?? '').trim().split(/\s+/).filter(Boolean)
@@ -177,11 +222,15 @@ ${each(h.trust, t => `<li>${inline(t)}</li>`)}
  */
 function renderProposalBanner(brief) {
   const p = brief.proposal ?? {}
+  const t = stringsFor(brief)
+  const text = t.banner(esc(brief.meta.businessName), {
+    preparedFor: esc(p.preparedFor),
+    preparedBy: esc(p.preparedBy),
+    contact: esc(p.contact),
+  })
   return `<div class="banner">
 <div class="wrap">
-<p><strong>Draft proposal — not affiliated with, endorsed by or operated by ${esc(brief.meta.businessName)}.</strong>
-Prepared for ${esc(p.preparedFor)} by ${esc(p.preparedBy)} (${esc(p.contact)}) as an example of what the page could look like.
-Nothing here is live, no payment is collected and no order is taken.</p>
+<p>${text}</p>
 </div>
 </div>`
 }
@@ -195,16 +244,27 @@ Nothing here is live, no payment is collected and no order is taken.</p>
  * rather than to a `#top` that goes nowhere.
  */
 function renderHeader(brief, { current = 'index' } = {}) {
+  const t = stringsFor(brief)
   const links = current === 'index'
     ? (Array.isArray(brief.nav) ? brief.nav : [])
     : [
-        { label: 'Home', href: 'index.html' },
-        ...(current === 'privacy' ? [] : [{ label: 'Privacy', href: 'privacy.html' }]),
-        ...(current === 'terms' ? [] : [{ label: 'Terms', href: 'terms.html' }]),
+        { label: t.home, href: 'index.html' },
+        ...(current === 'privacy' ? [] : [{ label: t.privacy, href: 'privacy.html' }]),
+        ...(current === 'terms' ? [] : [{ label: t.terms, href: 'terms.html' }]),
       ]
   const nav = links.length
-    ? `<nav class="nav" aria-label="${current === 'index' ? 'Sections' : 'Pages'}">
+    ? `<nav class="nav" aria-label="${attr(current === 'index' ? t.sections : t.pages)}">
 ${each(links, item => `<a href="${attr(item.href)}">${esc(item.label)}</a>`)}
+</nav>`
+    : ''
+  // The switcher only appears when the brief declares a sibling in another
+  // language, and it links to that sibling's equivalent page rather than dumping
+  // the reader on its home page.
+  const alts = Array.isArray(brief.alternates) ? brief.alternates : []
+  const page = current === 'index' ? '' : `${current}.html`
+  const switcher = alts.length
+    ? `<nav class="langs" aria-label="${attr(t.languages)}">
+${each(alts, a => `<a href="${attr(a.href.replace(/\/$/, '/') + page)}" hreflang="${attr(a.lang)}" lang="${attr(a.lang)}">${esc(a.label)}</a>`)}
 </nav>`
     : ''
   const monogram = brief.meta.monogram || monogramFor(brief.meta.businessName)
@@ -212,7 +272,10 @@ ${each(links, item => `<a href="${attr(item.href)}">${esc(item.label)}</a>`)}
   return `<header class="site-head">
 <div class="wrap row">
 <a class="brand" href="${home}"><span class="mark" aria-hidden="true">${esc(monogram)}</span>${esc(brief.meta.businessName)}</a>
+<div class="head-nav">
 ${nav}
+${switcher}
+</div>
 </div>
 </header>`
 }
@@ -225,12 +288,13 @@ function renderFooter(brief, { current = 'index' } = {}) {
   ].filter(Boolean).join(' · ')
   // Relative, not root-absolute: a client site is served from /<slug>/, where
   // /privacy.html is the operator's legal page, not the client's.
+  const t = stringsFor(brief)
   const footLinks = [
-    ...(current === 'index' ? [] : [{ label: 'Home', href: 'index.html' }]),
-    ...(current === 'privacy' ? [] : [{ label: 'Privacy', href: 'privacy.html' }]),
-    ...(current === 'terms' ? [] : [{ label: 'Terms', href: 'terms.html' }]),
+    ...(current === 'index' ? [] : [{ label: t.home, href: 'index.html' }]),
+    ...(current === 'privacy' ? [] : [{ label: t.privacy, href: 'privacy.html' }]),
+    ...(current === 'terms' ? [] : [{ label: t.terms, href: 'terms.html' }]),
   ]
-  const links = `<nav aria-label="Legal">${each(footLinks, l => `<a href="${attr(l.href)}">${esc(l.label)}</a>`)}</nav>`
+  const links = `<nav aria-label="${attr(t.legal)}">${each(footLinks, l => `<a href="${attr(l.href)}">${esc(l.label)}</a>`)}</nav>`
   return `<footer class="site-foot">
 <div class="wrap row">
 <div>
@@ -259,6 +323,32 @@ function renderJsonLd(brief) {
   return `<script type="application/ld+json">\n${jsonLd(data)}\n</script>`
 }
 
+/**
+ * hreflang links for the sibling languages.
+ *
+ * Emitted only when both this brief and the sibling carry an absolute `meta.url`
+ * and `alternates[].url`, because hreflang is specified in terms of fully
+ * qualified URLs. The visible language switcher works from the relative href
+ * regardless; this is the machine-readable hint, and a wrong hint is worse than
+ * none — it points a crawler at a page that is not the translation.
+ *
+ * Live pages only: a proposal is noindex, so describing its translations to a
+ * crawler would be pointless.
+ */
+function renderHreflang(brief, path) {
+  const alts = Array.isArray(brief.alternates) ? brief.alternates : []
+  if (!alts.length || brief.mode !== 'live' || !brief.meta.url) return ''
+  const usable = alts.filter(a => a.url)
+  if (!usable.length) return ''
+
+  const abs = (base, p) => new URL(p === '/' ? '.' : p.replace(/^\//, ''), base.endsWith('/') ? base : `${base}/`).href
+  const rows = [
+    `<link rel="alternate" hreflang="${attr(langOf(brief))}" href="${attr(abs(brief.meta.url, path))}">`,
+    ...usable.map(a => `<link rel="alternate" hreflang="${attr(a.lang)}" href="${attr(abs(a.url, path))}">`),
+  ]
+  return rows.join('\n')
+}
+
 function renderHead(brief, { title, description, path = '/' } = {}) {
   const m = brief.meta
   const pageTitle = title ?? m.title ?? `${m.businessName} — ${m.tagline}`
@@ -278,6 +368,7 @@ ${canonical && brief.mode === 'live' ? `<link rel="canonical" href="${attr(canon
 <meta property="og:locale" content="${attr((m.locale ?? 'en-CA').replace('-', '_'))}">
 ${canonical ? `<meta property="og:url" content="${attr(canonical)}">` : ''}
 <meta name="twitter:card" content="summary">
+${renderHreflang(brief, path)}
 <link rel="icon" href="${attr(faviconDataUri(monogram, m.accent))}">
 <style>
 ${stylesheet(m.accent)}
@@ -293,7 +384,7 @@ function document_(brief, { head, body }) {
 ${head}
 </head>
 <body id="top">
-<a class="skip" href="#main">Skip to content</a>
+<a class="skip" href="#main">${esc(stringsFor(brief).skip)}</a>
 ${body}
 </body>
 </html>
@@ -316,13 +407,13 @@ export function renderPage(brief) {
 }
 
 /** A legal page: one `<h1>`, a last-updated line, and prose sections. */
-export function renderLegalPage(brief, { title, slug, updated, blocks }) {
+export function renderLegalPage(brief, { title, slug, updated, updatedLabel = 'Last updated', blocks }) {
   const body = [
     brief.mode === 'proposal' ? renderProposalBanner(brief) : '',
     renderHeader(brief, { current: slug }),
     `<main id="main"><div class="wrap prose">`,
     `<h1>${esc(title)}</h1>`,
-    `<p class="updated">Last updated ${esc(updated)}</p>`,
+    `<p class="updated">${esc(updatedLabel)} ${esc(updated)}</p>`,
     each(blocks, b => {
       if (b.table) {
         return `<h2>${esc(b.heading)}</h2>

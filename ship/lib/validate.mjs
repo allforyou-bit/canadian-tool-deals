@@ -312,6 +312,36 @@ export function validateBrief(brief, label = 'brief') {
     c.unknown(hero, `${label}.hero`, ['eyebrow', 'headline', 'sub', 'primaryCta', 'secondaryCta', 'note', 'trust'])
   }
 
+  // Sibling-language versions of this site. Each entry points at another built
+  // site's directory; the build then checks the link is reciprocal, because a
+  // one-way language switcher strands the reader in the other language.
+  const alternates = brief.alternates
+  if (alternates !== undefined) {
+    if (!Array.isArray(alternates) || !alternates.length) {
+      c.err(`${label}.alternates`, 'expected a non-empty array of { lang, label, href }')
+    } else {
+      alternates.forEach((a, i) => {
+        const ap = `${label}.alternates[${i}]`
+        if (typeof a !== 'object' || a === null) { c.err(ap, 'expected an object'); return }
+        c.str(a, 'lang', ap, { max: 12 })
+        if (typeof a.lang === 'string' && !/^[a-z]{2}(-[A-Za-z0-9]{2,8})?$/.test(a.lang)) {
+          c.err(`${ap}.lang`, `expected a language tag like "ko" or "ko-KR", got ${JSON.stringify(a.lang)}`)
+        }
+        c.str(a, 'label', ap, { max: 24 })
+        if (typeof a.href !== 'string' || !/^\/[a-z0-9][a-z0-9-]*\/$/.test(a.href)) {
+          c.err(`${ap}.href`, `expected a site-relative directory like "/acme-ko/", got ${JSON.stringify(a.href)}`)
+        }
+        // Optional, and only useful once the real deployed URL is known. hreflang
+        // is emitted from this rather than from href, because it is specified in
+        // fully qualified URLs.
+        if (a.url !== undefined && (typeof a.url !== 'string' || !/^https?:\/\/[^\s]+$/i.test(a.url))) {
+          c.err(`${ap}.url`, `expected an absolute http(s) URL, got ${JSON.stringify(a.url)}`)
+        }
+        c.unknown(a, ap, ['lang', 'label', 'href', 'url'])
+      })
+    }
+  }
+
   const nav = brief.nav
   if (nav !== undefined) {
     if (!Array.isArray(nav)) c.err(`${label}.nav`, 'expected an array')
@@ -357,7 +387,7 @@ export function validateBrief(brief, label = 'brief') {
     c.unknown(footer, `${label}.footer`, ['note'])
   }
 
-  c.unknown(brief, label, ['slug', 'mode', 'meta', 'proposal', 'hero', 'nav', 'sections', 'contact', 'legal', 'footer'])
+  c.unknown(brief, label, ['slug', 'mode', 'meta', 'proposal', 'hero', 'nav', 'alternates', 'sections', 'contact', 'legal', 'footer'])
   checkPlaceholders(c, brief, label)
 
   return { errors: c.errors, warnings: c.warnings }

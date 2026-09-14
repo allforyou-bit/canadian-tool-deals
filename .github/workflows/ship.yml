@@ -57,3 +57,9 @@ jobs:
       # claim, verified against the DOM a browser actually built.
       - name: Safety self-test
         run: CHROME_PATH='${{ steps.browser.outputs.path }}' node ship/tools/selftest.mjs
+
+      # Serves the output the way a host would and requests every internal link.
+      # Root-absolute hrefs like the language switcher's "/acme-ko/" cannot be
+      # checked against the filesystem — only against a server.
+      - name: Check links
+        run: CHROME_PATH='${{ steps.browser.outputs.path }}' node ship/tools/links.mjs

@@ -1,0 +1,242 @@
+{
+  "slug": "sample-hanok-kitchen",
+  "mode": "live",
+  "meta": {
+    "businessName": "Hanok Kitchen",
+    "monogram": "HK",
+    "tagline": "banchan made the long way, six days a week",
+    "description": "A small Korean kitchen making banchan, kimchi and stews from scratch. Order by Wednesday, collect Friday or Saturday.",
+    "accent": "crimson",
+    "locale": "en-CA"
+  },
+  "alternates": [
+    {
+      "lang": "ko",
+      "label": "한국어",
+      "href": "/sample-hanok-kitchen-ko/"
+    }
+  ],
+  "nav": [
+    {
+      "label": "What we make",
+      "href": "#what-we-make"
+    },
+    {
+      "label": "Ordering",
+      "href": "#ordering"
+    },
+    {
+      "label": "Prices",
+      "href": "#prices"
+    },
+    {
+      "label": "Order",
+      "href": "#order"
+    }
+  ],
+  "hero": {
+    "eyebrow": "Fictional sample build",
+    "headline": "Banchan that tastes like someone's grandmother made it.",
+    "sub": "Because someone's grandmother did. Fermented on its own schedule, not on a production schedule. Order by Wednesday night, collect Friday or Saturday.",
+    "primaryCta": {
+      "label": "Order for this week",
+      "href": "#order"
+    },
+    "secondaryCta": {
+      "label": "See the menu",
+      "href": "#what-we-make"
+    },
+    "note": "Everything is made in one kitchen, in batches that sell out.",
+    "trust": [
+      "No MSG, no shortcuts",
+      "Kimchi aged at least three weeks",
+      "Glass jars, returnable",
+      "Collection only"
+    ]
+  },
+  "sections": [
+    {
+      "type": "features",
+      "id": "what-we-make",
+      "eyebrow": "The menu",
+      "heading": "Six things, made properly",
+      "intro": "The list barely changes. When it does, it is because something is in season.",
+      "items": [
+        {
+          "title": "Poggi kimchi",
+          "body": "Whole-cabbage, aged a minimum of three weeks before it leaves the kitchen. Sour enough to cook with, not so sour you cannot eat it fresh."
+        },
+        {
+          "title": "Kkakdugi",
+          "body": "Radish kimchi, cut thick. The one people buy a second jar of two days later."
+        },
+        {
+          "title": "Japchae",
+          "body": "Sweet potato noodles, five vegetables, cut and cooked separately the way it is supposed to be done."
+        },
+        {
+          "title": "Jangjorim",
+          "body": "Beef braised in soy with quail eggs. Keeps a week and makes a bad day better."
+        },
+        {
+          "title": "Doenjang jjigae base",
+          "body": "The stew without the tofu, so you add what you like and eat it in ten minutes."
+        },
+        {
+          "title": "Seasoned greens",
+          "body": "Spinach, bean sprouts or bracken, depending on the week. Ask what is good."
+        }
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "ordering",
+      "sunk": true,
+      "eyebrow": "How it works",
+      "heading": "Order Wednesday, collect Friday",
+      "items": [
+        {
+          "title": "Order by Wednesday 9pm",
+          "body": "Text or email. We cook to the order count, which is why nothing is wasted and nothing sits."
+        },
+        {
+          "title": "We cook Thursday",
+          "body": "Everything fresh except the kimchi, which has been waiting three weeks for you."
+        },
+        {
+          "title": "Collect Friday or Saturday",
+          "body": "Between 11 and 7. Bring back last week's jars and take two dollars off."
+        }
+      ]
+    },
+    {
+      "type": "pricing",
+      "id": "prices",
+      "eyebrow": "Prices",
+      "heading": "By the jar",
+      "intro": "Jars are 500 ml and 1 L. Two dollars back on every jar returned clean.",
+      "tiers": [
+        {
+          "name": "Single jar",
+          "amount": "$14",
+          "unit": "500 ml",
+          "desc": "Any one item. Good for one person, one week.",
+          "includes": [
+            "Your choice from the menu",
+            "Glass jar, $2 back on return",
+            "Collect Friday or Saturday"
+          ],
+          "cta": {
+            "label": "Order a jar",
+            "href": "#order"
+          }
+        },
+        {
+          "name": "Weekly four",
+          "amount": "$48",
+          "unit": "per week",
+          "tag": "Most orders",
+          "featured": true,
+          "desc": "Four jars, your choice, every week.",
+          "includes": [
+            "Four 500 ml jars",
+            "Change the selection any week",
+            "Skip a week with a day's notice",
+            "Held back before general orders open"
+          ],
+          "cta": {
+            "label": "Start weekly",
+            "href": "#order"
+          },
+          "fine": "Cheaper than four singles, because we know the count in advance."
+        },
+        {
+          "name": "Kimchi, 1 L",
+          "amount": "$22",
+          "unit": "per litre",
+          "desc": "Poggi or kkakdugi. For households that cook with it.",
+          "includes": [
+            "Aged three weeks minimum",
+            "1 L jar, $2 back on return",
+            "Order two and it keeps a month"
+          ],
+          "cta": {
+            "label": "Order kimchi",
+            "href": "#order"
+          }
+        }
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "questions",
+      "eyebrow": "Questions",
+      "heading": "Asked most weeks",
+      "items": [
+        {
+          "q": "How spicy is it?",
+          "a": "Medium by Korean standards, which is hotter than most Canadian palates expect. Say the word and we make a mild batch — it needs two days' notice because it is a separate batch, not a dilution."
+        },
+        {
+          "q": "Is it vegan?",
+          "a": "The kimchi contains fermented shrimp, which is what makes it taste like kimchi. Ask for the vegan version and you get one made without it, on two days' notice. The seasoned greens and japchae are already vegan."
+        },
+        {
+          "q": "How long does it keep?",
+          "a": "Kimchi improves for months in the fridge and gets sourer as it goes — that is not spoilage, that is what stew kimchi is. Everything else is a week."
+        },
+        {
+          "q": "Do you deliver?",
+          "a": "No. One kitchen, two hands. Collection keeps the price where it is."
+        }
+      ]
+    },
+    {
+      "type": "final",
+      "id": "order",
+      "eyebrow": "Order",
+      "heading": "Orders close Wednesday at 9pm",
+      "intro": "Text or email what you want and how many. That is the whole process.",
+      "primaryCta": {
+        "label": "Email an order",
+        "href": "mailto:hello@example.invalid?subject=Order"
+      },
+      "pairs": [
+        {
+          "label": "Order by",
+          "value": "Wednesday, 9pm"
+        },
+        {
+          "label": "Collect",
+          "value": "Friday or Saturday, 11 to 7"
+        },
+        {
+          "label": "Payment",
+          "value": "E-transfer or cash at collection"
+        },
+        {
+          "label": "Jars",
+          "value": "$2 back on every clean return"
+        }
+      ]
+    }
+  ],
+  "contact": {
+    "email": "hello@example.invalid"
+  },
+  "legal": {
+    "operator": "Hanok Kitchen (fictional)",
+    "jurisdiction": "Ontario, Canada",
+    "contactEmail": "hello@example.invalid",
+    "effective": "2026-09-14",
+    "deliverable": "the prepared foods described on this site",
+    "collects": [
+      "Your name, contact details and order, sent by text or email so we know whose jars are whose.",
+      "Nothing is collected by reading this page: no analytics, no advertising, no cookies."
+    ],
+    "refund": "If something is wrong with what you collected, tell us that day and it is replaced or refunded. Uncollected orders are not refunded, because the food was made."
+  },
+  "footer": {
+    "note": "Sample build. Hanok Kitchen is a fictional business invented to demonstrate the bilingual template — the menu, prices and hours are not real."
+  }
+}
