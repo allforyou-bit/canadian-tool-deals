@@ -135,11 +135,15 @@ ${each(s.pairs, p => `<div><dt>${esc(p.label)}</dt><dd>${inline(p.value)}</dd></
 
 function renderSection(s, index, brief) {
   const body = RENDERERS[s.type]?.(s, brief) ?? ''
-  if (!body.trim()) return ''
+  const head = sectionHead(s)
+  // A `final` section is often just a heading and a line of copy with no buttons.
+  // Keying only on the body would drop it silently, which is worse than an empty
+  // section: the author asked for it and the build said nothing.
+  if (!body.trim() && !head.trim()) return ''
   const classes = [s.sunk ? 'sunk' : '', s.type === 'final' ? 'final' : ''].filter(Boolean).join(' ')
   return `<section id="${attr(sectionId(s, index))}"${classes ? ` class="${classes}"` : ''}>
 <div class="wrap">
-${sectionHead(s)}
+${head}
 ${body}
 </div>
 </section>`
@@ -182,30 +186,51 @@ Nothing here is live, no payment is collected and no order is taken.</p>
 </div>`
 }
 
-function renderHeader(brief) {
-  const nav = Array.isArray(brief.nav) && brief.nav.length
-    ? `<nav class="nav" aria-label="Sections">
-${each(brief.nav, item => `<a href="${attr(item.href)}">${esc(item.label)}</a>`)}
+/**
+ * Site header.
+ *
+ * `current` is which page is being rendered. On a legal page the in-page nav is
+ * useless — `#price` and `#questions` are anchors on the home page, not here — so
+ * it is replaced with links to pages that actually exist, and the brand links home
+ * rather than to a `#top` that goes nowhere.
+ */
+function renderHeader(brief, { current = 'index' } = {}) {
+  const links = current === 'index'
+    ? (Array.isArray(brief.nav) ? brief.nav : [])
+    : [
+        { label: 'Home', href: 'index.html' },
+        ...(current === 'privacy' ? [] : [{ label: 'Privacy', href: 'privacy.html' }]),
+        ...(current === 'terms' ? [] : [{ label: 'Terms', href: 'terms.html' }]),
+      ]
+  const nav = links.length
+    ? `<nav class="nav" aria-label="${current === 'index' ? 'Sections' : 'Pages'}">
+${each(links, item => `<a href="${attr(item.href)}">${esc(item.label)}</a>`)}
 </nav>`
     : ''
   const monogram = brief.meta.monogram || monogramFor(brief.meta.businessName)
+  const home = current === 'index' ? '#top' : 'index.html'
   return `<header class="site-head">
 <div class="wrap row">
-<a class="brand" href="#top"><span class="mark" aria-hidden="true">${esc(monogram)}</span>${esc(brief.meta.businessName)}</a>
+<a class="brand" href="${home}"><span class="mark" aria-hidden="true">${esc(monogram)}</span>${esc(brief.meta.businessName)}</a>
 ${nav}
 </div>
 </header>`
 }
 
-function renderFooter(brief, { legalLinks = true } = {}) {
+function renderFooter(brief, { current = 'index' } = {}) {
   const c = brief.contact ?? {}
   const bits = [
     c.email ? `<a href="mailto:${attr(c.email)}">${esc(c.email)}</a>` : '',
     c.phone ? `<a href="tel:${attr(c.phone.replace(/[^+\d]/g, ''))}">${esc(c.phone)}</a>` : '',
   ].filter(Boolean).join(' · ')
-  const links = legalLinks
-    ? `<nav aria-label="Legal"><a href="/privacy.html">Privacy</a><a href="/terms.html">Terms</a></nav>`
-    : ''
+  // Relative, not root-absolute: a client site is served from /<slug>/, where
+  // /privacy.html is the operator's legal page, not the client's.
+  const footLinks = [
+    ...(current === 'index' ? [] : [{ label: 'Home', href: 'index.html' }]),
+    ...(current === 'privacy' ? [] : [{ label: 'Privacy', href: 'privacy.html' }]),
+    ...(current === 'terms' ? [] : [{ label: 'Terms', href: 'terms.html' }]),
+  ]
+  const links = `<nav aria-label="Legal">${each(footLinks, l => `<a href="${attr(l.href)}">${esc(l.label)}</a>`)}</nav>`
   return `<footer class="site-foot">
 <div class="wrap row">
 <div>
@@ -280,12 +305,12 @@ export function renderPage(brief) {
   const sections = each(brief.sections, (s, i) => renderSection(s, i, brief))
   const body = [
     brief.mode === 'proposal' ? renderProposalBanner(brief) : '',
-    renderHeader(brief),
+    renderHeader(brief, { current: 'index' }),
     `<main id="main">`,
     renderHero(brief),
     sections,
     `</main>`,
-    renderFooter(brief),
+    renderFooter(brief, { current: 'index' }),
   ].filter(Boolean).join('\n')
   return document_(brief, { head: renderHead(brief), body })
 }
@@ -294,7 +319,7 @@ export function renderPage(brief) {
 export function renderLegalPage(brief, { title, slug, updated, blocks }) {
   const body = [
     brief.mode === 'proposal' ? renderProposalBanner(brief) : '',
-    renderHeader(brief),
+    renderHeader(brief, { current: slug }),
     `<main id="main"><div class="wrap prose">`,
     `<h1>${esc(title)}</h1>`,
     `<p class="updated">Last updated ${esc(updated)}</p>`,
@@ -309,7 +334,7 @@ export function renderLegalPage(brief, { title, slug, updated, blocks }) {
       return `${b.heading ? `<h2>${esc(b.heading)}</h2>` : ''}\n${paragraphs(b.body)}`
     }),
     `</div></main>`,
-    renderFooter(brief, { legalLinks: false }),
+    renderFooter(brief, { current: slug }),
   ].filter(Boolean).join('\n')
   return document_(brief, {
     head: renderHead(brief, { title: `${title} — ${brief.meta.businessName}`, description: `${title} for ${brief.meta.businessName}.`, path: `/${slug}.html` }),

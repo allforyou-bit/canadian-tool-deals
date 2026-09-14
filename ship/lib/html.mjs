@@ -82,7 +82,11 @@ export function inline(value) {
     if (!/^(https?:\/\/|mailto:|tel:|#|\/)/i.test(href)) return text
     const external = /^https?:\/\//i.test(href)
     const rel = external ? ' target="_blank" rel="noopener noreferrer"' : ''
-    return `<a href="${attr(href)}"${rel}>${text}</a>`
+    // `href` came out of the already-escaped string, so it is attribute-safe as
+    // it stands. Escaping it again would turn the `&` in a query string into
+    // `&amp;amp;` and silently drop every parameter after the first — which is
+    // exactly what a checkout link looks like.
+    return `<a href="${href}"${rel}>${text}</a>`
   })
   return out
 }

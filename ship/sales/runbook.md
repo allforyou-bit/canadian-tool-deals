@@ -203,8 +203,11 @@ feeling does not.
 
 These are not suggestions. Each one is a verified rule with a real penalty.
 
-**No cold email. Not one.** Canada's anti-spam law reaches CAD 1,000,000 per
-violation for an individual. "The address was published on their website" is not
+**No cold email. Not one.** This is a rule for this sprint, not a statement of the
+law — CASL does provide a conspicuous publication exception, with conditions, and
+`ship/FINDINGS.md` sets them out. It is ruled out here because the conditions must
+be evidenced per recipient and the downside is not survivable: Canada's anti-spam
+law reaches CAD 1,000,000 per violation for an individual. "The address was published on their website" is not
 consent — the CRTC has stated that conspicuous publication sets "a higher standard
 than the simple public availability of electronic addresses", the onus of proof is
 on the sender, and CRTC Decision 2016-428 imposed a $50,000 penalty on exactly that

@@ -156,9 +156,22 @@ availability of electronic addresses", the onus of proof sits on the sender, and
 Decision CRTC 2016-428 imposed a $50,000 penalty on a sender relying on exactly
 that defence across 385,668 messages.
 
-What is not restricted by CASL: talking to someone in person, replying to someone
-who contacted you first, and replying to someone who published a request to be
-contacted.
+**The exception does exist, and it has conditions.** CASL provides a conspicuous
+publication exception: a commercial electronic message may be sent to a business
+address that is conspicuously published, where the publication is not accompanied
+by a do-not-contact statement, and where the message is *relevant to the
+recipient's business role, functions or duties*. All three conditions must hold,
+and the sender carries the burden of proving them. So this is not "never lawful" —
+it is "lawful only if you can evidence each condition for each recipient, and the
+penalty for being wrong is career-ending for an individual."
+
+`ship/sales/runbook.md` takes the stricter position of no cold email at all. That
+is an operating decision made for a 28-day sprint by one person with no compliance
+support, not a statement that the exception is unavailable.
+
+What is not restricted by CASL at all: talking to someone in person, replying to
+someone who contacted you first, and replying to someone who published a request to
+be contacted.
 
 **Business-to-business telephone calls are exempt from the National Do Not Call
 List**, so cold-calling a business is lawful — but the CRTC's telemarketing rules

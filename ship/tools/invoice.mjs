@@ -19,21 +19,29 @@
  * once you have registered and have a business number to print.
  */
 
-import { spawn } from 'node:child_process'
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { dirname, basename, join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 import { esc, inline } from '../lib/html.mjs'
 import { formatDate } from '../lib/legal.mjs'
-
-const CHROME = process.env.CHROME_PATH
-  || ['/opt/pw-browsers/chromium-1194/chrome-linux/chrome', '/usr/bin/chromium', '/usr/bin/google-chrome']
-    .find(p => existsSync(p))
-
-const sleep = ms => new Promise(r => setTimeout(r, ms))
+import { withPage, findChrome } from '../lib/chrome.mjs'
 
 const money = n => `$${n.toFixed(2)}`
+
+/**
+ * The money, computed once.
+ *
+ * Both the rendered document and the console line read from here. Computing the
+ * total two different ways (`subtotal * (1 + rate)` in one place, `subtotal +
+ * subtotal * rate` in the other) puts them a cent apart on some amounts, and a
+ * client-facing invoice that disagrees with itself is not a rounding curiosity.
+ */
+function totals(doc) {
+  const subtotal = doc.items.reduce((sum, it) => sum + it.amount, 0)
+  const tax = doc.tax ? Math.round(subtotal * doc.tax.rate * 100) / 100 : 0
+  return { subtotal, tax, total: Math.round((subtotal + tax) * 100) / 100 }
+}
 
 function required(doc, path) {
   const value = path.split('.').reduce((o, k) => (o == null ? o : o[k]), doc)
@@ -47,6 +55,21 @@ function validate(doc) {
   const problems = []
   for (const p of ['number', 'date', 'from.name', 'from.email', 'to.name', 'currency', 'payment.method']) {
     try { required(doc, p) } catch (e) { problems.push(e.message) }
+  }
+  // formatDate() indexes a month array, so a non-ISO date silently renders as
+  // "Issued undefined undefined NaN" on a document that goes to a client.
+  for (const field of ['date', 'due', 'paidOn']) {
+    const value = doc[field]
+    if (value === undefined) continue
+    if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      problems.push(`${field}: expected YYYY-MM-DD, got ${JSON.stringify(value)}`)
+      continue
+    }
+    const [y, m, d] = value.split('-').map(Number)
+    const probe = new Date(Date.UTC(y, m - 1, d))
+    if (probe.getUTCFullYear() !== y || probe.getUTCMonth() !== m - 1 || probe.getUTCDate() !== d) {
+      problems.push(`${field}: ${value} is not a real calendar date`)
+    }
   }
   if (!Array.isArray(doc.items) || !doc.items.length) problems.push('items: expected at least one line')
   else doc.items.forEach((it, i) => {
@@ -70,9 +93,7 @@ function validate(doc) {
 }
 
 function render(doc, { receipt }) {
-  const subtotal = doc.items.reduce((sum, it) => sum + it.amount, 0)
-  const taxAmount = doc.tax ? subtotal * doc.tax.rate : 0
-  const total = subtotal + taxAmount
+  const { subtotal, tax: taxAmount, total } = totals(doc)
   const title = receipt ? 'Receipt' : 'Invoice'
   const paidStamp = receipt
     ? `<p class="paid">Paid in full${doc.paidOn ? ` on ${esc(formatDate(doc.paidOn))}` : ''}. Thank you.</p>`
@@ -182,61 +203,10 @@ ${(doc.notes ?? []).map(n => `  <p>${inline(n)}</p>`).join('\n')}
 }
 
 async function toPdf(htmlPath, pdfPath) {
-  if (!CHROME) {
-    console.error('No Chrome found for PDF output. Set CHROME_PATH, or pass --html-only.')
-    process.exit(1)
-  }
-  const port = 9400 + (process.pid % 400)
-  const chrome = spawn(CHROME, [
-    '--headless', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage',
-    `--remote-debugging-port=${port}`, 'about:blank',
-  ], { stdio: ['ignore', 'ignore', 'ignore'] })
-
-  try {
-    let wsUrl = null
-    for (let i = 0; i < 80 && !wsUrl; i++) {
-      try {
-        const r = await fetch(`http://127.0.0.1:${port}/json/version`)
-        if (r.ok) wsUrl = (await r.json()).webSocketDebuggerUrl
-      } catch { /* still starting */ }
-      if (!wsUrl) await sleep(250)
-    }
-    if (!wsUrl) throw new Error('Chrome never opened a debugging port')
-
-    const ws = new WebSocket(wsUrl)
-    await new Promise((res, rej) => { ws.onopen = res; ws.onerror = () => rej(new Error('could not attach to Chrome')) })
-
-    let id = 0
-    const pending = new Map()
-    let sessionId = null
-    ws.onmessage = e => {
-      const m = JSON.parse(e.data)
-      const settle = pending.get(m.id)
-      if (settle) { pending.delete(m.id); settle(m) }
-    }
-    const send = (method, params = {}, useSession = true) => {
-      const msgId = ++id
-      const msg = { id: msgId, method, params }
-      if (useSession && sessionId) msg.sessionId = sessionId
-      ws.send(JSON.stringify(msg))
-      return new Promise((res, rej) => pending.set(msgId, m => (m.error ? rej(new Error(`${method}: ${m.error.message}`)) : res(m.result))))
-    }
-
-    const { targetId } = await send('Target.createTarget', { url: 'about:blank' }, false)
-    const attached = await send('Target.attachToTarget', { targetId, flatten: true }, false)
-    sessionId = attached.sessionId
-    await send('Page.enable')
-    await send('Page.navigate', { url: pathToFileURL(htmlPath).href })
-    await sleep(700)
-    const { data } = await send('Page.printToPDF', {
-      printBackground: true,
-      preferCSSPageSize: true,
-    })
-    writeFileSync(pdfPath, Buffer.from(data, 'base64'))
-    ws.close()
-  } finally {
-    chrome.kill()
-  }
+  await withPage(async page => {
+    await page.goto(pathToFileURL(htmlPath).href)
+    writeFileSync(pdfPath, await page.pdf())
+  }, { settle: 700 })
 }
 
 async function main() {
@@ -244,10 +214,19 @@ async function main() {
   const receipt = args.includes('--receipt')
   const htmlOnly = args.includes('--html-only')
   const outIdx = args.indexOf('--out')
+  if (outIdx !== -1 && !args[outIdx + 1]) {
+    console.error('--out needs a directory')
+    process.exit(1)
+  }
   const files = args.filter((a, i) => !a.startsWith('--') && args[i - 1] !== '--out')
 
   if (!files.length) {
     console.error('Usage: node ship/tools/invoice.mjs <invoice.json> [--receipt] [--html-only] [--out dir]')
+    process.exit(1)
+  }
+
+  if (!htmlOnly && !findChrome()) {
+    console.error('No Chrome found for PDF output. Set CHROME_PATH, or pass --html-only.')
     process.exit(1)
   }
 
@@ -263,8 +242,7 @@ async function main() {
     const pdfPath = join(outDir, `${stem}.pdf`)
 
     writeFileSync(htmlPath, render(doc, { receipt }))
-    const total = doc.items.reduce((s, it) => s + it.amount, 0) * (doc.tax ? 1 + doc.tax.rate : 1)
-    console.log(`${basename(htmlPath)}  ${doc.currency} ${money(total)}  ->  ${htmlPath}`)
+    console.log(`${basename(htmlPath)}  ${doc.currency} ${money(totals(doc).total)}  ->  ${htmlPath}`)
 
     if (!htmlOnly) {
       await toPdf(htmlPath, pdfPath)

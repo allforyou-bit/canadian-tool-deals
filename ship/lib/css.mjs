@@ -7,6 +7,12 @@
  *
  * Colour is driven by two tokens the brief sets (`accent` and `accentInk`).
  * Everything else is fixed, so a brief cannot produce an unreadable page.
+ *
+ * The greys are not arbitrary. `--ink-faint` is the lightest text on the page and
+ * is pinned to the darkest value that still clears WCAG AA (4.5:1) against every
+ * background it can land on: #ffffff and #f6f7f9 in light, #0e1014, #15181e and
+ * #1a1e25 in dark. Measured, not estimated. Lightening it breaks AA on the sunk
+ * background first — check with `node ship/tools/contrast.mjs` before changing it.
  */
 
 /** Accent presets, so a brief can say "slate" instead of picking hex values. */
@@ -35,7 +41,7 @@ export function stylesheet(accentName) {
   --bg-raise: #ffffff;
   --ink: #16181d;
   --ink-soft: #565b66;
-  --ink-faint: #8a8f9a;
+  --ink-faint: #6a6f7a;
   --line: #e3e5ea;
   --line-strong: #c9ccd4;
   --accent: ${a.light};
@@ -56,7 +62,7 @@ export function stylesheet(accentName) {
     --bg-raise: #1a1e25;
     --ink: #eef0f4;
     --ink-soft: #a8aeba;
-    --ink-faint: #757c89;
+    --ink-faint: #818895;
     --line: #262b34;
     --line-strong: #3a4150;
     --accent: ${a.dark};

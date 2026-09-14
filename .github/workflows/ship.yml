@@ -27,15 +27,33 @@ jobs:
       - name: Build
         run: node ship/build.mjs
 
-      # Every generated page claims to work on a phone. This is where that is
-      # checked rather than assumed: it loads each page at 390, 1280 light and
-      # 1280 dark and fails if anything overflows horizontally.
-      - name: Check responsive output
+      # The landing page claims these pages work on a phone and read properly in
+      # dark mode. Both claims are checked here against a real browser rather
+      # than asserted: overflow at 390px, and WCAG AA contrast on the colours the
+      # browser actually computed, in both themes.
+      #
+      # The browser is required, not optional. Skipping silently would turn a
+      # failing check into a passing build, which is worse than having no check.
+      - name: Find a browser
+        id: browser
         run: |
-          if [ -x /usr/bin/google-chrome ]; then
-            CHROME_PATH=/usr/bin/google-chrome node ship/tools/preview.mjs --check
-          elif [ -x /usr/bin/chromium-browser ]; then
-            CHROME_PATH=/usr/bin/chromium-browser node ship/tools/preview.mjs --check
-          else
-            echo "No browser on this runner; skipping the responsive check."
-          fi
+          for candidate in /usr/bin/google-chrome /usr/bin/chromium-browser /usr/bin/chromium; do
+            if [ -x "$candidate" ]; then
+              echo "path=$candidate" >> "$GITHUB_OUTPUT"
+              echo "Using $candidate"
+              exit 0
+            fi
+          done
+          echo "::error::No Chrome or Chromium on this runner; the responsive and contrast checks cannot run."
+          exit 1
+
+      - name: Check responsive output
+        run: CHROME_PATH='${{ steps.browser.outputs.path }}' node ship/tools/preview.mjs --check
+
+      - name: Check colour contrast
+        run: CHROME_PATH='${{ steps.browser.outputs.path }}' node ship/tools/contrast.mjs
+
+      # Escaping, href filtering and the "no cookies, no third-party requests"
+      # claim, verified against the DOM a browser actually built.
+      - name: Safety self-test
+        run: CHROME_PATH='${{ steps.browser.outputs.path }}' node ship/tools/selftest.mjs

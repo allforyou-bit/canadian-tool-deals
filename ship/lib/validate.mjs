@@ -63,6 +63,12 @@ class Check {
       if (required) this.err(`${path}.${key}`, 'required, expected an object')
       return null
     }
+    // `typeof null === 'object'`, so null has to be rejected explicitly or a
+    // `"meta": null` validates clean and then throws inside the renderer.
+    if (value === null) {
+      this.err(`${path}.${key}`, 'expected an object, got null')
+      return null
+    }
     if (typeof value !== 'object' || Array.isArray(value)) {
       this.err(`${path}.${key}`, `expected an object, got ${Array.isArray(value) ? 'array' : typeof value}`)
       return null
@@ -271,7 +277,13 @@ export function validateBrief(brief, label = 'brief') {
     c.str(meta, 'title', `${label}.meta`, { required: false, max: 65 })
     c.str(meta, 'monogram', `${label}.meta`, { required: false, max: 2 })
     c.str(meta, 'locale', `${label}.meta`, { required: false })
-    if (meta.url !== undefined) c.href(meta, 'url', `${label}.meta`)
+    // Not the permissive href() check: meta.url is resolved with `new URL()` to
+    // build the canonical tag and the sitemap, so a relative value throws mid-build.
+    if (meta.url !== undefined) {
+      if (typeof meta.url !== 'string' || !/^https?:\/\/[^\s]+$/i.test(meta.url)) {
+        c.err(`${label}.meta.url`, `expected an absolute http(s) URL, got ${JSON.stringify(meta.url)}`)
+      }
+    }
     c.oneOf(meta, 'accent', `${label}.meta`, Object.keys(ACCENTS), { required: false })
     c.unknown(meta, `${label}.meta`, ['businessName', 'tagline', 'description', 'title', 'monogram', 'locale', 'url', 'accent'])
   }

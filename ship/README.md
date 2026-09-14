@@ -34,6 +34,39 @@ node ship/build.mjs --check    # validate briefs without writing output
 Output lands in `ship/dist/<slug>/`. The service's own landing page is built from
 `ship/briefs/_site.json` and lands at `ship/dist/index.html`.
 
+## Checks
+
+```bash
+node ship/build.mjs --check            # brief validation, writes nothing
+node ship/tools/preview.mjs --check    # horizontal overflow at 390 / 1280, light and dark
+node ship/tools/contrast.mjs           # WCAG AA on the colours the browser computed
+node ship/tools/selftest.mjs           # escaping, href filtering, no cookies, no external requests
+node ship/tools/preview.mjs --out ./shots   # the same run, with PNGs
+```
+
+Both run in CI on every push. They exist because the landing page makes two
+claims — that these pages work on a phone and read properly in dark mode — and a
+claim that is never checked is a claim that quietly stops being true.
+
+`ship/tools/contrast.mjs` measures computed colour, not the tokens in the
+stylesheet, so `color-mix()`, inheritance and stacked backgrounds are all
+accounted for. `--ink-faint` is pinned to the darkest value that still clears
+4.5:1 against every background it can land on; lightening it fails the sunk
+background first.
+
+## Invoices
+
+```bash
+cp ship/sales/invoices/_example.json ship/sales/invoices/2026-002.json
+node ship/tools/invoice.mjs ship/sales/invoices/2026-002.json            # HTML + PDF
+node ship/tools/invoice.mjs ship/sales/invoices/2026-002.json --receipt  # paid version
+```
+
+PDFs are printed through the same headless browser, so there is no PDF library to
+keep current. The tool refuses to run while a `REPLACE-` placeholder remains, and
+prints no GST/HST line unless a `tax` block with a registration number is present.
+Generated invoices are gitignored: they carry client names.
+
 ## Deploying
 
 Cloudflare Pages, connected to this GitHub repository once by hand:

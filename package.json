@@ -9,7 +9,9 @@
     "lint": "eslint",
     "ship": "node ship/build.mjs",
     "ship:check": "node ship/build.mjs --check",
-    "ship:preview": "node ship/tools/preview.mjs"
+    "ship:preview": "node ship/tools/preview.mjs",
+    "ship:contrast": "node ship/tools/contrast.mjs",
+    "ship:test": "node ship/tools/selftest.mjs"
   },
   "dependencies": {
     "next": "16.2.3",

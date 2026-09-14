@@ -71,12 +71,22 @@ function readBriefFile(path) {
   }
 }
 
-function robotsFor(brief) {
+/**
+ * robots.txt for one site.
+ *
+ * `proposalPaths` only applies to the site at the output root: a crawler reads
+ * `/robots.txt` and nothing else, so a `Disallow: /` sitting in `/<slug>/robots.txt`
+ * protects nothing. Proposal directories have to be disallowed from the root file,
+ * and the per-directory file is kept for the case where a site is deployed alone at
+ * its own root.
+ */
+function robotsFor(brief, { proposalPaths = [] } = {}) {
   if (brief.mode === 'proposal') {
     // A proposal page is for one reader. Keep it out of every index.
     return 'User-agent: *\nDisallow: /\n'
   }
   const lines = ['User-agent: *', 'Allow: /']
+  for (const path of proposalPaths) lines.push(`Disallow: ${path}`)
   if (brief.meta.url) {
     const base = brief.meta.url.replace(/\/+$/, '')
     lines.push('', `Sitemap: ${base}/sitemap.xml`)
@@ -149,16 +159,25 @@ function main() {
     // The landing page owns the output root; client sites get a subdirectory, so
     // one Cloudflare Pages project can serve the landing page and every sample.
     const outDir = isSite ? DIST : join(DIST, brief.slug)
-    const pages = [
+    writes.push({ outDir, brief, isSite })
+  }
+
+  // Rendering happens after every brief is known, so the root robots.txt can
+  // disallow each proposal directory by path.
+  const proposalPaths = writes
+    .filter(w => !w.isSite && w.brief.mode === 'proposal')
+    .map(w => `/${w.brief.slug}/`)
+
+  for (const w of writes) {
+    const { brief, isSite } = w
+    w.pages = [
       ['index.html', renderPage(brief)],
       ['privacy.html', renderPrivacy(brief)],
       ['terms.html', renderTerms(brief)],
-      ['robots.txt', robotsFor(brief)],
+      ['robots.txt', robotsFor(brief, isSite ? { proposalPaths } : {})],
     ]
     const sitemap = sitemapFor(brief)
-    if (sitemap) pages.push(['sitemap.xml', sitemap])
-
-    writes.push({ outDir, pages, brief, isSite })
+    if (sitemap) w.pages.push(['sitemap.xml', sitemap])
   }
 
   const built = writes.length
@@ -180,7 +199,18 @@ function main() {
 
   // Only clear the output once every brief has validated, so a bad brief never
   // leaves a half-deployed directory behind.
-  rmSync(DIST, { recursive: true, force: true })
+  //
+  // A filtered build clears only what it is about to rewrite. The runbook tells
+  // the operator to run `node ship/build.mjs <prospect>` while working a lead;
+  // wiping the landing page and every sample to rebuild one site would be a
+  // genuinely bad surprise.
+  if (only.length) {
+    for (const { outDir, isSite } of writes) {
+      if (!isSite) rmSync(outDir, { recursive: true, force: true })
+    }
+  } else {
+    rmSync(DIST, { recursive: true, force: true })
+  }
   mkdirSync(DIST, { recursive: true })
   writeFileSync(join(DIST, '_headers'), HEADERS_FILE)
 
