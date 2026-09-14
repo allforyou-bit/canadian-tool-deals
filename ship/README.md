@@ -1,5 +1,8 @@
 # 48-Hour Ship
 
+> **The money routes and what each needs from you: [`MONEY.md`](MONEY.md).**
+> Facts and their sources: [`FINDINGS.md`](FINDINGS.md). Day-to-day: [`sales/runbook.md`](sales/runbook.md).
+
 A zero-dependency static site generator plus the sales kit that goes with it.
 
 One brief JSON in, one deployable site out: a responsive single-page site with the

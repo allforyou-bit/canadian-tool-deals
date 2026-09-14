@@ -88,7 +88,9 @@ days of signup is closed.
 
 ## Why the scrapers return nothing
 
-Measured, not guessed. The audit ran jobs in this repository's own GitHub Actions
+Measured, not guessed. Full transcript in
+`ship/evidence/retailer-probe-2026-09-14.md`, kept in the repository because
+Actions logs expire and this file cites them. The audit ran jobs in this repository's own GitHub Actions
 to get the evidence from the same IP range the scheduled scrape runs on.
 
 - **Fill rate: 6 real prices in 360 store slots.** 60 query files × 6 stores; 160

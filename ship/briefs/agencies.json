@@ -1,0 +1,149 @@
+{
+  "slug": "agencies",
+  "mode": "live",
+  "meta": {
+    "businessName": "Overflow Desk",
+    "monogram": "OD",
+    "tagline": "white-label page builds for studios with more signed work than hands",
+    "title": "Overflow Desk — white-label page builds, 48 hours, under your name",
+    "description": "White-label one-page builds for agencies and studios. Fixed CAD 250 per page, 48 hours, delivered as source under your name. You keep the client, the markup and the relationship.",
+    "accent": "slate",
+    "locale": "en-CA"
+  },
+  "nav": [
+    { "label": "How it works", "href": "#how-it-works" },
+    { "label": "Rates", "href": "#rates" },
+    { "label": "Terms", "href": "#terms" },
+    { "label": "Start", "href": "#start" }
+  ],
+  "hero": {
+    "eyebrow": "White label · Fixed rate · Canadian",
+    "headline": "You signed the client. You do not have the week.",
+    "sub": "Send the brief, get the built page back in 48 hours as source files under your name. Fixed CAD 250 per page. Your client never learns I exist, and I never contact them.",
+    "primaryCta": { "label": "Send a brief", "href": "mailto:kay.kyeong.lee@gmail.com?subject=Overflow%20-%20brief" },
+    "secondaryCta": { "label": "See rates", "href": "#rates" },
+    "note": "No minimum, no retainer, no commitment to send the next one.",
+    "trust": ["Source files, not a hosted account", "No contact with your client, ever", "Fixed price per page", "Invoiced to you, in CAD"]
+  },
+  "sections": [
+    {
+      "type": "features",
+      "id": "what-this-is",
+      "eyebrow": "The problem this solves",
+      "heading": "Overflow, not outsourcing",
+      "intro": "This is for the week where the work is signed and the calendar is full. It is not an attempt to become your development team.",
+      "items": [
+        { "title": "You keep everything", "body": "The client, the invoice, the markup, the relationship, the credit. I am a line in your cost of delivery, not a name your client ever sees." },
+        { "title": "Source, not a platform", "body": "You get HTML, CSS and the deploy configuration. Nothing runs on an account of mine, nothing phones home, and there is no login to hand over later." },
+        { "title": "Fixed price, so you can quote", "body": "CAD 250 a page means you know your margin before you reply to the client. No hourly estimate that moves after you have quoted." },
+        { "title": "48 hours from a complete brief", "body": "Complete means: the copy or the notes to write it from, the assets, and where the buttons should point. The clock starts at the last of those." },
+        { "title": "Built to hand over", "body": "Readable markup, one stylesheet, no build step required to edit it. Whoever picks it up after me will not curse me, which is the actual test." },
+        { "title": "I say no when it does not fit", "body": "Catalogue commerce, logins, databases, CMS integration — I will tell you straight away rather than discovering it on day two of your deadline." }
+      ]
+    },
+    {
+      "type": "steps",
+      "id": "how-it-works",
+      "sunk": true,
+      "eyebrow": "Process",
+      "heading": "Four messages, start to finish",
+      "items": [
+        { "title": "You send the brief", "body": "Client's offer, the copy or notes, brand assets if any, and where each button goes. A forwarded email thread is fine." },
+        { "title": "I confirm or decline in a few hours", "body": "If it does not fit the fixed price I say so before you have promised anything, not after." },
+        { "title": "You get the page in 48 hours", "body": "A live preview URL on my subdomain so you can look at it on a phone, plus the source. Unbranded, unindexed, nothing of mine on it." },
+        { "title": "One revision round, then invoice", "body": "You send corrections in one message, I turn them round the same day, then I invoice you. Not your client." }
+      ]
+    },
+    {
+      "type": "pricing",
+      "id": "rates",
+      "eyebrow": "Rates",
+      "heading": "Per page, in Canadian dollars",
+      "intro": "Below my direct rate, because you bring the client, the brief and the account management, and I do none of that.",
+      "tiers": [
+        {
+          "name": "Single page",
+          "amount": "CAD 250",
+          "unit": "per page",
+          "desc": "One page, source delivered, one revision round.",
+          "includes": ["Copy written or edited from your brief", "Responsive, dark-mode aware, accessible", "Privacy and terms pages if wanted", "Source and deploy config", "One revision round"],
+          "cta": { "label": "Send a brief", "href": "mailto:kay.kyeong.lee@gmail.com?subject=Overflow%20-%20single%20page" }
+        },
+        {
+          "name": "Batch of five",
+          "amount": "CAD 1,000",
+          "unit": "five pages",
+          "tag": "Best rate",
+          "featured": true,
+          "desc": "Five pages, drawn down whenever you need them.",
+          "includes": ["Everything in Single page, five times", "Use them across different clients", "No expiry", "Consistent house style across the set if you want one"],
+          "cta": { "label": "Ask about a batch", "href": "mailto:kay.kyeong.lee@gmail.com?subject=Overflow%20-%20batch%20of%20five" },
+          "fine": "CAD 200 a page. Invoiced on the first draw-down, not up front."
+        },
+        {
+          "name": "Bilingual",
+          "amount": "+CAD 150",
+          "unit": "per page",
+          "desc": "The same page in Korean and English, written in both.",
+          "includes": ["Written, not machine-translated", "Language switcher between the two", "Korean privacy and terms copy", "Correct Korean line-breaking"],
+          "cta": { "label": "Ask about bilingual", "href": "mailto:kay.kyeong.lee@gmail.com?subject=Overflow%20-%20bilingual" },
+          "fine": "Useful if you have a client selling into a Korean-speaking market."
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "terms",
+      "eyebrow": "The white-label terms",
+      "heading": "The part most people want in writing",
+      "body": [
+        "**I never contact your client.** Not to introduce myself, not to ask a question, not after the project ends. Questions come back to you and you decide what to pass on.",
+        "**No credit, no backlink, no portfolio use.** The work does not appear anywhere of mine unless you say in writing that it may. I do not need the case study more than I need the next brief from you.",
+        "**You own the output** the moment you have paid for it. No licence to claw back, no hosting dependency, no account of mine in the chain.",
+        "**I do not solicit your clients**, during or after. If one of them finds me independently and names you, I tell you before I reply.",
+        "**Invoiced to you, in CAD**, net-0 on delivery by default. If your accounts payable runs net-30, say so before the first brief rather than after the first invoice — it changes nothing about the work, but I would rather know.",
+        "**Liability is capped at the fee** for the page in question. For work at this price that is the honest limit, and an agency that needs a bigger cap needs a bigger supplier."
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "questions",
+      "eyebrow": "Questions",
+      "heading": "The ones agencies actually ask",
+      "items": [
+        { "q": "Why would you work below your direct rate?", "a": "Because you are removing the expensive half of the job. No lead generation, no discovery call, no scope negotiation, no client management, no chasing payment from a stranger. A brief that arrives already scoped is worth the difference." },
+        { "q": "What do you need from us to start?", "a": "The client's offer in a few sentences, whatever copy exists or notes to write it from, any brand assets, and where each button should point. If the copy does not exist yet, say so and I write it from the notes — that is included." },
+        { "q": "What if the client hates it?", "a": "One revision round is included and turned round the same day. If it is structurally wrong rather than a wording problem, that is on me and I rebuild it — but tell me honestly which it is, because rebuilding to a changed brief is a new page." },
+        { "q": "Can you match our house style?", "a": "Yes, if you send it. Colours, type scale and spacing are configurable, and for a batch I will set it once and keep it consistent across the set." },
+        { "q": "Do you use AI?", "a": "Yes, as part of production, which is why the rate is what it is. Everything is reviewed before it reaches you. If your client contract forbids it, say so before the brief and I will not." },
+        { "q": "Can we resell this at our own rate?", "a": "That is the entire point. What you charge your client is between you and them, and I will never know or ask." }
+      ]
+    },
+    {
+      "type": "final",
+      "id": "start",
+      "sunk": true,
+      "eyebrow": "Start",
+      "heading": "Forward a brief. Get a yes or a no today.",
+      "intro": "No onboarding call. If it fits, you get the page in 48 hours; if it does not, you get a straight no in a few hours and lose nothing.",
+      "primaryCta": { "label": "Forward a brief", "href": "mailto:kay.kyeong.lee@gmail.com?subject=Overflow%20-%20brief" },
+      "pairs": [
+        { "label": "Rate", "value": "CAD 250 per page" },
+        { "label": "Turnaround", "value": "48 hours from a complete brief" },
+        { "label": "Delivery", "value": "Source files, under your name" },
+        { "label": "Invoicing", "value": "To you, in CAD, net-0 by default" }
+      ]
+    }
+  ],
+  "contact": { "email": "kay.kyeong.lee@gmail.com" },
+  "legal": {
+    "operator": "REPLACE-WITH-YOUR-LEGAL-NAME",
+    "jurisdiction": "Ontario, Canada",
+    "contactEmail": "kay.kyeong.lee@gmail.com",
+    "effective": "2026-09-14",
+    "deliverable": "the white-label page builds described on this site",
+    "collects": ["Whatever is in an email you send to the address on this page: your name, your email address, and the brief.", "Nothing else. This page has no forms, no analytics, no advertising and no cookies."],
+    "refund": "Work is invoiced on delivery, after you have seen the page and had the included revision round. If the page is broken I fix it at no charge. Once an invoice is paid and the source is with you the work is delivered and cannot be returned."
+  },
+  "footer": { "note": "Built with the generator in this repository. No cookies, no trackers, no third-party requests." }
+}
