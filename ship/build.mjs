@@ -169,19 +169,22 @@ function main() {
   // Only enforced on a full build: a filtered build does not know about the
   // siblings it was not asked to render.
   if (!only.length) {
-    const bySlug = new Map(writes.map(w => [w.brief.slug, w.brief]))
-    for (const { brief } of writes) {
-      for (const alt of brief.alternates ?? []) {
-        const targetSlug = alt.href.replace(/^\/|\/$/g, '')
-        const target = bySlug.get(targetSlug)
+    // The site built at the output root is addressed as "/" rather than by slug,
+    // so both directions are compared on the path a reader would actually visit.
+    const pathOf = w => (w.isSite ? '/' : `/${w.brief.slug}/`)
+    const byPath = new Map(writes.map(w => [pathOf(w), w]))
+    for (const w of writes) {
+      const here = pathOf(w)
+      for (const alt of w.brief.alternates ?? []) {
+        const target = byPath.get(alt.href)
         if (!target) {
-          console.error(`${red('x')} ${brief.slug}: alternates points at "${alt.href}" but no brief builds that directory`)
+          console.error(`${red('x')} ${w.brief.slug}: alternates points at "${alt.href}" but no brief builds that path`)
           failed++
           continue
         }
-        const back = (target.alternates ?? []).some(a => a.href.replace(/^\/|\/$/g, '') === brief.slug)
+        const back = (target.brief.alternates ?? []).some(a => a.href === here)
         if (!back) {
-          console.error(`${red('x')} ${brief.slug}: "${targetSlug}" does not link back — add { href: "/${brief.slug}/" } to its alternates`)
+          console.error(`${red('x')} ${w.brief.slug}: "${alt.href}" does not link back — add { href: "${here}" } to its alternates`)
           failed++
         }
       }

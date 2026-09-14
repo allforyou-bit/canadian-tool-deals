@@ -328,8 +328,9 @@ export function validateBrief(brief, label = 'brief') {
           c.err(`${ap}.lang`, `expected a language tag like "ko" or "ko-KR", got ${JSON.stringify(a.lang)}`)
         }
         c.str(a, 'label', ap, { max: 24 })
-        if (typeof a.href !== 'string' || !/^\/[a-z0-9][a-z0-9-]*\/$/.test(a.href)) {
-          c.err(`${ap}.href`, `expected a site-relative directory like "/acme-ko/", got ${JSON.stringify(a.href)}`)
+        // "/" names the site built at the output root (the `_site.json` brief).
+        if (typeof a.href !== 'string' || !/^\/([a-z0-9][a-z0-9-]*\/)?$/.test(a.href)) {
+          c.err(`${ap}.href`, `expected "/" or a site-relative directory like "/acme-ko/", got ${JSON.stringify(a.href)}`)
         }
         // Optional, and only useful once the real deployed URL is known. hreflang
         // is emitted from this rather than from href, because it is specified in

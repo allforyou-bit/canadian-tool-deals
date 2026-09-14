@@ -10,6 +10,7 @@
     "accent": "teal",
     "locale": "en-CA"
   },
+  "alternates": [{ "lang": "ko", "label": "한국어", "href": "/ko/" }],
   "nav": [
     { "label": "What you get", "href": "#what-you-get" },
     { "label": "How it works", "href": "#how-it-works" },
