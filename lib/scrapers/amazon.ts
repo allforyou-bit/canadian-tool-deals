@@ -2,7 +2,6 @@ import { ToolPrice } from '../types'
 
 const STORE = 'Amazon Canada'
 const STORE_LOGO = 'amazon'
-const AFFILIATE_TAG = 'canadiantool-20'
 
 export async function scrapeAmazonCA(query: string): Promise<ToolPrice[]> {
   const searchUrl = `https://www.amazon.ca/s?k=${encodeURIComponent(query)}&i=tools`
@@ -56,7 +55,7 @@ export async function scrapeAmazonCA(query: string): Promise<ToolPrice[]> {
         storeLogo: STORE_LOGO,
         price: fullPrice,
         inStock: true,
-        url: `https://www.amazon.ca/dp/${asin}?tag=${AFFILIATE_TAG}`,
+        url: `https://www.amazon.ca/dp/${asin}`,
         name,
         image,
         lastUpdated: new Date().toISOString(),
@@ -76,7 +75,7 @@ function amazonFallback(query: string): ToolPrice[] {
     storeLogo: 'amazon',
     price: 0,
     inStock: true,
-    url: `https://www.amazon.ca/s?k=${encodeURIComponent(query)}&i=tools&tag=canadiantool-20`,
+    url: `https://www.amazon.ca/s?k=${encodeURIComponent(query)}&i=tools`,
     name: `Search "${query}" on Amazon Canada`,
     checkManually: true,
     lastUpdated: new Date().toISOString(),

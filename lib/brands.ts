@@ -155,7 +155,7 @@ export const STORE_NAMES: Record<string, string> = {
 export const STORE_URLS: Record<string, (q: string) => string> = {
   walmart:      q => `https://www.walmart.ca/search?q=${q}`,
   homedepot:    q => `https://www.homedepot.ca/search?q=${q}`,
-  amazon:       q => `https://www.amazon.ca/s?k=${q}&i=tools&tag=canadiantool-20`,
+  amazon:       q => `https://www.amazon.ca/s?k=${q}&i=tools`,
   canadiantire: q => `https://www.canadiantire.ca/en/search-results.html?q=${q}`,
   rona:         q => `https://www.rona.ca/en/search?q=${q}`,
   princessauto: q => `https://www.princessauto.com/en/search#q=${q}`,

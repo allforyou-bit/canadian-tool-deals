@@ -122,7 +122,7 @@ async function scrapeAmazon(query, brand = null) {
       const img = context.match(/src="(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+)"/)
       results.push({
         store: 'Amazon Canada', storeLogo: 'amazon', price: fullPrice, inStock: true,
-        url: `https://www.amazon.ca/dp/${asin}?tag=canadiantool-20`,
+        url: `https://www.amazon.ca/dp/${asin}`,
         name: productName ?? query,
         image: img?.[1],
         lastUpdated: new Date().toISOString(),
@@ -237,7 +237,7 @@ const SCRAPER_MAP = {
 const STORE_META = {
   walmart:      { name: 'Walmart Canada',    url: (q) => `https://www.walmart.ca/search?q=${encodeURIComponent(q)}` },
   homedepot:    { name: 'Home Depot Canada', url: (q) => `https://www.homedepot.ca/search?q=${encodeURIComponent(q)}` },
-  amazon:       { name: 'Amazon Canada',     url: (q) => `https://www.amazon.ca/s?k=${encodeURIComponent(q)}&i=tools&tag=canadiantool-20` },
+  amazon:       { name: 'Amazon Canada',     url: (q) => `https://www.amazon.ca/s?k=${encodeURIComponent(q)}&i=tools` },
   canadiantire: { name: 'Canadian Tire',     url: (q) => `https://www.canadiantire.ca/en/search-results.html?q=${encodeURIComponent(q)}` },
   rona:         { name: 'RONA',              url: (q) => `https://www.rona.ca/en/search?q=${encodeURIComponent(q)}` },
   princessauto: { name: 'Princess Auto',     url: (q) => `https://www.princessauto.com/en/search#q=${encodeURIComponent(q)}` },

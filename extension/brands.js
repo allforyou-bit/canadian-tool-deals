@@ -80,7 +80,7 @@ export const STORE_NAMES = {
 export const STORE_URLS = {
   walmart:      q => `https://www.walmart.ca/search?q=${encodeURIComponent(q)}`,
   homedepot:    q => `https://www.homedepot.ca/search?q=${encodeURIComponent(q)}`,
-  amazon:       q => `https://www.amazon.ca/s?k=${encodeURIComponent(q)}&i=tools&tag=canadiantool-20`,
+  amazon:       q => `https://www.amazon.ca/s?k=${encodeURIComponent(q)}&i=tools`,
   canadiantire: q => `https://www.canadiantire.ca/en/search-results.html?q=${encodeURIComponent(q)}`,
   rona:         q => `https://www.rona.ca/en/search?q=${encodeURIComponent(q)}`,
   princessauto: q => `https://www.princessauto.com/en/search#q=${encodeURIComponent(q)}`,

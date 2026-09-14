@@ -29,12 +29,25 @@ process, so the outcome is the site going dark.
 - https://vercel.com/docs/limits/fair-use-guidelines
 - https://vercel.com/kb/guide/why-is-my-account-deployment-blocked
 
-**Options, cheapest first:** remove the affiliate tag and keep it a genuinely
-non-commercial personal project; or move it to Cloudflare Pages, whose free plan
-limits usage but not commercial purpose; or move to Vercel Pro at USD 20 per seat
-per month.
+**Resolved by removing the tag.** `canadiantool-20` is gone from `lib/brands.ts`,
+`lib/scrapers/amazon.ts`, `scripts/scrape.mjs`, `extension/brands.js`,
+`extension/background.js` and the 60 cached JSON files that had it baked into
+stored URLs. The Next.js app still builds. Amazon links now point at Amazon
+without a tracking tag.
 
-This is your call, not mine — it is your project and I have not touched it.
+That one change closes both exposures at once: no tag means no monetisation, so
+the deployment is back inside Vercel's non-commercial Hobby terms, and it means no
+Associates membership to be in breach of the price-tracking prohibition.
+
+**Do not add it back to this site.** Not on Vercel Hobby, and not on Cloudflare
+either — the Associates policy problem is about what the site *is*, not where it is
+hosted. If you want to monetise a price-comparison surface, it needs a retailer
+programme that permits price display, and per the section below there is not one
+available here.
+
+The alternatives, if you ever want the tag back on something: put it on a site
+that is not a price comparison, or move to Vercel Pro at USD 20 per seat per month
+and solve only the hosting half of the problem, which leaves the Amazon half.
 
 ### 2. The price-comparison concept cannot be made compliant with Amazon at all
 

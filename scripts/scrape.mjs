@@ -70,7 +70,7 @@ const STORE_NAMES = {
 const STORE_SEARCH_URLS = {
   walmart:      q => `https://www.walmart.ca/search?q=${encodeURIComponent(q)}`,
   homedepot:    q => `https://www.homedepot.ca/search?q=${encodeURIComponent(q)}`,
-  amazon:       q => `https://www.amazon.ca/s?k=${encodeURIComponent(q)}&i=tools&tag=canadiantool-20`,
+  amazon:       q => `https://www.amazon.ca/s?k=${encodeURIComponent(q)}&i=tools`,
   canadiantire: q => `https://www.canadiantire.ca/en/search-results.html?q=${encodeURIComponent(q)}`,
   rona:         q => `https://www.rona.ca/en/search?q=${encodeURIComponent(q)}`,
   princessauto: q => `https://www.princessauto.com/en/search#q=${encodeURIComponent(q)}`,
@@ -231,7 +231,7 @@ async function scrapeAmazon(query, brand = null) {
       const img = context.match(/src="(https:\/\/m\.media-amazon\.com\/images\/I\/[^"]+)"/)
       results.push({
         store: 'Amazon Canada', storeLogo: 'amazon', price: fullPrice, inStock: true,
-        url: `https://www.amazon.ca/dp/${asin}?tag=canadiantool-20`,
+        url: `https://www.amazon.ca/dp/${asin}`,
         name: productName ?? query, image: img?.[1],
         lastUpdated: new Date().toISOString(),
       })
