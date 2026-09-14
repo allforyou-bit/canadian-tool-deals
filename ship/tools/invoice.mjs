@@ -26,6 +26,7 @@ import { pathToFileURL } from 'node:url'
 import { esc, inline } from '../lib/html.mjs'
 import { formatDate } from '../lib/legal.mjs'
 import { withPage, findChrome } from '../lib/chrome.mjs'
+import { loadOperator, applyOperator } from '../lib/operator.mjs'
 
 const money = n => `$${n.toFixed(2)}`
 
@@ -232,7 +233,9 @@ async function main() {
 
   for (const file of files) {
     const path = resolve(file)
-    const doc = JSON.parse(readFileSync(path, 'utf8'))
+    // Same substitution the briefs get, so the invoice carries the operator's
+    // legal name from the one place it is written down.
+    const doc = applyOperator(JSON.parse(readFileSync(path, 'utf8')), loadOperator())
     validate(doc)
 
     const outDir = outIdx !== -1 ? resolve(args[outIdx + 1]) : dirname(path)

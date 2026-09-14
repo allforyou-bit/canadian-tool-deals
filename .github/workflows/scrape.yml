@@ -1,8 +1,20 @@
 name: Daily Price Scrape
 
+# The daily schedule is switched off.
+#
+# The scrapers return nothing and have done for a long time: the run on
+# 2026-09-13 printed "live: 0" for all 54 queries, and the cache holds 6 real
+# prices in 360 slots. The cause is not stale selectors — Canadian Tire 403s
+# datacenter IPs at the Akamai edge, Home Depot Canada drops the connection
+# entirely, and the endpoints that do answer cannot be used for contractual
+# reasons. The evidence is in ship/evidence/retailer-probe-2026-09-14.md.
+#
+# So the schedule was spending Actions minutes every day to commit an unchanged
+# empty cache. Manual dispatch is kept: if a legitimate data source is ever
+# wired up, uncomment the schedule and it resumes.
 on:
-  schedule:
-    - cron: '0 8 * * *'   # 8am UTC = 4am EST daily
+  # schedule:
+  #   - cron: '0 8 * * *'   # 8am UTC = 4am EST daily
   workflow_dispatch:        # manual trigger anytime
 
 jobs:

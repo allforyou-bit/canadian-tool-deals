@@ -16,6 +16,7 @@ import { readFileSync, writeFileSync, readdirSync, mkdirSync, rmSync, existsSync
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { loadOperator, applyOperator } from './lib/operator.mjs'
 import { validateBrief } from './lib/validate.mjs'
 import { renderPage } from './lib/render.mjs'
 import { renderPrivacy, renderTerms } from './lib/legal.mjs'
@@ -126,6 +127,15 @@ function main() {
     process.exit(1)
   }
 
+  let operator
+  try {
+    operator = loadOperator()
+  } catch (e) {
+    console.error(red(e.message))
+    process.exit(1)
+  }
+  const unknownKeys = new Set()
+
   let failed = 0
   let warned = 0
   const writes = []
@@ -136,7 +146,7 @@ function main() {
 
     let brief
     try {
-      brief = readBriefFile(path)
+      brief = applyOperator(readBriefFile(path), operator, unknownKeys)
     } catch (e) {
       console.error(`${red('x')} ${file} — ${e.message}`)
       failed++
@@ -211,6 +221,11 @@ function main() {
     ]
     const sitemap = sitemapFor(brief)
     if (sitemap) w.pages.push(['sitemap.xml', sitemap])
+  }
+
+  for (const key of unknownKeys) {
+    console.warn(`  ${yellow('warn')} ${dim(`{{operator.${key}}} is not a field in ship/operator.json — left in the page as written`)}`)
+    warned++
   }
 
   const built = writes.length

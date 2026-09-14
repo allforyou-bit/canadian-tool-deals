@@ -3,7 +3,7 @@
   "mode": "proposal",
   "proposal": {
     "preparedFor": "a fictional brief, to demonstrate what proposal mode renders",
-    "preparedBy": "REPLACE-WITH-YOUR-LEGAL-NAME",
+    "preparedBy": "{{operator.legalName}}",
     "contact": "kay.kyeong.lee@gmail.com"
   },
   "meta": {
@@ -106,7 +106,7 @@
     }
   ],
   "legal": {
-    "operator": "REPLACE-WITH-YOUR-LEGAL-NAME",
+    "operator": "{{operator.legalName}}",
     "jurisdiction": "Ontario, Canada",
     "contactEmail": "kay.kyeong.lee@gmail.com",
     "effective": "2026-09-14",

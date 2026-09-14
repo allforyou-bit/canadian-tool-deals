@@ -81,6 +81,17 @@ Cloudflare Pages, connected to this GitHub repository once by hand:
 
 After that one-time connection every push deploys automatically.
 
+## Your details
+
+`ship/operator.json` holds the operator's legal name, contact address and
+jurisdiction. Briefs and invoice files reference it as `{{operator.legalName}}`
+and the build substitutes it in. It exists so the legal name lives in one place:
+spread across five files, updating four of them means a placeholder on a client's
+page.
+
+An unknown key is left visible as `{{operator.typo}}` rather than blanked, and the
+build warns. A bug you can see beats one you ship.
+
 ## Brief format
 
 See `ship/briefs/_schema.md` for every field, and `ship/briefs/sample-*.json` for

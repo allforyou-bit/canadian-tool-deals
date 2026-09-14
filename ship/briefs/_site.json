@@ -254,8 +254,8 @@
     "email": "kay.kyeong.lee@gmail.com"
   },
   "legal": {
-    "operator": "REPLACE-WITH-YOUR-LEGAL-NAME",
-    "jurisdiction": "Ontario, Canada",
+    "operator": "{{operator.legalName}}",
+    "jurisdiction": "{{operator.jurisdiction}}",
     "contactEmail": "kay.kyeong.lee@gmail.com",
     "effective": "2026-09-14",
     "deliverable": "the one-page website build described on this site",

@@ -1,0 +1,8 @@
+{
+  "_comment": "Your details, in one place. Every brief and the invoice tool read from here, so this is the only file that needs your name in it. Referenced from a brief as {{operator.legalName}}.",
+
+  "legalName": "REPLACE-WITH-YOUR-LEGAL-NAME",
+  "email": "kay.kyeong.lee@gmail.com",
+  "jurisdiction": "Ontario, Canada",
+  "jurisdictionKo": "캐나다 온타리오주"
+}

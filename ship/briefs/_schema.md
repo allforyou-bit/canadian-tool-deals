@@ -125,5 +125,16 @@ business name is safe.
 | `refund` | no | overrides the default refund paragraph |
 | `deliverable` | no | what the terms apply to, beyond the site itself |
 
+## Operator substitution
+
+Any string in a brief may contain `{{operator.legalName}}`, `{{operator.email}}`,
+`{{operator.jurisdiction}}` or `{{operator.jurisdictionKo}}`. The build replaces
+them from `ship/operator.json` before validation, so the operator's own details
+live in one file rather than in every brief.
+
+An unknown key is left in the output as written and warned about, rather than
+replaced with an empty string.
+
 Any string containing `REPLACE-` produces a warning on every build until it is
-replaced. That is how the operator's own legal name is handled: it is not guessed.
+replaced — including one that arrived through a substitution. That is how the
+operator's own legal name is handled: it is not guessed.

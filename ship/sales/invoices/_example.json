@@ -5,7 +5,7 @@
   "currency": "CAD",
   "reference": "48-Hour Ship",
   "from": {
-    "name": "REPLACE-WITH-YOUR-LEGAL-NAME",
+    "name": "{{operator.legalName}}",
     "email": "kay.kyeong.lee@gmail.com"
   },
   "to": {

@@ -5,8 +5,8 @@
     "businessName": "Overflow Desk",
     "monogram": "OD",
     "tagline": "white-label page builds for studios with more signed work than hands",
-    "title": "Overflow Desk — white-label page builds, 48 hours, under your name",
-    "description": "White-label one-page builds for agencies and studios. Fixed CAD 250 per page, 48 hours, delivered as source under your name. You keep the client, the markup and the relationship.",
+    "title": "Overflow Desk — white-label page builds in 48 hours",
+    "description": "White-label one-page builds for agencies and studios. CAD 250 a page, 48 hours, delivered as source under your name. You keep the client and the markup.",
     "accent": "slate",
     "locale": "en-CA"
   },
@@ -137,8 +137,8 @@
   ],
   "contact": { "email": "kay.kyeong.lee@gmail.com" },
   "legal": {
-    "operator": "REPLACE-WITH-YOUR-LEGAL-NAME",
-    "jurisdiction": "Ontario, Canada",
+    "operator": "{{operator.legalName}}",
+    "jurisdiction": "{{operator.jurisdiction}}",
     "contactEmail": "kay.kyeong.lee@gmail.com",
     "effective": "2026-09-14",
     "deliverable": "the white-label page builds described on this site",

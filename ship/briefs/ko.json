@@ -146,8 +146,8 @@
   ],
   "contact": { "email": "kay.kyeong.lee@gmail.com" },
   "legal": {
-    "operator": "REPLACE-WITH-YOUR-LEGAL-NAME",
-    "jurisdiction": "캐나다 온타리오주",
+    "operator": "{{operator.legalName}}",
+    "jurisdiction": "{{operator.jurisdictionKo}}",
     "contactEmail": "kay.kyeong.lee@gmail.com",
     "effective": "2026-09-14",
     "deliverable": "이 사이트에 안내된 한 장짜리 웹페이지 제작",

@@ -52,36 +52,33 @@ real hours. That is the whole edge. Protect it.
 
 Work through these in order. None takes 30 minutes on its own.
 
-### 2.1 Put your legal name in (5 min)
+### 2.1 Put your legal name in (2 min)
 
-Five files carry `REPLACE-WITH-YOUR-LEGAL-NAME`, and all five need your real legal
-name — the one you would put on an invoice:
+One file. `ship/operator.json`:
 
-- `ship/briefs/_site.json` — the English landing page
-- `ship/briefs/ko.json` — the Korean landing page
-- `ship/briefs/agencies.json` — the white-label page
-- `ship/briefs/sample-proposal-northbrook.json` — the proposal-mode example
-- `ship/sales/invoices/_example.json` — the invoice template
-
-```bash
-grep -rl 'REPLACE-WITH-YOUR-LEGAL-NAME' ship/briefs ship/sales
+```json
+{
+  "legalName": "REPLACE-WITH-YOUR-LEGAL-NAME",
+  "email": "kay.kyeong.lee@gmail.com",
+  "jurisdiction": "Ontario, Canada",
+  "jurisdictionKo": "캐나다 온타리오주"
+}
 ```
 
-That also lists this runbook, which mentions the token because it is documenting
-it — leave this file alone. And search `ship/briefs ship/sales` rather than
-`ship/`: the latter matches `ship/dist` too, which is generated output rewritten on
-every build, so editing anything in there accomplishes nothing.
-
-Every build warns until the three are replaced, and the invoice tool refuses to run
-at all. To confirm:
+Every page and the invoice tool read from here through `{{operator.legalName}}`,
+so there is nothing else to edit and nothing to forget. Confirm with:
 
 ```bash
 node ship/build.mjs --check   # no "still contains a placeholder" warnings
 ```
 
-Invoicing under your own legal name means no Ontario business-name registration is
-needed. A trade name would cost $60 for five years. (Ontario-specific. If you are
-in another province, check your own registry before using a business name.)
+The build warns on every run until the name is real, and the invoice tool refuses
+to run at all rather than printing a placeholder on a document that goes to a
+client.
+
+Use the name you would put on an invoice. Invoicing under your own legal name
+means no Ontario business-name registration is needed; a trade name would cost $60
+for five years. (Ontario-specific — check your own registry if you are elsewhere.)
 
 ### 2.2 Turn on Interac e-Transfer Autodeposit (10 min)
 
