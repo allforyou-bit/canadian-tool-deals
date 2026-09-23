@@ -90,13 +90,13 @@ No, I'm not bonded. That's why I don't hold keys.
 **EN**
 ```say
 No problem. When would suit you better: before a move, before the holidays, or in the spring? I can note it and come back then, or you can text me any time at {PHONE}. The card has a QR code that gives you an instant price.
-[SNOW, if ON] For snow, signing now costs nothing before December 1, and the contract is cancelled if not enough neighbours sign by November 20.
+[SNOW, if ON] For snow, if you sign now, no payment for the season is due before December 1, and the contract is cancelled if not enough neighbours sign by November 20.
 ```
 
 **KO**
 ```say
 괜찮아요. 언제가 더 좋으실까요? 이사 전이나 연말 전, 아니면 봄? 적어 두었다가 그때 다시 들를게요. 아니면 언제든 {PHONE}으로 문자 주세요. 안내지 QR코드를 찍으면 바로 가격을 보실 수 있어요.
-[SNOW, 제설 운영 시] 제설은 지금 신청하셔도 12월 1일 전에는 돈이 나가지 않고, 11월 20일까지 이웃 신청이 충분하지 않으면 계약은 취소돼요.
+[SNOW, 제설 운영 시] 제설은 지금 신청하셔도 시즌 요금은 12월 1일 전에는 나가지 않고, 11월 20일까지 이웃 신청이 충분하지 않으면 계약은 취소돼요.
 ```
 
 If they name a time, log **CB** with that date and come back only then. Don't text them unless they asked. 고객이 시간을 정하면 **CB**로 날짜를 적고 그때만 다시 가세요. 요청이 없으면 문자하지 마세요.

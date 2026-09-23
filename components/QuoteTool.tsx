@@ -21,6 +21,7 @@ export interface QuoteToolProps {
   lang: Lang
   book: PriceBook
   services: Record<ServiceKey, boolean>
+  gutterMaxStoreys: 2 | 3
   tax: { registered: boolean; ratePct: number; label: string }
   contact: { phone: string; email: string }
   brand: string
@@ -254,7 +255,7 @@ export default function QuoteTool(props: QuoteToolProps) {
             <fieldset>
               <legend className="mb-2 text-sm font-semibold text-muted">{q.storeys}</legend>
               <div className="flex flex-wrap gap-2">
-                {([1, 2, 3] as const).map((n) => (
+                {([1, 2, 3] as const).filter((n) => n <= props.gutterMaxStoreys).map((n) => (
                   <button key={n} type="button" className={chipCls(storeys === n)} onClick={() => setStoreys(n)} aria-pressed={storeys === n}>
                     {q.storeyOptions[n]}
                   </button>
@@ -383,7 +384,7 @@ export default function QuoteTool(props: QuoteToolProps) {
             {message && <p className="text-sm text-red-700">{message}</p>}
             <button
               type="submit"
-              disabled={status === 'sending'}
+              disabled={status === 'sending' || (Boolean(props.turnstileSiteKey) && !token)}
               className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-white hover:bg-brand-dark disabled:opacity-60"
             >
               {status === 'sending' ? f.sending : f.submit}

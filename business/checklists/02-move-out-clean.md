@@ -25,7 +25,7 @@ Client / payer (고객·결제자): tenant / owner / property manager / realtor 
 
 - [ ] Write the arrival time (도착 시각 기록)
 - [ ] Confirm the unit is empty and utilities work. Test a light, a tap and the hot water (비어 있는지, 전기·물·온수가 되는지 직접 확인)
-- [ ] **Before photos** of every room, both bathrooms' fixtures, appliances, and close-ups of damage that was already there (walls, floors, counters), following `03-photo-protocol.md`. In a move-out these photos protect you in landlord–tenant disputes (작업 전 사진: 모든 방, 욕실 설비, 가전, 기존 파손 근접 사진. 이사 청소에서는 집주인과 세입자 사이 분쟁에서 오너를 보호합니다)
+- [ ] **Before photos** of every room, bathroom fixtures, appliances, and close-ups of damage that was already there (walls, floors, counters), following `03-photo-protocol.md`. In a move-out these photos protect you in landlord–tenant disputes (작업 전 사진: 모든 방, 욕실 설비, 가전, 기존 파손 근접 사진. 이사 청소에서는 집주인과 세입자 사이 분쟁에서 오너를 보호합니다)
 - [ ] Items left behind: do not throw anything away without the client's written OK by text. Junk removal is out of scope (남은 물건: 고객의 문자 확인 없이 버리지 않습니다. 짐 처리는 작업 범위가 아닙니다)
 - [ ] Agreement signed. If signed **at the client's home in Ontario**: 10-day cancellation right, refund within 15 days (memo F32; effect of finishing the job within 10 days **not researched**). Not legal advice (계약서 서명. 온타리오에서 고객 집에서 서명하면 10일 취소권, 15일 내 환불. 10일 안에 작업을 끝낸 경우의 효과는 확인 필요. 법률 자문 아님)
 
@@ -54,7 +54,7 @@ Do every **D** task from checklist 01 first, then these (체크리스트 01의 *
 | Inside fridge: **add-on only**. Unplugging is the client's call; leave the door ajar only if they ask (냉장고 내부: **옵션일 때만**. 전원을 끌지는 고객이 정합니다) | [ ] |
 | Inside oven: **add-on only**. Ventilate well if you use oven cleaner (오븐 내부: **옵션일 때만**. 오븐 세제를 쓰면 환기) | [ ] |
 | Behind and under the stove and fridge: only if they roll out easily and the client agrees (레인지·냉장고 뒤와 밑: 쉽게 빠지고 고객이 동의할 때만) | [ ] |
-| Sink drain area and garburator flange wiped; no plumbing work (배수구 주변 닦기. 배관 작업은 안 함) | [ ] |
+| Around the sink drain wiped; no plumbing work (싱크대 배수구 주변 닦기. 배관 작업은 안 함) | [ ] |
 
 ### Bathrooms (욕실)
 

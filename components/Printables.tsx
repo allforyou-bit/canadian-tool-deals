@@ -236,7 +236,7 @@ export function PriceSheet({ lang }: { lang: Lang }) {
         <>
           <h2 className="mt-5 text-lg font-bold">{H.gutters}</h2>
           <p className="mt-1">
-            {([1, 2, 3] as const).map((n) => `${H.storeys[n - 1]} ${money(b.gutters!.byStoreys[n])}`).join(' · ')} · {H.downspout} +{money(b.gutters.downspoutFlush)}
+            {([1, 2, 3] as const).filter((n) => n <= business.gutterMaxStoreys).map((n) => `${H.storeys[n - 1]} ${money(b.gutters!.byStoreys[n])}`).join(' · ')} · {H.downspout} +{money(b.gutters.downspoutFlush)}
           </p>
         </>
       )}

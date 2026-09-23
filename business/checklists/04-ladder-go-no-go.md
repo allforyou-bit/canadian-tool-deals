@@ -37,7 +37,7 @@ Job ID (작업 번호): ______ Date (날짜): ______ Storeys (층수): 1 / 2 / 3
 | 10 | Ladder inspected today: rungs, rail locks, rope, pulley, feet (오늘 사다리 점검: 발판, 잠금장치, 로프, 도르래, 발) | No damage (이상 없음) | Any bend, crack, sticky lock, frayed rope (휨, 금, 잠금 불량, 해진 로프) [ ] |
 | 11 | **Height** (**높이**) | 1 or 2 storeys, all other checks GO (1–2층, 나머지 모두 GO) | **3 storeys and you are alone: NO-GO** (owner choice: never alone on 3 storeys). Hiring helpers is off in the first 30 days (memo §3), so by default decline 3-storey jobs; if a second person is present, first ask the broker whether they are covered (not researched) (**3층인데 혼자면 NO-GO**(오너 선택). 첫 30일은 도우미 고용 금지이므로 기본적으로 3층은 거절. 두 번째 사람이 있다면 보험 적용 여부를 브로커에게 먼저 확인) [ ] |
 | 12 | **You:** rested, not dizzy, no medication that makes you drowsy, not rushed (**본인 상태:** 충분히 쉬었고, 어지럽지 않고, 졸린 약 안 먹었고, 서두르지 않음) | Yes (예) | Any doubt (조금이라도 의심) [ ] |
-| 13 | Someone knows the address and your finish time; phone on you, not in the truck (누군가 주소와 끝나는 시각을 알고 있고, 휴대폰을 몸에 지님) | Yes (예) | No (아니오) [ ] |
+| 13 | Someone knows the address and your finish time; phone on you, not in the vehicle (누군가 주소와 끝나는 시각을 알고 있고, 휴대폰을 몸에 지님) | Yes (예) | No (아니오) [ ] |
 | 14 | Client has been told: gutters only; no roof, windows or pressure washing (고객 안내: 거터만, 지붕·창문·고압 세척 안 함) | Yes (예) | Client insists on extras: decline those (추가를 고집하면 그 부분은 거절) [ ] |
 
 **Result (결과):** GO [ ] NO-GO [ ] → reason (이유): ____________ → new date (새 날짜): ______

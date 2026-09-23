@@ -81,6 +81,8 @@ export const business = {
     // Snow is OFF until written snow insurance is bound (Gate S). Never enabled for Metro Vancouver.
     snow: envFlag('NEXT_PUBLIC_ENABLE_SNOW', false) && book.snow !== null,
   },
+  /** highest storey count offered for gutters; 3-storey work is declined while working alone (checklists/04) */
+  gutterMaxStoreys: (env('NEXT_PUBLIC_GUTTER_MAX_STOREYS') === '3' ? 3 : 2) as 2 | 3,
   /** set to true ONLY after a liability policy is bound — it shows an "Insured" line on the site */
   insured: envFlag('NEXT_PUBLIC_INSURED', false),
   /** GST/HST registration (small-supplier threshold $30,000 over four calendar quarters, ETA s.148) */

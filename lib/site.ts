@@ -10,6 +10,7 @@ export function quoteToolProps(lang: Lang): QuoteToolProps {
     lang,
     book: priceBook,
     services: business.services,
+    gutterMaxStoreys: business.gutterMaxStoreys,
     tax: { registered: business.salesTaxRegistered, ratePct: business.tax.ratePct, label: business.tax.label },
     contact: { phone: business.contact.phone, email: business.contact.email },
     brand: business.brand[lang],

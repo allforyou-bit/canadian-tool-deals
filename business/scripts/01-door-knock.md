@@ -86,12 +86,12 @@ I clean the gutters by hand, with a scoop, from a ladder. Gutters only: no windo
 
 **EN**
 ```say
-It's a season contract, December 1 to March 31, for your driveway, with a shovel or a walk-behind snowblower. Snow never goes onto the road. The season is {LOW} to {HIGH}, paid in 4 monthly instalments, December 1 to March 1. No payment for the season before December 1. If it snows in November, each visit is {PER_VISIT}. The snow depth that starts a visit is in the agreement. The contract only goes ahead if enough neighbours sign by November 20. If not, it's cancelled and you owe nothing.
+It's a season contract, December 1 to March 31, for your driveway, with a shovel or a walk-behind snowblower. Snow never goes onto the road. The season is {LOW} to {HIGH}, paid in 4 monthly instalments, December 1 to March 1. No payment for the season before December 1. If it snows in November, each visit is {PER_VISIT}. The snow depth that starts a visit is in the agreement. The contract only goes ahead if enough neighbours sign by November 20. If not, it's cancelled and you owe nothing for the season.
 ```
 
 **KO**
 ```say
-시즌 계약이고 기간은 12월 1일부터 3월 31일까지예요. 진입로 눈을 삽이나 밀고 다니는 제설기로 치워 드리고, 눈을 도로로 밀어내는 일은 절대 없어요. 시즌 요금은 {LOW}–{HIGH}이고, 12월 1일부터 3월 1일까지 매달 한 번씩 4번 나눠 내시면 돼요. 12월 1일 전에는 시즌 요금을 받지 않아요. 11월에 눈이 오면 1회에 {PER_VISIT}이에요. 눈이 몇 cm 오면 출동하는지는 계약서에 적혀 있어요. 그리고 11월 20일까지 이웃 신청이 충분히 모여야 계약이 시작되고, 안 모이면 취소되니까 내실 돈은 없어요.
+시즌 계약이고 기간은 12월 1일부터 3월 31일까지예요. 진입로 눈을 삽이나 밀고 다니는 제설기로 치워 드리고, 눈을 도로로 밀어내는 일은 절대 없어요. 시즌 요금은 {LOW}–{HIGH}이고, 12월 1일부터 3월 1일까지 매달 한 번씩 4번 나눠 내시면 돼요. 12월 1일 전에는 시즌 요금을 받지 않아요. 11월에 눈이 오면 1회에 {PER_VISIT}이에요. 눈이 몇 cm 오면 출동하는지는 계약서에 적혀 있어요. 그리고 11월 20일까지 이웃 신청이 충분히 모여야 계약이 시작되고, 안 모이면 계약이 취소되고 시즌 요금은 내지 않으셔도 돼요.
 ```
 
 Bill November visits as the snow agreement says (build item 5). 11월 1회 요금의 청구 시점은 제설 계약서(빌드 항목 5)대로 하세요.
@@ -158,7 +158,7 @@ One row per attempt: date, time, street, house number, attempt #, outcome code, 
 | Leave right away if there's a loose dog, someone is upset, or you feel unsafe. Note it in the log. | 풀어 놓은 개가 있거나, 상대가 화를 내거나, 불안하면 바로 떠나고 기록에 남기세요. |
 | Tell someone your route and finish time. Keep your phone charged. | 누군가에게 방문 경로와 끝나는 시간을 알려 두세요. 휴대폰은 충전해 두세요. |
 | Say only what is true. Don't say "insured" until the policy is bound. No made-up reviews, customer numbers, awards, licences or "since 20XX". No promises about results or savings. | 사실만 말하세요. 보험 가입 전에는 '보험 있다'고 하지 마세요. 후기·고객 수·수상·면허·'20XX년부터' 같은 말을 지어내지 말고, 결과나 절약을 장담하지 마세요. |
-| No snow money before December 1. Gutters are paid when the job is done. | 제설 요금은 12월 1일 전에 받지 않아요. 홈통 청소는 작업이 끝난 뒤에 받아요. |
+| No money for the snow season before December 1. Gutters are paid when the job is done. | 제설 시즌 요금은 12월 1일 전에 받지 않아요. 홈통 청소는 작업이 끝난 뒤에 받아요. |
 | Don't text or email anyone who didn't ask you to (CASL, memo F11). Phone: only call back people who asked; phone-outreach (DNCL) rules were not verified (memo §6). | 요청하지 않은 사람에게 문자·이메일을 보내지 마세요(CASL). 전화는 요청한 사람에게만 다시 거세요. 전화 영업(DNCL) 규정은 확인되지 않았어요. |
 
 **Sources / 출처:** decision memo §2, §5.3, §6, §7, §10 and F11, F32 (`business/research/decision-memo.md`). Door-knock response and close rates: not found (F45).

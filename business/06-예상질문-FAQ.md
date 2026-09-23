@@ -25,7 +25,7 @@
 
 **자격이 되면 네. 2026-10-10(토)까지 신청하세요**(F1).
 
-- 10월에는 EI와 작게 신고한 부업을 합친 금액(예시에서 주 약 $929)이 어떤 사업 시나리오보다 많습니다.
+- 최대 수당을 받는다면, 10월에는 EI와 작게 신고한 부업을 합친 금액(예시에서 주 약 $929)이 어떤 사업 시나리오보다 많습니다.
 - 사업 순이익이 주 약 $1,000을 넘을 때만 사업 전념으로 바꿉니다. 이 기준은 최대 수당 기준이고, 5.4절에 있습니다.
 - 무엇이 "minor extent"인지는 **Service Canada가 정합니다.**
 - 자세한 내용: `03-EI-결정규칙.md`
@@ -121,6 +121,30 @@
 - 메모 10절의 자산이 만들어집니다.
 - 컴플라이언스 단계가 출처와 함께 정리되어 있습니다.
 - 7, 14, 21, 28일차 점검에서 큰 돈을 쓰기 전에 이 계획이 통하는지 보입니다.
+
+### 16. 다른 부업(우버, 아마존, 유튜브 등)은 왜 안 하나요?
+
+메모 3절의 "하지 않을 것" 목록입니다. 이유와 출처는 아래와 같습니다.
+
+| 하지 않을 것 | 이유 (출처) |
+|---|---|
+| 크리스마스 조명을 계획된 사업으로 하기 | 8번 답 참조 (F33) |
+| 돈을 받고 이민·시민권·"서류" 도와주기 (팁 포함) | "어떤 방식으로든" 대가를 받으면 CICC 면허, 변호사, 패러리걸, 퀘벡 공증인이어야 합니다([canada.ca](https://www.canada.ca/en/immigration-refugees-citizenship/services/immigration-citizenship-representative/learn-about-representatives.html), 스니펫). |
+| 공인되지 않은 IRCC 번역을 사업으로 하기 | 검증자 추정: 한 건 $45인데 공증 비용이 건당 $75 이상입니다([translationagencyofcanada](https://translationagencyofcanada.ca/toronto-translation-services), 스니펫). |
+| 우버·리프트 운전 | 토론토 중간값 순수입이 운전 시간 전체 기준 시간당 $5.97입니다(2024년 1–4월, [Globe and Mail](https://www.theglobeandmail.com/business/article-rideshare-drivers-in-toronto-earn-substantially-below-minimum-wage/), 스니펫). 택시 사업은 첫 1달러부터 GST/HST 등록이 필요합니다(ETA s.240(1.1), F8). |
+| 아마존 공구 차익거래, 반품 팔레트 | 필요 자본이 $4k–19k입니다(추정). DeWalt 판매 승인이 약 5개월 동안 안 됐다는 사례가 있습니다([셀러 포럼](https://sellercentral.amazon.ca/seller-forums/discussions/t/ca50bc31-2fc3-4a92-8bed-5eb7596c4ff8), 스니펫). |
+| 공구 가격비교 사이트 되살리기 | 14번 답 참조 (F44) |
+| 콘텐츠·유튜브·틱톡·Etsy로 수입 내기 | 유튜브 수익화에는 구독자 1천 명 + 시청 4천 시간, 틱톡에는 팔로워 1만 명이 필요합니다(스니펫). 조사 자료의 60일 결과는 월 $0–500입니다. |
+| 마이크로 SaaS, 크롬 확장 프로그램 | 첫해 중간값 MRR이 $148입니다. 살아남은 곳도 MRR $1K까지 중간값 8개월이 걸렸습니다([2차 자료](https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md)). |
+| Upwork·Fiverr를 주력으로 | 첫 돈이 보통 37–75일째에 들어옵니다(조사 자료). Upwork는 고정가 대금을 승인 후 5일 동안 묶어 둡니다([Upwork](https://support.upwork.com/hc/en-us/articles/211063718-How-payments-for-milestones-and-fixed-price-contracts-work), 스니펫). Fiverr는 신규 판매자 대금을 14일 뒤에 줍니다. |
+| 토론토에서 압력 세척 | Building Renovator 면허(시험 포함)가 필요해 보입니다([toronto.ca](https://www.toronto.ca/services-payments/permits-licences-bylaws/building-renovators/), 스니펫). |
+| 외부 창문 청소 (지금은) | 온타리오 Reg. 859의 적용 여부를 확인하지 못했습니다([ontario.ca](https://www.ontario.ca/page/access-and-fall-protection-window-cleaning)). |
+| 트럭 플라우 제설 | 트럭 1–2대, $2M 배상책임에 연 $5,000–12,000입니다([zensurance](https://www.zensurance.com/blog/how-much-does-snowplow-insurance-in-canada-cost), 스니펫). 오타와는 플라우 면허가 필요합니다. |
+| 12월 1일 전 눈 치우기 대금, 일시불 선불 | 9번 답 참조. 퀘벡 OPC도 서비스 전 계약금을 받지 말라고 권고합니다([OPC](https://opc.gouv.qc.ca/en/consumer/good-service/housing-renovation/landscaping-exterior/snow-removal/cancelling-contract), 스니펫). |
+| 소비자에게 콜드 이메일·문자 | CASL: 동의가 필요하고, 증명 책임은 보내는 사람에게 있으며(s.13), 개인 벌금은 최대 $1M입니다(s.20(4), F11). |
+| TV 설치 시 벽 안 전기, 모든 배관·가스 | 규제 직종 경계를 확인하지 못했습니다. 거절합니다. |
+| 사업 사이트를 Vercel Hobby에 호스팅 | 비상업용 전용입니다(F40). |
+| 첫 30일 안에 보조 인력 고용 | 고용기준법과 WSIB 의무를 조사하지 않았습니다. |
 
 ---
 
