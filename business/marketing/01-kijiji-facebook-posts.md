@@ -37,7 +37,7 @@ Every dollar figure in this file comes from `PRICE_BOOKS.gta` in `config/prices.
 | Downspout flush | +$70 | `gutters.downspoutFlush` |
 | Snow season, single / double / large driveway | from $500 / $650 / $800 (4 instalments from $125 / $162.50 / $200) | `snow.driveway`, `snow.instalments` |
 | Front walkway and steps / salting | +$100 / +$100 per season | `snow.walkwayAndSteps`, `snow.salting` |
-| November snow, per visit (optional, only after the contract is confirmed; billed with the Dec 1 instalment, see section 7) | $60 | `snow.perVisit` |
+| November snow, per visit (optional: only if the customer ticks it in the agreement, and only after the contract is confirmed; billed with the Dec 1 instalment, see section 7) | $60 | `snow.perVisit` |
 
 - "From" means the smallest home in that row. The website calculator shows a range from the price-book figure up to 15% more (`rangeUpliftPct`), and the final price is confirmed from photos or on site.
 - **Sales tax:** you are not registered for GST/HST at the start (`salesTaxRegistered: false`; small-supplier test $30,000, memo F7). Do not add "+ HST" now. Once you register, add "+ HST" after every price.
@@ -83,7 +83,7 @@ Never state a coverage amount unless it is printed on your certificate.
 
 - **Log each post** in the CRM or a note: date, platform, variant ID (for example `C-EN-2`), and the link. After two weeks you can see which variant brings inquiries.
 - **Replying to someone who contacted you** is excluded from CASL section 6 (SOR/2013-221 s.3(b), memo F12). Still put your business name and contact in the reply. If you send a price quote by email or text, it must carry your business name, **mailing address**, a contact and an unsubscribe line (CASL s.6(6) exempts a requested quote from consent only, memo F11). Use the reply scripts from build item 7.
-- **Never send a message first** by email, text, Messenger or chat to someone who has not contacted you (memo do-not-do list: "Cold email or SMS to consumers"; CASL penalty up to $1M for an individual, F11).
+- **Never send a message first** by email, text, Messenger or chat to someone who has not contacted you (memo do-not-do list: "Cold email or SMS to consumers"; CASL administrative monetary penalty of up to $1M for an individual, s.20(4), memo F11).
 
 ---
 
@@ -184,8 +184,8 @@ Call or text {PHONE}
 Korean spoken · 한국어 가능
 ```
 
-### C-KO-1 · 이사·입주 청소
-**제목:** `{AREA} 이사·입주 청소, 침실 1개 $260부터`
+### C-KO-1 · 입주·이사 청소
+**제목:** `{AREA} 입주·이사 청소, 침실 1개 $260부터`
 
 ```text
 이사 나가시거나 새집에 들어가시나요? {BRAND}에서 빈집과 콘도를 청소해 드립니다.
@@ -203,13 +203,13 @@ Korean spoken · 한국어 가능
 전화·문자: {PHONE}
 ```
 
-### C-KO-2 · 대청소(딥클린)
-**제목:** `{AREA} 대청소(딥클린) 정액 $230부터`
+### C-KO-2 · 딥클린(대청소)
+**제목:** `{AREA} 딥클린(대청소) 정액 $230부터`
 
 ```text
 주방, 욕실, 바닥, 방마다 먼지까지 꼼꼼하게 청소해 드립니다. 자세한 청소 항목은 웹사이트에서 보실 수 있어요.
 
-대청소 정액 요금:
+딥클린 정액 요금:
 - 침실 1개 $230부터
 - 침실 2개 $270부터
 - 침실 3개 $320부터
@@ -309,17 +309,17 @@ Call or text {PHONE}
 ```
 
 ### G-KO-1 · 높이별 요금
-**제목:** `{AREA} 처마 물받이(거터) 청소 단층 $175부터`
+**제목:** `{AREA} 홈통(처마 물받이) 청소 단층 $175부터`
 
 ```text
-낙엽이 다 떨어졌나요? 눈 오기 전에 {BRAND}에서 처마 물받이(거터)를 깨끗이 비워 드립니다. 사다리에 올라 손으로 직접 청소합니다.
+낙엽이 다 떨어졌나요? 눈 오기 전에 {BRAND}에서 홈통(처마 물받이)을 깨끗이 비워 드립니다. 사다리에 올라 손으로 직접 청소합니다.
 
 높이별 정액 요금:
 - 단층(방갈로) $175부터
 - 2층 $225부터
-- 다운스파우트(배수관) 뚫기 +$70
+- 배수관(다운스파우트) 청소 +$70
 
-물받이 청소만 합니다. 창문 청소, 고압 세척, 지붕 수리는 하지 않습니다.
+홈통 청소만 합니다. 창문 청소, 고압 세척, 지붕 수리는 하지 않습니다.
 작업이 끝난 뒤에 결제하시면 됩니다.
 
 10월 중순 이후 날짜로 예약을 받고 있습니다. 보험과 사다리 준비가 10월 9일까지 끝나야 날짜가 확정됩니다. 준비가 안 되면 연락드려 예약을 취소하며, 내실 돈은 없습니다.
@@ -328,15 +328,15 @@ Call or text {PHONE}
 ```
 
 ### G-KO-2 · 시기
-**제목:** `눈 오기 전 거터 청소 · {AREA} $175부터`
+**제목:** `눈 오기 전 홈통 청소 · {AREA} $175부터`
 
 ```text
-거터 청소는 낙엽이 다 떨어진 뒤, 눈이 오기 전에 하시는 게 좋습니다.
+홈통(처마 물받이) 청소는 낙엽이 다 떨어진 뒤, 눈이 오기 전에 하시는 게 좋습니다.
 
 {BRAND}에서 {AREA} 10월 중순 이후 날짜로 예약을 받고 있습니다.
 - 단층 $175부터
 - 2층 $225부터
-- 다운스파우트(배수관) 뚫기 +$70
+- 배수관(다운스파우트) 청소 +$70
 
 사다리에 올라 손으로 청소합니다. 창문 청소와 고압 세척은 하지 않습니다.
 작업이 끝나기 전에는 돈을 받지 않습니다.
@@ -347,15 +347,15 @@ Call or text {PHONE}
 ```
 
 ### G-KO-3 · 이웃
-**제목:** `{AREA} 이웃분들, 거터 청소 예약 받습니다`
+**제목:** `{AREA} 이웃분들, 홈통 청소 예약 받습니다`
 
 ```text
-{BRAND}에서 이번 가을 {AREA} 여러 거리의 거터 청소 예약을 받고 있습니다. 같은 거리에 이미 예약된 집이 있는지 물어봐 주세요. 가능하면 같은 날 해 드리겠습니다.
+{BRAND}에서 이번 가을 {AREA} 여러 거리의 홈통(처마 물받이) 청소 예약을 받고 있습니다. 같은 거리에 이미 예약된 집이 있는지 물어봐 주세요. 가능하면 같은 날 해 드리겠습니다.
 
 높이별 요금:
 - 단층 $175부터
 - 2층 $225부터
-- 다운스파우트 뚫기 +$70
+- 배수관(다운스파우트) 청소 +$70
 
 집 앞면 사진을 보내 주시면 가격 확인이 빨라요. 작업이 끝난 뒤 결제하시면 됩니다.
 
@@ -369,12 +369,12 @@ Call or text {PHONE}
 ## 7. Posts: Snow (Track B, only after Gate S)
 
 These terms come from memo sections 2 and 6 and must match your signed snow agreement (build item 5):
-- The season runs **Dec 1 – Mar 31** and is billed in **4 instalments (Dec 1, Jan 1, Feb 1, Mar 1)**.
+- The season runs **Dec 1 – Mar 31**. The season price, confirmed on site, is split into **4 equal instalments billed Dec 1, Jan 1, Feb 1 and Mar 1**. Posts show the smallest instalment as "from $X" (single driveway: from $125), as the website calculator does.
 - **No payment is taken before Dec 1.**
-- November snow is **optional** (the customer ticks it in the agreement). It is cleared at the per-visit rate ($60) only from the day you confirm the agreement is going ahead (you tell customers by Nov 21, after the Nov 20 condition) until Nov 30, and it is **billed with the Dec 1 instalment, never before** (snow agreement, "November snow" clause). Never write just "November storms: $60 per visit" in a post.
-- **Every agreement is void unless the break-even number of agreements is signed by Nov 20.**
+- November snow is **optional**: the per-visit rate ($60) applies only if the customer ticks it in the agreement, and only to snowfalls at or above the trigger depth from the day you confirm the agreement is going ahead (you tell customers by Nov 21, after the Nov 20 condition) until Nov 30. It is **billed with the Dec 1 instalment; nothing is collected before Dec 1** (snow agreement, "November snow" clause). Never write just "November storms: $60 per visit" in a post.
+- **Contracts go ahead only if your minimum number of snow contracts, all areas combined, is signed by Nov 20. Otherwise every contract is void and nothing is owed.**
 - Snow is **never pushed onto the road** (Ontario HTA s.181 and Toronto Municipal Code 743-9, memo F34).
-- **Ontario: an agreement signed at the customer's home can be cancelled within 10 days of receiving the signed copy, with a refund within 15 days** (memo F32, [ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract)). This file is not legal advice.
+- **Ontario: an agreement signed at the customer's home can be cancelled within 10 days after the customer receives a copy of the signed agreement, and any refund is due within 15 days after the cancellation notice** (memo F32, [ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract), search snippet). This file is not legal advice.
 - The only equipment is a walk-behind snowblower or a shovel, with no truck plow. **Car-less owners using a shovel only: at most 10 driveways (assumed cap)** until you have measured your time per driveway (memo section 9).
 
 ### S-EN-1 · Season price
@@ -390,7 +390,7 @@ Season price:
 - Front walkway and steps +$100 · salting +$100
 
 Pay in 4 instalments: Dec 1, Jan 1, Feb 1, Mar 1. Nothing to pay before Dec 1.
-November snow (optional, once your contract is confirmed): $60 per visit, billed with your Dec 1 instalment.
+November snow (optional, tick it in your agreement): $60 per visit for snowfalls of {TRIGGER_DEPTH} or more, once your contract is confirmed, billed with your Dec 1 instalment.
 We never push snow onto the road.
 
 {BRAND}
@@ -410,7 +410,7 @@ With {BRAND}, you pay nothing for snow clearing before Dec 1.
 
 Season contracts go ahead only if we sign our minimum number of snow contracts (all areas combined) by Nov 20; if not, the agreement is void and you owe nothing.
 
-Ontario: if you sign at your door, you can cancel within 10 days of getting your copy.
+Ontario: if you sign at your home, you can cancel within 10 days after you receive a copy of the signed agreement, and we refund you within 15 days after your cancellation notice.
 
 Call or text {PHONE}
 {SITE}
@@ -425,7 +425,7 @@ Call or text {PHONE}
 - Single driveway: from $500 for the season (4 instalments, from $125 each; Dec 1 – Mar 1)
 - Double driveway: from $650 · Large: from $800
 - Walkway and steps +$100 · Salting +$100
-- November snow (optional, once your contract is confirmed): $60 per visit, billed with your Dec 1 instalment
+- November snow (optional, tick it in your agreement): $60 per visit for snowfalls of {TRIGGER_DEPTH} or more, once your contract is confirmed, billed with your Dec 1 instalment
 
 Nothing is charged before Dec 1. The written agreement says when we come, what happens in a low-snow winter, and that snow never goes onto the road.
 
@@ -437,17 +437,17 @@ Call or text {PHONE}
 **제목:** `{AREA} 겨울 시즌 제설, $500부터`
 
 ```text
-12월 1일부터 3월 31일까지 한 시즌 동안 드라이브웨이 눈을 치워 드립니다. 트럭 제설은 하지 않습니다.
+12월 1일부터 3월 31일까지 한 시즌 동안 진입로 눈을 치워 드립니다. 트럭 제설은 하지 않습니다.
 작업 장비: {SNOW_EQUIPMENT_KO}
 
 시즌 요금:
-- 드라이브웨이(차 1–2대) $500부터 (4회 분할, 회당 $125부터)
-- 드라이브웨이(차 3–4대) $650부터
-- 드라이브웨이(차 5–6대) $800부터
+- 진입로(차 1–2대) $500부터 (4회 분할, 회당 $125부터)
+- 진입로(차 3–4대) $650부터
+- 진입로(차 5–6대) $800부터
 - 현관 보도·계단 +$100 · 제빙(소금) +$100
 
 12월 1일, 1월 1일, 2월 1일, 3월 1일, 4번에 나눠 내시면 됩니다. 12월 1일 전에는 돈을 받지 않습니다.
-11월 눈(선택, 계약 확정 후): 1회 $60, 12월 1일 첫 분할금과 함께 청구.
+11월 눈(선택, 계약서에서 선택 시): 계약 확정 후 {TRIGGER_DEPTH} 이상 내린 눈 1회 $60, 12월 1일 첫 분할금과 함께 청구.
 치운 눈은 절대 도로로 밀어내지 않습니다.
 
 {BRAND}
@@ -462,28 +462,28 @@ Call or text {PHONE}
 
 - 시즌: 12월 1일 – 3월 31일
 - 4번 나눠 결제: 12월 1일, 1월 1일, 2월 1일, 3월 1일
-- 드라이브웨이(차 1–2대) $500부터 (4회 분할, 회당 $125부터)
+- 진입로(차 1–2대) $500부터 (4회 분할, 회당 $125부터)
 - 눈이 {TRIGGER_DEPTH} 이상 쌓이면 출동합니다
 
-11월 20일까지 전체 제설 계약이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다.
+11월 20일까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다.
 
-온타리오주: 댁에서 계약하신 경우, 계약서 사본을 받으신 날부터 10일 안에 취소하실 수 있습니다.
+온타리오주: 댁에서 계약하신 경우, 계약서 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있고, 취소 통지를 받은 다음 날부터 15일 안에 환불해 드립니다.
 
 전화·문자: {PHONE}
 {SITE}
 ```
 
-### S-KO-3 · 우리 동네 루트
+### S-KO-3 · 우리 거리 루트
 **제목:** `{AREA} 우리 거리 제설 · 시즌 $500부터`
 
 ```text
 {BRAND}에서 {AREA} 가까운 집들만 모아 작은 제설 루트를 운영합니다.
 작업 장비: {SNOW_EQUIPMENT_KO}
 
-- 드라이브웨이(차 1–2대): 시즌 $500부터, 4회 분할(회당 $125부터) (12월 1일 – 3월 1일)
+- 진입로(차 1–2대): 시즌 $500부터, 4회 분할(회당 $125부터) (12월 1일 – 3월 1일)
 - 차 3–4대: $650부터 · 차 5–6대: $800부터
 - 현관 보도·계단 +$100 · 제빙(소금) +$100
-- 11월 눈(선택, 계약 확정 후): 1회 $60, 12월 1일 첫 분할금과 함께 청구
+- 11월 눈(선택, 계약서에서 선택 시): 계약 확정 후 {TRIGGER_DEPTH} 이상 내린 눈 1회 $60, 12월 1일 첫 분할금과 함께 청구
 
 12월 1일 전에는 아무것도 청구하지 않습니다. 언제 오는지, 눈이 적게 온 겨울엔 어떻게 하는지, 눈을 도로에 버리지 않는다는 내용까지 서면 계약서에 모두 적어 드립니다.
 

@@ -1,7 +1,8 @@
 // Service agreements as typed content (decision memo §10, build item 5).
 //
 // - Three templates: cleaning, gutters, snow. The web page and the print/PDF view render these
-//   objects. Show an agreement only for a service that is switched on in config/business.ts.
+//   objects. The gutter and snow agreements are published on the site (and printed as PDFs) only
+//   when that service is switched on in config/business.ts.
 // - {BRAND}, {MAILING_ADDRESS}, {PHONE} and {EMAIL} are placeholders. Fill them from
 //   config/business.ts with fillAgreement() (see AGREEMENT_PLACEHOLDERS). Blanks written as
 //   ______ are filled in by hand on the printed copy.
@@ -112,7 +113,7 @@ const ONTARIO_CANCELLATION: AgreementSection = {
   clauses: [
     t(
       "If you signed this agreement in person anywhere other than our place of business (for example, at your home), it is a direct agreement under Ontario's Consumer Protection Act. You may cancel it for any reason within 10 days after you receive a copy of the signed agreement. To cancel, tell us in a way that leaves a record: email {EMAIL}, text {PHONE}, or write to {MAILING_ADDRESS}. We must refund everything you paid within 15 days after we receive your cancellation.",
-      '이 계약서를 저희 사업장이 아닌 곳(예: 고객님 댁)에서 직접 만나 서명하셨다면, 이 계약은 온타리오 소비자보호법(Consumer Protection Act)상 방문 계약(direct agreement)에 해당합니다. 고객님은 서명된 계약서 사본을 받으신 다음 날부터 10일 이내에 이유와 관계없이 계약을 취소할 수 있습니다. 취소하실 때는 기록이 남는 방법으로 알려 주세요. 이메일 {EMAIL}, 문자 {PHONE}, 또는 우편 {MAILING_ADDRESS}로 보내시면 됩니다. 저희는 취소 통지를 받은 다음 날부터 15일 이내에 고객님이 내신 금액 전부를 환불해야 합니다.',
+      '이 계약서를 저희 사업장이 아닌 곳(예: 고객님 댁)에서 직접 만나 서명하셨다면, 이 계약은 온타리오 소비자보호법(Consumer Protection Act)상 방문 계약(direct agreement)에 해당합니다. 고객님은 서명된 계약서 사본을 받으신 다음 날부터 10일 안에 이유와 관계없이 계약을 취소하실 수 있습니다. 취소하실 때는 기록이 남는 방법으로 알려 주세요. 이메일 {EMAIL}, 문자 {PHONE}, 또는 우편 {MAILING_ADDRESS}로 보내시면 됩니다. 저희는 취소 통지를 받은 다음 날부터 15일 안에 고객님이 내신 금액 전부를 환불해 드려야 합니다.',
     ),
   ],
 }
@@ -222,7 +223,7 @@ const CLEANING: Agreement = {
         ),
         t(
           'Deep clean: everything in a standard clean, plus baseboards, doors and door frames, light switches and handles, cabinet fronts, inside the microwave, inside window sills and tracks, and extra scrubbing of built-up grime in the kitchen and bathrooms.',
-          '딥클린(대청소): 일반 청소의 모든 항목에 더해 걸레받이, 문과 문틀, 전등 스위치와 손잡이, 수납장 문 겉면, 전자레인지 내부, 실내 창틀과 창문 레일, 주방과 욕실의 찌든 때 집중 청소.',
+          '딥클린: 일반 청소의 모든 항목에 더해 걸레받이, 문과 문틀, 전등 스위치와 손잡이, 수납장 문 겉면, 전자레인지 내부, 실내 창틀과 창문 레일, 주방과 욕실의 찌든 때 집중 청소.',
         ),
         t(
           'Move-in / move-out clean: a deep clean of an empty home, including inside closets and the floors where furniture stood. If furniture or belongings are still in the home, we clean around them.',
@@ -346,8 +347,8 @@ const GUTTERS: Agreement = {
       heading: t('Service, schedule and price', '서비스, 일정 및 요금'),
       clauses: [
         t(
-          'House: ☐ bungalow / 1 storey ☐ 2 storeys ☐ 3 storeys. Areas included: ☐ main house ☐ attached garage ☐ porch or other lower roofs ☐ other: ______________.',
-          '주택: ☐ 단층(방갈로) ☐ 2층 ☐ 3층. 포함 구역: ☐ 본채 ☐ 붙어 있는 차고 ☐ 현관 지붕 등 낮은 지붕 ☐ 기타: ______________.',
+          'House: ☐ bungalow / 1 storey ☐ 2 storeys ☐ 3 storeys (only when a second person is on site). Areas included: ☐ main house ☐ attached garage ☐ porch or other lower roofs ☐ other: ______________.',
+          '주택: ☐ 단층(방갈로) ☐ 2층 ☐ 3층(작업자가 한 명 더 현장에 있을 때만). 포함 구역: ☐ 본채 ☐ 붙어 있는 차고 ☐ 현관 지붕 등 낮은 지붕 ☐ 기타: ______________.',
         ),
         t('Add-on, done only if ticked: ☐ downspout flush.', '추가 서비스(표시한 경우에만 진행): ☐ 배수관(다운스파우트) 청소.'),
         t(
@@ -373,7 +374,7 @@ const GUTTERS: Agreement = {
         ),
         t(
           'Not included: gutter repair or re-hanging, sealing leaks, removing or installing screwed-on gutter guards, roof cleaning or moss removal, window cleaning and pressure washing. If we see damage (for example, loose or sagging sections, leaks or rot), we show you photos but do not repair it.',
-          '포함되지 않는 작업: 홈통 수리나 다시 달기, 누수 부위 실링, 나사로 고정된 낙엽 방지망(거터 가드) 떼기·설치, 지붕 청소나 이끼 제거, 유리창 청소, 고압 세척. 헐겁거나 처진 부분, 누수, 부식 같은 손상이 보이면 사진으로 보여 드리지만 수리는 하지 않습니다.',
+          '포함되지 않는 작업: 홈통 수리나 다시 달기, 누수 부위 실링, 나사로 고정된 홈통 낙엽 방지망 떼기·설치, 지붕 청소나 이끼 제거, 유리창 청소, 고압 세척. 헐겁거나 처진 부분, 누수, 부식 같은 손상이 보이면 사진으로 보여 드리지만 수리는 하지 않습니다.',
         ),
       ],
     },
@@ -441,7 +442,7 @@ const SNOW: Agreement = {
   service: 'snow',
   title: t(
     '{BRAND} — Seasonal Snow Clearing Agreement (December 1 – March 31)',
-    '{BRAND} — 시즌 제설 계약서 (12월 1일 – 3월 31일)',
+    '{BRAND} — 제설 시즌 계약서 (12월 1일 – 3월 31일)',
   ),
   notice: NOTICE,
   sections: [
@@ -487,8 +488,8 @@ const SNOW: Agreement = {
           '차량: 가능하면 저희가 오기 전에 진입로에서 차를 빼 주세요. 차가 있으면 그 주변만 치웁니다.',
         ),
         t(
-          'November snow (before the season): ☐ Yes, clear November snowfalls ☐ No. If Yes, from the day we confirm that this agreement is going ahead (see the November 20 condition) until November 30, we clear each snowfall that reaches the trigger depth at $______ per visit. These visits are billed with the December 1 instalment, not before.',
-          '11월 눈(시즌 시작 전): ☐ 예, 11월 눈도 치워 주세요 ☐ 아니요. ‘예’를 선택하시면, 이 계약이 진행된다고 저희가 확인해 드린 날(11월 20일 조건 참고)부터 11월 30일까지 출동 기준 이상 내린 눈을 1회당 $______에 치웁니다. 이 비용은 12월 1일 첫 분할금과 함께 청구하며, 그 전에는 받지 않습니다.',
+          'November snow (before the season): ☐ Yes, clear November snowfalls ☐ No. If Yes, from the day we confirm that this agreement is going ahead (see the November 20 condition) until November 30, we clear each snowfall that reaches the trigger depth at $______ per visit. These visits are billed with the first instalment on December 1; nothing is collected before December 1.',
+          '11월 눈(시즌 시작 전): ☐ 예, 11월 눈도 치워 주세요 ☐ 아니요. ‘예’를 선택하시면, 이 계약이 진행된다고 저희가 확인해 드린 날(11월 20일 조건 참고)부터 11월 30일까지 출동 기준 이상 내린 눈을 1회당 $______에 치웁니다. 이 비용은 12월 1일 첫 분할금과 함께 청구하며, 12월 1일 전에는 받지 않습니다.',
         ),
       ],
     },
@@ -548,8 +549,8 @@ const SNOW: Agreement = {
       heading: t('Minimum-contract condition (November 20)', '최소 계약 수 조건(11월 20일)'),
       clauses: [
         t(
-          'This agreement goes ahead only if we have signed at least ___ seasonal snow contracts in total by November 20. We will tell you by November 21 whether it goes ahead. If we have not reached that number, or if you have not heard from us by the end of November 21, this agreement is void: nothing is owed by either of us and no payment will be taken.',
-          '이 계약은 저희가 11월 20일까지 시즌 제설 계약을 모두 합해 ___건 이상 체결한 경우에만 진행됩니다. 진행 여부는 11월 21일까지 알려 드립니다. 그 수에 미치지 못했거나 11월 21일이 끝날 때까지 저희 연락을 받지 못하셨다면 이 계약은 무효입니다. 이 경우 양측 모두 서로에게 줄 돈이 없으며, 저희는 어떤 돈도 받지 않습니다.',
+          'This agreement goes ahead only if we have signed at least ___ snow season contracts in total, all areas combined, by November 20. We will tell you by November 21 whether it goes ahead. If we have not reached that minimum, or if you have not heard from us by the end of November 21, this agreement is void: nothing is owed by either of us and no payment will be taken.',
+          '이 계약은 11월 20일까지 저희가 체결한 전체 제설 시즌 계약(모든 지역 합산)이 ___건 이상인 경우에만 진행됩니다. 진행 여부는 11월 21일까지 알려 드립니다. 11월 20일까지 전체 제설 계약(모든 지역 합산)이 이 최소 건수에 이르지 않았거나, 11월 21일이 끝날 때까지 저희 연락을 받지 못하셨다면 이 계약은 무효이고 내실 돈은 없습니다. 저희도 고객님께 드릴 돈이 없으며, 어떤 돈도 받지 않습니다.',
         ),
       ],
     },
@@ -674,8 +675,8 @@ function gutterPriceNote(): Bilingual {
   const g = GTA.gutters
   if (!g) return NOT_IN_BOOK
   return t(
-    `Bungalow / 1 storey ${money(g.byStoreys[1])}, 2 storeys ${money(g.byStoreys[2])}, 3 storeys ${money(g.byStoreys[3])} (the 3-storey figure is a Calgary guide used as a GTA fallback; no GTA 3-storey price was found); downspout flush ${money(g.downspoutFlush)}. ${PRICE_BOOK_LINE.en}`,
-    `단층 ${money(g.byStoreys[1])}, 2층 ${money(g.byStoreys[2])}, 3층 ${money(g.byStoreys[3])} (3층 금액은 GTA 자료가 없어 캘거리 자료를 대신 쓴 것), 배수관 청소 ${money(g.downspoutFlush)}. ${PRICE_BOOK_LINE.ko}`,
+    `Bungalow / 1 storey ${money(g.byStoreys[1])}, 2 storeys ${money(g.byStoreys[2])}, 3 storeys ${money(g.byStoreys[3])} (the 3-storey figure is a Calgary guide used as a GTA fallback; no GTA 3-storey price was found); downspout flush ${money(g.downspoutFlush)}. 3-storey jobs are declined by default (NEXT_PUBLIC_GUTTER_MAX_STOREYS=2) and taken only with a second person present, so do not quote the 3-storey price otherwise. ${PRICE_BOOK_LINE.en}`,
+    `단층 ${money(g.byStoreys[1])}, 2층 ${money(g.byStoreys[2])}, 3층 ${money(g.byStoreys[3])} (3층 금액은 GTA 자료가 없어 캘거리 자료를 대신 쓴 것), 배수관 청소 ${money(g.downspoutFlush)}. 3층 작업은 기본적으로 거절하며(NEXT_PUBLIC_GUTTER_MAX_STOREYS=2), 작업자가 한 명 더 현장에 있을 때만 맡으므로 그 밖에는 3층 요금을 안내하지 마세요. ${PRICE_BOOK_LINE.ko}`,
   )
 }
 
@@ -684,8 +685,8 @@ function snowSeasonPriceNote(): Bilingual {
   if (!s) return NOT_IN_BOOK
   const unit = s.mode === 'season' ? t('per season', '시즌 기준') : t('per month', '월 기준')
   return t(
-    `Driveway ${unit.en}: single ${money(s.driveway.single)}, double ${money(s.driveway.double)}, large ${money(s.driveway.large)}; walkway and steps ${money(s.walkwayAndSteps)}; salting ${money(s.salting)}. Each instalment = season price ÷ ${s.instalments}. Calgary's price book is per month, so adapt the payment clause there; snow is not offered in Metro Vancouver or Montreal. ${PRICE_BOOK_LINE.en}`,
-    `진입로(${unit.ko}): 1열 ${money(s.driveway.single)}, 2열 ${money(s.driveway.double)}, 대형 ${money(s.driveway.large)}. 현관 보도·계단 ${money(s.walkwayAndSteps)}, 제빙제 ${money(s.salting)}. 분할금 1회 = 시즌 요금 ÷ ${s.instalments}. 캘거리 가격표는 월 단위이므로 결제 조항을 고쳐 쓰세요. 메트로 밴쿠버와 몬트리올에서는 제설을 하지 않습니다. ${PRICE_BOOK_LINE.ko}`,
+    `Driveway ${unit.en}: single ${money(s.driveway.single)}, double ${money(s.driveway.double)}, large ${money(s.driveway.large)}; walkway and steps ${money(s.walkwayAndSteps)}; salting ${money(s.salting)}. Each instalment = season price confirmed on site ÷ ${s.instalments}. Calgary's price book is per month, so adapt the payment clause there; snow is not offered in Metro Vancouver or Montreal. ${PRICE_BOOK_LINE.en}`,
+    `진입로(${unit.ko}): 1열 ${money(s.driveway.single)}, 2열 ${money(s.driveway.double)}, 대형 ${money(s.driveway.large)}. 현관 보도·계단 ${money(s.walkwayAndSteps)}, 제빙제 ${money(s.salting)}. 분할금 1회 = 현장에서 확정한 시즌 요금 ÷ ${s.instalments}. 캘거리 가격표는 월 단위이므로 결제 조항을 고쳐 쓰세요. 메트로 밴쿠버와 몬트리올에서는 제설을 하지 않습니다. ${PRICE_BOOK_LINE.ko}`,
   )
 }
 
@@ -703,8 +704,8 @@ const SHARED_NOTES: AgreementNote[] = [
     kind: 'source',
     topic: t('Ontario 10-day cancellation and 15-day refund', '온타리오 10일 취소 및 15일 환불'),
     note: t(
-      'Direct agreements (made in person away from the supplier’s place of business, e.g. at the home) can be cancelled within 10 days of receiving the signed copy; the refund is due within 15 days (memo F32, corpus S037). Keep this section on every form signed at a door.',
-      '사업장 밖(예: 고객 집)에서 직접 만나 맺은 방문 계약은 서명된 사본을 받은 다음 날부터 10일 이내에 취소할 수 있고(받은 날은 세지 않음), 환불은 취소 통지를 받은 다음 날부터 15일 이내입니다(메모 F32, 자료 S037). 문 앞에서 서명받는 모든 계약서에 이 부분을 넣으세요.',
+      'Direct agreements (made in person away from the supplier’s place of business, e.g. at the home) can be cancelled within 10 days after the customer receives a copy of the signed agreement; the refund is due within 15 days after the cancellation notice (memo F32, corpus S037, search summary). Not legal advice. Keep this section on every form signed at a door.',
+      '사업장 밖(예: 고객 집)에서 직접 만나 맺은 방문 계약은 고객이 계약서 사본을 받은 다음 날부터 10일 안에 취소할 수 있고(받은 날은 세지 않음), 환불은 취소 통지를 받은 다음 날부터 15일 안에 해야 합니다(메모 F32, 자료 S037, 검색 결과 요약). 법률 자문이 아닙니다. 문 앞에서 서명받는 모든 계약서에 이 부분을 넣으세요.',
     ),
     status: 'snippet',
     url: 'https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract',
@@ -886,7 +887,7 @@ const GUTTER_NOTES: AgreementNote[] = [
   },
   {
     kind: 'source',
-    topic: t('Use only after Gate G1', 'G1 관문 통과 후에만 사용'),
+    topic: t('Use only after Gate G1', '관문 G1 통과 후에만 사용'),
     note: t(
       'Memo §2: all five must hold — a vehicle that can carry a 24–28 ft ladder; fit and comfortable on a ladder; a broker’s written confirmation that the liability policy covers ladder/eavestrough work; money for the ladder, insurance and setup; at least 5 gutter jobs booked with dates before the ladder is bought. Hard stop Fri Oct 9, 2026.',
       '메모 §2: 다섯 가지가 모두 맞아야 합니다. 24–28피트 사다리를 실을 차량, 사다리 작업에 맞는 체력과 자신감, 보험이 사다리·홈통 작업을 보장한다는 중개인의 서면 확인, 사다리·보험·장비 비용, 사다리를 사기 전 날짜가 잡힌 홈통 작업 5건 이상. 최종 기한 2026년 10월 9일(금).',
@@ -968,8 +969,8 @@ const SNOW_NOTES: AgreementNote[] = [
     kind: 'fill',
     topic: t('Minimum number of contracts (November 20)', '최소 계약 수(11월 20일)'),
     note: t(
-      'Memo §5.3 break-even (ESTIMATE): with a snowblower, 6 contracts at base pricing / 12 at conservative pricing; shovel-only, 3 / 6. Recompute with the prices actually signed and your written insurance quote. Car-less shovel-only work is capped at 10 driveways (assumed) until the time per driveway is measured (memo §9).',
-      '메모 §5.3 손익분기(추정): 제설기 사용 시 기본 가격 6건 / 보수적 가격 12건, 삽만 쓸 때 3건 / 6건. 실제 계약 금액과 서면 보험 견적으로 다시 계산하세요. 차 없이 삽만 쓰는 경우 진입로 1곳당 걸리는 시간을 재기 전까지 10곳으로 제한합니다(가정, 메모 §9).',
+      'The minimum counts all snow contracts, all areas combined (not per area). Memo §5.3 break-even (ESTIMATE): with a snowblower, 6 contracts at base pricing / 12 at conservative pricing; shovel-only, 3 / 6. Recompute with the prices actually signed and your written insurance quote. Car-less shovel-only work is capped at 10 driveways (assumed) until the time per driveway is measured (memo §9).',
+      '최소 건수는 지역별이 아니라 전체 제설 계약(모든 지역 합산)으로 셉니다. 메모 §5.3 손익분기(추정): 제설기 사용 시 기본 가격 6건 / 보수적 가격 12건, 삽만 쓸 때 3건 / 6건. 실제 계약 금액과 서면 보험 견적으로 다시 계산하세요. 차 없이 삽만 쓰는 경우 진입로 1곳당 걸리는 시간을 재기 전까지 10곳으로 제한합니다(가정, 메모 §9).',
     ),
     status: 'memo',
     url: MEMO,
@@ -986,7 +987,7 @@ const SNOW_NOTES: AgreementNote[] = [
   },
   {
     kind: 'source',
-    topic: t('Gate S: written snow insurance first', 'S 관문: 서면 제설 보험 먼저'),
+    topic: t('Gate S: written snow insurance first', '관문 S: 서면 제설 보험 먼저'),
     note: t(
       'No snow contract is signed before written snow cover, including slip-and-fall, is in place; target Fri Oct 30 (memo §2, §6). One broker says insurers limit or stop new cover by late autumn (single source, unverified).',
       '미끄러짐·낙상을 포함한 서면 제설 보험이 생기기 전에는 제설 계약을 맺지 않습니다. 목표일 10월 30일(금)(메모 §2, §6). 한 중개인은 늦가을이면 보험사가 신규 가입을 제한하거나 중단한다고 합니다(단일 출처, 확인 안 됨).',

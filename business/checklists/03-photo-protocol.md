@@ -17,9 +17,9 @@ Not legal advice. Privacy law: Ontario = PIPEDA; BC and Alberta = provincial PIP
 | Service (서비스) | Before (작업 전) | After (작업 후) |
 |---|---|---|
 | Cleaning (청소) | Each room from the doorway, one wide shot. Close-ups of existing damage: scratches, stains, chips, cracks, broken items (방마다 문 앞에서 한 장. 기존 파손 근접: 긁힘, 얼룩, 깨짐, 금, 고장) | Same angles as before (작업 전과 같은 각도) |
-| Move-out (이사 청소) | As above, plus appliances, closets, bathroom fixtures (위와 같고 가전, 옷장, 욕실 설비 추가) | Same angles; open closets and appliances (같은 각도, 옷장과 가전 문 열고) |
-| Gutters (거터) | Each gutter run; loose hangers, cracks, damaged fascia or shingles you can see from the ladder (거터 구간별. 흔들리는 고정쇠, 금, 손상된 처마판·지붕널) | Each run cleared; debris bagged (구간별 청소 후, 쓰레기 봉투) |
-| Snow (눈) | Optional: depth marker at your fixed measuring spot (선택: 고정 측정 지점의 적설 깊이) | Driveway and walkway cleared, no snow on road or sidewalk, salt applied if on contract (진입로·보도 제설, 도로·인도에 눈 없음, 계약 시 제빙제) |
+| Move-in / move-out (입주·이사 청소) | As above, plus appliances, closets, bathroom fixtures (위와 같고 가전, 옷장, 욕실 설비 추가) | Same angles; open closets and appliances (같은 각도, 옷장과 가전 문 열고) |
+| Gutters (홈통 청소) | Each gutter run; loose hangers, cracks, damaged fascia or shingles you can see from the ladder (홈통 구간별. 흔들리는 고정쇠, 금, 손상된 처마판·지붕널) | Each run cleared; debris bagged (구간별 청소 후, 쓰레기 봉투) |
+| Snow (제설) | Optional: depth marker at your fixed measuring spot (선택: 고정 측정 지점의 적설 깊이) | Driveway and walkway cleared, no snow on road or sidewalk, salt applied if on contract (진입로·보도 제설, 도로·인도에 눈 없음, 계약 시 제빙제) |
 
 ## 3. What never to capture (절대 찍지 않는 것)
 
@@ -64,7 +64,7 @@ The research gave **no legal retention period for job photos**. PIPEDA's princip
 |---|---|---|
 | Dispute photos, no complaint (분쟁용, 문제 없음) | 90 days after the job (작업 후 90일) | Owner choice (오너 선택) |
 | Dispute photos, complaint or claim open (분쟁용, 이의·보험 청구 진행 중) | Until it is closed **and** your insurer says you may delete (종결되고 보험사가 삭제해도 된다고 할 때까지) | Owner choice; ask the insurer (오너 선택, 보험사 확인) |
-| Snow proof-of-service photos (눈 작업 증빙) | End of season (Mar 31) + 90 days, unless a claim is open (시즌 종료 3/31 + 90일, 청구가 없으면) | Owner choice (오너 선택) |
+| Snow proof-of-service photos (제설 작업 증빙) | End of season (Mar 31) + 90 days, unless a claim is open (시즌 종료 3/31 + 90일, 청구가 없으면) | Owner choice (오너 선택) |
 | Marketing photos with signed opt-in (서면 동의받은 홍보용) | Until the client withdraws; then take down from your own site and pages (고객 철회 시까지. 철회하면 자체 사이트·페이지에서 내림) | Opt-in slip above (위 동의서) |
 | Photos taken by mistake (people, mail, etc.) (실수로 찍힌 사진) | Delete the same day (당일 삭제) | Owner choice (오너 선택) |
 

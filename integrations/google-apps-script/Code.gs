@@ -97,7 +97,7 @@ const HEADERS = ['serverReceivedAt'].concat(LEAD_FIELDS, ['turnstileResult', 're
 
 const SERVICE_LABELS = {
   cleaning: '청소 / Cleaning',
-  gutters: '거터(홈통) 청소 / Gutter cleaning',
+  gutters: '홈통 청소 / Gutter cleaning',
   snow: '제설 / Snow clearing',
   other: '기타 / Other',
 };

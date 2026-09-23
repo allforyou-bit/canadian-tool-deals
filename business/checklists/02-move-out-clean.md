@@ -25,9 +25,9 @@ Client / payer (고객·결제자): tenant / owner / property manager / realtor 
 
 - [ ] Write the arrival time (도착 시각 기록)
 - [ ] Confirm the unit is empty and utilities work. Test a light, a tap and the hot water (비어 있는지, 전기·물·온수가 되는지 직접 확인)
-- [ ] **Before photos** of every room, bathroom fixtures, appliances, and close-ups of damage that was already there (walls, floors, counters), following `03-photo-protocol.md`. In a move-out these photos protect you in landlord–tenant disputes (작업 전 사진: 모든 방, 욕실 설비, 가전, 기존 파손 근접 사진. 이사 청소에서는 집주인과 세입자 사이 분쟁에서 오너를 보호합니다)
+- [ ] **Before photos** of every room, bathroom fixtures, appliances, and close-ups of damage that was already there (walls, floors, counters), following `03-photo-protocol.md`. In a move-in / move-out clean these photos protect you in landlord–tenant disputes (작업 전 사진: 모든 방, 욕실 설비, 가전, 기존 파손 근접 사진. 입주·이사 청소에서는 이 사진이 집주인과 세입자 사이 분쟁에서 오너를 보호합니다)
 - [ ] Items left behind: do not throw anything away without the client's written OK by text. Junk removal is out of scope (남은 물건: 고객의 문자 확인 없이 버리지 않습니다. 짐 처리는 작업 범위가 아닙니다)
-- [ ] Agreement signed. If signed **at the client's home in Ontario**: 10-day cancellation right, refund within 15 days (memo F32; effect of finishing the job within 10 days **not researched**). Not legal advice (계약서 서명. 온타리오에서 고객 집에서 서명하면 10일 취소권, 15일 내 환불. 10일 안에 작업을 끝낸 경우의 효과는 확인 필요. 법률 자문 아님)
+- [ ] Agreement signed. If signed **at the client's home in Ontario**, it is a direct agreement: the client can cancel within 10 days after receiving a copy of the signed agreement, and you must refund within 15 days after the cancellation notice (memo F32, snippet; effect of finishing the job within 10 days **not researched**). Not legal advice (계약서 서명. 온타리오에서 고객 집에서 서명했다면 고객은 계약서 사본을 받은 다음 날부터 10일 안에 취소할 수 있고, 오너는 취소 통지를 받은 다음 날부터 15일 안에 환불해야 합니다(검색 요약). 10일 안에 작업을 끝낸 경우의 효과는 확인 필요. 법률 자문 아님)
 
 ## 3. Room by room: added to the deep-clean list (공간별: 딥클린 목록에 더하는 작업)
 
@@ -101,7 +101,7 @@ Supply costs were **not found** in the research; the memo's 20% of ticket is an 
 
 ## 6. Time log (시간 기록)
 
-The memo assumes 5 h per flat-rate clean (A1, ASSUMPTION). Move-outs will likely differ from deep cleans, so log them separately and compare (메모는 정액 청소 1건에 5시간으로 가정합니다(가정). 이사 청소는 딥클린과 다를 수 있으니 따로 기록해 비교합니다).
+The memo assumes 5 h per flat-rate clean (A1, ASSUMPTION). Move-in / move-out cleans will likely differ from deep cleans, so log them separately and compare (메모는 정액 청소 1건에 5시간으로 가정합니다(가정). 입주·이사 청소는 딥클린과 다를 수 있으니 따로 기록해 비교합니다).
 
 | Job ID | Beds/Baths | Add-ons | Rush Y/N | Left home | Arrived | Finished | Home | On-site h | Travel h | Supplies $ | Transit/parking $ | Price $ |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|

@@ -35,7 +35,7 @@
 **조금 도움이 되는 정도입니다.**
 
 - 기본 시나리오에서 10–3월에 약 $3,000을 더해 줍니다(5.3절, 추정).
-- 보수 시나리오에서는 거터가 초기 비용을 겨우 회수합니다.
+- 보수 시나리오에서는 홈통(처마 물받이) 청소가 초기 비용을 겨우 회수합니다.
 - 관문(G1, S)과 구매 조건을 지킬 때만 하세요.
 
 ### 4. 지금 HST를 받아야 하나요?
@@ -57,7 +57,7 @@
 
 **B1(청소 + 플랫폼)만 하고, 더 천천히 늘어납니다.**
 
-- 걸어서 다닐 수 있는 클러스터에서 삽으로 하는 눈 작업은 가능합니다.
+- 걸어서 다닐 수 있는 클러스터에서 삽으로 하는 제설은 가능합니다.
 - 조건: 서면 보험을 받아야 합니다(관문 S).
 - 처음에는 진입로 10곳까지만 받습니다. 이 숫자는 가정이고, 한 곳에 걸리는 시간을 재기 전까지의 상한입니다.
 
@@ -67,18 +67,18 @@
 - 가격 자료가 2–3배씩 서로 다릅니다.
 - 겨울 사다리 작업입니다.
 - 1월 철거는 돈을 받지 못합니다.
-- **유일한 예외:** G1을 통과한 거터 고객이 먼저 요청하는 경우입니다.
+- **유일한 예외:** G1을 통과한 뒤 홈통 청소 고객이 먼저 요청하는 경우입니다.
   - 고객 소유 조명, 단층 지붕선에 한합니다.
   - 설치할 때 전액을 받고, 철거는 따로 청구합니다.
   - 이 매출은 계획에 넣지 않습니다.
 
-### 9. 눈 치우기 돈을 지금 받아도 되나요?
+### 9. 제설 대금을 지금 받아도 되나요?
 
 **아니요. 12월 1일 전에는 한 푼도 받지 않습니다.**
 
-- 온타리오 방문 계약은 10일 취소권이 있습니다(F32).
+- 온타리오에서 고객 집에서 서명한 계약은 고객이 계약서 사본을 받은 다음 날부터 10일 안에 취소할 수 있고, 사업자는 취소 통지를 받은 다음 날부터 15일 안에 환불해야 합니다(F32, 스니펫. 법률 자문 아님).
 - GTA에서 선불을 낸 고객들이 피해를 봤습니다(CP24).
-- 11/20(금)까지 손익분기 건수가 안 되면 계약은 무효입니다.
+- 11/20(금)까지 전체 제설 계약(모든 지역 합산)이 최소 건수(손익분기 건수)에 이르지 않으면 계약은 무효이고, 고객이 낼 돈은 없습니다.
 
 ### 10. 방문 영업은 합법인가요?
 
@@ -91,7 +91,7 @@
 **내 작업에 맞는 금액은 모릅니다.**
 
 - 스니펫 자료의 최저선은 연 약 $450–500입니다(청소 또는 창문 청소).
-- 눈 작업은 $450–3,000, 핸디맨은 약 $1,800입니다(F23, F27, F29).
+- 제설 작업은 $450–3,000, 핸디맨은 약 $1,800입니다(F23, F27, F29).
 - **1주차에 서면 견적을 받아야 합니다.**
 
 ### 12. TaskRabbit에서 일이 빨리 들어오나요?
@@ -106,7 +106,7 @@
 
 - Cloudflare의 한도는 공식 문서로 확인했습니다(F39).
 - 무료 플랜의 상업적 사용 가능 여부는 2차 자료에만 나옵니다(F40).
-- 가입할 때 약관을 읽으세요.
+- 가입할 때 Cloudflare 이용약관을 읽으세요.
 - Vercel Hobby는 비상업용 전용이라 쓰지 않습니다.
 
 ### 14. 예전 공구 가격비교 사이트는요?
@@ -140,8 +140,8 @@
 | 토론토에서 압력 세척 | Building Renovator 면허(시험 포함)가 필요해 보입니다([toronto.ca](https://www.toronto.ca/services-payments/permits-licences-bylaws/building-renovators/), 스니펫). |
 | 외부 창문 청소 (지금은) | 온타리오 Reg. 859의 적용 여부를 확인하지 못했습니다([ontario.ca](https://www.ontario.ca/page/access-and-fall-protection-window-cleaning)). |
 | 트럭 플라우 제설 | 트럭 1–2대, $2M 배상책임에 연 $5,000–12,000입니다([zensurance](https://www.zensurance.com/blog/how-much-does-snowplow-insurance-in-canada-cost), 스니펫). 오타와는 플라우 면허가 필요합니다. |
-| 12월 1일 전 눈 치우기 대금, 일시불 선불 | 9번 답 참조. 퀘벡 OPC도 서비스 전 계약금을 받지 말라고 권고합니다([OPC](https://opc.gouv.qc.ca/en/consumer/good-service/housing-renovation/landscaping-exterior/snow-removal/cancelling-contract), 스니펫). |
-| 소비자에게 콜드 이메일·문자 | CASL: 동의가 필요하고, 증명 책임은 보내는 사람에게 있으며(s.13), 개인 벌금은 최대 $1M입니다(s.20(4), F11). |
+| 12월 1일 전 제설 대금, 일시불 선불 | 9번 답 참조. 퀘벡 OPC도 서비스 전 계약금을 받지 말라고 권고합니다([OPC](https://opc.gouv.qc.ca/en/consumer/good-service/housing-renovation/landscaping-exterior/snow-removal/cancelling-contract), 스니펫). |
+| 소비자에게 콜드 이메일·문자 | CASL: 동의가 필요하고, 증명 책임은 보내는 사람에게 있으며(s.13), 개인 행정 제재금(과징금)은 최대 $1M입니다(s.20(4), F11). |
 | TV 설치 시 벽 안 전기, 모든 배관·가스 | 규제 직종 경계를 확인하지 못했습니다. 거절합니다. |
 | 사업 사이트를 Vercel Hobby에 호스팅 | 비상업용 전용입니다(F40). |
 | 첫 30일 안에 보조 인력 고용 | 고용기준법과 WSIB 의무를 조사하지 않았습니다. |
@@ -151,7 +151,7 @@
 ## 아직 찾지 못한 것 (믿고 쓰기 전에 하나씩 확인)
 
 - [ ] 퍼널 전환율(방문 → 대화 → 견적 → 계약), 플랫폼 승인 기간, 신규 태스커 수요
-- [ ] 소모품 비용, 사다리의 캐나다 가격, 거터 전용 보험
+- [ ] 소모품 비용, 사다리의 캐나다 가격, 홈통 청소 전용 보험
 - [ ] 몬트리올 가격. 캘거리·오타와·밴쿠버 청소 가격
 - [ ] 시 방문판매 조례
 - [ ] 10일 취소 기간 안에 작업을 해 주면 어떻게 되는지
@@ -172,7 +172,7 @@
   - (스니펫)
 - F23 청소 보험: [thinkinsure](https://www.thinkinsure.ca/business-insurance/cleaning-insurance) — 스니펫
 - F27 창문 청소 보험: [rates.ca](https://rates.ca/insurance-quotes/business/contractor/window-cleaning) — 스니펫
-- F29 눈 보험: [getcertain](https://getcertain.ca/how-much-does-snow-removal-insurance-cost-in-canada/), [rates.ca](https://rates.ca/resources/what-does-snow-removal-business-insurance-canada-really-cover-and-how-much-does-it-cost) — 스니펫
+- F29 제설 보험: [getcertain](https://getcertain.ca/how-much-does-snow-removal-insurance-cost-in-canada/), [rates.ca](https://rates.ca/resources/what-does-snow-removal-business-insurance-canada-really-cover-and-how-much-does-it-cost) — 스니펫
 - F32 온타리오 방문 계약: [ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract) — 스니펫
 - F33 조명 예약 시기: [settoshine](https://www.settoshine.ca/post/christmas-lights-cost-gta) — 스니펫, 업체 블로그
 - 조명 가격 충돌: [weinstallchristmaslights](https://weinstallchristmaslights.ca/how-much-does-it-really-cost-to-install-christmas-lights-in-ontario/) vs [settoshine](https://www.settoshine.ca/post/christmas-lights-cost-gta)

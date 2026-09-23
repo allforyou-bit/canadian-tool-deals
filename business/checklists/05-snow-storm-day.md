@@ -1,4 +1,4 @@
-# Checklist 05: Snow Storm Day (눈 오는 날 작업 체크리스트)
+# Checklist 05: Snow Storm Day (눈 오는 날 제설 작업 체크리스트)
 
 **Track B, snow only.** Use it only when **Gate S** has passed: written snow insurance, including slip-and-fall, bound **before** any contract was signed (memo §2, §6) (**트랙 B 제설 전용.** 관문 S 통과 후에만 씁니다: 계약 전에 미끄러짐 사고를 포함한 제설 보험을 서면으로 확보).
 
@@ -6,9 +6,9 @@ Labels (표시): **ESTIMATE/추정** = arithmetic, not a result. **ASSUMPTION/�
 
 ## 0. Is today a contract visit? (오늘은 계약 작업인가?)
 
-- [ ] Contracts are binding only if the break-even number was signed by **Nov 20**. If not, all contracts are void and no money was taken (memo §2, §5.3) (손익분기 계약 수가 **11/20**까지 서명되어야 계약이 유효합니다. 아니면 모두 무효이고 받은 돈도 없습니다)
-- [ ] **Dec 1 – Mar 31:** contract season. Instalments are due Dec 1, Jan 1, Feb 1 and Mar 1; **no payment before Dec 1** (memo §2) (**12/1–3/31:** 계약 시즌. 분할금은 12/1, 1/1, 2/1, 3/1. **12/1 전에는 돈을 받지 않습니다**)
-- [ ] **November storms:** only for clients who ticked November snow in their agreement, from the day the contract is confirmed to go ahead until Nov 30, at the per-visit rate in `config/prices.ts` (GTA default $60, chosen from the $50–150 band in memo F28; it must match the live price book). Billed with the Dec 1 instalment (**11월 눈:** 계약서에서 11월 눈을 선택한 고객만, 계약 진행이 확정된 날부터 11/30까지 1회 요금(GTA 기본값 $60, 실제 가격표와 같아야 함). 12월 1일 첫 분할금과 함께 청구)
+- [ ] Contracts go ahead only if the minimum number of snow contracts, all areas combined (the break-even count), is signed by **Nov 20**. If not, every contract is void, the client owes nothing, and no money was taken (memo §2, §5.3) (**11/20**까지 전체 제설 계약(모든 지역 합산)이 최소 건수(손익분기 수)에 이르지 않으면 계약은 모두 무효이고 고객이 낼 돈은 없습니다. 받은 돈도 없습니다)
+- [ ] **Dec 1 – Mar 31:** contract season. Instalments (the season price confirmed on site ÷ 4) are billed Dec 1, Jan 1, Feb 1 and Mar 1; **no payment before Dec 1** (memo §2) (**12/1–3/31:** 계약 시즌. 분할금(현장에서 확정한 시즌 요금 ÷ 4)은 12/1, 1/1, 2/1, 3/1에 청구. **12/1 전에는 돈을 받지 않습니다**)
+- [ ] **November snow:** only for clients who ticked the November option in their contract, for snowfall at or above the trigger depth between the day the contract is confirmed and Nov 30, at the per-visit rate in `config/prices.ts` (GTA default $60, chosen from the $50–150 band in memo F28; it must match the live price book). Billed with the Dec 1 first instalment; nothing is collected before Dec 1 (**11월 눈:** 계약서에서 11월 옵션을 선택한 고객만, 계약이 확정된 날부터 11/30까지 출동 기준 적설량 이상 내린 눈에 1회 요금 적용(GTA 기본값 $60, 실제 가격표와 같아야 함). 12월 1일 첫 분할금과 함께 청구하며, 12/1 전에는 받지 않음)
 - [ ] Snow depth at your fixed measuring spot: ____ cm. Go only if it meets the contract **trigger depth** {TRIGGER_DEPTH} (고정 측정 지점의 적설량: ____ cm. 계약서의 **출동 기준 적설량** 이상일 때만 출동)
 - [ ] **No car:** shovel-only in a walkable cluster, **capped at 10 driveways (ASSUMPTION)** until your per-driveway times are measured (memo §9) (**차가 없으면:** 걸어 다닐 수 있는 구역에서 삽 작업만, 진입로당 시간을 재기 전까지 **최대 10곳(가정)**)
 - [ ] City check: **Metro Vancouver = no snow service** (memo F46). **Ottawa:** whether shovel or walk-behind-snowblower operators need the plow licence is **unresolved**; confirm with the City before selling (memo F35) (도시 확인: 밴쿠버는 제설 없음. 오타와는 삽·소형 제설기 작업자의 면허 필요 여부가 미해결이니 시에 먼저 확인)
@@ -85,8 +85,8 @@ Write it **right away**, while you are still there. Photograph the spot and the 
 4. A client or anyone else mentions a claim, a lawyer or insurance, or holds back payment because of damage (고객이나 다른 사람이 청구, 변호사, 보험을 언급하거나 파손을 이유로 돈을 안 줄 때)
 5. You receive any letter from a lawyer or an insurance company (변호사나 보험사 편지를 받았을 때)
 
-- Read the "notice of claim" condition in your policy now, not after an incident. Ontario notice rules for snow and ice injuries were **NOT VERIFIED** in the research (`cand_snow.json`) (보험 약관의 "사고 통지" 조건을 미리 읽어 두세요. 눈·얼음 부상의 온타리오 통지 규정은 확인 필요)
-- Be polite, but do not promise to pay or say whose fault it was on the spot; say you will pass it to your insurer (GENERAL PRACTICE; check your policy wording) (정중하되 그 자리에서 배상 약속이나 과실 인정은 하지 말고 보험사에 넘기겠다고 말하기(일반 수칙, 약관 확인))
+- Read the "notice of claim" condition in your policy now, not after an incident. Ontario notice rules for snow and ice injuries were **NOT VERIFIED** in the research (`cand_snow.json`) (보험 증권에 적힌 "사고 통지" 조건을 미리 읽어 두세요. 눈·얼음 부상의 온타리오 통지 규정은 확인 필요)
+- Be polite, but do not promise to pay or say whose fault it was on the spot; say you will pass it to your insurer (GENERAL PRACTICE; check your policy wording) (정중하되 그 자리에서 배상 약속이나 과실 인정은 하지 말고 보험사에 넘기겠다고 말하기(일반 수칙, 보험 증권 문구 확인))
 - A bylaw or HTA ticket is not an insurance claim: log it and fix the cause (조례·도로교통법 벌금은 보험 청구가 아닙니다. 기록하고 원인을 고칩니다)
 
 ## 7. Your own safety (본인 안전)
@@ -107,7 +107,7 @@ These go only to clients with a signed contract or a per-visit request. Every te
 - EN: `{BRAND}: Heavy snow today. We expect to reach {STREET} by about {TIME}. Sorry for the wait. {PHONE}, {MAILING_ADDRESS}, {SITE}. Reply STOP to opt out.`
 - KO: `{BRAND}: 오늘 눈이 많이 와서 {STREET}에는 {TIME}쯤 도착할 예정입니다. 기다리게 해서 죄송합니다. {PHONE}, {MAILING_ADDRESS}, {SITE}. 수신을 원하지 않으시면 STOP이라고 답장해 주세요.`
 
-## 9. After the storm (눈 작업 후)
+## 9. After the storm (제설 작업 후)
 
 - [ ] Every driveway on the route list is marked done, with a photo (경로표의 모든 집 완료 표시와 사진)
 - [ ] Time, salt and incident logs copied into the CRM (시간·제빙·사고 기록을 CRM에 옮김)
@@ -118,4 +118,4 @@ These go only to clients with a signed contract or a per-visit request. Every te
 
 ---
 
-Sources: memo §2 (Gate S, season, instalments, Nov 20 void rule, per-visit rate), §5.1 (A4), §5.3 (break-evens; collected vs earned), §6 (snow never onto the road; Calgary fines; Ottawa), §8 (injury), §9 (no-car cap of 10, Vancouver), F4, F11, F13, F28, F34, F35, F46; `business/research/dossiers/cand_snow.json` (Toronto 743-9 and Ch. 719, Calgary 24 h rule, Ottawa 2024 rules, 20-minute figure unsourced, slip-and-fall notice rules not verified). Prices: `config/prices.ts`.
+Sources: memo §2 (Gate S, season, instalments, Nov 20 minimum/void rule, per-visit rate), §5.1 (A4), §5.3 (break-evens; collected vs earned), §6 (snow never onto the road; Calgary fines; Ottawa), §8 (injury), §9 (no-car cap of 10, Vancouver), F4, F11, F13, F28, F34, F35, F46; `business/research/dossiers/cand_snow.json` (Toronto 743-9 and Ch. 719, Calgary 24 h rule, Ottawa 2024 rules, 20-minute figure unsourced, slip-and-fall notice rules not verified). Prices: `config/prices.ts`.

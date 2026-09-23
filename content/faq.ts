@@ -31,7 +31,7 @@ const TAX_LINE = business.salesTaxRegistered
 
 // Only mention snow billing when snow is actually offered.
 const SNOW_PAY_NOTE = business.services.snow
-  ? { en: ' Seasonal snow contracts are billed in monthly instalments instead.', ko: ' 시즌 제설 계약은 매달 나눠서 청구해요.' }
+  ? { en: ' Seasonal snow contracts are billed in monthly instalments instead.', ko: ' 제설 시즌 계약은 매달 나눠서 청구해요.' }
   : { en: '', ko: '' }
 
 // Snow instalments are billed Dec 1 – Mar 1 (memo section 0 item 2 and section 6).
@@ -249,8 +249,8 @@ const GENERAL: FaqItem[] = [
   },
 ]
 
-// Ontario direct agreements: cancel within 10 days of receiving the signed copy; refund within
-// 15 days (memo F32, https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract,
+// Ontario direct agreements: cancel within 10 days after receiving a copy of the signed agreement;
+// refund within 15 days after the cancellation notice (memo F32, https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract,
 // snippet S037). Shown only in Ontario cities.
 const ONTARIO_CANCELLATION: FaqItem = {
   id: 'ontario-cancellation',
@@ -259,7 +259,7 @@ const ONTARIO_CANCELLATION: FaqItem = {
     ko: '집에서 서명한 계약도 취소할 수 있나요?',
   },
   a: {
-    en: "Yes. In Ontario, if you sign an agreement with us at your home (for example, when we knock on your door), you can cancel it within 10 days after you receive your signed copy. We'll refund any payment within 15 days after you cancel. Please cancel in writing (text, email or letter) so you have a record.\n\nSummary only, not legal advice: ontario.ca/page/your-rights-when-signing-or-cancelling-contract",
+    en: "Yes. In Ontario, if you sign an agreement with us at your home (for example, when we knock on your door), you can cancel it within 10 days after you receive a copy of the signed agreement. We'll refund any payment within 15 days after we receive your cancellation notice. Please cancel in writing (text, email or letter) so you have a record.\n\nSummary only, not legal advice: ontario.ca/page/your-rights-when-signing-or-cancelling-contract",
     ko: '네. 온타리오주에서는 저희가 댁을 방문했을 때처럼 고객님 댁에서 계약서에 서명하신 경우, 서명된 계약서 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있고, 취소 통지를 받은 다음 날부터 15일 안에 내신 금액을 환불해 드려요. 기록이 남도록 문자, 이메일, 편지 등 서면으로 알려 주세요.\n\n요약 안내이며 법률 자문이 아니에요: ontario.ca/page/your-rights-when-signing-or-cancelling-contract',
   },
 }
@@ -322,8 +322,8 @@ function snowItems(snow: SnowBook): FaqItem[] {
         ko: '제설 계약에는 무엇이 포함되나요?',
       },
       a: {
-        en: `The season runs Dec 1 to Mar 31. We clear your driveway with a walk-behind snowblower or shovel (no truck) when snowfall reaches the depth written in your agreement. Walkway, steps and salting are add-ons.\n\nNovember snow is optional: tick it in your agreement and we clear it at $${snow.perVisit} per visit once your contract is confirmed, billed with your Dec 1 instalment, not before.`,
-        ko: `시즌은 12월 1일부터 3월 31일까지예요. 계약서에 정한 적설량 이상 눈이 오면 트럭 없이 보행식 제설기나 삽으로 진입로를 치워 드려요. 보도·계단과 제빙(소금) 살포는 추가 옵션이에요.\n\n11월 눈은 선택 사항이에요. 계약서에서 선택하시면 계약 진행이 확정된 뒤부터 1회 $${snow.perVisit}에 치워 드리고, 12월 1일 첫 분할금과 함께 청구해요. 그 전에는 받지 않아요.`,
+        en: `The season runs Dec 1 to Mar 31. We clear your driveway with a walk-behind snowblower or shovel (no truck) when snowfall reaches the depth written in your agreement. Walkway, steps and salting are add-ons.\n\nNovember snow is optional: tick it in your agreement and, from contract confirmation to Nov 30, we clear snowfalls reaching that depth at $${snow.perVisit} per visit, billed with your Dec 1 instalment, not before.`,
+        ko: `시즌은 12월 1일부터 3월 31일까지예요. 계약서에 정한 적설량 이상 눈이 오면 트럭 없이 보행식 제설기나 삽으로 진입로를 치워 드려요. 보도·계단과 제빙(소금) 살포는 추가 옵션이에요.\n\n11월 눈은 선택 사항이에요. 계약서에서 선택하시면 계약 진행이 확정된 날부터 11월 30일까지 그 적설량 이상 내린 눈을 1회 $${snow.perVisit}에 치워 드리고, 12월 1일 첫 분할금과 함께 청구해요. 12월 1일 전에는 받지 않아요.`,
       },
     },
     {
@@ -339,7 +339,7 @@ function snowItems(snow: SnowBook): FaqItem[] {
       },
       a: {
         en: `${pay.en} We take no deposit and no payment for the season before Dec 1.\n\nContracts go ahead only if we sign our minimum number of snow contracts (all areas combined) by Nov 20. If not, every contract is void and you owe nothing. We'll let you know either way.`,
-        ko: `${pay.ko} 12월 1일 전에는 계약금을 포함해 시즌 요금을 전혀 받지 않아요.\n\n11월 20일까지 전체 제설 계약이 최소 건수에 이르지 않으면 모든 계약은 무효가 되고, 내실 돈은 없어요. 결과는 어느 쪽이든 알려 드려요.`,
+        ko: `${pay.ko} 12월 1일 전에는 계약금을 포함해 시즌 요금을 전혀 받지 않아요.\n\n11월 20일까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르지 않으면 모든 계약은 무효이고 내실 돈은 없어요. 결과는 어느 쪽이든 알려 드려요.`,
       },
     },
     {

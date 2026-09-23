@@ -52,12 +52,12 @@ Add at the end **only while the matching switch is on**:
 Whether a profile can show a second-language description was **not researched.** Use this text on the Korean website page or in Korean posts, or in the profile if the screen allows it.
 
 ```text
-{BRAND}에서는 {AREA} 지역의 집 청소를 합니다. 일반 청소, 대청소, 이사·입주 청소를 한 번 또는 2주마다 해 드리며, 단독주택, 타운하우스, 콘도 모두 가능합니다. 가격은 집 크기별 정액이고, 웹사이트에서 바로 예상 가격을 보실 수 있습니다. 최종 가격은 사진이나 현장 확인 후 정해집니다. 방마다 체크리스트대로 청소합니다. 열쇠는 보관하지 않습니다. 한국어로 편하게 상담하세요.
+{BRAND}에서는 {AREA} 지역의 집 청소를 합니다. 일반 청소, 딥클린(대청소), 입주·이사 청소를 한 번 또는 2주마다 해 드리며, 단독주택, 타운하우스, 콘도 모두 가능합니다. 가격은 집 크기별 정액이고, 웹사이트에서 바로 예상 가격을 보실 수 있습니다. 최종 가격은 사진이나 현장 확인 후 정해집니다. 방마다 체크리스트대로 청소합니다. 열쇠는 보관하지 않습니다. 한국어로 편하게 상담하세요.
 ```
 
 Optional additions:
-- Gutters on: `늦가을에는 처마 물받이(거터)를 손으로 청소해 드립니다. 물받이만 청소하고 창문 청소나 고압 세척은 하지 않습니다.`
-- Snow on: `겨울에는 시즌 계약으로 드라이브웨이 제설을 해 드리며, 12월 1일 전에는 돈을 받지 않습니다.`
+- Gutters on: `늦가을에는 홈통(처마 물받이) 청소도 손으로 해 드립니다. 홈통만 청소하고 창문 청소나 고압 세척은 하지 않습니다.`
+- Snow on: `겨울에는 제설 시즌 계약으로 진입로 눈을 치워 드리며, 12월 1일 전에는 돈을 받지 않습니다.`
 - Insured on: `배상책임보험에 가입되어 있습니다.`
 
 ---
@@ -69,15 +69,15 @@ If you enter prices on the profile, they **must match `config/prices.ts` (GTA de
 | Service (EN) | 서비스 (KO) | Short description (EN) | Price (GTA default) | Show when |
 |---|---|---|---|---|
 | Standard clean | 일반 청소 | Regular clean of kitchen, bathrooms, floors and dusting, by checklist | from $150 (1 bedroom) | always |
-| Deep clean | 대청소(딥클린) | Thorough top-to-bottom clean, by checklist | from $230 (1 bedroom) | always |
+| Deep clean | 딥클린(대청소) | Thorough top-to-bottom clean, by checklist | from $230 (1 bedroom) | always |
 | Move-in / move-out clean | 입주·이사 청소 | Empty-home clean before or after a move | from $260 (1 bedroom) | always |
 | Biweekly cleaning | 2주 정기 청소 | A standard clean every two weeks on a set day | from $150 per visit (standard price) | always |
 | Extra bathroom / inside oven / inside fridge / inside empty cabinets | 욕실 추가 / 오븐 내부 / 냉장고 내부 / 빈 수납장 내부 | Add-ons | $30 / $40 / $35 / $40 | always |
-| Gutter cleaning | 처마 물받이(거터) 청소 | Gutters only, cleaned by hand from a ladder; paid on completion | from $175 (1 storey), $225 (2 storeys) | `services.gutters` |
-| Downspout flush | 다운스파우트(배수관) 뚫기 | Add-on to gutter cleaning | $70 | `services.gutters` |
-| Seasonal snow clearing | 시즌 제설 | Driveway, Dec 1 – Mar 31, billed in 4 instalments (Dec 1 – Mar 1); no payment before Dec 1 | from $500 per season (single driveway) | `services.snow` |
+| Gutter cleaning | 홈통(처마 물받이) 청소 | Gutters only, cleaned by hand from a ladder; paid on completion | from $175 (1 storey), $225 (2 storeys) | `services.gutters` |
+| Downspout flush | 배수관(다운스파우트) 청소 | Add-on to gutter cleaning | $70 | `services.gutters` |
+| Seasonal snow clearing | 시즌 제설 | Driveway, Dec 1 – Mar 31; season price confirmed on site, billed in 4 equal instalments (Dec 1, Jan 1, Feb 1, Mar 1); no payment before Dec 1 | from $500 per season (single driveway) | `services.snow` |
 | Walkway and steps / salting | 현관 보도·계단 / 제빙(소금) | Snow add-ons, per season | $100 / $100 | `services.snow` |
-| November snow visit | 11월 눈 1회(선택) | Optional, after the contract is confirmed; billed Dec 1 | $60 per visit | `services.snow` |
+| November snow visit | 11월 눈 1회(선택) | Optional (ticked in the agreement), after the contract is confirmed; billed with the Dec 1 instalment | $60 per visit | `services.snow` |
 
 - **3-storey gutters are not listed by default.** Add "$300 (3 storeys)" only when `NEXT_PUBLIC_GUTTER_MAX_STOREYS=3`, which you set only when a second person is present and your broker has confirmed cover (`business/checklists/04-ladder-go-no-go.md` row 11; not researched). While you work alone, 3-storey jobs are declined.
 - **November snow:** the customer ticks it in the snow agreement. It runs only from the day you confirm the agreement is going ahead (by Nov 21) to Nov 30, and it is billed with the Dec 1 instalment, never before (snow agreement, "November snow" clause).

@@ -21,11 +21,11 @@
 
 | EN | KO |
 |---|---|
-| Gate 0 is done: you confirmed from your own IRCC documents that you may be self-employed (memo §2). | Gate 0 완료: 본인 IRCC 서류로 자영업이 가능한 신분인지 확인했어요. |
+| Gate 0 is done: you confirmed from your own IRCC documents that you may be self-employed (memo §2). | 관문 0 완료: 본인 IRCC 서류로 자영업이 가능한 신분인지 확인했어요. |
 | Door-to-door selling rules in your city (municipal soliciting bylaws) were **not researched**. Check the city website or call 311 before the first shift. | 시(市)의 방문판매 조례는 **조사되지 않았어요(확인 필요)**. 첫 방문 전에 시청 웹사이트나 311에서 확인하세요. |
 | Book work dates only **after** your liability insurance starts. No direct-client work before the policy is bound (memo §6, §7). | 작업 날짜는 배상책임보험 시작일 **이후**로만 잡으세요. 보험 가입 전에는 직접 고객 작업을 하지 않아요. |
 | You asked ServiceOntario whether your brand name must be registered, before printing it (not verified; file `02-컴플라이언스-체크리스트.md`). | 상호를 인쇄하기 전에 ServiceOntario에 상호 등록이 필요한지 확인했어요(확인 필요 항목, `02-컴플라이언스-체크리스트.md`). |
-| Bring: door hangers with this cluster's QR code, blank service agreements with the Ontario 10-day notice, the door log, a pen, your phone with `{SITE}` open. Print hangers and agreements from `{SITE}/print/` (English) after every ★ setting is filled in. Use Korean hangers (`{SITE}/ko/print/`) only for Korean-speaking homes. Customers always sign the English agreement; the Korean one is handed over as a reference copy (plan file 01, D2). The SAMPLE PDFs in `business/print/` are not for handing out. | 준비물: 이 구역 전용 QR이 있는 문고리 전단(도어행어), 온타리오 10일 취소 안내가 들어간 계약서, 방문 기록지, 펜, `{SITE}`를 열어 둔 휴대폰. 문고리 전단과 계약서는 ★ 설정을 모두 넣은 뒤 `{SITE}/print/`에서 영어판을 인쇄하세요. 한국어 전단(`{SITE}/ko/print/`)은 한국어를 쓰는 집에만 쓰고, 계약서는 항상 영문본에 서명받고 한국어본은 참고용으로 함께 드립니다(01 계획 D2). `business/print/`의 SAMPLE PDF는 배포용이 아니에요. |
+| Bring: door hangers with this cluster's QR code, blank service agreements with the Ontario 10-day notice, the door log, a pen, your phone with `{SITE}` open. Print hangers and agreements from `{SITE}/print/` (English) after every ★ setting is filled in. Use Korean hangers (`{SITE}/ko/print/`) only for Korean-speaking homes. Customers always sign the English agreement; the Korean one is handed over as a reference copy (plan file 01, D2). Gutter and snow agreements appear on the site, and can be printed, only once those services are switched on. The PDFs in `business/print/` are watermarked SAMPLES until your settings are filled in: never hand them out. | 준비물: 이 구역 전용 QR이 있는 문고리 전단(도어행어), 온타리오 10일 취소 안내가 들어간 서비스 계약서, 방문 기록지, 펜, `{SITE}`를 열어 둔 휴대폰. 문고리 전단과 서비스 계약서는 ★ 설정을 모두 넣은 뒤 `{SITE}/print/`에서 영어판을 인쇄하세요. 한국어 전단(`{SITE}/ko/print/`)은 한국어를 쓰는 집에만 쓰고, 계약서는 항상 영문본에 서명받고 한국어본은 참고용으로 함께 드립니다(01 계획 D2). 홈통 청소·제설 계약서는 해당 서비스를 켠 뒤에만 사이트에 올라가고 인쇄할 수 있어요. `business/print/`의 PDF는 설정을 채우기 전까지 워터마크가 찍힌 SAMPLE이라 절대 나눠 드리면 안 돼요. |
 | Daylight only; check today's sunset time (October sunset times were not researched). At most 40 doors on a day you also have a job. No knocking on Thanksgiving Monday, Oct 12 (memo §7). | 해가 있을 때만 방문하세요(10월 일몰 시간은 조사 안 됨, 매일 확인). 작업이 있는 날은 최대 40집. 추수감사절 월요일(10/12)에는 방문하지 않아요. |
 
 ---
@@ -39,7 +39,7 @@ Hi, sorry to bother you! I'm {NAME} with {BRAND}. I clean homes here in {AREA}: 
 
 **KO**
 ```say
-안녕하세요, 갑자기 찾아와서 죄송해요. 저는 {BRAND}의 {NAME}입니다. 여기 {AREA}에서 집 청소를 하고 있어요. 대청소, 입주·이사 청소, 정기 청소를 하는데, 가격은 작업 전에 미리 정해서 알려 드려요. 혹시 올가을에 대청소나 이사 청소 하실 계획 있으세요? 아니시면 안내지만 하나 드리고 갈게요.
+안녕하세요, 갑자기 찾아와서 죄송해요. 저는 {BRAND}의 {NAME}입니다. 여기 {AREA}에서 집 청소를 하고 있어요. 딥클린(대청소), 입주·이사 청소, 정기 청소를 하는데, 가격은 작업 전에 미리 정해서 알려 드려요. 혹시 올가을에 딥클린이나 입주·이사 청소 하실 계획 있으세요? 아니시면 안내지만 하나 드리고 갈게요.
 ```
 
 ## 1B. 20-second opener — Track B (gutters, snow) / 20초 첫인사 — 트랙 B(홈통, 제설)
@@ -48,18 +48,18 @@ Say the `[SNOW]` part only if snow is ON (Gate S passed: written snow insurance 
 - `[GUTTERS]`: after Gate G1 passes (gutters ON in config).
 - `[GUTTERS, before G1]`: until G1 is decided (final deadline Oct 9), and only if you are going for B2: you have a vehicle that carries the ladder and are comfortable on a ladder (intake Q3, Q6). G1 needs at least 5 dated gutter bookings before you buy the ladder (plan file 01 §2), so these bookings are how G1 can pass. Take them verbally only (at the door or by phone): no signed gutter agreement and no money before G1 passes. Log code **B** with "pre-G1", the date, and how they want to be contacted. If G1 fails, contact each of them that day (Oct 9 at the latest) to cancel.
 
-`[SNOW]`는 제설이 켜져 있을 때(Gate S 통과, 제설 보험 서면 확인)만 말하세요. 홈통 청소는 두 가지 버전이 있어요.
-- `[GUTTERS]`: G1 통과 후(설정에서 홈통 청소가 켜져 있을 때).
-- `[GUTTERS, G1 전]`: G1 결정 전까지(최종 마감 10/9), B2를 준비하는 경우에만 씁니다. 사다리를 실을 차가 있고 사다리 작업이 편해야 해요(인테이크 3번, 6번). G1은 사다리를 사기 전에 날짜가 잡힌 홈통 예약 5건 이상이 조건이라서(01 계획 2절), 이 예약을 받아야 G1을 통과할 수 있어요. 예약은 말로만(방문 중이나 전화로) 받고, G1 통과 전에는 홈통 계약서 서명이나 돈을 받지 않아요. 기록지에 **B**와 "G1 전", 날짜, 원하는 연락 방법을 적으세요. G1이 통과하지 못하면 그날(늦어도 10/9) 한 분 한 분께 연락해 취소하세요.
+`[SNOW]`는 제설이 켜져 있을 때(관문 S 통과, 제설 보험 서면 확인)만 말하세요. 홈통 청소는 두 가지 버전이 있어요.
+- `[GUTTERS]`: 관문 G1 통과 후(설정에서 홈통 청소가 켜져 있을 때).
+- `[GUTTERS, G1 전]`: 관문 G1 결정 전까지(최종 마감 10/9), B2를 준비하는 경우에만 씁니다. 사다리를 실을 차가 있고 사다리 작업이 편해야 해요(인테이크 3번, 6번). 관문 G1은 사다리를 사기 전에 날짜가 잡힌 홈통 청소 예약 5건 이상이 조건이라서(01 계획 2절), 이 예약을 받아야 G1을 통과할 수 있어요. 예약은 말로만(방문 중이나 전화로) 받고, G1 통과 전에는 홈통 청소 계약서 서명이나 돈을 받지 않아요. 기록지에 **B**와 "G1 전", 날짜, 원하는 연락 방법을 적으세요. G1을 통과하지 못하면 그날(늦어도 10/9) 한 분 한 분께 연락해 취소하세요.
 
 **EN**
 ```say
-Hi, sorry to bother you! I'm {NAME} with {BRAND}, here in {AREA}. I do house cleaning. [GUTTERS] This fall I also clean gutters by hand, once the leaves are down. [GUTTERS, before G1] I'm also taking gutter bookings for dates after mid-October, once the leaves are down. The date is confirmed only once my insurance and ladder are in place, by October 9. If not, I'll let you know and cancel, and you owe nothing. [SNOW] And I'm signing up homes on this street for snow clearing this winter. No payment for the season before December 1. Could any of that help you? If not, can I leave this with you?
+Hi, sorry to bother you! I'm {NAME} with {BRAND}, here in {AREA}. I do house cleaning. [GUTTERS] This fall I also clean gutters by hand, once the leaves are down. [GUTTERS, before G1] I'm also taking gutter bookings for dates after mid-October, once the leaves are down. The date is confirmed only once my insurance and ladder are in place, by October 9. If not, I'll let you know and cancel, and you owe nothing. [SNOW] And I'm signing up homes on this street for snow clearing this winter. Nothing is paid before December 1. Could any of that help you? If not, can I leave this with you?
 ```
 
 **KO**
 ```say
-안녕하세요, 갑자기 죄송해요. 저는 {AREA}에서 일하는 {BRAND}의 {NAME}입니다. 집 청소를 하고 있고요, [GUTTERS] 올가을에는 낙엽이 다 떨어진 뒤에 홈통(처마 물받이) 청소도 손으로 해 드려요. [GUTTERS, G1 전] 그리고 10월 중순 이후, 낙엽이 다 떨어진 뒤 날짜로 홈통(처마 물받이) 청소 예약도 받고 있어요. 제 보험과 사다리 준비가 10월 9일까지 끝나야 날짜가 확정되고, 안 되면 연락드려서 취소해요. 그 경우 내실 돈은 없어요. [SNOW] 그리고 이 거리 댁들을 대상으로 올겨울 제설 신청도 받고 있어요. 시즌 요금은 12월 1일 전에는 받지 않아요. 혹시 필요하신 게 있을까요? 아니시면 안내지만 드리고 갈게요.
+안녕하세요, 갑자기 죄송해요. 저는 {AREA}에서 일하는 {BRAND}의 {NAME}입니다. 집 청소를 하고 있고요, [GUTTERS] 올가을에는 낙엽이 다 떨어진 뒤에 홈통(처마 물받이) 청소도 손으로 해 드려요. [GUTTERS, G1 전] 그리고 10월 중순 이후, 낙엽이 다 떨어진 뒤 날짜로 홈통(처마 물받이) 청소 예약도 받고 있어요. 제 보험과 사다리 준비가 10월 9일까지 끝나야 날짜가 확정되고, 안 되면 연락드려서 취소해요. 그 경우 내실 돈은 없어요. [SNOW] 그리고 이 거리 댁들을 대상으로 올겨울 제설 신청도 받고 있어요. 12월 1일 전에는 돈을 받지 않아요. 혹시 필요하신 게 있을까요? 아니시면 안내지만 드리고 갈게요.
 ```
 
 ## 1C. If they're interested / 관심을 보이면
@@ -78,7 +78,7 @@ Text them only if they say yes; write down their number and "asked for estimate 
 
 ## 1D. If they ask about gutters / 홈통 청소를 물어보면
 
-After G1 passes (gutters ON) / G1 통과 후(홈통 청소 켜짐):
+After G1 passes (gutters ON) / 관문 G1 통과 후(홈통 청소 켜짐):
 
 **EN**
 ```say
@@ -90,7 +90,7 @@ I clean the gutters by hand, with a scoop, from a ladder. Gutters only: no windo
 사다리에 올라가서 홈통을 손과 스쿱으로 직접 청소해 드려요. 홈통만 하고, 창문 청소나 고압 세척은 하지 않아요. 댁은 {LOW}–{HIGH}이고, 작업이 끝난 뒤에 결제하시면 돼요. 그날 날씨 때문에 사다리 작업이 위험하면 날짜를 다시 잡아요.
 ```
 
-Before G1 (same conditions as `[GUTTERS, before G1]` in 1B). The site calculator hides gutters until they are ON, so take {LOW}–{HIGH} from the gutter row of the file 02 price card; 1–2 storeys only while you work alone (checklists/04). / G1 전(1B의 `[GUTTERS, G1 전]`과 같은 조건). 홈통 청소가 켜지기 전에는 사이트 계산기에 나오지 않으니, {LOW}–{HIGH}는 02번 파일 가격표의 홈통 줄에서 가져오세요. 혼자 일하는 동안은 1–2층만 받아요(checklists/04).
+Before G1 (same conditions as `[GUTTERS, before G1]` in 1B). The site calculator hides gutters until they are ON, so take {LOW}–{HIGH} from the gutter row of the file 02 price card; 1–2 storeys only while you work alone (checklists/04). / 관문 G1 전(1B의 `[GUTTERS, G1 전]`과 같은 조건). 홈통 청소가 켜지기 전에는 사이트 계산기에 나오지 않으니, {LOW}–{HIGH}는 02번 파일 가격표의 홈통 청소 줄에서 가져오세요. 혼자 일하는 동안은 1–2층만 받아요(checklists/04).
 
 **EN**
 ```say
@@ -106,15 +106,15 @@ Right now I'm taking bookings only. I clean gutters by hand, with a scoop, from 
 
 **EN**
 ```say
-It's a season contract, December 1 to March 31, for your driveway, with a shovel or a walk-behind snowblower. Snow never goes onto the road. The season is {LOW} to {HIGH}, paid in 4 monthly instalments, December 1 to March 1. No payment for the season before December 1. If it snows in November, each visit is {PER_VISIT}. The snow depth that starts a visit is in the agreement. The contract only goes ahead if enough neighbours sign by November 20. If not, it's cancelled and you owe nothing for the season.
+It's a season contract, December 1 to March 31, for your driveway, with a shovel or a walk-behind snowblower. Snow never goes onto the road. The season is {LOW} to {HIGH}, confirmed when I see the driveway, in 4 equal instalments: December 1, January 1, February 1, March 1. Nothing is paid before December 1. November snow is optional: if you tick it in the agreement, each snowfall that reaches the agreed depth, once your contract is confirmed, is {PER_VISIT} a visit, billed with the December 1 instalment. Contracts go ahead only if I sign my minimum number of snow contracts, all areas combined, by November 20. If not, the contract is void and you owe nothing.
 ```
 
 **KO**
 ```say
-시즌 계약이고 기간은 12월 1일부터 3월 31일까지예요. 진입로 눈을 삽이나 밀고 다니는 제설기로 치워 드리고, 눈을 도로로 밀어내는 일은 절대 없어요. 시즌 요금은 {LOW}–{HIGH}이고, 12월 1일부터 3월 1일까지 매달 한 번씩 4번 나눠 내시면 돼요. 12월 1일 전에는 시즌 요금을 받지 않아요. 11월에 눈이 오면 1회에 {PER_VISIT}이에요. 눈이 몇 cm 오면 출동하는지는 계약서에 적혀 있어요. 그리고 11월 20일까지 이웃 신청이 충분히 모여야 계약이 시작되고, 안 모이면 계약이 취소되고 시즌 요금은 내지 않으셔도 돼요.
+제설 시즌 계약이고 기간은 12월 1일부터 3월 31일까지예요. 진입로 눈을 삽이나 밀고 다니는 제설기로 치워 드리고, 눈을 도로로 밀어내는 일은 절대 없어요. 시즌 요금은 {LOW}–{HIGH}이고, 진입로를 보고 확정한 금액을 12월 1일, 1월 1일, 2월 1일, 3월 1일에 4번 똑같이 나눠 청구해요. 12월 1일 전에는 돈을 받지 않아요. 11월 눈은 선택 사항이에요. 계약서에서 선택하시면, 계약이 확정된 날부터 11월 30일까지 계약서에 적힌 출동 기준 이상 내린 눈을 1회 {PER_VISIT}에 치우고, 12월 1일 첫 분할금과 함께 청구해요. 11월 20일까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없어요.
 ```
 
-Bill November visits as the snow agreement says (build item 5). 11월 1회 요금의 청구 시점은 제설 계약서(빌드 항목 5)대로 하세요.
+Bill November visits with the December 1 first instalment, as the snow agreement says (build item 5); collect nothing before December 1. 11월 출동 요금은 제설 계약서(빌드 항목 5)대로 12월 1일 첫 분할금과 함께 청구하고, 12월 1일 전에는 아무것도 받지 마세요.
 
 ## 1F. When a job is signed at the door — Ontario 10-day line / 방문 계약 시 — 온타리오 10일 취소 안내
 
@@ -122,17 +122,17 @@ Say this every time a customer signs at their home in Ontario. 온타리오에�
 
 **EN**
 ```say
-Because we're signing this at your home, you can cancel within 10 days after you get your signed copy, for any reason. Just contact me using the details on your copy. If you've paid anything, I refund all of it within 15 days. It's written on your copy too.
+Because we're signing this at your home, you can cancel within 10 days after you receive your copy of the signed agreement, for any reason. Just contact me using the details on your copy. If you've paid anything, I refund all of it within 15 days after your cancellation notice. It's written on your copy too.
 ```
 
 **KO**
 ```say
-댁에서 계약하시는 거라서, 서명한 계약서 사본을 받으신 날부터 10일 안에는 이유 없이 취소하실 수 있어요. 사본에 있는 연락처로 알려 주시기만 하면 돼요. 이미 내신 돈이 있으면 15일 안에 전액 돌려드려요. 사본에도 똑같이 적혀 있어요.
+댁에서 계약하시는 거라서, 서명한 계약서 사본을 받으신 다음 날부터 10일 안에 이유와 관계없이 취소하실 수 있어요. 사본에 있는 연락처로 알려 주시기만 하면 돼요. 이미 내신 돈이 있으면 취소 통지를 받은 다음 날부터 15일 안에 전액 환불해 드려요. 사본에도 똑같이 적혀 있어요.
 ```
 
 | EN | KO |
 |---|---|
-| Hand over the signed copy on the spot. The 10 days start when the customer receives it; refund within 15 days of the cancellation ([ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract), search snippet, memo F32). | 서명한 사본은 그 자리에서 드리세요. 10일은 고객이 사본을 받은 날부터 계산하고, 환불은 취소 통지 후 15일 안에 해야 해요(메모 F32). |
+| Hand over the signed copy on the spot. The customer may cancel within 10 days after receiving it; refund within 15 days after the cancellation notice ([ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract), search snippet, memo F32). | 서명한 사본은 그 자리에서 드리세요. 고객은 계약서 사본을 받은 다음 날부터 10일 안에 취소할 수 있고, 환불은 취소 통지를 받은 다음 날부터 15일 안에 해야 해요(메모 F32, 검색 요약). |
 | Whether doing the work inside the 10 days changes this was **not researched**. Until Consumer Protection Ontario confirms, treat money for a door-signed job done within 10 days as refundable (memo §5.3), and offer dates after day 10 when you can. | 10일 안에 작업을 해 버린 경우 어떻게 되는지는 **조사되지 않았어요(확인 필요)**. 온타리오 소비자보호국(Consumer Protection Ontario)에 확인하기 전까지는, 10일 안에 한 방문 계약 작업의 돈은 환불될 수 있다고 보고, 가능하면 10일 이후로 날짜를 잡으세요. |
 | Ontario only (GTA, Ottawa). Other provinces were not researched for this; check before selling at the door there. | 온타리오(GTA, 오타와)만 해당해요. 다른 주는 조사되지 않았으니 방문 판매 전에 확인하세요. |
 
@@ -178,7 +178,7 @@ One row per attempt: date, time, street, house number, attempt #, outcome code, 
 | Leave right away if there's a loose dog, someone is upset, or you feel unsafe. Note it in the log. | 풀어 놓은 개가 있거나, 상대가 화를 내거나, 불안하면 바로 떠나고 기록에 남기세요. |
 | Tell someone your route and finish time. Keep your phone charged. | 누군가에게 방문 경로와 끝나는 시간을 알려 두세요. 휴대폰은 충전해 두세요. |
 | Say only what is true. Don't say "insured" until the policy is bound. No made-up reviews, customer numbers, awards, licences or "since 20XX". No promises about results or savings. | 사실만 말하세요. 보험 가입 전에는 '보험 있다'고 하지 마세요. 후기·고객 수·수상·면허·'20XX년부터' 같은 말을 지어내지 말고, 결과나 절약을 장담하지 마세요. |
-| No money for the snow season before December 1. Gutters are paid when the job is done. | 제설 시즌 요금은 12월 1일 전에 받지 않아요. 홈통 청소는 작업이 끝난 뒤에 받아요. |
+| No money for snow before December 1, including November visits. Gutters are paid when the job is done. | 제설 요금은 11월 출동분까지 포함해 12월 1일 전에 받지 않아요. 홈통 청소는 작업이 끝난 뒤에 받아요. |
 | Don't text or email anyone who didn't ask you to (CASL, memo F11). Phone: only call back people who asked; phone-outreach (DNCL) rules were not verified (memo §6). | 요청하지 않은 사람에게 문자·이메일을 보내지 마세요(CASL). 전화는 요청한 사람에게만 다시 거세요. 전화 영업(DNCL) 규정은 확인되지 않았어요. |
 
 **Sources / 출처:** decision memo §2, §5.3, §6, §7, §10 and F11, F32 (`business/research/decision-memo.md`). Door-knock response and close rates: not found (F45).

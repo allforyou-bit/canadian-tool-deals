@@ -76,7 +76,7 @@ Reply STOP to opt out.
 
 **KO**
 ```sms
-안녕하세요 {CUSTOMER}님, {BRAND} {NAME}입니다. {REFERRER_FULL_NAME}님이 소개해 주시면서 연락처를 알려 주셔서 연락드려요. 저는 {AREA}에서 대청소, 입주·이사 청소, 정기 청소를 하고 있어요. 가격이 궁금하시면 여기로 답장 주시거나 {SITE}에서 확인해 보세요. 필요 없으시면 다시 연락드리지 않을게요.
+안녕하세요 {CUSTOMER}님, {BRAND} {NAME}입니다. {REFERRER_FULL_NAME}님이 소개해 주시면서 연락처를 알려 주셔서 연락드려요. 저는 {AREA}에서 딥클린(대청소), 입주·이사 청소, 정기 청소를 하고 있어요. 가격이 궁금하시면 여기로 답장 주시거나 {SITE}에서 확인해 보세요. 필요 없으시면 다시 연락드리지 않을게요.
 {BRAND}, {MAILING_ADDRESS}, {PHONE}
 수신을 원치 않으시면 STOP이라고 답장해 주세요.
 ```
@@ -102,7 +102,7 @@ To stop getting emails from us, reply "unsubscribe".
 
 {CUSTOMER}님, 안녕하세요.
 
-{BRAND}의 {NAME}입니다. {REFERRER_FULL_NAME}님이 소개해 주시면서 이메일 주소를 알려 주셔서 연락드려요. 저는 {AREA}에서 대청소, 입주·이사 청소, 정기 청소를 하고 있고, 가격은 작업 전에 미리 정해서 알려 드려요.
+{BRAND}의 {NAME}입니다. {REFERRER_FULL_NAME}님이 소개해 주시면서 이메일 주소를 알려 주셔서 연락드려요. 저는 {AREA}에서 딥클린(대청소), 입주·이사 청소, 정기 청소를 하고 있고, 가격은 작업 전에 미리 정해서 알려 드려요.
 
 가격이 궁금하시면 답장 주시거나 {SITE}에서 바로 예상 금액을 확인해 보세요. 필요 없으시면 다시 연락드리지 않을게요.
 
@@ -117,7 +117,7 @@ To stop getting emails from us, reply "unsubscribe".
 
 | EN | KO |
 |---|---|
-| Pitch at the end of a first deep or move-in clean, in person. Use the text version only if you didn't get to ask **and** the consent rule in 5A allows it. | 첫 대청소·입주 청소가 끝날 때 직접 제안하세요. 직접 못 물어봤고 **5A의 문자 동의 규칙에도 맞을 때만** 문자를 쓰세요. |
+| Pitch at the end of a first deep or move-in clean, in person. Use the text version only if you didn't get to ask **and** the consent rule in 5A allows it. | 첫 딥클린이나 입주·이사 청소가 끝날 때 직접 제안하세요. 직접 못 물어봤고 **5A의 문자 동의 규칙에도 맞을 때만** 문자를 쓰세요. |
 | Price = the price book's **standard** clean for their home (GTA default, 2 bed: $180–$210; must match the live price book). `config/prices.ts` has no recurring discount, so don't offer one unless the owner adds it there first. | 가격은 가격표의 **일반 청소** 금액이에요(GTA 기본 침실 2개: $180–$210, 현재 가격표와 같아야 함). 가격표에 정기 할인이 없으니, 먼저 가격표에 넣기 전에는 할인을 약속하지 마세요. |
 | Skip, reschedule and cancel terms: say them exactly as your cleaning agreement states (memo §10, item 5). | 건너뛰기·일정 변경·해지 조건은 청소 계약서에 적힌 그대로 말하세요. |
 | No key custody in month 1: the client is home or uses a lockbox they control (memo §2). | 첫 달에는 열쇠를 맡지 않아요. 고객이 집에 있거나 고객이 관리하는 키박스를 써요. |
@@ -130,7 +130,7 @@ Thanks, {CUSTOMER}! Now that the deep clean is done, a regular clean keeps it th
 
 **KO (직접 말하기)**
 ```say
-감사합니다, {CUSTOMER}님! 이번에 대청소를 해 두셨으니 이제 정기적으로 관리하시면 이 상태를 유지하기 쉬워요. 2주에 한 번, 매번 같은 요일에 와서 일반 청소를 해 드릴 수 있어요. 댁은 1회에 {LOW}–{HIGH}이에요. 한번 해 보시겠어요? 원하시면 날짜를 잡아 둘게요.
+감사합니다, {CUSTOMER}님! 이번에 딥클린을 해 두셨으니 이제 정기적으로 관리하시면 이 상태를 유지하기 쉬워요. 2주에 한 번, 매번 같은 요일에 와서 일반 청소를 해 드릴 수 있어요. 댁은 1회에 {LOW}–{HIGH}이에요. 한번 해 보시겠어요? 원하시면 날짜를 잡아 둘게요.
 ```
 
 > **Send only with consent / 동의가 있을 때만:** the client ticked the site's marketing opt-in box, or asked you in person to text it (date and words logged). Otherwise don't text; our privacy notice and agreement promise no marketing messages without a separate opt-in. 고객이 사이트에서 마케팅 수신 동의란에 체크했거나, 직접 문자로 보내 달라고 하신 경우(날짜와 하신 말 기록)에만 보내세요. 그 밖에는 문자를 보내지 마세요. 개인정보 안내와 계약서에서 따로 동의한 분께만 마케팅 메시지를 보낸다고 약속했어요.

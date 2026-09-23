@@ -7,6 +7,8 @@ import { absolute, contactLinks, setupMissing, type Cluster } from '@/lib/site'
 // Print-ready sheets rendered at physical size. Open the page, then Print → "Letter", scale 100%,
 // margins "Default". Each door-hanger and flyer sheet fits inside the 7.7 × 10.2 in box that
 // app/globals.css (@page letter, margin 0.4in) leaves, so it prints on one page. `npm run pdf` saves them as PDFs.
+// The PDFs in business/print/ are SAMPLES with a watermark until the owner's settings are filled in;
+// real prints come from /print/ (or /ko/print/) on the deployed site.
 
 async function qrSvg(url: string): Promise<string> {
   return QRCode.toString(url, { type: 'svg', margin: 0, errorCorrectionLevel: 'M', color: { dark: '#111111', light: '#ffffff' } })
@@ -80,14 +82,14 @@ const TEXT = {
     visited: 'We stopped by on ______ at ______',
     language: '한국어 상담 가능 · Korean-speaking owner',
     ontario:
-      'Ontario: if you sign an agreement with us at your home, you may cancel within 10 days of receiving your copy. Any refund is due within 15 days.',
+      'Ontario: if you sign an agreement with us at your home, you may cancel within 10 days after you receive a copy of the signed agreement. We refund within 15 days after we receive your cancellation notice.',
     snowFine: (perVisit: string) =>
-      `Snow: season Dec 1 – Mar 31. Void, with nothing owed, if we have not signed our minimum number of snow contracts by Nov 20. Snow is never pushed onto the road. November snow (optional, once your contract is confirmed): ${perVisit} per visit, billed Dec 1.`,
+      `Snow: season Dec 1 – Mar 31. Void, with nothing owed, if we have not signed our minimum number of snow contracts (all areas combined) by Nov 20. Snow is never pushed onto the road. November snow (only if ticked in your contract; from confirmation to Nov 30): ${perVisit} per visit, billed with the Dec 1 instalment.`,
     guttersFine: 'Gutters: no windows, no pressure washing.',
   },
   ko: {
     headline: '청소 가격, 먼저 알려드립니다',
-    sub: '동네에서 대표가 직접 운영합니다. 온라인에서 바로 예상 가격을 확인하실 수 있습니다.',
+    sub: '가까운 동네 업체로, 대표가 직접 운영합니다. 온라인에서 바로 예상 가격을 확인하실 수 있습니다.',
     missed: '방문했지만 안 계셔서 남기고 갑니다!',
     scan: 'QR을 찍으면 바로 견적',
     or: '또는 전화·문자',
@@ -97,9 +99,9 @@ const TEXT = {
     visited: '______월 ______일 ______시에 방문했습니다',
     language: '한국어로 편하게 상담하세요',
     ontario:
-      '온타리오주: 댁에서 저희와 계약서에 서명하신 경우, 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있고, 취소 통지를 받은 다음 날부터 15일 안에 환불해 드립니다.',
+      '온타리오주: 댁에서 저희와 계약서에 서명하신 경우, 계약서 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있고, 취소 통지를 받은 다음 날부터 15일 안에 환불해 드립니다.',
     snowFine: (perVisit: string) =>
-      `제설: 시즌은 12월 1일 – 3월 31일입니다. 11월 20일까지 전체 제설 계약이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다. 눈은 도로로 밀어내지 않습니다. 11월 눈(선택, 계약 확정 후): 1회 ${perVisit}, 12월 1일에 청구.`,
+      `제설: 시즌은 12월 1일 – 3월 31일입니다. 11월 20일까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다. 눈은 도로로 밀어내지 않습니다. 11월 눈(계약서에서 선택한 경우에만, 계약 확정 후 11월 30일까지): 1회 ${perVisit}, 12월 1일 첫 분할금과 함께 청구.`,
     guttersFine: '홈통: 창문 청소와 고압 세척은 하지 않습니다.',
   },
 }
@@ -132,10 +134,12 @@ function Contact({ lang }: { lang: Lang }) {
 
 /**
  * Fine print for door hangers and flyers (business/marketing/05-door-hanger-and-flyer-text.md, 3.6).
- * - Ontario: cancel a home-signed agreement within 10 days of receiving the copy, refund within
- *   15 days (memo F32, https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract, snippet).
- * - Snow: season Dec 1 – Mar 31, void unless the Nov 20 minimum is signed, never onto the road,
- *   November visits only after confirmation and billed Dec 1 (memo sections 0 and 3; content/agreements.ts).
+ * - Ontario: cancel a home-signed agreement within 10 days after receiving a copy of the signed
+ *   agreement, refund within 15 days after the cancellation notice (memo F32,
+ *   https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract, snippet). Not legal advice.
+ * - Snow: season Dec 1 – Mar 31, void unless the Nov 20 minimum (all snow contracts, all areas
+ *   combined) is signed, never onto the road, November visits only if ticked in the contract, from
+ *   confirmation to Nov 30, billed with the Dec 1 instalment (memo sections 0 and 3; content/agreements.ts).
  * - Gutters: gutters only, no windows or pressure washing (memo section 2 Track B).
  */
 function fineLines(lang: Lang): string[] {
@@ -255,9 +259,9 @@ function snowBillingLine(lang: Lang, n: number): string {
   const d = SNOW_BILL_DATES[lang]
   const listed = n >= 1 && n <= d.length
   if (lang === 'ko') {
-    return `${listed ? `${d.slice(0, n).join('·')} ${n}회 분할 청구` : `12월 1일부터 매달 ${n}회 분할 청구`}. 12월 1일 전에는 결제 없음. 11월 20일까지 전체 제설 계약이 최소 건수에 못 미치면 계약 무효, 비용 없음.`
+    return `${listed ? `현장에서 확정한 시즌 요금을 ${n}회로 나눠 ${d.slice(0, n).join('·')}에 청구합니다` : `현장에서 확정한 시즌 요금을 12월 1일부터 매달 ${n}회로 나눠 청구합니다`}. 12월 1일 전에는 결제하지 않습니다. 11월 방문은 계약서에서 선택한 경우에만 하며 12월 1일 첫 분할금과 함께 청구합니다. 11월 20일까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다.`
   }
-  return `${listed ? `Billed in ${n} instalments: ${d.slice(0, n).join(', ')}` : `Billed in ${n} monthly instalments, starting Dec 1`}. Nothing is charged before Dec 1. If we have not signed our minimum number of snow contracts (all areas combined) by Nov 20, the contract is void and nothing is owed.`
+  return `${listed ? `Billed in ${n} instalments (season price confirmed on site ÷ ${n}): ${d.slice(0, n).join(', ')}` : `Billed in ${n} monthly instalments starting Dec 1 (season price confirmed on site ÷ ${n})`}. Nothing is charged before Dec 1. November visits, only if ticked in the contract, are billed with the Dec 1 instalment. If we have not signed our minimum number of snow contracts (all areas combined) by Nov 20, the contract is void and nothing is owed.`
 }
 
 export function PriceSheet({ lang }: { lang: Lang }) {
@@ -265,7 +269,7 @@ export function PriceSheet({ lang }: { lang: Lang }) {
   const c = b.cleaning
   const ko = lang === 'ko'
   const H = ko
-    ? { title: '가격표', cleaning: '청소(정액)', beds: '침실', baths: '포함 욕실', extra: '추가 욕실 1개당', addons: '추가 항목', rush: '24시간 내·주말·공휴일', gutters: '홈통 청소', storeys: ['단층', '2층', '3층'], downspout: '배수관 청소', snow: '제설', perVisit: '11월(시즌 전) 1회', walk: '현관 보도·계단', salt: '제빙 살포' }
+    ? { title: '가격표', cleaning: '청소(정액)', beds: '침실', baths: '포함 욕실', extra: '추가 욕실 1개당', addons: '추가 항목', rush: '24시간 내·주말·공휴일', gutters: '홈통 청소', storeys: ['단층', '2층', '3층'], downspout: '배수관(다운스파우트) 청소', snow: '제설', perVisit: '11월(시즌 전) 1회', walk: '현관 보도·계단', salt: '제빙 살포' }
     : { title: 'Price list', cleaning: 'Cleaning (flat rate)', beds: 'Bedrooms', baths: 'Baths incl.', extra: 'Each extra bathroom', addons: 'Add-ons', rush: 'Within 24 h / weekend / holiday', gutters: 'Gutter cleaning', storeys: ['Bungalow', '2 storeys', '3 storeys'], downspout: 'Downspout flush', snow: 'Snow clearing', perVisit: 'November visit (before season)', walk: 'Walkway & steps', salt: 'Salting' }
   const unit = b.snow?.mode === 'monthly' ? (ko ? '/월' : '/month') : ko ? '/시즌' : '/season'
   return (

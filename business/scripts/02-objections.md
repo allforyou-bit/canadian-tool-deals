@@ -21,8 +21,8 @@
 | Deep / 딥클린(대청소) | $230–$265 | $270–$315 | $320–$370 | $370–$430 |
 | Move-in/out / 입주·이사 청소 | $260–$300 | $300–$345 | $360–$415 | $420–$485 |
 
-Extras change the range; run the calculator: extra bathroom $30, inside oven $40, inside fridge $35, inside empty cabinets $40, within 24 h / weekend / holiday +15%. Track B, only when ON: gutters 1 storey $175–$205, 2 storeys $225–$260, 3 storeys $300–$345 (quote 3 storeys only if `NEXT_PUBLIC_GUTTER_MAX_STOREYS`=3, a second person is present and the broker has confirmed cover; otherwise decline, checklists/04 row 11), downspout flush +$70; snow, single driveway $500–$575 per season in 4 instalments; November visit $60.
-추가 항목이 있으면 금액이 바뀌니 계산기를 쓰세요: 추가 욕실 1개당 $30, 오븐 내부 $40, 냉장고 내부 $35, 빈 수납장 내부 $40, 24시간 이내·주말·공휴일 +15%. 트랙 B(켜져 있을 때만): 홈통 청소 단층 $175–$205, 2층 $225–$260, 3층 $300–$345(3층은 `NEXT_PUBLIC_GUTTER_MAX_STOREYS`=3이고 두 번째 사람이 함께 있으며 브로커가 보험 적용을 확인했을 때만. 아니면 거절, checklists/04 11번), 배수관(다운스파우트) 물 세척 +$70. 제설은 1열 진입로 시즌 $500–$575(4회 분할), 11월 1회 $60.
+Extras change the range; run the calculator: extra bathroom $30, inside oven $40, inside fridge $35, inside empty cabinets $40, within 24 h / weekend / holiday +15%. Track B, only when ON: gutters 1 storey $175–$205, 2 storeys $225–$260, downspout flush +$70. 3 storeys are declined by default (`NEXT_PUBLIC_GUTTER_MAX_STOREYS`=2); quote $300–$345 only if it is set to 3, a second person is present and the broker has confirmed cover (checklists/04 row 11). Snow: single driveway $500–$575 per season, confirmed on site and billed in 4 equal instalments (Dec 1, Jan 1, Feb 1, Mar 1); optional November visit $60, billed with the Dec 1 instalment.
+추가 항목이 있으면 금액이 바뀌니 계산기를 쓰세요: 추가 욕실 1개당 $30, 오븐 내부 $40, 냉장고 내부 $35, 빈 수납장 내부 $40, 24시간 이내·주말·공휴일 +15%. 트랙 B(켜져 있을 때만): 홈통 청소 단층 $175–$205, 2층 $225–$260, 배수관(다운스파우트) 청소 +$70. 3층은 기본적으로 거절해요(`NEXT_PUBLIC_GUTTER_MAX_STOREYS`=2). 이 값을 3으로 바꾸고, 두 번째 사람이 함께 있으며, 브로커가 보험 적용을 확인했을 때만 $300–$345로 견적을 내세요(checklists/04 11번). 제설은 1열 진입로(차 1–2대) 시즌 $500–$575이고, 현장에서 확정한 금액을 12월 1일, 1월 1일, 2월 1일, 3월 1일에 4번 똑같이 나눠 청구해요. 11월 1회 $60은 선택 사항이고 12월 1일 첫 분할금과 함께 청구해요.
 
 ---
 
@@ -35,7 +35,7 @@ I understand. It's a flat price, so you know the total before I start, with no h
 
 **KO**
 ```say
-네, 이해해요. 정해진 가격이라 작업 전에 총액을 먼저 아시고, 시간이 늘어나서 돈이 더 나오는 일은 없어요. 댁은 {LOW}–{HIGH} 정도이고, 집을 본 뒤 작업 전에 확정해 드려요. 부담되시면 대청소 대신 일반 청소로 하시거나 추가 항목을 빼셔도 돼요. 다른 곳과 비교해 보셔도 괜찮아요. 안내지 드릴 테니 천천히 생각해 보세요.
+네, 이해해요. 정해진 가격이라 작업 전에 총액을 먼저 아시고, 시간이 늘어나서 돈이 더 나오는 일은 없어요. 댁은 {LOW}–{HIGH} 정도이고, 집을 본 뒤 작업 전에 확정해 드려요. 부담되시면 딥클린 대신 일반 청소로 하시거나 추가 항목을 빼셔도 돼요. 다른 곳과 비교해 보셔도 괜찮아요. 안내지 드릴 테니 천천히 생각해 보세요.
 ```
 
 | EN | KO |
@@ -91,13 +91,13 @@ No, I'm not bonded. That's why I don't hold keys.
 **EN**
 ```say
 No problem. When would suit you better: before a move, before the holidays, or in the spring? I can note it and come back then, or you can text me any time at {PHONE}. The card has a QR code that gives you an instant price.
-[SNOW, if ON] For snow, if you sign now, no payment for the season is due before December 1, and the contract is cancelled if not enough neighbours sign by November 20.
+[SNOW, if ON] For snow, if you sign now, nothing is paid before December 1. Contracts go ahead only if I sign my minimum number of snow contracts, all areas combined, by November 20. If not, the contract is void and you owe nothing.
 ```
 
 **KO**
 ```say
 괜찮아요. 언제가 더 좋으실까요? 이사 전이나 연말 전, 아니면 봄? 적어 두었다가 그때 다시 들를게요. 아니면 언제든 {PHONE}으로 문자 주세요. 안내지 QR코드를 찍으면 바로 가격을 보실 수 있어요.
-[SNOW, 제설 운영 시] 제설은 지금 신청하셔도 시즌 요금은 12월 1일 전에는 나가지 않고, 11월 20일까지 이웃 신청이 충분하지 않으면 계약은 취소돼요.
+[SNOW, 제설 운영 시] 제설은 지금 신청하셔도 12월 1일 전에는 돈이 나가지 않아요. 11월 20일까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없어요.
 ```
 
 If they name a time, log **CB** with that date and come back only then. Don't text them unless they asked. 고객이 시간을 정하면 **CB**로 날짜를 적고 그때만 다시 가세요. 요청이 없으면 문자하지 마세요.
@@ -111,7 +111,7 @@ That's great. If you're happy with them, keep them! If you ever need a one-time 
 
 **KO**
 ```say
-잘됐네요. 만족하시면 계속 쓰시는 게 좋죠! 혹시 한 번 대청소나 이사 청소가 필요하시거나, 그분이 못 오실 때 연락 주세요. 가까이 있어요. 안내지 하나 드려도 될까요?
+잘됐네요. 만족하시면 계속 쓰시는 게 좋죠! 혹시 한 번 딥클린이나 입주·이사 청소가 필요하시거나, 그분이 못 오실 때 연락 주세요. 가까이 있어요. 안내지 하나 드려도 될까요?
 ```
 
 Never criticise their cleaner or ask what they pay. Log **NI** (or **CB** if they ask you to come back). 지금 쓰는 분을 흉보거나 얼마 내는지 묻지 마세요.
@@ -132,6 +132,6 @@ Sure! Would a text or an email be better for you? I'll send the price range and 
 |---|---|
 | Write down the number or email, that they asked for information, and the date: this is your consent evidence (CASL s.13). Log **Q**. | 번호나 이메일, 정보 요청을 받았다는 사실, 날짜를 적으세요. 동의 증거가 돼요(CASL s.13). **Q**로 기록하세요. |
 | Send the file 03 reply the same day, with the CASL ID and opt-out lines. Follow-ups: file 04 only. | 당일 03번 템플릿(발신자 정보·수신거부 문구 포함)으로 보내고, 후속 연락은 04번 규칙만 따르세요. |
-| If they won't give contact details, just leave the hanger. | 연락처를 주지 않으면 도어행어만 드리고 끝내세요. |
+| If they won't give contact details, just leave the hanger. | 연락처를 주지 않으면 문고리 전단만 드리고 끝내세요. |
 
 **Sources / 출처:** `config/prices.ts`, `lib/quote.ts`; decision memo §2, §6, §7, §8, §10 and F11. Insurance status is set by `business.insured` in `config/business.ts`.

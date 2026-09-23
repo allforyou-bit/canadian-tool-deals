@@ -42,7 +42,10 @@ const en = {
     // so it is shown as "from", never as the exact amount.
     snowSchedule: (n: number, each: string) =>
       `Billed in ${n} monthly instalments on Dec 1, Jan 1, Feb 1 and Mar 1, from ${each} each (season price confirmed on site ÷ ${n}). Nothing is charged before Dec 1.`,
-    snowPerVisit: (p: string) => `Snow before the season starts (in November): ${p} per visit, only if you ask for it.`,
+    // November snow: only if ticked in the contract, snowfalls at or above the trigger depth from contract
+    // confirmation to Nov 30, billed with the Dec 1 instalment (content/agreements.ts "November snow").
+    snowPerVisit: (p: string) =>
+      `November snow (optional): ${p} per visit, only if you tick that option in your contract, for snowfalls at or above the trigger depth from contract confirmation to Nov 30. Billed with the Dec 1 instalment; nothing is charged before Dec 1.`,
     // Minimum counted over all snow contracts, not per neighbourhood (content/agreements.ts
     // "Minimum-contract condition"; memo section 0 item 2 "break-even number of contracts").
     snowVoid: (date: string) =>
@@ -118,9 +121,10 @@ const ko: Dict = {
     plusTax: '+',
     snowSchedule: (n: number, each: string) =>
       `12월 1일, 1월 1일, 2월 1일, 3월 1일, 모두 ${n}번에 나눠 청구해요. 1회 금액은 ${each}부터예요(현장에서 확정한 시즌 요금 ÷ ${n}). 12월 1일 전에는 한 푼도 받지 않아요.`,
-    snowPerVisit: (p: string) => `시즌 시작 전(11월) 눈: 요청하실 때만 1회 ${p}.`,
+    snowPerVisit: (p: string) =>
+      `11월 눈(선택): 계약서에서 이 옵션을 선택하신 경우에만, 계약이 확정된 날부터 11월 30일까지 출동 기준 적설량 이상 내린 눈을 1회 ${p}에 치워 드려요. 12월 1일 첫 분할금과 함께 청구하고, 그 전에는 받지 않아요.`,
     snowVoid: (date: string) =>
-      `시즌 계약은 ${date}까지 전체 제설 계약이 최소 건수 이상 모여야 진행돼요. 모이지 않으면 계약은 무효가 되고 내실 돈은 없어요.`,
+      `시즌 계약은 ${date}까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르러야 진행돼요. 이르지 않으면 계약은 무효이고 내실 돈은 없어요.`,
     snowRoad: '치운 눈을 도로나 인도로 밀어내지 않아요. 위험하고, 도로에 눈을 밀어내면 벌금이 부과될 수 있어요.',
     perMonth: '/월',
     season: '시즌',

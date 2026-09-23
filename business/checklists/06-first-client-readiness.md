@@ -19,13 +19,13 @@ Labels (표시): **ASSUMPTION/가정**, **NOT VERIFIED/확인 필요**, **GENERA
 - [ ] **Cleaning CGL bound**: policy document and certificate saved as PDF on your phone and in your own backup. "Can start at $500" is a snippet with uncertain attribution (memo F23); your real premium is the written quote (**청소용 CGL 가입 완료**: 증권과 가입증명서 PDF를 휴대폰과 개인 백업에 저장. "$500부터"는 출처가 불확실한 검색 요약이며 실제 보험료는 서면 견적 기준)
 - [ ] You asked the broker about damage, theft allegations and key exclusions, and wrote down the answers (memo §6) (파손, 도난 의심, 열쇠 관련 면책을 브로커에게 묻고 답을 적어 둠)
 - [ ] `NEXT_PUBLIC_INSURED` set to true **only now**, after binding, so the site's "Insured" line is true (`config/business.ts`) (가입한 **지금에서야** `NEXT_PUBLIC_INSURED`를 true로. 그래야 사이트의 "보험 가입" 문구가 사실이 됩니다)
-- [ ] Track B only: gutters need the broker's **written** ladder/eavestrough confirmation (G1); snow needs **written** snow cover including slip-and-fall before any contract (Gate S) (memo §6) (트랙 B만: 거터는 사다리 작업 서면 확인, 제설은 계약 전 미끄러짐 포함 서면 보험)
+- [ ] Track B only: gutters need the broker's **written** ladder/eavestrough confirmation (G1); snow needs **written** snow cover including slip-and-fall before any contract (Gate S) (memo §6) (트랙 B만: 홈통(처마 물받이) 청소는 사다리 작업 서면 확인(관문 G1), 제설은 계약 전 미끄러짐 포함 서면 보험(관문 S))
 - [ ] You know there is no income cover if you are injured; WSIB for an independent operator was **not researched** (memo §6) (다쳤을 때 소득 보장이 없다는 점을 알고 있음. 자영업자 WSIB는 확인 필요)
 
 ## 3. Paperwork (서류)
 
-- [ ] Service agreement printed, **2 copies per job** (one for the client). Cleaning version covers scope, lockout fee, damage claims within 24 h with photos, cancellation, photo-consent opt-in and no key custody (memo §10, item 5). Marked "not legal advice" (서비스 계약서 **작업당 2부** 인쇄. 법률 자문 아님 표시)
-- [ ] **Ontario, signed at the client's home:** the agreement states the right to cancel within **10 days** of receiving the signed copy, with a refund within **15 days** ([ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract), memo F32). The effect of doing the job inside those 10 days is **not researched**: until you confirm with Consumer Protection Ontario, treat that money as refundable (memo §5.3, §6) (**온타리오, 고객 집에서 서명:** 서명본을 받은 날부터 **10일** 안에 취소 가능, **15일** 안에 환불. 10일 안에 작업한 경우의 효과는 확인 필요. 소비자보호원에 확인하기 전까지는 환불될 수 있는 돈으로 봅니다)
+- [ ] Service agreement printed, **2 copies per job** (one for the client). Cleaning version covers scope, lockout fee, damage claims within 24 h with photos, cancellation, photo-consent opt-in and no key custody (memo §10, item 5). Marked "not legal advice". Print it from `/print/` (or `/ko/print/`) on your deployed site after your settings are filled in; the PDFs in `business/print/` are watermarked samples. The gutter and snow agreements appear there only when those services are switched on (서비스 계약서 **작업당 2부** 인쇄. 법률 자문 아님 표시. 설정을 모두 넣고 배포한 사이트의 `/print/`(한국어는 `/ko/print/`)에서 인쇄합니다. `business/print/`의 PDF는 워터마크가 찍힌 샘플입니다. 홈통 청소·제설 계약서는 그 서비스를 켰을 때만 나옵니다)
+- [ ] **Ontario, signed at the client's home:** the agreement states that the client can cancel within **10 days** after receiving a copy of the signed agreement, and is refunded within **15 days** after the cancellation notice ([ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract), memo F32, snippet). The effect of doing the job inside those 10 days is **not researched**: until you confirm with Consumer Protection Ontario, treat that money as refundable (memo §5.3, §6) (**온타리오, 고객 집에서 서명:** 계약서에 "계약서 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있고, 취소 통지를 받은 다음 날부터 15일 안에 환불해 드립니다."라는 안내가 들어 있음(검색 요약). 10일 안에 작업한 경우의 효과는 확인 필요. 소비자보호원에 확인하기 전까지는 환불될 수 있는 돈으로 봅니다)
 - [ ] Separate photo-permission slip printed (`03-photo-protocol.md`, section 5) (별도 사진 사용 동의서 인쇄)
 - [ ] Numbered receipt or invoice template ready; no HST line while unregistered (memo §10, item 16) (번호 매긴 영수증·청구서 양식. 미등록 상태에서는 HST 줄 없음)
 - [ ] The written quote shows a **range labelled "estimate, confirmed on site"** from the calculator, and it matches `config/prices.ts` (memo §10, item 3) (견적은 계산기의 **"추정, 현장에서 확정"** 범위이며 가격표와 일치)
@@ -35,7 +35,7 @@ Labels (표시): **ASSUMPTION/가정**, **NOT VERIFIED/확인 필요**, **GENERA
 - [ ] e-Transfer set up on your bank account. Limits are set per bank, typically $2,000–3,000; an Oakville contractor had a payment delayed by a limit. **Split large payments** (memo F36) (e-Transfer 설정. 한도는 은행마다 다르며 보통 $2,000–3,000. **큰 금액은 나눠 받기**)
 - [ ] Card (optional): Stripe Canada is 2.9% + C$0.30 per charge (memo F37, secondary source). Add the fee to your records (카드 결제(선택): Stripe 수수료 2.9% + C$0.30(2차 출처))
 - [ ] Cash: always give a numbered receipt and log it the same day (현금: 항상 번호 매긴 영수증을 주고 당일 기록)
-- [ ] Payment is due **on completion** for cleaning and gutters. Snow: **nothing before Dec 1** (memo §2) (청소·거터는 **작업 완료 시** 결제. 제설은 **12/1 전에 받지 않음**)
+- [ ] Payment is due **on completion** for cleaning and gutters. Snow: **nothing before Dec 1** (memo §2) (청소·홈통 청소는 **작업 완료 시** 결제. 제설은 **12/1 전에 받지 않음**)
 - [ ] CRM payments tab ready; every payment gets a line (CRM 결제 탭 준비, 모든 결제를 한 줄씩)
 
 ## 5. Phone and messages (전화와 메시지)

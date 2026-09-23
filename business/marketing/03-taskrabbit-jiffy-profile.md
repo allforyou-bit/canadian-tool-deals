@@ -6,7 +6,7 @@ The owner creates the accounts, pays the fee and pastes the text. The AI cannot 
 
 > **사장님께 (한국어 요약)**
 > - TaskRabbit과 Jiffy는 주 사업과 함께 처음부터 돌려 두는 **보조 수입원(안전망)**입니다. 주 사업이 아닙니다. 승인까지 얼마나 걸리는지, 신규 태스커에게 일이 얼마나 들어오는지는 **조사되지 않았습니다.** 승인이 아예 안 날 수도 있습니다(memo F21).
-> - 1일차(9/28 월)에 두 곳 모두 신청하세요. 그 전에 **Gate 0**(본인이 캐나다에서 자영업을 할 수 있는 체류 신분인지)을 IRCC 서류로 먼저 확인해야 합니다.
+> - 1일차(9/28 월)에 두 곳 모두 신청하세요. 그 전에 **관문 0**(본인이 캐나다에서 자영업을 할 수 있는 체류 신분인지)을 IRCC 서류로 먼저 확인해야 합니다.
 > - 플랫폼에 보이는 "시간당 $35부터" 같은 금액은 **고객에게 보여 주는 최저 광고 가격**입니다. 실제로 손에 들어오는 돈이 아닙니다(memo F19–F22).
 > - 영어 소개글은 아래 3번에 있습니다. 소개글마다 한국어 설명을 붙였으니, 뜻을 확인한 뒤 붙여 넣으세요.
 > - **사실이 아닌 말은 쓰지 마세요.** 경력 연수, 후기, 자격증, 보험 같은 내용이 해당합니다. 경력 문장은 실제 경험이 있을 때만 한 줄 넣습니다.
@@ -102,7 +102,7 @@ I arrive on time, message you when I'm on the way, and clean up before I leave.
 Languages: {LANGUAGES}
 ```
 
-> **한국어 설명:** "안녕하세요, {FIRST_NAME}입니다. {AREA}에서 집 청소, 가구 조립, TV 벽걸이 설치를 합니다. 청소는 일반·대청소·이사 청소를 체크리스트대로 방마다 합니다. 가구 조립은 침대, 책상, 서랍장, 선반 같은 조립식 가구를 제 공구로 합니다. TV는 고객님 브래킷에 달고 선은 벽 겉으로 정리합니다. 전기 작업이나 벽 속 배선은 하지 않습니다. 시간 약속을 지키고, 출발할 때 메시지를 드리고, 끝나면 정리하고 갑니다." 세 가지 기술을 모두 등록할 때 쓰는 기본 소개글입니다. `{SUPPLIES_LINE}`은 청소 도구를 직접 가져가는지에 맞춰 한 문장만 고르세요.
+> **한국어 설명:** "안녕하세요, {FIRST_NAME}입니다. {AREA}에서 집 청소, 가구 조립, TV 벽걸이 설치를 합니다. 청소는 일반 청소, 딥클린(대청소), 입주·이사 청소를 체크리스트대로 방마다 합니다. 가구 조립은 침대, 책상, 서랍장, 선반 같은 조립식 가구를 제 공구로 합니다. TV는 고객님 브래킷에 달고 선은 벽 겉으로 정리합니다. 전기 작업이나 벽 속 배선은 하지 않습니다. 시간 약속을 지키고, 출발할 때 메시지를 드리고, 끝나면 정리하고 갑니다." 세 가지 기술을 모두 등록할 때 쓰는 기본 소개글입니다. `{SUPPLIES_LINE}`은 청소 도구를 직접 가져가는지에 맞춰 한 문장만 고르세요.
 
 ### 4.2 TaskRabbit bio, cleaning first
 
@@ -116,7 +116,7 @@ I don't hold keys: please be home, or leave access the way you normally do for v
 Languages: {LANGUAGES}
 ```
 
-> **한국어 설명:** "{AREA}에서 집과 콘도 청소를 합니다. 일반 청소, 대청소, 이사·입주 청소를 합니다. 방마다 체크리스트대로 해서 빠뜨리는 곳이 없게 합니다. 주방, 욕실, 바닥처럼 먼저 원하시는 곳을 말씀해 주시면 거기부터 시작합니다. 열쇠는 맡지 않으니 댁에 계시거나 평소 방문객 출입 방식대로 준비해 주세요." 청소 카테고리 위주로 일을 받고 싶을 때 씁니다. "열쇠를 맡지 않는다"는 첫 달 규칙(memo section 2: no key custody in month 1)을 반영한 것입니다.
+> **한국어 설명:** "{AREA}에서 집과 콘도 청소를 합니다. 일반 청소, 딥클린, 입주·이사 청소를 합니다. 방마다 체크리스트대로 해서 빠뜨리는 곳이 없게 합니다. 주방, 욕실, 바닥처럼 먼저 원하시는 곳을 말씀해 주시면 거기부터 시작합니다. 열쇠는 맡지 않으니 댁에 계시거나 평소 방문객 출입 방식대로 준비해 주세요." 청소 카테고리 위주로 일을 받고 싶을 때 씁니다. "열쇠를 맡지 않는다"는 첫 달 규칙(memo section 2: no key custody in month 1)을 반영한 것입니다.
 
 ### 4.3 TaskRabbit bio, assembly and TV mounting first
 
@@ -166,7 +166,7 @@ I arrive on time and message you when I'm on the way.
 Languages: {LANGUAGES}
 ```
 
-> **한국어 설명:** TaskRabbit 기본 소개글을 조금 줄인 것입니다. "청소는 체크리스트대로, 가구 조립은 공구 지참, TV는 브래킷 설치와 벽 겉 선 정리. 전기·배관·가스 작업은 안 함. 시간 약속을 지키고 출발할 때 연락드림"이라는 뜻입니다. Jiffy는 수수료가 12–30% 사이 어디인지 확인되지 않았습니다. 가입할 때 화면에 나오는 약관에서 수수료를 꼭 확인하고 적어 두세요.
+> **한국어 설명:** TaskRabbit 기본 소개글을 조금 줄인 것입니다. "청소는 체크리스트대로, 가구 조립은 공구 지참, TV는 브래킷 설치와 벽 겉 선 정리. 전기·배관·가스 작업은 안 함. 시간 약속을 지키고 출발할 때 연락드림"이라는 뜻입니다. Jiffy는 수수료가 12–30% 사이 어디인지 확인되지 않았습니다. 가입할 때 화면에 나오는 플랫폼 이용 조건(Terms)에서 수수료를 꼭 확인하고 적어 두세요.
 
 ---
 
@@ -188,7 +188,7 @@ The platforms' photo rules were **not researched.** Follow the instructions on s
 
 ### Day 1, Mon Sep 28
 - [ ] **Gate 0:** confirm from your own IRCC documents that you may be self-employed in Canada. If not, stop (memo section 2).
-- [ ] Open the TaskRabbit **fee** and **requirements** pages yourself (links in section 1). Confirm the $25 fee and the requirements on the live page.
+- [ ] Open the TaskRabbit **fee** and **requirements** pages yourself (links in section 1). Confirm the $25 fee (a search-snippet figure, memo F21) and the requirements on the live page.
 - [ ] Have ready: SIN, government photo ID, a Canadian **chequing** account, a credit/debit card, a phone number and an email address.
 - [ ] Apply to **TaskRabbit** with three categories (cleaning, furniture assembly, TV mounting), and pay the $25.
 - [ ] Apply to **Jiffy** as a pro. Before accepting, read the commission terms on screen and write the rate down.

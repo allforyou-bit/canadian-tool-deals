@@ -11,7 +11,7 @@
 | `{BRAND}` | Business name in the message's language (config `business.brand`) | 메시지 언어의 상호 |
 | `{NAME}` | Your first name | 사장님 이름 |
 | `{CUSTOMER}` | The customer's name | 고객 이름 |
-| `{SERVICE}` | What they asked for, e.g. "2-bedroom deep clean" / "침실 2개 대청소" | 요청한 서비스 |
+| `{SERVICE}` | What they asked for, e.g. "2-bedroom deep clean" / "침실 2개 딥클린" | 요청한 서비스 |
 | `{LOW}`–`{HIGH}` | Range from the calculator on `{SITE}`, with $ | 사이트 계산기 금액 범위($ 포함) |
 | `{DATES}` | 2–3 open dates you can offer | 가능한 날짜 2–3개 |
 | `{PER_VISIT}` | November snow per-visit rate, config `snow.perVisit` (GTA default $60; must match the live price book) | 11월 제설 1회 요금 (GTA 기본 $60) |
@@ -60,7 +60,7 @@ Reply STOP to opt out.
 
 **KO**
 ```sms
-안녕하세요 {CUSTOMER}님, {BRAND} {NAME}입니다. 연락 주셔서 감사합니다! 가격을 알려 드리려면 몇 가지만 여쭤볼게요. 어떤 청소(일반·대청소·입주/이사)인지, 침실과 욕실은 몇 개인지, 원하시는 날짜를 알려 주세요. {SITE}에서 바로 예상 가격을 보실 수도 있어요.
+안녕하세요 {CUSTOMER}님, {BRAND} {NAME}입니다. 연락 주셔서 감사합니다! 가격을 알려 드리려면 몇 가지만 여쭤볼게요. 어떤 청소(일반 청소, 딥클린, 입주·이사 청소)인지, 침실과 욕실은 몇 개인지, 원하시는 날짜를 알려 주세요. {SITE}에서 바로 예상 가격을 보실 수도 있어요.
 {BRAND}, {MAILING_ADDRESS}, {PHONE}
 수신을 원치 않으시면 STOP이라고 답장해 주세요.
 ```
@@ -99,18 +99,18 @@ To stop getting emails from us, reply "unsubscribe".
 
 ## 3D. SMS — snow estimate (only when snow is ON) / 문자 — 제설 견적 (제설 운영 시만)
 
-Use only after Gate S passes (written snow insurance). 제설 보험을 서면으로 받은 뒤(Gate S 통과)에만 쓰세요.
+Use only after Gate S passes (written snow insurance). 제설 보험을 서면으로 받은 뒤(관문 S 통과)에만 쓰세요.
 
 **EN**
 ```sms
-Hi {CUSTOMER}, {NAME} from {BRAND}. Thanks for asking about snow clearing! Your season price (Dec 1 – Mar 31) is {LOW}–{HIGH}, paid in 4 monthly instalments from Dec 1 to Mar 1. Nothing is paid before Dec 1. November snow is optional: once we confirm your contract is going ahead (we'll tell you by Nov 21), {PER_VISIT} per visit, billed with your Dec 1 instalment. If we haven't signed our minimum number of snow contracts by Nov 20, the agreement is void and you owe nothing.
+Hi {CUSTOMER}, {NAME} from {BRAND}. Thanks for asking about snow clearing! Your season price (Dec 1 – Mar 31) is {LOW}–{HIGH}, confirmed on site and billed in 4 equal instalments on Dec 1, Jan 1, Feb 1 and Mar 1. Nothing is paid before Dec 1. November snow is optional: if you tick it in the agreement, each snowfall at or above the trigger depth, from the day we confirm your contract (by Nov 21) to Nov 30, is {PER_VISIT} per visit, billed with your Dec 1 instalment. If we haven't signed our minimum number of snow contracts (all areas combined) by Nov 20, the agreement is void and you owe nothing.
 {BRAND}, {MAILING_ADDRESS}, {PHONE}, {SITE}
 Reply STOP to opt out.
 ```
 
 **KO**
 ```sms
-안녕하세요 {CUSTOMER}님, {BRAND} {NAME}입니다. 제설 문의 감사합니다! 시즌(12월 1일–3월 31일) 요금은 {LOW}–{HIGH}이고, 12월 1일부터 3월 1일까지 매달 한 번씩 4번 나눠 내시면 돼요. 12월 1일 전에는 어떤 돈도 받지 않아요. 11월 눈 제설은 선택 사항이에요. 계약이 진행된다고 확인해 드린 날부터(11월 21일까지 알려 드려요) 1회 {PER_VISIT}이고, 12월 1일 첫 분할금과 함께 청구해요. 11월 20일까지 최소 계약 수가 안 모이면 계약은 무효이고, 내실 돈은 없어요.
+안녕하세요 {CUSTOMER}님, {BRAND} {NAME}입니다. 제설 문의 감사합니다! 시즌(12월 1일–3월 31일) 요금은 {LOW}–{HIGH}이고, 현장에서 확정한 금액을 12월 1일, 1월 1일, 2월 1일, 3월 1일에 4번 똑같이 나눠 청구해요. 12월 1일 전에는 어떤 돈도 받지 않아요. 11월 눈은 선택 사항이에요. 계약서에서 선택하시면, 계약 진행을 확인해 드린 날(11월 21일까지 알려 드려요)부터 11월 30일까지 출동 기준 이상 내린 눈을 1회 {PER_VISIT}에 치우고, 12월 1일 첫 분할금과 함께 청구해요. 11월 20일까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없어요.
 {BRAND}, {MAILING_ADDRESS}, {PHONE}, {SITE}
 수신을 원치 않으시면 STOP이라고 답장해 주세요.
 ```

@@ -284,11 +284,11 @@ const SETTINGS = [
   { key: 'card_ok', ko: '카드 결제 받음?', en: 'Card accepted?', v: 'NO', list: YESNO, basis: '카드 결제 서비스를 실제로 쓸 때만 YES. Stripe 캐나다 수수료 2.9% + $0.30 (F37, SECONDARY).', url: U.stripe },
   { key: 'city', ko: '도시 (빌드 기준)', en: 'City (build)', v: CITY, kind: 'info', basis: '가격·세율 기본값의 기준 도시. 바꾸려면 다시 빌드: node scripts/build-crm.mjs --city=ottawa' },
   { key: 'plan_start', ko: '계획 시작일', en: 'Plan start (day 1)', v: utc(2026, 9, 28), fmt: FMT.date, basis: 'memo: Mon 2026-09-28' },
-  { key: 'asof', ko: '기준일', en: 'As-of date', v: f('TODAY()'), fmt: FMT.date, basis: '보통 TODAY(). 날짜를 직접 넣으면 그날 기준으로 지표·킬 기준·DAILY 줄을 다시 계산합니다.' },
+  { key: 'asof', ko: '기준일', en: 'As-of date', v: f('TODAY()'), fmt: FMT.date, basis: '보통 TODAY(). 날짜를 직접 넣으면 그날 기준으로 지표·중단 기준·DAILY 줄을 다시 계산합니다.' },
 
   { section: '소비자 계약·CASL Consumer contracts & CASL (F11, F32) — 법률 자문 아님' },
-  { key: 'cancel_days', ko: '방문 계약 취소 가능 기간', en: 'Door-signed cancellation period', v: 10, fmt: FMT.int, unit: '일', kind: 'info', basis: ONTARIO ? '온타리오 방문(direct) 계약: 서명한 사본을 받은 날부터 10일 안에 취소 가능 (F32, SNIPPET). 기간 중 작업한 경우의 효과는 조사 안 됨.' : `10은 온타리오 값입니다 (F32). 이 주의 방문 계약 취소 기간은 ${NOT_VERIFIED_PROV}.`, url: U.ontarioCancel },
-  { key: 'refund_days', ko: '취소 시 환불 기한', en: 'Refund due after cancellation', v: 15, fmt: FMT.int, unit: '일', kind: 'info', basis: ONTARIO ? '취소하면 15일 안에 환불 (F32)' : `15는 온타리오 값입니다 (F32). 이 주의 환불 기한은 ${NOT_VERIFIED_PROV}.`, url: U.ontarioCancel },
+  { key: 'cancel_days', ko: '방문 계약 취소 가능 기간', en: 'Door-signed cancellation period', v: 10, fmt: FMT.int, unit: '일', kind: 'info', basis: ONTARIO ? '온타리오 방문(direct) 계약: 고객은 계약서 사본을 받은 다음 날부터 10일 안에 취소 가능 (F32, SNIPPET). 기간 중 작업한 경우의 효과는 조사 안 됨.' : `10은 온타리오 값입니다 (F32). 이 주의 방문 계약 취소 기간은 ${NOT_VERIFIED_PROV}.`, url: U.ontarioCancel },
+  { key: 'refund_days', ko: '취소 시 환불 기한', en: 'Refund due after cancellation', v: 15, fmt: FMT.int, unit: '일', kind: 'info', basis: ONTARIO ? '취소 통지를 받은 다음 날부터 15일 안에 환불 (F32, SNIPPET)' : `15는 온타리오 값입니다 (F32). 이 주의 환불 기한은 ${NOT_VERIFIED_PROV}.`, url: U.ontarioCancel },
   { key: 'inquiry_months', ko: '문의 후 묵시적 동의 기간', en: 'Implied consent after an inquiry', v: 6, fmt: FMT.int, unit: '개월', kind: 'info', basis: 'CASL s.10(10) (F11). 그 뒤 문자·이메일을 보내려면 다른 동의 근거(예: 명시적 동의)가 필요.', url: U.casl },
   { key: 'unsub_days', ko: '수신거부 처리 기한', en: 'Unsubscribe processing time', v: 10, fmt: FMT.int, unit: '영업일', kind: 'info', basis: 'CASL: 수신거부는 10영업일 안에 처리, 수신거부 방법은 60일 동안 유효 (F11)', url: U.casl },
 
@@ -308,21 +308,21 @@ const SETTINGS = [
   { key: 'etr_limit', ko: 'e-Transfer 분할 안내 기준', en: 'Split e-Transfer above', v: 2000, fmt: FMT.money0, unit: '$', basis: '은행별 한도 보통 $2,000–3,000 (F36, SECONDARY/사례). 넘으면 나눠 받기.', url: U.etransfer },
 
   { section: 'EI 고용보험 (memo 5.4, F1–F6) — 모든 계산은 추정. 판단은 Service Canada가 합니다' },
-  { key: 'ei_eligible', ko: 'EI 자격?', en: 'EI eligible?', v: 'UNKNOWN', list: 'YES,NO,UNKNOWN', basis: '보험가능 근로 420–700시간 필요. 비행(misconduct)이나 정당한 이유 없는 자진 퇴사는 자격 없음 (EI Act s.7(2), s.30(1), F6). 본인이 확인. NO면 EI 계산이 꺼집니다.', url: U.eiAct },
+  { key: 'ei_eligible', ko: 'EI 자격?', en: 'EI eligible?', v: 'UNKNOWN', list: 'YES,NO,UNKNOWN', basis: '보험가입 근로 420–700시간 필요. 비행(misconduct)이나 정당한 이유 없는 자진 퇴사는 자격 없음 (EI Act s.7(2), s.30(1), F6). 본인이 확인. NO면 EI 계산이 꺼집니다.', url: U.eiAct },
   { key: 'ei_deadline', ko: 'EI 신청 마감', en: 'EI filing deadline', v: utc(2026, 10, 10), fmt: FMT.date, basis: 'Pilot 24: 2026-10-10까지 시작하는 수급 기간 (SOR-96-332 ss.77.996–77.999, F1). 연장 여부 찾지 못함.', url: U.eiRegs },
   { key: 'ei_claim_start', ko: 'EI 시작 주 (일요일)', en: 'Benefit period start (Sunday)', v: utc(2026, 10, 4), fmt: FMT.date, basis: '10/10까지 신청하면 10/4 시작 (EI Act s.10(1), F2). 실제 날짜로 바꾸세요.', url: U.eiAct },
-  { key: 'ei_B', ko: '주간 EI 수령액 B', en: 'Weekly benefit B', v: 729, fmt: FMT.money0, unit: '$/주', basis: '예시 = 2026 최대치 (68,900 ÷ 52 × 55% = 728.75, F5 SECONDARY). 본인 실제 금액으로 바꾸세요.', url: U.eiMax },
-  { key: 'ei_wie', ko: '주간 보험가능소득', en: 'Weekly insurable earnings', v: 1325, fmt: FMT.money0, unit: '$/주', basis: '예시 = 최대 보험가능소득 68,900 ÷ 52 ≈ 1,325 (F5). 본인 금액으로 바꾸세요.', url: U.eiMax },
-  { key: 'ei_ded_rate', ko: '수입 공제율', en: 'Earnings deduction rate', v: 0.5, fmt: FMT.pct, basis: '주간 보험가능소득의 90%까지는 50%, 그 위는 100% (EI Act s.19(2),(3), F4)', url: U.eiAct },
-  { key: 'ei_cap_pct', ko: '50% 구간 한도', en: '50% zone cap', v: 0.9, fmt: FMT.pct, basis: '주간 보험가능소득의 90% (F4)', url: U.eiAct },
+  { key: 'ei_B', ko: '주간 EI 수령액 B', en: 'Weekly benefit B', v: 729, fmt: FMT.money0, unit: '$/주', basis: '예시 = 2026 최대치. 2차 출처 + 법 조항 공식 (68,900 ÷ 52 × 55% = 728.75, F5 SECONDARY). 본인 실제 금액으로 바꾸세요.', url: U.eiMax },
+  { key: 'ei_wie', ko: '주당 보험가입소득', en: 'Weekly insurable earnings', v: 1325, fmt: FMT.money0, unit: '$/주', basis: '예시 = 최대 보험가입소득 68,900 ÷ 52 ≈ 1,325 (F5). 본인 금액으로 바꾸세요.', url: U.eiMax },
+  { key: 'ei_ded_rate', ko: '수입 공제율', en: 'Earnings deduction rate', v: 0.5, fmt: FMT.pct, basis: '주당 보험가입소득의 90%까지는 50%, 그 위는 100% (EI Act s.19(2),(3), F4)', url: U.eiAct },
+  { key: 'ei_cap_pct', ko: '50% 구간 한도', en: '50% zone cap', v: 0.9, fmt: FMT.pct, basis: '주당 보험가입소득의 90% (F4)', url: U.eiAct },
   { key: 'pathA_net', ko: 'Path A 계획 주간 순수입 A', en: 'Planned Path A weekly net (A)', v: 400, fmt: FMT.money0, unit: '$/주', basis: 'memo 5.4 예시 ($400). "경미한 정도(minor extent)" 인정 여부는 Service Canada에 전화로 확인 (Regs s.30, F3).', url: U.eiRegs },
 
-  { section: '문 두드리기 깔때기 Door funnel — 가정 (출처 없음, F45). 시도 30회부터 측정값으로 바뀝니다' },
+  { section: '문 두드리기 퍼널 Door funnel — 가정 (출처 없음, F45). 시도 30회부터 측정값으로 바뀝니다' },
   { key: 'ans_rate', ko: '응답률 (가정)', en: 'Answer % (assumption A8)', v: 0.35, fmt: FMT.pct, basis: '가정 A8 — 근거 자료 없음 (F45)' },
   { key: 'quote_rate', ko: '견적 요청률 (가정)', en: 'Quote % (assumption A9)', v: 0.1, fmt: FMT.pct, basis: '가정 A9 — 대화 중 견적 요청 비율' },
   { key: 'close_rate', ko: '계약률 (가정)', en: 'Close % (assumption A10)', v: 0.4, fmt: FMT.pct, basis: '가정 A10 — 견적 중 계약 비율. 합치면 1.4% → 계약 1건당 약 71.4문' },
   { key: 'min_attempts', ko: '측정값 사용 최소 시도', en: 'Min attempts to use measured rates', v: 30, fmt: FMT.int, unit: '회', basis: '이 수 이상이면 측정값 사용. 측정값이 0이면 그 비율만 가정값 사용.' },
-  { key: 'scenario', ko: '시나리오', en: 'Scenario', v: 'B1', list: 'B1,B2', basis: 'B1 = 청소+플랫폼, B2 = G1 통과 후 홈통·제설 추가 (memo 5.2, 5.3)' },
+  { key: 'scenario', ko: '시나리오', en: 'Scenario', v: 'B1', list: 'B1,B2', basis: 'B1 = 청소+플랫폼, B2 = 관문 G1 통과 후 홈통 청소·제설 추가 (memo 5.2, 5.3)' },
   { key: 'closes_manual', ko: '다음 주 필요 계약 수 (직접)', en: 'Closes needed next week (manual)', v: '', fmt: FMT.num1, basis: '비워 두면 아래 주별 목표표에서 자동으로 가져옵니다 (memo §7).' },
   { key: 'closes_needed', ko: '다음 주 필요 계약 수 (사용값)', en: 'Closes needed next week (used)', kind: 'calc', fmt: FMT.num2, v: () => f(closesNeededFormula()), basis: '= 그다음 주 완료 목표 (계약이 완료보다 약 1주 앞섬, memo §7 가정). 1월 이후는 직접 입력.' },
   { key: 'active_cluster', ko: '현재 클러스터 번호', en: 'Active cluster #', v: 1, fmt: FMT.int, list: '1,2,3', basis: '지표 시트의 "남은 가구"는 이 클러스터 기준' },
@@ -349,33 +349,33 @@ const SETTINGS = [
   { key: 'gut_ticket_cons', ko: '홈통 가격 — 보수', en: 'Gutter ticket — conservative', v: 175, fmt: FMT.money0, unit: '$', basis: 'memo 5.1 보수 가정 ($150–350 범위 하단 근처)' },
   { key: 'snow_cover_base', ko: '제설 보험 — 기본', en: 'Snow cover — base', v: 1000, fmt: FMT.money0, unit: '$', basis: '"일반적" $1,000–3,000의 하단 (F29, SNIPPET)', url: U.snowIns },
   { key: 'snow_cover_cons', ko: '제설 보험 — 보수', en: 'Snow cover — conservative', v: 1800, fmt: FMT.money0, unit: '$', basis: '"삽질하는 핸디맨 $1,800/년" (F29, 출처 불확실)', url: U.snowIns },
-  { key: 'snow_cover_actual', ko: '실제 제설 보험 견적', en: 'Actual snow cover quote', v: '', fmt: FMT.money0, unit: '$', basis: '받으면 입력 (Gate S: 계약 전 서면 보험 필수)' },
+  { key: 'snow_cover_actual', ko: '실제 제설 보험 견적', en: 'Actual snow cover quote', v: '', fmt: FMT.money0, unit: '$', basis: '받으면 입력 (관문 S: 계약 전 서면 보험 필수)' },
   { key: 'blower_base', ko: '제설기 — 기본', en: 'Snowblower — base', v: 1299, fmt: FMT.money0, unit: '$', basis: '24" 2단 2025–26 할인가 $1,299–1,999 (F30, 포럼 요약)', url: U.blower },
   { key: 'blower_cons', ko: '제설기 — 보수', en: 'Snowblower — conservative', v: 1999, fmt: FMT.money0, unit: '$', basis: 'F30 범위 상단', url: U.blower },
   { key: 'blower_actual', ko: '실제 제설기 가격', en: 'Actual snowblower price', v: '', fmt: FMT.money0, unit: '$', basis: '사면 입력 (11/20 손익분기 전에는 사지 않기)' },
   { key: 'snow_price_base', ko: '제설 시즌 가격 — 기본', en: 'Snow season price — base', v: SNOW_SEASON_BASE, fmt: FMT.money0, unit: '$', kind: 'info', basis: SNOW ? `config/prices.ts 1열 진입로${SNOW.mode === 'monthly' ? ' (월 가격 × 회수)' : ''} (memo 5.3 기본 $500)` : '이 도시는 제설 없음 (config/prices.ts)', url: U.snowGta },
   { key: 'snow_price_cons', ko: '제설 시즌 가격 — 보수', en: 'Snow season price — conservative', v: 400, fmt: FMT.money0, unit: '$', basis: 'memo 5.1 보수 가정' },
-  { key: 'snow_per_visit', ko: '11월 1회 방문 가격', en: 'November per-visit rate', v: SNOW ? SNOW.perVisit : '', fmt: FMT.money0, unit: '$', kind: 'info', basis: 'config/prices.ts (memo: 기본 $60, F28 $50–150 범위에서 선택)' },
-  { key: 'snow_instalments', ko: '제설 분할 횟수', en: 'Snow instalments', v: SNOW ? SNOW.instalments : 4, fmt: FMT.int, unit: '회', kind: 'info', basis: 'config/prices.ts: 12/1, 1/1, 2/1, 3/1 (memo §2)' },
-  { key: 'snow_method', ko: '제설 방식', en: 'Snow method', v: 'BLOWER', list: 'BLOWER,SHOVEL', basis: 'SHOVEL = 차 없이 삽만 (memo §2 Gate S, §9)' },
+  { key: 'snow_per_visit', ko: '11월 1회 방문 가격', en: 'November per-visit rate', v: SNOW ? SNOW.perVisit : '', fmt: FMT.money0, unit: '$', kind: 'info', basis: 'config/prices.ts (memo: 기본 $60, F28 $50–150 범위에서 선택). 계약서에서 11월 옵션을 선택한 고객만, 계약 확정일부터 11/30까지 출동 기준 적설량 이상 내린 눈에 적용. 12/1 첫 분할금과 함께 청구 (12/1 전 받지 않음)' },
+  { key: 'snow_instalments', ko: '제설 분할 횟수', en: 'Snow instalments', v: SNOW ? SNOW.instalments : 4, fmt: FMT.int, unit: '회', kind: 'info', basis: 'config/prices.ts: 현장에서 확정한 시즌 요금 ÷ 4, 12/1, 1/1, 2/1, 3/1에 청구 (memo §2)' },
+  { key: 'snow_method', ko: '제설 방식', en: 'Snow method', v: 'BLOWER', list: 'BLOWER,SHOVEL', basis: 'SHOVEL = 차 없이 삽만 (memo §2 관문 S, §9)' },
   { key: 'shovel_cap', ko: '삽 제설 최대 곳 수', en: 'Shovel-only cap', v: 10, fmt: FMT.int, unit: '곳', basis: '가정: 진입로 1곳 소요 시간을 재기 전까지 10곳 (memo §9)' },
 
-  { section: '게이트·점검 Gates & checks (memo §2, §8) — 상태를 직접 바꾸세요' },
+  { section: '관문·점검 Gates & checks (memo §2, §8) — 상태를 직접 바꾸세요' },
   { key: 'cgl_bound', ko: '청소 CGL 보험 가입됨?', en: 'Cleaning CGL bound?', v: 'NO', list: YESNO, basis: '가입 전에는 직접 고객 금지 (memo §6). 사이트 "Insured" 표시도 가입 후에만.' },
   { key: 'platform_ok', ko: '플랫폼 승인됨?', en: 'Platform approved?', v: 'NO', list: YESNO, basis: 'TaskRabbit/Jiffy 승인 기간 못 찾음 (F21)' },
-  { key: 'g1', ko: 'G1 통과?', en: 'Gate G1 passed?', v: 'PENDING', list: 'YES,NO,PENDING', basis: '5개 모두: 차량, 사다리 가능, 브로커 서면 확인, 자금, 날짜 잡힌 홈통 예약 5건 (memo §2)' },
-  { key: 'g1_min_booked', ko: 'G1 최소 홈통 예약', en: 'G1 min gutter bookings', v: 5, fmt: FMT.int, unit: '건', basis: 'memo §2 G1 조건 5 — 사다리는 그 뒤에 구매' },
-  { key: 'gate_s', ko: '제설 서면 보험 (Gate S)?', en: 'Gate S — written snow cover?', v: 'NO', list: YESNO, basis: '제설 계약 서명 전 필수. 목표 10/30 (memo §2)' },
+  { key: 'g1', ko: '관문 G1 통과?', en: 'Gate G1 passed?', v: 'PENDING', list: 'YES,NO,PENDING', basis: '5개 모두: 차량, 사다리 가능, 브로커 서면 확인, 자금, 날짜 잡힌 홈통 예약 5건 (memo §2)' },
+  { key: 'g1_min_booked', ko: '관문 G1 최소 홈통 예약', en: 'G1 min gutter bookings', v: 5, fmt: FMT.int, unit: '건', basis: 'memo §2 관문 G1 조건 5 — 사다리는 그 뒤에 구매' },
+  { key: 'gate_s', ko: '제설 서면 보험 (관문 S)?', en: 'Gate S — written snow cover?', v: 'NO', list: YESNO, basis: '제설 계약 서명 전 필수. 목표 10/30 (memo §2)' },
   { key: 'cash_now', ko: '현재 현금', en: 'Cash on hand', v: '', fmt: FMT.money0, unit: '$', basis: '직접 입력 (매주 갱신)' },
   { key: 'runway_floor', ko: '최소 현금선', en: 'Runway floor', v: '', fmt: FMT.money0, unit: '$', basis: '첫날 질문 10: 버틸 수 있는 월세 개월 수 기준 (memo §7)' },
   { key: 'd7', ko: 'Day 7 점검일', en: 'Day 7 check', v: utc(2026, 10, 4), fmt: FMT.date, basis: 'memo §8' },
   { key: 'd10', ko: 'Day 10 점검일', en: 'Day 10 check', v: utc(2026, 10, 7), fmt: FMT.date, basis: 'memo §8 (CGL 가입)' },
-  { key: 'g1_stop', ko: 'G1 최종 마감', en: 'G1 hard stop', v: utc(2026, 10, 9), fmt: FMT.date, basis: 'memo §2' },
+  { key: 'g1_stop', ko: '관문 G1 최종 마감', en: 'G1 hard stop', v: utc(2026, 10, 9), fmt: FMT.date, basis: 'memo §2' },
   { key: 'd14', ko: 'Day 14 점검일', en: 'Day 14 check', v: utc(2026, 10, 11), fmt: FMT.date, basis: 'memo §8' },
   { key: 'd21', ko: 'Day 21 점검일', en: 'Day 21 check', v: utc(2026, 10, 18), fmt: FMT.date, basis: 'memo §8' },
   { key: 'd28', ko: 'Day 28 점검일', en: 'Day 28 check', v: utc(2026, 10, 25), fmt: FMT.date, basis: 'memo §8' },
   { key: 'd30', ko: 'Day 30 점검일', en: 'Day 30 check', v: utc(2026, 10, 27), fmt: FMT.date, basis: 'memo §8' },
-  { key: 'snow_deadline', ko: '제설 손익분기 마감', en: 'Snow break-even deadline', v: utc(2026, 11, 20), fmt: FMT.date, basis: 'memo §2: 이날까지 손익분기 수 미달이면 모든 계약 무효' },
+  { key: 'snow_deadline', ko: '제설 최소 계약 마감', en: 'Snow minimum-contracts deadline', v: utc(2026, 11, 20), fmt: FMT.date, basis: 'memo §2: 이날까지 전체 제설 계약(모든 지역 합산)이 최소 건수(손익분기 수)에 이르지 않으면 모든 계약 무효, 고객이 낼 돈 없음' },
   { key: 'gut_from', ko: 'Day 21 홈통 예약 구간 시작', en: 'Gutter booking window from', v: utc(2026, 10, 19), fmt: FMT.date, basis: 'memo §8' },
   { key: 'gut_to', ko: 'Day 21 홈통 예약 구간 끝', en: 'Gutter booking window to', v: utc(2026, 11, 30), fmt: FMT.date, basis: 'memo §8' },
   { key: 'k_d7_doors', ko: 'Day 7: 시도 수', en: 'Day 7: attempts', v: 160, fmt: FMT.int, basis: 'memo §8: 160회 이상 + 견적 0건 → 스크립트 변경 (중단 아님)' },
@@ -496,14 +496,14 @@ const SPECS = {
       { key: 'status', csv: 'status', ko: '상태', en: 'Status', w: 9, list: 'OPEN,WON,LOST', ex: ['WON', 'OPEN'], note: 'OPEN 답 기다림 · WON 계약 성사 · LOST 안 됨' },
       { key: 'won', csv: 'won_date', ko: '계약일', en: 'Won date', w: 12, fmt: FMT.date, ex: [utc(2026, 10, 2), ''] },
       { key: 'sched', csv: 'scheduled_date', ko: '작업 예정일', en: 'Scheduled', w: 12, fmt: FMT.date, ex: [utc(2026, 10, 14), ''] },
-      { key: 'door', csv: 'door_signed', ko: '방문 계약?', en: 'Door-signed (Y/N)', w: 11, list: 'Y,N', ex: ['Y', 'N'], note: ONTARIO ? '고객 집에서 서명한 온타리오 계약 = Y. 10일 취소권 + 15일 내 환불 안내 필수 (F32).' : `고객 집에서 서명한 계약 = Y. 이 주의 취소권·환불 규칙은 ${NOT_VERIFIED_PROV} (온타리오 규칙 F32만 조사됨).` },
+      { key: 'door', csv: 'door_signed', ko: '방문 계약?', en: 'Door-signed (Y/N)', w: 11, list: 'Y,N', ex: ['Y', 'N'], note: ONTARIO ? '고객 집에서 서명한 온타리오 계약 = Y. 취소권 안내 필수: 계약서 사본을 받은 다음 날부터 10일 안에 취소, 취소 통지를 받은 다음 날부터 15일 안에 환불 (F32).' : `고객 집에서 서명한 계약 = Y. 이 주의 취소권·환불 규칙은 ${NOT_VERIFIED_PROV} (온타리오 규칙 F32만 조사됨).` },
       { key: 'optin', csv: 'marketing_optin', ko: '마케팅 수신 동의', en: 'Marketing opt-in (Y/N)', w: 12, list: 'Y,N', ex: ['N', 'N'], note: '따로 체크한 경우만 Y (CASL 명시적 동의). 동의 문구와 날짜는 메모에.' },
       { key: 'notes', csv: 'notes', ko: '메모', en: 'Notes', w: 30, ex: ['EXAMPLE - fake row - delete', 'EXAMPLE - fake row - delete'] },
       {
         key: 'cancel_by', ko: '취소 가능 기한 (추정)', en: 'Cancel-by (est.)', w: 14, fmt: FMT.date,
         f: (r) => `IF(AND($L${r}="Y",$J${r}<>""),$J${r}+${S('cancel_days')},"")`,
         note: ONTARIO
-          ? '방문 계약: 서명한 사본을 받은 날부터 10일 (F32). 여기서는 계약일 + 10일로 추정. 기간 중 작업한 경우의 효과는 조사 안 됨.'
+          ? '방문 계약: 계약서 사본을 받은 다음 날부터 10일 (F32, SNIPPET). 여기서는 계약일 + 10일로 추정. 기간 중 작업한 경우의 효과는 조사 안 됨.'
           : `온타리오 기준(10일, F32)으로 계산한 값입니다. 이 주의 취소 기간은 ${NOT_VERIFIED_PROV}.`,
       },
       {
@@ -525,7 +525,7 @@ const SPECS = {
     cols: [
       { key: 'id', csv: 'job_id', ko: '작업 ID', en: 'Job ID', w: 10, ex: ['EX-J1', 'EX-J2'], note: '예: J-001 … 인보이스 번호는 INV-작업ID' },
       { key: 'quote', csv: 'quote_id', ko: '견적 ID', en: 'Quote ID', w: 10, ex: ['EX-Q1', ''] },
-      { key: 'date', csv: 'completed_date', ko: '완료일', en: 'Completed date', w: 12, fmt: FMT.date, ex: [utc(2026, 10, 14), utc(2026, 10, 15)], note: '작업을 끝낸 날 (EI: 일한 주에 배분, s.36(6)). 제설 시즌 계약은 할부 1회마다 한 줄 (12/1, 1/1, 2/1, 3/1).' },
+      { key: 'date', csv: 'completed_date', ko: '완료일', en: 'Completed date', w: 12, fmt: FMT.date, ex: [utc(2026, 10, 14), utc(2026, 10, 15)], note: '작업을 끝낸 날 (EI: 일한 주에 배분, s.36(6)). 제설 시즌 계약은 할부 1회마다 한 줄 (현장 확정 시즌 요금 ÷ 4, 12/1, 1/1, 2/1, 3/1).' },
       { key: 'name', csv: 'name', ko: '고객 이름', en: 'Customer', w: 20, ex: ['EXAMPLE Customer A', 'EXAMPLE Customer C'] },
       { key: 'address', csv: 'address', ko: '주소', en: 'Address', w: 24, ex: ['103 EXAMPLE St', '7 EXAMPLE Cres'] },
       { key: 'service', csv: 'service', ko: '서비스', en: 'Service', w: 12, list: SERVICE_CODES, ex: ['CL-DEEP', 'CL-STD'], note: SERVICE_NOTE },
@@ -679,7 +679,7 @@ const T2125 = [
   ['8590 Bad debts', '대손 (못 받은 돈)', ''],
   ['8690 Insurance', '보험', '청소 CGL, 사다리·제설 보험'],
   ['8710 Interest and bank charges', '이자·은행 수수료', '카드 결제 수수료 분류 확인 필요'],
-  ['8760 Business taxes, licences and memberships', '사업세·면허·회비', '플랫폼 가입비($25) 분류 확인 필요'],
+  ['8760 Business taxes, licences and memberships', '사업세·면허·회비', '플랫폼 가입비(TaskRabbit $25, 검색 요약 F21) 분류 확인 필요'],
   ['8810 Office expenses', '사무 비용', ''],
   ['8811 Office stationery and supplies', '사무용품·소모품', '청소 용품 분류는 확인 필요'],
   ['8860 Professional fees', '전문가 수수료 (회계·법률)', ''],
@@ -842,8 +842,8 @@ function buildSettings(ws) {
   if (GUT) {
     priceLine('홈통 단층 / Gutters 1 storey', GUT.byStoreys[1], FMT.money0)
     priceLine('홈통 2층 / Gutters 2 storeys', GUT.byStoreys[2], FMT.money0)
-    priceLine('홈통 3층 / Gutters 3 storeys', GUT.byStoreys[3], FMT.money0)
-    priceLine('배수관 뚫기 / Downspout flush', GUT.downspoutFlush, FMT.money0)
+    priceLine('홈통 3층 / Gutters 3 storeys', GUT.byStoreys[3], FMT.money0, '기본 거절 (NEXT_PUBLIC_GUTTER_MAX_STOREYS=2). 두 번째 사람이 있을 때만 — 광고하지 않음 (체크리스트 04, 11번)')
+    priceLine('배수관(다운스파우트) 청소 / Downspout flush', GUT.downspoutFlush, FMT.money0)
   } else priceLine('홈통 / Gutters', '', null, '이 도시는 홈통 서비스 없음')
   if (SNOW) {
     const unit = SNOW.mode === 'monthly' ? '월 가격 / per month' : '시즌 가격 / per season'
@@ -852,8 +852,8 @@ function buildSettings(ws) {
     priceLine(`제설 대형 진입로 (${unit})`, SNOW.driveway.large, FMT.money0)
     priceLine('현관 보도·계단 / Walkway & steps', SNOW.walkwayAndSteps, FMT.money0, '운영 선택 (add-on 가격 못 찾음)')
     priceLine('제빙 살포 / Salting', SNOW.salting, FMT.money0, '운영 선택 (add-on 가격 못 찾음)')
-    priceLine('11월 1회 방문 / November per visit', SNOW.perVisit, FMT.money0)
-    priceLine('분할 횟수 / Instalments', SNOW.instalments, FMT.int, '12/1, 1/1, 2/1, 3/1 — 12/1 전 결제 없음')
+    priceLine('11월 1회 방문 / November per visit', SNOW.perVisit, FMT.money0, '계약서에서 선택한 경우만, 11/30까지. 12/1 첫 분할금과 함께 청구')
+    priceLine('분할 횟수 / Instalments', SNOW.instalments, FMT.int, '현장 확정 시즌 요금 ÷ 4: 12/1, 1/1, 2/1, 3/1 — 12/1 전 결제 없음')
   } else priceLine('제설 / Snow', '', null, '이 도시는 제설 서비스 없음')
 
   r += 1
@@ -1012,7 +1012,7 @@ function buildDashboard(ws) {
     return ref
   }
 
-  sectionRow(ws, r++, '1. 문 두드리기 누적 Door funnel (전체 기록)', 9)
+  sectionRow(ws, r++, '1. 문 두드리기 퍼널 (누적) Door funnel (전체 기록)', 9)
   const att = line('총 시도 Attempts', countCodes(DOOR_ATTEMPT_CODES), FMT.int, 'NA+NI+Q+B+CB. 재방문도 1회 (memo §7). NS는 제외.')
   const ans = line('응답 Answered', countCodes(DOOR_ANSWER_CODES), FMT.int, 'NI+Q+B+CB')
   const qreq = line('문에서 견적 요청 Quote requests at door', countCodes(['Q', 'B']), FMT.int, 'Q+B')
@@ -1122,7 +1122,7 @@ function buildDashboard(ws) {
   r += 1
 
   // Kill criteria
-  sectionRow(ws, r++, '5. 킬 기준 Kill criteria (memo §8) — PASS 통과 · FAIL/ACTION 조치 · PENDING 아직 날짜 전', 9)
+  sectionRow(ws, r++, '5. 중단 기준 Kill criteria (memo §8) — PASS 통과 · FAIL/ACTION 조치 · PENDING 아직 날짜 전', 9)
   ;['점검 Check', '날짜', '신호 Signal', '측정 D', '측정 E', '측정 F', '기준 Threshold', '결과 Result', '조치 Action'].forEach((h, i) => {
     const c = ws.getCell(r, i + 1)
     c.value = h
@@ -1152,13 +1152,13 @@ function buildDashboard(ws) {
       act: '직접 고객 받지 않기. 플랫폼만 하다가 순이익 $500이 모이면 다시 시도.',
     },
     {
-      check: 'G1 마감',
+      check: '관문 G1 마감',
       date: S('g1_stop'),
-      signal: 'G1 5개 조건 모두 충족(D)',
+      signal: '관문 G1 5개 조건 모두 충족(D)',
       D: () => S('g1'),
       thr: '"YES"',
       res: (B) => `IF(${S('g1')}="YES","통과 PASS",IF(${pend(B)},"대기 PENDING","실패 FAIL"))`,
-      act: '2026년 홈통 청소 접기. 제설은 Gate S로 따로 결정.',
+      act: '2026년 홈통 청소 접기. 제설은 관문 S로 따로 결정.',
     },
     {
       check: 'Day 14',
@@ -1239,13 +1239,13 @@ function buildDashboard(ws) {
     {
       check: '제설 11/20',
       date: S('snow_deadline'),
-      signal: '11/20까지 서명한 제설 계약(D) < 손익분기(E)',
+      signal: '11/20까지 서명한 전체 제설 계약(모든 지역 합산, D) < 최소 건수(손익분기, E)',
       D: () => BE_REF('signedByDeadline'),
       E: () => BE_REF('beApplied'),
-      thr: '"손익분기 수 이상"',
+      thr: '"최소 건수(손익분기) 이상"',
       res: (B, D, E) =>
         `IF(AND(${D}=0,${S('gate_s')}<>"YES"),"해당 없음 N/A",IF(${D}>=${E},"통과 PASS — 계약 유효",IF(${ASOF}<=${B},"대기 PENDING — "&MAX(0,${E}-${D})&"건 더 필요","무효 VOID")))`,
-      act: '미달이면 모든 계약 무효 (받은 돈 없음). 보험·제설기 사지 않기.',
+      act: '미달이면 모든 계약 무효, 고객이 낼 돈 없음 (받은 돈도 없음). 보험·제설기 사지 않기.',
     },
     {
       check: '매일 Any day',
@@ -1350,7 +1350,7 @@ function buildEI(ws) {
     ['운영비\nOperating exp.', true, '지출 시트: 날짜가 이 주인 지출 합. 연 보험료 같은 큰 지출을 어느 주에 넣을지는 Service Canada에 확인.'],
     ['순수입\nNet = 총수입 − 운영비', true, 'EI Regs s.35(10)(c)'],
     ['경로\nPath', false, 'A = EI + 작은 부업 · B = 사업 전념 (그 주 EI 없음) · - = EI 없음/청구 전. 기본값은 자동, 직접 바꿔도 됩니다.'],
-    ['EI 공제 추정\nEst. deduction', true, '순수입의 50% (주간 보험가능소득의 90%까지) + 초과분 100% (EI Act s.19(2),(3), F4)'],
+    ['EI 공제 추정\nEst. deduction', true, '순수입의 50% (주당 보험가입소득의 90%까지) + 초과분 100% (EI Act s.19(2),(3), F4)'],
     ['EI 수령 추정\nEst. EI paid', true, 'Path A일 때 B − 공제 (0 미만이면 0)'],
     ['Path A 합계\nEI + 순수입', true],
     ['CPP 뺀 합계\nAfter CPP', true, 'EI + 순수입 × (1 − 11.9%) (memo 5.4)'],
@@ -1407,8 +1407,8 @@ function buildEI(ws) {
   // Parameter block
   const P = [
     ['항목 Item', '값', '근거'],
-    ['주간 EI 수령액 B', S('ei_B'), '설정 시트 (예시 = 2026 최대 $729, F5)', FMT.money0],
-    ['주간 보험가능소득', S('ei_wie'), '설정 시트', FMT.money0],
+    ['주간 EI 수령액 B', S('ei_B'), '설정 시트 (예시 = 2026 최대 $729: 2차 출처 + 법 조항 공식, F5)', FMT.money0],
+    ['주당 보험가입소득', S('ei_wie'), '설정 시트', FMT.money0],
     ['50% 구간 한도 (90%)', `${S('ei_wie')}*${S('ei_cap_pct')}`, 'F4', FMT.money],
     ['CPP 비율', S('cpp_rate'), 'F9', FMT.pct],
     ['Path A 계획 순수입 A', S('pathA_net'), 'memo 5.4 예시 $400', FMT.money0],
@@ -1657,7 +1657,7 @@ function buildBreakEven(ws) {
     ws.getCell(r, 3).font = font({ size: 9, color: { argb: COLOR.grey } })
   }
 
-  sectionRow(ws, 4, 'A. 홈통 청소 Gutters — G1 통과 후에만. 날짜 잡힌 예약 5건 전에는 사다리 사지 않기', 5)
+  sectionRow(ws, 4, 'A. 홈통 청소 Gutters — 관문 G1 통과 후에만. 날짜 잡힌 예약 5건 전에는 사다리 사지 않기', 5)
   head(5)
   row(6, '설비비 Setup', S('gut_setup'), S('gut_setup'), S('gut_setup'), FMT.money0, '가정 A5 (보험 제외)')
   row(7, '사다리·높이 보험 Ladder cover', S('gut_ins'), S('gut_ins'), `IF(${S('gut_ins_actual')}<>"",${S('gut_ins_actual')},${S('gut_ins')})`, FMT.money0, 'F27 하한 (SNIPPET). 실제 견적이 있으면 실제 열에 반영')
@@ -1667,13 +1667,13 @@ function buildBreakEven(ws) {
   row(11, '작업당 기여이익 Contribution', '$B$9-$B$10', '$C$9-$C$10', '$D$9-$D$10', FMT.money0, 'memo: 기본 $205, 보수 $155')
   row(12, '손익분기 작업 수 Break-even jobs', 'ROUNDUP(IFERROR($B$8/$B$11,0),0)', 'ROUNDUP(IFERROR($C$8/$C$11,0),0)', 'ROUNDUP(IFERROR($D$8/$D$11,0),0)', FMT.int, 'memo: 기본 10건, 보수 13건', true)
   one(14, '성사된 홈통 작업 Signed (WON)', `COUNTIFS(${QSVC},"GUT",${QSTAT},"WON")`, FMT.int, '견적 시트')
-  one(15, '날짜 잡힌 예약 Booked with dates', `COUNTIFS(${QSVC},"GUT",${QSTAT},"WON",${QSCHED},"<>")`, FMT.int, 'G1 조건 5의 기준')
+  one(15, '날짜 잡힌 예약 Booked with dates', `COUNTIFS(${QSVC},"GUT",${QSTAT},"WON",${QSCHED},"<>")`, FMT.int, '관문 G1 조건 5의 기준')
   one(16, '완료된 홈통 작업 Completed', `COUNTIFS(${R('jobs', 'service')},"GUT")`, FMT.int, '작업 시트')
   one(17, '손익분기까지 남은 수 Remaining', 'MAX(0,$D$12-$B$14)', FMT.int, '실제 열 기준', true)
-  one(18, '사다리 구매 규칙 Ladder rule', `IF($B$15>=${S('g1_min_booked')},"구매 가능 — 날짜 잡힌 예약 "&$B$15&"건","사다리 구매 금지 — 예약 "&$B$15&"/"&${S('g1_min_booked')})`, null, 'memo §2 G1 조건 5', true)
-  one(19, 'G1 상태', S('g1'), null, '설정 시트')
+  one(18, '사다리 구매 규칙 Ladder rule', `IF($B$15>=${S('g1_min_booked')},"구매 가능 — 날짜 잡힌 예약 "&$B$15&"건","사다리 구매 금지 — 예약 "&$B$15&"/"&${S('g1_min_booked')})`, null, 'memo §2 관문 G1 조건 5', true)
+  one(19, '관문 G1 상태', S('g1'), null, '설정 시트')
 
-  sectionRow(ws, 21, 'B. 제설 Snow — Gate S(서면 보험) 후에만. 12/1 전 결제 없음, 11/20까지 손익분기 미달이면 모든 계약 무효', 5)
+  sectionRow(ws, 21, 'B. 제설 Snow — 관문 S(서면 보험) 후에만. 12/1 전 결제 없음. 11/20까지 전체 제설 계약(모든 지역 합산)이 최소 건수(손익분기)에 이르지 않으면 모든 계약 무효', 5)
   head(22)
   row(23, '제설 보험 Snow cover', S('snow_cover_base'), S('snow_cover_cons'), `IF(${S('snow_cover_actual')}<>"",${S('snow_cover_actual')},${S('snow_cover_base')})`, FMT.money0, 'F29 (SNIPPET)')
   row(24, '제설기 Snowblower', S('blower_base'), S('blower_cons'), `IF(${S('blower_actual')}<>"",${S('blower_actual')},${S('blower_base')})`, FMT.money0, 'F30. 삽만 쓰면 0')
@@ -1697,7 +1697,7 @@ function buildBreakEven(ws) {
   )
   one(37, '삽 제설 한도 Shovel cap', `IF(AND($B$31="SHOVEL",$B$33>${S('shovel_cap')}),"한도 초과 — 삽 제설은 "&${S('shovel_cap')}&"곳까지 (가정)","OK")`, null, 'memo §9 (가정)')
   one(38, '서명한 시즌 총액 Signed season value', `SUMIFS(${QPRICE},${QSVC},"SNOW",${QSTAT},"WON")`, FMT.money0, '받은 돈 ≠ 번 돈: 서비스를 한 만큼만 번 것 (memo 5.3)')
-  one(39, '월 분할 입금 예정 Per instalment (12/1–3/1)', `IFERROR($B$38/${S('snow_instalments')},0)`, FMT.money0, '12/1, 1/1, 2/1, 3/1')
+  one(39, '월 분할 입금 예정 Per instalment (12/1–3/1)', `IFERROR($B$38/${S('snow_instalments')},0)`, FMT.money0, '시즌 총액 ÷ 4: 12/1, 1/1, 2/1, 3/1')
   ws.addConditionalFormatting({
     ref: 'B36',
     rules: [
@@ -1830,7 +1830,7 @@ function buildInvoice(ws) {
 
   // snow instalments
   longRow(28, `IF(${H.snow},"제설 시즌 계약 — 4회 분할 / Snow season contract — 4 instalments","")`, { size: 10, bold: true, height: 18 })
-  put('A29', `IF(${H.snow},"시즌 총액 / Season total","")`, { f: true })
+  put('A29', `IF(${H.snow},"시즌 요금(현장 확정) / Season price (confirmed on site)","")`, { f: true })
   put('F29', `IF(${H.snow},${H.season},"")`, { f: true, fmt: FMT.money, bold: true })
   const ord = ['1회차 / 1st', '2회차 / 2nd', '3회차 / 3rd', '4회차 / 4th']
   const dates = [`DATE(${H.syear},12,1)`, `DATE(${H.syear}+1,1,1)`, `DATE(${H.syear}+1,2,1)`, `DATE(${H.syear}+1,3,1)`]
@@ -1841,15 +1841,19 @@ function buildInvoice(ws) {
     put(`F${r}`, `IF(${H.snow},ROUND(IFERROR(${H.season}/${S('snow_instalments')},0),2),"")`, { f: true, fmt: FMT.money })
   })
   longRow(34, `IF(${H.snow},"12월 1일 전에는 어떤 금액도 받지 않습니다. / No payment is taken before Dec 1.","")`, { height: 18 })
-  longRow(35, `IF(${H.snow},${lit('11월 20일까지 최소 계약 수가 채워지지 않으면 이 계약은 무효이며, 아무것도 청구하지 않습니다. / If the minimum number of contracts is not signed by Nov 20, this contract is void and nothing is charged.')},"")`)
-  longRow(36, `IF(${H.snow},"시즌: 12월 1일–3월 31일. 11월 눈은 방문당 $"&${S('snow_per_visit')}&". / Season: Dec 1 – Mar 31. November storms: $"&${S('snow_per_visit')}&" per visit.","")`)
+  longRow(35, `IF(${H.snow},${lit('11월 20일까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다. / If the minimum number of snow contracts, all areas combined, is not signed by Nov 20, the contract is void and nothing is owed.')},"")`)
+  longRow(
+    36,
+    `IF(${H.snow},${lit('시즌: 12월 1일–3월 31일. 11월 눈: 계약서에서 11월 옵션을 선택하신 경우에만, 계약 확정일부터 11월 30일까지 출동 기준 적설량 이상 내린 눈에 방문당 $')}&${S('snow_per_visit')}&${lit('를 적용하며, 12월 1일 첫 분할금과 함께 청구합니다. / Season: Dec 1 – Mar 31. November snow: only if you ticked this option in the contract, $')}&${S('snow_per_visit')}&${lit(' per visit for snowfall at or above the trigger depth between contract confirmation and Nov 30, billed with the Dec 1 first instalment.')},"")`,
+    { height: 52 },
+  )
 
   // Door-signed cancellation notice: Ontario wording only for Ontario builds (F32); elsewhere a
   // placeholder the owner must replace, because other provinces were not researched.
   const doorNotice = ONTARIO
-    ? '온타리오 방문 계약: 집에서 서명하셨다면, 서명한 계약서 사본을 받은 날부터 10일 안에 취소할 수 있고, 환불은 15일 안에 받습니다. / Ontario: if you signed this agreement at your home, you can cancel within 10 days of receiving your signed copy, and any refund is made within 15 days. (ontario.ca — 법률 자문 아님 / not legal advice)'
+    ? '온타리오 방문 계약: 집에서 서명하셨다면 계약서 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있고, 취소 통지를 받은 다음 날부터 15일 안에 환불해 드립니다. / Ontario: if you signed this agreement at your home, you can cancel within 10 days after receiving a copy of the signed agreement, and we refund you within 15 days after receiving your cancellation notice. (ontario.ca — 법률 자문 아님 / not legal advice)'
     : `[${NOT_VERIFIED_PROV}] 방문 계약 취소권 안내: 이 주의 규칙은 조사하지 않았습니다. 보내기 전에 이 줄을 확인된 문구로 바꾸세요. / Door-to-door cancellation rules for this province were not researched. Replace this line before sending.`
-  longRow(38, `IF(${H.door}="Y",${lit(doorNotice)},"")`, { height: 40 })
+  longRow(38, `IF(${H.door}="Y",${lit(doorNotice)},"")`, { height: 48 })
   longRow(40, '"감사합니다! / Thank you!"', { size: 10, bold: true, height: 18 })
   longRow(41, `${S('brand_en')}&" · "&${S('brand_ko')}&" · "&${S('mailing')}&" · "&${S('phone')}&" · "&${S('email')}`, { italic: true, height: 18 })
 

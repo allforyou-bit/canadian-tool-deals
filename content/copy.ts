@@ -47,7 +47,7 @@ const snowInstalments = priceBook.snow?.instalments ?? 0
 
 export const COPY: { en: SiteCopy; ko: SiteCopy } = {
   en: {
-    heroTitle: 'Home cleaning in your neighbourhood, with prices up front',
+    heroTitle: 'Local home cleaning, with prices up front',
     heroSubtitle:
       'Standard, deep and move-in/move-out cleans at flat prices by home size. Check your estimate online, and we confirm it on site before any work starts.',
     heroCta: 'Get my estimate',
@@ -87,7 +87,7 @@ export const COPY: { en: SiteCopy; ko: SiteCopy } = {
         body: 'Standard, deep and move-in/move-out cleans at a flat price by bedrooms and bathrooms. After your first clean, you can switch to regular biweekly visits.',
         includes: [
           'Kitchen, bathrooms, dusting and floors',
-          'Deep and move-out cleans add baseboards, doors and built-up grime',
+          'Deep and move-in/move-out cleans add baseboards, doors and built-up grime',
           'Inside oven, fridge or cabinets as add-ons',
         ],
       },
@@ -102,7 +102,7 @@ export const COPY: { en: SiteCopy; ko: SiteCopy } = {
       },
       snow: {
         title: 'Seasonal snow clearing',
-        body: `Driveway clearing with a walk-behind snowblower or shovel for the Dec 1 – Mar 31 season. Nothing is paid before Dec 1: the season is billed in ${snowInstalments} monthly instalments, and contracts go ahead only if enough homes sign up by Nov 20.`,
+        body: `Driveway clearing with a walk-behind snowblower or shovel for the Dec 1 – Mar 31 season. Nothing is paid before Dec 1: the season is billed in ${snowInstalments} monthly instalments, and if we have not signed our minimum number of snow contracts (all areas combined) by Nov 20, the contract is void and you owe nothing.`,
         includes: [
           'Visits when snowfall reaches the depth set in your agreement',
           'Walkway, steps and salting as add-ons',
@@ -159,7 +159,7 @@ export const COPY: { en: SiteCopy; ko: SiteCopy } = {
         body: '일반 청소, 딥클린, 입주·이사 청소를 침실·욕실 수에 따른 정액 요금으로 해 드려요. 첫 청소 후에는 격주 정기 청소로 이어 가실 수 있어요.',
         includes: [
           '주방, 욕실, 먼지 제거, 바닥 청소',
-          '딥클린·이사 청소는 걸레받이, 문, 묵은 때까지',
+          '딥클린·입주·이사 청소는 걸레받이, 문, 묵은 때까지',
           '오븐·냉장고·수납장 내부는 추가 옵션',
         ],
       },
@@ -174,7 +174,7 @@ export const COPY: { en: SiteCopy; ko: SiteCopy } = {
       },
       snow: {
         title: '시즌 제설',
-        body: `12월 1일부터 3월 31일까지, 보행식 제설기나 삽으로 진입로 눈을 치워 드려요. 12월 1일 전에는 돈을 받지 않고 시즌 요금은 ${snowInstalments}번에 나눠 매달 청구하며, 11월 20일까지 전체 제설 계약(모든 지역 합계)이 최소 건수 이상 모여야 계약이 확정돼요.`,
+        body: `12월 1일부터 3월 31일까지, 보행식 제설기나 삽으로 진입로 눈을 치워 드려요. 12월 1일 전에는 돈을 받지 않고 시즌 요금은 ${snowInstalments}번에 나눠 매달 청구하며, 11월 20일까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없어요.`,
         includes: [
           '계약서에 정한 적설량 이상이면 출동',
           '보도·계단, 제빙(소금) 살포는 추가 옵션',

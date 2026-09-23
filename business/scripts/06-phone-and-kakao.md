@@ -62,7 +62,7 @@ Sorry, I'm more comfortable with English in writing. Could you text me the detai
 |---|---|
 | Live voice calls are excluded from CASL (s.6(8)(a), memo F11), but National Do Not Call List rules were **not verified**. Answer inbound calls and call back only people who asked. No cold calls. | 실시간 음성 통화는 CASL 적용 제외지만, 전화 영업 금지 목록(DNCL) 규정은 **확인되지 않았어요**. 걸려 온 전화에 답하고, 요청한 사람에게만 다시 거세요. 모르는 사람에게 영업 전화 금지. |
 | Text the estimate only if they said yes, using file 03. | 고객이 좋다고 한 경우에만 03번 템플릿으로 견적 문자를 보내세요. |
-| Outside `{AREA}`, or a job you don't do (in-wall electrical, plumbing, gas, windows, pressure washing in Toronto; memo §3): say so politely and decline. | 서비스 지역 밖이거나 하지 않는 일(벽 속 전기, 배관, 가스, 창문, 토론토 압력 세척)은 정중하게 거절하세요. |
+| Outside `{AREA}`, or a job you don't do (in-wall electrical, plumbing, gas, windows, pressure washing in Toronto; memo §3): say so politely and decline. | 서비스 지역 밖이거나 하지 않는 일(벽 속 전기, 배관, 가스, 창문, 토론토에서의 고압 세척)은 정중하게 거절하세요. |
 | Log every call in the CRM: source "phone", how they heard about you, outcome. | 모든 통화를 CRM에 기록하세요: 출처 "전화", 알게 된 경로, 결과. |
 
 ---
