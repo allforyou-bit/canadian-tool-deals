@@ -8,7 +8,7 @@ import { DICT, type Lang } from '@/lib/i18n'
 import { contactLinks, quoteToolProps } from '@/lib/site'
 
 const SECTION = {
-  en: { how: 'How it works', why: 'Why neighbours choose us', faq: 'Questions', services: 'Services' },
+  en: { how: 'How it works', why: 'Why book with us', faq: 'Questions', services: 'Services' },
   ko: { how: '이용 방법', why: '저희를 선택하는 이유', faq: '자주 묻는 질문', services: '서비스' },
 }
 
@@ -91,7 +91,7 @@ export default function HomePage({ lang }: { lang: Lang }) {
             <h2 className="text-2xl font-bold">{c.quoteTitle}</h2>
             <p className="mt-2 max-w-2xl text-foreground/75">{c.quoteIntro}</p>
             <div className="mt-6">
-              <QuoteTool {...quoteToolProps(lang)} />
+              <QuoteTool {...quoteToolProps(lang)} headingLevel={3} />
             </div>
           </div>
         </section>

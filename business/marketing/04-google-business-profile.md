@@ -73,11 +73,14 @@ If you enter prices on the profile, they **must match `config/prices.ts` (GTA de
 | Move-in / move-out clean | 입주·이사 청소 | Empty-home clean before or after a move | from $260 (1 bedroom) | always |
 | Biweekly cleaning | 2주 정기 청소 | A standard clean every two weeks on a set day | from $150 per visit (standard price) | always |
 | Extra bathroom / inside oven / inside fridge / inside empty cabinets | 욕실 추가 / 오븐 내부 / 냉장고 내부 / 빈 수납장 내부 | Add-ons | $30 / $40 / $35 / $40 | always |
-| Gutter cleaning | 처마 물받이(거터) 청소 | Gutters only, cleaned by hand from a ladder; paid on completion | from $175 (1 storey), $225 (2), $300 (3) | `services.gutters` |
+| Gutter cleaning | 처마 물받이(거터) 청소 | Gutters only, cleaned by hand from a ladder; paid on completion | from $175 (1 storey), $225 (2 storeys) | `services.gutters` |
 | Downspout flush | 다운스파우트(배수관) 뚫기 | Add-on to gutter cleaning | $70 | `services.gutters` |
 | Seasonal snow clearing | 시즌 제설 | Driveway, Dec 1 – Mar 31, billed in 4 instalments (Dec 1 – Mar 1); no payment before Dec 1 | from $500 per season (single driveway) | `services.snow` |
 | Walkway and steps / salting | 현관 보도·계단 / 제빙(소금) | Snow add-ons, per season | $100 / $100 | `services.snow` |
-| November storm visit | 11월 눈 1회 | Before the season starts | $60 per visit | `services.snow` |
+| November snow visit | 11월 눈 1회(선택) | Optional, after the contract is confirmed; billed Dec 1 | $60 per visit | `services.snow` |
+
+- **3-storey gutters are not listed by default.** Add "$300 (3 storeys)" only when `NEXT_PUBLIC_GUTTER_MAX_STOREYS=3`, which you set only when a second person is present and your broker has confirmed cover (`business/checklists/04-ladder-go-no-go.md` row 11; not researched). While you work alone, 3-storey jobs are declined.
+- **November snow:** the customer ticks it in the snow agreement. It runs only from the day you confirm the agreement is going ahead (by Nov 21) to Nov 30, and it is billed with the Dec 1 instalment, never before (snow agreement, "November snow" clause).
 
 Price-book fields: `cleaning.tiers`, `cleaning.extraBathroom`, `cleaning.addOns`, `gutters.byStoreys`, `gutters.downspoutFlush`, `snow.driveway`, `snow.walkwayAndSteps`, `snow.salting`, `snow.perVisit`, `snow.instalments`.
 
@@ -124,9 +127,10 @@ Only post seeds 8–10 while the matching service is enabled.
 - EN: No. We clean gutters only, by hand from a ladder. You pay when the job is done.
 - KO: 아니요. 처마 물받이만 사다리에 올라 손으로 청소합니다. 작업이 끝난 뒤 결제하시면 됩니다.
 
-**9. [Snow] When do I pay, and what happens if not enough people sign up?**
-- EN: Nothing is paid before Dec 1. The season (Dec 1 – Mar 31) is billed in 4 instalments on Dec 1, Jan 1, Feb 1 and Mar 1. If we don't have enough signed agreements in your area by Nov 20, the season agreement is void and you owe nothing for the season.
-- KO: 12월 1일 전에는 돈을 받지 않습니다. 시즌(12월 1일 – 3월 31일) 요금은 12월 1일, 1월 1일, 2월 1일, 3월 1일에 4번 나눠 내십니다. 11월 20일까지 동네에서 계약하신 분이 충분하지 않으면 시즌 계약은 무효가 되고, 시즌 비용은 내지 않으셔도 됩니다.
+**9. [Snow] When do I pay, and what happens if not enough contracts are signed?**
+- EN: Nothing is paid before Dec 1. The season (Dec 1 – Mar 31) is billed in 4 instalments on Dec 1, Jan 1, Feb 1 and Mar 1. If we have not signed our minimum number of snow contracts (all areas combined) by Nov 20, every season agreement is void and you owe nothing. We'll tell you by Nov 21 whether it goes ahead.
+- KO: 12월 1일 전에는 돈을 받지 않습니다. 시즌(12월 1일 – 3월 31일) 요금은 12월 1일, 1월 1일, 2월 1일, 3월 1일에 4번 나눠 내십니다. 11월 20일까지 전체 제설 계약(모든 지역 합계)이 최소 건수에 이르지 않으면 모든 시즌 계약은 무효가 되고, 내실 돈은 없습니다. 진행 여부는 11월 21일까지 알려 드립니다.
+- *(Source: snow agreement, "Minimum-contract condition (November 20)" clause, `content/agreements.ts`.)*
 
 **10. [Snow] Where does the snow go?**
 - EN: On your property, never onto the road. Pushing snow onto the road is against Ontario's Highway Traffic Act (s.181) and Toronto's Municipal Code (743-9).

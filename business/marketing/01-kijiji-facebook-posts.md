@@ -14,7 +14,7 @@ Each service has 3 English and 3 Korean variants. Titles are 60 characters or fe
 | Service | When to post | Memo rule |
 |---|---|---|
 | Cleaning (standard, deep, move-in/move-out, biweekly) | From day 3 (Wed Sep 30). **Book direct jobs only for dates after your cleaning liability insurance is bound** (target Wed Oct 7). | "No direct clients before it is bound" (section 7, week 2) |
-| Gutters | Only when G1 items 1–4 are true: (1) a vehicle that carries a 24–28 ft ladder, (2) you are fit and comfortable on a ladder, (3) a broker has **confirmed in writing** that your policy covers ladder/eavestrough work, (4) you have the money for ladder, insurance and the $1,500 setup (A5, ESTIMATE). Bookings from these ads count toward item 5 (5 jobs booked before you buy the ladder). **If G1 has not passed by Fri Oct 9, delete the gutter ads and call everyone booked to cancel.** Nobody has paid anything, because gutters are paid on completion. | Section 2, Gate G1 |
+| Gutters | Only when G1 items 1–4 are true: (1) a vehicle that carries a 24–28 ft ladder, (2) you are fit and comfortable on a ladder, (3) a broker has **confirmed in writing** that your policy covers ladder/eavestrough work, (4) you have the money for ladder, insurance and the $1,500 setup (A5, ESTIMATE). Bookings from these ads count toward item 5 (5 jobs booked before you buy the ladder). **Before G1 passes, use the posts in section 6 as written: they say the date is provisional and send people to your phone, not the website** (see the note at the top of section 6). **If G1 has not passed by Fri Oct 9, delete the gutter ads and call everyone booked to cancel.** Nobody has paid anything, because gutters are paid on completion. | Section 2, Gate G1 |
 | Snow | Only after you have **written snow insurance** (Gate S, target Fri Oct 30). | "Pitch snow contracts once written cover exists" (section 7, week 3) |
 
 In code, the same switches are `business.services.gutters` and `business.services.snow` in `config/business.ts` (both OFF by default).
@@ -32,11 +32,12 @@ Every dollar figure in this file comes from `PRICE_BOOKS.gta` in `config/prices.
 | Extra bathroom | +$30 | `cleaning.extraBathroom` |
 | Inside oven / inside fridge / inside empty cabinets | +$40 / +$35 / +$40 | `cleaning.addOns` |
 | Within 24 h, weekend or statutory holiday | +15% | `cleaning.rushPremiumPct` |
-| Gutters, 1 / 2 / 3 storeys | from $175 / $225 / $300 | `gutters.byStoreys` |
+| Gutters, 1 / 2 storeys | from $175 / $225 | `gutters.byStoreys` |
+| Gutters, 3 storeys: **do not post by default** (see section 6) | from $300, only if `NEXT_PUBLIC_GUTTER_MAX_STOREYS=3` and a second person is present | `gutters.byStoreys`, `gutterMaxStoreys` |
 | Downspout flush | +$70 | `gutters.downspoutFlush` |
-| Snow season, single / double / large driveway | $500 / $650 / $800 (4 × $125 / $162.50 / $200) | `snow.driveway`, `snow.instalments` |
+| Snow season, single / double / large driveway | from $500 / $650 / $800 (4 instalments from $125 / $162.50 / $200) | `snow.driveway`, `snow.instalments` |
 | Front walkway and steps / salting | +$100 / +$100 per season | `snow.walkwayAndSteps`, `snow.salting` |
-| November storm, per visit | $60 | `snow.perVisit` |
+| November snow, per visit (optional, only after the contract is confirmed; billed with the Dec 1 instalment, see section 7) | $60 | `snow.perVisit` |
 
 - "From" means the smallest home in that row. The website calculator shows a range from the price-book figure up to 15% more (`rangeUpliftPct`), and the final price is confirmed from photos or on site.
 - **Sales tax:** you are not registered for GST/HST at the start (`salesTaxRegistered: false`; small-supplier test $30,000, memo F7). Do not add "+ HST" now. Once you register, add "+ HST" after every price.
@@ -243,7 +244,13 @@ Korean spoken · 한국어 가능
 ## 6. Posts: Gutters (Track B, only under the G1 rule in 1.1)
 
 Scope is **gutters only**: no windows, no pressure washing (memo section 3). Cleaning is by hand and scoop from a ladder. Paid on completion.
-3-storey homes: take them only if your ladder reaches safely. Check first with the ladder go/no-go checklist (build item 14).
+3-storey homes are **declined by default**. `config/business.ts` sets `gutterMaxStoreys` to 2 unless `NEXT_PUBLIC_GUTTER_MAX_STOREYS=3`, so the website calculator and the printed price sheet show 1 and 2 storeys only. The ladder go/no-go checklist (`business/checklists/04-ladder-go-no-go.md`, row 11) says never go alone on 3 storeys. No helpers are hired in the first 30 days (memo section 3). So the posts below list 1 and 2 storeys only.
+**Add a 3-storey line (`- 3 storeys from $300` / `- 3층 $300부터`) only when `gutterMaxStoreys` is 3.** Set it to 3 only when a second person is present and your broker has confirmed that the policy covers the work (checklist 04, row 11; not researched).
+
+**The posts below are written for the stage before G1 passes**, which is when most gutter posts go up (1.1):
+- Each post says the booking is provisional, in the same words as door scripts 1B and 1D: dates after mid-October, confirmed only once insurance and ladder are in place by Oct 9, otherwise cancelled with nothing owed.
+- Each post sends people to your phone, not to a website estimate. The website shows no gutter option until `NEXT_PUBLIC_ENABLE_GUTTERS=1`, which you set only after G1 passes (`business/08-배포-가이드.md` section 5-1).
+- **After G1 passes and gutters are ON:** delete the sentence(s) about the date being confirmed by Oct 9, and you may add `Estimate: {SITE}` / `예상 가격: {SITE}` above the phone line.
 
 ### G-EN-1 · Price by height
 **Title:** `Gutter cleaning in {AREA} – bungalow from $175`
@@ -254,13 +261,13 @@ Leaves down? {BRAND} cleans eavestroughs by hand, from a ladder, before the snow
 Flat price by height:
 - Bungalow / 1 storey from $175
 - 2 storeys from $225
-- 3 storeys from $300 (only if our ladder reaches safely; we check first)
 Downspout flush +$70
 
 Gutters only: no windows, no pressure washing, no roof repairs.
 You pay when the job is done.
 
-Estimate: {SITE}
+Taking bookings now for dates after mid-October. Your date is confirmed only once our insurance and ladder are in place (by Oct 9). If not, we'll contact you to cancel, and you owe nothing.
+
 Call or text {PHONE}
 ```
 
@@ -270,7 +277,7 @@ Call or text {PHONE}
 ```text
 Book your fall gutter cleaning: after the leaves drop, before the snow.
 
-{BRAND} is now booking dates in {AREA}.
+{BRAND} is now booking dates after mid-October in {AREA}.
 - 1 storey from $175
 - 2 storeys from $225
 - Downspout flush +$70
@@ -278,26 +285,27 @@ Book your fall gutter cleaning: after the leaves drop, before the snow.
 Hand cleaning from a ladder. Gutters only: we don't do windows or pressure washing.
 No payment until the work is done.
 
-Pick a date: {SITE}
-Or call or text {PHONE}
+Your date is confirmed only once our insurance and ladder are in place (by Oct 9). If not, we'll contact you to cancel, and you owe nothing.
+
+To pick a date, call or text {PHONE}
 ```
 
 ### G-EN-3 · Neighbours
 **Title:** `Neighbours in {AREA}: gutter cleaning from $175`
 
 ```text
-{BRAND} is cleaning gutters on streets in {AREA} this fall. Ask if we are already booked on your street; we will try to do yours the same day.
+{BRAND} is booking gutter cleaning on streets in {AREA} this fall. Ask if we are already booked on your street; we will try to do yours the same day.
 
 Price by height:
 - Bungalow from $175
 - 2 storeys from $225
-- 3 storeys from $300 (only if our ladder reaches safely; we check first)
 Downspout flush +$70
 
 A photo of the front of your house helps us confirm the price. Pay when done.
 
+Dates are after mid-October. Your date is confirmed only once our insurance and ladder are in place (by Oct 9). If not, we'll contact you to cancel, and you owe nothing.
+
 Call or text {PHONE}
-{SITE}
 ```
 
 ### G-KO-1 · 높이별 요금
@@ -309,13 +317,13 @@ Call or text {PHONE}
 높이별 정액 요금:
 - 단층(방갈로) $175부터
 - 2층 $225부터
-- 3층 $300부터 (사다리로 안전하게 닿는 집만, 미리 확인합니다)
 - 다운스파우트(배수관) 뚫기 +$70
 
 물받이 청소만 합니다. 창문 청소, 고압 세척, 지붕 수리는 하지 않습니다.
 작업이 끝난 뒤에 결제하시면 됩니다.
 
-예상 가격: {SITE}
+10월 중순 이후 날짜로 예약을 받고 있습니다. 보험과 사다리 준비가 10월 9일까지 끝나야 날짜가 확정됩니다. 준비가 안 되면 연락드려 예약을 취소하며, 내실 돈은 없습니다.
+
 전화·문자: {PHONE}
 ```
 
@@ -325,7 +333,7 @@ Call or text {PHONE}
 ```text
 거터 청소는 낙엽이 다 떨어진 뒤, 눈이 오기 전에 하시는 게 좋습니다.
 
-{BRAND}에서 {AREA} 예약을 받고 있습니다.
+{BRAND}에서 {AREA} 10월 중순 이후 날짜로 예약을 받고 있습니다.
 - 단층 $175부터
 - 2층 $225부터
 - 다운스파우트(배수관) 뚫기 +$70
@@ -333,26 +341,27 @@ Call or text {PHONE}
 사다리에 올라 손으로 청소합니다. 창문 청소와 고압 세척은 하지 않습니다.
 작업이 끝나기 전에는 돈을 받지 않습니다.
 
-날짜 선택: {SITE}
-전화·문자: {PHONE}
+보험과 사다리 준비가 10월 9일까지 끝나야 날짜가 확정됩니다. 준비가 안 되면 연락드려 예약을 취소하며, 내실 돈은 없습니다.
+
+날짜 문의(전화·문자): {PHONE}
 ```
 
 ### G-KO-3 · 이웃
 **제목:** `{AREA} 이웃분들, 거터 청소 예약 받습니다`
 
 ```text
-{BRAND}에서 이번 가을 {AREA} 여러 거리의 거터 청소를 하고 있습니다. 같은 거리에 이미 예약된 집이 있는지 물어봐 주세요. 가능하면 같은 날 해 드리겠습니다.
+{BRAND}에서 이번 가을 {AREA} 여러 거리의 거터 청소 예약을 받고 있습니다. 같은 거리에 이미 예약된 집이 있는지 물어봐 주세요. 가능하면 같은 날 해 드리겠습니다.
 
 높이별 요금:
 - 단층 $175부터
 - 2층 $225부터
-- 3층 $300부터 (사다리로 안전하게 닿는 집만)
 - 다운스파우트 뚫기 +$70
 
 집 앞면 사진을 보내 주시면 가격 확인이 빨라요. 작업이 끝난 뒤 결제하시면 됩니다.
 
+작업 날짜는 10월 중순 이후입니다. 보험과 사다리 준비가 10월 9일까지 끝나야 날짜가 확정됩니다. 준비가 안 되면 연락드려 예약을 취소하며, 내실 돈은 없습니다.
+
 전화·문자: {PHONE}
-{SITE}
 ```
 
 ---
@@ -362,7 +371,7 @@ Call or text {PHONE}
 These terms come from memo sections 2 and 6 and must match your signed snow agreement (build item 5):
 - The season runs **Dec 1 – Mar 31** and is billed in **4 instalments (Dec 1, Jan 1, Feb 1, Mar 1)**.
 - **No payment is taken before Dec 1.**
-- November storms are charged per visit ($60).
+- November snow is **optional** (the customer ticks it in the agreement). It is cleared at the per-visit rate ($60) only from the day you confirm the agreement is going ahead (you tell customers by Nov 21, after the Nov 20 condition) until Nov 30, and it is **billed with the Dec 1 instalment, never before** (snow agreement, "November snow" clause). Never write just "November storms: $60 per visit" in a post.
 - **Every agreement is void unless the break-even number of agreements is signed by Nov 20.**
 - Snow is **never pushed onto the road** (Ontario HTA s.181 and Toronto Municipal Code 743-9, memo F34).
 - **Ontario: an agreement signed at the customer's home can be cancelled within 10 days of receiving the signed copy, with a refund within 15 days** (memo F32, [ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract)). This file is not legal advice.
@@ -375,13 +384,13 @@ These terms come from memo sections 2 and 6 and must match your signed snow agre
 Driveway snow clearing for the whole season, Dec 1 – Mar 31, with a {SNOW_EQUIPMENT}. No truck plow.
 
 Season price:
-- Single driveway (1–2 cars) from $500 (4 × $125)
+- Single driveway (1–2 cars) from $500 (4 instalments from $125)
 - Double driveway (3–4 cars) from $650
 - Large driveway (5–6 cars) from $800
 - Front walkway and steps +$100 · salting +$100
 
 Pay in 4 instalments: Dec 1, Jan 1, Feb 1, Mar 1. Nothing to pay before Dec 1.
-November storms: $60 per visit.
+November snow (optional, once your contract is confirmed): $60 per visit, billed with your Dec 1 instalment.
 We never push snow onto the road.
 
 {BRAND}
@@ -396,10 +405,10 @@ With {BRAND}, you pay nothing for snow clearing before Dec 1.
 
 - Season: Dec 1 – Mar 31
 - 4 payments: Dec 1, Jan 1, Feb 1, Mar 1
-- Single driveway from $500 = 4 × $125
+- Single driveway from $500 (4 instalments from $125)
 - We come when snow reaches {TRIGGER_DEPTH}
 
-The season goes ahead only if enough neighbours in {AREA} sign up by Nov 20. If not, the season agreement is void and you owe nothing for it.
+Season contracts go ahead only if we sign our minimum number of snow contracts (all areas combined) by Nov 20; if not, the agreement is void and you owe nothing.
 
 Ontario: if you sign at your door, you can cancel within 10 days of getting your copy.
 
@@ -408,15 +417,15 @@ Call or text {PHONE}
 ```
 
 ### S-EN-3 · Street route
-**Title:** `Snow clearing on your street in {AREA} – 4 × $125`
+**Title:** `Snow clearing on your street in {AREA} – from $500/season`
 
 ```text
 {BRAND} keeps a small route of nearby driveways in {AREA}, cleared with a {SNOW_EQUIPMENT}.
 
-- Single driveway: $500 for the season, paid 4 × $125 (Dec 1 – Mar 1)
-- Double driveway: $650 · Large: $800
+- Single driveway: from $500 for the season (4 instalments, from $125 each; Dec 1 – Mar 1)
+- Double driveway: from $650 · Large: from $800
 - Walkway and steps +$100 · Salting +$100
-- November storms: $60 per visit
+- November snow (optional, once your contract is confirmed): $60 per visit, billed with your Dec 1 instalment
 
 Nothing is charged before Dec 1. The written agreement says when we come, what happens in a low-snow winter, and that snow never goes onto the road.
 
@@ -432,13 +441,13 @@ Call or text {PHONE}
 작업 장비: {SNOW_EQUIPMENT_KO}
 
 시즌 요금:
-- 드라이브웨이(차 1–2대) $500부터 (4회 × $125)
+- 드라이브웨이(차 1–2대) $500부터 (4회 분할, 회당 $125부터)
 - 드라이브웨이(차 3–4대) $650부터
 - 드라이브웨이(차 5–6대) $800부터
 - 현관 보도·계단 +$100 · 제빙(소금) +$100
 
 12월 1일, 1월 1일, 2월 1일, 3월 1일, 4번에 나눠 내시면 됩니다. 12월 1일 전에는 돈을 받지 않습니다.
-11월 눈: 1회 $60
+11월 눈(선택, 계약 확정 후): 1회 $60, 12월 1일 첫 분할금과 함께 청구.
 치운 눈은 절대 도로로 밀어내지 않습니다.
 
 {BRAND}
@@ -453,10 +462,10 @@ Call or text {PHONE}
 
 - 시즌: 12월 1일 – 3월 31일
 - 4번 나눠 결제: 12월 1일, 1월 1일, 2월 1일, 3월 1일
-- 드라이브웨이(차 1–2대) $500부터 = 4회 × $125
+- 드라이브웨이(차 1–2대) $500부터 (4회 분할, 회당 $125부터)
 - 눈이 {TRIGGER_DEPTH} 이상 쌓이면 출동합니다
 
-{AREA}에서 11월 20일까지 신청하신 분이 충분해야 시즌이 시작됩니다. 부족하면 시즌 계약은 무효가 되고, 시즌 비용은 내지 않으셔도 됩니다.
+11월 20일까지 전체 제설 계약이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다.
 
 온타리오주: 댁에서 계약하신 경우, 계약서 사본을 받으신 날부터 10일 안에 취소하실 수 있습니다.
 
@@ -465,16 +474,16 @@ Call or text {PHONE}
 ```
 
 ### S-KO-3 · 우리 동네 루트
-**제목:** `{AREA} 우리 거리 제설 · 월 $125씩 4회`
+**제목:** `{AREA} 우리 거리 제설 · 시즌 $500부터`
 
 ```text
 {BRAND}에서 {AREA} 가까운 집들만 모아 작은 제설 루트를 운영합니다.
 작업 장비: {SNOW_EQUIPMENT_KO}
 
-- 드라이브웨이(차 1–2대): 시즌 $500, 4회 × $125 (12월 1일 – 3월 1일)
-- 차 3–4대: $650 · 차 5–6대: $800
+- 드라이브웨이(차 1–2대): 시즌 $500부터, 4회 분할(회당 $125부터) (12월 1일 – 3월 1일)
+- 차 3–4대: $650부터 · 차 5–6대: $800부터
 - 현관 보도·계단 +$100 · 제빙(소금) +$100
-- 11월 눈: 1회 $60
+- 11월 눈(선택, 계약 확정 후): 1회 $60, 12월 1일 첫 분할금과 함께 청구
 
 12월 1일 전에는 아무것도 청구하지 않습니다. 언제 오는지, 눈이 적게 온 겨울엔 어떻게 하는지, 눈을 도로에 버리지 않는다는 내용까지 서면 계약서에 모두 적어 드립니다.
 

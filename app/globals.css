@@ -96,6 +96,18 @@ body {
   }
 }
 
+/* Phones and narrow windows: text sheets (agreements, price list) reflow to the screen width so
+   nobody has to pan sideways to read them. Door-hanger and flyer sheets (the flex ones) hold
+   fixed-size cards, so they keep physical size. Print output is unchanged. */
+@media screen and (max-width: 8.5in) {
+  .sheet:not(.flex) {
+    width: 100%;
+    max-width: 8.5in;
+    min-height: 0;
+    padding: 1.25rem 1rem;
+  }
+}
+
 @media print {
   .sheet {
     width: auto;

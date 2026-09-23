@@ -35,7 +35,11 @@ export interface Estimate {
   high: number
   /** present only when the business is registered for GST/HST */
   tax?: { label: string; lowAmount: number; highAmount: number }
-  /** snow only: how the season price is billed */
+  /**
+   * snow only: how the season price is billed. `each` = low ÷ instalments, i.e. the smallest
+   * possible instalment; the real one is the season price confirmed on site ÷ instalments, which
+   * can reach high ÷ instalments. Display it as "from", never as the exact instalment.
+   */
   schedule?: { instalments: number; each: number; firstDue: string }
   /** snow only: rate for storms before the season starts */
   perVisit?: number
@@ -123,7 +127,7 @@ export function estimateGutters(
   const lines: Line[] = [
     { en: `Gutter cleaning — ${storeyLabel[0]}`, ko: `홈통(처마 물받이) 청소 — ${storeyLabel[1]}`, amount: g.byStoreys[input.storeys] },
   ]
-  if (input.downspouts) lines.push({ en: 'Downspout flush', ko: '배수관(다운스파우트) 뚫기', amount: g.downspoutFlush })
+  if (input.downspouts) lines.push({ en: 'Downspout flush', ko: '배수관(다운스파우트) 청소', amount: g.downspoutFlush })
   return finish(book, lines, taxRatePct, taxLabel)
 }
 

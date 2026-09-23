@@ -39,7 +39,7 @@ Hi, you've reached {NAME} at {BRAND}. I'm probably on a job right now. Please le
 
 **KO**
 ```say
-안녕하세요, {BRAND} {NAME}입니다. 지금 작업 중이라 전화를 받지 못했어요. 성함, 연락처, 필요하신 서비스를 남겨 주시거나 이 번호로 문자 주세요. 최대한 빨리 연락드릴게요. 감사합니다!
+안녕하세요, {BRAND} {NAME}입니다. 지금은 전화를 받을 수 없어요. 작업 중일 수 있어요. 성함, 연락처, 필요하신 서비스를 남겨 주시거나 이 번호로 문자 주세요. 최대한 빨리 연락드릴게요. 감사합니다!
 ```
 
 ## 6C. If a call in English gets hard / 영어 통화가 어려울 때

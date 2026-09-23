@@ -5,7 +5,8 @@ import { CLEANING_TYPE_LABEL, DRIVEWAY_LABEL } from '@/lib/quote'
 import { absolute, contactLinks, setupMissing, type Cluster } from '@/lib/site'
 
 // Print-ready sheets rendered at physical size. Open the page, then Print → "Letter", scale 100%,
-// margins "None" or "Default" (the sheets already leave a safe margin). `npm run pdf` saves them as PDFs.
+// margins "Default". Each door-hanger and flyer sheet fits inside the 7.7 × 10.2 in box that
+// app/globals.css (@page letter, margin 0.4in) leaves, so it prints on one page. `npm run pdf` saves them as PDFs.
 
 async function qrSvg(url: string): Promise<string> {
   return QRCode.toString(url, { type: 'svg', margin: 0, errorCorrectionLevel: 'M', color: { dark: '#111111', light: '#ffffff' } })
@@ -27,59 +28,79 @@ function SampleMark() {
   )
 }
 
-/** "from" prices shown on printed material — always derived from the live price book */
+/**
+ * "from" prices shown on printed material — always derived from the live price book.
+ * At most 3 offers (memo section 10 item 6), using the slot table in
+ * business/marketing/05-door-hanger-and-flyer-text.md section 2: cleaning lines merge when
+ * gutters or snow take a slot.
+ */
 export function offerLines(lang: Lang): string[] {
   const c = priceBook.cleaning
   const from = lang === 'ko' ? (x: string) => `${x}부터` : (x: string) => `from ${x}`
-  const lines = [
-    `${CLEANING_TYPE_LABEL.deep[lang]} — ${from(money(cheapest(c.tiers.map((t) => t.deep))))}`,
-    `${CLEANING_TYPE_LABEL.moveOut[lang]} — ${from(money(cheapest(c.tiers.map((t) => t.moveOut))))}`,
-    `${CLEANING_TYPE_LABEL.standard[lang]} — ${from(money(cheapest(c.tiers.map((t) => t.standard))))}`,
-  ]
+  const price = (t: 'standard' | 'deep' | 'moveOut') => from(money(cheapest(c.tiers.map((x) => x[t]))))
+  const own = (t: 'standard' | 'deep' | 'moveOut') => `${CLEANING_TYPE_LABEL[t][lang]} — ${price(t)}`
+  const short = (t: 'standard' | 'deep' | 'moveOut') => `${CLEANING_TYPE_LABEL[t][lang]} ${price(t)}`
+  const extras: string[] = []
   if (business.services.gutters && priceBook.gutters) {
     const g = cheapest(Object.values(priceBook.gutters.byStoreys))
-    lines.push(lang === 'ko' ? `홈통 청소 — ${from(money(g))}` : `Gutter cleaning — ${from(money(g))}`)
+    extras.push(lang === 'ko' ? `홈통 청소 — ${from(money(g))}` : `Gutter cleaning — ${from(money(g))}`)
   }
   if (business.services.snow && priceBook.snow) {
     const s = priceBook.snow
     const p = s.driveway.single
-    lines.push(
+    extras.push(
       s.mode === 'season'
         ? lang === 'ko'
-          ? `겨울 제설 시즌 계약 — ${from(money(p))} (4회 분할, 12월 1일 전 결제 없음)`
-          : `Winter snow season — ${from(money(p))} (4 payments, nothing before Dec 1)`
+          ? `겨울 제설 시즌 계약 — ${from(money(p))} (${s.instalments}회 분할, 12월 1일 전 결제 없음)`
+          : `Winter snow season — ${from(money(p))} (${s.instalments} payments, nothing before Dec 1)`
         : lang === 'ko'
           ? `겨울 제설 — 월 ${from(money(p))}`
           : `Winter snow clearing — ${from(`${money(p)}/month`)}`,
     )
   }
-  return lines
+  const cleaning =
+    extras.length === 0
+      ? [own('deep'), own('moveOut'), own('standard')]
+      : extras.length === 1
+        ? [`${short('standard')} · ${short('deep')}`, own('moveOut')]
+        : [`${short('standard')} · ${short('deep')} · ${short('moveOut')}`]
+  return [...cleaning, ...extras]
 }
 
 const TEXT = {
   en: {
     headline: 'Home cleaning, priced upfront',
-    sub: 'Local and owner-operated. Get your price in 30 seconds.',
+    sub: 'Local, owner-operated. Instant estimate online.',
     missed: 'Sorry we missed you!',
     scan: 'Scan for your instant estimate',
     or: 'or call / text',
     fine: 'Estimates are confirmed when we see your home. No obligation.',
     web: 'Online',
-    steps: ['Scan the code or call for a price range', 'We confirm the price and book a time', 'Pay by e-Transfer or cash when the job is done'],
+    steps: ['Scan the code or call for a price range', 'We confirm the price from photos or on site, and book a time', 'Pay by e-Transfer or cash when the job is done'],
     visited: 'We stopped by on ______ at ______',
     language: '한국어 상담 가능 · Korean-speaking owner',
+    ontario:
+      'Ontario: if you sign an agreement with us at your home, you may cancel within 10 days of receiving your copy. Any refund is due within 15 days.',
+    snowFine: (perVisit: string) =>
+      `Snow: season Dec 1 – Mar 31. Void, with nothing owed, if we have not signed our minimum number of snow contracts by Nov 20. Snow is never pushed onto the road. November snow (optional, once your contract is confirmed): ${perVisit} per visit, billed Dec 1.`,
+    guttersFine: 'Gutters: no windows, no pressure washing.',
   },
   ko: {
     headline: '청소 가격, 먼저 알려드립니다',
-    sub: '동네 사장이 직접 운영합니다. 30초면 예상 가격을 확인하세요.',
+    sub: '동네에서 대표가 직접 운영합니다. 온라인에서 바로 예상 가격을 확인하실 수 있습니다.',
     missed: '방문했지만 안 계셔서 남기고 갑니다!',
     scan: 'QR을 찍으면 바로 견적',
     or: '또는 전화·문자',
     fine: '최종 금액은 집을 확인한 뒤 확정합니다. 문의는 부담 없이 하세요.',
     web: '웹사이트',
-    steps: ['QR 또는 전화로 예상 가격 확인', '가격 확정 후 방문 시간 예약', '작업이 끝나면 e-Transfer 또는 현금 결제'],
+    steps: ['QR 또는 전화로 예상 가격 확인', '사진이나 현장 확인 후 가격 확정·방문 예약', '작업이 끝나면 e-Transfer 또는 현금 결제'],
     visited: '______월 ______일 ______시에 방문했습니다',
     language: '한국어로 편하게 상담하세요',
+    ontario:
+      '온타리오주: 댁에서 저희와 계약서에 서명하신 경우, 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있고, 취소 통지를 받은 다음 날부터 15일 안에 환불해 드립니다.',
+    snowFine: (perVisit: string) =>
+      `제설: 시즌은 12월 1일 – 3월 31일입니다. 11월 20일까지 전체 제설 계약이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다. 눈은 도로로 밀어내지 않습니다. 11월 눈(선택, 계약 확정 후): 1회 ${perVisit}, 12월 1일에 청구.`,
+    guttersFine: '홈통: 창문 청소와 고압 세척은 하지 않습니다.',
   },
 }
 
@@ -109,47 +130,73 @@ function Contact({ lang }: { lang: Lang }) {
   )
 }
 
+/**
+ * Fine print for door hangers and flyers (business/marketing/05-door-hanger-and-flyer-text.md, 3.6).
+ * - Ontario: cancel a home-signed agreement within 10 days of receiving the copy, refund within
+ *   15 days (memo F32, https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract, snippet).
+ * - Snow: season Dec 1 – Mar 31, void unless the Nov 20 minimum is signed, never onto the road,
+ *   November visits only after confirmation and billed Dec 1 (memo sections 0 and 3; content/agreements.ts).
+ * - Gutters: gutters only, no windows or pressure washing (memo section 2 Track B).
+ */
+function fineLines(lang: Lang): string[] {
+  const T = TEXT[lang]
+  const lines = [business.serviceArea[lang] ? `${T.fine} · ${business.serviceArea[lang]}` : T.fine]
+  if (business.tax.province === 'ON') lines.push(T.ontario)
+  if (business.services.snow && priceBook.snow) lines.push(T.snowFine(money(priceBook.snow.perVisit)))
+  if (business.services.gutters && priceBook.gutters) lines.push(T.guttersFine)
+  return lines
+}
+
+function FinePrint({ lang, className }: { lang: Lang; className: string }) {
+  return (
+    <div className={className}>
+      {fineLines(lang).map((l) => (
+        <p key={l}>{l}</p>
+      ))}
+    </div>
+  )
+}
+
 export async function DoorHangerSheet({ lang, cluster }: { lang: Lang; cluster: Cluster }) {
   const svg = await qrSvg(quoteUrl(lang, cluster))
   const T = TEXT[lang]
   const hanger = (
-    <div className="relative flex h-[10.2in] w-[3.95in] flex-col items-center border border-dashed border-gray-300 px-4 pb-4 pt-3">
+    <div className="relative flex h-[10.1in] w-[3.7in] flex-col items-center border border-dashed border-gray-300 px-4 pb-3 pt-3">
       {/* hole + slit guide */}
-      <div className="flex h-[1.9in] w-full flex-col items-center">
-        <div className="h-[1.35in] w-[1.35in] rounded-full border-2 border-dashed border-gray-400" />
+      <div className="flex h-[1.75in] w-full flex-col items-center">
+        <div className="h-[1.3in] w-[1.3in] rounded-full border-2 border-dashed border-gray-400" />
         <div className="h-[0.45in] border-l-2 border-dashed border-gray-400" />
       </div>
       <p className="text-center text-sm font-semibold text-gray-700">{T.missed}</p>
-      <p className="mt-2 text-center text-lg font-extrabold text-[#115e59]">{business.brand[lang]}</p>
+      <p className="mt-1 text-center text-lg font-extrabold text-[#115e59]">{business.brand[lang]}</p>
       <h2 className="mt-1 text-center text-[22px] font-extrabold leading-tight">{T.headline}</h2>
       <p className="mt-1 text-center text-xs text-gray-700">{T.sub}</p>
-      <ul className="mt-3 w-full space-y-1 text-[13px] font-semibold">
+      <ul className="mt-2 w-full space-y-1 text-[13px] font-semibold">
         {offerLines(lang).map((l) => (
           <li key={l} className="rounded bg-[#e6f4f1] px-2 py-1">
             {l}
           </li>
         ))}
       </ul>
-      <div className="mt-3 flex flex-col items-center">
-        <div className="h-[1.25in] w-[1.25in]" dangerouslySetInnerHTML={{ __html: svg }} />
+      <div className="mt-2 flex flex-col items-center">
+        <div className="h-[1.15in] w-[1.15in]" dangerouslySetInnerHTML={{ __html: svg }} />
         <p className="mt-1 text-xs font-semibold">{T.scan}</p>
       </div>
       <div className="mt-2">
         <Contact lang={lang} />
       </div>
-      <p className="mt-3 rounded-full border border-[#0f766e] px-3 py-0.5 text-center text-[11px] font-semibold text-[#115e59]">{T.language}</p>
-      <div className="mt-3 w-full">
+      <p className="mt-2 rounded-full border border-[#0f766e] px-3 py-0.5 text-center text-[11px] font-semibold text-[#115e59]">{T.language}</p>
+      <div className="mt-2 w-full">
         <Steps lang={lang} />
       </div>
-      <p className="mt-4 w-full text-center text-[11px] text-gray-700">{T.visited}</p>
-      <p className="mt-auto text-center text-[9px] leading-snug text-gray-600">
-        {T.fine}
-        {business.serviceArea[lang] ? ` · ${business.serviceArea[lang]}` : ''}
-      </p>
+      <p className="mt-3 w-full text-center text-[11px] text-gray-700">{T.visited}</p>
+      <FinePrint lang={lang} className="mt-auto w-full space-y-0.5 pt-1.5 text-center text-[9px] leading-snug text-gray-600" />
     </div>
   )
+  // 2 × 3.7in + 0.2in gap = 7.6in wide, 10.1in tall: inside the 7.7 × 10.2in printable box.
+  // On screen the 0.4in padding stands in for the @page margin.
   return (
-    <div className="sheet relative flex items-start justify-center gap-[0.2in] p-[0.2in]" lang={lang}>
+    <div className="sheet relative flex items-start justify-center gap-[0.2in] p-[0.4in] print:p-0" lang={lang}>
       <SampleMark />
       {hanger}
       {hanger}
@@ -161,38 +208,39 @@ export async function FlyerSheet({ lang, cluster }: { lang: Lang; cluster: Clust
   const svg = await qrSvg(quoteUrl(lang, cluster))
   const T = TEXT[lang]
   const flyer = (
-    <div className="flex h-[5.1in] w-[8in] gap-5 border border-dashed border-gray-300 p-5">
-      <div className="flex flex-1 flex-col">
-        <p className="text-lg font-extrabold text-[#115e59]">{business.brand[lang]}</p>
-        <h2 className="mt-1 text-3xl font-extrabold leading-tight">{T.headline}</h2>
-        <p className="mt-1 text-sm text-gray-700">{T.sub}</p>
-        <ul className="mt-3 space-y-1.5 text-[15px] font-semibold">
-          {offerLines(lang).map((l) => (
-            <li key={l} className="rounded bg-[#e6f4f1] px-2 py-1">
-              {l}
-            </li>
-          ))}
-        </ul>
-        <div className="mt-3">
-          <Steps lang={lang} size="md" />
+    <div className="flex h-[4.9in] w-[7.5in] flex-col border border-dashed border-gray-300 p-5">
+      <div className="flex min-h-0 flex-1 gap-5">
+        <div className="flex flex-1 flex-col">
+          <p className="text-lg font-extrabold text-[#115e59]">{business.brand[lang]}</p>
+          <h2 className="mt-1 text-2xl font-extrabold leading-tight">{T.headline}</h2>
+          <p className="mt-1 text-sm text-gray-700">{T.sub}</p>
+          <ul className="mt-3 space-y-1 text-[14px] font-semibold">
+            {offerLines(lang).map((l) => (
+              <li key={l} className="rounded bg-[#e6f4f1] px-2 py-1">
+                {l}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-3">
+            <Steps lang={lang} />
+          </div>
         </div>
-        <p className="mt-2 text-[12px] font-semibold text-[#115e59]">{T.language}</p>
-        <p className="mt-auto text-[10px] text-gray-600">
-          {T.fine}
-          {business.serviceArea[lang] ? ` · ${business.serviceArea[lang]}` : ''}
-        </p>
-      </div>
-      <div className="flex w-[2.3in] flex-col items-center justify-center">
-        <div className="h-[1.8in] w-[1.8in]" dangerouslySetInnerHTML={{ __html: svg }} />
-        <p className="mt-2 text-center text-sm font-semibold">{T.scan}</p>
-        <div className="mt-3">
-          <Contact lang={lang} />
+        <div className="flex w-[2.3in] flex-col items-center justify-center">
+          <div className="h-[1.6in] w-[1.6in]" dangerouslySetInnerHTML={{ __html: svg }} />
+          <p className="mt-2 text-center text-sm font-semibold">{T.scan}</p>
+          <div className="mt-2">
+            <Contact lang={lang} />
+          </div>
+          <p className="mt-2 text-center text-[12px] font-semibold text-[#115e59]">{T.language}</p>
         </div>
       </div>
+      <FinePrint lang={lang} className="mt-2 space-y-0.5 text-[9px] leading-snug text-gray-600" />
     </div>
   )
+  // 7.5in wide; 2 × 4.9in + 0.2in gap = 10in tall: inside the 7.7 × 10.2in printable box.
+  // On screen the 0.4in padding stands in for the @page margin.
   return (
-    <div className="sheet relative flex flex-col items-center gap-[0.2in] p-[0.25in]" lang={lang}>
+    <div className="sheet relative flex flex-col items-center gap-[0.2in] p-[0.4in] print:p-0" lang={lang}>
       <SampleMark />
       {flyer}
       {flyer}
@@ -200,12 +248,24 @@ export async function FlyerSheet({ lang, cluster }: { lang: Lang; cluster: Clust
   )
 }
 
+// Snow billing dates (memo section 0 item 2 and section 6); the count comes from priceBook.snow.instalments.
+const SNOW_BILL_DATES = { en: ['Dec 1', 'Jan 1', 'Feb 1', 'Mar 1'], ko: ['12월 1일', '1월 1일', '2월 1일', '3월 1일'] }
+
+function snowBillingLine(lang: Lang, n: number): string {
+  const d = SNOW_BILL_DATES[lang]
+  const listed = n >= 1 && n <= d.length
+  if (lang === 'ko') {
+    return `${listed ? `${d.slice(0, n).join('·')} ${n}회 분할 청구` : `12월 1일부터 매달 ${n}회 분할 청구`}. 12월 1일 전에는 결제 없음. 11월 20일까지 전체 제설 계약이 최소 건수에 못 미치면 계약 무효, 비용 없음.`
+  }
+  return `${listed ? `Billed in ${n} instalments: ${d.slice(0, n).join(', ')}` : `Billed in ${n} monthly instalments, starting Dec 1`}. Nothing is charged before Dec 1. If we have not signed our minimum number of snow contracts (all areas combined) by Nov 20, the contract is void and nothing is owed.`
+}
+
 export function PriceSheet({ lang }: { lang: Lang }) {
   const b = priceBook
   const c = b.cleaning
   const ko = lang === 'ko'
   const H = ko
-    ? { title: '가격표', cleaning: '청소(정액)', beds: '침실', baths: '포함 욕실', extra: '추가 욕실 1개당', addons: '추가 항목', rush: '24시간 내·주말·공휴일', gutters: '홈통 청소', storeys: ['단층', '2층', '3층'], downspout: '배수관 뚫기', snow: '제설', perVisit: '11월(시즌 전) 1회', walk: '현관 보도·계단', salt: '제빙 살포' }
+    ? { title: '가격표', cleaning: '청소(정액)', beds: '침실', baths: '포함 욕실', extra: '추가 욕실 1개당', addons: '추가 항목', rush: '24시간 내·주말·공휴일', gutters: '홈통 청소', storeys: ['단층', '2층', '3층'], downspout: '배수관 청소', snow: '제설', perVisit: '11월(시즌 전) 1회', walk: '현관 보도·계단', salt: '제빙 살포' }
     : { title: 'Price list', cleaning: 'Cleaning (flat rate)', beds: 'Bedrooms', baths: 'Baths incl.', extra: 'Each extra bathroom', addons: 'Add-ons', rush: 'Within 24 h / weekend / holiday', gutters: 'Gutter cleaning', storeys: ['Bungalow', '2 storeys', '3 storeys'], downspout: 'Downspout flush', snow: 'Snow clearing', perVisit: 'November visit (before season)', walk: 'Walkway & steps', salt: 'Salting' }
   const unit = b.snow?.mode === 'monthly' ? (ko ? '/월' : '/month') : ko ? '/시즌' : '/season'
   return (
@@ -265,19 +325,16 @@ export function PriceSheet({ lang }: { lang: Lang }) {
             {unit} · {H.salt} +{money(b.snow.salting)}
             {unit} · {H.perVisit} {money(b.snow.perVisit)}
           </p>
-          <p className="mt-1">
-            {ko
-              ? '12월 1일·1월 1일·2월 1일·3월 1일 4회 분할 청구. 12월 1일 전에는 결제 없음. 11월 20일까지 동네 최소 계약 수에 못 미치면 계약 무효, 비용 없음.'
-              : 'Billed in 4 instalments: Dec 1, Jan 1, Feb 1, Mar 1. Nothing is charged before Dec 1. If we have not signed our neighbourhood minimum by Nov 20, the contract is void and nothing is owed.'}
-          </p>
+          <p className="mt-1">{snowBillingLine(lang, b.snow.instalments)}</p>
         </>
       )}
 
       <div className="mt-6 space-y-1 border-t border-gray-300 pt-3 text-[12px] text-gray-700">
         <p>
+          {/* matches lib/quote.ts: high end = low × (1 + rangeUpliftPct/100), rounded up to the next $5 */}
           {ko
-            ? `표시 가격은 예상 가격이며, 집을 확인한 뒤 확정합니다(작업량이 많으면 최대 ${b.rangeUpliftPct}% 추가).`
-            : `Prices are estimates confirmed on site (heavier jobs up to ${b.rangeUpliftPct}% more).`}
+            ? `표시 가격은 예상 가격이며, 집을 확인한 뒤 확정합니다(작업량이 많으면 최대 ${b.rangeUpliftPct}% 추가, 5달러 단위로 올림).`
+            : `Prices are estimates confirmed on site (heavier jobs up to ${b.rangeUpliftPct}% more, rounded up to the next $5).`}
         </p>
         <p>
           {business.salesTaxRegistered

@@ -97,7 +97,7 @@ const PAYMENT_ON_COMPLETION: AgreementSection = {
   clauses: [
     t(
       'Payment is due when the work is finished, by Interac e-Transfer (to ______________________) or in cash. No deposit is required.',
-      '요금은 작업이 끝났을 때 인터랙 e-Transfer(받는 이메일: ______________________) 또는 현금으로 내시면 됩니다. 선금(보증금)은 받지 않습니다.',
+      '요금은 작업이 끝났을 때 인터랙 e-Transfer(받는 이메일: ______________________) 또는 현금으로 내시면 됩니다. 선금(계약금)은 받지 않습니다.',
     ),
     t(
       "If the total is more than your bank's e-Transfer limit, you can split it into two or more transfers or pay part in cash. We give a receipt for every payment.",
@@ -112,7 +112,7 @@ const ONTARIO_CANCELLATION: AgreementSection = {
   clauses: [
     t(
       "If you signed this agreement in person anywhere other than our place of business (for example, at your home), it is a direct agreement under Ontario's Consumer Protection Act. You may cancel it for any reason within 10 days after you receive a copy of the signed agreement. To cancel, tell us in a way that leaves a record: email {EMAIL}, text {PHONE}, or write to {MAILING_ADDRESS}. We must refund everything you paid within 15 days after we receive your cancellation.",
-      '이 계약서를 저희 사업장이 아닌 곳(예: 고객님 댁)에서 직접 만나 서명하셨다면, 이 계약은 온타리오 소비자보호법(Consumer Protection Act)상 방문 계약(direct agreement)에 해당합니다. 고객님은 서명된 계약서 사본을 받은 날부터 10일 이내에 이유와 관계없이 계약을 취소할 수 있습니다. 취소하실 때는 기록이 남는 방법으로 알려 주세요. 이메일 {EMAIL}, 문자 {PHONE}, 또는 우편 {MAILING_ADDRESS}로 보내시면 됩니다. 저희는 취소 통지를 받은 날부터 15일 이내에 고객님이 내신 금액 전부를 환불해야 합니다.',
+      '이 계약서를 저희 사업장이 아닌 곳(예: 고객님 댁)에서 직접 만나 서명하셨다면, 이 계약은 온타리오 소비자보호법(Consumer Protection Act)상 방문 계약(direct agreement)에 해당합니다. 고객님은 서명된 계약서 사본을 받으신 다음 날부터 10일 이내에 이유와 관계없이 계약을 취소할 수 있습니다. 취소하실 때는 기록이 남는 방법으로 알려 주세요. 이메일 {EMAIL}, 문자 {PHONE}, 또는 우편 {MAILING_ADDRESS}로 보내시면 됩니다. 저희는 취소 통지를 받은 다음 날부터 15일 이내에 고객님이 내신 금액 전부를 환불해야 합니다.',
     ),
   ],
 }
@@ -349,7 +349,7 @@ const GUTTERS: Agreement = {
           'House: ☐ bungalow / 1 storey ☐ 2 storeys ☐ 3 storeys. Areas included: ☐ main house ☐ attached garage ☐ porch or other lower roofs ☐ other: ______________.',
           '주택: ☐ 단층(방갈로) ☐ 2층 ☐ 3층. 포함 구역: ☐ 본채 ☐ 붙어 있는 차고 ☐ 현관 지붕 등 낮은 지붕 ☐ 기타: ______________.',
         ),
-        t('Add-on, done only if ticked: ☐ downspout flush.', '추가 서비스(표시한 경우에만 진행): ☐ 배수관(다운스파우트) 뚫기.'),
+        t('Add-on, done only if ticked: ☐ downspout flush.', '추가 서비스(표시한 경우에만 진행): ☐ 배수관(다운스파우트) 청소.'),
         t(
           'Planned date: ______________, weather permitting. Price: $______ in total, agreed before work starts.',
           '작업 예정일: ______________ (날씨에 따라 바뀔 수 있음). 요금: 총 $______ (작업 시작 전에 합의).',
@@ -369,7 +369,7 @@ const GUTTERS: Agreement = {
         ),
         t(
           'Downspout flush (add-on): we run water through each downspout we can reach and clear blockages we can reach by hand or with a hand tool. We do not dig up, repair or unclog underground drain pipes.',
-          '배수관 뚫기(추가 서비스): 손이 닿는 배수관마다 물을 흘려보내고, 손이나 수공구로 닿는 곳의 막힘을 뚫습니다. 땅속 배수관은 파내거나 수리하거나 뚫지 않습니다.',
+          '배수관 청소(추가 서비스): 손이 닿는 배수관마다 물을 흘려보내고, 손이나 수공구로 닿는 곳의 막힘을 뚫습니다. 땅속 배수관은 파내거나 수리하거나 뚫지 않습니다.',
         ),
         t(
           'Not included: gutter repair or re-hanging, sealing leaks, removing or installing screwed-on gutter guards, roof cleaning or moss removal, window cleaning and pressure washing. If we see damage (for example, loose or sagging sections, leaks or rot), we show you photos but do not repair it.',
@@ -536,7 +536,7 @@ const SNOW: Agreement = {
         ),
         t(
           'We take no payment of any kind before December 1: no deposit, no prepayment and no lump-sum payment for the season.',
-          '12월 1일 전에는 어떤 돈도 받지 않습니다. 보증금, 선불, 시즌 요금 일시불 모두 받지 않습니다.',
+          '12월 1일 전에는 어떤 돈도 받지 않습니다. 계약금, 선불, 시즌 요금 일시불 모두 받지 않습니다.',
         ),
         t(
           'If an instalment is more than ___ days late, we may pause service until it is paid, after telling you in writing.',
@@ -675,7 +675,7 @@ function gutterPriceNote(): Bilingual {
   if (!g) return NOT_IN_BOOK
   return t(
     `Bungalow / 1 storey ${money(g.byStoreys[1])}, 2 storeys ${money(g.byStoreys[2])}, 3 storeys ${money(g.byStoreys[3])} (the 3-storey figure is a Calgary guide used as a GTA fallback; no GTA 3-storey price was found); downspout flush ${money(g.downspoutFlush)}. ${PRICE_BOOK_LINE.en}`,
-    `단층 ${money(g.byStoreys[1])}, 2층 ${money(g.byStoreys[2])}, 3층 ${money(g.byStoreys[3])} (3층 금액은 GTA 자료가 없어 캘거리 자료를 대신 쓴 것), 배수관 뚫기 ${money(g.downspoutFlush)}. ${PRICE_BOOK_LINE.ko}`,
+    `단층 ${money(g.byStoreys[1])}, 2층 ${money(g.byStoreys[2])}, 3층 ${money(g.byStoreys[3])} (3층 금액은 GTA 자료가 없어 캘거리 자료를 대신 쓴 것), 배수관 청소 ${money(g.downspoutFlush)}. ${PRICE_BOOK_LINE.ko}`,
   )
 }
 
@@ -704,7 +704,7 @@ const SHARED_NOTES: AgreementNote[] = [
     topic: t('Ontario 10-day cancellation and 15-day refund', '온타리오 10일 취소 및 15일 환불'),
     note: t(
       'Direct agreements (made in person away from the supplier’s place of business, e.g. at the home) can be cancelled within 10 days of receiving the signed copy; the refund is due within 15 days (memo F32, corpus S037). Keep this section on every form signed at a door.',
-      '사업장 밖(예: 고객 집)에서 직접 만나 맺은 방문 계약은 서명된 사본을 받은 날부터 10일 이내에 취소할 수 있고, 환불은 15일 이내입니다(메모 F32, 자료 S037). 문 앞에서 서명받는 모든 계약서에 이 부분을 넣으세요.',
+      '사업장 밖(예: 고객 집)에서 직접 만나 맺은 방문 계약은 서명된 사본을 받은 다음 날부터 10일 이내에 취소할 수 있고(받은 날은 세지 않음), 환불은 취소 통지를 받은 다음 날부터 15일 이내입니다(메모 F32, 자료 S037). 문 앞에서 서명받는 모든 계약서에 이 부분을 넣으세요.',
     ),
     status: 'snippet',
     url: 'https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract',
@@ -734,7 +734,7 @@ const SHARED_NOTES: AgreementNote[] = [
     topic: t('Quebec and other provinces', '퀘벡 및 다른 주'),
     note: t(
       'Quebec (OPC): 10 days to cancel when solicited at home; the OPC advises no deposit before service starts; a fuel-price surcharge clause is illegal, but a surcharge for the amount of snow is legal (S038, search summary). French is likely required (unverified). BC and Alberta door-to-door rules were not researched. Adapt the template before using it outside Ontario.',
-      '퀘벡(OPC): 집으로 찾아와 권유한 계약은 10일 안에 취소 가능, OPC는 서비스 시작 전 보증금을 주지 말라고 권고, 유류비 자동 인상 조항은 불법이지만 적설량에 따른 추가 요금은 합법(S038, 검색 결과 요약). 프랑스어가 필요할 가능성이 큼(확인 안 됨). BC주·앨버타주의 방문 판매 규정은 조사하지 못했습니다. 온타리오 밖에서 쓰려면 양식을 고쳐야 합니다.',
+      '퀘벡(OPC): 집으로 찾아와 권유한 계약은 10일 안에 취소 가능, OPC는 서비스 시작 전 계약금을 주지 말라고 권고, 유류비 자동 인상 조항은 불법이지만 적설량에 따른 추가 요금은 합법(S038, 검색 결과 요약). 프랑스어가 필요할 가능성이 큼(확인 안 됨). BC주·앨버타주의 방문 판매 규정은 조사하지 못했습니다. 온타리오 밖에서 쓰려면 양식을 고쳐야 합니다.',
     ),
     status: 'snippet',
     url: 'https://opc.gouv.qc.ca/en/consumer/good-service/housing-renovation/landscaping-exterior/snow-removal/cancelling-contract',
@@ -880,7 +880,7 @@ const CLEANING_NOTES: AgreementNote[] = [
 const GUTTER_NOTES: AgreementNote[] = [
   {
     kind: 'fill',
-    topic: t('Price ($______) and downspout flush', '요금($______) 및 배수관 뚫기'),
+    topic: t('Price ($______) and downspout flush', '요금($______) 및 배수관 청소'),
     note: gutterPriceNote(),
     status: 'price-book',
   },
@@ -999,7 +999,7 @@ const SNOW_NOTES: AgreementNote[] = [
     topic: t('No payment before December 1', '12월 1일 전 결제 없음'),
     note: t(
       'GTA customers who prepaid (one case $1,200) "feel cheated" after a company stopped providing service (CP24, Jan 16 2026, search summary). Quebec’s OPC recommends no deposit before service (memo §3).',
-      '선불로 낸 GTA 고객들(한 사례 $1,200)이 업체가 서비스를 멈춘 뒤 “속았다”고 느꼈다는 보도가 있습니다(CP24, 2026년 1월 16일, 검색 결과 요약). 퀘벡 OPC도 서비스 전 보증금을 주지 말라고 권고합니다(메모 §3).',
+      '선불로 낸 GTA 고객들(한 사례 $1,200)이 업체가 서비스를 멈춘 뒤 “속았다”고 느꼈다는 보도가 있습니다(CP24, 2026년 1월 16일, 검색 결과 요약). 퀘벡 OPC도 서비스 전 계약금을 주지 말라고 권고합니다(메모 §3).',
     ),
     status: 'snippet',
     url: 'https://www.cp24.com/local/toronto/2026/01/16/gta-customers-who-paid-in-advance-for-snow-removal-feel-cheated-after-company-stopped-providing-service/',

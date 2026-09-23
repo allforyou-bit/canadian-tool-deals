@@ -8,7 +8,7 @@ Labels (표시): **ESTIMATE/추정** = arithmetic, not a result. **ASSUMPTION/�
 
 - [ ] Contracts are binding only if the break-even number was signed by **Nov 20**. If not, all contracts are void and no money was taken (memo §2, §5.3) (손익분기 계약 수가 **11/20**까지 서명되어야 계약이 유효합니다. 아니면 모두 무효이고 받은 돈도 없습니다)
 - [ ] **Dec 1 – Mar 31:** contract season. Instalments are due Dec 1, Jan 1, Feb 1 and Mar 1; **no payment before Dec 1** (memo §2) (**12/1–3/31:** 계약 시즌. 분할금은 12/1, 1/1, 2/1, 3/1. **12/1 전에는 돈을 받지 않습니다**)
-- [ ] **November storms:** charged at the per-visit rate in `config/prices.ts` (GTA default $60, chosen from the $50–150 band in memo F28; it must match the live price book), only for clients who asked for it in writing (**11월 눈:** 1회 요금(GTA 기본값 $60, 실제 가격표와 같아야 함), 서면으로 요청한 고객만)
+- [ ] **November storms:** only for clients who ticked November snow in their agreement, from the day the contract is confirmed to go ahead until Nov 30, at the per-visit rate in `config/prices.ts` (GTA default $60, chosen from the $50–150 band in memo F28; it must match the live price book). Billed with the Dec 1 instalment (**11월 눈:** 계약서에서 11월 눈을 선택한 고객만, 계약 진행이 확정된 날부터 11/30까지 1회 요금(GTA 기본값 $60, 실제 가격표와 같아야 함). 12월 1일 첫 분할금과 함께 청구)
 - [ ] Snow depth at your fixed measuring spot: ____ cm. Go only if it meets the contract **trigger depth** {TRIGGER_DEPTH} (고정 측정 지점의 적설량: ____ cm. 계약서의 **출동 기준 적설량** 이상일 때만 출동)
 - [ ] **No car:** shovel-only in a walkable cluster, **capped at 10 driveways (ASSUMPTION)** until your per-driveway times are measured (memo §9) (**차가 없으면:** 걸어 다닐 수 있는 구역에서 삽 작업만, 진입로당 시간을 재기 전까지 **최대 10곳(가정)**)
 - [ ] City check: **Metro Vancouver = no snow service** (memo F46). **Ottawa:** whether shovel or walk-behind-snowblower operators need the plow licence is **unresolved**; confirm with the City before selling (memo F35) (도시 확인: 밴쿠버는 제설 없음. 오타와는 삽·소형 제설기 작업자의 면허 필요 여부가 미해결이니 시에 먼저 확인)
@@ -111,7 +111,7 @@ These go only to clients with a signed contract or a per-visit request. Every te
 
 - [ ] Every driveway on the route list is marked done, with a photo (경로표의 모든 집 완료 표시와 사진)
 - [ ] Time, salt and incident logs copied into the CRM (시간·제빙·사고 기록을 CRM에 옮김)
-- [ ] November per-visit jobs invoiced (11월 1회 작업 청구)
+- [ ] November per-visit jobs logged; bill them with the Dec 1 instalment, not before (11월 1회 작업은 기록만 해 두고, 12월 1일 첫 분할금과 함께 청구합니다. 그 전에는 청구하지 않습니다)
 - [ ] Money collected is not money earned: season payments are earned only as service is delivered (memo §5.3) (받은 돈과 번 돈은 다릅니다: 시즌 요금은 서비스를 제공한 만큼만 번 돈입니다)
 - [ ] On EI: declare net self-employment earnings for the week the work was performed (memo F4) (EI 수급 중이면 작업한 주의 순소득을 신고)
 - [ ] Equipment fuelled or charged, gloves dried, salt restocked (장비 연료·충전, 장갑 말리기, 제빙제 보충)

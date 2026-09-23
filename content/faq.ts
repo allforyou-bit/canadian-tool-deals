@@ -172,7 +172,7 @@ const GENERAL: FaqItem[] = [
   },
   {
     // Cancellation and lockout terms live in the service agreement (memo section 10 item 5); no fee
-    // amounts were researched, so none are stated here.
+    // amounts were researched, so none are stated here. KO term matches the agreement: 출입 불가 수수료.
     id: 'cancel-reschedule',
     q: {
       en: 'How do I cancel or reschedule?',
@@ -180,7 +180,7 @@ const GENERAL: FaqItem[] = [
     },
     a: {
       en: "Call or text us as early as you can, and we'll find a new time. If we arrive at the booked time and can't get in, a lockout fee may apply. The exact cancellation and lockout terms are in our service agreement, and we go over them with you before you book.",
-      ko: '가능한 한 빨리 전화나 문자로 알려 주시면 다른 시간으로 잡아 드려요. 약속한 시간에 도착했는데 들어갈 수 없으면 출장비가 청구될 수 있어요. 정확한 취소 및 출장비 조건은 서비스 계약서에 있고, 예약 전에 함께 확인해 드려요.',
+      ko: '가능한 한 빨리 전화나 문자로 알려 주시면 다른 시간으로 잡아 드려요. 약속한 시간에 도착했는데 들어갈 수 없으면 출입 불가 수수료가 청구될 수 있어요. 정확한 취소 및 출입 불가 수수료 조건은 서비스 계약서에 있고, 예약 전에 함께 확인해 드려요.',
     },
   },
   {
@@ -205,7 +205,7 @@ const GENERAL: FaqItem[] = [
     },
     a: {
       en: 'Yes. We carry commercial general liability insurance. We can show you our certificate of insurance on request.',
-      ko: '네. 사업자 일반배상책임보험(CGL)에 가입되어 있어요. 요청하시면 보험 증명서를 보여 드려요.',
+      ko: '네. 영업배상책임보험(CGL)에 가입되어 있어요. 요청하시면 보험 증명서를 보여 드려요.',
     },
   },
   {
@@ -244,7 +244,7 @@ const GENERAL: FaqItem[] = [
     },
     a: {
       en: "We use your name, contact details and address to answer your request, prepare your estimate and do the job. We send marketing messages only if you tick the separate opt-in box, and you can unsubscribe at any time. We don't sell your information.\n\nFull details: /privacy",
-      ko: '이름, 연락처, 주소는 문의 답변, 견적 준비, 작업 진행을 위해 사용해요. 홍보 메시지는 별도 수신 동의란에 체크하신 경우에만 보내고, 언제든 수신 거부하실 수 있어요. 개인정보를 판매하지 않아요.\n\n자세한 내용: /privacy',
+      ko: '이름, 연락처, 주소는 문의 답변, 견적 준비, 작업 진행을 위해 사용해요. 홍보 메시지는 별도 수신 동의란에 체크하신 경우에만 보내고, 언제든 수신 거부하실 수 있어요. 개인정보를 판매하지 않아요.\n\n자세한 내용: /ko/privacy',
     },
   },
 ]
@@ -260,7 +260,7 @@ const ONTARIO_CANCELLATION: FaqItem = {
   },
   a: {
     en: "Yes. In Ontario, if you sign an agreement with us at your home (for example, when we knock on your door), you can cancel it within 10 days after you receive your signed copy. We'll refund any payment within 15 days after you cancel. Please cancel in writing (text, email or letter) so you have a record.\n\nSummary only, not legal advice: ontario.ca/page/your-rights-when-signing-or-cancelling-contract",
-    ko: '네. 온타리오주에서는 저희가 댁을 방문했을 때처럼 고객님 댁에서 계약서에 서명하신 경우, 서명된 계약서 사본을 받으신 날부터 10일 이내에 취소하실 수 있어요. 취소하시면 받은 금액은 15일 이내에 환불해 드려요. 기록이 남도록 문자, 이메일, 편지 등 서면으로 알려 주세요.\n\n요약 안내이며 법률 자문이 아니에요: ontario.ca/page/your-rights-when-signing-or-cancelling-contract',
+    ko: '네. 온타리오주에서는 저희가 댁을 방문했을 때처럼 고객님 댁에서 계약서에 서명하신 경우, 서명된 계약서 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있고, 취소 통지를 받은 다음 날부터 15일 안에 내신 금액을 환불해 드려요. 기록이 남도록 문자, 이메일, 편지 등 서면으로 알려 주세요.\n\n요약 안내이며 법률 자문이 아니에요: ontario.ca/page/your-rights-when-signing-or-cancelling-contract',
   },
 }
 
@@ -280,7 +280,7 @@ const GUTTERS: FaqItem[] = [
     },
     a: {
       en: "Gutters (eavestroughs) only. We clear leaves and debris by hand and tidy up underneath. Downspout flushing is an optional add-on. Before we start, we photograph any existing damage and show you. We don't clean windows, repair roofs or pressure wash.",
-      ko: '홈통(처마 물받이) 청소만 해요. 낙엽과 이물질을 손으로 걷어 내고 아래쪽도 정리해 드려요. 배수관(다운스파우트) 뚫기는 추가 옵션이에요. 시작 전에 이미 있던 손상은 사진으로 찍어 보여 드려요. 창문 청소, 지붕 수리, 고압 세척은 하지 않아요.',
+      ko: '홈통(처마 물받이) 청소만 해요. 낙엽과 이물질을 손으로 걷어 내고 아래쪽도 정리해 드려요. 배수관(다운스파우트) 청소는 추가 옵션이에요. 시작 전에 이미 있던 손상은 사진으로 찍어 보여 드려요. 창문 청소, 지붕 수리, 고압 세척은 하지 않아요.',
     },
   },
   {
@@ -312,7 +312,9 @@ function snowItems(snow: SnowBook): FaqItem[] {
       // Season Dec 1 – Mar 31; walk-behind snowblower or shovel, no truck; trigger depth written in
       // the agreement (no depth was researched, so none is stated); walkway/steps and salting are
       // add-ons (memo section 2 Track B, section 6, F28). November storms at the per-visit rate from
-      // config/prices.ts (default chosen from the $50–150 band, memo F28).
+      // config/prices.ts (default chosen from the $50–150 band, memo F28): optional clause of the snow
+      // agreement, only from the day the contract is confirmed (Nov 20 condition) to Nov 30, billed
+      // with the Dec 1 instalment (content/agreements.ts; memo section 3 "Any snow payment before Dec 1").
       id: 'snow-season',
       service: 'snow',
       q: {
@@ -320,13 +322,14 @@ function snowItems(snow: SnowBook): FaqItem[] {
         ko: '제설 계약에는 무엇이 포함되나요?',
       },
       a: {
-        en: `The season runs Dec 1 to Mar 31. We clear your driveway with a walk-behind snowblower or shovel (no truck) when snowfall reaches the depth written in your agreement. Walkway, steps and salting are add-ons.\n\nStorms before Dec 1 aren't part of the contract: a November visit costs $${snow.perVisit}, charged after the work is done.`,
-        ko: `시즌은 12월 1일부터 3월 31일까지예요. 계약서에 정한 적설량 이상 눈이 오면 트럭 없이 보행식 제설기나 삽으로 진입로를 치워 드려요. 보도·계단과 제빙(소금) 살포는 추가 옵션이에요.\n\n12월 1일 전의 눈은 계약에 포함되지 않아요. 11월 출동은 1회 $${snow.perVisit}이며, 작업 후에 청구해요.`,
+        en: `The season runs Dec 1 to Mar 31. We clear your driveway with a walk-behind snowblower or shovel (no truck) when snowfall reaches the depth written in your agreement. Walkway, steps and salting are add-ons.\n\nNovember snow is optional: tick it in your agreement and we clear it at $${snow.perVisit} per visit once your contract is confirmed, billed with your Dec 1 instalment, not before.`,
+        ko: `시즌은 12월 1일부터 3월 31일까지예요. 계약서에 정한 적설량 이상 눈이 오면 트럭 없이 보행식 제설기나 삽으로 진입로를 치워 드려요. 보도·계단과 제빙(소금) 살포는 추가 옵션이에요.\n\n11월 눈은 선택 사항이에요. 계약서에서 선택하시면 계약 진행이 확정된 뒤부터 1회 $${snow.perVisit}에 치워 드리고, 12월 1일 첫 분할금과 함께 청구해요. 그 전에는 받지 않아요.`,
       },
     },
     {
       // Instalments Dec 1 – Mar 1, no payment before Dec 1, void if the break-even count is not signed
-      // by Nov 20 (memo section 0 item 2, section 3 "Any snow payment before Dec 1", section 6;
+      // by Nov 20, counted over all snow contracts, not per area (memo section 0 item 2, section 3
+      // "Any snow payment before Dec 1", section 6; content/agreements.ts minimum-contract condition;
       // https://www.cp24.com/local/toronto/2026/01/16/gta-customers-who-paid-in-advance-for-snow-removal-feel-cheated-after-company-stopped-providing-service/).
       id: 'snow-billing',
       service: 'snow',
@@ -335,8 +338,8 @@ function snowItems(snow: SnowBook): FaqItem[] {
         ko: '요금은 언제 내나요? 계약이 취소될 수도 있나요?',
       },
       a: {
-        en: `${pay.en} We take no deposit and no payment for the season before Dec 1.\n\nContracts only go ahead if enough homes in your area sign up by Nov 20. If not, every contract is void and you owe nothing for the season. We'll let you know either way.`,
-        ko: `${pay.ko} 12월 1일 전에는 계약금을 포함해 시즌 요금을 전혀 받지 않아요.\n\n11월 20일까지 동네에서 계약이 충분히 모이지 않으면 모든 계약은 무효가 되고, 시즌 요금은 내실 필요가 없어요. 결과는 어느 쪽이든 알려 드려요.`,
+        en: `${pay.en} We take no deposit and no payment for the season before Dec 1.\n\nContracts go ahead only if we sign our minimum number of snow contracts (all areas combined) by Nov 20. If not, every contract is void and you owe nothing. We'll let you know either way.`,
+        ko: `${pay.ko} 12월 1일 전에는 계약금을 포함해 시즌 요금을 전혀 받지 않아요.\n\n11월 20일까지 전체 제설 계약이 최소 건수에 이르지 않으면 모든 계약은 무효가 되고, 내실 돈은 없어요. 결과는 어느 쪽이든 알려 드려요.`,
       },
     },
     {

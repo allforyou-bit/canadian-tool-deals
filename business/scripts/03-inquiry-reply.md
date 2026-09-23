@@ -2,6 +2,9 @@
 
 > **Draft v1, 2026-09-23.** The owner approves the Korean before use (memo §10, item 7). Templates are ≤ 120 words per language, including the ID and opt-out lines. The owner sends every message; the AI never sends.
 > 초안입니다. 사장님이 한국어 문구를 확인·승인한 뒤 사용하세요. 메시지는 사장님이 직접 보내요.
+>
+> Not legal advice. The CASL points come from the decision memo (F11–F13); check with a lawyer if unsure.
+> 법률 자문이 아닙니다. CASL 관련 내용은 결정 메모(F11–F13)에서 가져왔어요. 확실하지 않으면 변호사에게 확인하세요.
 
 | Placeholder | Meaning | 뜻 |
 |---|---|---|
@@ -85,9 +88,9 @@ To stop getting emails from us, reply "unsubscribe".
 
 {CUSTOMER}님, 안녕하세요.
 
-문의해 주셔서 감사합니다. 문의하신 {SERVICE} 예상 금액은 {LOW}–{HIGH}입니다. 최종 금액은 작업 전에 현장에서 확인하고 확정해 드려요.
+문의해 주셔서 감사합니다. 문의하신 {SERVICE} 예상 금액은 {LOW}–{HIGH}입니다. 최종 금액은 작업 전에 현장에서 확인하고 확정해 드립니다.
 
-가능한 날짜: {DATES}. 편하신 날짜를 답장으로 알려 주시거나 {PHONE}으로 전화·문자 주세요. {SITE}에서 예상 금액을 직접 확인하실 수도 있어요.
+가능한 날짜: {DATES}. 편하신 날짜를 답장으로 알려 주시거나 {PHONE}으로 전화·문자 주세요. {SITE}에서 예상 금액을 직접 확인하실 수도 있습니다.
 
 {NAME} 드림
 {BRAND} · {MAILING_ADDRESS} · {PHONE} · {SITE}
@@ -100,16 +103,16 @@ Use only after Gate S passes (written snow insurance). 제설 보험을 서면�
 
 **EN**
 ```sms
-Hi {CUSTOMER}, {NAME} from {BRAND}. Thanks for asking about snow clearing! Your season price (Dec 1 – Mar 31) is {LOW}–{HIGH}, paid in 4 monthly instalments from Dec 1 to Mar 1. No payment for the season before Dec 1. November storms: {PER_VISIT} per visit. The contract goes ahead only if enough neighbours sign by Nov 20; if not, it's cancelled and you owe nothing for the season.
+Hi {CUSTOMER}, {NAME} from {BRAND}. Thanks for asking about snow clearing! Your season price (Dec 1 – Mar 31) is {LOW}–{HIGH}, paid in 4 monthly instalments from Dec 1 to Mar 1. Nothing is paid before Dec 1. November snow is optional: once we confirm your contract is going ahead (we'll tell you by Nov 21), {PER_VISIT} per visit, billed with your Dec 1 instalment. If we haven't signed our minimum number of snow contracts by Nov 20, the agreement is void and you owe nothing.
 {BRAND}, {MAILING_ADDRESS}, {PHONE}, {SITE}
 Reply STOP to opt out.
 ```
 
 **KO**
 ```sms
-안녕하세요 {CUSTOMER}님, {BRAND} {NAME}입니다. 제설 문의 감사합니다! 시즌(12월 1일–3월 31일) 요금은 {LOW}–{HIGH}이고, 12월 1일부터 3월 1일까지 매달 한 번씩 4번 나눠 내시면 돼요. 12월 1일 전에는 시즌 요금을 받지 않아요. 11월에 눈이 오면 1회 {PER_VISIT}이에요. 11월 20일까지 이웃 신청이 충분히 모여야 계약이 진행되고, 아니면 취소되고 시즌 요금은 내지 않으셔도 돼요.
+안녕하세요 {CUSTOMER}님, {BRAND} {NAME}입니다. 제설 문의 감사합니다! 시즌(12월 1일–3월 31일) 요금은 {LOW}–{HIGH}이고, 12월 1일부터 3월 1일까지 매달 한 번씩 4번 나눠 내시면 돼요. 12월 1일 전에는 어떤 돈도 받지 않아요. 11월 눈 제설은 선택 사항이에요. 계약이 진행된다고 확인해 드린 날부터(11월 21일까지 알려 드려요) 1회 {PER_VISIT}이고, 12월 1일 첫 분할금과 함께 청구해요. 11월 20일까지 최소 계약 수가 안 모이면 계약은 무효이고, 내실 돈은 없어요.
 {BRAND}, {MAILING_ADDRESS}, {PHONE}, {SITE}
 수신을 원치 않으시면 STOP이라고 답장해 주세요.
 ```
 
-**Sources / 출처:** decision memo §3, §6, §7, §10 and F11–F13; `config/prices.ts`; `lib/quote.ts`.
+**Sources / 출처:** decision memo §3, §6, §7, §10 and F11–F13; `config/prices.ts`; `lib/quote.ts`; snow wording matches the snow agreement in `content/agreements.ts` (November snow clause, payment clause, November 20 condition) / 제설 문구는 제설 계약서와 같은 조건입니다.

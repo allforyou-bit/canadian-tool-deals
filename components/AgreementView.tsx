@@ -6,7 +6,7 @@ import { prefix, type Lang } from '@/lib/i18n'
 
 const UI = {
   en: { print: 'Print or save as PDF from your browser.', others: 'Other agreements' },
-  ko: { print: '브라우저에서 인쇄하거나 PDF로 저장하세요.', others: '다른 약관' },
+  ko: { print: '브라우저에서 인쇄하거나 PDF로 저장하세요.', others: '다른 계약서' },
 }
 
 export default function AgreementView({ lang, agreement: template, all }: { lang: Lang; agreement: Agreement; all: Agreement[] }) {
@@ -23,7 +23,8 @@ export default function AgreementView({ lang, agreement: template, all }: { lang
       <p className="no-print mb-4 text-xs text-muted">
         {UI[lang].print} {UI[lang].others}:{' '}
         {all
-          .filter((a) => a.service !== agreement.service)
+          // link only services switched on in config/business.ts (gutters need Gate G1, snow needs Gate S)
+          .filter((a) => a.service !== agreement.service && business.services[a.service])
           .map((a) => fillAgreement(a, values))
           .map((a) => (
             <Link key={a.service} className="mr-2 underline" href={`${p}/agreements/${a.service}/`}>

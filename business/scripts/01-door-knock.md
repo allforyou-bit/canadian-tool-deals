@@ -24,7 +24,8 @@
 | Gate 0 is done: you confirmed from your own IRCC documents that you may be self-employed (memo §2). | Gate 0 완료: 본인 IRCC 서류로 자영업이 가능한 신분인지 확인했어요. |
 | Door-to-door selling rules in your city (municipal soliciting bylaws) were **not researched**. Check the city website or call 311 before the first shift. | 시(市)의 방문판매 조례는 **조사되지 않았어요(확인 필요)**. 첫 방문 전에 시청 웹사이트나 311에서 확인하세요. |
 | Book work dates only **after** your liability insurance starts. No direct-client work before the policy is bound (memo §6, §7). | 작업 날짜는 배상책임보험 시작일 **이후**로만 잡으세요. 보험 가입 전에는 직접 고객 작업을 하지 않아요. |
-| Bring: door hangers with this cluster's QR code, blank service agreements with the Ontario 10-day notice, the door log, a pen, your phone with `{SITE}` open. | 준비물: 이 구역 전용 QR이 있는 도어행어, 온타리오 10일 취소 안내가 들어간 계약서, 방문 기록지, 펜, `{SITE}`를 열어 둔 휴대폰. |
+| You asked ServiceOntario whether your brand name must be registered, before printing it (not verified; file `02-컴플라이언스-체크리스트.md`). | 상호를 인쇄하기 전에 ServiceOntario에 상호 등록이 필요한지 확인했어요(확인 필요 항목, `02-컴플라이언스-체크리스트.md`). |
+| Bring: door hangers with this cluster's QR code, blank service agreements with the Ontario 10-day notice, the door log, a pen, your phone with `{SITE}` open. Print hangers and agreements from `{SITE}/print/` (English) after every ★ setting is filled in. Use Korean hangers (`{SITE}/ko/print/`) only for Korean-speaking homes. Customers always sign the English agreement; the Korean one is handed over as a reference copy (plan file 01, D2). The SAMPLE PDFs in `business/print/` are not for handing out. | 준비물: 이 구역 전용 QR이 있는 문고리 전단(도어행어), 온타리오 10일 취소 안내가 들어간 계약서, 방문 기록지, 펜, `{SITE}`를 열어 둔 휴대폰. 문고리 전단과 계약서는 ★ 설정을 모두 넣은 뒤 `{SITE}/print/`에서 영어판을 인쇄하세요. 한국어 전단(`{SITE}/ko/print/`)은 한국어를 쓰는 집에만 쓰고, 계약서는 항상 영문본에 서명받고 한국어본은 참고용으로 함께 드립니다(01 계획 D2). `business/print/`의 SAMPLE PDF는 배포용이 아니에요. |
 | Daylight only; check today's sunset time (October sunset times were not researched). At most 40 doors on a day you also have a job. No knocking on Thanksgiving Monday, Oct 12 (memo §7). | 해가 있을 때만 방문하세요(10월 일몰 시간은 조사 안 됨, 매일 확인). 작업이 있는 날은 최대 40집. 추수감사절 월요일(10/12)에는 방문하지 않아요. |
 
 ---
@@ -41,19 +42,24 @@ Hi, sorry to bother you! I'm {NAME} with {BRAND}. I clean homes here in {AREA}: 
 안녕하세요, 갑자기 찾아와서 죄송해요. 저는 {BRAND}의 {NAME}입니다. 여기 {AREA}에서 집 청소를 하고 있어요. 대청소, 입주·이사 청소, 정기 청소를 하는데, 가격은 작업 전에 미리 정해서 알려 드려요. 혹시 올가을에 대청소나 이사 청소 하실 계획 있으세요? 아니시면 안내지만 하나 드리고 갈게요.
 ```
 
-## 1B. 20-second opener — when Track B is ON / 20초 첫인사 — 트랙 B 운영 시
+## 1B. 20-second opener — Track B (gutters, snow) / 20초 첫인사 — 트랙 B(홈통, 제설)
 
-Say the `[GUTTERS]` part only if gutters are ON in config (Gate G1 passed), and the `[SNOW]` part only if snow is ON (Gate S passed: written snow insurance in hand).
-`[GUTTERS]`는 설정에서 홈통 청소가 켜져 있을 때(G1 통과)만, `[SNOW]`는 제설이 켜져 있을 때(Gate S 통과, 제설 보험 서면 확인)만 말하세요.
+Say the `[SNOW]` part only if snow is ON (Gate S passed: written snow insurance in hand). For gutters there are two versions:
+- `[GUTTERS]`: after Gate G1 passes (gutters ON in config).
+- `[GUTTERS, before G1]`: until G1 is decided (final deadline Oct 9), and only if you are going for B2: you have a vehicle that carries the ladder and are comfortable on a ladder (intake Q3, Q6). G1 needs at least 5 dated gutter bookings before you buy the ladder (plan file 01 §2), so these bookings are how G1 can pass. Take them verbally only (at the door or by phone): no signed gutter agreement and no money before G1 passes. Log code **B** with "pre-G1", the date, and how they want to be contacted. If G1 fails, contact each of them that day (Oct 9 at the latest) to cancel.
+
+`[SNOW]`는 제설이 켜져 있을 때(Gate S 통과, 제설 보험 서면 확인)만 말하세요. 홈통 청소는 두 가지 버전이 있어요.
+- `[GUTTERS]`: G1 통과 후(설정에서 홈통 청소가 켜져 있을 때).
+- `[GUTTERS, G1 전]`: G1 결정 전까지(최종 마감 10/9), B2를 준비하는 경우에만 씁니다. 사다리를 실을 차가 있고 사다리 작업이 편해야 해요(인테이크 3번, 6번). G1은 사다리를 사기 전에 날짜가 잡힌 홈통 예약 5건 이상이 조건이라서(01 계획 2절), 이 예약을 받아야 G1을 통과할 수 있어요. 예약은 말로만(방문 중이나 전화로) 받고, G1 통과 전에는 홈통 계약서 서명이나 돈을 받지 않아요. 기록지에 **B**와 "G1 전", 날짜, 원하는 연락 방법을 적으세요. G1이 통과하지 못하면 그날(늦어도 10/9) 한 분 한 분께 연락해 취소하세요.
 
 **EN**
 ```say
-Hi, sorry to bother you! I'm {NAME} with {BRAND}, here in {AREA}. I do house cleaning. [GUTTERS] This fall I also clean gutters by hand, once the leaves are down. [SNOW] And I'm signing up homes on this street for snow clearing this winter. No payment for the season before December 1. Could any of that help you? If not, can I leave this with you?
+Hi, sorry to bother you! I'm {NAME} with {BRAND}, here in {AREA}. I do house cleaning. [GUTTERS] This fall I also clean gutters by hand, once the leaves are down. [GUTTERS, before G1] I'm also taking gutter bookings for dates after mid-October, once the leaves are down. The date is confirmed only once my insurance and ladder are in place, by October 9. If not, I'll let you know and cancel, and you owe nothing. [SNOW] And I'm signing up homes on this street for snow clearing this winter. No payment for the season before December 1. Could any of that help you? If not, can I leave this with you?
 ```
 
 **KO**
 ```say
-안녕하세요, 갑자기 죄송해요. 저는 {AREA}에서 일하는 {BRAND}의 {NAME}입니다. 집 청소를 하고 있고요, [GUTTERS] 올가을에는 낙엽이 다 떨어진 뒤에 홈통(처마 물받이) 청소도 손으로 해 드려요. [SNOW] 그리고 이 거리 댁들을 대상으로 올겨울 제설 신청도 받고 있어요. 시즌 요금은 12월 1일 전에는 받지 않아요. 혹시 필요하신 게 있을까요? 아니시면 안내지만 드리고 갈게요.
+안녕하세요, 갑자기 죄송해요. 저는 {AREA}에서 일하는 {BRAND}의 {NAME}입니다. 집 청소를 하고 있고요, [GUTTERS] 올가을에는 낙엽이 다 떨어진 뒤에 홈통(처마 물받이) 청소도 손으로 해 드려요. [GUTTERS, G1 전] 그리고 10월 중순 이후, 낙엽이 다 떨어진 뒤 날짜로 홈통(처마 물받이) 청소 예약도 받고 있어요. 제 보험과 사다리 준비가 10월 9일까지 끝나야 날짜가 확정되고, 안 되면 연락드려서 취소해요. 그 경우 내실 돈은 없어요. [SNOW] 그리고 이 거리 댁들을 대상으로 올겨울 제설 신청도 받고 있어요. 시즌 요금은 12월 1일 전에는 받지 않아요. 혹시 필요하신 게 있을까요? 아니시면 안내지만 드리고 갈게요.
 ```
 
 ## 1C. If they're interested / 관심을 보이면
@@ -70,7 +76,9 @@ Great! How many bedrooms and bathrooms, and when would you like it done? … For
 
 Text them only if they say yes; write down their number and "asked for estimate at door, date" (code **Q**). 고객이 좋다고 할 때만 문자를 보내고, 번호와 "방문 시 견적 요청, 날짜"를 기록하세요(**Q**).
 
-## 1D. If they ask about gutters (Track B ON) / 홈통 청소를 물어보면
+## 1D. If they ask about gutters / 홈통 청소를 물어보면
+
+After G1 passes (gutters ON) / G1 통과 후(홈통 청소 켜짐):
 
 **EN**
 ```say
@@ -79,7 +87,19 @@ I clean the gutters by hand, with a scoop, from a ladder. Gutters only: no windo
 
 **KO**
 ```say
-사다리에 올라가서 홈통을 손과 스쿱으로 직접 청소해 드려요. 홈통만 하고, 창문 청소나 압력 세척은 하지 않아요. 댁은 {LOW}–{HIGH}이고, 작업이 끝난 뒤에 결제하시면 돼요. 그날 날씨 때문에 사다리 작업이 위험하면 날짜를 다시 잡아요.
+사다리에 올라가서 홈통을 손과 스쿱으로 직접 청소해 드려요. 홈통만 하고, 창문 청소나 고압 세척은 하지 않아요. 댁은 {LOW}–{HIGH}이고, 작업이 끝난 뒤에 결제하시면 돼요. 그날 날씨 때문에 사다리 작업이 위험하면 날짜를 다시 잡아요.
+```
+
+Before G1 (same conditions as `[GUTTERS, before G1]` in 1B). The site calculator hides gutters until they are ON, so take {LOW}–{HIGH} from the gutter row of the file 02 price card; 1–2 storeys only while you work alone (checklists/04). / G1 전(1B의 `[GUTTERS, G1 전]`과 같은 조건). 홈통 청소가 켜지기 전에는 사이트 계산기에 나오지 않으니, {LOW}–{HIGH}는 02번 파일 가격표의 홈통 줄에서 가져오세요. 혼자 일하는 동안은 1–2층만 받아요(checklists/04).
+
+**EN**
+```say
+Right now I'm taking bookings only. I clean gutters by hand, with a scoop, from a ladder. Gutters only: no windows and no pressure washing. For your house it's {LOW} to {HIGH}, paid when the job is done. The date is confirmed only once my insurance and ladder are in place, by October 9. If not, I'll let you know and cancel, and you owe nothing. Which date after mid-October works for you?
+```
+
+**KO**
+```say
+지금은 예약만 받고 있어요. 사다리에 올라가서 홈통을 손과 스쿱으로 직접 청소해 드려요. 홈통만 하고, 창문 청소나 고압 세척은 하지 않아요. 댁은 {LOW}–{HIGH}이고, 작업이 끝난 뒤에 결제하시면 돼요. 제 보험과 사다리 준비가 10월 9일까지 끝나야 날짜가 확정되고, 안 되면 연락드려서 취소해요. 그 경우 내실 돈은 없어요. 10월 중순 이후 언제가 좋으세요?
 ```
 
 ## 1E. If they ask about snow (Track B ON) / 제설을 물어보면
@@ -118,16 +138,16 @@ Because we're signing this at your home, you can cancel within 10 days after you
 
 ---
 
-## 2. Leaving a door hanger / 도어행어 거는 법
+## 2. Leaving a door hanger / 문고리 전단 거는 법
 
 | EN | KO |
 |---|---|
-| No answer: knock or ring once, wait about 20 seconds, then leave a hanger. | 응답이 없으면 한 번만 노크(또는 벨)하고 20초쯤 기다린 뒤 도어행어를 걸어 두세요. |
+| No answer: knock or ring once, wait about 20 seconds, then leave a hanger. | 응답이 없으면 한 번만 노크(또는 벨)하고 20초쯤 기다린 뒤 문고리 전단을 걸어 두세요. |
 | Hang it on the door handle, printed side out. Not in the mailbox or mail slot, not taped to the door, not on cars or on the ground. | 문 손잡이에 인쇄면이 밖으로 보이게 거세요. 우편함·우편 투입구에 넣거나, 테이프로 붙이거나, 차나 바닥에 두지 마세요. |
-| A "No soliciting", "No flyers" or "No junk mail" sign means no knock and no hanger. Log **NS**. | '방문판매 사절', '전단지 사절' 표시가 있으면 노크도, 도어행어도 하지 마세요. **NS**로 기록하세요. |
-| Use only hangers with this cluster's QR code, so inquiries can be traced to the cluster (memo §10, item 6). | 이 구역 전용 QR이 찍힌 도어행어만 쓰세요. 그래야 어느 구역에서 문의가 왔는지 알 수 있어요. |
+| A "No soliciting", "No flyers" or "No junk mail" sign means no knock and no hanger. Log **NS**. | '방문판매 사절', '전단지 사절' 표시가 있으면 노크도, 문고리 전단도 하지 마세요. **NS**로 기록하세요. |
+| Use only hangers with this cluster's QR code, so inquiries can be traced to the cluster (memo §10, item 6). | 이 구역 전용 QR이 찍힌 문고리 전단만 쓰세요. 그래야 어느 구역에서 문의가 왔는지 알 수 있어요. |
 | Someone answers but is busy: hand it over, say thanks, and go. | 사람이 나왔는데 바쁘면 직접 건네고 인사한 뒤 바로 가세요. |
-| Re-knock hanger doors on a later day; each re-knock is a new attempt. How well re-knocking works is unknown, so measure it (memo §7). | 도어행어를 건 집은 다른 날 다시 방문해도 돼요. 재방문은 새 시도로 기록해요. 효과는 알려진 자료가 없으니 직접 측정하세요. |
+| Re-knock hanger doors on a later day; each re-knock is a new attempt. How well re-knocking works is unknown, so measure it (memo §7). | 문고리 전단을 건 집은 다른 날 다시 방문해도 돼요. 재방문은 새 시도로 기록해요. 효과는 알려진 자료가 없으니 직접 측정하세요. |
 
 ## 3. What to record in the CRM door log / 방문 기록지에 적을 것
 
@@ -135,12 +155,12 @@ One row per attempt: date, time, street, house number, attempt #, outcome code, 
 
 | Code | EN | KO | Next step / 다음 할 일 |
 |---|---|---|---|
-| **NA** | No answer, hanger left | 부재, 도어행어 걸어 둠 | Re-knock another day (new attempt) / 다른 날 재방문(새 시도) |
+| **NA** | No answer, hanger left | 부재, 문고리 전단 걸어 둠 | Re-knock another day (new attempt) / 다른 날 재방문(새 시도) |
 | **NI** | Not interested | 관심 없음 | Final. Don't knock again. / 종료. 다시 가지 않음 |
 | **Q** | Asked for a price or info | 가격·정보 요청 | Send what they asked for the same day (file 03), then follow up per file 04 / 당일 03번으로 답장, 이후 04번 규칙대로 |
 | **B** | Booked | 예약 완료 | Service, date, price range, agreement signed, date the copy was given (10-day count) / 서비스, 날짜, 금액, 계약서 서명, 사본 준 날짜(10일 계산용) |
 | **CB** | Come back or call back at a time they chose | 다시 오라거나 전화 달라고 함 | Write the date and time they gave; contact them only then / 고객이 정한 날짜·시간을 적고 그때만 연락 |
-| **NS** | No-soliciting or no-flyers sign | 방문판매·전단지 사절 표시 | Final. Skip, no hanger. / 종료. 건너뛰고 도어행어도 안 걸어요 |
+| **NS** | No-soliciting or no-flyers sign | 방문판매·전단지 사절 표시 | Final. Skip, no hanger. / 종료. 건너뛰고 문고리 전단도 안 걸어요 |
 
 | EN | KO |
 |---|---|

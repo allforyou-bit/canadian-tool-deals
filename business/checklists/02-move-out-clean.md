@@ -5,7 +5,7 @@ Track A. For an **empty** home or unit. Print one copy per job (작업마다 한
 Labels (표시): **ASSUMPTION/가정** = no source, measure it. **NOT VERIFIED/확인 필요** = not found or not checked in the research. "Memo" = `business/research/decision-memo.md`.
 
 Job ID (작업 번호): ______ Date (날짜): ______ Beds/Baths (침실/욕실): ___ / ___ Add-ons on quote (견적서의 추가 옵션): ______________
-Client / payer (고객·결제자): tenant / owner / property manager / realtor (세입자 / 집주인 / 관리회사 / 리얼터) ______ Hand-over deadline (열쇠 반납 시각): ______
+Client / payer (고객·결제자): tenant / owner / property manager / realtor (세입자 / 집주인 / 관리회사 / 리얼터) ______ Hand-over deadline (집 인계 마감 시각): ______
 
 ---
 

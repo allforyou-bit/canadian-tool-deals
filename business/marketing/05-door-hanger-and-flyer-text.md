@@ -89,8 +89,8 @@ Each block has a heading and one or two short lines. Print the blocks chosen in 
 - KO: **처마 물받이(거터) 청소 $175부터** · 단층 $175 · 2층 $225 · 물받이만, 손으로 청소 · 작업 후 결제
 
 **C · Snow season** (only when `services.snow` is on)
-- EN: **Snow clearing from $500/season** · Single driveway, 4 × $125 (Dec 1 – Mar 1) · Nothing to pay before Dec 1 · {SNOW_EQUIPMENT}, no truck
-- KO: **시즌 제설 $500부터** · 드라이브웨이(차 1–2대), 4회 × $125 (12월 1일 – 3월 1일) · 12월 1일 전 결제 없음 · {SNOW_EQUIPMENT_KO}, 트럭 없음
+- EN: **Snow clearing from $500/season** · Single driveway, 4 instalments from $125 (Dec 1 – Mar 1) · Nothing to pay before Dec 1 · {SNOW_EQUIPMENT}, no truck
+- KO: **시즌 제설 $500부터** · 드라이브웨이(차 1–2대), 4회 분할(회당 $125부터) (12월 1일 – 3월 1일) · 12월 1일 전 결제 없음 · {SNOW_EQUIPMENT_KO}, 트럭 없음
 
 ### 3.3 No-obligation line
 
@@ -116,11 +116,11 @@ Print the lines that apply:
    - KO: 표시된 가격은 집 크기별 시작 가격입니다. 최종 가격은 사진이나 현장 확인 후 정해집니다.
 2. Ontario clusters, always:
    - EN: Ontario: if you sign an agreement with us at your home, you may cancel within 10 days of receiving your copy. Any refund is due within 15 days.
-   - KO: 온타리오주: 댁에서 저희와 계약서에 서명하신 경우, 사본을 받으신 날부터 10일 안에 취소하실 수 있으며 환불은 15일 안에 해 드립니다.
+   - KO: 온타리오주: 댁에서 저희와 계약서에 서명하신 경우, 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있으며 환불은 취소 통지 후 15일 안에 해 드립니다.
    - Source: memo F32, [ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract) (snippet). For clusters outside Ontario, this rule was not researched; the Montreal/Quebec version is not supported (see `config/prices.ts` city notes).
 3. When block C prints:
-   - EN: Snow: season Dec 1 – Mar 31. The agreement is void, and nothing is owed for the season, if not enough neighbours sign by Nov 20. Snow is never pushed onto the road. November storms: $60 per visit.
-   - KO: 제설: 시즌은 12월 1일 – 3월 31일입니다. 11월 20일까지 계약하신 이웃이 충분하지 않으면 계약은 무효이고, 시즌 비용은 내지 않으셔도 됩니다. 눈은 절대 도로로 밀어내지 않습니다. 11월 눈: 1회 $60.
+   - EN: Snow: season Dec 1 – Mar 31. Season contracts go ahead only if we sign our minimum number of snow contracts (all areas combined) by Nov 20; if not, the agreement is void and you owe nothing. Snow is never pushed onto the road. November storms: $60 per visit.
+   - KO: 제설: 시즌은 12월 1일 – 3월 31일입니다. 11월 20일까지 전체 제설 계약이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다. 눈은 절대 도로로 밀어내지 않습니다. 11월 눈: 1회 $60.
 4. When block B prints:
    - EN: Gutters: no windows, no pressure washing.
    - KO: 거터: 창문 청소와 고압 세척은 하지 않습니다.
@@ -160,8 +160,10 @@ Add-ons: extra bathroom $30 · inside oven $40 · inside fridge $35 · inside em
 (4- and 5-bedroom prices are in the price book and the online calculator.)
 
 **Gutters (only when `services.gutters` is on)**
-- EN: Bungalow / 1 storey $175 · 2 storeys $225 · 3 storeys $300 (only if safely reachable; we check first) · Downspout flush +$70 · Gutters only, by hand from a ladder · Pay when the job is done
-- KO: 단층 $175 · 2층 $225 · 3층 $300 (사다리로 안전하게 닿는 집만, 미리 확인) · 다운스파우트 뚫기 +$70 · 물받이만 손으로 청소 · 작업이 끝난 뒤 결제
+- EN: Bungalow / 1 storey $175 · 2 storeys $225 · Downspout flush +$70 · Gutters only, by hand from a ladder · Pay when the job is done
+- KO: 단층 $175 · 2층 $225 · 다운스파우트 뚫기 +$70 · 물받이만 손으로 청소 · 작업이 끝난 뒤 결제
+- Add "3 storeys from $300" / "3층 $300부터" only when `NEXT_PUBLIC_GUTTER_MAX_STOREYS=3` (a second person is present and the broker has confirmed cover; checklist 04 row 11; cover not researched). 3-storey jobs are declined by default (`gutterMaxStoreys` is 2), so the default flyer lists 1 and 2 storeys only.
+  (3층은 기본적으로 거절합니다. 두 번째 사람이 함께 있고 브로커가 보험 적용을 확인해 준 뒤(보험 적용 여부는 조사되지 않음) `NEXT_PUBLIC_GUTTER_MAX_STOREYS=3`으로 바꿨을 때만 "3층 $300부터"를 넣으세요. 체크리스트 04, 11번 항목.)
 
 **Snow season (only when `services.snow` is on)**
 - EN: Single driveway (1–2 cars) $500 · Double (3–4 cars) $650 · Large (5–6 cars) $800 · Walkway and steps +$100 · Salting +$100 · Paid in 4 instalments on Dec 1, Jan 1, Feb 1 and Mar 1 · Nothing paid before Dec 1 · November storms $60 per visit
@@ -196,7 +198,7 @@ Use the same no-obligation line (3.3), QR call-to-action (3.4), contact line (3.
 
 ## 6. QR code and attribution
 
-- **One QR link per cluster** (memo build item 6), so the CRM can tell which streets bring leads. For example, add a source tag to the quote-page link: `{SITE}/?src=hanger-c1` for cluster 1 and `?src=hanger-c2` for cluster 2. **The exact page path and parameter depend on how the site and PDF generator are built. Confirm that the link opens the quote tool before printing.**
+- **One QR link per cluster** (memo build item 6), so the CRM can tell which streets bring leads. The print generator (`components/Printables.tsx`, `lib/site.ts`) builds these links for you: `{SITE}/quote/?src=c1` for cluster 1, `?src=c2` for cluster 2 and `?src=c3` for cluster 3 (Korean prints use `{SITE}/ko/quote/?src=c1` and so on; see `business/08-배포-가이드.md`). **Confirm that the link opens the quote tool before printing.**
 - Test every new QR code with **two different phones** before printing a batch.
 - Print the short link as text under the QR code for people who don't scan.
 
@@ -207,9 +209,10 @@ Use the same no-obligation line (3.3), QR call-to-action (3.4), contact line (3.
 | Topic | Tip | Status |
 |---|---|---|
 | Paper size | **Letter (8.5 × 11 in)** | memo build item 6 |
-| 1-up | One full-page flyer | memo build item 6 |
-| **2-up** | Two door hangers per sheet, each **4.25 × 11 in** (cut lengthwise), or two half-page flyers of 5.5 × 8.5 in | memo item 6 layout; sizes are letter-page geometry |
-| **4-up** | Four cards of 4.25 × 5.5 in, handy as leave-behinds when someone answers | memo item 6 layout; geometry |
+| **2-up door hangers** | Two door hangers per Letter sheet, each **3.7 × 10.1 in**, with a dashed doorknob circle at the top (`/print/door-hanger/c1/`, `c2`, `c3`) | what the site's print generator builds (`components/Printables.tsx`) |
+| **2-up flyers** | Two half-page flyers per Letter sheet, each 7.5 × 4.9 in (`/print/flyer/c1/`, `c2`, `c3`) | what the print generator builds |
+| Price list | One Letter page (`/print/price-sheet/`) | what the print generator builds |
+| 1-up / **4-up** | **Not built yet.** Memo item 6 asks for 2-up and 4-up; the 4-up sheet is still open, and there is no 1-up full-page flyer either. | memo item 6 open |
 | Scale | Print at **100% / "Actual size"**, not "Fit to page", so the cut lines and QR code keep their size | suggestion |
 | Paper | Heavier paper or cardstock holds up better on a doorknob. Check what your printer can feed. | suggestion, not researched |
 | Doorknob hole | Cut a hole with a slit for the doorknob. Test on your own door before cutting a batch. | suggestion |

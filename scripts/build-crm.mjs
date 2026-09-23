@@ -233,7 +233,7 @@ function listDV(list, message) {
     allowBlank: true,
     formulae: [list.startsWith("'") ? list : `"${list}"`],
     showErrorMessage: true,
-    errorStyle: 'error',
+    errorStyle: 'stop', // OOXML allows only stop | warning | information
     errorTitle: '목록에서 고르세요 / Pick from the list',
     error: message ?? `${list}`,
   }
@@ -256,6 +256,19 @@ const GUT = BOOK.gutters
 const SNOW = BOOK.snow
 const SNOW_SEASON_BASE = SNOW ? (SNOW.mode === 'monthly' ? SNOW.driveway.single * SNOW.instalments : SNOW.driveway.single) : ''
 
+// Only the Ontario door-to-door rule (F32) and Ontario HST were researched. Other provinces get a
+// "not verified" label instead of Ontario wording.
+const ONTARIO = BOOK.city === 'gta' || BOOK.city === 'ottawa'
+const NOT_VERIFIED_PROV = '확인 필요 / not verified for this province'
+const TAX_BASIS =
+  {
+    gta: '온타리오 HST 13% (ETA s.165, Sched. VIII, F8)',
+    ottawa: '온타리오 HST 13% (ETA s.165, Sched. VIII, F8)',
+    calgary: '앨버타 GST 5% (ETA s.165, F8)',
+    vancouver: 'BC GST 5% (ETA s.165, F8). BC PST 7%가 이 서비스에 붙는지는 확인 필요 (F8, 2차 출처)',
+    montreal: `퀘벡 GST 5% + QST 9.975%는 조사에서 확인하지 못함 — ${NOT_VERIFIED_PROV}`,
+  }[BOOK.city] ?? NOT_VERIFIED_PROV
+
 // ----- Settings sheet entries (layout computed before any formula is written) -----
 
 const YESNO = 'YES,NO'
@@ -274,15 +287,15 @@ const SETTINGS = [
   { key: 'asof', ko: '기준일', en: 'As-of date', v: f('TODAY()'), fmt: FMT.date, basis: '보통 TODAY(). 날짜를 직접 넣으면 그날 기준으로 지표·킬 기준·DAILY 줄을 다시 계산합니다.' },
 
   { section: '소비자 계약·CASL Consumer contracts & CASL (F11, F32) — 법률 자문 아님' },
-  { key: 'cancel_days', ko: '방문 계약 취소 가능 기간', en: 'Door-signed cancellation period', v: 10, fmt: FMT.int, unit: '일', kind: 'info', basis: '온타리오 방문(direct) 계약: 서명한 사본을 받은 날부터 10일 안에 취소 가능 (F32, SNIPPET). 기간 중 작업한 경우의 효과는 조사 안 됨.', url: U.ontarioCancel },
-  { key: 'refund_days', ko: '취소 시 환불 기한', en: 'Refund due after cancellation', v: 15, fmt: FMT.int, unit: '일', kind: 'info', basis: '취소하면 15일 안에 환불 (F32)', url: U.ontarioCancel },
+  { key: 'cancel_days', ko: '방문 계약 취소 가능 기간', en: 'Door-signed cancellation period', v: 10, fmt: FMT.int, unit: '일', kind: 'info', basis: ONTARIO ? '온타리오 방문(direct) 계약: 서명한 사본을 받은 날부터 10일 안에 취소 가능 (F32, SNIPPET). 기간 중 작업한 경우의 효과는 조사 안 됨.' : `10은 온타리오 값입니다 (F32). 이 주의 방문 계약 취소 기간은 ${NOT_VERIFIED_PROV}.`, url: U.ontarioCancel },
+  { key: 'refund_days', ko: '취소 시 환불 기한', en: 'Refund due after cancellation', v: 15, fmt: FMT.int, unit: '일', kind: 'info', basis: ONTARIO ? '취소하면 15일 안에 환불 (F32)' : `15는 온타리오 값입니다 (F32). 이 주의 환불 기한은 ${NOT_VERIFIED_PROV}.`, url: U.ontarioCancel },
   { key: 'inquiry_months', ko: '문의 후 묵시적 동의 기간', en: 'Implied consent after an inquiry', v: 6, fmt: FMT.int, unit: '개월', kind: 'info', basis: 'CASL s.10(10) (F11). 그 뒤 문자·이메일을 보내려면 다른 동의 근거(예: 명시적 동의)가 필요.', url: U.casl },
   { key: 'unsub_days', ko: '수신거부 처리 기한', en: 'Unsubscribe processing time', v: 10, fmt: FMT.int, unit: '영업일', kind: 'info', basis: 'CASL: 수신거부는 10영업일 안에 처리, 수신거부 방법은 60일 동안 유효 (F11)', url: U.casl },
 
   { section: '세금 Tax (F7–F10) — 세무 자문 아님' },
   { key: 'hst_reg', ko: 'GST/HST 등록?', en: 'HST registered', v: 'NO', list: YESNO, basis: 'NO가 기본. 4분기 합계 $30,000 전까지 소규모 사업자 (ETA s.148, F7). 자발적 등록은 1년간 취소 불가 (s.242(2), F8). YES면 인보이스에 세금 줄이 나타납니다.', url: U.eta },
   { key: 'hst_no', ko: 'GST/HST 등록번호', en: 'GST/HST number', v: '', basis: '등록한 뒤에만 입력' },
-  { key: 'tax_rate', ko: '세율', en: 'Tax rate', v: BIZ.taxRate, fmt: FMT.pct, basis: `config/business.ts TAX_RULES (${CITY}). 온타리오 HST 13% (ETA s.165, Sched. VIII, F8). BC PST·퀘벡 QST는 확인 필요.`, url: U.eta },
+  { key: 'tax_rate', ko: '세율', en: 'Tax rate', v: BIZ.taxRate, fmt: FMT.pct, basis: `config/business.ts TAX_RULES (${CITY}). ${TAX_BASIS}.`, url: U.eta },
   { key: 'tax_label', ko: '세금 이름', en: 'Tax label', v: BIZ.taxLabel, basis: 'config/business.ts TAX_RULES' },
   { key: 'gst_threshold', ko: '소규모 사업자 기준', en: 'Small-supplier threshold', v: 30000, fmt: FMT.money0, unit: '$', basis: '4분기 합계 테스트 + 단일 분기 테스트 (ETA s.148, F7)', url: U.eta },
   { key: 'warn_rolling', ko: '4분기 합계 경고선', en: 'Rolling 4-quarter warning', v: 25000, fmt: FMT.money0, unit: '$', basis: 'memo §10 item 15 (미리 준비하기 위한 경고선)' },
@@ -483,13 +496,15 @@ const SPECS = {
       { key: 'status', csv: 'status', ko: '상태', en: 'Status', w: 9, list: 'OPEN,WON,LOST', ex: ['WON', 'OPEN'], note: 'OPEN 답 기다림 · WON 계약 성사 · LOST 안 됨' },
       { key: 'won', csv: 'won_date', ko: '계약일', en: 'Won date', w: 12, fmt: FMT.date, ex: [utc(2026, 10, 2), ''] },
       { key: 'sched', csv: 'scheduled_date', ko: '작업 예정일', en: 'Scheduled', w: 12, fmt: FMT.date, ex: [utc(2026, 10, 14), ''] },
-      { key: 'door', csv: 'door_signed', ko: '방문 계약?', en: 'Door-signed (Y/N)', w: 11, list: 'Y,N', ex: ['Y', 'N'], note: '고객 집에서 서명한 온타리오 계약 = Y. 10일 취소권 + 15일 내 환불 안내 필수 (F32).' },
+      { key: 'door', csv: 'door_signed', ko: '방문 계약?', en: 'Door-signed (Y/N)', w: 11, list: 'Y,N', ex: ['Y', 'N'], note: ONTARIO ? '고객 집에서 서명한 온타리오 계약 = Y. 10일 취소권 + 15일 내 환불 안내 필수 (F32).' : `고객 집에서 서명한 계약 = Y. 이 주의 취소권·환불 규칙은 ${NOT_VERIFIED_PROV} (온타리오 규칙 F32만 조사됨).` },
       { key: 'optin', csv: 'marketing_optin', ko: '마케팅 수신 동의', en: 'Marketing opt-in (Y/N)', w: 12, list: 'Y,N', ex: ['N', 'N'], note: '따로 체크한 경우만 Y (CASL 명시적 동의). 동의 문구와 날짜는 메모에.' },
       { key: 'notes', csv: 'notes', ko: '메모', en: 'Notes', w: 30, ex: ['EXAMPLE - fake row - delete', 'EXAMPLE - fake row - delete'] },
       {
         key: 'cancel_by', ko: '취소 가능 기한 (추정)', en: 'Cancel-by (est.)', w: 14, fmt: FMT.date,
         f: (r) => `IF(AND($L${r}="Y",$J${r}<>""),$J${r}+${S('cancel_days')},"")`,
-        note: '방문 계약: 서명한 사본을 받은 날부터 10일 (F32). 여기서는 계약일 + 10일로 추정. 기간 중 작업한 경우의 효과는 조사 안 됨.',
+        note: ONTARIO
+          ? '방문 계약: 서명한 사본을 받은 날부터 10일 (F32). 여기서는 계약일 + 10일로 추정. 기간 중 작업한 경우의 효과는 조사 안 됨.'
+          : `온타리오 기준(10일, F32)으로 계산한 값입니다. 이 주의 취소 기간은 ${NOT_VERIFIED_PROV}.`,
       },
       {
         key: 'est_net', ko: '예상 순이익', en: 'Est. net', w: 12, fmt: FMT.money,
@@ -517,7 +532,7 @@ const SPECS = {
       { key: 'source', csv: 'source', ko: '출처', en: 'Source', w: 11, list: SOURCES, ex: ['DOOR', 'REFERRAL'], note: SOURCE_NOTE },
       { key: 'price', csv: 'price', ko: '금액 (세전)', en: 'Price $ (pre-tax)', w: 13, fmt: FMT.money, ex: [tier(2).deep, tier(1).standard] },
       { key: 'direct', csv: 'direct_costs_actual', ko: '직접비 (실제)', en: 'Direct costs $ (actual)', w: 13, fmt: FMT.money, ex: ['', ''], note: '비워 두면 추정 비율을 씁니다 (청소 20%, 홈통 $20, 제설 15%, 플랫폼 10% — 가정 A2–A6). 세금·EI에는 지출 시트의 실제 영수증만 씁니다.' },
-      { key: 'door', csv: 'door_signed', ko: '방문 계약?', en: 'Door-signed (Y/N)', w: 11, list: 'Y,N', ex: ['Y', 'N'], note: 'Y면 인보이스에 온타리오 10일 취소권 안내가 나옵니다 (F32).' },
+      { key: 'door', csv: 'door_signed', ko: '방문 계약?', en: 'Door-signed (Y/N)', w: 11, list: 'Y,N', ex: ['Y', 'N'], note: ONTARIO ? 'Y면 인보이스에 온타리오 10일 취소권 안내가 나옵니다 (F32).' : `Y면 인보이스에 "${NOT_VERIFIED_PROV}" 줄이 나옵니다. 이 주의 취소권 문구를 확인해 바꾼 뒤 보내세요.` },
       { key: 'notes', csv: 'notes', ko: '메모', en: 'Notes', w: 30, ex: ['EXAMPLE - fake row - delete', 'EXAMPLE - fake row - delete'] },
       {
         key: 'direct_used', ko: '적용 직접비', en: 'Direct cost used', w: 12, fmt: FMT.money,
@@ -579,9 +594,15 @@ const SPECS = {
       },
       {
         key: 'casl', ko: 'CASL 확인', en: 'CASL check', w: 34,
+        // Fails closed: REFERRAL covers only the first message (s.4(1)), REPLY only a direct answer to
+        // the inquiry (s.3(b)), INQUIRY needs the quote's request date (F11, F12).
         f: (r) =>
           `IF($A${r}="","",IF($I${r}="Y","수신거부: 문자·이메일 보내지 않기",IF(OR($E${r}="SMS",$E${r}="EMAIL"),` +
-          `IF(OR($H${r}="",$H${r}="NONE"),"동의 근거 없음: 전화·방문만",IF(AND($H${r}="INQUIRY",N($N${r})>0,${ASOF}>N($N${r})),"문의 후 6개월 지남: 다른 동의 근거 필요","OK: 이름·주소·연락처·수신거부 문구 넣기")),"")))`,
+          `IF(OR($H${r}="",$H${r}="NONE"),"동의 근거 없음: 전화·방문만",` +
+          `IF($H${r}="INQUIRY",IF(N($N${r})=0,"견적 요청일을 못 찾음: 관련 ID에 견적 ID(Q-…)를 넣었는지 확인",IF(${ASOF}>N($N${r}),"문의 후 6개월 지남: 다른 동의 근거 필요","OK: 이름·주소·연락처·수신거부 문구 넣기")),` +
+          `IF($H${r}="REFERRAL","소개 후 첫 메시지만 OK: 소개자 이름 + 이름·주소·연락처·수신거부 문구. 두 번째부터는 다른 동의 근거 필요",` +
+          `IF(AND($H${r}="REPLY",$D${r}<>"QUOTE",$D${r}<>"CALLBACK"),"문의에 대한 답장이 아님: EXPRESS 또는 INQUIRY 동의 필요",` +
+          `"OK: 이름·주소·연락처·수신거부 문구 넣기")))),"")))`,
       },
       {
         key: 'consent_end', ko: '문의 동의 만료', en: 'Inquiry consent ends', w: 13, fmt: FMT.date,
@@ -646,7 +667,7 @@ function assertCol(sheetKey, colKey, letter) {
   ['jobs', 'id', 'A'], ['jobs', 'date', 'C'], ['jobs', 'service', 'F'], ['jobs', 'price', 'H'], ['jobs', 'direct', 'I'],
   ['jobs', 'direct_used', 'L'], ['jobs', 'paid', 'O'],
   ['payments', 'job', 'B'], ['payments', 'amount', 'C'], ['payments', 'method', 'D'],
-  ['followups', 'created', 'A'], ['followups', 'related', 'C'], ['followups', 'channel', 'E'], ['followups', 'due', 'F'],
+  ['followups', 'created', 'A'], ['followups', 'related', 'C'], ['followups', 'type', 'D'], ['followups', 'channel', 'E'], ['followups', 'due', 'F'],
   ['followups', 'done', 'G'], ['followups', 'consent', 'H'], ['followups', 'unsub', 'I'], ['followups', 'consent_end', 'N'],
   ['expenses', 'date', 'A'], ['mileage', 'date', 'A'],
 ].forEach(([s, c, l]) => assertCol(s, c, l))
@@ -910,7 +931,7 @@ function buildDoorsLegend(ws) {
     ['NA', '부재 No answer', '문고리 광고지를 두고 나중에 다시 (시도 # +1)'],
     ['NI', '관심 없음 Not interested', '끝. 다시 두드리지 않기'],
     ['Q', '견적 요청 Quote requested', '견적 시트에 한 줄 (출처 DOOR)'],
-    ['B', '바로 예약 Booked', '견적 시트에 WON + 방문 계약 Y (10일 취소권 안내, F32)'],
+    ['B', '바로 예약 Booked', `견적 시트에 WON + 방문 계약 Y (${ONTARIO ? '10일 취소권 안내, F32' : `취소권 규칙 ${NOT_VERIFIED_PROV}`})`],
     ['CB', '다시 연락 Call back', '후속 시트에 한 줄'],
     ['NS', '방문판매 금지 표시 No soliciting', '두드리지 않음. 시도 수에서 빠짐'],
   ]
@@ -1394,7 +1415,7 @@ function buildEI(ws) {
     ['Path B 전환선 (주)', `IFERROR((${EI.B}-${ded}*${EI.A}+(1-${EI.cpp})*${EI.A})/(1-${EI.cpp}),0)`, 'memo 5.4: (B − 0.5A + 0.881A) ÷ 0.881. 최대 EI면 약 $1,000', FMT.money],
     ['공식 적용 확인', `IF(${EI.A}>${EI.cap},"A가 90% 한도 초과 — 전환선 재계산 필요","OK")`, 'A가 50% 구간 안에 있어야 공식이 맞습니다'],
     ['지난 2주 완료 순이익', `SUMIFS(${R('jobs', 'net')},${JDATE},">="&(${ASOF}-13),${JDATE},"<="&${ASOF})`, '작업 시트 (기준일 포함 14일)', FMT.money],
-    ['앞으로 2주 예약 순이익', `SUMIFS(${R('quotes', 'est_net')},${R('quotes', 'status')},"WON",${R('quotes', 'sched')},">"&${ASOF},${R('quotes', 'sched')},"<="&(${ASOF}+14))`, '견적 시트: WON + 예정일이 앞으로 14일 (추정 순이익)', FMT.money],
+    ['앞으로 2주 예약 순이익', `SUMIFS(${R('quotes', 'est_net')},${R('quotes', 'status')},"WON",${R('quotes', 'service')},"<>SNOW",${R('quotes', 'sched')},">"&${ASOF},${R('quotes', 'sched')},"<="&(${ASOF}+14))`, '견적 시트: WON + 예정일이 앞으로 14일 (추정 순이익). 제설 시즌 계약(SNOW)은 제외: 견적 금액이 12–3월에 나눠 버는 시즌 총액이라서입니다. 할부는 작업 시트에 회차마다 한 줄씩(12/1, 1/1, 2/1, 3/1) 넣으면 “지난 2주 완료”에 잡힙니다.', FMT.money],
     ['주당 평균 (4주)', `IFERROR((${EI.done2}+${EI.ahead2})/4,0)`, '해석(추정): (지난 2주 완료 + 앞으로 2주 예약) ÷ 4주 (memo 5.4 규칙 3)', FMT.money],
     ['판단', `IF(${S('ei_eligible')}="NO","EI 없음 — Path B (사업 전념)",IF(${EI.avg}>=${EI.thr},"Path B 전환 검토 (주 $"&ROUND(${EI.thr},0)&" 이상)","Path A 유지"))`, '10월 기본값은 Path A (memo 5.4). Service Canada에 "minor extent" 여부를 먼저 전화로 물어보세요.'],
     ['EI 신청 마감', S('ei_deadline'), 'F1 (Pilot 24)', FMT.date],
@@ -1552,7 +1573,7 @@ function buildTax(ws) {
     ['소득세: T1 + T2125. 2026년분은 2027-06-15까지 신고, 2027-04-30까지 납부 (memo §6).', U.ita],
     ['분납(instalments): 올해 또는 지난 2년 각각의 순 세금이 $3,000 이하면 필요 없음 (ITA s.156.1(1),(2)(b), F10). 본인 해당 여부는 추정 — 확인 필요.', U.ita],
     ['CPP: 자영업 9.9% + 2.0% = 11.9%, 기본공제 $3,500 초과분 (F9). 적립은 순이익 전체의 11.9%로 보수적으로.', U.cpp],
-    ['GST/HST: 온타리오 HST 13% (F8). 자발적 등록은 1년간 취소 불가 → B2C는 기준 전까지 미등록 유지 (memo §6).', U.eta],
+    [`GST/HST: ${TAX_BASIS}. 자발적 등록은 1년간 취소 불가 (ETA s.242(2), F8) → B2C는 기준 전까지 미등록 유지 (memo §6).`, U.eta],
     ['플랫폼(TaskRabbit·Jiffy) 수입이 본인 과세매출인지 확인 안 됨 (memo 5.5) — 설정 시트 스위치로 조정.', U.memo],
     ['소득세율·소득세 적립액은 연구 범위 밖이라 이 시트에 없습니다. 회계사 또는 CRA에 확인.', ''],
   ]
@@ -1823,12 +1844,12 @@ function buildInvoice(ws) {
   longRow(35, `IF(${H.snow},${lit('11월 20일까지 최소 계약 수가 채워지지 않으면 이 계약은 무효이며, 아무것도 청구하지 않습니다. / If the minimum number of contracts is not signed by Nov 20, this contract is void and nothing is charged.')},"")`)
   longRow(36, `IF(${H.snow},"시즌: 12월 1일–3월 31일. 11월 눈은 방문당 $"&${S('snow_per_visit')}&". / Season: Dec 1 – Mar 31. November storms: $"&${S('snow_per_visit')}&" per visit.","")`)
 
-  // Ontario direct agreement notice
-  longRow(
-    38,
-    `IF(${H.door}="Y",${lit('온타리오 방문 계약: 집에서 서명하셨다면, 서명한 계약서 사본을 받은 날부터 10일 안에 취소할 수 있고, 환불은 15일 안에 받습니다. / Ontario: if you signed this agreement at your home, you can cancel within 10 days of receiving your signed copy, and any refund is made within 15 days. (ontario.ca — 법률 자문 아님 / not legal advice)')},"")`,
-    { height: 40 },
-  )
+  // Door-signed cancellation notice: Ontario wording only for Ontario builds (F32); elsewhere a
+  // placeholder the owner must replace, because other provinces were not researched.
+  const doorNotice = ONTARIO
+    ? '온타리오 방문 계약: 집에서 서명하셨다면, 서명한 계약서 사본을 받은 날부터 10일 안에 취소할 수 있고, 환불은 15일 안에 받습니다. / Ontario: if you signed this agreement at your home, you can cancel within 10 days of receiving your signed copy, and any refund is made within 15 days. (ontario.ca — 법률 자문 아님 / not legal advice)'
+    : `[${NOT_VERIFIED_PROV}] 방문 계약 취소권 안내: 이 주의 규칙은 조사하지 않았습니다. 보내기 전에 이 줄을 확인된 문구로 바꾸세요. / Door-to-door cancellation rules for this province were not researched. Replace this line before sending.`
+  longRow(38, `IF(${H.door}="Y",${lit(doorNotice)},"")`, { height: 40 })
   longRow(40, '"감사합니다! / Thank you!"', { size: 10, bold: true, height: 18 })
   longRow(41, `${S('brand_en')}&" · "&${S('brand_ko')}&" · "&${S('mailing')}&" · "&${S('phone')}&" · "&${S('email')}`, { italic: true, height: 18 })
 

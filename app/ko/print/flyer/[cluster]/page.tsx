@@ -3,7 +3,7 @@ import PrintFrame from '@/components/PrintFrame'
 import { FlyerSheet } from '@/components/Printables'
 import { CLUSTERS, type Cluster } from '@/lib/site'
 
-export const metadata: Metadata = { title: 'Flyer', robots: { index: false, follow: false } }
+export const metadata: Metadata = { title: '전단', robots: { index: false, follow: false } }
 export const dynamicParams = false
 export function generateStaticParams() {
   return CLUSTERS.map((cluster) => ({ cluster }))

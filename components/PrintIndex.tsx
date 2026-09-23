@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { business } from '@/config/business'
 import { prefix, type Lang } from '@/lib/i18n'
 import { CLUSTERS } from '@/lib/site'
 
@@ -9,7 +10,7 @@ const T = {
     hanger: 'Door hangers (2 per Letter sheet)',
     flyer: 'Half-page flyers (2 per Letter sheet)',
     price: 'Price list (1 Letter page)',
-    agreements: 'Service agreements',
+    agreements: 'Service agreements (only services that are switched on)',
   },
   ko: {
     h1: '인쇄물',
@@ -17,7 +18,7 @@ const T = {
     hanger: '문고리 전단(레터 1장에 2개)',
     flyer: '반쪽 전단(레터 1장에 2개)',
     price: '가격표(레터 1장)',
-    agreements: '서비스 약관',
+    agreements: '서비스 계약서(켜진 서비스만)',
   },
 }
 
@@ -55,13 +56,16 @@ export default function PrintIndex({ lang }: { lang: Lang }) {
       </h2>
       <h2 className="mt-4 font-bold">{t.agreements}</h2>
       <ul className="mt-1 flex gap-3">
-        {['cleaning', 'gutters', 'snow'].map((s) => (
-          <li key={s}>
-            <Link className="underline" href={`${p}/agreements/${s}/`}>
-              {s}
-            </Link>
-          </li>
-        ))}
+        {/* Only services switched on in config/business.ts: the agreement routes publish only those (gutters need Gate G1, snow needs Gate S). */}
+        {(['cleaning', 'gutters', 'snow'] as const)
+          .filter((s) => business.services[s])
+          .map((s) => (
+            <li key={s}>
+              <Link className="underline" href={`${p}/agreements/${s}/`}>
+                {s}
+              </Link>
+            </li>
+          ))}
       </ul>
     </main>
   )

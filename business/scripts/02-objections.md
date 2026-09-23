@@ -21,8 +21,8 @@
 | Deep / 딥클린(대청소) | $230–$265 | $270–$315 | $320–$370 | $370–$430 |
 | Move-in/out / 입주·이사 청소 | $260–$300 | $300–$345 | $360–$415 | $420–$485 |
 
-Extras change the range; run the calculator: extra bathroom $30, inside oven $40, inside fridge $35, inside empty cabinets $40, within 24 h / weekend / holiday +15%. Track B, only when ON: gutters 1 storey $175–$205, 2 storeys $225–$260, 3 storeys $300–$345, downspout flush +$70; snow, single driveway $500–$575 per season in 4 instalments; November visit $60.
-추가 항목이 있으면 금액이 바뀌니 계산기를 쓰세요.
+Extras change the range; run the calculator: extra bathroom $30, inside oven $40, inside fridge $35, inside empty cabinets $40, within 24 h / weekend / holiday +15%. Track B, only when ON: gutters 1 storey $175–$205, 2 storeys $225–$260, 3 storeys $300–$345 (quote 3 storeys only if `NEXT_PUBLIC_GUTTER_MAX_STOREYS`=3, a second person is present and the broker has confirmed cover; otherwise decline, checklists/04 row 11), downspout flush +$70; snow, single driveway $500–$575 per season in 4 instalments; November visit $60.
+추가 항목이 있으면 금액이 바뀌니 계산기를 쓰세요: 추가 욕실 1개당 $30, 오븐 내부 $40, 냉장고 내부 $35, 빈 수납장 내부 $40, 24시간 이내·주말·공휴일 +15%. 트랙 B(켜져 있을 때만): 홈통 청소 단층 $175–$205, 2층 $225–$260, 3층 $300–$345(3층은 `NEXT_PUBLIC_GUTTER_MAX_STOREYS`=3이고 두 번째 사람이 함께 있으며 브로커가 보험 적용을 확인했을 때만. 아니면 거절, checklists/04 11번), 배수관(다운스파우트) 물 세척 +$70. 제설은 1열 진입로 시즌 $500–$575(4회 분할), 11월 1회 $60.
 
 ---
 
@@ -60,12 +60,12 @@ Yes. I have general liability insurance, and I can show you proof. I don't keep 
 
 **EN — B (not bound yet)**
 ```say
-Not yet. My liability insurance is being set up, and I won't do any work in your home until it's in place. I'll show you proof before your date. I'm new in {AREA}, so I don't have many reviews yet. You're welcome to be home while I work.
+Not yet. I've requested liability insurance quotes, and I won't work in your home until a policy is in place. If it isn't in place before your date, I'll tell you and we'll move the date. I'm new in {AREA}, so I have no reviews yet. You're welcome to be home while I work.
 ```
 
 **KO — B (아직 가입 전)**
 ```say
-아직은 아니에요. 배상책임보험 가입을 진행하고 있고, 보험이 시작되기 전에는 댁에서 어떤 작업도 하지 않아요. 작업 날 전에 증명서를 보여 드릴게요. {AREA}에서 새로 시작해서 아직 후기가 많지 않아요. 작업하는 동안 집에 계셔도 괜찮아요.
+아직은 아니에요. 배상책임보험 견적을 요청해 두었고, 보험이 시작되기 전에는 댁에서 어떤 작업도 하지 않아요. 작업 날까지 보험이 시작되지 않으면 미리 말씀드리고 날짜를 옮길게요. {AREA}에서 새로 시작해서 아직 후기가 없어요. 작업하는 동안 집에 계셔도 괜찮아요.
 ```
 
 **If asked "Are you bonded?" / "본딩(보증보험) 있어요?"**
@@ -83,6 +83,7 @@ No, I'm not bonded. That's why I don't hold keys.
 | EN | KO |
 |---|---|
 | The damage-report rule (24 h, photos) must match your signed cleaning agreement (memo §10, item 5). | 파손 신고 규칙(24시간, 사진)은 실제 청소 계약서 내용과 같아야 해요. |
+| In **B**, say "I've requested liability insurance quotes" only after you have actually requested them (planned for Tue 9/29, memo §7); until then, leave that sentence out. Say "no reviews yet" only while you have none. | **B**에서 "배상책임보험 견적을 요청해 두었다"는 말은 실제로 견적을 요청한 뒤에만 하세요(9/29 화 예정). 그 전에는 이 문장을 빼세요. "아직 후기가 없다"는 후기가 하나도 없을 때만 말하세요. |
 | If the policy isn't bound by the booked date, move the job. No direct-client work before binding (memo §6). Bonding norms were not researched; no key custody in month 1 (memo §2). | 예약일까지 보험이 시작되지 않으면 날짜를 옮기세요. 본딩 관행은 조사되지 않았고, 첫 달에는 열쇠를 맡지 않아요. |
 
 ## 2.3 "Not now." / "지금은 아니에요." (timing / 시기)
@@ -133,4 +134,4 @@ Sure! Would a text or an email be better for you? I'll send the price range and 
 | Send the file 03 reply the same day, with the CASL ID and opt-out lines. Follow-ups: file 04 only. | 당일 03번 템플릿(발신자 정보·수신거부 문구 포함)으로 보내고, 후속 연락은 04번 규칙만 따르세요. |
 | If they won't give contact details, just leave the hanger. | 연락처를 주지 않으면 도어행어만 드리고 끝내세요. |
 
-**Sources / 출처:** `config/prices.ts`, `lib/quote.ts`; decision memo §2, §6, §8, §10 and F11. Insurance status is set by `business.insured` in `config/business.ts`.
+**Sources / 출처:** `config/prices.ts`, `lib/quote.ts`; decision memo §2, §6, §7, §8, §10 and F11. Insurance status is set by `business.insured` in `config/business.ts`.

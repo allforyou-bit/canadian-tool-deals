@@ -39,6 +39,8 @@ export function leadSummary(p: LeadPayload): string {
     `Address: ${p.address}`,
     p.preferredDates ? `Preferred dates: ${p.preferredDates}` : '',
     p.notes ? `Notes: ${p.notes}` : '',
+    // CASL consent record: the SMS/email fallback is the only copy when no lead endpoint is set.
+    p.marketingOptIn ? `Marketing opt-in: YES — "${p.marketingConsentText}"` : 'Marketing opt-in: no',
   ]
     .filter(Boolean)
     .join('\n')

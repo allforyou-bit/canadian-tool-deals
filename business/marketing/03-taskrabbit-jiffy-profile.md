@@ -5,7 +5,7 @@ Build item 8 in the decision memo (`business/research/decision-memo.md`, section
 The owner creates the accounts, pays the fee and pastes the text. The AI cannot open ID-verified accounts (memo section 10).
 
 > **사장님께 (한국어 요약)**
-> - TaskRabbit과 Jiffy는 **바닥 수입원**입니다. 주 사업이 아닙니다. 승인까지 얼마나 걸리는지, 신규 태스커에게 일이 얼마나 들어오는지는 **조사되지 않았습니다.** 승인이 아예 안 날 수도 있습니다(memo F21).
+> - TaskRabbit과 Jiffy는 주 사업과 함께 처음부터 돌려 두는 **보조 수입원(안전망)**입니다. 주 사업이 아닙니다. 승인까지 얼마나 걸리는지, 신규 태스커에게 일이 얼마나 들어오는지는 **조사되지 않았습니다.** 승인이 아예 안 날 수도 있습니다(memo F21).
 > - 1일차(9/28 월)에 두 곳 모두 신청하세요. 그 전에 **Gate 0**(본인이 캐나다에서 자영업을 할 수 있는 체류 신분인지)을 IRCC 서류로 먼저 확인해야 합니다.
 > - 플랫폼에 보이는 "시간당 $35부터" 같은 금액은 **고객에게 보여 주는 최저 광고 가격**입니다. 실제로 손에 들어오는 돈이 아닙니다(memo F19–F22).
 > - 영어 소개글은 아래 3번에 있습니다. 소개글마다 한국어 설명을 붙였으니, 뜻을 확인한 뒤 붙여 넣으세요.

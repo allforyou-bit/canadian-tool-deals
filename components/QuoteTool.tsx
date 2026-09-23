@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useId, useMemo, useRef, useState } from 'react'
 import type { Bedrooms, DrivewaySize, PriceBook } from '@/config/prices'
-import { DICT, money, SNOW_MINIMUM_DEADLINE, type Lang } from '@/lib/i18n'
+import { DICT, marketingConsentText, money, SNOW_MINIMUM_DEADLINE, type Lang } from '@/lib/i18n'
 import type { LeadPayload } from '@/lib/lead'
 import { leadSummary } from '@/lib/lead'
 import {
@@ -27,14 +27,62 @@ export interface QuoteToolProps {
   brand: string
   leadEndpoint: string
   turnstileSiteKey: string
+  /** heading level of the form/result titles: 2 under a page h1 (default), 3 under a section h2 */
+  headingLevel?: 2 | 3
+  /**
+   * CASL consent request shown next to the marketing opt-in box and stored as the consent record
+   * (SOR/2012-36 s.4). Preferably built on the server with marketingConsentText() from config;
+   * when absent it is built here from brand, contact and NEXT_PUBLIC_MAILING_ADDRESS.
+   */
+  consentText?: string
 }
 
 declare global {
   interface Window {
     turnstile?: {
-      render: (el: HTMLElement, opts: { sitekey: string; callback: (token: string) => void }) => string
+      render: (
+        el: HTMLElement,
+        opts: {
+          sitekey: string
+          callback: (token: string) => void
+          'error-callback'?: () => void
+          'expired-callback'?: () => void
+        },
+      ) => string
+      remove?: (widgetId: string) => void
     }
   }
+}
+
+// Referenced literally so Next inlines it into the client bundle at build time (config/business.ts
+// reads env vars dynamically, which works only on the server). CASL mailing address for the opt-in.
+const MAILING_ADDRESS = (process.env.NEXT_PUBLIC_MAILING_ADDRESS ?? '').trim()
+
+/** contact.phone is '' or 1 + 10 digits (lib/site.ts dialPhone) → 416-555-0123 */
+const displayPhone = (dial: string) => (dial.length === 11 ? `${dial.slice(1, 4)}-${dial.slice(4, 7)}-${dial.slice(7)}` : dial)
+
+const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
+/** with no token after this long, stop blocking submit and offer the text/email fallback */
+const TURNSTILE_TIMEOUT_MS = 10_000
+
+// Strings used only here (kept local so lib/i18n.ts stays untouched by this component's edge cases).
+const LOCAL: Record<Lang, Record<'notConfigured' | 'turnstileHint' | 'turnstileFallback' | 'turnstileNoContact' | 'errorNoContact' | 'edit', string>> = {
+  en: {
+    notConfigured: 'Online requests are not set up yet, so this form cannot send anything. The estimate still works.',
+    turnstileHint: 'The security check did not load. You can still send your request.',
+    turnstileFallback: 'The security check did not load, so your request may not reach us online. Please also send it by text or email.',
+    turnstileNoContact: 'The security check did not load, so your request may not reach us. Please try again later.',
+    errorNoContact: 'Something went wrong sending the form. Please check your connection and try again.',
+    edit: 'Edit request',
+  },
+  ko: {
+    notConfigured: '온라인 요청 기능이 아직 설정되지 않아 이 양식으로는 요청을 보낼 수 없어요. 예상 견적은 그대로 볼 수 있어요.',
+    turnstileHint: '보안 확인을 불러오지 못했어요. 그래도 요청은 보낼 수 있어요.',
+    turnstileFallback: '보안 확인을 불러오지 못해 온라인 요청이 전달되지 않았을 수 있어요. 아래 버튼으로 문자나 이메일도 보내 주세요.',
+    turnstileNoContact: '보안 확인을 불러오지 못해 요청이 전달되지 않았을 수 있어요. 잠시 뒤 다시 시도해 주세요.',
+    errorNoContact: '양식을 보내는 중에 문제가 생겼어요. 인터넷 연결을 확인하고 다시 시도해 주세요.',
+    edit: '요청 내용 고치기',
+  },
 }
 
 const inputCls =
@@ -57,6 +105,24 @@ export default function QuoteTool(props: QuoteToolProps) {
   const d = DICT[lang]
   const q = d.quote
   const f = d.form
+  const L = LOCAL[lang]
+  const H = props.headingLevel === 3 ? 'h3' : 'h2'
+  // SOR/2012-36 s.4: the consent request names the business, gives its mailing address and a
+  // phone/email, and says consent can be withdrawn. The same string is stored as the record (CASL s.13).
+  const consentText =
+    props.consentText ||
+    marketingConsentText(lang, {
+      brand: props.brand,
+      mailingAddress: MAILING_ADDRESS,
+      phone: displayPhone(contact.phone),
+      email: contact.email,
+    })
+
+  // Where a request can go: the lead endpoint, or the one-tap text/email buttons.
+  const hasContact = Boolean(contact.phone || contact.email)
+  const canDeliver = Boolean(props.leadEndpoint) || hasContact
+  // A Turnstile token is only checked by the lead endpoint, so never block the no-endpoint path on it.
+  const useTurnstile = Boolean(props.leadEndpoint && props.turnstileSiteKey)
 
   const enabled = (['cleaning', 'gutters', 'snow'] as ServiceKey[]).filter((s) => services[s])
   const [service, setService] = useState<ServiceKey>(enabled[0] ?? 'cleaning')
@@ -105,35 +171,108 @@ export default function QuoteTool(props: QuoteToolProps) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'fallback' | 'error'>('idle')
   const [message, setMessage] = useState('')
   const [token, setToken] = useState('')
+  const [turnstileFailed, setTurnstileFailed] = useState(false)
+  const [notice, setNotice] = useState('')
+  const [triedSubmit, setTriedSubmit] = useState(false)
   const [payload, setPayload] = useState<LeadPayload | null>(null)
   const turnstileRef = useRef<HTMLDivElement>(null)
+  const nameRef = useRef<HTMLInputElement>(null)
+  const phoneRef = useRef<HTMLInputElement>(null)
+  const addressRef = useRef<HTMLInputElement>(null)
+  const panelHeadingRef = useRef<HTMLHeadingElement>(null)
+  const focusFormNext = useRef(false)
+  const messageId = useId()
+  const panelShown = status === 'sent' || status === 'fallback' || status === 'error'
 
+  // Move focus to the result panel when it replaces the form, and back to the form after "Edit".
   useEffect(() => {
-    if (!props.turnstileSiteKey || !turnstileRef.current) return
+    if (panelShown) panelHeadingRef.current?.focus()
+    else if (focusFormNext.current) {
+      focusFormNext.current = false
+      nameRef.current?.focus()
+    }
+  }, [panelShown])
+
+  // Turnstile: if the script is blocked, the widget errors or no token arrives in time, mark it
+  // failed so submit is not stuck disabled; submit then routes to the text/email fallback.
+  useEffect(() => {
+    if (!useTurnstile || panelShown || !turnstileRef.current) return
     const el = turnstileRef.current
+    let widgetId: string | undefined
+    let gotToken = false
+    const fail = () => setTurnstileFailed(true)
+    const timer = window.setTimeout(() => {
+      if (!gotToken) fail()
+    }, TURNSTILE_TIMEOUT_MS)
     const render = () => {
-      if (window.turnstile && el.childElementCount === 0) {
-        window.turnstile.render(el, { sitekey: props.turnstileSiteKey, callback: setToken })
+      if (!window.turnstile) {
+        fail()
+        return
+      }
+      if (el.childElementCount > 0) return
+      try {
+        widgetId = window.turnstile.render(el, {
+          sitekey: props.turnstileSiteKey,
+          callback: (t) => {
+            gotToken = true
+            setToken(t)
+            setTurnstileFailed(false)
+          },
+          'error-callback': fail,
+          'expired-callback': () => setToken(''),
+        })
+      } catch {
+        fail()
       }
     }
-    if (window.turnstile) {
-      render()
-      return
+    let script: HTMLScriptElement | null = null
+    if (window.turnstile) render()
+    else {
+      script = document.querySelector<HTMLScriptElement>(`script[src="${TURNSTILE_SRC}"]`)
+      if (!script) {
+        script = document.createElement('script')
+        script.src = TURNSTILE_SRC
+        script.async = true
+        document.head.appendChild(script)
+      }
+      script.addEventListener('load', render)
+      script.addEventListener('error', fail)
     }
-    const s = document.createElement('script')
-    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
-    s.async = true
-    s.onload = render
-    document.head.appendChild(s)
-  }, [props.turnstileSiteKey])
+    return () => {
+      window.clearTimeout(timer)
+      script?.removeEventListener('load', render)
+      script?.removeEventListener('error', fail)
+      if (widgetId !== undefined) {
+        try {
+          window.turnstile?.remove?.(widgetId)
+        } catch {
+          // widget already gone
+        }
+      }
+    }
+  }, [useTurnstile, props.turnstileSiteKey, panelShown])
+
+  function editRequest() {
+    setNotice('')
+    setToken('') // a Turnstile token is single-use; a fresh widget renders with the form
+    setTurnstileFailed(false)
+    focusFormNext.current = true
+    setStatus('idle')
+  }
+
+  const invalid = (v: string) => (triedSubmit && !v.trim()) || undefined
 
   const toggleAddOn = (id: string) =>
     setAddOns((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id]))
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
-    if (!name.trim() || !phone.trim() || !address.trim()) {
+    if (!canDeliver) return
+    setTriedSubmit(true)
+    const firstInvalid = !name.trim() ? nameRef : !phone.trim() ? phoneRef : !address.trim() ? addressRef : null
+    if (firstInvalid) {
       setMessage(f.required)
+      firstInvalid.current?.focus()
       return
     }
     setMessage('')
@@ -153,15 +292,20 @@ export default function QuoteTool(props: QuoteToolProps) {
       preferredDates: dates.trim(),
       notes: notes.trim(),
       marketingOptIn: optIn,
-      marketingConsentText: optIn ? f.marketing : '',
+      marketingConsentText: optIn ? consentText : '',
       turnstileToken: token,
       website,
     }
     setPayload(p)
+    setNotice('')
     if (!props.leadEndpoint) {
       setStatus('fallback')
       return
     }
+    // Turnstile failed (blocked, errored or timed out): still POST, since the Apps Script keeps
+    // token-less leads in its "Rejected" tab, then show the text/email fallback.
+    const noToken = useTurnstile && !token
+    if (noToken) setNotice(hasContact ? L.turnstileFallback : L.turnstileNoContact)
     setStatus('sending')
     try {
       // Apps Script web apps do not send CORS headers; "no-cors" + text/plain delivers the body anyway.
@@ -171,7 +315,7 @@ export default function QuoteTool(props: QuoteToolProps) {
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(p),
       })
-      setStatus('sent')
+      setStatus(noToken ? 'fallback' : 'sent')
     } catch {
       setStatus('error')
     }
@@ -330,11 +474,15 @@ export default function QuoteTool(props: QuoteToolProps) {
 
       {/* ---------- lead form ---------- */}
       <div className="rounded-2xl border border-line bg-white p-5 shadow-sm lg:col-span-2">
-        {status === 'sent' || status === 'fallback' || status === 'error' ? (
+        {panelShown ? (
           <div className="space-y-4">
-            <h3 className="text-lg font-bold">{status === 'sent' ? f.sentTitle : f.fallbackTitle}</h3>
-            {status === 'error' && <p className="text-sm text-red-700">{f.error}</p>}
-            <p className="text-sm text-muted">{status === 'sent' ? f.sentBody : f.fallbackBody}</p>
+            <H ref={panelHeadingRef} tabIndex={-1} className="text-lg font-bold outline-none">
+              {status === 'sent' ? f.sentTitle : f.fallbackTitle}
+            </H>
+            {status === 'error' && <p className="text-sm text-red-700">{hasContact ? f.error : L.errorNoContact}</p>}
+            {status === 'fallback' && notice && <p className="text-sm text-red-700">{notice}</p>}
+            {/* these lines point at the text/email buttons, so show them only when a button exists */}
+            {hasContact && <p className="text-sm text-muted">{status === 'sent' ? f.sentBody : f.fallbackBody}</p>}
             <div className="flex flex-col gap-2">
               {contact.phone && (
                 <a className="rounded-lg bg-brand px-4 py-3 text-center font-semibold text-white hover:bg-brand-dark" href={smsHref(contact.phone, summary)}>
@@ -346,49 +494,61 @@ export default function QuoteTool(props: QuoteToolProps) {
                   {f.emailIt}
                 </a>
               )}
+              <button type="button" onClick={editRequest} className="rounded-lg px-4 py-2 text-center text-sm font-semibold text-brand-dark underline hover:bg-brand-soft">
+                {L.edit}
+              </button>
             </div>
             <pre className="max-h-48 overflow-auto whitespace-pre-wrap rounded-lg bg-gray-50 p-3 text-xs text-muted">{summary}</pre>
           </div>
         ) : (
           <form onSubmit={submit} className="space-y-3" noValidate>
-            <h3 className="text-lg font-bold">{f.title}</h3>
+            <H className="text-lg font-bold">{f.title}</H>
             <p className="text-sm text-muted">{f.intro}</p>
-            <input className={inputCls} placeholder={f.name} aria-label={f.name} value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required />
-            <input className={inputCls} placeholder={f.phone} aria-label={f.phone} value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" inputMode="tel" required />
-            <input className={inputCls} placeholder={f.email} aria-label={f.email} value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" inputMode="email" type="email" />
-            <input className={inputCls} placeholder={f.address} aria-label={f.address} value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" required />
-            <input className={inputCls} placeholder={f.dates} aria-label={f.dates} value={dates} onChange={(e) => setDates(e.target.value)} />
-            <textarea className={inputCls} rows={2} placeholder={f.notes} aria-label={f.notes} value={notes} onChange={(e) => setNotes(e.target.value)} />
-            <input
-              type="text"
-              tabIndex={-1}
-              autoComplete="off"
-              aria-hidden="true"
-              className="absolute -left-[9999px] h-0 w-0 opacity-0"
-              name="website"
-              value={website}
-              onChange={(e) => setWebsite(e.target.value)}
-            />
-            <label className="flex items-start gap-3 text-sm">
-              <input type="checkbox" className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--brand)]" checked={optIn} onChange={(e) => setOptIn(e.target.checked)} />
-              <span>{f.marketing}</span>
-            </label>
-            <p className="text-xs text-muted">
-              {f.privacyAgree}{' '}
-              <a className="underline" href={lang === 'ko' ? '/ko/privacy/' : '/privacy/'}>
-                {f.privacy}
-              </a>
-              .
-            </p>
-            {props.turnstileSiteKey && <div ref={turnstileRef} />}
-            {message && <p className="text-sm text-red-700">{message}</p>}
-            <button
-              type="submit"
-              disabled={status === 'sending' || (Boolean(props.turnstileSiteKey) && !token)}
-              className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-white hover:bg-brand-dark disabled:opacity-60"
-            >
-              {status === 'sending' ? f.sending : f.submit}
-            </button>
+            {!canDeliver && <p className="rounded-lg bg-gray-50 p-3 text-sm font-semibold text-red-700">{L.notConfigured}</p>}
+            {/* disabled when no endpoint, phone or email is configured: nothing typed here could be sent */}
+            <fieldset disabled={!canDeliver} className={`min-w-0 space-y-3 ${canDeliver ? '' : 'opacity-60'}`}>
+              <input ref={nameRef} className={inputCls} placeholder={f.name} aria-label={f.name} value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required aria-invalid={invalid(name)} aria-describedby={invalid(name) && messageId} />
+              <input ref={phoneRef} className={inputCls} placeholder={f.phone} aria-label={f.phone} value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" inputMode="tel" required aria-invalid={invalid(phone)} aria-describedby={invalid(phone) && messageId} />
+              <input className={inputCls} placeholder={f.email} aria-label={f.email} value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" inputMode="email" type="email" />
+              <input ref={addressRef} className={inputCls} placeholder={f.address} aria-label={f.address} value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" required aria-invalid={invalid(address)} aria-describedby={invalid(address) && messageId} />
+              <input className={inputCls} placeholder={f.dates} aria-label={f.dates} value={dates} onChange={(e) => setDates(e.target.value)} />
+              <textarea className={inputCls} rows={2} placeholder={f.notes} aria-label={f.notes} value={notes} onChange={(e) => setNotes(e.target.value)} />
+              <input
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute -left-[9999px] h-0 w-0 opacity-0"
+                name="website"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+              />
+              <label className="flex items-start gap-3 text-sm">
+                <input type="checkbox" className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--brand)]" checked={optIn} onChange={(e) => setOptIn(e.target.checked)} />
+                <span>{consentText}</span>
+              </label>
+              <p className="text-xs text-muted">
+                {f.privacyAgree}{' '}
+                <a className="underline" href={lang === 'ko' ? '/ko/privacy/' : '/privacy/'}>
+                  {f.privacy}
+                </a>
+                .
+              </p>
+              {useTurnstile && <div ref={turnstileRef} />}
+              {useTurnstile && turnstileFailed && !token && <p className="text-sm text-muted">{L.turnstileHint}</p>}
+              {message && (
+                <p id={messageId} role="alert" className="text-sm text-red-700">
+                  {message}
+                </p>
+              )}
+              <button
+                type="submit"
+                disabled={!canDeliver || status === 'sending' || (useTurnstile && !token && !turnstileFailed)}
+                className="w-full rounded-lg bg-brand px-4 py-3 font-semibold text-white hover:bg-brand-dark disabled:opacity-60"
+              >
+                {status === 'sending' ? f.sending : f.submit}
+              </button>
+            </fieldset>
           </form>
         )}
       </div>

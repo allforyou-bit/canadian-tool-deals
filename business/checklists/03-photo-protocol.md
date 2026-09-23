@@ -47,7 +47,7 @@ A photo of a home can identify the home even with no names on it (memo §6). So 
 >
 > I allow {BRAND} to use the photos I tick below on its website, flyers and social media posts. The photos will not show people, my address, house number or the front of my home. This is optional and does not change my service or price. I can withdraw at any time by contacting {PHONE} or {EMAIL}; after that, {BRAND} will stop using the photos in anything new and remove them from its own website and pages.
 >
-> {BRAND}가 아래에 표시한 사진을 웹사이트, 전단지, SNS 게시물에 쓰는 것에 동의합니다. 사진에는 사람, 주소, 집 번지, 집 정면이 나오지 않습니다. 동의는 선택이며 서비스나 가격과 관계없습니다. 언제든 {PHONE} 또는 {EMAIL}로 연락해 철회할 수 있고, 철회하면 {BRAND}는 새로 만드는 자료에 사진을 쓰지 않고 자체 웹사이트와 페이지에서 사진을 내립니다.
+> {BRAND}에서 아래에 표시한 사진을 웹사이트, 전단지, SNS 게시물에 쓰는 것에 동의합니다. 사진에는 사람, 주소, 집 번지, 집 정면이 나오지 않습니다. 동의는 선택이며 서비스나 가격과 관계없습니다. 언제든 {PHONE} 또는 {EMAIL}로 연락해 철회할 수 있고, 철회하면 {BRAND}에서는 새로 만드는 자료에 사진을 쓰지 않고 자체 웹사이트와 페이지에서 사진을 내립니다.
 >
 > [ ] Before/after photos of: ______________ (작업 전후 사진: 어느 공간)
 > Name (이름): ______ Signature (서명): ______ Date (날짜): ______
@@ -73,7 +73,7 @@ The research gave **no legal retention period for job photos**. PIPEDA's princip
 
 ## 7. Breach log (개인정보 유출 기록)
 
-Under PIPEDA a business must keep a record of **every** breach of security safeguards (s.10.3(1)), and report to the Privacy Commissioner and notify the affected people when a breach creates "a real risk of significant harm" (s.10.1). The record must be kept **for 24 months** after the day you determine the breach happened ([SOR/2018-64 s.6(1)](https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-2018-64.xml); memo §6) (PIPEDA에 따라 **모든** 유출을 기록하고, "중대한 피해의 실제 위험"이 있으면 개인정보보호위원회에 신고하고 당사자에게 알려야 합니다. 기록은 유출을 확인한 날부터 **24개월** 보관합니다).
+Under PIPEDA a business must keep a record of **every** breach of security safeguards (s.10.3(1)), and report to the Privacy Commissioner and notify the affected people when a breach creates "a real risk of significant harm" (s.10.1). The record must be kept **for 24 months** after the day you determine the breach happened ([SOR/2018-64 s.6(1)](https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-2018-64.xml); memo §6) (PIPEDA에 따라 **모든** 유출을 기록하고, "중대한 피해의 실제 위험"이 있으면 캐나다 연방 개인정보보호 커미셔너(Privacy Commissioner of Canada)에게 신고하고 당사자에게 알려야 합니다. 기록은 유출을 확인한 날부터 **24개월** 보관합니다).
 
 Examples: lost or stolen phone, a photo sent to the wrong person, a shared album left open, a hacked email or cloud account (예: 휴대폰 분실·도난, 사진을 엉뚱한 사람에게 보냄, 공유 앨범이 열려 있음, 이메일·클라우드 해킹).
 

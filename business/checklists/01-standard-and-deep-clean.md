@@ -24,7 +24,7 @@ Job ID (작업 번호): ______ Date (날짜): ______ Client (고객): ______ Bed
 - [ ] Walk through with the client. Confirm the scope matches the quote: type, rooms, add-ons (고객과 함께 둘러보며 견적 내용과 같은지 확인)
 - [ ] Ask about fragile items, valuables and "do not touch" areas (깨지기 쉬운 물건, 귀중품, 손대지 말 곳 확인)
 - [ ] **Before photos** of every room and close-ups of any existing damage, following `03-photo-protocol.md` (작업 전 사진: 방마다 한 장, 기존 파손은 가까이서)
-- [ ] Agreement signed. If it was signed **at the client's home in Ontario**, it is a direct agreement: the client can cancel within 10 days of receiving the signed copy, with a refund within 15 days ([ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract), memo F32). How doing the job inside those 10 days affects this was **not researched**, so treat that payment as refundable until the 10 days pass. Not legal advice. (계약서 서명. 온타리오에서 고객 집에서 서명했다면 10일 안에 취소할 수 있고 15일 안에 환불해야 합니다. 10일 안에 작업을 끝낸 경우의 효과는 확인 필요. 법률 자문이 아닙니다)
+- [ ] Agreement signed. If it was signed **at the client's home in Ontario**, it is a direct agreement: the client can cancel within 10 days of receiving the signed copy, with a refund within 15 days ([ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract), memo F32). How doing the job inside those 10 days affects this was **not researched**, so treat that payment as refundable until the 10 days pass. Not legal advice. (계약서 서명. 온타리오에서 고객 집에서 서명했다면 서명된 사본을 받은 날부터 10일 안에 취소할 수 있고 15일 안에 환불해야 합니다. 10일 안에 작업을 끝낸 경우의 효과는 확인 필요이므로, 10일이 지나기 전까지는 받은 돈을 환불될 수 있는 돈으로 봅니다. 법률 자문이 아닙니다)
 
 ## 3. Room by room (공간별 작업)
 

@@ -446,10 +446,10 @@ function emailBody_(p, record, written, brand, service, flags) {
     lines.push('  예 — 명시적 동의가 시트에 기록되었습니다. / YES — express consent recorded in the sheet.');
     lines.push('  고객에게 보인 문구 / Wording shown: "' + oneLine_(p.marketingConsentText) + '"');
   } else {
-    lines.push('  아니요 — 명시적 동의 없음. 이 문의에 답장하고 견적을 보내는 것은 괜찮습니다.');
-    lines.push('  홍보 메시지는 문의일로부터 6개월간의 묵시적 동의만 적용됩니다 (CASL s.10(10), 결정 메모 F11).');
-    lines.push('  NO — no express consent. You may reply to this inquiry and send the quote. For promotions, only');
-    lines.push('  the 6-month implied consent from this inquiry applies (CASL s.10(10), decision memo F11).');
+    lines.push('  아니요 — 명시적 동의 없음. 이 문의에 답장하고 이 견적에 대한 후속 연락(04번 규칙)만 하세요.');
+    lines.push('  동의하지 않은 고객에게는 홍보 메시지를 보내지 마세요 (웹사이트 개인정보 안내와 계약서의 약속).');
+    lines.push('  NO — no express consent. Reply to this request and follow up on this quote only (file 04).');
+    lines.push('  No promotional messages without the opt-in (promised in the site privacy notice and the agreement).');
   }
   lines.push('');
   lines.push('답장 전 확인 / Before you reply:');
