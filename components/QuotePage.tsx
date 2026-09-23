@@ -6,7 +6,7 @@ import { quoteToolProps } from '@/lib/site'
 
 const TITLE = {
   en: { h1: 'Instant estimate', intro: 'Choose your options to see a price range. We confirm the final price when we see your home.' },
-  ko: { h1: '바로 견적', intro: '항목을 고르면 예상 가격 범위가 바로 나옵니다. 최종 금액은 집을 확인한 뒤 확정합니다.' },
+  ko: { h1: '바로 견적', intro: '항목을 고르면 예상 가격 범위가 바로 나와요. 최종 금액은 집을 확인한 뒤 확정해요.' },
 }
 
 export default function QuotePage({ lang }: { lang: Lang }) {

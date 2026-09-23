@@ -97,7 +97,7 @@ Write it **right away**, while you are still there. Photograph the spot and the 
 
 ## 8. Texts to clients (고객 문자)
 
-These go only to clients with a signed contract or a per-visit request. Every text carries the business name, mailing address, a contact and an opt-out (CASL, memo F11, F13). Anyone who replies STOP: log it in `business/b2b/unsubscribe-log.csv` (channel = SMS) and honour it within 10 business days (계약했거나 1회 작업을 요청한 고객에게만 보냅니다. 모든 문자에 상호, 우편 주소, 연락처, 수신 거부 방법이 들어갑니다. STOP 답장은 기록하고 10영업일 안에 처리합니다).
+These go only to clients with a signed contract or a per-visit request. Every text carries the business name, mailing address, a contact and an opt-out (CASL, memo F11, F13). Anyone who replies STOP: log it in your single private opt-out list (a copy of `business/b2b/unsubscribe-log.csv` kept OUTSIDE the repo folder, or inside `private/`, which git ignores — never write customer phone numbers or emails into files that are committed) (channel = SMS) and honour it within 10 business days (계약했거나 1회 작업을 요청한 고객에게만 보냅니다. 모든 문자에 상호, 우편 주소, 연락처, 수신 거부 방법이 들어갑니다. STOP 답장은 기록하고 10영업일 안에 처리합니다).
 
 **Done (완료)**
 - EN: `{BRAND}: Your driveway at {STREET} was cleared at {TIME}. Questions? {PHONE}. {BRAND}, {MAILING_ADDRESS}, {SITE}. Reply STOP to opt out.`

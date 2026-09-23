@@ -39,7 +39,7 @@ Hi, sorry to bother you! I'm {NAME} with {BRAND}. I clean homes here in {AREA}: 
 
 **KO**
 ```say
-안녕하세요, 갑자기 찾아와서 죄송해요. 저는 {BRAND}의 {NAME}입니다. 여기 {AREA}에서 집 청소를 하고 있어요. 딥클린(대청소), 입주·이사 청소, 정기 청소를 하는데, 가격은 작업 전에 미리 정해서 알려 드려요. 혹시 올가을에 딥클린이나 입주·이사 청소 하실 계획 있으세요? 아니시면 안내지만 하나 드리고 갈게요.
+안녕하세요, 갑자기 찾아와서 죄송해요. 저는 {BRAND}의 {NAME}입니다. 여기 {AREA}에서 집 청소를 하고 있어요. 딥클린(대청소), 입주·이사 청소, 정기 청소를 하는데, 가격은 작업 전에 미리 정해서 알려 드려요. 혹시 올가을에 딥클린이나 입주·이사 청소 하실 계획 있으세요? 아니시면 안내문만 하나 드리고 갈게요.
 ```
 
 ## 1B. 20-second opener — Track B (gutters, snow) / 20초 첫인사 — 트랙 B(홈통, 제설)
@@ -59,7 +59,7 @@ Hi, sorry to bother you! I'm {NAME} with {BRAND}, here in {AREA}. I do house cle
 
 **KO**
 ```say
-안녕하세요, 갑자기 죄송해요. 저는 {AREA}에서 일하는 {BRAND}의 {NAME}입니다. 집 청소를 하고 있고요, [GUTTERS] 올가을에는 낙엽이 다 떨어진 뒤에 홈통(처마 물받이) 청소도 손으로 해 드려요. [GUTTERS, G1 전] 그리고 10월 중순 이후, 낙엽이 다 떨어진 뒤 날짜로 홈통(처마 물받이) 청소 예약도 받고 있어요. 제 보험과 사다리 준비가 10월 9일까지 끝나야 날짜가 확정되고, 안 되면 연락드려서 취소해요. 그 경우 내실 돈은 없어요. [SNOW] 그리고 이 거리 댁들을 대상으로 올겨울 제설 신청도 받고 있어요. 12월 1일 전에는 돈을 받지 않아요. 혹시 필요하신 게 있을까요? 아니시면 안내지만 드리고 갈게요.
+안녕하세요, 갑자기 찾아와서 죄송해요. 저는 {AREA}에서 일하는 {BRAND}의 {NAME}입니다. 집 청소를 하고 있고요, [GUTTERS] 올가을에는 낙엽이 다 떨어진 뒤에 홈통(처마 물받이) 청소도 손으로 해 드려요. [GUTTERS, G1 전] 그리고 10월 중순 이후, 낙엽이 다 떨어진 뒤 날짜로 홈통(처마 물받이) 청소 예약도 받고 있어요. 제 보험과 사다리 준비가 10월 9일까지 끝나야 날짜가 확정되고, 안 되면 연락드려서 취소해요. 그 경우 내실 돈은 없어요. [SNOW] 그리고 이 거리 댁들을 대상으로 올겨울 제설 신청도 받고 있어요. 12월 1일 전에는 돈을 받지 않아요. 혹시 필요하신 게 있을까요? 아니시면 안내문만 드리고 갈게요.
 ```
 
 ## 1C. If they're interested / 관심을 보이면
@@ -127,12 +127,12 @@ Because we're signing this at your home, you can cancel within 10 days after you
 
 **KO**
 ```say
-댁에서 계약하시는 거라서, 서명한 계약서 사본을 받으신 다음 날부터 10일 안에 이유와 관계없이 취소하실 수 있어요. 사본에 있는 연락처로 알려 주시기만 하면 돼요. 이미 내신 돈이 있으면 취소 통지를 받은 다음 날부터 15일 안에 전액 환불해 드려요. 사본에도 똑같이 적혀 있어요.
+댁에서 계약하시는 거라서, 서명한 계약서 사본을 받으신 후 10일 이내에 이유와 관계없이 취소하실 수 있어요. 사본에 있는 연락처로 알려 주시기만 하면 돼요. 이미 내신 돈이 있으면 취소 통지를 받은 후 15일 이내에 전액 환불해 드려요. 사본에도 똑같이 적혀 있어요.
 ```
 
 | EN | KO |
 |---|---|
-| Hand over the signed copy on the spot. The customer may cancel within 10 days after receiving it; refund within 15 days after the cancellation notice ([ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract), search snippet, memo F32). | 서명한 사본은 그 자리에서 드리세요. 고객은 계약서 사본을 받은 다음 날부터 10일 안에 취소할 수 있고, 환불은 취소 통지를 받은 다음 날부터 15일 안에 해야 해요(메모 F32, 검색 요약). |
+| Hand over the signed copy on the spot. The customer may cancel within 10 days after receiving it; refund within 15 days after the cancellation notice ([ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract), search snippet, memo F32). | 서명한 사본은 그 자리에서 드리세요. 고객은 계약서 사본을 받은 후 10일 이내에 취소할 수 있고, 환불은 취소 통지를 받은 후 15일 이내에 해야 해요(메모 F32, 검색 요약). |
 | Whether doing the work inside the 10 days changes this was **not researched**. Until Consumer Protection Ontario confirms, treat money for a door-signed job done within 10 days as refundable (memo §5.3), and offer dates after day 10 when you can. | 10일 안에 작업을 해 버린 경우 어떻게 되는지는 **조사되지 않았어요(확인 필요)**. 온타리오 소비자보호국(Consumer Protection Ontario)에 확인하기 전까지는, 10일 안에 한 방문 계약 작업의 돈은 환불될 수 있다고 보고, 가능하면 10일 이후로 날짜를 잡으세요. |
 | Ontario only (GTA, Ottawa). Other provinces were not researched for this; check before selling at the door there. | 온타리오(GTA, 오타와)만 해당해요. 다른 주는 조사되지 않았으니 방문 판매 전에 확인하세요. |
 

@@ -71,7 +71,7 @@ If you enter prices on the profile, they **must match `config/prices.ts` (GTA de
 | Standard clean | 일반 청소 | Regular clean of kitchen, bathrooms, floors and dusting, by checklist | from $150 (1 bedroom) | always |
 | Deep clean | 딥클린(대청소) | Thorough top-to-bottom clean, by checklist | from $230 (1 bedroom) | always |
 | Move-in / move-out clean | 입주·이사 청소 | Empty-home clean before or after a move | from $260 (1 bedroom) | always |
-| Biweekly cleaning | 2주 정기 청소 | A standard clean every two weeks on a set day | from $150 per visit (standard price) | always |
+| Biweekly cleaning | 격주 정기 청소 | A standard clean every two weeks on a set day | from $150 per visit (standard price) | always |
 | Extra bathroom / inside oven / inside fridge / inside empty cabinets | 욕실 추가 / 오븐 내부 / 냉장고 내부 / 빈 수납장 내부 | Add-ons | $30 / $40 / $35 / $40 | always |
 | Gutter cleaning | 홈통(처마 물받이) 청소 | Gutters only, cleaned by hand from a ladder; paid on completion | from $175 (1 storey), $225 (2 storeys) | `services.gutters` |
 | Downspout flush | 배수관(다운스파우트) 청소 | Add-on to gutter cleaning | $70 | `services.gutters` |
@@ -93,8 +93,8 @@ These come from the FAQ themes in memo build item 13: insurance, what's included
 Only post seeds 8–10 while the matching service is enabled.
 
 **1. What's included in a standard, deep or move-out clean?**
-- EN: Each type follows a written room-by-room checklist, which is on our website ({SITE}). Inside the oven, inside the fridge and inside empty cabinets are add-ons.
-- KO: 청소 종류마다 방별 체크리스트가 있고, 웹사이트({SITE})에서 보실 수 있습니다. 오븐 내부, 냉장고 내부, 빈 수납장 내부는 추가 항목입니다.
+- EN: Each type follows a written room-by-room checklist; ask us and we will send it to you. The website ({SITE}) lists what each type includes. Inside the oven, inside the fridge and inside empty cabinets are add-ons.
+- KO: 청소 종류마다 방별 체크리스트가 있고, 요청하시면 보내 드립니다. 종류별 포함 항목은 웹사이트({SITE})에서 보실 수 있습니다. 오븐 내부, 냉장고 내부, 빈 수납장 내부는 추가 항목입니다.
 
 **2. How much does it cost?**
 - EN: Prices are flat by home size. For example, a standard clean for a 1-bedroom starts at $150, a deep clean at $230 and a move-out clean at $260. Our website gives an instant estimate, and we confirm the final price from photos or on site.
@@ -110,13 +110,13 @@ Only post seeds 8–10 while the matching service is enabled.
 - KO: 열쇠는 보관하지 않습니다. 고객님이나 부동산 중개인이 문을 열어 주시거나, 고객님이 준비하신 락박스를 이용합니다.
 
 **5. How do I pay?**
-- EN: By Interac e-Transfer. Banks set their own transfer limits, often around $2,000–3,000, so a larger amount may be split into two transfers.
-- KO: 인터랙 이트랜스퍼(e-Transfer)로 받습니다. 은행마다 이체 한도가 있어서(보통 $2,000–3,000 정도), 금액이 크면 두 번에 나눠 보내실 수 있습니다.
+- EN: By Interac e-Transfer or cash when the job is done. Banks set their own transfer limits, often around $2,000–3,000, so a larger amount may be split into two transfers.
+- KO: 작업이 끝난 뒤 인터랙 이트랜스퍼(e-Transfer)나 현금으로 받습니다. 은행마다 이체 한도가 있어서(보통 $2,000–3,000 정도), 금액이 크면 두 번에 나눠 보내실 수 있습니다.
 - *(Source: memo F36, secondary. Card payment is not set up in this plan.)*
 
 **6. Can I cancel?**
 - EN: Yes. Our cancellation terms are in your service agreement. In Ontario, if you sign an agreement with us at your home, you can cancel within 10 days after you receive a copy of the signed agreement, and we refund you within 15 days after your cancellation notice.
-- KO: 네. 취소 조건은 서비스 계약서에 적혀 있습니다. 온타리오주에서는 댁에서 계약서에 서명하신 경우, 계약서 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있고, 취소 통지를 받은 다음 날부터 15일 안에 환불해 드립니다.
+- KO: 네. 취소 조건은 서비스 계약서에 적혀 있습니다. 온타리오주에서는 댁에서 계약서에 서명하신 경우, 계약서 사본을 받으신 후 10일 이내에 취소하실 수 있고, 취소 통지를 받은 후 15일 이내에 환불해 드립니다.
 - *(Source: memo F32, [ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract), snippet. Not legal advice.)*
 
 **7. Do you speak Korean?**

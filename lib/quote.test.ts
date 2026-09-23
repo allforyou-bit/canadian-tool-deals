@@ -96,3 +96,15 @@ describe('price book sanity', () => {
     }
   })
 })
+
+describe('rounding', () => {
+  it('floating-point noise never adds an extra $5 to the upper end', () => {
+    const book = { ...gta, rangeUpliftPct: 10 }
+    // 200 × 1.1 = 220.00000000000003 in floating point → must stay 220
+    const e = estimateCleaning(book, { type: 'standard', bedrooms: 1, bathrooms: 2, addOns: [], rush: false })
+    expect(e.low).toBe(180)
+    expect(e.high).toBe(200)
+    const e2 = estimateGutters({ ...gta, rangeUpliftPct: 10, gutters: { ...gta.gutters!, byStoreys: { 1: 200, 2: 225, 3: 300 } } }, { storeys: 1, downspouts: false })
+    expect(e2.high).toBe(220)
+  })
+})

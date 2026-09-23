@@ -151,7 +151,7 @@ Call or text {PHONE}
 **Title:** `Deep cleaning in {AREA} – flat price from $230`
 
 ```text
-A thorough top-to-bottom clean for houses and condos in {AREA}: kitchen, bathrooms, floors and dusting in every room. The full checklist is on our website.
+A thorough top-to-bottom clean for houses and condos in {AREA}: kitchen, bathrooms, floors and dusting in every room. Ask us for the full room-by-room checklist.
 
 Deep clean, flat price:
 - 1 bedroom from $230
@@ -222,8 +222,8 @@ Korean spoken · 한국어 가능
 전화·문자: {PHONE}
 ```
 
-### C-KO-3 · 일반 청소와 2주 정기 청소
-**제목:** `{AREA} 집 청소 $150부터 · 2주 정기 청소 가능`
+### C-KO-3 · 일반 청소와 격주 정기 청소
+**제목:** `{AREA} 집 청소 $150부터 · 격주 정기 청소 가능`
 
 ```text
 바쁘셔서 청소할 시간이 없으신가요? {BRAND}에서 집과 콘도를 한 번 또는 2주마다 청소해 드립니다.
@@ -393,6 +393,8 @@ Pay in 4 instalments: Dec 1, Jan 1, Feb 1, Mar 1. Nothing to pay before Dec 1.
 November snow (optional, tick it in your agreement): $60 per visit for snowfalls of {TRIGGER_DEPTH} or more, once your contract is confirmed, billed with your Dec 1 instalment.
 We never push snow onto the road.
 
+Season contracts go ahead only if we sign our minimum number of snow contracts (all areas combined) by Nov 20; if not, the agreement is void and you owe nothing.
+
 {BRAND}
 Call or text {PHONE} · {SITE}
 ```
@@ -420,6 +422,8 @@ Call or text {PHONE}
 **Title:** `Snow clearing on your street in {AREA} – from $500/season`
 
 ```text
+Season contracts go ahead only if we sign our minimum number of snow contracts (all areas combined) by Nov 20; if not, the agreement is void and you owe nothing.
+
 {BRAND} keeps a small route of nearby driveways in {AREA}, cleared with a {SNOW_EQUIPMENT}.
 
 - Single driveway: from $500 for the season (4 instalments, from $125 each; Dec 1 – Mar 1)
@@ -450,6 +454,8 @@ Call or text {PHONE}
 11월 눈(선택, 계약서에서 선택 시): 계약 확정 후 {TRIGGER_DEPTH} 이상 내린 눈 1회 $60, 12월 1일 첫 분할금과 함께 청구.
 치운 눈은 절대 도로로 밀어내지 않습니다.
 
+11월 20일까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다.
+
 {BRAND}
 전화·문자: {PHONE} · {SITE}
 ```
@@ -467,7 +473,7 @@ Call or text {PHONE}
 
 11월 20일까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다.
 
-온타리오주: 댁에서 계약하신 경우, 계약서 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있고, 취소 통지를 받은 다음 날부터 15일 안에 환불해 드립니다.
+온타리오주: 댁에서 계약하신 경우, 계약서 사본을 받으신 후 10일 이내에 취소하실 수 있고, 취소 통지를 받은 후 15일 이내에 환불해 드립니다.
 
 전화·문자: {PHONE}
 {SITE}
@@ -477,6 +483,8 @@ Call or text {PHONE}
 **제목:** `{AREA} 우리 거리 제설 · 시즌 $500부터`
 
 ```text
+11월 20일까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다.
+
 {BRAND}에서 {AREA} 가까운 집들만 모아 작은 제설 루트를 운영합니다.
 작업 장비: {SNOW_EQUIPMENT_KO}
 

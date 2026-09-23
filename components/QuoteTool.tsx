@@ -507,12 +507,30 @@ export default function QuoteTool(props: QuoteToolProps) {
             {!canDeliver && <p className="rounded-lg bg-gray-50 p-3 text-sm font-semibold text-red-700">{L.notConfigured}</p>}
             {/* disabled when no endpoint, phone or email is configured: nothing typed here could be sent */}
             <fieldset disabled={!canDeliver} className={`min-w-0 space-y-3 ${canDeliver ? '' : 'opacity-60'}`}>
-              <input ref={nameRef} className={inputCls} placeholder={f.name} aria-label={f.name} value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required aria-invalid={invalid(name)} aria-describedby={invalid(name) && messageId} />
-              <input ref={phoneRef} className={inputCls} placeholder={f.phone} aria-label={f.phone} value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" inputMode="tel" required aria-invalid={invalid(phone)} aria-describedby={invalid(phone) && messageId} />
-              <input className={inputCls} placeholder={f.email} aria-label={f.email} value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" inputMode="email" type="email" />
-              <input ref={addressRef} className={inputCls} placeholder={f.address} aria-label={f.address} value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" required aria-invalid={invalid(address)} aria-describedby={invalid(address) && messageId} />
-              <input className={inputCls} placeholder={f.dates} aria-label={f.dates} value={dates} onChange={(e) => setDates(e.target.value)} />
-              <textarea className={inputCls} rows={2} placeholder={f.notes} aria-label={f.notes} value={notes} onChange={(e) => setNotes(e.target.value)} />
+              <label className="block">
+                <span className="mb-1 block text-sm font-medium text-muted">{f.name}</span>
+                <input ref={nameRef} className={inputCls} value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" required aria-invalid={invalid(name)} aria-describedby={invalid(name) && messageId} />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-sm font-medium text-muted">{f.phone}</span>
+                <input ref={phoneRef} className={inputCls} value={phone} onChange={(e) => setPhone(e.target.value)} autoComplete="tel" inputMode="tel" required aria-invalid={invalid(phone)} aria-describedby={invalid(phone) && messageId} />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-sm font-medium text-muted">{f.email}</span>
+                <input className={inputCls} value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" inputMode="email" type="email" />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-sm font-medium text-muted">{f.address}</span>
+                <input ref={addressRef} className={inputCls} value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" required aria-invalid={invalid(address)} aria-describedby={invalid(address) && messageId} />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-sm font-medium text-muted">{f.dates}</span>
+                <input className={inputCls} value={dates} onChange={(e) => setDates(e.target.value)} />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-sm font-medium text-muted">{f.notes}</span>
+                <textarea className={inputCls} rows={2} value={notes} onChange={(e) => setNotes(e.target.value)} />
+              </label>
               <input
                 type="text"
                 tabIndex={-1}

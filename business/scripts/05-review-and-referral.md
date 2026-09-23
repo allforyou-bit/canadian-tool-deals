@@ -1,4 +1,6 @@
-# 05 · Reviews, referrals and biweekly cleaning / 후기·소개·2주 정기 청소
+# 05 · Reviews, referrals and biweekly cleaning / 후기·소개·격주 정기 청소
+
+> Not legal advice. The rules cited here come from the decision memo (business/research/decision-memo.md); check them before relying on them. / 법률 자문이 아닙니다. 여기 인용한 규정은 결정 메모에서 가져온 것이니, 따르기 전에 확인하세요.
 
 > **Draft v1, 2026-09-23.** The owner approves the Korean before use (memo §10, item 7). Scripts and templates are ≤ 120 words per language. The owner sends every message; the AI never sends.
 > 초안입니다. 사장님이 한국어 문구를 확인·승인한 뒤 사용하세요.
@@ -23,7 +25,7 @@
 | Never write, edit or post a review yourself, and never ask family or friends to post one. | 후기를 직접 쓰거나 고치거나 올리지 말고, 가족·지인에게 써 달라고 하지도 마세요. |
 | Review-platform rules (Google and others) and the Competition Act on reviews were **not researched** (확인 필요). The rules above are this business's own policy. | 구글 등 플랫폼의 후기 정책과 경쟁법(Competition Act)상 후기 규정은 **조사되지 않았어요(확인 필요)**. 위 규칙은 우리 가게 자체 방침이에요. |
 | Send only when `{REVIEW_LINK}` exists. Google Business Profile verification can take up to 5 business days, or up to 14 days by postcard (memo F38, secondary source); it is not counted on for October. | 후기 페이지가 생긴 뒤에만 보내세요. 구글 비즈니스 프로필 인증은 최대 영업일 5일, 우편 인증은 최대 14일 걸릴 수 있어요(2차 자료). |
-| **Consent rule for texts.** Send the text versions (5A review link, 5D biweekly pitch) only if the client ticked the marketing opt-in box on the site's quote form, or asked you in person at the end of the job to text it (a message sent at the client's request: SOR/2013-221 s.3(b), memo F12; log the date and their words in the CRM). Otherwise ask in person only. The agreement has no marketing tick box: it only says we message clients if they agree separately. Why: CASL alone would allow 2 years of implied consent after a purchase ([CASL s.10(10)](https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-1.6.xml)), but our privacy notice, FAQ and agreement promise no marketing messages without a separate opt-in, and we keep that promise. Every text keeps the ID and opt-out lines. | **문자 동의 규칙.** 문자(5A 후기 링크, 5D 2주 정기 청소 제안)는 고객이 사이트 견적 양식에서 마케팅 수신 동의란에 체크했거나, 작업이 끝날 때 직접 "문자로 보내 달라"고 하신 경우에만 보내세요(고객 요청에 따른 메시지: SOR/2013-221 s.3(b), 메모 F12. 날짜와 고객이 하신 말을 CRM에 적어 두세요). 그 밖의 경우에는 직접 말로만 부탁하세요. 계약서에는 마케팅 수신 체크란이 없고, "따로 동의하신 경우에만 보낸다"고만 적혀 있어요. 이유: CASL만 보면 구매 고객은 2년간 묵시적 동의가 있지만(CASL s.10(10)), 저희 개인정보 안내·FAQ·계약서에서 따로 동의한 분께만 마케팅 메시지를 보낸다고 약속했으니 그 약속을 지켜야 해요. 문자에는 발신자 정보와 수신거부 문구를 꼭 넣으세요. |
+| **Consent rule for texts.** Send the text versions (5A review link, 5D biweekly pitch) only if the client ticked the marketing opt-in box on the site's quote form, or asked you in person at the end of the job to text it (a message sent at the client's request: SOR/2013-221 s.3(b), memo F12; log the date and their words in the CRM). Otherwise ask in person only. The agreement has no marketing tick box: it only says we message clients if they agree separately. Why: CASL alone would allow 2 years of implied consent after a purchase ([CASL s.10(10)](https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-1.6.xml)), but our privacy notice, FAQ and agreement promise no marketing messages without a separate opt-in, and we keep that promise. Every text keeps the ID and opt-out lines. | **문자 동의 규칙.** 문자(5A 후기 링크, 5D 격주 정기 청소 제안)는 고객이 사이트 견적 양식에서 마케팅 수신 동의란에 체크했거나, 작업이 끝날 때 직접 "문자로 보내 달라"고 하신 경우에만 보내세요(고객 요청에 따른 메시지: SOR/2013-221 s.3(b), 메모 F12. 날짜와 고객이 하신 말을 CRM에 적어 두세요). 그 밖의 경우에는 직접 말로만 부탁하세요. 계약서에는 마케팅 수신 체크란이 없고, "따로 동의하신 경우에만 보낸다"고만 적혀 있어요. 이유: CASL만 보면 구매 고객은 2년간 묵시적 동의가 있지만(CASL s.10(10)), 저희 개인정보 안내·FAQ·계약서에서 따로 동의한 분께만 마케팅 메시지를 보낸다고 약속했으니 그 약속을 지켜야 해요. 문자에는 발신자 정보와 수신거부 문구를 꼭 넣으세요. |
 | Before/after photos of a client's home go into marketing only with their separate written photo opt-in (memo §6). | 고객 집 전후 사진은 고객이 따로 서면 동의한 경우에만 홍보에 써요. |
 
 > **Send only with consent / 동의가 있을 때만:** see the consent rule above. 위 문자 동의 규칙에 맞을 때만 보내세요.
@@ -113,7 +115,7 @@ To stop getting emails from us, reply "unsubscribe".
 
 ---
 
-## 5D. Biweekly recurring pitch / 2주 정기 청소 제안
+## 5D. Biweekly recurring pitch / 격주 정기 청소 제안
 
 | EN | KO |
 |---|---|

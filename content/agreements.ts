@@ -113,7 +113,7 @@ const ONTARIO_CANCELLATION: AgreementSection = {
   clauses: [
     t(
       "If you signed this agreement in person anywhere other than our place of business (for example, at your home), it is a direct agreement under Ontario's Consumer Protection Act. You may cancel it for any reason within 10 days after you receive a copy of the signed agreement. To cancel, tell us in a way that leaves a record: email {EMAIL}, text {PHONE}, or write to {MAILING_ADDRESS}. We must refund everything you paid within 15 days after we receive your cancellation.",
-      '이 계약서를 저희 사업장이 아닌 곳(예: 고객님 댁)에서 직접 만나 서명하셨다면, 이 계약은 온타리오 소비자보호법(Consumer Protection Act)상 방문 계약(direct agreement)에 해당합니다. 고객님은 서명된 계약서 사본을 받으신 다음 날부터 10일 안에 이유와 관계없이 계약을 취소하실 수 있습니다. 취소하실 때는 기록이 남는 방법으로 알려 주세요. 이메일 {EMAIL}, 문자 {PHONE}, 또는 우편 {MAILING_ADDRESS}로 보내시면 됩니다. 저희는 취소 통지를 받은 다음 날부터 15일 안에 고객님이 내신 금액 전부를 환불해 드려야 합니다.',
+      '이 계약서를 저희 사업장이 아닌 곳(예: 고객님 댁)에서 직접 만나 서명하셨다면, 이 계약은 온타리오 소비자보호법(Consumer Protection Act)상 방문 계약(direct agreement)에 해당합니다. 고객님은 서명된 계약서 사본을 받으신 후 10일 이내에 이유와 관계없이 계약을 취소하실 수 있습니다. 취소하실 때는 기록이 남는 방법으로 알려 주세요. 이메일 {EMAIL}, 문자 {PHONE}, 또는 우편 {MAILING_ADDRESS}로 보내시면 됩니다. 저희는 취소 통지를 받은 후 15일 이내에 고객님이 내신 금액 전부를 환불해 드려야 합니다.',
     ),
   ],
 }
@@ -123,11 +123,11 @@ const PHOTOS: AgreementSection = {
   clauses: [
     t(
       'We take photos of the work areas before and after the job to check our work and to handle any damage claim. These photos are not published, and we keep them only as long as they are needed for those purposes.',
-      '저희는 작업 확인과 파손 문의 처리를 위해 작업 전후로 작업 구역의 사진을 찍습니다. 이 사진은 공개하지 않으며, 그 목적에 필요한 기간 동안만 보관합니다.',
+      '저희는 작업을 확인하고 손해 청구에 대응하기 위해 작업 전후로 작업 구역의 사진을 찍습니다. 이 사진은 공개하지 않으며, 그 목적에 필요한 기간 동안만 보관합니다.',
     ),
     t(
       'Separate, optional consent for marketing photos: ☐ Yes ☐ No. We may use before/after photos of the work areas on our website, in ads and on social media only if you tick Yes and initial the photo line below. We will not show people, pets, house numbers, the street, vehicles or licence plates, mail, documents, family photos or other items that identify you, but someone who knows your home may still recognise it. Saying No does not change your price or service. You can withdraw this consent at any time by contacting us; we will then stop using the photos in anything new and remove them from our website and social media accounts within ___ days. Printed materials already handed out cannot be recalled.',
-      '마케팅용 사진 사용에 대한 별도 선택 동의: ☐ 예 ☐ 아니요. ‘예’에 표시하고 아래 사진 동의란에 이니셜을 적어 주신 경우에만 저희가 작업 전후 사진을 웹사이트, 광고, 소셜미디어에 쓸 수 있습니다. 사람, 반려동물, 집 번지수, 거리 모습, 차량이나 번호판, 우편물, 서류, 가족사진 등 고객님을 알아볼 수 있는 것은 보이지 않게 하겠습니다. 다만 고객님 댁을 아는 사람은 사진만 보고도 알아볼 수 있습니다. ‘아니요’를 선택하셔도 요금이나 서비스는 달라지지 않습니다. 이 동의는 언제든지 연락 주시면 철회할 수 있으며, 그 뒤로는 새로 사진을 쓰지 않고 웹사이트와 소셜미디어 계정에서 ___일 이내에 삭제합니다. 이미 나누어 드린 인쇄물은 회수할 수 없습니다.',
+      '마케팅용 사진 사용에 대한 별도 선택 동의: ☐ 예 ☐ 아니요. ‘예’에 표시하고 아래 사진 동의란에 이니셜을 적어 주신 경우에만 저희가 작업 전후 사진을 웹사이트, 광고, 소셜미디어에 쓸 수 있습니다. 사람, 반려동물, 집 번지수, 거리 모습, 차량이나 번호판, 우편물, 서류, 가족사진 등 고객님을 알아볼 수 있는 것은 보이지 않게 하겠습니다. 다만 고객님 댁을 아는 사람은 사진만 보고도 알아볼 수 있습니다. ‘아니요’를 선택하셔도 요금이나 서비스는 달라지지 않습니다. 이 동의는 언제든지 연락 주시면 철회할 수 있으며, 그 뒤로는 새로 만드는 자료에 그 사진을 쓰지 않고, 이미 올린 사진은 웹사이트와 소셜미디어 계정에서 ___일 이내에 삭제합니다. 이미 나누어 드린 인쇄물은 회수할 수 없습니다.',
     ),
   ],
 }
@@ -137,7 +137,7 @@ const PRIVACY: AgreementSection = {
   clauses: [
     t(
       'We collect your name, address, phone number, email, access instructions and job notes only to quote, schedule, do and bill the work, to handle claims, and to keep the records that tax law requires. We do not sell your information. We share it only when needed for those purposes (for example, with our insurer if there is a claim) or when the law requires it.',
-      '저희는 고객님의 이름, 주소, 전화번호, 이메일, 출입 안내, 작업 메모를 견적, 일정 잡기, 작업, 청구, 파손 문의 처리, 그리고 세법상 필요한 기록 보관을 위해서만 수집합니다. 고객님의 정보를 판매하지 않습니다. 이 목적에 꼭 필요한 경우(예: 파손 문의가 생겨 보험사에 알려야 할 때)나 법이 요구하는 경우에만 제공합니다.',
+      '저희는 고객님의 이름, 주소, 전화번호, 이메일, 출입 안내, 작업 메모를 견적, 일정 잡기, 작업, 청구, 손해 청구 처리, 그리고 세법상 필요한 기록 보관을 위해서만 수집합니다. 고객님의 정보를 판매하지 않습니다. 이 목적에 꼭 필요한 경우(예: 손해 청구가 생겨 보험사에 알려야 할 때)나 법이 요구하는 경우에만 제공합니다.',
     ),
     t(
       'We send marketing emails or texts only if you agree to them separately, and every such message tells you how to unsubscribe.',
@@ -568,11 +568,11 @@ const SNOW: Agreement = {
       ],
     },
     {
-      heading: t('Slips and falls (wording to be reviewed by our insurer)', '미끄러짐 및 낙상(보험사 검토가 필요한 문구)'),
+      heading: t('Slips and falls', '미끄러짐 및 낙상'),
       clauses: [
         t(
-          '[Have this clause reviewed by the insurer before use.] On each visit we clear the listed areas, and salt them if salting is included. Snow and ice can come back between visits through new snow, drifting, melting and refreezing, or freezing rain. We are responsible for our own work at the time of each visit. Between visits, checking the listed areas, spreading ice melt where needed and asking us for an extra visit are your responsibility.',
-          '[사용 전에 이 조항은 보험사 검토를 받으세요.] 저희는 방문할 때마다 계약한 구역을 치우고, 제빙제를 선택하신 경우 제빙제를 뿌립니다. 방문과 방문 사이에 새로 내린 눈, 바람에 날려 온 눈, 녹았다 다시 언 얼음, 어는 비 때문에 눈과 얼음이 다시 생길 수 있습니다. 저희는 각 방문 당시의 저희 작업에 책임을 집니다. 방문과 방문 사이에 계약 구역을 살피고, 필요하면 제빙제를 뿌리고, 추가 방문을 요청하시는 것은 고객님 책임입니다.',
+          'On each visit we clear the listed areas, and salt them if salting is included. Snow and ice can come back between visits through new snow, drifting, melting and refreezing, or freezing rain. We are responsible for our own work at the time of each visit. Between visits, checking the listed areas, spreading ice melt where needed and asking us for an extra visit are your responsibility.',
+          '저희는 방문할 때마다 계약한 구역을 치우고, 제빙제를 선택하신 경우 제빙제를 뿌립니다. 방문과 방문 사이에 새로 내린 눈, 바람에 날려 온 눈, 녹았다 다시 언 얼음, 어는 비 때문에 눈과 얼음이 다시 생길 수 있습니다. 저희는 각 방문 당시의 저희 작업에 책임을 집니다. 방문과 방문 사이에 계약 구역을 살피고, 필요하면 제빙제를 뿌리고, 추가 방문을 요청하시는 것은 고객님 책임입니다.',
         ),
         t(
           'If anyone falls on an area we clear, please tell us right away so that we can notify our insurer.',
@@ -705,7 +705,7 @@ const SHARED_NOTES: AgreementNote[] = [
     topic: t('Ontario 10-day cancellation and 15-day refund', '온타리오 10일 취소 및 15일 환불'),
     note: t(
       'Direct agreements (made in person away from the supplier’s place of business, e.g. at the home) can be cancelled within 10 days after the customer receives a copy of the signed agreement; the refund is due within 15 days after the cancellation notice (memo F32, corpus S037, search summary). Not legal advice. Keep this section on every form signed at a door.',
-      '사업장 밖(예: 고객 집)에서 직접 만나 맺은 방문 계약은 고객이 계약서 사본을 받은 다음 날부터 10일 안에 취소할 수 있고(받은 날은 세지 않음), 환불은 취소 통지를 받은 다음 날부터 15일 안에 해야 합니다(메모 F32, 자료 S037, 검색 결과 요약). 법률 자문이 아닙니다. 문 앞에서 서명받는 모든 계약서에 이 부분을 넣으세요.',
+      '사업장 밖(예: 고객 집)에서 직접 만나 맺은 방문 계약은 고객이 계약서 사본을 받은 후 10일 이내에 취소할 수 있고, 환불은 취소 통지를 받은 후 15일 이내에 해야 합니다(메모 F32, 자료 S037, 검색 결과 요약). 법률 자문이 아닙니다. 문 앞에서 서명받는 모든 계약서에 이 부분을 넣으세요.',
     ),
     status: 'snippet',
     url: 'https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract',

@@ -1,5 +1,7 @@
 # 04 · Quote follow-up / 견적 후속 연락
 
+> Not legal advice. The rules cited here come from the decision memo (business/research/decision-memo.md); check them before relying on them. / 법률 자문이 아닙니다. 여기 인용한 규정은 결정 메모에서 가져온 것이니, 따르기 전에 확인하세요.
+
 > **Draft v1, 2026-09-23.** The owner approves the Korean before use (memo §10, item 7). Templates are ≤ 120 words per language, including the ID and opt-out lines. The owner sends every message; the AI never sends.
 > 초안입니다. 사장님이 한국어 문구를 확인·승인한 뒤 사용하세요.
 

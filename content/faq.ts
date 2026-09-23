@@ -260,7 +260,7 @@ const ONTARIO_CANCELLATION: FaqItem = {
   },
   a: {
     en: "Yes. In Ontario, if you sign an agreement with us at your home (for example, when we knock on your door), you can cancel it within 10 days after you receive a copy of the signed agreement. We'll refund any payment within 15 days after we receive your cancellation notice. Please cancel in writing (text, email or letter) so you have a record.\n\nSummary only, not legal advice: ontario.ca/page/your-rights-when-signing-or-cancelling-contract",
-    ko: '네. 온타리오주에서는 저희가 댁을 방문했을 때처럼 고객님 댁에서 계약서에 서명하신 경우, 서명된 계약서 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있고, 취소 통지를 받은 다음 날부터 15일 안에 내신 금액을 환불해 드려요. 기록이 남도록 문자, 이메일, 편지 등 서면으로 알려 주세요.\n\n요약 안내이며 법률 자문이 아니에요: ontario.ca/page/your-rights-when-signing-or-cancelling-contract',
+    ko: '네. 온타리오주에서는 저희가 댁을 방문했을 때처럼 고객님 댁에서 계약서에 서명하신 경우, 서명된 계약서 사본을 받으신 후 10일 이내에 취소하실 수 있고, 취소 통지를 받은 후 15일 이내에 내신 금액을 환불해 드려요. 기록이 남도록 문자, 이메일, 편지 등 서면으로 알려 주세요.\n\n요약 안내이며 법률 자문이 아니에요: ontario.ca/page/your-rights-when-signing-or-cancelling-contract',
   },
 }
 

@@ -157,7 +157,7 @@ const ko: Dict = {
     prices: '가격표',
     rights: '모든 가격은 캐나다 달러 기준이에요.',
   },
-  notFound: { title: '페이지를 찾을 수 없습니다', back: '홈으로' },
+  notFound: { title: '페이지를 찾을 수 없어요', back: '홈으로' },
 }
 
 export const DICT: Record<Lang, Dict> = { en, ko }

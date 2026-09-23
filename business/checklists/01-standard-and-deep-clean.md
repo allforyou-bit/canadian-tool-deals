@@ -24,7 +24,7 @@ Job ID (작업 번호): ______ Date (날짜): ______ Client (고객): ______ Bed
 - [ ] Walk through with the client. Confirm the scope matches the quote: type, rooms, add-ons (고객과 함께 둘러보며 견적 내용과 같은지 확인)
 - [ ] Ask about fragile items, valuables and "do not touch" areas (깨지기 쉬운 물건, 귀중품, 손대지 말 곳 확인)
 - [ ] **Before photos** of every room and close-ups of any existing damage, following `03-photo-protocol.md` (작업 전 사진: 방마다 한 장, 기존 파손은 가까이서)
-- [ ] Agreement signed. If it was signed **at the client's home in Ontario**, it is a direct agreement: the client can cancel within 10 days after receiving a copy of the signed agreement, and you must refund within 15 days after the cancellation notice ([ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract), memo F32, snippet). How doing the job inside those 10 days affects this was **not researched**, so treat that payment as refundable until the 10 days pass. Not legal advice. (계약서 서명. 온타리오에서 고객 집에서 서명했다면 고객은 계약서 사본을 받은 다음 날부터 10일 안에 취소할 수 있고, 오너는 취소 통지를 받은 다음 날부터 15일 안에 환불해야 합니다(검색 요약). 10일 안에 작업을 끝낸 경우의 효과는 확인 필요이므로, 10일이 지나기 전까지는 받은 돈을 환불될 수 있는 돈으로 봅니다. 법률 자문이 아닙니다)
+- [ ] Agreement signed. If it was signed **at the client's home in Ontario**, it is a direct agreement: the client can cancel within 10 days after receiving a copy of the signed agreement, and you must refund within 15 days after the cancellation notice ([ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract), memo F32, snippet). How doing the job inside those 10 days affects this was **not researched**, so treat that payment as refundable until the 10 days pass. Not legal advice. (계약서 서명. 온타리오에서 고객 집에서 서명했다면 고객은 계약서 사본을 받은 후 10일 이내에 취소할 수 있고, 오너는 취소 통지를 받은 후 15일 이내에 환불해야 합니다(검색 요약). 10일 안에 작업을 끝낸 경우의 효과는 확인 필요이므로, 10일이 지나기 전까지는 받은 돈을 환불될 수 있는 돈으로 봅니다. 법률 자문이 아닙니다)
 
 ## 3. Room by room (공간별 작업)
 
@@ -94,7 +94,7 @@ Work top to bottom, dry before wet, back of the room toward the door (위에서 
 - Any plumbing, gas or electrical work (memo §3) (배관·가스·전기 작업 일체)
 - Exterior windows, and any spot you cannot reach from the floor or a small step stool (memo §3 excludes exterior windows; the step-stool limit is an owner choice) (외부 유리창, 바닥이나 작은 발판에서 닿지 않는 곳)
 - Moving heavy furniture alone. An injury means zero income (memo §8) (무거운 가구 혼자 옮기기. 다치면 수입이 0이 됩니다)
-- Mould removal, biohazards, pest droppings (owner choice) (곰팡이 제거, 오물, 해충 배설물: 오너 판단)
+- Mould removal, biohazards, pest droppings (owner choice) (곰팡이 제거, 생물학적 위험물(혈액·체액, 사람·동물 배설물, 주사바늘), 해충 배설물: 오너 판단)
 - Holding keys (memo §2) (열쇠 보관)
 
 ## 4. Before you leave the job (마치기 전)

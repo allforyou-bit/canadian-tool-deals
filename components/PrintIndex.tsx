@@ -54,7 +54,9 @@ export default function PrintIndex({ lang }: { lang: Lang }) {
           {t.price}
         </Link>
       </h2>
-      <h2 className="mt-4 font-bold">{t.agreements}</h2>
+      {business.tax.province === 'ON' && (
+        <>
+          <h2 className="mt-4 font-bold">{t.agreements}</h2>
       <ul className="mt-1 flex gap-3">
         {/* Only services switched on in config/business.ts: the agreement routes publish only those (gutters need Gate G1, snow needs Gate S). */}
         {(['cleaning', 'gutters', 'snow'] as const)
@@ -67,6 +69,8 @@ export default function PrintIndex({ lang }: { lang: Lang }) {
             </li>
           ))}
       </ul>
+        </>
+      )}
     </main>
   )
 }

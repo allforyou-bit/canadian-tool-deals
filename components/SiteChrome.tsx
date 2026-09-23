@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import LangLink from '@/components/LangLink'
 import { business } from '@/config/business'
 import { DICT, prefix, type Lang } from '@/lib/i18n'
 import { contactLinks, setupMissing } from '@/lib/site'
@@ -35,9 +36,9 @@ export function SiteHeader({ lang, path = '/' }: { lang: Lang; path?: string }) 
           <Link href={`${p}/#faq`} className="hidden rounded-md px-2 py-1 hover:bg-brand-soft sm:inline">
             {d.nav.faq}
           </Link>
-          <Link href={otherLangHref(lang, path === '/' ? '/' : path)} className="rounded-md border border-line px-2 py-1 hover:bg-brand-soft" hrefLang={lang === 'ko' ? 'en' : 'ko'}>
+          <LangLink href={otherLangHref(lang, path === '/' ? '/' : path)} className="rounded-md border border-line px-2 py-1 hover:bg-brand-soft" hrefLang={lang === 'ko' ? 'en' : 'ko'}>
             {d.otherLang}
-          </Link>
+          </LangLink>
           {c.tel && (
             <a href={c.tel} className="rounded-md bg-brand px-3 py-1.5 font-semibold text-white hover:bg-brand-dark">
               {d.call}
@@ -85,11 +86,13 @@ export function SiteFooter({ lang }: { lang: Lang }) {
               {d.footer.privacy}
             </Link>
           </p>
-          <p>
-            <Link className="hover:underline" href={`${p}/agreements/cleaning/`}>
-              {d.footer.agreements}
-            </Link>
-          </p>
+          {business.tax.province === 'ON' && (
+            <p>
+              <Link className="hover:underline" href={`${p}/agreements/cleaning/`}>
+                {d.footer.agreements}
+              </Link>
+            </p>
+          )}
           <p>
             <Link className="hover:underline" href={`${p}/print/price-sheet/`}>
               {d.footer.prices}

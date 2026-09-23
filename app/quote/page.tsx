@@ -3,7 +3,7 @@ import QuotePage from '@/components/QuotePage'
 
 export const metadata: Metadata = {
   title: 'Instant estimate',
-  alternates: { canonical: '/quote/', languages: { en: '/quote/', ko: '/ko/quote/' } },
+  alternates: { canonical: '/quote/', languages: { en: '/quote/', ko: '/ko/quote/', 'x-default': '/quote/' } },
 }
 
 export default function Page() {

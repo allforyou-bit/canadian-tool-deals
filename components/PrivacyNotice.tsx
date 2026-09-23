@@ -12,7 +12,8 @@ export default function PrivacyNotice({ lang }: { lang: Lang }) {
   const brand = business.brand[lang]
   const contact = [business.contact.email, business.contact.mailingAddress].filter(Boolean).join(' · ')
   const usesSheet = Boolean(business.leadEndpoint)
-  const usesTurnstile = Boolean(business.turnstileSiteKey)
+  // matches components/QuoteTool.tsx: Turnstile loads only when both a lead endpoint and a site key are set
+  const usesTurnstile = Boolean(business.leadEndpoint && business.turnstileSiteKey)
 
   if (lang === 'ko') {
     return (
@@ -24,7 +25,7 @@ export default function PrivacyNotice({ lang }: { lang: Lang }) {
         <h2 className="mt-6 text-xl font-semibold">사용 목적</h2>
         <p>견적 안내, 방문 일정 조율, 서비스 제공, 청구·영수증 발행, 서비스 관련 문의 응대에만 사용합니다. 정보를 판매하지 않습니다.</p>
         <h2 className="mt-6 text-xl font-semibold">마케팅 메시지</h2>
-        <p>양식에서 별도로 동의하신 경우에만 할인·소식을 보냅니다. 모든 메시지에 수신 거부 방법이 있으며, 언제든 거부하실 수 있습니다.</p>
+        <p>양식에서 별도로 동의하신 경우에만 할인·소식을 보냅니다. 모든 메시지에 수신 거부 방법이 있으며, 언제든 동의를 철회하실 수 있습니다.</p>
         <h2 className="mt-6 text-xl font-semibold">보관과 제3자</h2>
         <p>
           이 웹사이트는 Cloudflare에서 호스팅됩니다.
@@ -34,7 +35,7 @@ export default function PrivacyNotice({ lang }: { lang: Lang }) {
           서비스 제공과 법적 기록 보관에 필요한 기간 동안만 보관합니다.
         </p>
         <h2 className="mt-6 text-xl font-semibold">사진</h2>
-        <p>분쟁 예방을 위해 작업 전후 사진을 찍을 수 있으며 비공개로 보관합니다. 광고·홍보에는 별도 서면 동의를 받은 경우에만 사용합니다.</p>
+        <p>작업 내용을 기록하기 위해 작업 전후 사진을 찍을 수 있으며 비공개로 보관합니다. 광고·홍보에는 별도 서면 동의를 받은 경우에만 사용합니다.</p>
         <h2 className="mt-6 text-xl font-semibold">개인정보 책임자, 열람·정정·동의 철회</h2>
         <p>개인정보 처리에 대한 책임은 {brand} 대표에게 있습니다. 캐나다 밖 서비스 제공업체에 관한 서면 안내 요청을 포함해, 개인정보 관련 문의에는 대표가 직접 답변합니다.</p>
         <p>본인 정보의 열람·정정·삭제, 불만 제기, 동의 철회를 원하시면 대표에게 연락 주세요{contact ? `: ${contact}` : ''}.</p>

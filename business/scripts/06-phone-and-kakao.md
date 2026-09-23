@@ -1,5 +1,7 @@
 # 06 · Phone calls and Korean-community chat / 전화 응대와 한인 커뮤니티 채팅
 
+> Not legal advice. The rules cited here come from the decision memo (business/research/decision-memo.md); check them before relying on them. / 법률 자문이 아닙니다. 여기 인용한 규정은 결정 메모에서 가져온 것이니, 따르기 전에 확인하세요.
+
 > **Draft v1, 2026-09-23.** The owner approves the Korean before use (memo §10, item 7). Scripts and templates are ≤ 120 words per language. **The owner posts and replies from their own accounts; the AI never posts, sends or phones.**
 > 초안입니다. 사장님이 한국어 문구를 확인·승인한 뒤 사용하세요. **게시·답장·전화는 모두 사장님이 직접 해요. AI는 초안만 만들어요.**
 

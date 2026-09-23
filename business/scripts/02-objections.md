@@ -1,5 +1,7 @@
 # 02 · Handling objections / 거절·반대 의견 대응
 
+> Not legal advice. The rules cited here come from the decision memo (business/research/decision-memo.md); check them before relying on them. / 법률 자문이 아닙니다. 여기 인용한 규정은 결정 메모에서 가져온 것이니, 따르기 전에 확인하세요.
+
 > **Draft v1, 2026-09-23.** The owner approves the Korean before use (memo §10, item 7). Each answer is ≤ 120 words per language. Say only what is true.
 > 초안입니다. 사장님이 한국어 문구를 확인·승인한 뒤 사용하세요. 사실만 말하세요.
 
@@ -68,7 +70,7 @@ Not yet. I've requested liability insurance quotes, and I won't work in your hom
 아직은 아니에요. 배상책임보험 견적을 요청해 두었고, 보험이 시작되기 전에는 댁에서 어떤 작업도 하지 않아요. 작업 날까지 보험이 시작되지 않으면 미리 말씀드리고 날짜를 옮길게요. {AREA}에서 새로 시작해서 아직 후기가 없어요. 작업하는 동안 집에 계셔도 괜찮아요.
 ```
 
-**If asked "Are you bonded?" / "본딩(보증보험) 있어요?"**
+**If asked "Are you bonded?" / "본딩(신원보증) 있어요?"**
 
 **EN**
 ```say
@@ -77,7 +79,7 @@ No, I'm not bonded. That's why I don't hold keys.
 
 **KO**
 ```say
-보증보험(본딩)은 없어요. 그래서 열쇠는 맡지 않아요.
+신원보증(본딩)은 없어요. 그래서 열쇠는 맡지 않아요.
 ```
 
 | EN | KO |

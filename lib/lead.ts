@@ -28,19 +28,26 @@ export interface LeadPayload {
   website: string
 }
 
+const SUMMARY_LABELS = {
+  en: { title: 'Quote request', none: 'no estimate', name: 'Name', phone: 'Phone', email: 'Email', address: 'Address', dates: 'Preferred dates', notes: 'Notes', optYes: 'Marketing opt-in: YES', optNo: 'Marketing opt-in: no', service: { cleaning: 'cleaning', gutters: 'gutter cleaning', snow: 'snow clearing', other: 'other' } },
+  ko: { title: '견적 요청', none: '견적 없음', name: '성함', phone: '전화', email: '이메일', address: '주소', dates: '희망 날짜', notes: '메모', optYes: '마케팅 수신 동의: 예', optNo: '마케팅 수신 동의: 아니요', service: { cleaning: '청소', gutters: '홈통 청소', snow: '제설', other: '기타' } },
+}
+
+/** Plain-text summary used for the SMS/email fallback, written in the visitor's language. */
 export function leadSummary(p: LeadPayload): string {
-  const est = p.estimateLow !== null ? `$${p.estimateLow}–$${p.estimateHigh}` : 'no estimate'
+  const L = SUMMARY_LABELS[p.lang] ?? SUMMARY_LABELS.en
+  const est = p.estimateLow !== null ? `$${p.estimateLow}–$${p.estimateHigh}` : L.none
   return [
-    `Quote request (${p.service}) — ${est}`,
+    `${L.title} (${L.service[p.service]}) — ${est}`,
     p.selections,
-    `Name: ${p.name}`,
-    `Phone: ${p.phone}`,
-    p.email ? `Email: ${p.email}` : '',
-    `Address: ${p.address}`,
-    p.preferredDates ? `Preferred dates: ${p.preferredDates}` : '',
-    p.notes ? `Notes: ${p.notes}` : '',
+    `${L.name}: ${p.name}`,
+    `${L.phone}: ${p.phone}`,
+    p.email ? `${L.email}: ${p.email}` : '',
+    `${L.address}: ${p.address}`,
+    p.preferredDates ? `${L.dates}: ${p.preferredDates}` : '',
+    p.notes ? `${L.notes}: ${p.notes}` : '',
     // CASL consent record: the SMS/email fallback is the only copy when no lead endpoint is set.
-    p.marketingOptIn ? `Marketing opt-in: YES — "${p.marketingConsentText}"` : 'Marketing opt-in: no',
+    p.marketingOptIn ? `${L.optYes} — "${p.marketingConsentText}"` : L.optNo,
   ]
     .filter(Boolean)
     .join('\n')

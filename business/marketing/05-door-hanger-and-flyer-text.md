@@ -116,7 +116,7 @@ Print the lines that apply:
    - KO: 표시된 가격은 집 크기별 시작 가격입니다. 최종 가격은 사진이나 현장 확인 후 정해집니다.
 2. Ontario clusters, always:
    - EN: Ontario: if you sign an agreement with us at your home, you may cancel within 10 days after receiving a copy of the signed agreement. Any refund is due within 15 days after your cancellation notice.
-   - KO: 온타리오주: 댁에서 저희와 계약서에 서명하신 경우, 계약서 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있고, 취소 통지를 받은 다음 날부터 15일 안에 환불해 드립니다.
+   - KO: 온타리오주: 댁에서 저희와 계약서에 서명하신 경우, 계약서 사본을 받으신 후 10일 이내에 취소하실 수 있고, 취소 통지를 받은 후 15일 이내에 환불해 드립니다.
    - Source: memo F32, [ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract) (snippet). For clusters outside Ontario, this rule was not researched; the Montreal/Quebec version is not supported (see `config/prices.ts` city notes).
 3. When block C prints:
    - EN: Snow: season Dec 1 – Mar 31. Season contracts go ahead only if we sign our minimum number of snow contracts (all areas combined) by Nov 20; if not, the agreement is void and you owe nothing. Snow is never pushed onto the road. November snow (optional, if ticked in your agreement): $60 per visit for snowfalls at or above the trigger depth once your contract is confirmed, billed with the Dec 1 instalment.

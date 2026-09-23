@@ -1344,7 +1344,7 @@ function buildEI(ws) {
     '순수입 = 총수입 − 운영비 (EI Regs s.35(10)(c)); 수입은 일한 주에 배분 (s.36(6)); 모든 수입 신고, 신고 안 한 수입은 환수 (F4). 사업이 "경미한 정도(minor extent)"를 넘으면 그 주는 EI 없음 (s.30, F3). 총수입은 작업 시트, 운영비는 지출 시트에서 자동으로 옵니다. 법률 자문 아님.',
   )
   const heads = [
-    ['주 시작 (일)\nWeek start (Sun)', false, '일요일 시작 주 (EI Act s.10(1), F2)'],
+    ['주 시작 (일)\nWeek start (Sun)', false, '일요일 시작 주 (EI Act s.2(1) "week" 정의)'],
     ['주 끝 (토)\nWeek end', true],
     ['총수입\nGross', true, '작업 시트: 완료일이 이 주인 작업 금액 합'],
     ['운영비\nOperating exp.', true, '지출 시트: 날짜가 이 주인 지출 합. 연 보험료 같은 큰 지출을 어느 주에 넣을지는 Service Canada에 확인.'],
@@ -1944,7 +1944,9 @@ function writeCsvTemplates() {
   writeCsv(
     'ei-weekly.csv',
     ['week_start', 'week_end', 'gross', 'operating_expenses', 'net', 'path', 'ei_deduction_est', 'ei_paid_est', 'declared', 'declared_on', 'notes'],
-    [eiRow(utc(2026, 10, 4), tier(2).deep, 40, 'Y', utc(2026, 10, 11)), eiRow(utc(2026, 10, 11), tier(2).deep + tier(1).standard, 60, 'N', '')],
+    // Examples start after the waiting week (benefit period from Sun 10/4, F2): waiting-week earnings follow
+    // EI Act s.19(1) (deducted from the first 3 payable weeks), not the 50% rule used below.
+    [eiRow(utc(2026, 10, 11), tier(2).deep, 40, 'Y', utc(2026, 10, 18)), eiRow(utc(2026, 10, 18), tier(2).deep + tier(1).standard, 60, 'N', '')],
   )
 }
 

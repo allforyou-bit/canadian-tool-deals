@@ -57,7 +57,8 @@ export const DRIVEWAY_LABEL: Record<DrivewaySize, { en: string; ko: string }> = 
   large: { en: 'Large driveway (5–6 cars)', ko: '대형 진입로(차 5–6대)' },
 }
 
-const roundUp5 = (n: number) => Math.ceil(n / 5) * 5
+// round to cents first so floating-point noise (e.g. 200 × 1.1 = 220.00000000000003) never adds an extra $5
+const roundUp5 = (n: number) => Math.ceil(Math.round(n * 100) / 100 / 5) * 5
 const cents = (n: number) => Math.round(n * 100) / 100
 
 function finish(book: PriceBook, lines: Line[], taxRatePct: number | null, taxLabel: string): Estimate {
@@ -107,8 +108,8 @@ export function estimateCleaning(
   if (input.rush) {
     const subtotal = lines.reduce((s, l) => s + l.amount, 0)
     lines.push({
-      en: `Within 24 h / weekend / holiday (+${c.rushPremiumPct}%)`,
-      ko: `24시간 내·주말·공휴일 (+${c.rushPremiumPct}%)`,
+      en: `Within 24 h / weekend / holiday (+${c.rushPremiumPct}%, rounded up to $5)`,
+      ko: `24시간 내·주말·공휴일 (+${c.rushPremiumPct}%, $5 단위 올림)`,
       amount: roundUp5((subtotal * c.rushPremiumPct) / 100),
     })
   }

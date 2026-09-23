@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
   const a = ACTIVE.find((x) => x.service === service)
   return {
     title: a ? { absolute: a.title.ko.replace('{BRAND}', business.brand.ko) } : '계약서',
-    alternates: { canonical: '/ko/agreements/' + service + '/', languages: { en: '/agreements/' + service + '/', ko: '/ko/agreements/' + service + '/' } },
+    alternates: { canonical: '/ko/agreements/' + service + '/', languages: { en: '/agreements/' + service + '/', ko: '/ko/agreements/' + service + '/', 'x-default': '/agreements/' + service + '/' } },
   }
 }
 

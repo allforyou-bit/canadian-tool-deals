@@ -76,7 +76,7 @@
 
 **아니요. 12월 1일 전에는 한 푼도 받지 않습니다.**
 
-- 온타리오에서 고객 집에서 서명한 계약은 고객이 계약서 사본을 받은 다음 날부터 10일 안에 취소할 수 있고, 사업자는 취소 통지를 받은 다음 날부터 15일 안에 환불해야 합니다(F32, 스니펫. 법률 자문 아님).
+- 온타리오에서 고객 집에서 서명한 계약은 고객이 계약서 사본을 받은 후 10일 이내에 취소할 수 있고, 사업자는 취소 통지를 받은 후 15일 이내에 환불해야 합니다(F32, 스니펫. 법률 자문 아님).
 - GTA에서 선불을 낸 고객들이 피해를 봤습니다(CP24).
 - 11/20(금)까지 전체 제설 계약(모든 지역 합산)이 최소 건수(손익분기 건수)에 이르지 않으면 계약은 무효이고, 고객이 낼 돈은 없습니다.
 
@@ -137,7 +137,7 @@
 | 콘텐츠·유튜브·틱톡·Etsy로 수입 내기 | 유튜브 수익화에는 구독자 1천 명 + 시청 4천 시간, 틱톡에는 팔로워 1만 명이 필요합니다(스니펫). 조사 자료의 60일 결과는 월 $0–500입니다. |
 | 마이크로 SaaS, 크롬 확장 프로그램 | 첫해 중간값 MRR이 $148입니다. 살아남은 곳도 MRR $1K까지 중간값 8개월이 걸렸습니다([2차 자료](https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md)). |
 | Upwork·Fiverr를 주력으로 | 첫 돈이 보통 37–75일째에 들어옵니다(조사 자료). Upwork는 고정가 대금을 승인 후 5일 동안 묶어 둡니다([Upwork](https://support.upwork.com/hc/en-us/articles/211063718-How-payments-for-milestones-and-fixed-price-contracts-work), 스니펫). Fiverr는 신규 판매자 대금을 14일 뒤에 줍니다. |
-| 토론토에서 압력 세척 | Building Renovator 면허(시험 포함)가 필요해 보입니다([toronto.ca](https://www.toronto.ca/services-payments/permits-licences-bylaws/building-renovators/), 스니펫). |
+| 토론토에서 고압 세척 | Building Renovator 면허(시험 포함)가 필요해 보입니다([toronto.ca](https://www.toronto.ca/services-payments/permits-licences-bylaws/building-renovators/), 스니펫). |
 | 외부 창문 청소 (지금은) | 온타리오 Reg. 859의 적용 여부를 확인하지 못했습니다([ontario.ca](https://www.ontario.ca/page/access-and-fall-protection-window-cleaning)). |
 | 트럭 플라우 제설 | 트럭 1–2대, $2M 배상책임에 연 $5,000–12,000입니다([zensurance](https://www.zensurance.com/blog/how-much-does-snowplow-insurance-in-canada-cost), 스니펫). 오타와는 플라우 면허가 필요합니다. |
 | 12월 1일 전 제설 대금, 일시불 선불 | 9번 답 참조. 퀘벡 OPC도 서비스 전 계약금을 받지 말라고 권고합니다([OPC](https://opc.gouv.qc.ca/en/consumer/good-service/housing-renovation/landscaping-exterior/snow-removal/cancelling-contract), 스니펫). |
