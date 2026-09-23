@@ -1,0 +1,3 @@
+quote_id,request_date,source,name,address,contact,service,quote_price,status,won_date,scheduled_date,door_signed,marketing_optin,notes
+EX-Q1,2026-09-30,DOOR,EXAMPLE Customer A,103 EXAMPLE St,555-0100,CL-DEEP,270,WON,2026-10-02,2026-10-14,Y,N,EXAMPLE - fake row - delete
+EX-Q2,2026-10-01,KIJIJI,EXAMPLE Customer B,5 EXAMPLE Ave,b@example.com,CL-MOVE,300,OPEN,,,N,N,EXAMPLE - fake row - delete

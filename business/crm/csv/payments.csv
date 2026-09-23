@@ -1,0 +1,3 @@
+date,job_id,amount,method,reference,notes
+2026-10-14,EX-J1,270,ETRANSFER,EXAMPLE-REF-001,EXAMPLE - fake row - delete
+2026-10-15,EX-J2,150,CASH,,EXAMPLE - fake row - delete

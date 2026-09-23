@@ -2,7 +2,7 @@ import QRCode from 'qrcode'
 import { business, priceBook } from '@/config/business'
 import { money, prefix, type Lang } from '@/lib/i18n'
 import { CLEANING_TYPE_LABEL, DRIVEWAY_LABEL } from '@/lib/quote'
-import { absolute, contactLinks, type Cluster } from '@/lib/site'
+import { absolute, contactLinks, setupMissing, type Cluster } from '@/lib/site'
 
 // Print-ready sheets rendered at physical size. Open the page, then Print → "Letter", scale 100%,
 // margins "None" or "Default" (the sheets already leave a safe margin). `npm run pdf` saves them as PDFs.
@@ -16,6 +16,16 @@ function quoteUrl(lang: Lang, cluster: Cluster) {
 }
 
 const cheapest = (xs: number[]) => Math.min(...xs)
+
+/** Printed across every sheet while contact details / site URL are missing, so a sample with a dead QR code never gets printed by mistake. */
+function SampleMark() {
+  if (setupMissing().length === 0) return null
+  return (
+    <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center overflow-hidden">
+      <p className="rotate-[-35deg] whitespace-nowrap text-[64px] font-black tracking-widest text-red-600/25">SAMPLE · 샘플 · 설정 입력 전</p>
+    </div>
+  )
+}
 
 /** "from" prices shown on printed material — always derived from the live price book */
 export function offerLines(lang: Lang): string[] {
@@ -139,7 +149,8 @@ export async function DoorHangerSheet({ lang, cluster }: { lang: Lang; cluster: 
     </div>
   )
   return (
-    <div className="sheet flex items-start justify-center gap-[0.2in] p-[0.2in]" lang={lang}>
+    <div className="sheet relative flex items-start justify-center gap-[0.2in] p-[0.2in]" lang={lang}>
+      <SampleMark />
       {hanger}
       {hanger}
     </div>
@@ -181,7 +192,8 @@ export async function FlyerSheet({ lang, cluster }: { lang: Lang; cluster: Clust
     </div>
   )
   return (
-    <div className="sheet flex flex-col items-center gap-[0.2in] p-[0.25in]" lang={lang}>
+    <div className="sheet relative flex flex-col items-center gap-[0.2in] p-[0.25in]" lang={lang}>
+      <SampleMark />
       {flyer}
       {flyer}
     </div>
@@ -197,7 +209,8 @@ export function PriceSheet({ lang }: { lang: Lang }) {
     : { title: 'Price list', cleaning: 'Cleaning (flat rate)', beds: 'Bedrooms', baths: 'Baths incl.', extra: 'Each extra bathroom', addons: 'Add-ons', rush: 'Within 24 h / weekend / holiday', gutters: 'Gutter cleaning', storeys: ['Bungalow', '2 storeys', '3 storeys'], downspout: 'Downspout flush', snow: 'Snow clearing', perVisit: 'November visit (before season)', walk: 'Walkway & steps', salt: 'Salting' }
   const unit = b.snow?.mode === 'monthly' ? (ko ? '/월' : '/month') : ko ? '/시즌' : '/season'
   return (
-    <div className="sheet p-[0.5in] text-[13px]" lang={lang}>
+    <div className="sheet relative p-[0.5in] text-[13px]" lang={lang}>
+      <SampleMark />
       <div className="flex items-baseline justify-between border-b-2 border-[#0f766e] pb-2">
         <h1 className="text-2xl font-extrabold">
           {business.brand[lang]} — {H.title}

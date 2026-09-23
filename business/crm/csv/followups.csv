@@ -1,0 +1,3 @@
+created_date,name,related_id,type,channel,due_date,done,consent_basis,unsubscribed,result,notes
+2026-10-01,EXAMPLE Customer B,EX-Q2,QUOTE,SMS,2026-10-03,N,INQUIRY,N,,EXAMPLE - fake row - delete
+2026-10-14,EXAMPLE Customer A,EX-J1,RECURRING,PHONE,2026-10-21,N,,N,,EXAMPLE - fake row - delete

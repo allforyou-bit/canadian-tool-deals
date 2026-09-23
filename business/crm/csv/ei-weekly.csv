@@ -1,0 +1,3 @@
+week_start,week_end,gross,operating_expenses,net,path,ei_deduction_est,ei_paid_est,declared,declared_on,notes
+2026-10-04,2026-10-10,270,40,230,A,115,614,Y,2026-10-11,EXAMPLE - fake row - delete (estimate only)
+2026-10-11,2026-10-17,420,60,360,A,180,549,N,,EXAMPLE - fake row - delete (estimate only)
