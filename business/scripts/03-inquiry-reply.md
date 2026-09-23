@@ -103,7 +103,7 @@ Use only after Gate S passes (written snow insurance). 제설 보험을 서면�
 
 **EN**
 ```sms
-Hi {CUSTOMER}, {NAME} from {BRAND}. Thanks for asking about snow clearing! Your season price (Dec 1 – Mar 31) is {LOW}–{HIGH}, confirmed on site and billed in 4 equal instalments on Dec 1, Jan 1, Feb 1 and Mar 1. Nothing is paid before Dec 1. November snow is optional: if you tick it in the agreement, each snowfall at or above the trigger depth, from the day we confirm your contract (by Nov 21) to Nov 30, is {PER_VISIT} per visit, billed with your Dec 1 instalment. If we haven't signed our minimum number of snow contracts (all areas combined) by Nov 20, the agreement is void and you owe nothing.
+Hi {CUSTOMER}, {NAME} from {BRAND}. Thanks for asking about snow clearing! Your season price (Dec 1 – Mar 31) is {LOW}–{HIGH}, confirmed on site, billed in 4 equal instalments: Dec 1, Jan 1, Feb 1, Mar 1. Nothing is paid before Dec 1. November snow is optional: if you tick it in the agreement, each snowfall at or above the trigger depth, from the day we confirm your contract (by Nov 21) to Nov 30, is {PER_VISIT} per visit, billed with your Dec 1 instalment. If we haven't signed our minimum number of snow contracts (all areas combined) by Nov 20, the agreement is void and you owe nothing.
 {BRAND}, {MAILING_ADDRESS}, {PHONE}, {SITE}
 Reply STOP to opt out.
 ```

@@ -18,6 +18,6 @@
 | `door-hanger-{en,ko}-{c1,c2,c3}.pdf` | 문고리 전단, 레터 1장에 2개. c1–c3은 동네(클러스터)별 QR (`/quote/?src=c1` 등) |
 | `flyer-{en,ko}-{c1,c2,c3}.pdf` | 반쪽 전단, 레터 1장에 2개 |
 | `price-sheet-{en,ko}.pdf` | 가격표 (켜진 서비스만 표시) |
-| `agreement-{cleaning,gutters,snow}-{en,ko}.pdf` | 서비스 계약서 양식 — 법률 자문 아님, 사용 전 변호사·보험사 검토. 홈통 청소·제설 계약서는 그 서비스를 켰을 때만 사이트에 게시되고 PDF로 인쇄됩니다(여기 있는 것은 샘플) |
+| `agreement-{cleaning,gutters,snow}-{en,ko}.pdf` | 서비스 계약서 양식 — 법률 자문 아님, 사용 전 변호사·보험사 검토. 홈통 청소·제설 계약서는 그 서비스를 켰을 때만 사이트에 게시됩니다. 여기 있는 홈통·제설 PDF는 서비스를 켜기 **전에** 보험 중개인·변호사에게 검토받으라고 미리 만든 양식입니다(`PDF_ONLY='agreement-(gutters\|snow)'`로 두 서비스를 켠 빌드에서 생성) |
 
 인쇄 비용·인쇄소는 조사하지 않았습니다(확인 필요).

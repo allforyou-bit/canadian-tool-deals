@@ -70,27 +70,27 @@ Each block has a heading and one or two short lines. Print the blocks chosen in 
 
 **A2 · Deep clean**
 - EN: **Deep clean from $230** · Top-to-bottom, by checklist · 1 bedroom $230 · 2 bedrooms $270 · 3 bedrooms $320
-- KO: **대청소 $230부터** · 체크리스트대로 구석구석 · 침실 1개 $230 · 2개 $270 · 3개 $320
+- KO: **딥클린(대청소) $230부터** · 체크리스트대로 구석구석 · 침실 1개 $230 · 2개 $270 · 3개 $320
 
 **A3 · Move-in / move-out clean**
 - EN: **Move-in / move-out from $260** · Empty homes and condos · 1 bedroom $260 · 2 bedrooms $300 · 3 bedrooms $360
-- KO: **이사·입주 청소 $260부터** · 빈집·콘도 · 침실 1개 $260 · 2개 $300 · 3개 $360
+- KO: **입주·이사 청소 $260부터** · 빈집·콘도 · 침실 1개 $260 · 2개 $300 · 3개 $360
 
 **A4 · Cleaning (standard + deep)**
 - EN: **Home cleaning from $150** · Deep clean from $230 · One-time or every two weeks
-- KO: **집 청소 $150부터** · 대청소 $230부터 · 한 번 또는 2주마다
+- KO: **집 청소 $150부터** · 딥클린(대청소) $230부터 · 한 번 또는 2주마다
 
 **A5 · All cleaning**
 - EN: **Home cleaning from $150** · Deep clean from $230 · Move-in / move-out from $260
-- KO: **집 청소 $150부터** · 대청소 $230부터 · 이사·입주 청소 $260부터
+- KO: **집 청소 $150부터** · 딥클린(대청소) $230부터 · 입주·이사 청소 $260부터
 
 **B · Gutters** (only when `services.gutters` is on)
 - EN: **Gutter cleaning from $175** · Bungalow $175 · 2 storeys $225 · Gutters only, by hand · Pay when done
-- KO: **처마 물받이(거터) 청소 $175부터** · 단층 $175 · 2층 $225 · 물받이만, 손으로 청소 · 작업 후 결제
+- KO: **홈통(처마 물받이) 청소 $175부터** · 단층 $175 · 2층 $225 · 홈통만, 손으로 청소 · 작업 후 결제
 
 **C · Snow season** (only when `services.snow` is on)
 - EN: **Snow clearing from $500/season** · Single driveway, 4 instalments from $125 (Dec 1 – Mar 1) · Nothing to pay before Dec 1 · {SNOW_EQUIPMENT}, no truck
-- KO: **시즌 제설 $500부터** · 드라이브웨이(차 1–2대), 4회 분할(회당 $125부터) (12월 1일 – 3월 1일) · 12월 1일 전 결제 없음 · {SNOW_EQUIPMENT_KO}, 트럭 없음
+- KO: **시즌 제설 $500부터** · 진입로(차 1–2대), 4회 분할(회당 $125부터) (12월 1일 – 3월 1일) · 12월 1일 전 결제 없음 · {SNOW_EQUIPMENT_KO}, 트럭 없음
 
 ### 3.3 No-obligation line
 
@@ -115,15 +115,15 @@ Print the lines that apply:
    - EN: Prices shown are starting prices for each home size. The final price is confirmed from photos or on site.
    - KO: 표시된 가격은 집 크기별 시작 가격입니다. 최종 가격은 사진이나 현장 확인 후 정해집니다.
 2. Ontario clusters, always:
-   - EN: Ontario: if you sign an agreement with us at your home, you may cancel within 10 days of receiving your copy. Any refund is due within 15 days.
-   - KO: 온타리오주: 댁에서 저희와 계약서에 서명하신 경우, 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있으며 환불은 취소 통지 후 15일 안에 해 드립니다.
+   - EN: Ontario: if you sign an agreement with us at your home, you may cancel within 10 days after receiving a copy of the signed agreement. Any refund is due within 15 days after your cancellation notice.
+   - KO: 온타리오주: 댁에서 저희와 계약서에 서명하신 경우, 계약서 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있고, 취소 통지를 받은 다음 날부터 15일 안에 환불해 드립니다.
    - Source: memo F32, [ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract) (snippet). For clusters outside Ontario, this rule was not researched; the Montreal/Quebec version is not supported (see `config/prices.ts` city notes).
 3. When block C prints:
-   - EN: Snow: season Dec 1 – Mar 31. Season contracts go ahead only if we sign our minimum number of snow contracts (all areas combined) by Nov 20; if not, the agreement is void and you owe nothing. Snow is never pushed onto the road. November storms: $60 per visit.
-   - KO: 제설: 시즌은 12월 1일 – 3월 31일입니다. 11월 20일까지 전체 제설 계약이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다. 눈은 절대 도로로 밀어내지 않습니다. 11월 눈: 1회 $60.
+   - EN: Snow: season Dec 1 – Mar 31. Season contracts go ahead only if we sign our minimum number of snow contracts (all areas combined) by Nov 20; if not, the agreement is void and you owe nothing. Snow is never pushed onto the road. November snow (optional, if ticked in your agreement): $60 per visit for snowfalls at or above the trigger depth once your contract is confirmed, billed with the Dec 1 instalment.
+   - KO: 제설: 시즌은 12월 1일 – 3월 31일입니다. 11월 20일까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다. 눈은 절대 도로로 밀어내지 않습니다. 11월 눈(선택, 계약서에서 선택 시): 계약 확정 후 출동 기준 이상 내린 눈 1회 $60, 12월 1일 첫 분할금과 함께 청구.
 4. When block B prints:
    - EN: Gutters: no windows, no pressure washing.
-   - KO: 거터: 창문 청소와 고압 세척은 하지 않습니다.
+   - KO: 홈통 청소: 창문 청소와 고압 세척은 하지 않습니다.
 
 ---
 
@@ -151,8 +151,8 @@ A flyer has more room than a hanger. Use it at the door when someone answers, as
 | KO | 침실 1개 | 침실 2개 | 침실 3개 |
 |---|---|---|---|
 | 일반 청소 | $150 | $180 | $220 |
-| 대청소 | $230 | $270 | $320 |
-| 이사·입주 청소 | $260 | $300 | $360 |
+| 딥클린(대청소) | $230 | $270 | $320 |
+| 입주·이사 청소 | $260 | $300 | $360 |
 
 Add-ons: extra bathroom $30 · inside oven $40 · inside fridge $35 · inside empty cabinets $40 · within 24 h, weekend or statutory holiday +15%.
 추가 항목: 욕실 추가 $30 · 오븐 내부 $40 · 냉장고 내부 $35 · 빈 수납장 내부 $40 · 24시간 이내, 주말, 공휴일 +15%
@@ -161,13 +161,13 @@ Add-ons: extra bathroom $30 · inside oven $40 · inside fridge $35 · inside em
 
 **Gutters (only when `services.gutters` is on)**
 - EN: Bungalow / 1 storey $175 · 2 storeys $225 · Downspout flush +$70 · Gutters only, by hand from a ladder · Pay when the job is done
-- KO: 단층 $175 · 2층 $225 · 다운스파우트 뚫기 +$70 · 물받이만 손으로 청소 · 작업이 끝난 뒤 결제
+- KO: 단층 $175 · 2층 $225 · 배수관(다운스파우트) 청소 +$70 · 홈통만 손으로 청소 · 작업이 끝난 뒤 결제
 - Add "3 storeys from $300" / "3층 $300부터" only when `NEXT_PUBLIC_GUTTER_MAX_STOREYS=3` (a second person is present and the broker has confirmed cover; checklist 04 row 11; cover not researched). 3-storey jobs are declined by default (`gutterMaxStoreys` is 2), so the default flyer lists 1 and 2 storeys only.
   (3층은 기본적으로 거절합니다. 두 번째 사람이 함께 있고 브로커가 보험 적용을 확인해 준 뒤(보험 적용 여부는 조사되지 않음) `NEXT_PUBLIC_GUTTER_MAX_STOREYS=3`으로 바꿨을 때만 "3층 $300부터"를 넣으세요. 체크리스트 04, 11번 항목.)
 
 **Snow season (only when `services.snow` is on)**
-- EN: Single driveway (1–2 cars) $500 · Double (3–4 cars) $650 · Large (5–6 cars) $800 · Walkway and steps +$100 · Salting +$100 · Paid in 4 instalments on Dec 1, Jan 1, Feb 1 and Mar 1 · Nothing paid before Dec 1 · November storms $60 per visit
-- KO: 드라이브웨이(차 1–2대) $500 · 차 3–4대 $650 · 차 5–6대 $800 · 현관 보도·계단 +$100 · 제빙(소금) +$100 · 12월 1일, 1월 1일, 2월 1일, 3월 1일 4번 분할 결제 · 12월 1일 전 결제 없음 · 11월 눈 1회 $60
+- EN: Single driveway (1–2 cars) $500 · Double (3–4 cars) $650 · Large (5–6 cars) $800 · Walkway and steps +$100 · Salting +$100 · Paid in 4 instalments on Dec 1, Jan 1, Feb 1 and Mar 1 · Nothing paid before Dec 1 · November snow (optional, if ticked in your agreement) $60 per visit, billed with the Dec 1 instalment
+- KO: 진입로(차 1–2대) $500 · 차 3–4대 $650 · 차 5–6대 $800 · 현관 보도·계단 +$100 · 제빙(소금) +$100 · 12월 1일, 1월 1일, 2월 1일, 3월 1일 4번 분할 결제 · 12월 1일 전 결제 없음 · 11월 눈(선택, 계약서에서 선택 시) 1회 $60, 12월 1일 첫 분할금과 함께 청구
 
 ### 4.3 How it works
 
@@ -212,6 +212,7 @@ Use the same no-obligation line (3.3), QR call-to-action (3.4), contact line (3.
 | **2-up door hangers** | Two door hangers per Letter sheet, each **3.7 × 10.1 in**, with a dashed doorknob circle at the top (`/print/door-hanger/c1/`, `c2`, `c3`) | what the site's print generator builds (`components/Printables.tsx`) |
 | **2-up flyers** | Two half-page flyers per Letter sheet, each 7.5 × 4.9 in (`/print/flyer/c1/`, `c2`, `c3`) | what the print generator builds |
 | Price list | One Letter page (`/print/price-sheet/`) | what the print generator builds |
+| Which files to print | Real prints come only from `{SITE}/print/` (Korean: `{SITE}/ko/print/`) on the deployed site, after your settings are filled in. The PDFs in `business/print/` are SAMPLES with a watermark until then: never hand them out. | what the print generator builds (`business/print/README.md`) |
 | 1-up / **4-up** | **Not built yet.** Memo item 6 asks for 2-up and 4-up; the 4-up sheet is still open, and there is no 1-up full-page flyer either. | memo item 6 open |
 | Scale | Print at **100% / "Actual size"**, not "Fit to page", so the cut lines and QR code keep their size | suggestion |
 | Paper | Heavier paper or cardstock holds up better on a doorknob. Check what your printer can feed. | suggestion, not researched |

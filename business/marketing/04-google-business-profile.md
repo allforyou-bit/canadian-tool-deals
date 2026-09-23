@@ -80,7 +80,7 @@ If you enter prices on the profile, they **must match `config/prices.ts` (GTA de
 | November snow visit | 11월 눈 1회(선택) | Optional (ticked in the agreement), after the contract is confirmed; billed with the Dec 1 instalment | $60 per visit | `services.snow` |
 
 - **3-storey gutters are not listed by default.** Add "$300 (3 storeys)" only when `NEXT_PUBLIC_GUTTER_MAX_STOREYS=3`, which you set only when a second person is present and your broker has confirmed cover (`business/checklists/04-ladder-go-no-go.md` row 11; not researched). While you work alone, 3-storey jobs are declined.
-- **November snow:** the customer ticks it in the snow agreement. It runs only from the day you confirm the agreement is going ahead (by Nov 21) to Nov 30, and it is billed with the Dec 1 instalment, never before (snow agreement, "November snow" clause).
+- **November snow:** the per-visit rate applies only if the customer ticks it in the snow agreement, and only to snowfalls at or above the trigger depth from the day you confirm the agreement is going ahead (by Nov 21) to Nov 30. It is billed with the Dec 1 instalment; nothing is collected before Dec 1 (snow agreement, "November snow" clause).
 
 Price-book fields: `cleaning.tiers`, `cleaning.extraBathroom`, `cleaning.addOns`, `gutters.byStoreys`, `gutters.downspoutFlush`, `snow.driveway`, `snow.walkwayAndSteps`, `snow.salting`, `snow.perVisit`, `snow.instalments`.
 
@@ -98,7 +98,7 @@ Only post seeds 8–10 while the matching service is enabled.
 
 **2. How much does it cost?**
 - EN: Prices are flat by home size. For example, a standard clean for a 1-bedroom starts at $150, a deep clean at $230 and a move-out clean at $260. Our website gives an instant estimate, and we confirm the final price from photos or on site.
-- KO: 집 크기별 정액입니다. 예를 들어 침실 1개 기준으로 일반 청소 $150부터, 대청소 $230부터, 이사 청소 $260부터입니다. 웹사이트에서 바로 예상 가격을 보실 수 있고, 최종 가격은 사진이나 현장 확인 후 정해집니다.
+- KO: 집 크기별 정액입니다. 예를 들어 침실 1개 기준으로 일반 청소 $150부터, 딥클린(대청소) $230부터, 입주·이사 청소 $260부터입니다. 웹사이트에서 바로 예상 가격을 보실 수 있고, 최종 가격은 사진이나 현장 확인 후 정해집니다.
 - *(Prices must match `config/prices.ts`.)*
 
 **3. Are you insured?** Use only the version that is true today.
@@ -115,8 +115,8 @@ Only post seeds 8–10 while the matching service is enabled.
 - *(Source: memo F36, secondary. Card payment is not set up in this plan.)*
 
 **6. Can I cancel?**
-- EN: Yes. Our cancellation terms are in your service agreement. In Ontario, if you sign an agreement with us at your home, you can cancel within 10 days of receiving your copy, and any refund is due within 15 days.
-- KO: 네. 취소 조건은 서비스 계약서에 적혀 있습니다. 온타리오주에서는 댁에서 계약서에 서명하신 경우, 사본을 받으신 날부터 10일 안에 취소하실 수 있고 환불은 15일 안에 해 드립니다.
+- EN: Yes. Our cancellation terms are in your service agreement. In Ontario, if you sign an agreement with us at your home, you can cancel within 10 days after you receive a copy of the signed agreement, and we refund you within 15 days after your cancellation notice.
+- KO: 네. 취소 조건은 서비스 계약서에 적혀 있습니다. 온타리오주에서는 댁에서 계약서에 서명하신 경우, 계약서 사본을 받으신 다음 날부터 10일 안에 취소하실 수 있고, 취소 통지를 받은 다음 날부터 15일 안에 환불해 드립니다.
 - *(Source: memo F32, [ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract), snippet. Not legal advice.)*
 
 **7. Do you speak Korean?**
@@ -125,11 +125,11 @@ Only post seeds 8–10 while the matching service is enabled.
 
 **8. [Gutters] Do you also clean windows or pressure-wash?**
 - EN: No. We clean gutters only, by hand from a ladder. You pay when the job is done.
-- KO: 아니요. 처마 물받이만 사다리에 올라 손으로 청소합니다. 작업이 끝난 뒤 결제하시면 됩니다.
+- KO: 아니요. 홈통(처마 물받이)만 사다리에 올라 손으로 청소합니다. 작업이 끝난 뒤 결제하시면 됩니다.
 
 **9. [Snow] When do I pay, and what happens if not enough contracts are signed?**
-- EN: Nothing is paid before Dec 1. The season (Dec 1 – Mar 31) is billed in 4 instalments on Dec 1, Jan 1, Feb 1 and Mar 1. If we have not signed our minimum number of snow contracts (all areas combined) by Nov 20, every season agreement is void and you owe nothing. We'll tell you by Nov 21 whether it goes ahead.
-- KO: 12월 1일 전에는 돈을 받지 않습니다. 시즌(12월 1일 – 3월 31일) 요금은 12월 1일, 1월 1일, 2월 1일, 3월 1일에 4번 나눠 내십니다. 11월 20일까지 전체 제설 계약(모든 지역 합계)이 최소 건수에 이르지 않으면 모든 시즌 계약은 무효가 되고, 내실 돈은 없습니다. 진행 여부는 11월 21일까지 알려 드립니다.
+- EN: Nothing is paid before Dec 1. The season price (Dec 1 – Mar 31), confirmed on site, is billed in 4 equal instalments on Dec 1, Jan 1, Feb 1 and Mar 1. If we have not signed our minimum number of snow contracts (all areas combined) by Nov 20, the contract is void and you owe nothing. We'll tell you by Nov 21 whether it goes ahead.
+- KO: 12월 1일 전에는 돈을 받지 않습니다. 현장에서 확정한 시즌(12월 1일 – 3월 31일) 요금을 4번 똑같이 나눠 12월 1일, 1월 1일, 2월 1일, 3월 1일에 청구합니다. 11월 20일까지 전체 제설 계약(모든 지역 합산)이 최소 건수에 이르지 않으면 계약은 무효이고 내실 돈은 없습니다. 진행 여부는 11월 21일까지 알려 드립니다.
 - *(Source: snow agreement, "Minimum-contract condition (November 20)" clause, `content/agreements.ts`.)*
 
 **10. [Snow] Where does the snow go?**

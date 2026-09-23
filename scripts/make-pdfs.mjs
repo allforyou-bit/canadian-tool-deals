@@ -1,5 +1,5 @@
 // Saves every printable page as a Letter-size PDF in business/print/.
-// Usage: npm run build && npm run pdf
+// Usage: npm run build && npm run pdf   (PDF_ONLY=<regex> limits which files are written)
 // Needs Playwright + Chromium: `npm i -D playwright && npx playwright install chromium`
 // (or set PLAYWRIGHT_MODULE to the path of an existing playwright install).
 import { createServer } from 'node:http'
@@ -50,16 +50,21 @@ for (const lang of ['en', 'ko']) {
 
 mkdirSync(OUT, { recursive: true })
 const browser = await playwright.chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {})
-const page = await browser.newPage()
+const only = process.env.PDF_ONLY ? new RegExp(process.env.PDF_ONLY) : null
 let n = 0
 for (const [path, file] of JOBS) {
-  const res = await page.goto(base + path, { waitUntil: 'networkidle' })
-  if (!res || !res.ok()) {
-    console.warn(`skip ${path} (${res ? res.status() : 'no response'})`)
+  if (only && !only.test(file)) continue
+  // Pages for switched-off services are not built — skip them before navigating.
+  if (!existsSync(join(ROOT, path, 'index.html'))) {
+    console.log(`skip ${path} (not built — service switched off)`)
     continue
   }
+  const page = await browser.newPage()
+  const res = await page.goto(base + path, { waitUntil: 'networkidle' })
+  if (!res || !res.ok()) throw new Error(`Failed to load ${path}: ${res ? res.status() : 'no response'}`)
   await page.emulateMedia({ media: 'print' })
   await page.pdf({ path: join(OUT, file), format: 'Letter', printBackground: true, preferCSSPageSize: true })
+  await page.close()
   n++
 }
 await browser.close()
