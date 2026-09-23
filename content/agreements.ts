@@ -452,7 +452,7 @@ const SNOW: Agreement = {
       clauses: [
         t(
           'Season: December 1 to March 31. We use shovels and/or a walk-behind snowblower only; no truck or plow.',
-          '시즌: 12월 1일부터 3월 31일까지. 삽과 손으로 미는 제설기(워크비하인드 스노블로어)만 사용하며, 트럭이나 제설 차량은 쓰지 않습니다.',
+          '시즌: 12월 1일부터 3월 31일까지. 삽과 보행식 제설기(워크비하인드 스노블로어)만 사용하며, 트럭이나 제설 차량은 쓰지 않습니다.',
         ),
         t(
           'Areas included (tick): ☐ driveway: ☐ single (1–2 cars) ☐ double (3–4 cars) ☐ large (5–6 cars); ☐ front walkway and steps; ☐ salting (ice melt) on the cleared areas. Other areas, only if written here: ______________.',
@@ -1050,7 +1050,7 @@ const SNOW_NOTES: AgreementNote[] = [
     topic: t('Ottawa licence', '오타와 면허'),
     note: t(
       'Ottawa requires a licence and $2M insurance for plow contractors. Whether shovel or walk-behind snowblower work is exempt is unresolved; confirm with the City before selling (memo F35).',
-      '오타와는 제설 차량 업자에게 면허와 $2M 보험을 요구합니다. 삽이나 손으로 미는 제설기 작업이 면제되는지는 확인되지 않았습니다. 판매 전에 시에 확인하세요(메모 F35).',
+      '오타와는 제설 차량 업자에게 면허와 $2M 보험을 요구합니다. 삽이나 보행식 제설기 작업이 면제되는지는 확인되지 않았습니다. 판매 전에 시에 확인하세요(메모 F35).',
     ),
     status: 'snippet',
     url: 'https://www.ottawa.ca/en/business/permits-and-licences/business-licences/snow-plow-contractor-and-vehicle-licences',
