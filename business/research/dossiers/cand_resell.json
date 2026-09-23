@@ -1,0 +1,334 @@
+{
+ "dossier": {
+  "candidate": "Reselling / flipping / arbitrage (FB Marketplace and Kijiji flipping, liquidation pallets, retail and online arbitrage to Amazon.ca, eBay), plus whether the owner's Canadian tool price scraper can support tool flipping",
+  "summary": "RESEARCH LIMITATION (read first): the network proxy blocked WebFetch and curl for every domain I tried: sell.amazon.ca, sellercentral.amazon.ca, canada.ca, ebay.ca, bstock.com, cbc.ca, reddit, moosemoney.com, ecomcalctools.com, liquidationprime.ca, directliquidation.com and homedepot.ca. The session's web-search budget ran out after 12 successful searches. So every fact below comes from search-result titles and snippets, not from full pages I opened. The eBay.ca fee schedule, B-Stock Canada buyer terms, Amazon.ca per-item Individual fee, Amazon.ca FBA fee tables in CAD, and Reddit failure threads could not be retrieved and are marked \"not found\".\n\nWHAT THE EVIDENCE SAYS: Flipping on FB Marketplace and Kijiji is the fastest way to get first cash, probably within days. It needs very little setup, and the AI can do listing copy and price tracking. But the best documented Canadian-style anecdote I found is about $2,333/month profit (ESTIMATE: $35,000 over 15 months). That is less than half the $5,000 target, and it is labour-heavy: messaging, pickups, meetups, and usually a vehicle. Amazon.ca arbitrage costs CAD $29.99/month (Professional plan) plus a 15% referral fee in Tools and Home Improvement (CAD $0.40 minimum) plus FBA fees with a 3.5% fuel surcharge since 17 April 2026. The most obvious tool brands for flipping (DeWalt, Milwaukee) are brand-gated. One Amazon.ca seller-forum thread reports failing to get DeWalt-ungated after 5 months. Liquidation pallets are available in the GTA (B-Stock lists Amazon Canada and Best Buy Canada as sellers, Liquidation Prime has $1 starting bids, and Mississauga warehouses exist). But reviews say pallets can hold \"only a handful of valuable items\", and CBC reported returned Amazon goods in Toronto liquidation stores still carrying buyers' personal information.\n\nTAX: sales platforms report sellers to CRA once they pass 30 sales or about CAD $2,800 a year (rules effective 2024). GST/HST registration becomes mandatory once taxable revenue passes $30,000 in four consecutive quarters. At the revenue needed to net $5k/month on Amazon, that happens within about 2 months.\n\nTHE OWNER'S SCRAPER: all 54 cached queries show priceCount 0. Every entry is a \"checkManually\" search link with price 0. In its current form it cannot support tool arbitrage.\n\nVERDICT: good as a fast, low-setup way to bridge income in weeks 1–4. It is unlikely to reliably average CAD $5,000/month net within 60 days without a vehicle, several thousand dollars of working capital, and near full-time physical effort.",
+  "time_to_first_revenue": "FB Marketplace and Kijiji local flipping: probably days, but no official source measures this. The anecdotal basis is MooseMoney's article \"I Spent 20 Hours Hustling on Facebook Marketplace to Figure Out What Are The Best Items To Flip in Canada\" (https://www.moosemoney.com/best-items-to-flip-on-marketplace/, title and snippet only). It reports that consoles, keyboards and controllers \"move fast when priced right\". Cash is usually paid in person at pickup, so money arrives the same day, but I have no source for that; it is an unverified assumption. Amazon.ca (FBA or merchant-fulfilled): account-verification time, FBA inbound check-in time and payout schedule were all not found (sell.amazon.ca and sellercentral.amazon.ca were blocked). The one relevant source says capital is \"locked up longer due to shipping time, customs, and FBA intake\" for cross-border arbitrage (https://arbitragecyclops.com/blog/cross-border-arbitrage-canada-us/, an industry vendor). Liquidation pallets: auction close plus pickup plus sorting plus individual resale. No time estimate was found. Liquidation Prime lists pallets with starting bids at $1 (https://liquidationprime.ca/, snippet). Overall ESTIMATE, not sourced: first dollar within 3–10 days via local flipping; first Amazon payout likely several weeks out (no source found).",
+  "pricing_facts": [
+   {
+    "fact": "Amazon.ca Professional selling plan: CAD $29.99/month plus per-item referral fees that vary by category (search-result summary citing sell.amazon.ca/pricing; the page itself could not be opened due to the egress block). Conflicting signal: an Amazon.ca seller-forum thread is titled 'Deducting every month 39.99$ on new fresh Account?'. The US plan is USD $39.99/month, so that thread may be about a US subscription. Unresolved.",
+    "source_url": "https://sell.amazon.ca/pricing"
+   },
+   {
+    "fact": "Same CAD $29.99/month Professional plan figure repeated by a third-party Canada seller-account guide (snippet).",
+    "source_url": "https://myamazonguy.com/amazon-canada/amazon-canada-seller-account/"
+   },
+   {
+    "fact": "Amazon (US) Individual plan is $0.99 per item and Professional is $39.99/month (US figures). The Amazon.ca Individual per-item fee in CAD: not found.",
+    "source_url": "https://sell.amazon.com/pricing"
+   },
+   {
+    "fact": "Amazon.ca Tools and Home Improvement referral fee: 15% with a CAD $0.40 minimum (search-result summary from referral-fee guides; official page blocked).",
+    "source_url": "https://feedvisor.com/university/referral-fee/"
+   },
+   {
+    "fact": "Amazon Device Accessories referral fee can be as high as 45%, the highest category (search snippet).",
+    "source_url": "https://eightx.co/blog/average-amazon-referral-fee-by-category"
+   },
+   {
+    "fact": "Amazon announced no general increase to Canada referral fees or base FBA fulfilment fees for 2026 (the official Seller Central Canada summary page title '2026 Amazon.ca CA referral and FBA fee changes summary' appeared in results; snippet via third party).",
+    "source_url": "https://www.efulfillmentservice.com/2026/04/amazon-2026-fba-fee-changes-what-sellers-need-to-know/"
+   },
+   {
+    "fact": "Amazon.ca FBA per-unit fulfilment fee table in CAD by size tier: not found (sellercentral.amazon.ca/help/hub/reference/external/GABBX6GZPA8MSZGW was blocked).",
+    "source_url": "https://sellercentral.amazon.ca/help/hub/reference/external/GABBX6GZPA8MSZGW"
+   },
+   {
+    "fact": "eBay.ca final value fee percentage and per-order fee for 2026: not found (the ebay.ca fee page was blocked and the search budget ran out).",
+    "source_url": "https://www.ebay.ca/help/account/regulatory/sales-reporting/canada-digital-sales-reporting?id=5476"
+   },
+   {
+    "fact": "Liquidation Prime (Canada) auction marketplace: starting bids 'begin at just $1 for entire pallets' (snippet; buyer premium, fees and taxes not found).",
+    "source_url": "https://liquidationprime.ca/"
+   }
+  ],
+  "cost_facts": [
+   {
+    "fact": "3.5% fuel and logistics surcharge applied to all FBA fulfilment fees in the US and Canada from April 17, 2026. It is 3.5% of the FBA fee, not of the sale price.",
+    "source_url": "https://www.efulfillmentservice.com/2026/04/amazon-2026-fba-fee-changes-what-sellers-need-to-know/"
+   },
+   {
+    "fact": "Amazon Canada holiday peak FBA fee increase averages about CAD $0.39 per unit and is unchanged from the prior year (snippet). Exact 2026 peak date range: not found.",
+    "source_url": "https://amzprep.com/holiday-peak-fulfillment-fees/"
+   },
+   {
+    "fact": "Variable coupon fees capped at CAD 500 per coupon effective November 5, 2025. Amazon also launched an FBA Liquidations program for excess and returned inventory (snippet).",
+    "source_url": "https://www.efulfillmentservice.com/2026/04/amazon-2026-fba-fee-changes-what-sellers-need-to-know/"
+   },
+   {
+    "fact": "Amazon liquidation pallets 'typically range between $200 and $800 per pallet' (search-result summary. Currency and country not stated, likely US-generic, so treat as a rough indicator only).",
+    "source_url": "https://www.yelp.com/search?find_desc=Liquidation+Pallets&find_loc=Ontario%2C+CA"
+   },
+   {
+    "fact": "Cross-border arbitrage landed cost = buy price + shipping to prep centre + prep fees + shipping to FBA + Amazon referral and FBA fees. Requires Professional accounts on both Amazon.com and Amazon.ca, a prep centre, and a scanning tool (industry vendor blog; no CAD figures given).",
+    "source_url": "https://arbitragecyclops.com/blog/cross-border-arbitrage-canada-us/"
+   },
+   {
+    "fact": "B-Stock buyer premium, deposit and freight costs for Canadian auctions: not found (bstock.com blocked).",
+    "source_url": "https://bstock.com/auctions/canada/"
+   }
+  ],
+  "earnings_evidence": [
+   {
+    "claim": "Furniture flipper Claire McCann reports over $35,000 profit in 15 months from Facebook Marketplace furniture flipping. ESTIMATE: 35,000 / 15 = $2,333/month average profit. Currency and country not confirmed in the snippet.",
+    "source_url": "https://www.goodreads.com/author_blog_posts/24409809-35k-profit-in-15-months-via-facebook-marketplace",
+    "kind": "community"
+   },
+   {
+    "claim": "MooseMoney (Canadian personal-finance site) spent 20 hours flipping on Facebook Marketplace in Canada. Consoles, keyboards and controllers moved fast when priced right, and buying bundles and splitting them boosted profit. Total dollar profit not visible in the snippet.",
+    "source_url": "https://www.moosemoney.com/best-items-to-flip-on-marketplace/",
+    "kind": "community"
+   },
+   {
+    "claim": "Marketing-style claims that people make '$500, $1,000, or more every month' from Marketplace flipping; 'not passive income, as messaging alone can take hours'; expect '3-5 months of complete honest disciplined hard work'.",
+    "source_url": "https://sleeplessyogi.substack.com/p/mme-016-0-to-100-by-flipping-items",
+    "kind": "community"
+   },
+   {
+    "claim": "A flipping-guide creator claims over $40,000 profit with $0 ad spend. It is a self-promotional Gumroad product and unverifiable.",
+    "source_url": "https://daddysidehustle.gumroad.com/l/freeadsforflippers",
+    "kind": "community"
+   },
+   {
+    "claim": "Cross-border US/Canada Amazon arbitrage described as offering 'strong margins, repeatable deal flow' but with customs, logistics and multi-currency complexity and capital tied up in transit. No numeric margin was given. The source sells arbitrage software.",
+    "source_url": "https://arbitragecyclops.com/blog/cross-border-arbitrage-canada-us/",
+    "kind": "industry"
+   },
+   {
+    "claim": "No official or statistical source on typical Canadian reseller income was found.",
+    "source_url": "https://www.canada.ca/en/revenue-agency/programs/about-canada-revenue-agency-cra/compliance/reporting-rules-digital-platforms.html",
+    "kind": "estimate"
+   }
+  ],
+  "path_to_5k_math": "All numbers below are ESTIMATES. The only sourced inputs are the fees and the one anecdote. Per-flip profit and margins are HYPOTHETICAL because no sourced average was found.\n\n(A) Local flipping on FB Marketplace and Kijiji. Best sourced anecdote: ESTIMATE $35,000 / 15 months = $2,333/month. Reaching $5,000 needs ESTIMATE 5,000 / 2,333 = 2.14x that person's average.\n- At a HYPOTHETICAL $60 average net profit per flip: ESTIMATE 5,000 / 60 = 84 flips/month, which is 84 / 30 = 2.8 sales/day and about 168 buy-plus-sell meetups/month.\n- At a HYPOTHETICAL $150/flip (furniture or tool lots, needs a vehicle): ESTIMATE 5,000 / 150 = 34 flips/month.\n- Working capital at a HYPOTHETICAL $100 average buy cost and 2-week turnover: ESTIMATE 84 x 100 / 2 = $4,200.\n\n(B) Amazon.ca online arbitrage in Tools (15% referral, $29.99/month plan). At a HYPOTHETICAL 20% net margin after all fees, required revenue is ESTIMATE (5,000 + 29.99) / 0.20 = $25,150/month.\n- Referral fees on that revenue: ESTIMATE 0.15 x 25,150 = $3,773.\n- If FBA, prep and inbound shipping cost a HYPOTHETICAL 15% more (about $3,773), cost of goods is about ESTIMATE 25,150 - 3,773 - 3,773 - 5,030 = $12,574/month.\n- At a HYPOTHETICAL 6-week cash cycle, capital tied up is about ESTIMATE 12,574 x 1.5 = $18,860.\n- GST/HST: ESTIMATE 30,000 / 25,150 = 1.19 months of sales passes the $30,000 small-supplier threshold, so registration is required in month 2.\n\n(C) Pallets at the $200–$800 snippet range. With a HYPOTHETICAL 2x gross resale recovery on a $500 pallet, profit is $500 before transport, fees, unsellable items and labour. So 5,000 / 500 = 10 pallets/month = $5,000/month buy-in, and hundreds of individual items to test, photograph, list and sell.\n\nConclusion (ESTIMATE): each path needs roughly $4k–$19k of working capital and/or 80+ transactions a month, with no sourced evidence that a beginner reaches that within 60 days.",
+  "startup_cost_cad": "ESTIMATE, varies by path:\n- Local flipping: $0 platform fees for FB Marketplace and Kijiji basic listings (fee terms not verified; not found), plus inventory of $300–$4,200 (HYPOTHETICAL, see math), plus a vehicle for anything bulky (owner's own or rental; cost not found).\n- Amazon.ca arbitrage: $29.99/month Professional plan (sourced), plus inventory of roughly $5k–$19k to reach $5k/month net (HYPOTHETICAL), plus scanning/repricing software (price not found), plus prep and shipping (not found).\n- Pallets: $1 starting bids up to $200–$800+ per pallet (snippets), plus buyer premium and freight (not found), plus storage space.\nRealistic minimum to start testing: ESTIMATE about $500–$1,000 for local flipping only.",
+  "requirements": [
+   "Capital: working inventory money. ESTIMATE $500 minimum for local flipping; ESTIMATE $4k–$19k to reach $5k/month net (see math). Savings unknown, so this is a gating question for the owner.",
+   "Vehicle: effectively required for furniture, large tools, pallets and warehouse pickups (Mississauga liquidation warehouses and B-Stock/Liquidation Prime pickups). Small electronics and hand tools can be done by transit at lower volume.",
+   "Storage space: a garage, basement or locker for inventory and pallets. Condo/apartment rules may prohibit it (not researched).",
+   "Physical labour: lifting furniture and pallets, repeated meetups, testing and cleaning items.",
+   "English level: functional conversational English for negotiation and messaging on FB Marketplace and Kijiji. Korean-language community boards could supplement this (not researched). Amazon Seller Central is in English and French (not verified).",
+   "Amazon.ca path: government ID, bank account and credit card for Seller Central identity verification; Professional plan at $29.99/month; ungating invoices from authorized distributors for brands like DeWalt and Milwaukee (retail receipts are generally not accepted per ungating guides — see brand-gating sources).",
+   "SIN and tax records: platforms report sellers passing 30 sales or about $2,800/year to CRA; business income is reported on T2125 (per the northos.ca T2125 guide title).",
+   "Smartphone with camera and data for listings, comps and meetups.",
+   "Time: 40+ hours/week to approach the transaction volumes in the math."
+  ],
+  "regulations": [
+   {
+    "fact": "Reporting Rules for Digital Platform Operators (Part XX of the Income Tax Act, via Bill C-47, Royal Assent June 22, 2023) have applied since January 1, 2024. Platforms collect seller name, address, TIN and total sales proceeds and report them to CRA. The first reports were due January 31, 2025.",
+    "source_url": "https://www.canada.ca/en/revenue-agency/programs/about-canada-revenue-agency-cra/compliance/reporting-rules-digital-platforms.html"
+   },
+   {
+    "fact": "eBay.ca: Canadian residents who sell over $2,800 (USD $2,044) or pass 30 sales transactions in a calendar year have their information reported to CRA. Failing to provide requested information may result in a $500 CRA fine (search-summary wording; exact source sentence not opened).",
+    "source_url": "https://www.ebay.ca/help/account/regulatory/sales-reporting/canada-digital-sales-reporting?id=5476"
+   },
+   {
+    "fact": "A third-party search summary states Facebook Marketplace and Kijiji also report under these rules. This is not confirmed on an official Meta or Kijiji page (not found), especially for cash local-pickup sales.",
+    "source_url": "https://shopfront.app/blog/canada-reseller-tax-guide-2026/"
+   },
+   {
+    "fact": "GST/HST small supplier: $30,000 or less in worldwide taxable revenues over the last four consecutive calendar quarters. If $30,000 is passed in a single quarter, registration takes effect no later than the day of the supply that crossed it, and GST/HST must be charged on that supply. If it is passed over four quarters, the business stops being a small supplier at the end of the month after that quarter. Voluntary registration is allowed.",
+    "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/when-register-charge.html"
+   },
+   {
+    "fact": "CRA audit attention on online sellers (Amazon, Shopify, Etsy, eBay), per the tax-law firm article title 'CRA Targets Online Sellers ... Audits, Tax Risks' (title and snippet only).",
+    "source_url": "https://taxpayer.law/cra-targets-online-sellers/"
+   },
+   {
+    "fact": "Amazon brand gating: restricted brands such as DeWalt and Milwaukee need approval through Seller Central, typically with invoices from the manufacturer or an authorized wholesaler, or a brand authorization letter.",
+    "source_url": "https://www.thesellingguys.com/identifying-amazon-gated-restricted-brands-avoid-suspension/"
+   },
+   {
+    "fact": "Quebec QST, BC PST, Alberta rules, and municipal second-hand-goods licensing (Toronto, Vancouver, Calgary, Ottawa, Montreal): not found in this research. The owner must verify with the province and city before buying and reselling at volume.",
+    "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/when-register-charge.html"
+   },
+   {
+    "fact": "Product-safety and recall rules for reselling used or returned goods (e.g., Canada Consumer Product Safety Act): not verified in this research because egress was blocked. Owner should check Health Canada recall listings before reselling returns.",
+    "source_url": "https://www.cbc.ca/news/canada/toronto/amazon-returns-privacy-1.7048409"
+   }
+  ],
+  "ai_can_build": [
+   "A comp and deal-evaluation spreadsheet or web tool: buy price, sold-comps range, Amazon.ca referral (15% tools, $0.40 minimum), FBA fee input, 3.5% surcharge, GST/HST flag at $30k, and profit/ROI per item",
+   "Listing-copy generator templates for FB Marketplace and Kijiji (English, and Korean for Korean community boards), with title, description, condition checklist and pricing tiers",
+   "Negotiation and reply message templates plus a scam-screening checklist. The human sends them, because the AI cannot post from the owner's accounts",
+   "An inventory and cash-flow tracker: items, cost, list date, sold price, days-to-sell, and running totals of sales count and dollars against the CRA 30-sale and $2,800 platform threshold and the $30k GST/HST threshold",
+   "T2125-ready bookkeeping export: income, cost of goods, fees and mileage categories",
+   "Repurpose the existing Next.js repo into a private 'flip calculator' and inventory dashboard, replacing the broken scraper with manual price entry and saved retailer clearance links",
+   "Google Calendar blocks for pickup and meetup routes and auction close times; Gmail filters and labels for B-Stock and Liquidation Prime notifications",
+   "Research checklists for unknowns: municipal licensing, provincial sales tax, B-Stock buyer requirements"
+  ],
+  "human_must_do": [
+   "Decide how much capital to risk, and provide the vehicle and storage (or rent them)",
+   "Open and verify accounts with ID: Amazon Seller Central, eBay, B-Stock, Liquidation Prime; pay fees; hold bank accounts",
+   "Source inventory in person: curb finds, garage sales, retail clearance aisles, liquidation warehouses and auction pickups",
+   "Post listings and reply to buyers from their own FB Marketplace and Kijiji accounts. The AI cannot post to the owner's accounts",
+   "Meet buyers and sellers, inspect and test items, handle cash or e-transfers safely",
+   "Lift, clean, repair, photograph, pack and ship items; drop off at carriers or prepare FBA shipments",
+   "Apply for Amazon brand and category ungating with qualifying distributor invoices",
+   "Register for GST/HST when required, file taxes, and keep receipts",
+   "Wipe or destroy any customer personal data found in returned-goods pallets (see the CBC report)"
+  ],
+  "seasonality": "Amazon applies holiday peak FBA fees in Canada (about CAD $0.39/unit on average, https://amzprep.com/holiday-peak-fulfillment-fees/), so Amazon treats Q4 as a peak period. Starting in October 2026 means entering Q4 with higher fulfilment costs; exact 2026 peak dates were not found. Holiday demand for consoles, electronics and tools as gifts is plausible but not sourced here. Seasonal effects on FB Marketplace and Kijiji (for example, fewer furniture pickups in winter, or lawn tools selling in spring and snow equipment in fall) were not found in any source; they are unverified assumptions only.",
+  "risks": [
+   "Income shortfall: the best-sourced flipper anecdote works out to about $2,333/month (ESTIMATE), under half the $5,000 target",
+   "Inventory risk: unsold, broken or missing-part items. Liquidation-pallet reviews mention 'only a handful of valuable items'",
+   "Capital lock-up: Amazon FBA and cross-border arbitrage tie up money in transit and intake, which clashes with a 30-day cash need",
+   "Amazon account risk: brand gating (DeWalt and Milwaukee are restricted, with a Canadian seller reporting 5 months of failed DeWalt ungating); suspension risk from IP or authenticity complaints on retail-sourced goods",
+   "Fee creep: 3.5% FBA fuel surcharge since April 17, 2026; peak fees; Device Accessories referral up to 45%",
+   "Privacy and legal exposure: returned-goods pallets in Toronto were found to contain buyers' personal information (CBC)",
+   "Personal safety and scam risk at in-person meetups and with online payment scams (no Canadian scam statistics retrieved; not found)",
+   "Tax: CRA platform reporting past 30 sales or $2,800 means the income will be visible to CRA; at volume, mandatory GST/HST registration after $30,000",
+   "Saturation: many paid 'how to flip' guides on Gumroad target beginners. This is an observation from search results that the niche is heavily marketed, not a measured saturation statistic",
+   "Physical and vehicle dependency: without a vehicle, only small items at lower volume",
+   "Scraper dependency: the owner's price-comparison repo currently produces zero prices, so it gives no deal-finding edge"
+  ],
+  "counter_evidence": [
+   {
+    "fact": "The owner's own scraper: public/cache/index.json has 54 tracked queries and 0 with any price (priceCount 0 for all, checked 2026-09-23). Each store entry is a search link with price 0 and checkManually true, and daily GitHub Actions commits keep producing empty data. Scripts use plain fetch() with a browser User-Agent against walmart.ca, homedepot.ca, rona.ca and others, which are evidently blocked. Local repo evidence, not a web page.",
+    "source_url": "file:///home/user/canadian-tool-deals/public/cache/index.json"
+   },
+   {
+    "fact": "An Amazon.ca Seller Central forum thread, 'Dewalt Brand Ungate in CANADA': a seller reports repeated ungating applications over about five months with no approval and no clear rejection reason. DeWalt is one of the main tool-flip brands.",
+    "source_url": "https://sellercentral.amazon.ca/seller-forums/discussions/t/ca50bc31-2fc3-4a92-8bed-5eb7596c4ff8"
+   },
+   {
+    "fact": "CBC News: products returned to Amazon were found at Toronto liquidation stores along with buyers' personal information. Amazon's liquidator contracts require removing personal info, but it still happened. Article date not visible in the snippet.",
+    "source_url": "https://www.cbc.ca/news/canada/toronto/amazon-returns-privacy-1.7048409"
+   },
+   {
+    "fact": "Liquidation-pallet reviews are mixed; some buyers report 'only a handful of valuable items' in pallets (search summary of review pages).",
+    "source_url": "https://ca.trustpilot.com/categories/pallet_supplier"
+   },
+   {
+    "fact": "Marketplace flipping 'is not passive income, as messaging alone can take hours'; beginners should expect 3–5 months of disciplined work (community newsletter). That conflicts with a 30-day income deadline.",
+    "source_url": "https://sleeplessyogi.substack.com/p/mme-016-0-to-100-by-flipping-items"
+   },
+   {
+    "fact": "Cross-border arbitrage adds customs, logistics and multi-currency complexity, and money stays locked up longer. The vendor itself advises starting small and scaling gradually.",
+    "source_url": "https://arbitragecyclops.com/blog/cross-border-arbitrage-canada-us/"
+   },
+   {
+    "fact": "Many results for 'Facebook Marketplace flipping' are paid Gumroad courses (momhustleclub, daddysidehustle, chicacademy). Earnings claims in this niche are often self-promotional and unverified.",
+    "source_url": "https://momhustleclub.gumroad.com/l/FacebookMarketplace"
+   },
+   {
+    "fact": "Specific Reddit failure stories (r/Flipping, r/FulfillmentByAmazon, r/PersonalFinanceCanada): not found. Reddit was blocked and no Reddit threads came up in the searches.",
+    "source_url": "https://old.reddit.com/r/Flipping/"
+   }
+  ],
+  "scores": {
+   "speed": 7,
+   "probability_5k": 2,
+   "capital_light": 4,
+   "ai_leverage": 3,
+   "low_risk": 4
+  },
+  "score_rationale": "Speed 7: local FB Marketplace and Kijiji flipping needs no approvals and pays cash at pickup, so the first sale can plausibly come within days (anecdotal, MooseMoney). The Amazon and pallet paths are slower.\n\nProbability of $5k within 60 days is 2 for three reasons:\n- The only quantified anecdote is about $2,333/month (ESTIMATE).\n- Reaching $5k needs about 84 flips/month at a hypothetical $60/flip, or about $25k/month Amazon revenue with about $19k tied up (ESTIMATE).\n- No source shows beginners reaching this within 60 days; the one community source says expect 3–5 months.\n\nCapital-light 4: local flipping can start with a few hundred dollars, but scaling to $5k net needs roughly $4k–$19k of working capital, often plus a vehicle and storage.\n\nAI leverage 3: the AI can build calculators, listing copy, trackers and bookkeeping. The revenue-generating work — sourcing, negotiating from the owner's accounts, pickups, testing, lifting, shipping and ungating — is human and physical.\n\nLow-risk 4: the risks are dead inventory, pallet duds, Amazon gating and suspension, the FBA surcharge and peak fees, meetup safety and scams, personal-data exposure in returns, and CRA platform reporting plus GST/HST. There are no licensing barriers found, and a cautious small-scale start keeps the downside limited.\n\nScraper: it currently returns 0 prices for all 54 queries. Retailers block plain-fetch scraping, and DeWalt and Milwaukee are gated on Amazon. So the existing repo realistically cannot support tool-flipping arbitrage within 30 days. It is better repurposed as a manual-entry profit calculator and inventory tracker.\n\nConfidence note: scores rest on search snippets only, because full-page fetches were blocked by the network proxy."
+ },
+ "verification": {
+  "checked_claims": [
+   {
+    "claim": "Amazon.ca Professional selling plan costs CAD $29.99/month (the dossier cites sell.amazon.ca/pricing, but only a search summary was seen).",
+    "status": "unverifiable",
+    "correction": "I could not re-open it. sell.amazon.ca was blocked by the egress proxy (EGRESS_BLOCKED) in this session too, and the session's web-search budget is used up (200 of 200 calls). The dossier's own unresolved conflict still stands: an Amazon.ca forum thread reports $39.99 being charged. The figure should stay a single-source search snippet until the owner sees the price on the sign-up screen. The Amazon.ca Individual per-item fee is still not found.",
+    "source_url": "https://sell.amazon.ca/pricing"
+   },
+   {
+    "claim": "Amazon.ca Tools and Home Improvement referral fee is 15% with a CAD $0.40 minimum.",
+    "status": "unverifiable",
+    "correction": "The cited source is a third-party US-oriented guide (feedvisor.com), not Amazon.ca's fee schedule, and it was blocked (EGRESS_BLOCKED) when I tried to open it. No Canadian primary source confirms the 15% or the $0.40 CAD minimum. Treat both as unverified inputs in any calculator.",
+    "source_url": "https://feedvisor.com/university/referral-fee/"
+   },
+   {
+    "claim": "A 3.5% fuel and logistics surcharge has applied to all FBA fulfilment fees in the US and Canada since April 17, 2026, and Amazon announced no general increase to Canada referral or FBA fees for 2026.",
+    "status": "unverifiable",
+    "correction": "The page was blocked (EGRESS_BLOCKED). Both statements come from one third-party fulfilment vendor. The dossier also contradicts itself: a 3.5% surcharge on every FBA fee is an effective fee increase, so 'no general increase for 2026' cannot be taken at face value. Both need checking in Seller Central Canada fee announcements before any Amazon math is trusted.",
+    "source_url": "https://www.efulfillmentservice.com/2026/04/amazon-2026-fba-fee-changes-what-sellers-need-to-know/"
+   },
+   {
+    "claim": "The best documented Canadian-style earnings anecdote is $35,000 profit in 15 months from FB Marketplace furniture flipping (ESTIMATE: $2,333/month).",
+    "status": "corrected",
+    "correction": "The page was blocked (EGRESS_BLOCKED). The dossier's own evidence section says the currency and country are NOT confirmed, so calling it 'Canadian-style' in the summary overstates it. The URL path (goodreads.com/author_blog_posts/...) shows it is a book author's promotional blog post, not independent reporting. It is also a furniture flip, which needs a vehicle, and the hours worked are unknown. Correct reading: one unverified, self-reported, non-Canadian-confirmed anecdote. It is not a benchmark. The $2,333/month arithmetic (35,000 / 15) is correct.",
+    "source_url": "https://www.goodreads.com/author_blog_posts/24409809-35k-profit-in-15-months-via-facebook-marketplace"
+   },
+   {
+    "claim": "MooseMoney tested FB Marketplace flipping in Canada for 20 hours; consoles, keyboards and controllers 'move fast', which supports time-to-first-cash in days.",
+    "status": "unverifiable",
+    "correction": "The page was blocked (EGRESS_BLOCKED). No profit figure or time-to-sale figure was ever extracted, so it cannot support the dossier's speed score of 7. The claim of 'first dollar within 3–10 days' is an unsourced ESTIMATE.",
+    "source_url": "https://www.moosemoney.com/best-items-to-flip-on-marketplace/"
+   },
+   {
+    "claim": "GST/HST small supplier threshold: $30,000 over four consecutive calendar quarters, or within a single quarter; at about $25,150/month of Amazon revenue, registration is required in month 2.",
+    "status": "unverifiable",
+    "correction": "canada.ca was blocked (EGRESS_BLOCKED), so I could not re-open it. The dossier's arithmetic is internally correct (ESTIMATE: 30,000 / 25,150 = 1.19 months). One thing it missed: if the $30,000 is passed within a single calendar quarter (which happens at $25k/month), the dossier's own quoted rule makes registration effective on the day of the supply that crosses the threshold. That day falls in month 2, not after it, and GST/HST is owed on that sale. One interaction was not researched: Amazon.ca's role as a platform operator collecting GST/HST for non-registered sellers. Status: not found.",
+    "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/when-register-charge.html"
+   },
+   {
+    "claim": "eBay.ca and other platforms report sellers to CRA once they pass 30 sales or about CAD $2,800 a year, with a possible $500 fine for failing to provide information; FB Marketplace and Kijiji also report.",
+    "status": "unverifiable",
+    "correction": "The ebay.ca and canada.ca pages were blocked, and search is exhausted. The FB Marketplace and Kijiji part rests only on a third-party blog (shopfront.app). Cash or e-Transfer local-pickup sales do not pass through those platforms' payment systems, so they may not be reportable at all. That part is unverified and must not be presented as fact.",
+    "source_url": "https://www.ebay.ca/help/account/regulatory/sales-reporting/canada-digital-sales-reporting?id=5476"
+   },
+   {
+    "claim": "Amazon liquidation pallets typically cost $200–$800 each.",
+    "status": "unverifiable",
+    "correction": "The cited 'source' is a Yelp search-results URL for Ontario liquidation pallets. A search page is not a source for a price range, and the currency and country are unknown. Treat it as unsourced. The pallet-path math in path_to_5k (10 pallets = $5,000 buy-in) therefore rests on no evidence.",
+    "source_url": "https://www.yelp.com/search?find_desc=Liquidation+Pallets&find_loc=Ontario%2C+CA"
+   },
+   {
+    "claim": "The owner's scraper returns 0 prices for all 54 queries, so it cannot support tool arbitrage.",
+    "status": "confirmed",
+    "correction": "Confirmed locally on 2026-09-23. public/cache/index.json has 54 entries and 0 with priceCount > 0. 60 of 60 per-query cache files contain price 0 / checkManually entries. scripts/scrape.mjs uses plain fetch() with a spoofed Chrome User-Agent (line 99) and falls back to price:0 checkManually search links (line 343). The problem is older than the dossier shows: git history has index.json at 54 queries and 0 priced on 2026-08-05, 2026-08-25, 2026-09-14 and 2026-09-23. So it has produced no prices for at least about 7 weeks of daily 'update price cache' commits.",
+    "source_url": "file:///home/user/canadian-tool-deals/public/cache/index.json"
+   },
+   {
+    "claim": "CBC reported returned Amazon goods in Toronto liquidation stores carrying buyers' personal information.",
+    "status": "unverifiable",
+    "correction": "cbc.ca was blocked, and the article date was never seen. ESTIMATE, not verified: CBC story IDs in the 1.70xxxxx range usually date from around late 2023. If so, this is roughly 3 years old and should not be presented as a current condition.",
+    "source_url": "https://www.cbc.ca/news/canada/toronto/amazon-returns-privacy-1.7048409"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Local repo evidence: the tool-price scraper has produced zero prices on every snapshot I sampled from 2026-08-05 to 2026-09-23 (54 queries, 0 priced). The daily GitHub Actions 'chore: update price cache' commits are committing empty data, not deal signals. Any tool-flip strategy that relies on this repo for finding deals has no data to work from today.",
+    "source_url": "file:///home/user/canadian-tool-deals/scripts/scrape.mjs"
+   },
+   {
+    "fact": "The main earnings anecdote is hosted on a book author's blog (goodreads.com/author_blog_posts), not in independent reporting. Its currency, country and hours are unconfirmed. So the dossier has zero verified Canadian earnings data points for flipping.",
+    "source_url": "https://www.goodreads.com/author_blog_posts/24409809-35k-profit-in-15-months-via-facebook-marketplace"
+   },
+   {
+    "fact": "The dossier's own community source says beginners should expect 3–5 months of 'complete honest disciplined hard work' and that messaging alone takes hours. That directly contradicts a 30-day income need and the speed score of 7 (snippet only; page not re-opened, search budget exhausted).",
+    "source_url": "https://sleeplessyogi.substack.com/p/mme-016-0-to-100-by-flipping-items"
+   },
+   {
+    "fact": "The one Amazon.ca forum data point on DeWalt, the obvious tool-flip brand, is 5 months of failed ungating. That is the reverse of a 30-day timeline (snippet only; not re-opened).",
+    "source_url": "https://sellercentral.amazon.ca/seller-forums/discussions/t/ca50bc31-2fc3-4a92-8bed-5eb7596c4ff8"
+   },
+   {
+    "fact": "Fresh counter-evidence searches were not possible in this session. The WebSearch budget is exhausted (200 of 200), and WebFetch was EGRESS_BLOCKED for sell.amazon.ca, canada.ca, efulfillmentservice.com, moosemoney.com, goodreads.com and feedvisor.com. Reddit failure threads, FB Marketplace commerce-account restriction reports and Canadian scam statistics all remain not found. This absence is not evidence of low risk.",
+    "source_url": "file:///root/.ccr/README.md"
+   }
+  ],
+  "hidden_costs_or_blockers": [
+   "EI interaction (missing from the dossier; not verified this session): the owner is losing a job next week and may apply for Employment Insurance. Self-employment or flipping income usually has to be declared on EI reports and may reduce or disqualify benefits if the self-employment is judged full-time. The owner must check the EI self-employment rules on canada.ca before scaling, because this could cost more than the flipping earns.",
+   "Evidence quality: the whole dossier rests on search snippets. None of the core Amazon.ca fee figures (plan fee, 15% referral, $0.40 minimum, FBA table, 3.5% surcharge, peak fee) was confirmed on a primary page, in the dossier or in this re-check. Any calculator the AI builds must leave these as editable inputs, not hard-coded 'facts'.",
+   "The dossier's 'no 2026 fee increase' statement conflicts with the 3.5% FBA surcharge it also reports. The Amazon math may understate fees.",
+   "Amazon retail-arbitrage authenticity risk: retail receipts are generally not accepted for ungating, per the dossier's own sources. The same weakness exposes retail-sourced tool listings to authenticity complaints and account suspension, which can freeze the payout balance. Payout timing and hold periods remain not found.",
+   "Amazon seller identity verification time: not found. It could consume a large part of the 30-day window before a single sale.",
+   "Local cash sales: the dossier assumes FB Marketplace and Kijiji report to CRA, but this is unverified. Either way, income is taxable. Records must be kept for T2125, including mileage and vehicle costs, which the dossier never costs out.",
+   "Vehicle cost (fuel, insurance, wear) is not quantified anywhere, yet it is required for the furniture, pallet and warehouse paths. The pallet path also needs storage space, and condo or lease rules were not researched.",
+   "Municipal licensing for second-hand goods dealing in Toronto, Vancouver, Calgary, Ottawa and Montreal: not found. Volume reselling from home could trigger licence or zoning issues, so check before scaling.",
+   "Seasonality trap (unsourced): entering in October means buying inventory at Q4 prices and paying FBA peak fees, with a possible January demand drop. Inventory unsold by January could be stranded capital.",
+   "Product-safety and recall duties for resold returns or used tools (e.g., battery packs, chargers): not verified. Selling a recalled item carries legal exposure.",
+   "Working capital: ESTIMATE $4k–$19k to approach $5k/month net. For someone who just lost their job, that is money they may need for rent, so the downside hits their survival fund."
+  ],
+  "adjusted_scores": {
+   "speed": 6,
+   "probability_5k": 1,
+   "capital_light": 3,
+   "ai_leverage": 2,
+   "low_risk": 3
+  },
+  "verdict": "DOWNGRADE, and do not use it as the primary $5k/month plan. Keep it only as an optional, small, cash-only bridge: local FB Marketplace and Kijiji flips of small items the owner already has or can buy cheaply, capped at a few hundred dollars of capital. Reasons:\n(1) The re-check could not confirm a single external claim on a primary page. Egress was blocked and the search budget is exhausted, so every fee and earnings figure stays unverified.\n(2) The only quantified earnings anecdote is self-promotional, not confirmed as Canadian, and even at face value is under half the target (ESTIMATE $2,333/month).\n(3) The Amazon.ca tools path is blocked in practice within 30 days: DeWalt and Milwaukee gating (5 months of failed ungating reported), about $19k of capital tied up (ESTIMATE), and account and suspension risk.\n(4) The owner's scraper has produced zero prices for at least 7 weeks (confirmed locally), so it gives no deal-finding edge.\n(5) The dossier missed a material risk: self-employment income can reduce or disqualify EI benefits the owner is likely about to claim.\nProbability of averaging CAD $5,000/month net within about 60 days: very low (1 of 10). The AI's contribution is limited to calculators, templates and trackers, because the revenue-driving work is physical and done from the owner's own accounts."
+ }
+}

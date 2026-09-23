@@ -1,0 +1,345 @@
+{
+ "dossier": {
+  "candidate": "Cleaning services (residential, move-in/move-out, short-term rental turnover, post-construction). Primary market Greater Toronto Area, with notes on Vancouver, Calgary, Ottawa and Montreal where evidence was found.",
+  "summary": "IMPORTANT, READ FIRST (how this was researched): I ran 10 WebSearch calls. Only 7 returned results; the other 3 were refused because the session-wide limit of 200 searches was already used up. The unanswered ones were Airbnb turnover rates, post-construction rates, and insurance/bonding cost. WebFetch was blocked by the network egress proxy on every domain I tried: homestars.com, hellamaid.ca, urbantasker.com, toronto.ca, www2.gov.bc.ca, canada.ca, nationalobserver.com, jobbank.gc.ca, support.taskrabbit.com and reddit.com. So every fact below comes from search-result titles and summaries, not from pages I opened. Where a summary mixed several pages, I say that I could not confirm which page a number came from. Please re-check prices before publishing them.\n\nFINDINGS:\n(1) Pricing. GTA pricing is well documented by 2026 industry blogs:\n- $35–$65 per hour per cleaner; reputable companies mostly charge $45–$55.\n- Registered companies charge $40–$90 per hour.\n- Independent cleaners are reported at $15–$30 per hour. This shows strong low-price competition.\n- TaskRabbit Toronto lists one-time cleaning from $35/hr.\n- Move-out flat rates range from \"from $185\" at one firm to $325–$559 + HST by bedroom count at another.\n\n(2) Platforms. TaskRabbit charges Taskers a one-time $25 registration fee, and clients pay the service fee. In Canada you must be 19 or older. Jiffy's commission is reported at 12–18% and is not fixed by contract. Some Jiffy Pro user reviews say 25–30%. Jiffy pays on the Friday after the week the job was done.\n\n(3) Short-term rental (STR) rules reduce turnover demand in the two biggest markets:\n- Toronto allows STRs only in the host's principal residence, and entire-home rentals are capped at 180 nights a year. The 2026 registration fee is $375 new / $390 renewal (from third-party guides).\n- BC's principal-residence requirement took effect May 1, 2024. From May 2024 to Feb 2025, entire-home listings fell 22% in Vancouver, 24% in Victoria and 31% in Kelowna (ministry figures reported by the National Observer).\n\n(4) Tax. The CRA small-supplier threshold is $30,000 over four consecutive calendar quarters. At the revenue needed for $5k net, the owner would have to register for GST/HST in roughly month 5, which is outside the 60-day window.\n\n(5) Not found in this session: supply costs, liability insurance and bonding premiums, post-construction rates, Airbnb per-turnover rates, earnings reports from solo cleaners, documented failure stories (apart from the Jiffy commission complaints), and any pricing or regulation data for Calgary, Ottawa or Montreal.\n\nVERDICT: This is one of the fastest and cheapest ways to get to first revenue, if the owner can do full-time physical work. It is a labour business: $5k net means about 26–41 billable hours a week (see the math section). The owner would have to reach that from zero reviews, against well-established insured companies and low-priced independents. Averaging $5k net over the first 60 days is unlikely. Reaching a $5k/month run rate by month 2–3 is possible for a fit, English-capable owner, ideally with a vehicle. The best-supported services are move-out/move-in and deep cleans at flat rates, plus recurring residential clients. STR turnover should be a secondary line in Toronto and Vancouver because of the rules above.",
+  "time_to_first_revenue": "ESTIMATE: 1–3 weeks from starting, if the owner is physically available.\n\nBASIS:\n- (a) TaskRabbit runs an active Toronto cleaning category, listed \"from $35 an hour\" for one-time cleaning (https://www.taskrabbit.ca/locations/toronto/one-time). Taskers pay a one-time $25 registration fee, and paying it does not guarantee acceptance (https://support.taskrabbit.com/hc/en-ca/articles/360032936511-What-s-the-Registration-Fee; summary only, page fetch blocked). How long approval or onboarding takes: NOT FOUND.\n- (b) Jiffy pays pros on the Friday after the week the job was done (search summary for \"Jiffy app cleaning pro commission fees Canada\"; sources listed included https://urbantasker.com/blog/is-jiffy-on-demand-app-good-for-contractors and https://www.ratehub.ca/blog/review-jiffy-on-demand-home-service-app/). ESTIMATE: payout lags the job by 5 days (job on Sunday, paid the next Friday) to 11 days (job on Monday, paid Friday of the following week). Jiffy pro approval time: NOT FOUND.\n- (c) Direct clients from Kijiji or Facebook Marketplace can in principle pay on the day of the job. I did not verify any platform rules or payment norms for these channels, and time to a first Kijiji/Facebook booking was NOT FOUND.\n\nOctober timing note: I found no source on when move-outs peak in the month (e.g. month-end clustering in Toronto), so that is NOT FOUND.",
+  "pricing_facts": [
+   {
+    "fact": "Toronto 2026: the typical rate is $35–$65 per hour per cleaner, and most reputable companies charge $45–$55/hr. (From a search-result summary; the result set included this Hellamaid 2026 article, HomeStars, MeshMaids and others. I could not confirm which page the figure came from, and the page fetch was blocked.)",
+    "source_url": "https://hellamaid.ca/blog/toronto-hourly-vs-flat-rate-cleaning-prices-in-2026/"
+   },
+   {
+    "fact": "Registered cleaning companies charge $40–$90/hr and include insurance, vetted staff and backup cleaners. Independent cleaners typically charge $15–$30/hr. (Search-result summary for Toronto 2026 cleaning prices; which page it came from is not confirmed.)",
+    "source_url": "https://meshmaids.ca/blog/how-much-house-cleaning-cost-in-toronto/"
+   },
+   {
+    "fact": "Hourly house-cleaning rates in Toronto and Vancouver commonly run $85–$125, versus $65–$90 in mid-sized cities such as Halifax, Winnipeg and Regina. (Search-result summary. It is unclear whether this is per cleaner or per team, and whether it came from the HomeStars 2026 price guide; the page fetch was blocked.)",
+    "source_url": "https://www.homestars.com/cleaning/price-guides/house-apartment-cleaning-cost"
+   },
+   {
+    "fact": "A standard three-bedroom home in Toronto costs roughly $150–$300 to clean (search-result summary, 2026 Toronto price guides).",
+    "source_url": "https://www.cqdnewgen.ai/blog/how-much-does-a-house-cleaner-cost-in-toronto-in-2026-real-cad-rates-how-to-hire"
+   },
+   {
+    "fact": "Move-out flat rates at 'one major Toronto cleaning service': studio/1BR $325 + HST, 2BR $365, 3BR $443, 4BR $508, 5BR $559 + HST. (Search-result summary; the result set included the Master Maid price list. Attribution is not confirmed.)",
+    "source_url": "https://mastermaid.ca/prices/"
+   },
+   {
+    "fact": "A Toronto competitor advertises 'Move Out Cleaning in Toronto | From $185 Fixed' (page title seen in search results).",
+    "source_url": "https://anyclean.ca/move-out-cleaning-toronto/"
+   },
+   {
+    "fact": "A standard flat-rate clean for a condo or small apartment is often $165–$250; a larger home or a deep clean is $250–$400+ (2025 Toronto flat-vs-hourly article, search summary).",
+    "source_url": "https://www.itsglocleaning.com/post/how-much-does-a-home-cleaning-service-cost-in-toronto"
+   },
+   {
+    "fact": "Apartment cleaning in Toronto typically costs $100–$250, more for deep cleaning and move-in/move-out (search summary).",
+    "source_url": "https://nowitsclean.ca/blog/apartment-cleaning-cost/"
+   },
+   {
+    "fact": "Rush jobs (within 24 hours, on weekends or on statutory holidays) often carry a 10–20% premium. Downtown Toronto jobs can include paid parking and extra time moving through condo buildings (elevators, key rules). A property with heavy grease, pet hair and odours can be quoted about $180 higher (2026 article, search summary).",
+    "source_url": "https://tidyuphandycrew.ca/2026/02/23/what-affects-move-out-cleaning-cost-in-toronto/"
+   },
+   {
+    "fact": "TaskRabbit Toronto: house cleaning prices begin at $40, and one-time cleaning starts at $35/hr (search summary of TaskRabbit Canada location pages).",
+    "source_url": "https://www.taskrabbit.ca/locations/toronto/one-time"
+   },
+   {
+    "fact": "Airbnb/STR turnover per-clean rates in Toronto: NOT FOUND (search refused because the session search limit was reached).",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Post-construction cleaning rates (per sq ft or per job) in the GTA: NOT FOUND (search refused because the session search limit was reached).",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Calgary, Ottawa and Montreal cleaning rates: NOT FOUND in this session.",
+    "source_url": "not found"
+   }
+  ],
+  "cost_facts": [
+   {
+    "fact": "TaskRabbit Canada: one-time, non-refundable $25 Tasker registration fee, charged only if registration is processed. Paying it does not guarantee you will become a Tasker. (Search summary of TaskRabbit support page.)",
+    "source_url": "https://support.taskrabbit.com/hc/en-ca/articles/360032936511-What-s-the-Registration-Fee"
+   },
+   {
+    "fact": "TaskRabbit: clients pay a Taskrabbit Service Fee on top of the Tasker's rate (a percentage of the hourly rate). Apart from the registration fee, all fees are charged to clients, not Taskers. (Search summary; the exact client fee percentage was NOT FOUND.)",
+    "source_url": "https://support.taskrabbit.com/hc/en-us/articles/46260411872155-What-s-the-Taskrabbit-Service-Fee"
+   },
+   {
+    "fact": "Jiffy takes a reported 12–18% commission from the consumer's payment. The commission is reportedly not contractually set, so it can vary. (Search-result summary; the result set included UrbanTasker, SideHusl and Ratehub, and attribution is not confirmed.)",
+    "source_url": "https://urbantasker.com/blog/is-jiffy-on-demand-app-good-for-contractors"
+   },
+   {
+    "fact": "Downtown Toronto jobs can involve paid parking fees (a hidden transport cost).",
+    "source_url": "https://tidyuphandycrew.ca/2026/02/23/what-affects-move-out-cleaning-cost-in-toronto/"
+   },
+   {
+    "fact": "GST/HST: once taxable revenue exceeds $30,000 in a single calendar quarter or over four consecutive calendar quarters, you must register and charge GST/HST. Registration is due within 29 days of the effective date. This is an added price or margin cost once crossed. (Search summary of CRA pages.)",
+    "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/when-register-charge.html"
+   },
+   {
+    "fact": "Cleaning supplies and equipment (vacuum, chemicals, microfiber, etc.): NOT FOUND (no sourced prices; search limit reached, fetch blocked).",
+    "source_url": "not found"
+   },
+   {
+    "fact": "General liability insurance and bonding premiums for a Canadian sole-proprietor cleaner: NOT FOUND (search refused because the session search limit was reached).",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Ontario business-name registration fee and WSIB obligations for cleaning sole proprietors or helpers: NOT FOUND in this session.",
+    "source_url": "not found"
+   }
+  ],
+  "earnings_evidence": [
+   {
+    "claim": "Company-side rates in Toronto are $40–$90/hr for registered companies, versus $15–$30/hr for independent cleaners. A solo newcomer without insurance or reviews would likely be benchmarked against the lower band. (Marketing/industry content from cleaning-company blogs, which have a commercial bias.)",
+    "source_url": "https://meshmaids.ca/blog/how-much-house-cleaning-cost-in-toronto/",
+    "kind": "industry"
+   },
+   {
+    "claim": "TaskRabbit Toronto one-time cleaning is listed from $35/hr. Because client service fees are charged to the client, the Tasker rate is what the Tasker earns (before their own costs).",
+    "source_url": "https://www.taskrabbit.ca/locations/toronto/one-time",
+    "kind": "official"
+   },
+   {
+    "claim": "Jiffy Pro app reviews (anecdotal) complain that 25–30% of income is taken as commission, which is higher than the 12–18% reported elsewhere.",
+    "source_url": "https://apps.apple.com/ca/app/jiffy-pro/id1101378362",
+    "kind": "community"
+   },
+   {
+    "claim": "A 'How much can Canadians make on TaskRabbit?' article exists (FinlyWealth), but I did not see its content or figures, so they are NOT FOUND.",
+    "source_url": "https://www.finlywealth.com/blog/budgeting/task-rabbit",
+    "kind": "industry"
+   },
+   {
+    "claim": "Verified monthly net earnings reports from solo cleaners in Canada (Reddit, YouTube or forums): NOT FOUND in this session (Reddit fetch blocked; search limit reached).",
+    "source_url": "not found",
+    "kind": "community"
+   }
+  ],
+  "path_to_5k_math": "All figures below are ESTIMATES built only from the sourced prices above. Direct costs (supplies, transport, insurance) were NOT FOUND, so they are shown as scenarios.\n\n(A) Hourly work. Hours needed = $5,000 ÷ hourly rate; weeks per month = 4.33.\n- Zero direct costs:\n  - $35/hr (TaskRabbit Toronto starting rate): 5000/35 = 142.9 billable h/month = 33.0 h/week.\n  - $45/hr (low end of the reputable-company band): 5000/45 = 111.1 h/month = 25.7 h/week.\n  - $55/hr: 5000/55 = 90.9 h/month = 21.0 h/week.\n  - $65/hr (top of the per-cleaner range): 5000/65 = 76.9 h/month = 17.8 h/week.\n- 20% direct costs (placeholder share, not a sourced figure). Gross needed = 5000/0.8 = $6,250.\n  - $35/hr: 6250/35 = 178.6 h/month = 41.2 h/week.\n  - $45/hr: 6250/45 = 138.9 h/month = 32.1 h/week.\n  - $55/hr: 6250/55 = 113.6 h/month = 26.2 h/week.\n- Unpaid travel between jobs is extra and was not quantified.\n\n(B) Jiffy commission. At a $45/hr client price, the pro keeps:\n- 12% commission: 45 × 0.88 = $39.60/hr.\n- 18% commission: 45 × 0.82 = $36.90/hr.\n- 30% (reported in reviews): 45 × 0.70 = $31.50/hr.\n- Hours for $5,000 at $36.90/hr: 5000/36.90 = 135.5 h/month = 31.3 h/week.\n\n(C) Move-out flat rates:\n- Jobs for $5,000 gross: at $185 (a competitor's 'from' price), 5000/185 = 27.0 jobs/month = 6.2/week; at $325 (1BR at a major firm), 5000/325 = 15.4 jobs/month = 3.6/week.\n- With 20% costs: 6250/185 = 33.8 jobs/month; 6250/325 = 19.2 jobs/month.\n- Hours per move-out job: NOT FOUND, so I cannot convert jobs into hours.\n\n(D) 60-day average. Month 1 starts from zero clients and zero reviews. If month 1 nets $2,000 (illustrative placeholder, not sourced), month 2 would need 10000 − 2000 = $8,000 net to average $5k. At $45/hr with no costs that is 8000/45 = 177.8 h = 41.1 h/week. That is why the 60-day average is unlikely, even though a $5k run rate by month 2–3 is plausible.\n\n(E) HST trigger. At $6,250 gross per month, cumulative revenue reaches $30,000 after 30000/6250 = 4.8 months. After that the owner must register and charge GST/HST, or absorb it.\n\n(F) Scaling past what one person's labour can earn needs helpers or subcontractors. Employment standards, WSIB and payroll obligations were NOT researched (NOT FOUND).",
+  "startup_cost_cad": "Sourced minimum: $25 (TaskRabbit Tasker registration fee, https://support.taskrabbit.com/hc/en-ca/articles/360032936511-What-s-the-Registration-Fee).\n\nEverything else is NOT FOUND in this session:\n- supplies and equipment (vacuum, chemicals, microfiber, mops, caddy)\n- general liability insurance or bonding premium\n- business-name registration\n- any vehicle or transit cost\n- phone/data plan\n\nJiffy pros pay no upfront fee in the sourced material; Jiffy's commission is taken from job payments (12–18% reported). Get real quotes (retail supply prices and an insurance quote) before committing. No capital figure is asserted here, because none was sourced.",
+  "requirements": [
+   "PHYSICAL LABOUR: required and central. $5k net takes roughly 21–41 billable hours a week of standing, bending, scrubbing and carrying equipment, depending on price and costs (ESTIMATE; see the math section). The owner does all the cleaning personally unless they hire.",
+   "AGE: 19 or older to be a TaskRabbit Tasker in Canada (https://www.taskrabbit.ca/locations/toronto/house-cleaning, per search summary).",
+   "ENGLISH: functional English is needed for platform messaging, quotes, reviews and handling complaints on TaskRabbit/Jiffy. A Korean-speaking client niche (Korean community and realtors) is possible but not researched. The level of English needed was not formally sourced.",
+   "VEHICLE: strongly helpful but not strictly required; there is no sourced rule. Downtown jobs involve paid parking (tidyuphandycrew 2026). Carrying a vacuum and chemicals on transit limits jobs per day (judgment, not sourced). Suburban GTA coverage is much easier with a car.",
+   "CAPITAL: small. Supply and insurance costs were NOT FOUND. The $25 TaskRabbit fee is sourced.",
+   "INSURANCE: not legally mandated per any source found. Companies market insurance and bonding as the reason they charge more than independents, so it is a competitive requirement for property managers, realtors and higher-paying clients. Premiums NOT FOUND.",
+   "LICENCE: no cleaning-specific licence was found in this session (NOT FOUND, not verified as unnecessary). If the owner does STR turnover work, the host (not the cleaner) must be registered with the City of Toronto.",
+   "ACCOUNTS (human only): TaskRabbit/Jiffy pro accounts with ID and possibly background checks (background-check requirement NOT FOUND/unverified), a bank account for payouts and e-Transfer, and GST/HST registration once over the $30k threshold.",
+   "SCHEDULE: availability on evenings and weekends and at month-end for move-outs (demand timing NOT FOUND/unverified)."
+  ],
+  "regulations": [
+   {
+    "fact": "Toronto: short-term rentals are allowed only in the operator's principal residence (where they live and use for bills, taxes and government ID). Entire-unit rentals are capped at 180 nights per year; room rentals while the host stays in the home have no annual cap. (Third-party 2026 guides and City of Toronto page, search summary.)",
+    "source_url": "https://www.toronto.ca/community-people/housing-shelter/rental-housing-rights-information/short-term-rentals/short-term-rental-operators-hosts/"
+   },
+   {
+    "fact": "Toronto STR registration fee for 2026: $375 new, $390 annual renewal (third-party guide, search summary; not verified on toronto.ca because the fetch was blocked). Active registrations, with address and ward, are published on Toronto Open Data and refreshed daily. This could serve as a lead list of legal STR hosts who need turnover cleaning.",
+    "source_url": "https://www.keycafe.com/s/blog/understanding-torontos-short-term-rental-regulations"
+   },
+   {
+    "fact": "BC Short-Term Rental Accommodations Act: the principal-residence requirement took effect May 1, 2024. In designated municipalities with more than 10,000 people (plus some adjacent communities), STRs of less than 90 days are limited to the host's principal residence plus at most one secondary suite or accessory dwelling unit on the same property. (Search summary of the gov.bc.ca page.)",
+    "source_url": "https://www2.gov.bc.ca/gov/content/housing-tenancy/short-term-rentals/principal-residence-requirement"
+   },
+   {
+    "fact": "BC impact, May 2024 to Feb 2025: entire-property STR listings fell 31% in Kelowna, 24% in Victoria and 22% in Vancouver (provincial ministry figures reported by Canada's National Observer, April 24, 2025). That means fewer investor-owned units needing turnover cleaning in Metro Vancouver.",
+    "source_url": "https://www.nationalobserver.com/2025/04/24/news/year-after-bcs-short-term-rental-crackdown-has-it-made-housing-cheaper"
+   },
+   {
+    "fact": "GST/HST: a small supplier has $30,000 or less in worldwide taxable supplies in a calendar quarter and over the last four consecutive quarters. Once over, the business must register (within 29 days of the effective date) and charge GST/HST, including on the sale that crossed the threshold. (CRA pages, search summary.)",
+    "source_url": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/2-2/small-suppliers.html"
+   },
+   {
+    "fact": "Calgary, Ottawa and Montreal/Quebec STR rules, Ontario WSIB coverage for cleaning sole proprietors, and municipal business licensing for cleaners: NOT FOUND in this session.",
+    "source_url": "not found"
+   }
+  ],
+  "ai_can_build": [
+   "A one-page bilingual (English/Korean) website or landing page with an instant quote calculator. Flat rates by bedrooms and bathrooms for standard, deep and move-out cleans, plus add-ons (oven, fridge, balcony, inside cabinets) and a rush surcharge of 10–20%, matching sourced market practice.",
+   "A booking request form that creates Google Calendar holds and sends confirmation or quote emails through Gmail drafts, for the owner to approve and send.",
+   "A pricing sheet and job-costing spreadsheet: hours, travel time, supplies used and parking, giving effective $/hr per job, plus a running GST/HST $30k threshold tracker by calendar quarter.",
+   "Kijiji and Facebook Marketplace ad copy in several variants (move-out, deep clean, recurring weekly/biweekly), plus Korean-language versions for community groups. The owner posts them.",
+   "Outreach email templates and lead lists for property managers, realtors (including Korean-speaking realtors in the GTA), condo concierges and small builders (for post-construction work). A lead list of legal Toronto STR hosts from the City's open-data registration dataset. The owner sends the emails.",
+   "Printable move-out and move-in checklists, a deep-clean checklist, an STR turnover checklist with photo proof steps, and before/after photo report templates.",
+   "TaskRabbit and Jiffy profile copy, service descriptions, and a review-request message sequence.",
+   "Invoice and receipt templates (with an HST line ready once registered), a cancellation and lockout policy, and a damage/liability disclaimer draft. A lawyer or insurer should review the disclaimer.",
+   "Google Business Profile description and FAQ copy. The owner must create and verify the profile."
+  ],
+  "human_must_do": [
+   "All physical cleaning work, travel to jobs, and carrying equipment.",
+   "Create and verify accounts that need ID: TaskRabbit ($25 fee), Jiffy Pro, a bank account and e-Transfer, Google Business Profile, and later CRA GST/HST registration.",
+   "Buy supplies and equipment, and get and pay for liability insurance and bonding (costs not found; must get quotes).",
+   "Post ads on Kijiji, Facebook Marketplace and community groups, and send outreach from the owner's own accounts.",
+   "Phone and text conversations with clients, walkthroughs or quotes on site, and handling keys, lockboxes and building access.",
+   "Collect payments, handle disputes and complaints, and ask for reviews in person.",
+   "Decide on the business name, whether to register it, and whether to hire helpers (which brings in employer obligations not researched here)."
+  ],
+  "seasonality": "NOT FOUND in the sourced material; no seasonality data was returned in this session. Sourced timing facts only:\n- Rush, weekend and statutory-holiday jobs carry a 10–20% premium (https://tidyuphandycrew.ca/2026/02/23/what-affects-move-out-cleaning-cost-in-toronto/).\n- Toronto caps entire-home STRs at 180 nights a year, which limits turnovers per listing across the year (https://www.keycafe.com/s/blog/understanding-torontos-short-term-rental-regulations).\n\nUnverified hypotheses to check (NOT facts): move-outs cluster around month-end and the spring/summer moving season; there is extra deep-clean demand before holidays; winter slows STR turnover in Toronto.",
+  "risks": [
+   "Physical injury, strain, or chemical exposure takes the only worker offline, and income drops to zero.",
+   "Damage or theft accusations in clients' homes. Without liability insurance and bonding (premiums not found), one claim could wipe out months of profit. Companies use insurance as the reason they charge more (search summary, meshmaids/hellamaid 2026).",
+   "Price competition from independents at a reported $15–$30/hr and from TaskRabbit's $35/hr floor. It is easy to underprice and end up with an effective hourly rate below target once travel and supplies are counted.",
+   "Platform dependence. Jiffy's commission is reportedly not contractually fixed (12–18% reported, 25–30% in some reviews), payouts are weekly, and ratings and algorithms control who gets jobs.",
+   "Unpaid travel time and GTA parking fees reduce the effective hourly rate (parking is sourced; travel time is not quantified).",
+   "Toronto and BC STR regulations shrink the market for turnover cleaning: principal-residence-only rules, a 180-night cap in Toronto, and BC listing declines of 22–31%.",
+   "Hitting the GST/HST threshold in about month 5 at target revenue (ESTIMATE 4.8 months at $6,250/month). The owner must then charge 'plus HST' or absorb it.",
+   "Cancellations, no-shows, lockouts and last-minute reschedules. No sourced frequency data.",
+   "Income is capped by one person's hours. Growing past about $5k net requires hiring, which brings employer obligations (not researched)."
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Independent cleaners in Toronto reportedly charge only $15–$30/hr, which undercuts newcomers and signals a crowded low end of the market (search summary; page attribution not confirmed).",
+    "source_url": "https://meshmaids.ca/blog/how-much-house-cleaning-cost-in-toronto/"
+   },
+   {
+    "fact": "Established companies differentiate on insurance, vetted and trained staff, and backup cleaners, advantages a solo newcomer lacks at launch (search summary of 2026 Toronto price guides).",
+    "source_url": "https://hellamaid.ca/blog/toronto-hourly-vs-flat-rate-cleaning-prices-in-2026/"
+   },
+   {
+    "fact": "Jiffy Pro users complain (anecdotal app-store reviews) of 25–30% commission taken from income. The commission is reportedly not contractually set.",
+    "source_url": "https://apps.apple.com/ca/app/jiffy-pro/id1101378362"
+   },
+   {
+    "fact": "On TaskRabbit, paying the $25 registration fee does not guarantee becoming a Tasker (access risk).",
+    "source_url": "https://support.taskrabbit.com/hc/en-ca/articles/360032936511-What-s-the-Registration-Fee"
+   },
+   {
+    "fact": "Vancouver entire-home STR listings fell 22% (Kelowna 31%, Victoria 24%) between May 2024 and Feb 2025 after BC's principal-residence rule, reducing turnover-cleaning demand.",
+    "source_url": "https://www.nationalobserver.com/2025/04/24/news/year-after-bcs-short-term-rental-crackdown-has-it-made-housing-cheaper"
+   },
+   {
+    "fact": "Toronto restricts STRs to principal residences, with entire-home rentals capped at 180 nights a year, which limits investor-scale turnover contracts.",
+    "source_url": "https://www.toronto.ca/community-people/housing-shelter/rental-housing-rights-information/short-term-rentals/short-term-rental-operators-hosts/"
+   },
+   {
+    "fact": "Documented failure stories of new cleaning businesses (Reddit or YouTube): NOT FOUND in this session (Reddit fetch blocked; search limit reached).",
+    "source_url": "not found"
+   }
+  ],
+  "scores": {
+   "speed": 7,
+   "probability_5k": 3.5,
+   "capital_light": 8,
+   "ai_leverage": 3,
+   "low_risk": 6
+  },
+  "score_rationale": "SPEED 7: You can start with almost no setup. TaskRabbit has an active Toronto cleaning category ($25 fee) and Jiffy pays weekly. However, platform approval times were not found, Jiffy's payout lag is 5–11 days (ESTIMATE), and direct clients need reviews and trust first.\n\nPROBABILITY_5K 3.5: The sourced rates ($35–$65/hr per cleaner) mean 26–41 billable hours a week at mid-range prices once costs are counted (ESTIMATE). That target has to be reached from zero reviews, against insured companies and $15–$30/hr independents. Averaging $5k net over the first 60 days would need about $8k net in month 2 if month 1 is a normal ramp-up (illustrative ESTIMATE). A $5k/month run rate by month 2–3 is realistic only for a fit, full-time owner with workable English and ideally a vehicle.\n\nCAPITAL_LIGHT 8: The only sourced upfront cost is $25. Supplies and insurance costs were NOT FOUND, but the business needs no inventory or lease. A vehicle, if not already owned, would change this score a lot.\n\nAI_LEVERAGE 3: The AI can build all the marketing, quoting, booking, checklists and bookkeeping. But roughly 80%+ of the value is physical labour and in-person trust, which only the owner can provide (judgment, not sourced).\n\nLOW_RISK 6: Legal and regulatory risk is low; I found no licence requirement, though that is unverified. The real risks are bodily injury, damage and theft claims (insurance cost unknown), platform dependence, and the income stopping entirely whenever the owner cannot work.\n\nCONFIDENCE CAVEAT: The evidence base is thinner than required. Only 7 searches returned results before the shared search limit ran out, and every page fetch was blocked, so all facts come from search-result summaries. Turnover rates, post-construction rates, insurance and supply costs, earnings reports and failure stories remain NOT FOUND. Before committing, run a follow-up pass that opens the pages to check these numbers."
+ },
+ "verification": {
+  "checked_claims": [
+   {
+    "claim": "Toronto 2026: the typical rate is $35–$65/hr per cleaner, and reputable companies mostly charge $45–$55/hr (Hellamaid 2026).",
+    "status": "unverifiable",
+    "correction": "I could not re-check this. WebSearch returned 'budget exhausted (200 of 200)' and WebFetch was blocked by the egress proxy for every domain I tried: mastermaid.ca, support.taskrabbit.com, canada.ca, ontario.ca, taskrabbit.ca, apps.apple.com, anyclean.ca, keycafe.com and nationalobserver.com. A curl check also returned 000 for toronto.ca, reddit.com and wikipedia.org. The original researcher never opened the page either and could not say which page the number came from, so it rests only on a search snippet. It also conflicts with the dossier's own HomeStars figure of $85–$125/hr (see below). The unit (per cleaner or per team) is unresolved.",
+    "source_url": "https://hellamaid.ca/blog/toronto-hourly-vs-flat-rate-cleaning-prices-in-2026/"
+   },
+   {
+    "claim": "Hourly house-cleaning rates in Toronto and Vancouver commonly run $85–$125, versus $65–$90 in mid-sized cities (HomeStars).",
+    "status": "unverifiable",
+    "correction": "The page could not be opened (blocked). This range is about 2x the $35–$65 per-cleaner figure used for all of the path-to-$5k math. If $85–$125 is a two-person team rate, the per-person rate is ESTIMATE: 85/2 = $42.50 to 125/2 = $62.50, which fits the other band. If it is per cleaner, the dossier's hours math is too pessimistic. The dossier did not resolve this, so its break-even hours rest on an unresolved unit question.",
+    "source_url": "https://www.homestars.com/cleaning/price-guides/house-apartment-cleaning-cost"
+   },
+   {
+    "claim": "Independent cleaners in Toronto charge $15–$30/hr, and registered companies charge $40–$90/hr (MeshMaids).",
+    "status": "unverifiable",
+    "correction": "Could not open (blocked). The source is a competing company's marketing blog with a commercial reason to make independents look cheap and risky. The researcher could not confirm which page the $15–$30 figure came from. I could not verify it or cross-check it against any wage floor, so it should not drive pricing decisions.",
+    "source_url": "https://meshmaids.ca/blog/how-much-house-cleaning-cost-in-toronto/"
+   },
+   {
+    "claim": "Master Maid move-out flat rates: 1BR $325 + HST, 2BR $365, 3BR $443, 4BR $508, 5BR $559 + HST.",
+    "status": "unverifiable",
+    "correction": "I tried to fetch mastermaid.ca/prices directly: EGRESS_BLOCKED. The dossier itself says the attribution to Master Maid is not confirmed. Treat these as unconfirmed. They are also the prices of an established, insured company, not what a newcomer with zero reviews can expect to charge.",
+    "source_url": "https://mastermaid.ca/prices/"
+   },
+   {
+    "claim": "TaskRabbit Canada charges Taskers a one-time, non-refundable $25 registration fee, and paying it does not guarantee acceptance.",
+    "status": "unverifiable",
+    "correction": "I tried to fetch the support page directly: EGRESS_BLOCKED. This is the only sourced startup cost in the dossier, and it is unconfirmed. How long approval takes and whether a background check is required are still NOT FOUND, and these decide whether first revenue can arrive in October.",
+    "source_url": "https://support.taskrabbit.com/hc/en-ca/articles/360032936511-What-s-the-Registration-Fee"
+   },
+   {
+    "claim": "TaskRabbit Toronto one-time cleaning starts from $35/hr, and because client fees are charged to the client, the Tasker rate is what the Tasker earns.",
+    "status": "unverifiable",
+    "correction": "I tried to fetch taskrabbit.ca: EGRESS_BLOCKED. There is also a problem of interpretation even if the number is right. A 'from $35/hr' figure on a location page is a marketing floor, not the typical or median rate Taskers actually get booked at, and it says nothing about how many hours a new Tasker with no reviews can fill. The dossier treats it as an earnings benchmark, which it is not.",
+    "source_url": "https://www.taskrabbit.ca/locations/toronto/one-time"
+   },
+   {
+    "claim": "Jiffy commission is 12–18% (not fixed by contract), and Jiffy Pro app reviews report 25–30%.",
+    "status": "unverifiable",
+    "correction": "I tried to fetch apps.apple.com: EGRESS_BLOCKED. The 12–18% figure comes from a search summary that mixed three third-party blogs, with no attribution confirmed. The 25–30% figure is anecdotal. I found no official Jiffy fee page. Treat Jiffy's commission as unknown within 12–30%.",
+    "source_url": "https://apps.apple.com/ca/app/jiffy-pro/id1101378362"
+   },
+   {
+    "claim": "GST/HST small-supplier threshold is $30,000, and at target revenue the owner must register around month 5 (ESTIMATE 30000/6250 = 4.8 months).",
+    "status": "unverifiable",
+    "correction": "I tried to fetch canada.ca: EGRESS_BLOCKED. The arithmetic 30000/6250 = 4.8 is correct. However, the dossier treats the four-quarter test as a rolling monthly total. The rule it cites works by calendar quarter, so when the obligation actually starts depends on quarter boundaries, not on '4.8 months'. I could not confirm the exact timing rule in this session, so the owner should read the CRA page directly before relying on the month-5 date.",
+    "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/when-register-charge.html"
+   },
+   {
+    "claim": "Toronto allows STRs only in the host's principal residence, caps entire-home rentals at 180 nights a year, and charges a 2026 registration fee of $375 new / $390 renewal.",
+    "status": "unverifiable",
+    "correction": "toronto.ca and keycafe.com were both blocked. The fee figures come from a third-party guide, per the dossier's own note. Whichever way this resolves, it only affects the secondary STR line, not the core recommendation.",
+    "source_url": "https://www.keycafe.com/s/blog/understanding-torontos-short-term-rental-regulations"
+   },
+   {
+    "claim": "BC entire-home STR listings fell 22% in Vancouver, 24% in Victoria and 31% in Kelowna between May 2024 and Feb 2025 (National Observer, April 24, 2025).",
+    "status": "unverifiable",
+    "correction": "I tried to fetch nationalobserver.com directly: EGRESS_BLOCKED. The data is also about 17 months older than today (2026-09-23), and I found nothing on listing counts after Feb 2025.",
+    "source_url": "https://www.nationalobserver.com/2025/04/24/news/year-after-bcs-short-term-rental-crackdown-has-it-made-housing-cheaper"
+   },
+   {
+    "claim": "Path-to-$5k arithmetic: 5000/35 = 142.9 h/mo = 33.0 h/wk; 6250/45 = 138.9 h/mo = 32.1 h/wk; 5000/36.90 = 135.5 h/mo = 31.3 h/wk; 8000/45 = 177.8 h = 41.1 h/wk.",
+    "status": "confirmed",
+    "correction": "I recomputed every figure (ESTIMATE: 142.86/4.33 = 33.0; 138.89/4.33 = 32.1; 135.50/4.33 = 31.3; 177.78/4.33 = 41.06), and they are all correct. But the model leaves things out. These are BILLABLE hours only. It has no allowance for unpaid travel between jobs, quoting and messaging time, cancellations, or unfilled schedule gaps in month 1. Actual hours worked will be higher by an amount the dossier did not measure (NOT FOUND). Direct costs are a 20% placeholder with no source.",
+    "source_url": "not found (internal recomputation of dossier figures; no external source)"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "LIMIT OF THIS REVIEW: I could not collect any new counter-evidence. WebSearch was refused ('200 of 200 WebSearch calls' used for the session), and WebFetch or curl was blocked on every domain I tried (canada.ca, ontario.ca, toronto.ca, taskrabbit.ca, support.taskrabbit.com, mastermaid.ca, anyclean.ca, keycafe.com, nationalobserver.com, apps.apple.com, reddit.com, wikipedia.org). Failure stories, saturation data, platform deactivation reports and seasonality data all remain NOT FOUND. The fact that none turned up does not mean the risks are absent.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "The dossier's own sources contradict each other on the core price input: $35–$65/hr per cleaner (Hellamaid snippet) versus $85–$125/hr in Toronto and Vancouver (HomeStars snippet) versus $15–$30/hr for independents (MeshMaids snippet). With a spread this wide and none of the pages opened, the hours needed for $5k could be anywhere from about 13 to over 70 billable hours a week. ESTIMATE: 5000/85/4.33 = 13.6 h/wk; 6250/20/4.33 = 72.2 h/wk.",
+    "source_url": "https://www.homestars.com/cleaning/price-guides/house-apartment-cleaning-cost"
+   },
+   {
+    "fact": "The dossier's own snippet says established Toronto companies sell insurance, vetted staff and backup cleaners as the reason they charge more. A solo newcomer launching in October has none of these, and whether condo buildings or property managers require contractors to show a certificate of insurance is NOT FOUND. That could shut the newcomer out of the higher-paying move-out and property-manager work the dossier recommends as the main line.",
+    "source_url": "https://hellamaid.ca/blog/toronto-hourly-vs-flat-rate-cleaning-prices-in-2026/"
+   },
+   {
+    "fact": "Anecdotal: Jiffy Pro app-store reviewers report a 25–30% commission, well above the 12–18% in third-party blogs (from the dossier's search snippet; not re-opened).",
+    "source_url": "https://apps.apple.com/ca/app/jiffy-pro/id1101378362"
+   },
+   {
+    "fact": "Nothing in the dossier's sources shows how many jobs a new, zero-review Tasker or Jiffy pro actually gets in their first month in Toronto, or how long approval takes. These two unknowns decide whether any revenue arrives in October.",
+    "source_url": "not found"
+   }
+  ],
+  "hidden_costs_or_blockers": [
+   "Nothing in the dossier was opened at the source, and I could not open anything in this review either, because of the search budget and proxy blocks. The entire pricing base is unverified search snippets, so the owner must check the prices by hand before setting rates.",
+   "The platform onboarding timeline is unknown: TaskRabbit and Jiffy approval and background-check times are NOT FOUND. If approval takes 2–4 weeks, October revenue from platforms may not happen.",
+   "Billable hours are not hours worked. Travel between jobs across the GTA, winter transit while carrying equipment, quoting and messaging, and schedule gaps are all unpaid and not counted. ESTIMATE: if 25% of paid-for time is unbillable, 32.1 billable h/wk becomes 32.1/0.75 = 42.8 h/wk of actual work at $45/hr with 20% costs.",
+   "Vehicle: not strictly needed, but without one the owner can only reach clients near transit. With one, gas, insurance and downtown parking costs apply, and none of these costs were sourced.",
+   "Liability insurance and bonding premiums were NOT FOUND. Condo and property-manager requirements for a certificate of insurance were NOT FOUND. Both could be a gate to the higher-paying work.",
+   "Supplies and equipment (vacuum, chemicals, microfiber) costs were NOT FOUND, and the 20% direct-cost placeholder is unsourced.",
+   "Self-employment payroll-type obligations (for example CPP contributions on self-employment income) and income tax were not addressed. The goal is stated before income tax, but these still reduce take-home pay. I did not verify any of this in this session.",
+   "Hiring helpers to scale past one person's labour brings employment-standards, WSIB and payroll obligations. All NOT FOUND/not researched.",
+   "GST/HST: once over the $30k small-supplier threshold (whose timing works by calendar quarter; I could not verify it here), the owner must add HST, which is 13% in Ontario (a commonly cited rate that I did not verify in this session), or absorb it out of margin. That is a price shock for existing recurring clients.",
+   "Demand timing: month-end clustering of move-outs and the fall/winter slowdown are unverified hypotheses. If demand is concentrated at month-end, one person's capacity limits how much move-out income they can capture.",
+   "A single injury, a damage or theft claim, or an illness reduces income to zero. There is no income replacement or insurance, and its cost was NOT FOUND.",
+   "English and trust: platform reviews and messaging, handling complaints, and on-site walkthroughs all need functional English. The Korean-community niche was not researched."
+  ],
+  "adjusted_scores": {
+   "speed": 6,
+   "probability_5k": 2.5,
+   "capital_light": 7,
+   "ai_leverage": 2.5,
+   "low_risk": 5
+  },
+  "verdict": "DOWNGRADE: keep this as a fallback or bridge-income option, not the primary plan.\n\n1. Evidence is unverified. None of the 11 decision-critical claims could be re-opened. All pages were blocked and the search budget was used up, so every price, fee and rule remains unverifiable. The core price inputs also contradict each other: $35–$65/hr per cleaner vs $85–$125/hr vs $15–$30/hr, with the unit unresolved.\n\n2. The October start is uncertain. Platform approval times, background-check requirements and first-month job volume for zero-review pros are all NOT FOUND.\n\n3. The math understates the effort. The arithmetic checks out, but it counts only billable hours. Once unpaid travel and schedule gaps are added, reaching $5k net likely means 35–45+ hours a week of physical work. ESTIMATE: 32.1 billable h/wk / 0.75 = 42.8 h/wk.\n\n4. The 60-day average is out of reach. The dossier itself admits month 2 would need about $8k net (ESTIMATE, 41 billable h/wk) to average $5k over 60 days.\n\n5. Speed is still its strength. Upfront cost and legal barriers appear low: no licence was found, though that is not verified as unnecessary.\n\nOverall, it is a plausible way to get some cash quickly for a physically fit, English-capable owner, ideally with a car. It is unlikely to average CAD $5k/month net in the first 60 days, and AI can do only about 20–25% of the work.\n\nBefore committing, the owner should personally check:\n- TaskRabbit and Jiffy approval times and fees\n- a real liability insurance quote\n- current prices on 5–10 live Toronto competitor pages"
+ }
+}

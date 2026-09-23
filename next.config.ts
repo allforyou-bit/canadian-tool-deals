@@ -1,24 +1,11 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
+// Static export: `npm run build` writes plain HTML/CSS/JS to ./out, which any static host
+// can serve (Cloudflare Pages Free is the recommended host — see business/08-배포-가이드.md).
 const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
-      { protocol: 'https', hostname: 'i5.walmartimages.com' },
-      { protocol: 'https', hostname: 'm.media-amazon.com' },
-      { protocol: 'https', hostname: 'assets.canadiantire.ca' },
-      { protocol: 'https', hostname: 'images.homedepot.ca' },
-      { protocol: 'https', hostname: 'www.rona.ca' },
-      { protocol: 'https', hostname: 'www.princessauto.com' },
-    ],
-  },
-  async headers() {
-    return [
-      {
-        source: '/cache/:path*',
-        headers: [{ key: 'Cache-Control', value: 'public, max-age=3600, stale-while-revalidate=86400' }],
-      },
-    ]
-  },
-};
+  output: 'export',
+  trailingSlash: true,
+  images: { unoptimized: true },
+}
 
-export default nextConfig;
+export default nextConfig

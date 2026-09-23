@@ -1,0 +1,415 @@
+{
+ "dossier": {
+  "candidate": "Micro-SaaS / Chrome extension / AI tools (products built by an AI coding agent, sold by a Canada-based sole proprietor)",
+  "summary": "VERDICT: The evidence does not support this as a way to replace income within 30 days. It is cheap to try and the AI can build nearly all of it, but revenue is slow to arrive and spread very unevenly. Averaging CAD 5,000/month net within about 60 days would put the owner far above the typical results in every dataset found. It can work as a side asset alongside faster income, not as the main plan for October–November 2026.\n\nKEY FACTS:\n(1) Cost. Chrome Web Store (CWS) registration is a one-time fee. The official doc does not state the amount; many developer READMEs say US$5. CWS's own payments system is shut down, so every paid extension needs an outside processor.\n(2) Fees. Stripe Canada charges 2.9% + C$0.30 per domestic card (secondary sources, 2026). Paddle charges 5% + $0.50 (secondary, read 2026-09-22). Polar's official docs list 5% + 50¢ on its free tier. ExtensionPay adds 5% on top of Stripe. Stripe Managed Payments adds 3.5% on top of Stripe's fees and is open to Canada-based businesses.\n(3) Typical results. Across 5,079 products with Stripe-verified revenue, median MRR is about $169/month and year-0 median is $148/month. Only 0.9% were \"breaking out\". In an older 2022 sample, more than 54% of tracked products earned $0. Among 28 survivors, the median time to $1K MRR was 8 months.\n(4) Extensions in practice. Free-to-paid conversion is roughly 0.8–3% of active users. One developer with 5 extensions made $180/month after 6 months. Another extension had 70,000 users and about $30/month. The fast-launch success stories (AudioPen, TypingMind, HeadshotPro) came from founders who already had large audiences, mostly during the 2023 ChatGPT wave.\n(5) Getting customers is the hard part. Sources from 2025–2026 describe markets flooded with AI tools and \"vibe-coded\" (AI-generated) apps, and many say distribution, not building, is now the limit.\n\nLIMITS OF THIS RESEARCH: In this session the network proxy blocked stripe.com, paddle.com, lemonsqueezy.com, canada.ca, developer.chrome.com, indiehackers.com, chartmogul.com, reddit, youtube and dev.to, and the shared web-search budget (200/200) was already used up. Every fact here therefore comes from one of two kinds of sources:\n(a) official documentation read from GitHub, including the Chrome developer-docs repo (some pages dated 2021–2023), Polar's docs and ExtPay's README;\n(b) secondary research documents on GitHub from 2026 that cite the original pages.\nNumbers from (b) should be treated as claimed and secondhand until someone checks them against the original sites.",
+  "time_to_first_revenue": "ESTIMATE: a first sale within 1–4 weeks is possible. A first CAD 5,000 month within 60 days is very unlikely.\n\nBASIS:\n(a) Build speed. The AI can build a Manifest V3 extension (MV3, the current Chrome extension format) plus a landing page in days. ExtPay's README quotes a user who said payments took \"less than an hour to set up\" (https://raw.githubusercontent.com/Glench/ExtPay/main/README.md).\n(b) Chrome review time. The official review-process doc, last updated 2021-12-10, says: \"In early 2021, most submissions completed review in less than 24 hours, with over 90% completed within three days.\" Reviews take longer for new developers, new extensions, and broad or sensitive permissions (https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/review-process/index.md). A secondary source reports that in 2025 updates that used to take 6–12 hours were taking 2–3 days (https://raw.githubusercontent.com/minalGoel/micro-tools/main/project_planning/source_files/Chrome%20Extension%20Economics%20and%20Distribution%202024%E2%80%932026.md).\n(c) Human steps first. The human must complete ID checks with Stripe, Paddle or Polar before any money can arrive. Payout timing for a new Stripe Canada account: not found (stripe.com blocked). An unsourced secondary claim says Paddle pays out monthly with a $100 minimum; not verified.\n(d) What typical products earn. From the Indie Hackers analysis of TrustMRR data (n=5,079, Stripe-verified, 12 Mar 2026): median MRR is $148/month in year 0 and $334/month in year 1. Among 28 survivor-selected products (2022), median time to $1K MRR was 8 months (p25 = 5, p75 = 12). Source for both: https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md, citing https://www.indiehackers.com/post/i-analyzed-5-079-stripe-verified-startups-f0f6bd053f and https://www.indiehackers.com/post/it-takes-5-months-to-reach-1k-in-mrr-491742f806.\n(e) Early revenue examples (anecdotal). Simple Analytics made $27 in week 1 and $408 with 40+ paying customers by week 4 (https://raw.githubusercontent.com/AnshumanAtrey/licon/main/research/founder-stories/solo-saas-founders-research.md). A developer with 5 extensions reported $60/month at month 3 and $180/month at month 6 (May 2026, dev.to/ktg0215, via https://raw.githubusercontent.com/nnnkit/totem/main/plans/research/premium-monetization/raw/rs-recent-discourse.md).",
+  "pricing_facts": [
+   {
+    "fact": "Brief dated April 15, 2026 (secondary): suggested extension pricing is $4.99–$14.99/month for consumers and $19–$49/month for B2B (business customers) on subscriptions, or $9.99–$29.99 for a one-time unlock on pure utilities.",
+    "source_url": "https://raw.githubusercontent.com/LoopheadLabs/meetingfocus-site/main/chrome-extension-opportunity-brief.md"
+   },
+   {
+    "fact": "Secondary compilation dated 2026-06-19, citing nichecheck.com (Feb 22, 2026): subscription prices by category are SEO/Marketing $15–$30/month, Developer Tools $6–$8/month, AI-Powered $10–$20/month and Productivity freemium $3–$7/month. Annual plans at a 30–40% discount are reported to cut churn by 50–60%.",
+    "source_url": "https://raw.githubusercontent.com/nnnkit/totem/main/plans/research/premium-monetization/raw/rs-recent-discourse.md"
+   },
+   {
+    "fact": "ExtensionPay's roundup of extension prices (via secondary, no dates): CSS Scan sells a $69 one-time unlock, Spider a $38 one-time unlock, GMass subscriptions run $8–$20/month, and Closet Tools charges $30/month.",
+    "source_url": "https://raw.githubusercontent.com/nnnkit/totem/main/plans/research/premium-monetization/raw/rs-recent-discourse.md"
+   },
+   {
+    "fact": "Anecdotal, reported by one developer (dev.to/ktg0215, May 2026): switching a utility extension from subscription to one-time pricing raised conversions by 60%, and conversion prompts that listed benefits converted 8% versus 2% for a basic alert.",
+    "source_url": "https://raw.githubusercontent.com/nnnkit/totem/main/plans/research/premium-monetization/raw/rs-recent-discourse.md"
+   },
+   {
+    "fact": "Polar (official docs): the Starter plan is free at 5% + 50¢ per transaction. Pro is $20/month at 3.8% + 40¢, Growth $100/month at 3.6% + 35¢, and Scale $400/month at 3.4% + 30¢. Organizations created before May 27, 2026 keep the old 4% + 40¢ rate (+0.5% on subscriptions).",
+    "source_url": "https://raw.githubusercontent.com/polarsource/polar/main/docs/merchant-of-record/fees.mdx"
+   },
+   {
+    "fact": "Polar's pricing page says Pro breaks even against Starter at about $1,379/month in sales, and Growth at about $5,634/month.",
+    "source_url": "https://raw.githubusercontent.com/polarsource/polar/main/clients/apps/web/src/components/Landing/resources/PricingPage.tsx"
+   }
+  ],
+  "cost_facts": [
+   {
+    "fact": "Chrome Web Store: 'you must register as a CWS developer and pay a one-time registration fee'. The official doc (last updated 2023-08-02) does not give the amount. It recommends a separate email address just for publishing.",
+    "source_url": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/register/index.md"
+   },
+   {
+    "fact": "Many developer docs put the CWS registration fee at a one-time $5 USD. Example (dart-lang/webdev CONTRIBUTING.md): 'you will be asked to pay a $5 registration fee'. Secondary sources; the official amount was not visible.",
+    "source_url": "https://github.com/dart-lang/webdev/blob/be720d999bfc480f64e7285512a07a2a5c458473/debug_extension/CONTRIBUTING.md"
+   },
+   {
+    "fact": "Chrome Web Store's built-in payments are deprecated. Creating new paid extensions stopped permanently on September 21, 2020, and charging was removed on February 1, 2021. Developers have to use an outside payment processor.",
+    "source_url": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/cws-payments-deprecation/index.md"
+   },
+   {
+    "fact": "Stripe Canada: 2.9% + C$0.30 for domestic cards, plus 0.8% for international cards and 2% for currency conversion. Secondary 2026 doc citing stripe.com/en-ca/pricing, which was blocked here.",
+    "source_url": "https://raw.githubusercontent.com/kurtrgoddard/Bilingua-App/main/economy/research-pricing.md"
+   },
+   {
+    "fact": "Canadian fee comparison dated 2026-08-02 (secondary): Stripe Billing costs 0.7% of billing volume (pay-as-you-go), and Stripe Tax Basic costs 0.5% per transaction. Paddle is 5% + $0.50 with billing, tax and FX included. Lemon Squeezy is 5% + $0.50, plus 1.5% on international payments. Only Stripe supports Canadian pre-authorized debit.",
+    "source_url": "https://raw.githubusercontent.com/BoilerHAUS/EPSCAxplor/main/docs/planning/payments-comparison.md"
+   },
+   {
+    "fact": "Copy of Stripe's US pricing page taken 2026-06-04: $15.00 per dispute, and Managed Payments (Stripe acting as merchant of record) costs '3.5% per successful Managed Payments transaction in addition to Payments fees'. The Canadian dispute fee was not found.",
+    "source_url": "https://raw.githubusercontent.com/brianbolze/truffle/master/store/stripe-com/captures/2026-06-04/pricing.md"
+   },
+   {
+    "fact": "Stripe Managed Payments has been generally available since April 22, 2026, and AI services became eligible on June 2, 2026. It is open to businesses based in the US, Canada, 31 European countries, Australia, Hong Kong, Japan or Singapore. Paddle is 5% + $0.50 all-in (secondary, read from paddle.com/pricing on 2026-09-22).",
+    "source_url": "https://raw.githubusercontent.com/flechilla/lanternist/main/plans/HOSTED_PLAN.md"
+   },
+   {
+    "fact": "Polar (official docs): +1.5% for international cards and $15 per dispute. Payouts cost $2 per month of active payouts, plus 0.25% + $0.25 per payout, plus up to 1% for cross-border transfers outside the EU.",
+    "source_url": "https://raw.githubusercontent.com/polarsource/polar/main/docs/merchant-of-record/fees.mdx"
+   },
+   {
+    "fact": "ExtensionPay charges 5% per transaction on top of Stripe's fees, with no monthly fee. It is not a merchant of record, so the seller still owes sales tax/VAT. Secondary.",
+    "source_url": "https://github.com/nnnkit/totem/blob/417cf26daf11dd6c91a6ee63027a841c37dcf9da/plans/research/premium-monetization/raw/rs-payments.md"
+   },
+   {
+    "fact": "List checked in July 2026 (secondary): Lemon Squeezy is 5% + $0.50, 'now owned by Stripe and folding into Stripe Managed Payments… maintenance mode'. Gumroad is 10% + $0.50 and Creem is 3.9% + $0.40.",
+    "source_url": "https://raw.githubusercontent.com/yerdaulet-damir/awesome-solo-ai/main/tools/payments-monetization.md"
+   },
+   {
+    "fact": "LLM API cost for AI features (secondary, Jan 2026): Claude Haiku 4.5 costs $1.00 per million input tokens and $5.00 per million output tokens; Claude Sonnet 4.6 costs $3/$15.",
+    "source_url": "https://github.com/ThamJiaHe/claude-code-handbook/blob/4dedd940c1a2e6bae0a3e98b74bfcb3b8b4a3a3d/docs/pricing-comparison-jan-2026.md"
+   },
+   {
+    "fact": "Bessemer guidance, as quoted in a secondary compilation: AI products have real, variable inference costs ('When you receive $10 from the customer, you can't just spend 10 cents on AWS'), so their gross margins are structurally lower than traditional SaaS.",
+    "source_url": "https://raw.githubusercontent.com/minalGoel/micro-tools/main/project_planning/source_files/Micro-SaaS%20and%20AI%20tool%20monetization%20what%20actually%20works.md"
+   }
+  ],
+  "earnings_evidence": [
+   {
+    "claim": "Indie Hackers analysis of TrustMRR data (n=5,079 Stripe-verified products, 12 Mar 2026): median MRR is $169/month. The 75th, 90th and 99th percentiles are about $800, $10,000 and $98,500 per month. Only 0.9% (48 of 5,079) were 'breaking out' (>$10k MRR and >50% month-over-month growth). The sample is opt-in, which biases results upward.",
+    "source_url": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md",
+    "kind": "industry"
+   },
+   {
+    "claim": "Same TrustMRR analysis, median MRR by product age: year 0 $148/month, year 1 $334, year 2 $656, year 4 $2,399, year 5 $2,509.",
+    "source_url": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md",
+    "kind": "industry"
+   },
+   {
+    "claim": "ScrapingFish analysis of Indie Hackers products (n=937, July 2022, dated): more than 54% of tracked products earn $0.",
+    "source_url": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md",
+    "kind": "community"
+   },
+   {
+    "claim": "Indie Hackers sample (n=28, June 2022, survivor-selected): median time to $1K MRR was 8 months (p25 = 5, p75 = 12).",
+    "source_url": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md",
+    "kind": "community"
+   },
+   {
+    "claim": "RockingWeb's 2025 analysis of about 1,000 micro-SaaS products claims that about 70% earn under $500/month, 82% never reach $5,000/month and 93% never reach $10,000/month. The compiling author flags these as 'indicative, not citable-grade' and survivor-biased.",
+    "source_url": "https://raw.githubusercontent.com/bistuwangqiyuan/StrykerAI/main/research/report_eafdad16.md",
+    "kind": "estimate"
+   },
+   {
+    "claim": "ExtensionPay says it 'has earned extension creators over $500k and counting' in total across all its users. One testimonial user passed '$4,000 in annual subscriptions'.",
+    "source_url": "https://raw.githubusercontent.com/Glench/ExtPay/main/README.md",
+    "kind": "official"
+   },
+   {
+    "claim": "Developer with 5 extensions on ExtensionPay (dev.to/ktg0215, about May 2026): 0.8% average free-to-paid conversion (best 1.4%, worst 0.3%), and MRR of $180/month after about 6 months, up from $60/month three months earlier.",
+    "source_url": "https://raw.githubusercontent.com/nnnkit/totem/main/plans/research/premium-monetization/raw/rs-recent-discourse.md",
+    "kind": "community"
+   },
+   {
+    "claim": "chromegoldmine benchmarks (Mar 26, 2026), via secondary: a Reddit case with 50,000 users made about $21k/year (about $1,750/month) at under 1% conversion. Extensions with 2k–10k users on one-time pricing make $1k–$10k cumulative, not monthly.",
+    "source_url": "https://raw.githubusercontent.com/nnnkit/totem/main/plans/research/premium-monetization/raw/rs-recent-discourse.md",
+    "kind": "community"
+   },
+   {
+    "claim": "Responsive Viewer, a Chrome extension with 70,000+ users, earned about $30/month from ads. A Tealpod image compressor with 9,000+ downloads had 'single digit sales'.",
+    "source_url": "https://raw.githubusercontent.com/minalGoel/micro-tools/main/project_planning/source_files/Micro-SaaS%20and%20AI%20tool%20monetization%20what%20actually%20works.md",
+    "kind": "community"
+   },
+   {
+    "claim": "Fast outliers, mostly 2023 and mostly founders who already had audiences: AudioPen got '100 paying customers within 2 days' of launch, TypingMind made '$10K revenue in first 10 days', and Simple Analytics made $27 in week 1 and $408 with 40+ customers by week 4. Slower cases: Easy Folders reached $3,700 MRR after 6 months, Data Fetcher reached $5K MRR after about 16 months, and Angel Match was 'stuck at ~$3K MRR for 4 years'.",
+    "source_url": "https://raw.githubusercontent.com/AnshumanAtrey/licon/main/research/founder-stories/solo-saas-founders-research.md",
+    "kind": "community"
+   },
+   {
+    "claim": "ChartMogul SaaS go-to-market report, via secondary: freemium-to-paid conversion is 3–4%, opt-in trials without a card convert about 18%, and opt-out trials with a card about 50%. Pure self-serve marketplace installs convert about 2.5% by day 7 and about 1% by day 14.",
+    "source_url": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/cac.md",
+    "kind": "industry"
+   },
+   {
+    "claim": "Freemius State of Micro-SaaS 2025, via secondary: 57% of founders running ads either wait 7+ months for return on ad spend or cannot tell whether ads work. 47% say communities, partnerships and integrations became their most dependable growth source.",
+    "source_url": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/cac.md",
+    "kind": "industry"
+   },
+   {
+    "claim": "Product Hunt launch outcomes (the compiler rates this low credibility, no stated method): outside the top 10, a launch gets under 500 visitors and under 20 signups; the top 3 get 5,000–15,000 visitors and 100–400 signups.",
+    "source_url": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/cac.md",
+    "kind": "community"
+   }
+  ],
+  "path_to_5k_math": "All of the following is ESTIMATE arithmetic. It uses the sourced fees above and CAD pricing to avoid needing an exchange rate, which was not sourced.\n\nSCENARIO A: consumer Chrome extension at C$9/month, Stripe Canada domestic card + ExtensionPay.\n- Stripe fee: 0.029 × 9 + 0.30 = C$0.561. ExtensionPay fee: 0.05 × 9 = C$0.45. Net per subscriber: 9 − 0.561 − 0.45 = C$7.989 (before any Stripe Billing fee or AI API cost).\n- Subscribers needed for C$5,000/month: 5,000 / 7.989 = 626.\n- Active users needed at 3% conversion (ChartMogul freemium upper end): 626 / 0.03 = 20,867. At 2%: 31,300. At 0.8% (ktg0215's real portfolio): 78,250 active users.\n- International cards (+0.8%) with FX (+2%) add 0.028 × 9 = C$0.252 per sale. Net drops to C$7.737, so 647 subscribers.\n- AI features at Haiku 4.5 prices ($1/$5 per million tokens): 2,000 input + 500 output tokens per call costs 0.002 + 0.0025 = $0.0045. At 300 calls per user per month that is $1.35 per paying user per month, about 17% of the C$7.99 net (no FX adjustment).\n\nSCENARIO B: B2B micro-SaaS at C$49/month, Stripe Canada + Stripe Billing 0.7%.\n- Fees: 0.029 × 49 + 0.30 + 0.007 × 49 = 1.421 + 0.30 + 0.343 = C$2.064. Net per customer: C$46.936.\n- Customers needed: 5,000 / 46.936 = 107.\n- Cold email yields about 0.8–2 meetings per 100 sends (secondary benchmark). Even if every meeting closed, that is 107 / 0.02 = 5,350 sends up to 107 / 0.008 = 13,375 sends.\n- With a HYPOTHETICAL 25% meeting-to-paid close rate (an assumption, not sourced): 21,400–53,500 sends.\n\nSCENARIO C: one-time unlock at C$29 on Polar Starter (5% + 50¢, fee currency treated nominally).\n- Net per sale: 29 − 1.45 − 0.50 = C$27.05.\n- 5,000 / 27.05 = 185 new sales every month, indefinitely, because there is no recurring base.\n\n60-DAY TEST (the goal is to average C$5,000/month, i.e. C$10,000 net over two months).\n- Scenario A: 10,000 / 7.989 = 1,252 subscriber-months. With N new subscribers per month and no churn, month 1 has N and month 2 has 2N, so 3N = 1,252 and N = 418 new paying subscribers each month from launch.\n- Scenario B: 10,000 / 46.936 = 213 customer-months, so N = 71 new paying B2B customers each month from launch.\n- Base-rate comparison: the TrustMRR year-0 median is $148/month. C$5,000 is about 34× that (5,000 / 148 = 33.8; currency difference ignored). The target sits between the 75th ($800) and 90th ($10,000) percentiles of products of ALL ages, not products 60 days old.\n\nCONCLUSION (ESTIMATE): hitting the target inside 60 days would take distribution the owner is not known to have, such as an existing audience, paid-ads budget or sales channel. The realistic outcome at day 60 is C$0 to a few hundred dollars of MRR.",
+  "startup_cost_cad": "ESTIMATE: under C$100 to launch, and C$100–C$500 with a buffer for AI API use and small tests.\n\nCost items:\n- CWS one-time fee: US$5 (secondary; the official doc gives no amount).\n- Payment processing: $0/month on Stripe, Paddle, Polar Starter or ExtensionPay. All of these charge percentages only (sourced above).\n- Domain and hosting: prices not verified in this session.\n- LLM API: usage-based, e.g. Haiku 4.5 at $1/$5 per million tokens.\n- Optional: an Ontario business-name registration if a trade name is used (fee not verified; ServiceOntario page blocked), and Polar Pro at $20/month only once sales pass about $1,379/month.\n\nThe main real cost is 30–60+ days of the owner's time with no income.",
+  "requirements": [
+   "Vehicle: NOT required.",
+   "Physical labour: NOT required.",
+   "Capital: minimal. ESTIMATE under C$100 to launch (see startup cost). The owner also needs personal savings to cover living costs because revenue is slow. How much savings they have is unknown and is decisive here.",
+   "Licence: no software licence needed. A sole proprietor using a trade name must register a business name in their province; the Ontario fee was not verified. GST/HST registration is required once taxable sales exceed C$30,000 over four consecutive calendar quarters.",
+   "Identity/banking: government ID and a Canadian bank account to pass ID checks with Stripe, Paddle or Polar. A Google account to register as a CWS developer (the official doc recommends a dedicated email address).",
+   "English level: probably upper-intermediate or better in writing if selling to the global Chrome market. Listing copy, support emails and community posts would be in English (the AI can draft, but the human posts and answers). A Korean-language niche is possible, but its market size was not found.",
+   "Skills: no coding needed, since the AI builds. The human does need judgement on customer problems, willingness to hold 10–30 user or customer conversations, and daily distribution work on their own social accounts.",
+   "Time: ESTIMATE 3–6 hours/day for the human, mostly distribution and customer contact rather than building.",
+   "Mindset/cash: tolerance for a likely C$0–few-hundred MRR at day 60 (see base rates). Not suitable as the only income source for someone who needs rent money in 30 days."
+  ],
+  "regulations": [
+   {
+    "fact": "GST/HST small-supplier threshold (secondary summary of a CRA page): registration is required once worldwide taxable supplies exceed $30,000 over four consecutive calendar quarters, or within a single quarter, which triggers immediate loss of small-supplier status and registration within 29 days. Below the threshold, registration and charging are not required.",
+    "source_url": "https://raw.githubusercontent.com/kurtrgoddard/Bilingua-App/main/economy/research-pricing.md"
+   },
+   {
+    "fact": "Under a merchant of record (MoR: Paddle, Polar, Lemon Squeezy, Stripe Managed Payments), the MoR is the seller of record and handles tax collection. Canadian B2B buyers may still need a GST/HST registration number on the invoice to claim their input tax credit (ITC), which is a friction point. Secondary, verified 2026-08-02.",
+    "source_url": "https://raw.githubusercontent.com/BoilerHAUS/EPSCAxplor/main/docs/planning/payments-comparison.md"
+   },
+   {
+    "fact": "METRO VANCOUVER DIFFERENCE: BC PST applies to software, including SaaS, at 7%. An in-province seller 'must register to collect PST if they make taxable sales… in BC in the ordinary course of business'; even a single taxable sale triggers registration. Out-of-province sellers must register above C$10,000 of BC sales. Source is an open-source accountant knowledge base updated 2026-07-13 with status 'pending review'; verify with BC eTaxBC or Bulletin PST 105. A Vancouver owner selling directly through Stripe to BC customers would need PST registration; an MoR avoids this.",
+    "source_url": "https://raw.githubusercontent.com/openaccountants/openaccountants/main/packages/ca-chartered-accountant/bc-pst.md"
+   },
+   {
+    "fact": "Montreal (Quebec QST) and Calgary (Alberta, GST-only) specifics for SaaS sellers: not verified in this session.",
+    "source_url": "https://raw.githubusercontent.com/openaccountants/openaccountants/main/packages/ca-chartered-accountant/bc-pst.md"
+   },
+   {
+    "fact": "Self-employment income is reported on CRA form T2125. The filing deadline for self-employed people is June 15, but any tax owing is due April 30 (secondary).",
+    "source_url": "https://github.com/openaccountants/openaccountants/blob/ab70f684e7b2afc35026fda0940a53c747698bbb/packages/ca-on/ca-fed-t2125.md"
+   },
+   {
+    "fact": "CWS spam policy (official, dated 2022-11-01): 'We don't allow any developer, related developer accounts, or their affiliates to submit multiple extensions that provide duplicate experiences or functionality'. This rules out a strategy of publishing many near-identical AI extensions.",
+    "source_url": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/program-policies/spam-and-abuse/index.md"
+   },
+   {
+    "fact": "CWS review (official, updated 2021-12-10): new developers, new extensions, dangerous or broad host permissions (for example *://*/*) and sensitive permissions (tabs, downloads) get longer reviews. Policy violations lead to rejection by email with an appeal path.",
+    "source_url": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/review-process/index.md"
+   },
+   {
+    "fact": "2025 CWS affiliate-ads policy (secondary): extensions must disclose affiliate relationships and may add or modify affiliate links only when this directly benefits the user. Enforcement began June 10, 2025. Manifest V2 extensions are no longer supported. A privacy policy is required when user data is collected.",
+    "source_url": "https://raw.githubusercontent.com/minalGoel/micro-tools/main/project_planning/source_files/Chrome%20Extension%20Economics%20and%20Distribution%202024%E2%80%932026.md"
+   }
+  ],
+  "ai_can_build": [
+   "The full Manifest V3 extension: code, popup and options UI, and a background service worker. The repo already contains an MV3 extension scaffold ('Canadian Tool Deals — Live Price Checker', /home/user/canadian-tool-deals/extension/manifest.json) and a Next.js site that could be reused. Note that consumer price-comparison is a weak category to monetize, and affiliate-link injection is restricted by the 2025 CWS policy.",
+   "Web app or micro-SaaS backend: Next.js, database, authentication, license and entitlement checks, a Stripe or ExtensionPay or Paddle or Polar checkout integration, webhooks, and a customer portal link.",
+   "Landing page, pricing page, SEO/comparison pages, docs and a changelog.",
+   "All CWS listing assets: title and description copy, screenshots and promo images (generated), a permission justification text, and draft privacy disclosures. The privacy policy draft needs human review.",
+   "Onboarding and upgrade prompts shown mid-task (a secondary source reports these convert 3–5× better than prompts at install), trial logic and one-time versus subscription experiments.",
+   "Market research spreadsheets (competitor extensions, reviews, feature gaps), unit-economics and pricing calculators, and an MRR dashboard.",
+   "Outreach assets: prospect lists from public web research, cold email sequences, Gmail drafts through the connected Gmail, and Calendar scheduling for demo calls.",
+   "Community post drafts for Reddit, Indie Hackers, X, Product Hunt and Korean-Canadian communities. The human must post them.",
+   "Support macros, FAQ and refund-policy drafts, plus a monitoring and alert script for errors and AI API spend.",
+   "Automated CWS updates through the CWS API once the human has created the first item (secondary claim; not verified in official docs this session)."
+  ],
+  "human_must_do": [
+   "Register the CWS developer account with their own Google account and pay the fee. Submit the first listing and accept the developer terms.",
+   "Open and verify payment accounts (Stripe Canada, Paddle, Polar or ExtensionPay's Stripe connection) with government ID, SIN or business details as required, and a Canadian bank account for payouts.",
+   "Decide on a legal setup: sole proprietorship and a business-name registration if using a trade name; get a CRA Business Number and GST/HST registration once past C$30k (or register voluntarily). In BC, handle PST registration if selling directly.",
+   "Hold customer-discovery and sales conversations by video or phone (the AI cannot make calls), and close B2B deals.",
+   "Post and engage from their own accounts on Reddit, X, Indie Hackers, Product Hunt, LinkedIn, Instagram, YouTube and KakaoTalk or Korean-Canadian communities. This is the main bottleneck.",
+   "Approve any spending (API credits, domain, ads), and handle chargebacks and disputes, refunds and support escalations.",
+   "Review and approve the privacy policy and terms, and answer CWS rejection emails or appeals.",
+   "File taxes (T2125) and keep records."
+  ],
+  "seasonality": "No sourced seasonality data was found for Chrome extensions or micro-SaaS revenue in this session. Any seasonal pattern (for example a January productivity bump or slower B2B buying in late December) is unverified here. The larger timing issue is structural rather than seasonal: subscription revenue builds up month over month, so income in October–November 2026 would be the lowest point of the curve.",
+  "risks": [
+   "Getting customers is the main risk. Sources from 2025–2026 agree that AI made building cheap but did not solve distribution. For someone with no audience, organic launches outside the Product Hunt top 10 bring under 500 visitors and under 20 signups (low-credibility benchmark).",
+   "Income timing: typical products earn about $148/month in year 0 (TrustMRR), and median time to $1K MRR is about 8 months even among survivors. This does not match a need for income within 30 days.",
+   "Crowded markets: AI content, scraper, dashboard and 'copilot' tools are widely reported as saturated. Thin wrappers around AI models face race-to-zero pricing and can be copied by the model providers themselves.",
+   "Platform risk: CWS reviews are slower for new developers, rejections can be opaque (a 2025 secondary report describes repeated 'Use of Permissions' rejections with no human response), takedowns can come with little appeal, and policies change (MV3, 2025 affiliate rules). Depending on third-party APIs killed GummySearch after Reddit's API pricing change.",
+   "Processor and MoR risk: account reviews or holds at Paddle, Polar or Stripe (approval rules not verified this session). Lemon Squeezy is reported to be in maintenance mode and folding into Stripe Managed Payments. ExtensionPay is maintained by a single person.",
+   "Hidden costs: LLM inference that grows with use or abuse, $15 per dispute (Polar; Stripe US), payout and FX fees (up to 1% cross-border on Polar, 2% FX on Stripe Canada), and the 5% ExtensionPay layer.",
+   "Tax compliance if selling directly through Stripe: GST/HST past C$30k, BC PST on software for BC sellers, and foreign VAT. A merchant of record removes most of this but costs about 5% + 50¢.",
+   "Security and quality: HN discussions (secondary) point to high vulnerability rates in AI-generated code, such as missing row-level security in Lovable/Supabase apps. A breach in a product that handles user data creates legal exposure.",
+   "Conversion reality: 0.3–1.4% on one developer's real portfolio. Large free user bases often convert to almost nothing (70k users ≈ $30/month).",
+   "Opportunity cost: 30–60 days spent here instead of on services or employment income may leave the owner without income when it is needed most."
+  ],
+  "counter_evidence": [
+   {
+    "fact": "More than 54% of tracked Indie Hackers products make $0 (n=937, 2022). The median of 5,079 Stripe-verified products is $169 MRR, and only 0.9% were 'breaking out'.",
+    "source_url": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md"
+   },
+   {
+    "fact": "Real 2026 extension portfolio (5 extensions, ExtensionPay): 0.8% conversion and $180/month MRR after about 6 months.",
+    "source_url": "https://raw.githubusercontent.com/nnnkit/totem/main/plans/research/premium-monetization/raw/rs-recent-discourse.md"
+   },
+   {
+    "fact": "Post-mortems: Responsive Viewer had 70,000+ users and about $30/month. Text-Behind-Objects had 1M views and $23 total. 'Viral AI Script Generator' had 30 waitlist signups and $0 because '5+ free alternatives existed'. One founder built 12 SaaS products in 2 years and '1,600 hours building, 3 hours talking to users'. FeedbackWise shut down after 6 months with no traction in a saturated market.",
+    "source_url": "https://raw.githubusercontent.com/minalGoel/micro-tools/main/project_planning/source_files/Micro-SaaS%20and%20AI%20tool%20monetization%20what%20actually%20works.md"
+   },
+   {
+    "fact": "Pieter Levels: 'Only 4 out of 70+ projects ever made money'. Marc Lou built 28 startups before his breakthrough. CSS Scan's founder's 2 previous products made $189 combined.",
+    "source_url": "https://raw.githubusercontent.com/AnshumanAtrey/licon/main/research/founder-stories/solo-saas-founders-research.md"
+   },
+   {
+    "fact": "HN and Reddit sentiment (anecdotal): a 'wrapper graveyard' of generic AI tools with weak moats and heavy churn. A Reddit thread titled 'EVERYTHING IS OVERSATURATED (especially micro SaaS)'. 'Audience, not product, is the moat'. Builders 'mostly end up selling tools to each other'.",
+    "source_url": "https://raw.githubusercontent.com/minalGoel/micro-tools/main/project_planning/source_files/Hacker%20News%20Debates%20on%20Vibe%20Coding%2C%20AI-Built%20Products%2C%20and%20Micro%E2%80%91SaaS%20(2024%E2%80%932026).md"
+   },
+   {
+    "fact": "X/Twitter discourse on 2026-05-04 (anecdotal): 'building is now easy, but marketing, maintenance, and distribution remain unsolved… vibe coding solves the wrong bottleneck'.",
+    "source_url": "https://github.com/vibewatch/vibewatch.github.io/blob/cbd6bdd3b207c02c3399c5f971949cb313276af2/docs/twitter/ai-coding/2026-05-04.md"
+   },
+   {
+    "fact": "The widely repeated claim that '112,000 extensions, 86.3% have fewer than 1,000 users' appears in a 2026 brief with no source attribution, so it is unverified. A separate compilation says about 94% of extensions are fully free with no direct monetization (Zovo 2026, secondary).",
+    "source_url": "https://raw.githubusercontent.com/LoopheadLabs/meetingfocus-site/main/chrome-extension-opportunity-brief.md"
+   },
+   {
+    "fact": "The fast-launch success stories (TypingMind, AudioPen, HeadshotPro, SiteGPT) come mostly from the 2023 ChatGPT wave and from founders who already had large audiences. Stories of fast revenue for founders with no audience in 2025–2026 were not found.",
+    "source_url": "https://raw.githubusercontent.com/AnshumanAtrey/licon/main/research/founder-stories/solo-saas-founders-research.md"
+   },
+   {
+    "fact": "The research author warns that every indie revenue dataset (Acquire.com, TrustMRR, SaaS Capital) skews upward because of self-selection; the >54% zero-revenue share is the only downward correction.",
+    "source_url": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md"
+   }
+  ],
+  "scores": {
+   "speed": 3,
+   "probability_5k": 1,
+   "capital_light": 9,
+   "ai_leverage": 7,
+   "low_risk": 7
+  },
+  "score_rationale": "SPEED (3): A first dollar within 2–4 weeks is possible. The AI can build in days, ExtPay setup takes under an hour, and most CWS reviews historically finished within 3 days. But the documented early numbers are tiny: $27 in week 1 and $60/month at month 3. Human ID checks, CWS review delays for new developers, and payout timing (not verified) push meaningful cash past 30 days.\n\nPROBABILITY_5K (1): Averaging CAD 5,000/month within about 60 days would take about 418 new C$9 subscribers or about 71 new C$49 B2B customers every month from launch. That is about 34× the TrustMRR year-0 median and beyond the 90th-percentile trajectory. Only 0.9% of 5,079 products were 'breaking out'. The fast-success examples depended on existing audiences, which this owner is not known to have.\n\nCAPITAL_LIGHT (9): Launch costs are under C$100 (US$5 CWS fee, no monthly fees on Stripe, Paddle, Polar Starter or ExtensionPay). Variable AI API cost is the only real cash exposure.\n\nAI_LEVERAGE (7): The AI can do about 90% of the build and all copy and analytics. Distribution, ID checks, community posting, customer calls and CWS account steps are human-only, and those are exactly the steps that decide revenue.\n\nLOW_RISK (7): Legal, physical and financial risk is low: little capital, no licence, no liability from physical work. The remaining risks are platform takedowns or rejections, tax compliance if selling directly through Stripe (BC PST in particular), security flaws in AI-generated code, and processor account holds.\n\nThe biggest risk, opportunity cost for someone who needs income in 30 days, is reflected in the probability and speed scores rather than here.\n\nCONFIDENCE NOTE: primary sites were blocked and the search budget was exhausted. Several numbers are secondhand (GitHub-hosted 2026 research that cites the originals) and should be re-checked against stripe.com/en-ca/pricing, paddle.com/pricing, canada.ca (CRA) and developer.chrome.com before any decision."
+ },
+ "verification": {
+  "checked_claims": [
+   {
+    "claim": "The Chrome Web Store developer registration fee is a one-time US$5.",
+    "status": "confirmed",
+    "correction": "Only secondhand. The official register doc (updated 2023-08-02) still gives no amount. Several independent 2026 developer docs say US$5, and one 2026 compilation that cites Google's docs adds that the fee covers up to 20 items. MISSED BY THE DOSSIER: the account email cannot be changed later. Before submitting, the seller must also make a Trader/Non-Trader declaration. A paid extension is a trader, and trader status publishes the seller's legal name, phone number and physical address on the store listing.",
+    "source_url": "https://raw.githubusercontent.com/erwins-enkel/shepherd/82f1abb7d5db1b7e57172fa95cf1ee04f871c95d/docs/research/extension-chrome-web-store-readiness.md"
+   },
+   {
+    "claim": "Stripe Canada charges 2.9% + C$0.30 per domestic card, plus 0.8% for international cards and 2% for currency conversion.",
+    "status": "confirmed",
+    "correction": "The base rate is backed by two independent 2026 secondary sources that cite stripe.com/en-ca/pricing, one of them checked on 2026-08-23. stripe.com itself was blocked by the proxy. The +0.8% and +2% figures come from only one secondary source. The dossier's Scenario A leaves out the Stripe Billing fee (0.7% of billing volume) that applies to subscriptions. ESTIMATE: 0.007 × 9 = C$0.063, so net per subscriber is 7.989 − 0.063 = C$7.926, and 5,000 / 7.926 = 631 subscribers are needed instead of 626.",
+    "source_url": "https://raw.githubusercontent.com/heyimcarlos/osfo/a69786b6ce42fc4707bf8c0528e880557f1054d5/docs/research/hermes-composio-tools-skills-study-20260822.md"
+   },
+   {
+    "claim": "Polar charges 5% + 50¢ on the free Starter plan, +1.5% for international cards, $15 per dispute, and a $2 monthly fee plus 0.25% + $0.25 per payout.",
+    "status": "confirmed",
+    "correction": "Confirmed word for word in Polar's official docs repo (fees.mdx). MISSED BY THE DOSSIER: (1) transaction fees are not returned when you refund; (2) Polar may issue refunds at its own discretion for up to 60 days after purchase; (3) Polar says it may step in and even suspend accounts whose chargeback rate approaches about 0.7%. The Early Member rate is no longer available, because only organizations created before 2026-05-27 get it.",
+    "source_url": "https://raw.githubusercontent.com/polarsource/polar/main/docs/merchant-of-record/fees.mdx"
+   },
+   {
+    "claim": "Paddle charges 5% + $0.50 all-in.",
+    "status": "corrected",
+    "correction": "A 2026-09-19 vendor comparison that cites paddle.com/pricing says products under $10 need a custom discussion with Paddle. The dossier's C$9/month consumer plan (Scenario A) is exactly in that band, so Paddle may not take it at the standard rate. Paddle's pricing page itself was blocked here.",
+    "source_url": "https://raw.githubusercontent.com/darce/context-alt-text-monorepo/0a95484c464bfffa0b9d369847ecf1f094d1332b/docs/assessments/current/app-portal-prior-art-and-vendors-2026-09-19.md"
+   },
+   {
+    "claim": "Lemon Squeezy (5% + $0.50) is 'in maintenance mode' and folding into Stripe Managed Payments.",
+    "status": "corrected",
+    "correction": "The same 2026-09-19 comparison says Lemon Squeezy's January 2026 update describes a move toward Stripe and slower updates, not a published shutdown, and warns 'do not claim a shutdown or mandatory migration'. The dossier also left out Lemon Squeezy's extra +0.5% on subscriptions and +1.5% on PayPal.",
+    "source_url": "https://raw.githubusercontent.com/darce/context-alt-text-monorepo/0a95484c464bfffa0b9d369847ecf1f094d1332b/docs/assessments/current/app-portal-prior-art-and-vendors-2026-09-19.md"
+   },
+   {
+    "claim": "Payout timing for a new Stripe Canada account: 'not found'.",
+    "status": "corrected",
+    "correction": "A GitHub mirror of Stripe's 'Receive payouts' doc (mirror date not shown) says Stripe 'typically schedules your initial payout for 7-14 days after you successfully receive your first payment', and that it can take longer for riskier industries. Its settlement table lists Canada at 7 calendar days for the first payout and 3 business days after that. This pushes cash in hand later than the dossier's 'first sale in 1–4 weeks'.",
+    "source_url": "https://raw.githubusercontent.com/ruiyuwg/anytext/main/registry/docs/stripe/receive-payouts.md"
+   },
+   {
+    "claim": "CWS review: in early 2021 most submissions finished within 24 hours, and over 90% within 3 days.",
+    "status": "corrected",
+    "correction": "The quote is accurate, but it is dated 2021 (doc updated 2021-12-10). The same official doc says to contact support if an item is pending for more than three weeks. A 2026 secondary compilation that cites Google says reviews can take 'up to a few weeks', reports a larger 2026 backlog, and advises budgeting about 1–3 weeks. New developers and broad host permissions lengthen review. Rejections can also come from bundled or minified libraries that trip the 'Red Titanium' obfuscation check, which developers report happening with AI and bundler output.",
+    "source_url": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/review-process/index.md"
+   },
+   {
+    "claim": "TrustMRR analysis (n=5,079): median MRR is $169, year-0 median is $148, and 0.9% are 'breaking out'.",
+    "status": "unverifiable",
+    "correction": "The secondary report (2026-08-13) reproduces these numbers exactly, but the primary Indie Hackers post was blocked. The same report adds that TrustMRR is opt-in and skews upward, and that 'the median product does not reach $1k MRR by year 2', which strengthens the dossier's negative conclusion.",
+    "source_url": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md"
+   },
+   {
+    "claim": "RockingWeb 2025 (~1,000 micro-SaaS products): about 70% earn under $500/month, 82% never reach $5k and 93% never reach $10k.",
+    "status": "refuted",
+    "correction": "Not usable as evidence. A separate 2026 research report lists RockingWeb as a 'content-farm' source and quotes different RockingWeb figures ('median $4.2K MRR / 70% under $1K') that contradict the $169 Stripe-verified median by 25 times. The dossier's own source says 'Citing 93% as a hard number is not [defensible]'. Drop it.",
+    "source_url": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md"
+   },
+   {
+    "claim": "ExtensionPay charges 5% on top of Stripe; 'over $500k earned' in total; setup takes 'less than an hour'.",
+    "status": "corrected",
+    "correction": "From the official README, the '$500k' total and the 'less than an hour' testimonial are confirmed. The 5% fee is not in the README and comes only from secondary vendor-comparison pages, so it is unverifiable. MISSED BY THE DOSSIER: the ExtPay issue tracker shows service outages. On 2025-03-16 all users were logged out (#264), on 2026-01-02 the site was down (#326), and from 2026-05-22 a global HTTP 500 on /subscribe blocked all paid subscriptions (#349). A 2025 report says payments were not reaching the seller's Stripe account (#302).",
+    "source_url": "https://raw.githubusercontent.com/Glench/ExtPay/main/README.md"
+   },
+   {
+    "claim": "Stripe Managed Payments costs 3.5% on top of Payments fees and is open to Canada-based businesses.",
+    "status": "confirmed",
+    "correction": "The 3.5% is confirmed in a capture of Stripe's pricing page taken 2026-06-04, and Canada eligibility in two 2026 secondary sources. Caveats the dossier missed: an eligibility review still applies, and professional-service or consulting offers do not qualify.",
+    "source_url": "https://raw.githubusercontent.com/brianbolze/truffle/master/store/stripe-com/captures/2026-06-04/pricing.md"
+   },
+   {
+    "claim": "LLM API cost: Claude Haiku 4.5 is $1/$5 per million tokens and Sonnet 4.6 is $3/$15.",
+    "status": "confirmed",
+    "correction": "Matches Anthropic's claude-api reference model table (cached 2026-06-24), read locally from the bundled skill rather than a web URL. Sonnet 5 at $2/$10 is also available and cheaper than Sonnet 4.6.",
+    "source_url": "local: Anthropic claude-api skill model/pricing table (cached 2026-06-24)"
+   },
+   {
+    "claim": "Developer with 5 extensions (dev.to/ktg0215, May 2026): 0.8% conversion and $180 MRR after 6 months.",
+    "status": "unverifiable",
+    "correction": "The secondary compilation matches the dossier word for word, but dev.to was blocked, so the original post could not be opened.",
+    "source_url": "https://raw.githubusercontent.com/nnnkit/totem/main/plans/research/premium-monetization/raw/rs-recent-discourse.md"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "CWS official account setup (2023-10-16): 'Only items that offer functionality to purchase items, additional features, or subscriptions must include a physical address.' So a paid extension requires a physical address. A 2026 compilation adds that trader status publishes the legal name, phone number and physical address on the listing. A sole proprietor working from home would be exposing their home address.",
+    "source_url": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/set-up-account/index.md"
+   },
+   {
+    "fact": "A 2026-09-02 developer ADR (decision record) reports that the CWS trader entity (Individual or Business) is inherited from the Google payments profile, which is fixed when the profile is created. Getting a business-name publisher took a second attempt, a new Business profile and a D-U-N-S (Dun & Bradstreet business ID) check. This is setup friction the dossier describes as a 'US$5 errand'.",
+    "source_url": "https://raw.githubusercontent.com/Integral-Productivity/glassfrog-clipper/7648897d36b0bbe7b8ef27fb5f31e80f271a6f8a/docs/adr/0016-a-verified-publisher-is-bought-with-a-public-address.md"
+   },
+   {
+    "fact": "CWS Repeat Abuse policy (official, 2022-11-01): serious or repeated violations suspend the developer account and possibly related accounts, and 'in extreme cases, this may also result in the suspension of related Google services associated with your Google account.' If the owner uses a personal Gmail account, a takedown could spread to their personal Google services.",
+    "source_url": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/program-policies/repeat-abuse/index.md"
+   },
+   {
+    "fact": "ExtensionPay, the easiest payment route in the dossier, had documented outages. On 2026-05-22 a global HTTP 500 on /subscribe blocked all paid subscriptions across extensions (#349). There was also a site outage on 2026-01-02 (#326) and an incident on 2025-03-16 that logged out all users (#264).",
+    "source_url": "https://github.com/Glench/ExtPay/issues/349"
+   },
+   {
+    "fact": "EU VAT: sellers outside the EU get no threshold for digital services sold to EU consumers. From the first sale they must charge the destination country's rate and either use the non-Union OSS scheme or register in each member state. ExtensionPay with plain Stripe is not a merchant of record, so any EU customer triggers this. That pushes the owner toward a merchant of record at about 5% + 50¢.",
+    "source_url": "https://raw.githubusercontent.com/openaccountants/openaccountants/main/packages/_cross-border/eu-oss-digital.md"
+   },
+   {
+    "fact": "The research report behind the TrustMRR figures says 'the median product does not reach $1k MRR by year 2'. It also excludes several widely cited rosy statistics as fabricated or AI-generated ('0 to $10K MRR in 6 months', RockingWeb's '$4.2K median').",
+    "source_url": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md"
+   },
+   {
+    "fact": "Developers report CWS 'Red Titanium' (code obfuscation) rejections caused by bundled third-party libraries (jsPDF optional dependencies, minified pdf.js). AI-built extensions that bundle libraries face the same risk of rejection and resubmission delays.",
+    "source_url": "https://raw.githubusercontent.com/nuncaeslupus/ai-chat-exporter/main/docs/dev/releasing.md"
+   },
+   {
+    "fact": "Polar's official fee doc says it may 'intervene and even suspend your account' if the chargeback rate approaches about 0.7%, and may refund customers at its discretion for up to 60 days. Merchant-of-record revenue is therefore not guaranteed once a sale is made.",
+    "source_url": "https://raw.githubusercontent.com/polarsource/polar/main/docs/merchant-of-record/fees.mdx"
+   }
+  ],
+  "hidden_costs_or_blockers": [
+   "Cash timing (ESTIMATE): human ID checks (Stripe/Polar, and the Google payments profile for CWS) take 0–few days. CWS review for a new developer should be budgeted at about 1–3 weeks (secondary, 2026). Stripe's first payout comes 7–14 days after the first payment (Stripe doc mirror). Adding these, even a flawless launch around Oct 1 gives a first payout around late October or November, and it would be tiny.",
+   "A paid extension requires a physical address, and trader status shows legal name, phone and address publicly on the listing. This is a privacy cost for a home-based sole proprietor, and the payments-profile entity type cannot be changed later.",
+   "The CWS developer account email is permanent. A suspension can reach 'related Google services', so the owner needs a dedicated Google account, not their personal Gmail.",
+   "EU VAT from the first sale to an EU consumer if selling directly (Stripe or ExtensionPay are not merchants of record). Otherwise a merchant of record is needed at about 5% + 50¢ (Polar/Paddle) or +3.5% (Stripe Managed Payments, with eligibility review).",
+   "Paddle: products under $10 need a custom discussion (2026-09-19 secondary), which blocks a straightforward C$9/month consumer plan on Paddle.",
+   "Stripe Billing at 0.7% was left out of the dossier's Scenario A. ESTIMATE: net per C$9 subscriber is C$7.926, so 631 subscribers are needed for C$5,000/month.",
+   "Refund fees are not returned (Polar). Disputes cost $15 each (Polar; Stripe US). Payouts cost $2/month plus 0.25% + $0.25 each, plus up to 1% cross-border (Polar).",
+   "ExtensionPay is a single-maintainer dependency with documented global outages (2025-03, 2026-01, 2026-05).",
+   "NOT VERIFIED (canada.ca blocked): if the owner claims Employment Insurance after losing the job next week, self-employment activity and earnings would need to be reported and could affect eligibility. Check before starting any business, because it changes the net value of low early revenue.",
+   "The existing repo scaffold (/home/user/canadian-tool-deals/extension/manifest.json) requests host permissions for Amazon.ca, Walmart.ca, Home Depot, Canadian Tire, RONA and Princess Auto to fetch live prices. Scraping retailers carries terms-of-service risk (retailer ToS not verified here), and CWS affiliate policy requires disclosure plus a user action before each affiliate code. This scaffold is a weak base for a paid product.",
+   "Research limits this pass: the WebSearch budget was already used up (200/200), so none of the 8 required web searches could run. stripe.com, paddle.com, developer.chrome.com, dev.to, indiehackers.com and canada.ca were all blocked. Verification relied on GitHub-hosted official repos (Chrome docs, Polar docs, ExtPay), GitHub code and issue search (about 9 queries), and 2026 secondary documents. Every 'confirmed (secondary)' item still needs a check against the live primary page."
+  ],
+  "adjusted_scores": {
+   "speed": 2,
+   "probability_5k": 0.5,
+   "capital_light": 9,
+   "ai_leverage": 6,
+   "low_risk": 6
+  },
+  "verdict": "ELIMINATE as the main 30–60 day income plan, and keep it only as an optional low-effort side bet once faster income exists. The dossier's negative conclusion holds up, and the checks make it worse. (1) Cash arrives later than claimed. Stripe's first payout comes 7–14 days after the first payment (Canada: 7 days for the first settlement), and CWS review for a new developer should be budgeted at 1–3 weeks rather than the 2021 figure of under 24 hours. Cash in hand in October 2026 is therefore very unlikely. (2) The dossier missed several blockers: a public physical address and phone number for a paid (trader) listing, EU VAT from the first sale unless a merchant of record is used, Paddle's under-$10 restriction on the C$9 plan, ExtensionPay's global outages, and the risk that a CWS suspension spreads to the owner's personal Google services. (3) One of the dossier's own base-rate sources (RockingWeb) is flagged elsewhere as a content farm with contradictory numbers. The best remaining dataset, TrustMRR (opt-in, so it skews upward), puts the median product below $1k MRR even at year 2. Scores lowered: speed 3→2, probability 1→0.5, AI leverage 7→6 (the steps that decide revenue are all human), low risk 7→6. Capital-light stays at 9."
+ }
+}

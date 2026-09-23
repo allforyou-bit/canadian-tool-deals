@@ -1,0 +1,36 @@
+{
+ "topic": "Market timing and demand signals for Oct–Dec 2026 in Canadian metros (seasonal demand, economic context, winter 2026–27 outlooks, ENSO status, local home-service competition). SWEEP FAILED: no market facts could be verified in this session because web search and web access were blocked. Nothing below is a market fact.",
+ "key_facts": [
+  {
+   "fact": "RESEARCH-PROCESS NOTE, NOT A MARKET FACT: The WebSearch tool refused all 3 queries I tried (StatCan LFS August 2026; NOAA ENSO September 2026; Farmers' Almanac winter 2026-27) with the message 'this session has used its web search budget (200 of 200 WebSearch calls)'. Other agents in this workflow used up the shared budget before this sweep started, so this sweep ran zero searches.",
+   "source_url": "n/a: WebSearch tool output in this session, 2026-09-23",
+   "applies_to": "research process only"
+  },
+  {
+   "fact": "RESEARCH-PROCESS NOTE, NOT A MARKET FACT: WebFetch returned EGRESS_BLOCKED for every page I tried: www.cpc.ncep.noaa.gov (ENSO discussion), www150.statcan.gc.ca (LFS Daily), www.farmersalmanac.com, weather.gc.ca (seasonal forecasts), www.canada.ca, en.wikipedia.org, www.theweathernetwork.com and homestars.com. I also checked 40 hosts with curl through the proxy. None returned a web page (status 000) except github.com (400) and raw.githubusercontent.com (301). The unreachable hosts included statcan, canada.ca, weather.gc.ca, NOAA, TWN, almanac.com, homestars, kijiji, google, reddit, youtube, cbc, globalnews, ctvnews, bankofcanada, ontario.ca, toronto.ca, retailcouncil.org, cfib-fcei.ca, trreb.ca, crea.ca and web.archive.org. The proxy status log also shows 403 CONNECT denials at 19:33–19:34 UTC for www.uber.com, www.reddit.com, help.doordash.com, www.cbc.ca and www.tps.ca.",
+   "source_url": "n/a: WebFetch errors and the proxy status endpoint ($HTTPS_PROXY/__agentproxy/status) in this session, 2026-09-23",
+   "applies_to": "research process only; other workflow agents are probably hitting the same blocks"
+  }
+ ],
+ "implications": [
+  "The judges and synthesis step should not use any claim about Oct–Dec seasonal demand, the 2026 unemployment rate, consumer spending, the winter 2026–27 forecast, La Niña/El Niño status or competitor counts unless another dossier gives it a source URL that was actually opened. This sweep verified none of these.",
+  "Other dossiers may say demand for a service is 'seasonal' or 'peaks in the fall', for example snow-removal sign-ups, holiday lights, leaf cleanup or moving. Treat those as unverified unless they cite a primary source.",
+  "Snow-removal models depend on the weather. Until someone verifies an official ECCC seasonal forecast and the NOAA/ECCC ENSO status, the plan should assume snowfall in winter 2026–27 is unknown. Any snow-contract revenue projection should include a low-snow scenario and a refund/cancellation policy. This is a planning safeguard, not a forecast.",
+  "Metro Vancouver needs its own check before any snow-based model is recommended there. This sweep did not verify its snowfall norms.",
+  "To fix this: re-run this sweep after raising CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION and allowlisting at least www150.statcan.gc.ca, www.canada.ca, weather.gc.ca, www.cpc.ncep.noaa.gov, www.theweathernetwork.com, www.farmersalmanac.com, www.almanac.com, homestars.com, www.kijiji.ca and www.reddit.com. Raising the search budget alone will not help, because WebFetch is blocked for these hosts too.",
+  "The pages to open first on a re-run are the StatCan Daily Labour Force Survey release for August 2026 (www150.statcan.gc.ca/n1/dai-quotidien/), StatCan table 14-10-0287-01 for national and provincial unemployment rates, and the NOAA CPC ENSO discussion (cpc.ncep.noaa.gov/products/analysis_monitoring/enso_advisory/ensodisc.shtml). After those: the ECCC seasonal forecasts (weather.gc.ca/saisons/), The Weather Network's fall 2026 forecast and its winter forecast (release timing not verified), the Farmers' Almanac and Old Farmer's Almanac winter 2026–27 pages (label these as low-reliability folk forecasts), the StatCan Daily retail trade release, and the HomeStars and Kijiji category pages for snow removal, eavestrough/gutter cleaning, Christmas lights and movers in Toronto, Mississauga, Ottawa, Calgary, Montreal and Vancouver, recording each count and the date seen."
+ ],
+ "unknowns": [
+  "Latest Statistics Canada Labour Force Survey unemployment rate in 2026 (national, Ontario, Toronto CMA, BC/Vancouver, Alberta/Calgary, Quebec/Montreal, Ottawa-Gatineau): not found (access blocked)",
+  "Consumer spending signals for 2026 (StatCan retail trade, Retail Council of Canada holiday outlook, Bank of Canada policy rate and outlook): not found (access blocked)",
+  "NOAA CPC ENSO Alert System status and probabilities for Northern Hemisphere winter 2026–27: not found (NOAA blocked)",
+  "ECCC ENSO statement and seasonal temperature and precipitation forecasts for Oct–Dec 2026 and Dec 2026–Feb 2027: not found (weather.gc.ca and canada.ca blocked)",
+  "The Weather Network fall 2026 forecast and winter 2026–27 forecast: not found (blocked); I could not confirm whether the winter forecast has been published yet",
+  "Farmers' Almanac and Old Farmer's Almanac winter 2026–27 forecasts for Canada: not found (blocked)",
+  "Which consumer and small-business services peak in Oct–Dec (snow-removal contract sign-ups, holiday light installation bookings, gutter and leaf cleanup, holiday retail and seasonal hiring, moving) and when bookings happen: not found. These remain hypotheses to verify, not facts.",
+  "Competition counts per city on HomeStars, Google Maps and Kijiji for snow removal, holiday lights, gutter/leaf cleanup and moving in the GTA, Vancouver, Calgary, Ottawa and Montreal: not found (homestars, kijiji and google blocked)",
+  "Community evidence (Reddit, YouTube, Instagram, TikTok) about fall 2026 demand: not found (reddit, youtube and others blocked)",
+  "Metro Vancouver snowfall norms and the low-snow-winter risk to snow-removal models: not found this session",
+  "Seasonal hiring for holiday retail and delivery (e.g., Canada Post, Amazon, retailers): not found; this may belong to other dossiers"
+ ]
+}

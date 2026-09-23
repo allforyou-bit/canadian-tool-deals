@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Archived previous project (not built or deployed).
+    "archive/**",
+    // Google Apps Script source (runs on Google, not in Node).
+    "integrations/**",
   ]),
 ]);
 

@@ -1,0 +1,331 @@
+{
+ "dossier": {
+  "candidate": "Services for the Korean-Canadian community and Korean-owned businesses (bilingual KO/EN translation, bilingual websites and digital marketing for Korean-owned SMBs, paperwork help, tutoring, home catering)",
+  "summary": "RESEARCH LIMITS: WebFetch was blocked by the network egress proxy for every domain I tried (canada.ca, statcan.gc.ca, wikipedia.org, atio.on.ca, gov.bc.ca, taontario.ca, translayte.com, koreatimes.net, joinsmediacanada.com). The session's shared WebSearch budget (200 calls) ran out after 10 successful searches from this agent. So every fact below comes from search-result titles and snippets I actually saw, not from full pages I opened. The owner should open the key official pages before acting on them.\n\nFINDINGS: (1) The market is real but small. The 2021 Census counted 218,140 Korean Canadians, including 74,975 in the Toronto metro area, 62,885 in Vancouver and 13,060 in Calgary (Wikipedia, citing StatCan). Korean consulate counts for 2024 are larger: 127,174 in the Toronto consulate's jurisdiction, 100,708 in Vancouver's, 15,200 in Montreal's and 4,280 in Ottawa's. Recent growth has been concentrated in Vancouver, where the count reached about 110,700 in 2025 and growth was more than three times Toronto's (YTN, March 2026). (2) Paid immigration or paperwork help is legally closed to the owner unless they are a CICC-licensed consultant, a lawyer or paralegal, or a Quebec notary. Canada.ca says anyone who is paid or compensated 'in any way' must be authorized. Secondary sources report fines of $50k–$100k and/or jail for ghost consultants, and 2024 proposed regulations add administrative penalties of up to $1.5M. Remove this line of business. (3) Translation can legally be done without certification only where IRCC accepts a translation from a non-certified translator with a sworn affidavit. It cannot be done for purposes that require a certified translator: OINP requires an ATIO translator, and BC government purposes require STIBC or another CTTIC member. IRCC also refuses translations done by the applicant's representative or consultant, so translation cannot be bundled with paid application help. (4) Certified Korean translation already has established competitors in Toronto with published prices: from $59+HST per document for standard certified translation and from $109+HST for ATIO-certified. This caps what a newcomer can charge and makes it hard to win trust. (5) I found no sourced prices for bilingual websites or marketing for Korean SMBs, Korean tutoring rates, home-catering permit rules, or KakaoTalk and Naver cafe channel specifics. Each is marked 'not found'.\n\nVERDICT: The only version that is legal and fast is non-certified KO→EN translation with an affidavit for IRCC, plus bilingual websites and Google or Naver listings for Korean-owned SMBs. Nothing I found shows that CAD 5k/month net within 60 days is realistic; that figure rests entirely on unsourced price assumptions.",
+  "time_to_first_revenue": "Not found in any source. ESTIMATE, not source-backed: non-certified translation with an affidavit could bring a first paid job 1–3 weeks after the owner posts in Korean community media and chats, if the owner is fully bilingual. A bilingual website for an SMB: ESTIMATE 3–6 weeks, i.e. 1–3 weeks to close the sale plus 1–2 weeks to build, with a deposit possibly paid earlier. Immigration paperwork help cannot legally start without CICC or law-society authorization (https://www.canada.ca/en/immigration-refugees-citizenship/services/immigration-citizenship-representative/learn-about-representatives.html). ATIO or STIBC certified translation is not achievable within 30 days; the certification timeline was not found (https://stibc.org/certification/ was seen in results, but the timing was not visible). Home catering was not researched because the search budget ran out, so its time to revenue is not found.",
+  "pricing_facts": [
+   {
+    "fact": "ATIO-certified translation in Ontario is advertised 'From $109 + HST', usually available within 3 business days (competitor price anchor; page date not visible).",
+    "source_url": "https://www.taontario.ca/translation/7/"
+   },
+   {
+    "fact": "Translation pricing in Ontario advertised 'From $59 per Document' (+HST), usually 1–2 business days (competitor price anchor).",
+    "source_url": "https://www.taontario.ca/pricing/"
+   },
+   {
+    "fact": "A search summary of Toronto translation agencies reported 'standard translations from $58 per document, with notarization from $75 per document (taxes extra)'. This is most likely Translation Agency of Canada; I could not open the page to confirm.",
+    "source_url": "https://translationagencyofcanada.ca/toronto-translation-services"
+   },
+   {
+    "fact": "ATIO-certified translation in Toronto is priced per document for civil-status documents (birth, marriage, death certificates) and per word for longer texts; the reported average is $0.10–0.20 per word (search-result summary; attribution to TA Ontario pages not verified).",
+    "source_url": "https://www.taontario.ca/"
+   },
+   {
+    "fact": "Korean-specialist certified translation providers already market in Toronto (e.g. 'ATIO Certified Translation Korean | Toronto, ON'; 'Certified Korean translation in Toronto and Canada'). Their specific prices were not visible.",
+    "source_url": "https://www.ginabyuntrans.com/"
+   },
+   {
+    "fact": "Docsbase advertises certified Korean translation in Toronto (special-offer page); the price was not visible in results.",
+    "source_url": "http://www.docsbase.ca/special-offers/certified-korean-translation-in-toronto-and-canada.htm"
+   },
+   {
+    "fact": "Prices for bilingual websites or digital marketing for Korean-owned SMBs in Canada: not found.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Korean tutoring hourly rates in GTA/Vancouver: not found.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Home-catering price points for the Korean community: not found.",
+    "source_url": "not found"
+   }
+  ],
+  "cost_facts": [
+   {
+    "fact": "An agency lists notarization 'from $75 per document' (retail, taxes extra). This is only a proxy for the cost of swearing a translation affidavit before a notary. Commissioner-of-oaths fees the owner would actually pay were not found.",
+    "source_url": "https://translationagencyofcanada.ca/toronto-translation-services"
+   },
+   {
+    "fact": "IRCC requires a non-certified translator's affidavit to be sworn before a person authorized to administer oaths, so each IRCC-bound job has a per-affidavit cost or logistics step. The fee amount was not found.",
+    "source_url": "https://ircc.canada.ca/english/helpcentre/answer.asp?qnum=040&top=4"
+   },
+   {
+    "fact": "ATIO or STIBC certification fees and timeline: not found (the STIBC certification page appeared in results, but its fee and timeline details were not visible).",
+    "source_url": "https://stibc.org/certification/"
+   },
+   {
+    "fact": "The cost and time to become a CICC-licensed consultant, which is legally required for paid immigration help: not found.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Web hosting, domain and software costs per SMB client: not found in this session.",
+    "source_url": "not found"
+   }
+  ],
+  "earnings_evidence": [
+   {
+    "claim": "The 2021 Census reported 218,140 Korean Canadians: Ontario 99,425, BC 72,820, Alberta 24,370; Toronto metro 74,975, Vancouver 62,885, Calgary 13,060 (secondary source citing StatCan; the same page also carries an older, conflicting BC figure of 53,770 / 49,880 Greater Vancouver, likely from an earlier census). This is the size of the potential customer base, not evidence of earnings.",
+    "source_url": "https://en.wikipedia.org/wiki/Korean_Canadians",
+    "kind": "industry"
+   },
+   {
+    "claim": "Korea's Overseas Koreans Agency counted 263,153 overseas Koreans in Canada as of 2024: 127,174 in the Toronto consulate's jurisdiction, 100,708 in Vancouver's, 15,200 in Montreal's and 4,280 in the Ottawa embassy's area. Consulate jurisdictions are larger than the metro areas.",
+    "source_url": "https://www.koreatimes.net/ArticleViewer/Article/174081",
+    "kind": "official"
+   },
+   {
+    "claim": "The Vancouver consulate's 2025 count put the regional Korean community at about 110,700 (46,435 Korean nationals plus 64,280 Canadian citizens), up almost 10% in two years. Growth was more than three times Toronto's, driven by working-holiday youth.",
+    "source_url": "https://www.ytn.co.kr/_ln/0104_202603080642167697",
+    "kind": "industry"
+   },
+   {
+    "claim": "Western Canada's Korean community reached the '110,000 era' (Korea Daily, 2 Jan 2026 New Year feature).",
+    "source_url": "https://www.koreadaily.com/article/20260102170045213",
+    "kind": "industry"
+   },
+   {
+    "claim": "Coquitlam had 11,900 Korean residents in 2021, per a search summary of a Daily Hive article based on the census. The summary also showed 10,895 for Vancouver; which geography that figure refers to is unclear.",
+    "source_url": "https://dailyhive.com/vancouver/metro-vancouver-visible-minority-population-residents-statistics",
+    "kind": "industry"
+   },
+   {
+    "claim": "Several providers sell certified Korean–English translation in Toronto (ginabyuntrans.com, docsbase.ca, seertranslation.com, translationagencyofcanada.ca). This shows paying demand exists, but their earnings were not found.",
+    "source_url": "https://www.ginabyuntrans.com/",
+    "kind": "industry"
+   },
+   {
+    "claim": "Earnings reports from individual Korean-community freelancers (translators, web designers, tutors, home caterers) in Canada: not found. No community (Reddit, Naver cafe, YouTube) earnings evidence was collected because the search budget ran out.",
+    "source_url": "not found",
+    "kind": "community"
+   }
+  ],
+  "path_to_5k_math": "None of the service prices used below were found in sources, except the translation price anchors ($59+HST standard and $109+HST ATIO per document, $0.10–0.20 per word, from taontario.ca). Everything else is an assumption.\n\nScenario A, translation only: ESTIMATE price $45/doc, deliberately below the $59 anchor because the owner is not certified. Assumed direct cost is about $5/doc (affidavit and commissioner cost amortized; the actual fee was not found), giving $40 net. $5,000 / $40 = 125 documents/month, or 125 / 21 business days ≈ 6 documents every business day. That is implausible for an unknown, uncertified newcomer in months 1–2.\n\nScenario B, bilingual websites and listings for Korean-owned SMBs: ASSUMED $1,000 setup plus $100/month care; there is no market source for these prices. Month 1: 5 sites × $1,000 = $5,000. By month 3 with 10 care clients: 4 sites × $1,000 + 10 × $100 = $5,000. Five closed sales per month from zero is aggressive; the number of Korean-owned businesses in the GTA was not found.\n\nScenario C, a blend: 2 sites × $1,000 = $2,000; 40 translations × $45 = $1,800; 8 care retainers × $150 = $1,200. Total $5,000 gross, minus about 40 × $5 = $200 in affidavit costs, leaving about $4,800 net.\n\nLonger per-word jobs: a 5,000-word contract × $0.12/word = $600 (ESTIMATE, using a rate inside the sourced $0.10–0.20 range).\n\nConclusion (ESTIMATE): every path to $5k needs 4–6 paid jobs per week in the first 60 days, and I found no evidence that this demand exists or that the prices assumed here would be accepted.",
+  "startup_cost_cad": "ESTIMATE: CAD $100–$500, mostly a domain and hosting, optional business-name registration, and commissioner or notary fees for the first affidavits. None of these fees were verified this session. Certification routes (ATIO, STIBC, CICC) cost more and take longer; their costs were not found.",
+  "requirements": [
+   "Native Korean plus professional written English, needed for translation. The IRCC affidavit must swear to the accuracy of the translation and the translator's language proficiency (https://ircc.canada.ca/english/helpcentre/answer.asp?qnum=040&top=4).",
+   "For anything labelled 'certified' in Ontario: ATIO membership. In BC: STIBC or another CTTIC member society. Neither can be obtained within 30 days (timeline not found).",
+   "For any paid immigration or citizenship help, including 'paperwork help' tied to IRCC applications: CICC licence, law-society membership (lawyer or paralegal) or Quebec notary. Not feasible in 30 days, so this part must be dropped.",
+   "Capital: minimal (see the startup-cost ESTIMATE). Vehicle: not required for digital work; helpful for walk-in sales visits to Korean-owned shops. Physical labour: none, except for home catering, which was not researched.",
+   "Home catering needs food-safety and premises approvals; the specific rules were not found this session and must be researched before any sale.",
+   "Ability to sell in person or by phone to Korean-speaking small-business owners (the AI cannot make calls or post from the owner's accounts)."
+  ],
+  "regulations": [
+   {
+    "fact": "Only these people may charge for immigration or citizenship representation or advice: CICC consultants in good standing, lawyers and paralegals in a Canadian law society, and Quebec notaries. 'If you pay a representative or compensate them in any way in exchange for their services, they must be authorized.' Unpaid help (friends, family) is not covered by this rule.",
+    "source_url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigration-citizenship-representative/learn-about-representatives.html"
+   },
+   {
+    "fact": "Secondary sources report that unauthorized ('ghost') consultants face $50,000–$100,000 fines and/or imprisonment. The search summary said up to 6 months on summary conviction; I could not open the IRPA text to verify.",
+    "source_url": "https://immigrationnewscanada.ca/new-canada-rules-immigration-consultants/"
+   },
+   {
+    "fact": "Proposed IRPR amendments (Canada Gazette Part I, 21 Dec 2024) would add administrative monetary penalties and consequences for representatives. Secondary sources report maximums of up to $1.5M for serious misrepresentation.",
+    "source_url": "https://gazette.gc.ca/rp-pr/p1/2024/2024-12-21/html/reg3-eng.html"
+   },
+   {
+    "fact": "The IRB has a published policy for handling complaints about unauthorized paid representatives.",
+    "source_url": "https://irb-cisr.gc.ca/en/legal-policy/policies/Pages/PolPaidRemun.aspx"
+   },
+   {
+    "fact": "IRCC: documents that are not in English or French need a translation. If the translator is not certified, the translation must come with an affidavit sworn before a person authorized to administer oaths, and the affidavit must refer to both the original and the translation.",
+    "source_url": "https://ircc.canada.ca/english/helpcentre/answer.asp?qnum=040&top=4"
+   },
+   {
+    "fact": "IRCC does not accept translations by the applicant's family members, or by the applicant's representative or consultant, even if that person is a lawyer, notary or translator. So translation cannot be bundled with representation for the same client.",
+    "source_url": "https://www.canada.ca/content/dam/ircc/documents/pdf/english/kits/forms/imm0147/01-04-2022/imm0147e.pdf"
+   },
+   {
+    "fact": "IRCC defines a certified translator as a member in good standing of a professional translation association in Canada or abroad, confirmed by a seal or stamp showing the membership number.",
+    "source_url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/apply-permanent-residence/scan-upload-documents.html"
+   },
+   {
+    "fact": "In Ontario, 'Certified' is a legally reserved title for ATIO members, and the OINP requires an ATIO-certified translator (secondary source summary; ATIO's own 'Certified Translations in Ontario – What you need to know' PDF appeared in results but could not be opened).",
+    "source_url": "https://translayte.com/blog/certified-translation-express-entry"
+   },
+   {
+    "fact": "BC: translations for BC government or official purposes must be done by a translator certified through STIBC or another CTTIC member society (search summary of the BC government translation-requirements page).",
+    "source_url": "https://www2.gov.bc.ca/gov/content/governments/government-id/guide-to-the-authentication-of-documents/translation-requirements"
+   },
+   {
+    "fact": "Home-based food or catering permits (Ontario and BC), business-name registration, and GST/HST registration rules: not verified this session (search budget exhausted).",
+    "source_url": "not found"
+   }
+  ],
+  "ai_can_build": [
+   "Bilingual (KO/EN) landing page for the owner's translation and web service, with a per-page and per-word quote calculator anchored below the published competitor prices ($59/$109 per document)",
+   "A reusable bilingual website template for Korean-owned SMBs (restaurants, salons, academies, realtors), plus menu and service-list translations and Google Business Profile copy",
+   "Draft KO→EN translations of standard civil documents such as family-relation certificates, transcripts and licences; the human must check them line by line and sign the affidavit",
+   "An affidavit-of-translation template with the required references to the original and the translation (per IRCC help centre 040), for the human to swear before a commissioner",
+   "Korean outreach scripts for community classifieds, KakaoTalk open chats and Naver cafes, plus walk-in sales one-pagers for Koreatown businesses",
+   "A client-intake form that screens out immigration-advice requests and refers them to a CICC consultant or lawyer (a compliance guardrail)",
+   "A CRM and pipeline spreadsheet, invoice templates, and a pricing and scenario model",
+   "A list of Korean community organizations to contact (the Toronto consulate publishes one: https://toronto.mofa.go.kr/ca-toronto-ko/brd/m_5422/list.do)"
+  ],
+  "human_must_do": [
+   "Verify every translation personally and swear or sign the translator affidavit before a commissioner of oaths or notary",
+   "Register the business and open bank and payment accounts (Interac, Stripe or Square), which need ID verification",
+   "Post in KakaoTalk open chats, Naver cafes and Korean community media classifieds from their own accounts; the AI cannot post",
+   "Visit Korean-owned businesses in person or by phone to sell website services; meet clients and collect payments",
+   "Confirm with a CICC consultant or lawyer where the line sits between allowed paid help and regulated immigration advice before offering any 'paperwork' service",
+   "Decide whether to pursue ATIO or STIBC certification over the long term (not feasible within 30 days)",
+   "Research and obtain food-premises approvals before any home catering (not researched here)"
+  ],
+  "seasonality": "Not found. No source gave seasonal demand for Korean-community translation, web or tutoring services. The only related evidence is that working-holiday youth arrivals drive growth in Vancouver's Korean community (YTN, March 2026: https://www.ytn.co.kr/_ln/0104_202603080642167697); their timing across the year was not found.",
+  "risks": [
+   "Legal (high if scope creeps): paid help with IRCC or citizenship applications without CICC or law-society authorization can bring fines or jail (see regulations). Community clients often ask for exactly this kind of help.",
+   "Market-access risk: uncertified translations are unusable where certification is required (OINP in Ontario, BC official purposes), which shrinks the addressable market.",
+   "Competitive: established ATIO-certified Korean translators and agencies advertise from $59–$109 per document, so a newcomer has to discount and still lacks credentials to build trust.",
+   "Liability for translation errors on legal or immigration documents; professional liability insurance cost was not found.",
+   "Small niche: 74,975 people of Korean ancestry in the Toronto metro area (2021). Recent growth is concentrated in Vancouver rather than Toronto.",
+   "Low willingness to pay: working-holiday youth are the growth segment (YTN 2026). Their budgets were not sourced, so this is an inference, not a finding.",
+   "Channel risk: rules on commercial posts in Naver cafes and KakaoTalk open chats were not verified; posts may be removed or accounts banned.",
+   "Evidence risk: this dossier rests on search snippets only, because WebFetch was blocked and the search budget ran out. Key facts must be re-verified on the official pages."
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Direct competition is already established: multiple Toronto providers market ATIO-certified Korean translation.",
+    "source_url": "https://www.ginabyuntrans.com/"
+   },
+   {
+    "fact": "A second Korean-specific competitor advertises certified Korean translation in Toronto and Canada.",
+    "source_url": "http://www.docsbase.ca/special-offers/certified-korean-translation-in-toronto-and-canada.htm"
+   },
+   {
+    "fact": "National online agencies compete on price and speed ($59+HST per document, 1–2 business days), which caps what a new uncertified provider can charge.",
+    "source_url": "https://www.taontario.ca/pricing/"
+   },
+   {
+    "fact": "The OINP requires ATIO-certified translators, so uncertified translators are excluded from that document stream.",
+    "source_url": "https://translayte.com/blog/certified-translation-express-entry"
+   },
+   {
+    "fact": "BC official-purpose translations require STIBC or CTTIC-certified translators, so uncertified translators are excluded.",
+    "source_url": "https://www2.gov.bc.ca/gov/content/governments/government-id/guide-to-the-authentication-of-documents/translation-requirements"
+   },
+   {
+    "fact": "IRCC refuses translations done by the applicant's representative or consultant, so 'paperwork help + translation' cannot be sold as one bundle.",
+    "source_url": "https://www.canada.ca/content/dam/ircc/documents/pdf/english/kits/forms/imm0147/01-04-2022/imm0147e.pdf"
+   },
+   {
+    "fact": "The government is tightening enforcement on unauthorized paid representatives (proposed administrative penalties, Dec 2024).",
+    "source_url": "https://gazette.gc.ca/rp-pr/p1/2024/2024-12-21/html/reg3-eng.html"
+   },
+   {
+    "fact": "Recent Korean population growth is concentrated in Vancouver, more than three times Toronto's growth. YTN also reports Canada restricting general work visas, with working-holiday youth now the main inflow.",
+    "source_url": "https://www.ytn.co.kr/_ln/0104_202603080642167697"
+   },
+   {
+    "fact": "Korean was not among the top ethnic origins shown on StatCan's 2021 Focus on Geography pages for the Toronto and Vancouver CMAs (search summary). It is a small niche next to larger diaspora markets.",
+    "source_url": "https://www12.statcan.gc.ca/census-recensement/2021/as-sa/fogs-spg/page.cfm?lang=e&topic=10&dguid=2021S0503535"
+   }
+  ],
+  "scores": {
+   "speed": 5,
+   "probability_5k": 2,
+   "capital_light": 8,
+   "ai_leverage": 6,
+   "low_risk": 5
+  },
+  "score_rationale": "Speed 5: non-certified translation for IRCC and bilingual website work can legally start at once. However, every source-backed route to credentials (ATIO, STIBC, CICC) is closed within 30 days, and first-sale timing is not sourced. Probability of $5k within about 60 days, 2: the only sourced prices are competitor anchors ($59–$109 per document), which would require about 125 documents a month. Website and marketing prices and SMB counts were not found, the niche is small (74,975 people of Korean ancestry in the Toronto metro in 2021), and established certified competitors exist. Capital-light 8: startup costs are mostly a domain, hosting and affidavit fees (ESTIMATE, unverified). AI leverage 6: the AI can build the sites, calculators, outreach and first-draft translations, but a human must verify translations, swear affidavits, sell in person and post in Kakao and Naver channels. Low-risk 5: the web and translation work is low-risk, but the community pull toward paid immigration help carries serious legal penalties, and translation errors carry liability. Confidence in all scores is reduced: only snippet-level evidence was available, because WebFetch was blocked for every domain tried and the session's search budget ran out after 10 searches from this agent."
+ },
+ "verification": {
+  "checked_claims": [
+   {
+    "claim": "Competitor anchor: translation in Ontario 'From $59 per Document' (+HST), 1-2 business days; ATIO-certified 'From $109 + HST', about 3 business days (taontario.ca)",
+    "status": "unverifiable",
+    "correction": "Re-fetch failed. WebFetch returned EGRESS_BLOCKED for www.taontario.ca, and curl through the proxy got 'CONNECT tunnel failed, response 403'. My WebSearch returned 'search budget exhausted (200 of 200)'. The figures still rest only on search snippets from the original agent. Two cautions. First, TA Ontario is a general multi-language agency, not a Korean specialist, so its prices may not be the relevant ceiling for Korean-to-English work. Second, no page date was visible, so the prices could be from before 2026. Treat them as unconfirmed anchors.",
+    "source_url": "https://www.taontario.ca/pricing/"
+   },
+   {
+    "claim": "IRCC accepts translations by non-certified translators if accompanied by an affidavit sworn before a person authorized to administer oaths",
+    "status": "unverifiable",
+    "correction": "Re-fetch was blocked: ircc.canada.ca returned EGRESS_BLOCKED and canada.ca returned a proxy 403. The claim is consistent with the dossier's other IRCC citations, but I could not confirm it this session. It is also incomplete: each job needs a separate oath step, and the commissioner or notary fee is still 'not found'. The owner must read this page before selling anything.",
+    "source_url": "https://ircc.canada.ca/english/helpcentre/answer.asp?qnum=040&top=4"
+   },
+   {
+    "claim": "IRCC refuses translations done by the applicant's representative or consultant (IMM 0147 guide), so translation cannot be bundled with paid paperwork help",
+    "status": "unverifiable",
+    "correction": "I could not open the PDF (canada.ca is blocked by the proxy). The dossier cites one form kit dated 01-04-2022, which may be superseded, and it generalizes that kit to all IRCC programs. The owner should check the current instruction guide for the specific application type. Whatever the translation rules say, the conclusion that paid immigration 'paperwork help' is closed stands on the separate CICC/representative rule.",
+    "source_url": "https://www.canada.ca/content/dam/ircc/documents/pdf/english/kits/forms/imm0147/01-04-2022/imm0147e.pdf"
+   },
+   {
+    "claim": "Only CICC consultants, lawyers/paralegals and Quebec notaries may be paid for immigration or citizenship advice; ghost consultants face $50k-$100k fines and/or jail; proposed penalties of up to $1.5M",
+    "status": "unverifiable",
+    "correction": "All three URLs (canada.ca, gazette.gc.ca, immigrationnewscanada.ca) could not be re-opened. The fine amounts come from a secondary news site, not the IRPA text. The $1.5M figure is from a PROPOSED amendment (Canada Gazette Part I, Dec 2024), and I could not confirm whether it has been finalized in Part II by Sept 2026. Report it as proposed, not in force. The practical conclusion (do not sell paid immigration help) is conservative and should be kept either way.",
+    "source_url": "https://gazette.gc.ca/rp-pr/p1/2024/2024-12-21/html/reg3-eng.html"
+   },
+   {
+    "claim": "2021 Census: 218,140 Korean Canadians; Toronto CMA 74,975, Vancouver 62,885, Calgary 13,060 (Wikipedia citing StatCan)",
+    "status": "unverifiable",
+    "correction": "en.wikipedia.org returned a proxy 403, and StatCan could not be re-searched. The dossier itself notes a conflicting older BC figure on the same page. There is also a definitional mismatch: census 'ethnic origin' counts (74,975 Toronto CMA) and consulate counts (127,174 in the Toronto consulate's jurisdiction) measure different things over different geographies, so they should not be mixed when sizing the market. Addressable-market size remains weakly sourced.",
+    "source_url": "https://en.wikipedia.org/wiki/Korean_Canadians"
+   },
+   {
+    "claim": "Vancouver consulate 2025: about 110,700 Koreans (46,435 nationals + 64,280 citizens), 'up almost 10% in two years', growth more than 3x Toronto's",
+    "status": "corrected",
+    "correction": "The arithmetic checks out: 46,435 + 64,280 = 110,715. But the dossier's own figures are internally inconsistent. The 2024 Overseas Koreans Agency count for Vancouver's jurisdiction was 100,708, and ESTIMATE: (110,715 - 100,708) / 100,708 = 9.9%, which is about 10% in ONE year, not two. So either the two series use different definitions or dates, or one figure is misreported. I could not open the YTN article to resolve this (search budget exhausted). Do not use these growth rates for decisions.",
+    "source_url": "https://www.ytn.co.kr/_ln/0104_202603080642167697"
+   },
+   {
+    "claim": "Path-to-5k math: Scenario A needs 125 docs/month (about 6 per business day); Scenario C blend totals $5,000 gross and about $4,800 net",
+    "status": "confirmed",
+    "correction": "The arithmetic is correct: ESTIMATE $5,000 / $40 = 125; 125 / 21 = 5.95 per day; 2 x $1,000 + 40 x $45 + 8 x $150 = $2,000 + $1,800 + $1,200 = $5,000; minus 40 x $5 = $200 gives $4,800. However, every input except the $59/$109 anchors is an unsourced assumption: the $45 price, the $5 affidavit cost, the $1,000 site price, the $100-150 care retainer and the close rates. The $5 per-document affidavit cost is especially doubtful. The dossier's only proxy is notarization 'from $75 per document', which would make ESTIMATE $45 - $75 = -$30 per document, a loss on every IRCC-bound job, unless the owner finds a much cheaper commissioner or can batch several documents under one affidavit (not verified). Scenario A as modeled is therefore probably not viable at all.",
+    "source_url": "https://translationagencyofcanada.ca/toronto-translation-services"
+   },
+   {
+    "claim": "In Ontario, 'Certified' is a reserved title for ATIO members and OINP requires ATIO-certified translators; BC official purposes require STIBC or another CTTIC member",
+    "status": "unverifiable",
+    "correction": "The Ontario part rests on a commercial blog (translayte.com), not ATIO or OINP pages, and could not be re-opened. The BC part comes from a search snippet of gov.bc.ca, which is blocked by the proxy. The direction (uncertified translators excluded from these streams) is plausible and conservative. Its exact scope, especially which Ontario provincial bodies and courts require ATIO, is unconfirmed.",
+    "source_url": "https://www2.gov.bc.ca/gov/content/governments/government-id/guide-to-the-authentication-of-documents/translation-requirements"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "The dossier's own notarization proxy ('from $75 per document', taxes extra, snippet only) is larger than its assumed $45 uncertified translation price. If each IRCC-bound document needs an affidavit sworn at anything near that cost, the non-certified translation line loses money per job (ESTIMATE: $45 - $75 = -$30), or the client pays both fees and ends up above the $58-$59 certified competitor price. Either way the price advantage disappears.",
+    "source_url": "https://translationagencyofcanada.ca/toronto-translation-services"
+   },
+   {
+    "fact": "Established competitors already sell Korean-specific certified translation in Toronto: ginabyuntrans.com, docsbase.ca, seertranslation.com, and general agencies. An uncertified newcomer competes against credentialed sellers whose prices already sit near the proposed discount (snippet-level; not re-opened this session).",
+    "source_url": "https://www.ginabyuntrans.com/"
+   },
+   {
+    "fact": "The dossier gives two population figures for Vancouver's Korean community: 100,708 (2024, Overseas Koreans Agency) and 110,715 (2025, consulate, 'up almost 10% in two years'). These cannot both be right on the same definition. This weakens confidence in the market-sizing claim that growth is concentrated in Vancouver.",
+    "source_url": "https://www.koreatimes.net/ArticleViewer/Article/174081"
+   },
+   {
+    "fact": "The growth segment identified, working-holiday youth, arrives on temporary status, and YTN reports that Canada is restricting general work visas. The growth customers are therefore likely low-budget and transient, which makes them a weak base for recurring revenue (snippet-level; interpretation, not a sourced budget figure).",
+    "source_url": "https://www.ytn.co.kr/_ln/0104_202603080642167697"
+   },
+   {
+    "fact": "No sourced evidence was found anywhere in the dossier or this re-check for: website prices for Korean-owned SMBs, the number of Korean-owned SMBs in the GTA, freelancer earnings in this niche, or Naver cafe / KakaoTalk open-chat commercial-post rules. The $5k path depends entirely on the website line, which has zero price or demand evidence.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Counter-evidence searches were not possible this session. WebSearch returned 'budget exhausted (200 of 200)', and the egress proxy denied CONNECT to taontario.ca, canada.ca, ircc.canada.ca, wikipedia.org, reddit.com, youtube.com, financialpost.com and theglobeandmail.com (per the proxy status log). No community failure stories were collected, so absence of negative evidence here is not evidence of viability.",
+    "source_url": "not found"
+   }
+  ],
+  "hidden_costs_or_blockers": [
+   "Employment Insurance interaction: the owner is losing their job next week and may claim EI. Starting self-employment during a claim can reduce benefits or put eligibility at risk (the 'unemployed' test and reporting of self-employment hours and earnings). Not verified this session; the owner must check the current Service Canada EI rules before invoicing anyone. This could be the largest hidden cost of the whole plan.",
+   "Per-document oath cost and logistics: the commissioner or notary fee for each translator affidavit was 'not found'. The only proxy is $75+ per document, which wipes out the margin at the assumed $45 price. Batching several documents under one affidavit was not verified.",
+   "GST/HST: registration becomes mandatory once revenue passes the small-supplier threshold (widely cited as $30,000 over four consecutive quarters; not re-verified this session, see canada.ca/revenue-agency). A business averaging $5k/month would cross it in about 6 months (ESTIMATE: $30,000 / $5,000 = 6 months), after which pricing must include HST/GST.",
+   "Professional liability (E&O) insurance for translation errors on legal or immigration documents: cost not found. Operating without it exposes personal assets.",
+   "Quebec (Montreal): French-language requirements for business websites and commercial materials would likely make KO/EN-only sites non-compliant for Quebec clients. Not verified this session.",
+   "Payment friction: Korean small businesses commonly prefer e-transfer or cash, and processor fees for Stripe or Square were not sourced. Deposits and collections on web projects need contracts the human must enforce.",
+   "Sales-time cost: website sales need walk-in or phone selling by the owner, because the AI cannot call or post. The close rate and sales cycle for Korean SMBs were not found. The 5 sites/month in Scenario B is unsupported.",
+   "Scope-creep legal risk: community clients will ask for help filling out IRCC, PR or citizenship forms. Accepting any payment, including 'tips' or bundled fees, triggers the authorized-representative rule. This needs a written intake refusal policy.",
+   "Channel risk: commercial posting rules for Naver cafes, KakaoTalk open chats and Korean community classifieds were not verified. Paid classified ads may be the only reliable channel, and their cost was not found.",
+   "Requires native Korean plus professional written English, and an in-person sales ability. If the owner lacks either, the translation and website lines are unavailable.",
+   "Evidence risk: neither the original dossier nor this re-check could open a single source page (proxy-blocked, search budget exhausted). Every figure is snippet-level or assumed."
+  ],
+  "adjusted_scores": {
+   "speed": 4,
+   "probability_5k": 1,
+   "capital_light": 7,
+   "ai_leverage": 5.5,
+   "low_risk": 4.5
+  },
+  "verdict": "DOWNGRADE, and do not pursue as a standalone plan for CAD 5k/month within 60 days. It can survive only as a secondary line, bilingual KO/EN websites and Google Business Profile setup for Korean-owned SMBs, bolted onto a broader, better-evidenced primary business. It is not eliminated outright, because the web line is legal, cheap and highly AI-buildable, and a fully bilingual owner who can do face-to-face sales could win some deals. Reasons for the downgrade: (1) Not one decision-critical claim could be confirmed by opening a source; all are snippet-level or unverifiable. (2) The only priced line, uncertified IRCC translation, appears loss-making or uncompetitive once affidavit costs are included (ESTIMATE: $45 price vs a $75+ notarization proxy). (3) The website line, which the whole $5k path depends on, has zero sourced price, demand or SMB-count evidence. (4) The paperwork and immigration line is legally closed, and certification routes (ATIO, STIBC, CICC) cannot be completed within 30 days. (5) Market-sizing figures in the dossier are internally inconsistent. (6) The possible EI interaction and GST/HST obligations are unaddressed. Probability of averaging $5k/month within about 60 days: 1/10."
+ }
+}

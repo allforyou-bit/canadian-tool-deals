@@ -1,0 +1,85 @@
+{
+ "verdict": "CONDITIONAL PASS: fix before shipping. The memo is unusually disciplined. Most numbers carry URLs or ESTIMATE labels, all section-5 arithmetic recomputes correctly, and the key legal facts match the primary text.\n\n**Spot-checks that passed.** I opened Justice Canada XML (local clone plus the raw GitHub copy) and the Cloudflare docs on GitHub.\n- EI Regs s.77.996 and s.77.997 (window Mar 30 2025 to Oct 10 2026) and s.30(1)–(3).\n- EI Act s.10(1).\n- CASL s.6(6)(a), s.6(8)(a), s.13 and s.20(4) ($1M for an individual).\n- SOR/2013-221 s.3(b) (\"Section 6 of the Act does not apply…\") and s.4(1).\n- SOR/2012-36 s.2(1)(d).\n- ETA s.148(1) and s.240(1.1).\n- Cloudflare Pages limits (500 builds, 100 projects, 20,000 files, no bandwidth limit stated) and Pages Functions pricing (billed as Workers requests, 100,000/day, static assets free and unlimited).\n- Corpus snippets for settoshine (\"sweet spot…late September through the first week of October\", \"October…can often be accommodated\"), CP24 ($1,200 prepaid), OPC (no deposit before service), Ontario 10-day/15-day (S037), Ottawa manual-snowblower exemption (S033), handyperson $1,800 (S042), salt $15–30/application, and Vancouver \"nine days\".\n\n**Spot-checks that failed.**\n- The claim that \"0 of 54 [were] priced on every snapshot\" is false. In local git history, index.json at commit e637cb7 (2026-08-07) had 12 priced queries.\n- \"PO box acceptable\" is not in SOR/2012-36.\n- The $1,500 setup figure is attributed to the fall dossier as covering \"ladder, first insurance premium, tools\". The dossier's figure was ladder, stabilizer, tools and blower, with insurance counted separately.\n\n**Substantive problems.**\n- Track B's unit economics use a $265 blended gutter ticket that includes a window-cleaning add-on the memo excludes.\n- B2 carries no cost for the snowblower or the snow insurance premium.\n- The platform-hour economics treat TaskRabbit \"from $35–40\" floors as realized pay and ignore Jiffy commission, which the verifiers explicitly rejected.\n- The weekly targets, the door funnel and the section-5 job counts contradict each other.\n- The ~1,500-home cluster is used up by about week 4.\n- The day-7 kill thresholds cannot be reached by the week-1 plan.\n- The EI Path A vs Path B decision is never actually made, even though the base-case October net ($2,280) is below the EI maximum ($3,159).\n- The owner's work-authorization status (self-employment eligibility) is missing as a branch and gate.\n- The build spec assumes Google Sheets automation and lead email delivery that the AI's tools cannot do.\n- The build spec leaves request-dependent API routes in place, which will break `output: 'export'`.",
+ "problems": [
+  {
+   "issue": "Gutter unit economics contradict the memo's own scope. F23/A6 use the fall dossier's $265 blended ticket (= $225 gutter + 20% × $200 exterior-window add-on) and $245 contribution. Track B is defined as 'hand and scoop only' gutter work with no window cleaning. Every B2 gutter figure is therefore overstated by $40/job (≈$880 in base November).",
+   "severity": "major",
+   "fix": "Either add exterior window cleaning to Track B (with its own ladder/insurance note), or recompute with a gutter-only ticket. ESTIMATE: 225 − 20 = $205/job. Nov base: 22 × 205 + 4 × 200 = 4,510 + 800 = $5,310. Oct base: 6 × 205 + 800 + 720 − 1,500 = $1,250. Oct–Nov avg: (1,250 + 5,310)/2 = $3,280. Update F23, section 0, section 11 Q1 and the day-30 thresholds to match."
+  },
+  {
+   "issue": "B2 omits snow-specific capital and insurance. A5's $1,500 is attributed to the fall dossier as 'ladder, first insurance premium, tools'. The dossier's $1,500 was 'ladder, stabilizer, tools, blower' and excluded insurance, which it carried as ~$250/month overhead. No month in B2 deducts a snowblower (the corpus S039 has only a 2020 RedFlagDeals price: $799.99 on sale, $1,199.99 regular) or the snow GL premium (F27: $450–3,000; handyperson $1,800). Dec–Mar B2 net is overstated.",
+   "severity": "major",
+   "fix": "Correct the A5 attribution. Add separate lines for (a) the snowblower: CAD price not found, cite the 2020 S039 figure as 'historical only' or run a sensitivity at $0/$800/$1,200; (b) snow insurance, deducted in October/November; (c) the dossier's $250/month overhead (phone, flyers, ads; unsourced) in every month of B1 and B2. Recompute Dec–Mar and state whether $5k/month still holds."
+  },
+  {
+   "issue": "Platform-hour economics contradict verifier corrections. The base case uses $40/h and the conservative case $35/h, both from TaskRabbit 'from' prices. The cleaning verifier says 'a from $35/hr figure…is a marketing floor, not the typical…rate…The dossier treats it as an earnings benchmark, which it is not.' The labour dossier reports new Taskers at $15–25/h (unverified). Jiffy commission (verifier: 'unknown within 12–30%') is not deducted; only 10% for supplies/transit is. Both scenarios also assume 20–30 platform hours in October even though approval time is 'not found' and the verifier calls onboarding possibly 'unbounded'.",
+   "severity": "major",
+   "fix": "Label platform rates as client-facing floors, not realized pay. Add a conservative row at $25/h (labour dossier's new-Tasker top, unverified), with Jiffy hours at 70–88% after commission. Add a branch with 0 platform hours in October (approval not received). ESTIMATE B1 Oct conservative with 0 platform hours: 3 × 148 = $444."
+  },
+  {
+   "issue": "Internal inconsistency between the weekly targets (section 7), the door funnel and the section-5 job counts. B1 weekly targets for October sum to 2 + 4 + 5 = 11 jobs, but section 5 B1 October has 6 direct cleans. B2 targets sum to 3 + 6 + 8 = 17, but section 5 B2 October has 10 jobs. The assumed funnel (80 doors × 1.4% ≈ 1.1 closes/day) gives ≈5.6 closes/week in week 2 against a target of 2–3.",
+   "severity": "major",
+   "fix": "Derive the weekly targets from section 5, splitting direct cleans, gutter jobs and platform hours. Reconcile the door quota with the funnel, e.g. B1 week 2: 2 jobs ÷ (0.35 × 0.10 × 0.40) ≈ 143 doors/week, not 400. State that jobs are counted when completed, not when closed."
+  },
+  {
+   "issue": "The cluster size cannot supply the door volume. The plan picks a cluster of 'about 1,500 homes'. October knocking totals ≈220 (wk1) + 400 (wk2) + 500 (wk3) + 500 (wk4) ≈ 1,620 doors plus re-knocks. B2 November also needs ≈1,860 fresh doors (26 jobs × 71.4). The cluster is exhausted by about week 4.",
+   "severity": "major",
+   "fix": "Size the cluster from the funnel: ≥ (Oct jobs + Nov jobs) × 71 doors (ESTIMATE ≈ 2,600–3,700 homes for B2). Alternatively, plan cluster #2 from week 4 and say how re-knocks count. Add cluster size to the day-5 recompute formula."
+  },
+  {
+   "issue": "The EI branch is never decided. By the memo's own ESTIMATE, EI at the maximum is $3,159/month, and B1 base October net is $2,280 (conservative $1,074; B2 October $1,490 or −$266.50). The owner is told to run a full-time-plus business from Oct 5, which under Regs s.30(1) likely makes every week a full working week, so no EI. The comparison is also not like-for-like: business net is before CPP (11.9%), and EI is the maximum only if insurable earnings reach $68,900. The pilot's +20-week extension for long-tenured workers (s.77.999(2), verified in XML) is omitted.",
+   "severity": "major",
+   "fix": "Add an explicit decision rule for week 1. If EI-eligible and Service Canada indicates the plan is not 'minor extent': run Path A (declared minor side activity) in October, and switch to Path B only when the measured run-rate beats the weekly benefit after CPP. Show ESTIMATE: 729 vs business weekly net × (1 − 0.119). Add the long-tenured +20 weeks to F1. Add the intake question 'weekly insurable earnings / expected benefit'."
+  },
+  {
+   "issue": "Missing branch: work authorization. The owner is described as Korean-speaking and living in Canada, and immigration status is unknown. The labour dossier explicitly lists 'Work authorization…NOT FOUND. Owner must confirm their own eligibility for self-employment.' The memo never raises it. A temporary resident on an employer-specific permit may not be allowed to run a business or use TaskRabbit, and that would invalidate the whole plan.",
+   "severity": "major",
+   "fix": "Add intake question #10 (status: citizen/PR/open or closed work permit). Make 'lawfully able to be self-employed' a gate before any sale, marked 'rules not researched; owner confirms with IRCC documents'. Add a branch: if not authorized, the plan is not applicable."
+  },
+  {
+   "issue": "The build spec assumes capabilities the AI does not have. The CRM is a 'Google Sheet' with auto-recomputed targets, and an '8 pm daily summary as a Gmail draft' plus weekly review read from it. The listed tools are Gmail, Calendar and GitHub, with no Sheets/Drive connector. A Google Sheet cannot be created or read, and nothing schedules the 8 pm job. The lead form 'arrives in the owner's inbox…within 1 minute' from a Pages Function, but no email-sending mechanism is specified or researched. Photo upload is specified with KV/Sheets storage, which is not suited to files. There is no spam/bot protection.",
+   "severity": "major",
+   "fix": "Specify: (a) the CRM as an .xlsx/.csv the AI generates in the repo and the owner imports into Sheets, or the owner pastes daily numbers into email; (b) the daily and weekly reports produced by a scheduled Routine that reads owner-sent Gmail updates (name the mechanism); (c) lead delivery via a named, verified path (e.g. Cloudflare Email Routing send-to-verified-address, marked 'not verified this session'), or store to KV and fire a Gmail-readable notification; (d) drop photos or add R2 (limits not verified); (e) add bot protection. Mark all of these unverified in the acceptance criteria."
+  },
+  {
+   "issue": "Static export will fail as specified. The repo has request-dependent route handlers (app/api/search/route.ts uses NextRequest, fs and runtime 'nodejs'; app/api/debug/route.ts takes GET(req) and fetches retailer sites) and next.config.ts has remote image patterns plus headers(). Item 0 only says 'move the tool site out of the root route'. Per F38 (local static-exports.md lines 282–291), such route handlers are unsupported under `output: 'export'`.",
+   "severity": "major",
+   "fix": "In item 0, delete or convert app/api/search and app/api/debug (and check app/sitemap.ts). Remove headers() and set images.unoptimized. Acceptance criterion: `next build` with `output: 'export'` succeeds and emits /out."
+  },
+  {
+   "issue": "False local fact. The memo says '0 of 54 queries priced on every snapshot from 2026-08-05 to 2026-09-23 (verified locally)' and Q13 says 'zero prices for about 7 weeks'. Git history shows commit e637cb7 (2026-08-07) with 12 priced queries in public/cache/index.json. The content verifier also reported a non-null lowestPrice at 2026-08-08, so the two verifiers conflict and the memo picked the wrong one.",
+   "severity": "minor",
+   "fix": "Reword: 'index.json has had 0 priced queries in every commit after 2026-08-07 (12 priced on 2026-08-07); ≈6.5 weeks of empty daily commits (LOCAL-V: git log -- public/cache/index.json).'"
+  },
+  {
+   "issue": "Day-7 kill criterion cannot trigger as written. It requires '≥250 doors + 4 posts + 50 B2B emails', but week 1 plans 40 + 3 × 60 = 220 doors and 10 + 3 × 10 = 40 emails. Its action ('keep going') is not a kill. Gate G1 is 'decided Wed 9/30' but 'checked' on day 7. The Sun Oct 11 day-14 review is called 'one day early' but Oct 11 is exactly day 14. The day-21 check (Oct 18) is filed under week 4. 'Run-rate' is undefined.",
+   "severity": "minor",
+   "fix": "Set the day-7 thresholds to the planned volumes (≥220 doors, ≥40 emails). Define run-rate (e.g. trailing-7-day net, completed jobs only). Fix the day labels. Add kills for: no platform approval by day 14; insurance not bindable or unaffordable by day 10 (no direct clients); cumulative cash below a stated runway floor (the owner sets rent-months)."
+  },
+  {
+   "issue": "Unrealistic early timelines and daily load. Gate G1 needs a broker's written confirmation of CGL coverage for ladder and snow work within ~1 day of first calls (Tue→Wed), while the owner 'may still be employed'. Week 3–4 days combine 100 doors (3–4 h at an unsourced 2 min/door), a 5-hour clean and transit (B1 has no car), about 9–11 h/day for 6 days. October dusk is not considered. The shovel-only snow fallback for car-less owners has no capacity or insurance check.",
+   "severity": "minor",
+   "fix": "Move Gate G1 to 'by Mon Oct 5 or when written broker confirmation arrives, whichever is later'. Cap door-knocking on job days (e.g. 40 doors). Show weekly hours per scenario, ESTIMATE ≤50 h. Require snow cover in writing before any shovel-only contract."
+  },
+  {
+   "issue": "Consumer-protection exposure on door-signed jobs is under-analysed. S037 says the consumer can cancel a direct agreement within 10 days of receiving the signed copy and must be refunded within 15 days. The plan closes cleaning and gutter jobs at the door and performs them the same week, so completed-work refunds are possible. Whether performance during the cooling-off period changes this is not researched.",
+   "severity": "minor",
+   "fix": "Add to section 6: 'Effect of performing door-signed services inside the 10-day window: not researched; owner confirms with Consumer Protection Ontario before relying on same-week door-signed jobs.' Also flag the cash-timing risk in section 5."
+  },
+  {
+   "issue": "Unsourced or overstated compliance statements. 'mailing address (PO box acceptable)': SOR/2012-36 s.2(1)(d) says only 'the mailing address' and nothing about PO boxes (checked on raw GitHub). 'Requested quotes exempt (s.6(6)(a))': s.6(6) exempts only paragraph 6(1)(a) (consent), so identification and unsubscribe still apply. 'Ottawa: no vehicle plow, so no licence needed' is presented as settled, but the snow verifier said this 'most important' question was unresolved (the S033 snippet exists but is attribution-uncertain). The checklist also says 'Instalments apply only if net tax owing exceeds $3,000', but ITA s.156.1(2)(b) also looks at the two preceding years.",
+   "severity": "minor",
+   "fix": "Change to 'mailing address (whether a PO box suffices: not stated in SOR/2012-36)'. Add 'quote replies still need sender ID + unsubscribe (s.6(1)(b))'. Change to 'Ottawa: snippet says manual snowblowers exempt; verifier unresolved; confirm with City'. Restate the instalment rule with both conditions."
+  },
+  {
+   "issue": "Minor sourcing and labelling errors. The gutter conservative $175 is called 'below F20's band', but F20 is $150–350, so $175 is inside it. A5 misattributes contents (see above). 'Its verifier found zero sourced price…' refers to the korean verifier, not aismb. Vancouver's $300 inter-municipal licence (IMBL) is sourced to arkandmason.com, not vancubers. F28 says the snowblower price is 'not found', but the corpus has a 2020 historical price (S039). The TaskRabbit claim 'Customers come to the owner there, so there is no selling' is speculation that contradicts sourced saturation and onboarding-freeze evidence (NerdWallet, labour verifier).",
+   "severity": "minor",
+   "fix": "Correct each label and source. Replace the 'no selling' claim with 'inbound platform demand for a new Tasker: not found (labour verifier)'."
+  },
+  {
+   "issue": "Missing compliance and operations items. Direct cleaning is scheduled from week 2, but binding cleaning CGL before the first direct client is never scheduled (only quotes). Consent is not required for using clients' before/after home photos in ads (PIPEDA). WSIB applicability to a self-employed Track B operator is listed only for hiring, though the fall verifier flagged it as 'not found'. Key/lockbox handling and bonding are absent. The snow contract's season start/end and November-storm treatment are undefined, although the guides say Nov–Mar and billing is Dec–Mar.",
+   "severity": "minor",
+   "fix": "Add a checklist step 'bind cleaning CGL before first off-platform job' in week 2. Add a photo-consent clause to item 5 contracts. Add 'WSIB for independent operator: not researched'. Define the contract season (e.g. Dec 1–Mar 31) plus a per-visit November rate from F26 ($50–150, snippet)."
+  }
+ ]
+}

@@ -1,0 +1,317 @@
+{
+ "dossier": {
+  "candidate": "Tutoring & test prep (K-12 math/science, English, Korean language, SAT/IELTS/CELPIP), in person (GTA focus) and online, Sept to Nov 2026",
+  "summary": "Tutoring costs very little to start and has no licensing barrier in Ontario. Independent tutors in Toronto can charge $50–80/hr for high-school math and science, and certified teachers can charge $70–100+ (Biller.ca 2026 guide, seen in search results). Reaching CAD $5,000/month net within about 60 days is unlikely, though. The best case is roughly 60–100 billable hours a month of direct-pay work at $50–80/hr. That means about 15–23 recurring weekly students built from zero in about 8 weeks, and no source I found shows that ramp speed. The platform routes are much worse. Preply keeps 100% of every trial lesson and 18–33% of later lessons (Preply Help Center). italki takes 15%, with community reports of 21% in 2026. Wyzant does not accept tutors who live in Canada. Agency employment in Toronto averages about $21/hr (Glassdoor). Taxable tutoring such as test prep and adult language lessons triggers GST/HST registration once it passes $30k over four quarters. Tutoring for an Ontario school-curriculum course is exempt. Research limits: 11 web searches ran before the session's shared search budget (200) ran out. Every attempt to open a page was blocked by the organization's egress proxy (Preply, italki, Superprof, Wyzant, canada.ca, tps.ca, Biller.ca and others). So every fact below comes from search-result extracts, not from pages I opened, and needs re-checking. Korean-tutor rates, IELTS/CELPIP/SAT rates, Vancouver/Calgary/Ottawa/Montreal differences, seasonality data and time-to-first-student evidence were NOT found. Verdict: a good secondary or bridge income if the owner has a strong subject skill (for example high-school math, or native Korean plus an existing Korean-Canadian network). It is weak as a sole path to $5k/month within 60 days.",
+  "time_to_first_revenue": "Not found: no source gave a measured time to first paying student. What the sources do show: (1) Preply keeps 100% of each trial lesson, so the first lesson with every new Preply student pays the tutor $0 (https://help.preply.com/en/articles/4171383-preply-commission-model, search-result extract). (2) Superprof says many tutors offer a free first lesson (https://www.superprof.ca/blog/how-superprof-works/, search-result extract). (3) A Toronto Police Vulnerable Sector Check, if parents or an agency ask for one, generally takes about 2 weeks and can take up to 20 business days. Applying online is not faster (https://www.tps.ca/services/police-record-checks/ and https://www.tps.ca/services/frequently-asked-questions/, search-result extract). ESTIMATE, not evidence: with an existing personal network (church, Korean community groups, former colleagues' children), the first paid session could come within 1–2 weeks of launch. Through cold platform listings the first paid session is unknown, because trials are unpaid or free and the waiting time for bookings was not found. With a VSC required first, add 2–4 weeks (10–20 business days per TPS).",
+  "pricing_facts": [
+   {
+    "fact": "Most private tutors in Canada charge $30–$80/hr in 2026, with Toronto and Vancouver higher than smaller cities. Student tutors $15–35; experienced independent tutors $40–65; certified teachers and university-level specialists $60–100+. (Search-result extract; page open blocked by egress proxy)",
+    "source_url": "https://biller.ca/pricing-guides/how-much-to-charge-tutoring-canada"
+   },
+   {
+    "fact": "Elementary tutoring typically $30–50/hr in Canada ($50–80 if a certified teacher). High-school math and science typically $50–80/hr in 2026 ($70–100+ for certified teachers). (Search-result extract)",
+    "source_url": "https://biller.ca/pricing-guides/how-much-to-charge-tutoring-canada"
+   },
+   {
+    "fact": "In Toronto the average cost of a tutor ranges from $20 to $100 per hour depending on skill and experience. (Search-result extract; undated in snippet)",
+    "source_url": "https://www.tutorlyft.com/blogs/how-much-does-a-tutor-cost-per-hour-in-toronto"
+   },
+   {
+    "fact": "Employee pay benchmark: Private Tutor in Toronto averages $43,577/yr or $21/hr; 25th–75th percentile $37,790–$50,250/yr (Glassdoor 2026, search-result extract).",
+    "source_url": "https://www.glassdoor.ca/Salaries/toronto-on-private-tutor-salary-SRCH_IL.0,10_IM976_KO11,24.htm"
+   },
+   {
+    "fact": "On Superprof, students pay a monthly Student Pass subscription to contact tutors, then pay lesson fees to the tutor at the tutor's own rate. (Search-result extract)",
+    "source_url": "https://www.superprof.com/blog/students-and-superprof/"
+   },
+   {
+    "fact": "Hourly rates for Korean-language tutors, IELTS/CELPIP prep and SAT prep in Toronto or Vancouver: not found (search budget ran out before these could be searched).",
+    "source_url": "not found"
+   }
+  ],
+  "cost_facts": [
+   {
+    "fact": "Preply: commission on every trial lesson with a new student is 100%. Later lessons carry 18%–33% of the hourly rate, depending on the tutor's total lesson hours taught (official Help Center, search-result extract).",
+    "source_url": "https://help.preply.com/en/articles/4171383-preply-commission-model"
+   },
+   {
+    "fact": "Preply tier detail from third-party sources, which conflict with each other: 33% for 0–20 hrs, 28% after 20 hrs, 18% at 400+ hrs (Pensight). Another source says 33% for new tutors, 25% after 50 hrs, 22% after 200 hrs, 18% after 400+ hrs (TutorLingua). Treat the middle tiers as unverified.",
+    "source_url": "https://pensight.com/post/how-much-does-preply-actually-cost-tutors-2026-commission-breakdown"
+   },
+   {
+    "fact": "Preply tier breakdown (alternative third-party version, 2026).",
+    "source_url": "https://tutorlingua.co/blog/preply-commission-explained-2026"
+   },
+   {
+    "fact": "italki: long-standing commission of 15%. Teacher-community reporting says 21% on single one-to-one lessons as of mid-2026, but no official policy page confirmed this. Group lessons are reportedly about 30%. (Search-result extracts)",
+    "source_url": "https://supatutor.in/italki-commission-increase-explained/"
+   },
+   {
+    "fact": "italki official help article on how commission is charged exists, but its figures could not be opened (egress blocked).",
+    "source_url": "https://support.italki.com/hc/en-us/articles/206352068-How-does-italki-charge-a-commission"
+   },
+   {
+    "fact": "italki payouts: withdrawals requested between the 1st and 15th are paid between the 16th and 26th. Requests after the 15th are paid the following month. (Search-result extract; exact source page among the listed results not confirmed)",
+    "source_url": "https://www.tefl.org/teach-english-online/italki/"
+   },
+   {
+    "fact": "Superprof takes no commission when the student pays the tutor directly. When a lesson is paid through Superprof's payment system, the tutor is charged a service fee of roughly 10%. (Search-result extract from third-party comparison)",
+    "source_url": "https://itutoronline.com/blog/itutoronline-vs-superprof"
+   },
+   {
+    "fact": "Toronto Police Vulnerable Sector Check fee: $71.72 for employment, $26.72 for volunteer or student positions. (Search-result extract)",
+    "source_url": "https://www.tps.ca/services/police-record-checks/"
+   }
+  ],
+  "earnings_evidence": [
+   {
+    "claim": "Employed private tutors in Toronto average $21/hr ($43,577/yr); 25th–75th percentile $37,790–$50,250/yr. The agency and employee route pays far below independent rates.",
+    "source_url": "https://www.glassdoor.ca/Salaries/toronto-on-private-tutor-salary-SRCH_IL.0,10_IM976_KO11,24.htm",
+    "kind": "industry"
+   },
+   {
+    "claim": "Independent high-school math/science tutors charge $50–80/hr, and certified teachers $70–100+/hr (2026 pricing guide). This is a rate range, not proof of full schedules.",
+    "source_url": "https://biller.ca/pricing-guides/how-much-to-charge-tutoring-canada",
+    "kind": "industry"
+   },
+   {
+    "claim": "Blog post titled '$45,000 in 2.5 Years as an Unqualified Language Teacher' (title seen only; currency and details not read). ESTIMATE: $45,000 / 30 months = $1,500/month average. Anecdotal.",
+    "source_url": "https://www.goodreads.com/author_blog_posts/24510167-45-000-in-2-5-years-as-an-unqualified-language-teacher?tab=book",
+    "kind": "community"
+   },
+   {
+    "claim": "italki teacher complaint: lesson priced at 50 ITC, teacher receives about 43 ITC. Anecdotal; the value of an ITC in CAD was not verified.",
+    "source_url": "https://www.italki.com/en/post/question-206853",
+    "kind": "community"
+   },
+   {
+    "claim": "ESTIMATE: Direct-pay tutoring at $50/hr needs 100 billable hrs/month ($5,000/$50) to reach $5k gross. At $80/hr it needs 62.5 hrs/month.",
+    "source_url": "https://biller.ca/pricing-guides/how-much-to-charge-tutoring-canada",
+    "kind": "estimate"
+   },
+   {
+    "claim": "No verified Canadian case study of a tutor going from zero to $5k/month within 60 days was found.",
+    "source_url": "not found",
+    "kind": "estimate"
+   }
+  ],
+  "path_to_5k_math": "All figures are ESTIMATES built from sourced rates plus clearly marked assumptions. Target: $5,000/month net of direct costs. Weeks per month = 4.33.\n(A) Independent direct-pay K-12 math/science (Biller.ca band $50–80/hr for high school):\n- At $50/hr: $5,000 / 50 = 100 hrs/month → 100 / 4.33 = 23.1 hrs/week.\n- At $65/hr: $5,000 / 65 = 76.9 hrs/month → 17.8 hrs/week.\n- At $80/hr: $5,000 / 80 = 62.5 hrs/month → 14.4 hrs/week.\nAssuming each student books 1 hr/week (assumption, not sourced), that is 15–23 recurring students. Reaching that from zero by about day 60 (about 8 weeks) with zero churn means 15/8 = 1.9 to 23/8 = 2.9 new retained students every week. No source shows this acquisition rate is typical.\n(B) Preply at an assumed $40/hr list price (Canada-based tutor rates not found):\n- New-tutor commission 33%: 40 × 0.67 = $26.80/hr → 5,000 / 26.80 = 186.6 hrs/month (43 hrs/week), plus unpaid trial lessons.\n- Even at the 18% floor, which needs 400+ taught hours and so cannot be reached in 60 days: 40 × 0.82 = $32.80 → 152 hrs/month.\n(C) italki at an assumed $30/hr:\n- 15% commission: 30 × 0.85 = $25.50 → 196 hrs/month.\n- 21% (community-reported): 30 × 0.79 = $23.70 → 211 hrs/month.\n(D) Agency employee at the Glassdoor $21/hr: 5,000 / 21 = 238 hrs/month (55 hrs/week). Not feasible.\n(E) Small-group format (assumption: 4 students × $25/student/hr = $100/hr; group pricing not sourced): 5,000 / 100 = 50 hrs/month (11.5 hrs/week). This is the only structure where $5k fits a normal after-school schedule. It depends on filling groups, which is unproven.\n(F) Illustrative ramp, not evidence: month 1 = 5 students × 4 hrs × $55 = $1,100; month 2 = 12 students × 4.33 hrs × $55 = $2,858. 60-day average = (1,100 + 2,858) / 2 = $1,979/month, about 40% of target.\n(G) Tax: taxable tutoring (test prep, adult language lessons) at $5k/month passes the $30,000 small-supplier threshold after 30,000 / 5,000 = 6 months. GST/HST registration is then required, and the tax either raises client prices or cuts net income. Tutoring for courses that follow a school-authority curriculum is exempt.",
+  "startup_cost_cad": "ESTIMATE: about $0–$150. Toronto VSC is $71.72 (employment rate, TPS) if the owner chooses or is asked to get one. Laptop, internet and webcam are assumed to be owned already (not verified). Optional ads, domain, Superprof premium or printed materials: costs not found. Tutoring in clients' homes adds transit or fuel costs (not sourced).",
+  "requirements": [
+   "Real subject competence that parents will pay for: high-school math/science, native-level Korean, or strong English for English/IELTS/CELPIP. Private tutoring in Ontario needs no licence, but the tutor must show expertise (OCT help and Job Bank, search extracts).",
+   "English fluency: needed for English-medium K-12 subjects and for IELTS/CELPIP/SAT prep. Korean lessons for heritage learners may need less English, but the English level needed to deal with parents was not verified.",
+   "Vulnerable Sector Check: strongly advisable for work with minors, and agencies and school boards use VSC processes. No source found making it legally mandatory for private tutors. Toronto: $71.72, about 2 weeks to 20 business days.",
+   "Vehicle: not required for online tutoring or tutoring at a library or your own home. For in-home tutoring across the GTA suburbs it is helpful (not sourced).",
+   "Capital: minimal (see startup cost).",
+   "Physical labour: none.",
+   "Availability during after-school and weekend hours, when K-12 clients are free (assumption, not sourced).",
+   "Platform accounts (Preply, italki, Superprof) require the human's own identity and payout details. Wyzant is unavailable to Canadian residents (US residence and SSN required).",
+   "A way to receive payments (e-transfer or a platform payout) and a record-keeping system to track the $30k GST/HST small-supplier threshold."
+  ],
+  "regulations": [
+   {
+    "fact": "Private tutoring in Ontario is not regulated like classroom teaching: no licence is needed to advertise as a tutor. OCT certification is required only for teachers in publicly funded schools. (Search-result extract)",
+    "source_url": "https://help.oct.ca/hc/en-us/sections/360009664834-Private-Tutoring"
+   },
+   {
+    "fact": "Job Bank: tutors of elementary and secondary subjects may need to be enrolled in or have completed related post-secondary study, and must show subject expertise (employer requirement, not a licence).",
+    "source_url": "https://www.on.jobbank.gc.ca/marketreport/requirements/24624/ON"
+   },
+   {
+    "fact": "GST/HST: Schedule V, Part III, section 9 of the Excise Tax Act exempts 'a supply of a service of tutoring or instructing an individual in a course that is approved for credit by, or that follows a curriculum designated by, a school authority' (CRA GST/HST Memorandum 20-6, Dec 2019).",
+    "source_url": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/20-6/tutoring-equivalent-services.html"
+   },
+   {
+    "fact": "Instruction by self-employed teachers and educators is normally taxable, unless it is music lessons or tutoring in a course approved for credit by, or following a curriculum designated by, a school authority. There must be a direct connection to that course or curriculum.",
+    "source_url": "https://www.canada.ca/en/revenue-agency/services/forms-publications/publications/20-4/vocational-schools-courses.html"
+   },
+   {
+    "fact": "General or optional preparatory courses such as test prep usually do not qualify for the exemption, and post-secondary tutoring is generally taxable. (Secondary source, CPA firm blog; not an official ruling)",
+    "source_url": "https://mackisen.com/blog/cra-gst-hst-tutoring-coaching-private-education-audit-montreal-cpa-firm-near-you-defending-exempt-vs-taxable-lessons-online-courses-packages-itcs"
+   },
+   {
+    "fact": "Small supplier: a business must register for GST/HST once worldwide taxable supplies exceed $30,000 in a single calendar quarter or over the last four consecutive quarters. It must charge tax from the date of registration and register within 29 days.",
+    "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/when-register-charge.html"
+   },
+   {
+    "fact": "Toronto Police Vulnerable Sector Check: $71.72 employment / $26.72 volunteer or student. Generally 2 weeks, up to 20 business days. Online and mail applications take equally long.",
+    "source_url": "https://www.tps.ca/services/frequently-asked-questions/"
+   },
+   {
+    "fact": "Wyzant requires tutors to live permanently and be physically located in the US, with a valid SSN. Canadian residents cannot tutor there.",
+    "source_url": "https://support.wyzant.com/tutors/tutor-home/i-dont-live-in-the-us-can-i-be-listed-as-a-tutor-on-wyzant/"
+   },
+   {
+    "fact": "Whether a self-employed private tutor with no sponsoring organization can obtain a VSC in Ontario, and VSC rules and costs in BC (Vancouver), Alberta (Calgary), Ottawa and Quebec (Montreal): not found.",
+    "source_url": "not found"
+   }
+  ],
+  "ai_can_build": [
+   "Bilingual (Korean/English) tutoring landing page with subject pages, rates, FAQ, testimonials section and a booking-request form.",
+   "Lesson-package and group-pricing calculator, plus an HST exempt-vs-taxable classifier and a $30k small-supplier threshold tracker spreadsheet.",
+   "Diagnostic tests and worksheets aligned to the Ontario math/science curriculum (Grades 7–12), with answer keys and progress-report templates for parents.",
+   "Korean-language curricula for heritage-learner kids and K-pop/K-drama adult fans (Hangul in 2 weeks, drama-phrase units, TOPIK I prep outlines).",
+   "Original IELTS/CELPIP/SAT-style practice prompts, speaking-drill scripts and scoring rubrics (original content, not copies of official test material).",
+   "Profile copy for Superprof, Preply and italki listings, plus intro-video scripts.",
+   "Outreach templates: emails and messages for Korean churches, Korean community associations, settlement agencies, parent groups, and Kijiji or Facebook Marketplace ads (the human posts them).",
+   "Google Calendar scheduling set-up, Gmail drafts for lead follow-up, reminders and invoices, and a simple CRM spreadsheet for lead to trial to paying student.",
+   "Weekly parent progress-email templates to improve retention."
+  ],
+  "human_must_do": [
+   "Deliver every tutoring hour, whether live or in person. Revenue scales only with the human's teaching hours.",
+   "Apply for the Vulnerable Sector Check (ID and possibly fingerprints) and pay for it.",
+   "Create and verify accounts on Preply, italki and Superprof (ID and payout set-up), and record intro videos.",
+   "Post ads and social content from their own accounts (Instagram, KakaoTalk groups, Kijiji, Facebook, church bulletins), and network in person.",
+   "Take calls and meetings with parents, run trial lessons, and close sales.",
+   "Receive payments (e-transfer or platform payouts), keep records, and register for GST/HST if taxable revenue passes $30k over four quarters. Report self-employment income to the CRA.",
+   "Travel to clients for in-home tutoring, if offered."
+  ],
+  "seasonality": "Not found: no search returned seasonality data (the search budget ran out). UNVERIFIED HYPOTHESIS, labelled as such: K-12 demand likely follows the school calendar (fall term start, midterms, January and June exams), which would make Oct–Nov 2026 a reasonable launch window. IELTS/CELPIP demand likely follows immigration-application timing. Neither claim is sourced here, and both need checking before any decision.",
+  "risks": [
+   "Hours ceiling: at the sourced independent rates ($50–80/hr), $5k needs 62–100 billable hours a month, most of them squeezed into after-school and weekend slots. Burnout and cancellations directly cut income.",
+   "Slow ramp: acquiring 15–23 recurring students in about 8 weeks from zero is unproven. Platform trials are unpaid on Preply or free by convention on Superprof.",
+   "Platform economics: 33% commission for new Preply tutors plus 100% of trials; italki reportedly moved from 15% to 21%; Wyzant is closed to Canadians.",
+   "Low-price competition from student tutors at $15–35/hr (Biller.ca) and a $20/hr floor in Toronto ranges (Tutorlyft). With no licensing barrier, anyone can enter (inference from the unregulated status).",
+   "Tax complexity: test prep, adult Korean and IELTS/CELPIP lessons are likely taxable, while curriculum K-12 tutoring is exempt. Mixed income makes tracking the $30k threshold necessary.",
+   "Child-safety and liability exposure when working with minors. Some parents or agencies may require a VSC (2–4 week delay). Insurance needs and costs were not found.",
+   "Research quality risk: all page opens were blocked by the egress proxy and the search budget ran out after 11 queries. Korean, IELTS/CELPIP and SAT rates, seasonality, time-to-first-student, and differences in other cities are unverified.",
+   "Owner-fit risk: the owner's subject skills and English level are unknown. Without a demonstrable speciality this model mostly fails."
+  ],
+  "counter_evidence": [
+   {
+    "fact": "The employed tutor route in Toronto pays about $21/hr on average ($43,577/yr), far below what $5k/month requires.",
+    "source_url": "https://www.glassdoor.ca/Salaries/toronto-on-private-tutor-salary-SRCH_IL.0,10_IM976_KO11,24.htm"
+   },
+   {
+    "fact": "Preply keeps 100% of every trial lesson with a new student, and new tutors pay the highest commission tier (up to 33%).",
+    "source_url": "https://help.preply.com/en/articles/4171383-preply-commission-model"
+   },
+   {
+    "fact": "italki commission reportedly rose from 15% to 21% in 2026 (community reporting, not an official page).",
+    "source_url": "https://supatutor.in/italki-commission-increase-explained/"
+   },
+   {
+    "fact": "Wyzant, a major US tutoring marketplace, will not list tutors who live in Canada.",
+    "source_url": "https://support.wyzant.com/tutors/tutor-home/i-dont-live-in-the-us-can-i-be-listed-as-a-tutor-on-wyzant/"
+   },
+   {
+    "fact": "Anecdotal: '$45,000 in 2.5 Years as an Unqualified Language Teacher'. ESTIMATE: about $1,500/month average, well below $5k.",
+    "source_url": "https://www.goodreads.com/author_blog_posts/24510167-45-000-in-2-5-years-as-an-unqualified-language-teacher?tab=book"
+   },
+   {
+    "fact": "Anecdotal: italki teacher complaint that a 50 ITC lesson pays out only about 43 ITC after deductions.",
+    "source_url": "https://www.italki.com/en/post/question-206853"
+   },
+   {
+    "fact": "Student tutors charge $15–35/hr, so price competition compresses rates for non-certified tutors.",
+    "source_url": "https://biller.ca/pricing-guides/how-much-to-charge-tutoring-canada"
+   },
+   {
+    "fact": "Most tutoring and coaching is GST/HST-taxable; only instruction tied to a school-authority curriculum or credit course is exempt (secondary source).",
+    "source_url": "https://mackisen.com/blog/cra-gst-hst-tutoring-coaching-private-education-audit-montreal-cpa-firm-near-you-defending-exempt-vs-taxable-lessons-online-courses-packages-itcs"
+   }
+  ],
+  "scores": {
+   "speed": 6,
+   "probability_5k": 2,
+   "capital_light": 9,
+   "ai_leverage": 4,
+   "low_risk": 7
+  },
+  "score_rationale": "Speed 6: no licence is needed in Ontario and startup cost is about $72. A first paid session could come within weeks through a personal network, but platform trials are unpaid or free, a VSC takes 2–4 weeks if required, and no source measured time to first student. Probability of $5k 2/10: at the sourced $50–80/hr independent rates, $5k net needs 62–100 billable hours a month, meaning 15–23 recurring weekly students acquired from zero in about 8 weeks. Platform routes need 150–210 hours a month after commissions, agency work needs 238 hours at $21/hr, and the only earnings anecdote found averages about $1,500/month. Capital-light 9: VSC $71.72 plus existing devices. AI leverage 4: the AI can build the site, curricula, practice materials, outreach copy and admin automation, but every dollar of revenue is a live human teaching hour, and the AI cannot post, call or teach. Low risk 7: legal and financial risk is low. The main risks are working with minors (VSC and liability), GST/HST classification, and the income shortfall itself. Confidence is reduced because every page open was egress-blocked and the search budget ran out after 11 queries, so Korean, IELTS/CELPIP and SAT rates, seasonality, and data for cities other than the GTA are 'not found'."
+ },
+ "verification": {
+  "checked_claims": [
+   {
+    "claim": "Preply keeps 100% of every trial lesson with a new student; later lessons carry an 18%–33% commission depending on hours taught.",
+    "status": "unverifiable",
+    "correction": "Could not re-check in this session. WebFetch of help.preply.com was refused by the egress proxy (EGRESS_BLOCKED), and WebSearch reported the session budget was already used up (200 of 200). The dossier's own author also saw only a search-result extract and never opened the page. The middle tiers are internally contradictory (Pensight says 28% after 20 hrs; TutorLingua says 25%/22% after 50/200 hrs). Treat only '33% for new tutors' and '100% of trials' as plausible, not verified. The per-hour Preply maths in path (B) rests on an assumed $40 rate that is itself 'not found'.",
+    "source_url": "https://help.preply.com/en/articles/4171383-preply-commission-model"
+   },
+   {
+    "claim": "Independent Toronto tutors charge $50–80/hr for high-school math and science, and certified teachers $70–100+/hr (Biller.ca 2026 guide).",
+    "status": "unverifiable",
+    "correction": "Fetch blocked (biller.ca EGRESS_BLOCKED) and no search budget left. Beyond that, Biller.ca is an invoicing-software vendor's SEO pricing guide, not a survey. It gives rate ranges with no sample size or method, and it does not show how many hours tutors actually sell at those rates. Tutorlyft's Toronto range ($20–100/hr) is so wide that it supports no specific rate. The whole path-to-$5k calculation depends on these unverified rates.",
+    "source_url": "https://biller.ca/pricing-guides/how-much-to-charge-tutoring-canada"
+   },
+   {
+    "claim": "GST/HST small supplier: registration is required once worldwide taxable supplies exceed $30,000 in a single calendar quarter or over the last four consecutive quarters, and within 29 days.",
+    "status": "unverifiable",
+    "correction": "The canada.ca fetch was blocked, so the wording could not be re-checked. The dossier also compresses two different rules into one. By the dossier's own description, the single-quarter test and the four-quarter test have different effective dates, and 'must charge tax from the date of registration' does not describe both. This needs checking on the official page before any tax-planning tool is built. One point is consistent with the dossier's own sources: exempt curriculum tutoring should not count toward the $30k, because only taxable supplies count. This was not re-verified.",
+    "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/when-register-charge.html"
+   },
+   {
+    "claim": "Toronto Police Vulnerable Sector Check costs $71.72 (employment) and takes about 2 weeks, up to 20 business days.",
+    "status": "unverifiable",
+    "correction": "The tps.ca fetch was blocked. More important: the dossier admits it did not find whether a self-employed tutor with no sponsoring organization can obtain a VSC at all. If the owner cannot get one alone, the 'get a VSC so parents trust you' step may be impossible without an agency. That would be a hidden blocker for in-home tutoring of minors. Status: not found.",
+    "source_url": "https://www.tps.ca/services/police-record-checks/"
+   },
+   {
+    "claim": "italki's commission rose from 15% to 21% on one-to-one lessons in mid-2026.",
+    "status": "unverifiable",
+    "correction": "The supatutor.in fetch was blocked. Even taken at face value, the source is a third-party blog repeating community reports, and the dossier says no official italki page confirmed it. The 21% path (C) figure must stay labelled as community-reported and unconfirmed.",
+    "source_url": "https://supatutor.in/italki-commission-increase-explained/"
+   },
+   {
+    "claim": "Wyzant does not accept tutors who live in Canada (US residence and SSN required).",
+    "status": "unverifiable",
+    "correction": "Could not be re-opened in this session (search budget used up, and fetches to non-official domains blocked the same way). Low decision impact either way, because the dossier already excludes Wyzant.",
+    "source_url": "https://support.wyzant.com/tutors/tutor-home/i-dont-live-in-the-us-can-i-be-listed-as-a-tutor-on-wyzant/"
+   },
+   {
+    "claim": "Employed private tutors in Toronto average $21/hr ($43,577/yr) (Glassdoor 2026).",
+    "status": "unverifiable",
+    "correction": "Not re-opened (budget used up). Also a mismatch: Glassdoor figures are self-reported employee salaries for mixed full- and part-time roles. They benchmark agency pay, not what an independent tutor earns. The dossier uses them correctly only as the agency route.",
+    "source_url": "https://www.glassdoor.ca/Salaries/toronto-on-private-tutor-salary-SRCH_IL.0,10_IM976_KO11,24.htm"
+   },
+   {
+    "claim": "The dossier's arithmetic: $5,000/$50 = 100 hrs; /$65 = 76.9; /$80 = 62.5; Preply 40×0.67 = 26.80 → 186.6 hrs; italki 30×0.85 = 25.50 → 196 hrs; 30×0.79 = 23.70 → 211 hrs; agency 5,000/21 = 238 hrs; ramp (1,100 + 2,858)/2 = $1,979.",
+    "status": "confirmed",
+    "correction": "Arithmetic re-computed and correct. ESTIMATE check: 5000/26.8 = 186.57; 186.57/4.33 = 43.1 hrs/wk; 12×4.33×55 = 2,857.8. The arithmetic is right, but its inputs (rates, hours, students per week, group pricing) are unsourced assumptions. Two further problems: the 'net of direct costs' target is treated as gross (no deduction for travel, materials, platform or payment fees), and self-employed CPP contributions are ignored.",
+    "source_url": "not found (internal arithmetic check of the dossier)"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Research-integrity finding. In this fact-check session, every decision-critical page (help.preply.com, biller.ca, canada.ca, tps.ca, supatutor.in) was refused by the organization's egress proxy, and the shared WebSearch budget was already used up (200/200). The original dossier ran only 11 searches and opened zero pages. So no dossier claim has been verified by anyone opening a primary source. Under the owner's no-speculation rule, the candidate rests entirely on unopened search snippets.",
+    "source_url": "not found (session tool logs: EGRESS_BLOCKED and a 200/200 search budget)"
+   },
+   {
+    "fact": "The dossier's own illustrative ramp reaches an ESTIMATED $1,979/month average over 60 days, about 40% of the $5,000 target. Its only earnings anecdote averages an ESTIMATED $1,500/month ($45,000/30 months). None of the evidence it presents shows $5k/month reached within 60 days.",
+    "source_url": "https://www.goodreads.com/author_blog_posts/24510167-45-000-in-2-5-years-as-an-unqualified-language-teacher?tab=book"
+   },
+   {
+    "fact": "The time-to-first-revenue evidence is almost entirely negative or missing. Preply trials pay the tutor $0 and Superprof norms favour a free first lesson (both from search extracts only). No source measured time to first paying student. The dossier's speed score of 6 rests on an ESTIMATE about using the owner's personal network, whose existence is unknown.",
+    "source_url": "https://help.preply.com/en/articles/4171383-preply-commission-model"
+   },
+   {
+    "fact": "Timing trap (unverified hypothesis, flagged): a late-October launch comes after the September back-to-school window, when families plausibly set up tutors. Seasonality data was 'not found' by both the dossier and this check, so the dossier's claim that Oct–Nov is a 'reasonable launch window' is unsupported.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Failure stories, platform bans, saturation data, Reddit or YouTube tutor-income reports, and Korean-community tutoring competition (e.g. existing hagwon-style academies in the GTA) could not be searched in this session. Status: not found. Absence of counter-evidence here is not evidence that it doesn't exist.",
+    "source_url": "not found"
+   }
+  ],
+  "hidden_costs_or_blockers": [
+   "VSC access for self-employed people (not found): it is unconfirmed whether an independent tutor with no sponsoring agency can get an Ontario VSC at all. If not, the dossier's advice to get a VSC fails, and parents of minors may not hire a stranger without one.",
+   "Self-employed CPP contributions are ignored. Net self-employment income owes both the employee and employer shares of CPP. The rate was not verified in this session, so the amount is not quantified, but it cuts real take-home pay below the 'net of direct costs' figure.",
+   "After-school hours cap. ESTIMATE: weekday 3:30–8:30pm = 5 hrs × 5 days = 25 hrs, plus about 10 weekend hours = about 35 sellable hrs/week at most, before travel, cancellations and no-shows. In-home tutoring across the GTA eats part of these hours in travel. Travel costs (transit or fuel) were not found and are not deducted in the dossier's maths.",
+   "Cancellations and no-shows: the dossier has no cancellation policy or prepaid-package model built into its revenue maths. Each missed hour is lost income. No rate data found.",
+   "Liability and insurance for working with minors in homes: cost not found. It may be required by some clients or venues.",
+   "Mixed GST/HST status: test prep, adult Korean and IELTS/CELPIP lessons are likely taxable while curriculum K-12 tutoring is exempt (secondary source, not re-verified). This forces per-client classification and record-keeping. Getting the classification wrong risks back-tax exposure.",
+   "Platform onboarding delays: Preply, italki and Superprof profile review and approval times were not found. They may push the first lesson back beyond the dossier's timeline.",
+   "Payout lag: italki withdrawals requested after the 15th are paid the following month (search extract, unverified). October earnings on platforms may not reach a bank account until November or December, which matters for a 30-day cash need.",
+   "Owner-fit is the biggest blocker. The owner's subject expertise and English level are unknown. Without a demonstrable speciality (high-school math or science, native Korean with community reach, or high-level English for IELTS/CELPIP), the model has no product.",
+   "Group-format pricing ($25/student/hr × 4), the only path the dossier finds that fits $5k into a normal schedule, is entirely unsourced. It also needs a venue: library room rules or rental costs were not found."
+  ],
+  "adjusted_scores": {
+   "speed": 4,
+   "probability_5k": 1.5,
+   "capital_light": 9,
+   "ai_leverage": 3,
+   "low_risk": 6.5
+  },
+  "verdict": "DOWNGRADE: remove as the primary path to $5k/month and keep only as a bridge or secondary income, conditional on owner fit. Reasons: (1) No factual claim in the dossier could be verified from a primary source, either by the original author (zero pages opened, 11 searches) or in this check (all key domains egress-blocked, search budget used up). Scores must default down. (2) Even taking the unverified rates at face value, the dossier's own maths shows $5k needs 62–100 direct-pay hours a month from 15–23 recurring students acquired in about 8 weeks. Its own ramp estimate reaches only about 40% of target ($1,979/mo). Its only earnings anecdote averages about $1,500/mo. Platform routes need 150–210 hours a month. (3) Speed is lowered from 6 to 4: trials are unpaid or free, time-to-first-student is 'not found', the VSC may be impossible to get without an agency, platform payouts lag, and the October launch may miss the September intake. (4) AI leverage is lowered from 4 to 3, because revenue is 100% live human teaching hours. (5) Low-risk is lowered slightly from 7 to 6.5 for minors-liability, VSC and mixed-GST/HST uncertainty. Capital-light stays at 9. Keep it in the portfolio only if the owner confirms a strong subject speciality or an existing Korean-Canadian parent network, where it can bring in a few hundred to about $2k/month early while a higher-ceiling business ramps."
+ }
+}

@@ -1,0 +1,161 @@
+# 오너가 물어볼 만한 질문 (FAQ)
+
+> 근거: 결정 메모(`business/research/decision-memo.md`) 11절과 "아직 찾지 못한 것" 목록. 금액은 모두 **추정**입니다. 법률 자문이 아닙니다.
+> 이 문서는 오너용입니다. 고객용 FAQ는 따로 있습니다(메모 10절 항목 13).
+
+---
+
+### 1. 10월에 $5,000을 벌 수 있나요?
+
+**아니요.** (모두 추정)
+
+- **10월 기본 시나리오**
+  - B1: $972.50
+  - B2: 현금 −$220, 운영 기준 $2,230
+- **10월 보수 시나리오**
+  - B1: −$256
+  - B2: −$1,741
+- **월 약 $5,000에 처음 닿는 시점**
+  - 기본 B1: 2027년 1월
+  - 기본 B2: 운영 기준으로는 11월, 현금 기준으로는 12월
+- **보수 시나리오:** 이번 겨울에는 혼자서 도달하지 못합니다.
+- 자세한 계산: `05-수익-시나리오.md`
+
+### 2. EI를 신청해야 하나요?
+
+**자격이 되면 네. 2026-10-10(토)까지 신청하세요**(F1).
+
+- 10월에는 EI와 작게 신고한 부업을 합친 금액(예시에서 주 약 $929)이 어떤 사업 시나리오보다 많습니다.
+- 사업 순이익이 주 약 $1,000을 넘을 때만 사업 전념으로 바꿉니다. 이 기준은 최대 수당 기준이고, 5.4절에 있습니다.
+- 무엇이 "minor extent"인지는 **Service Canada가 정합니다.**
+- 자세한 내용: `03-EI-결정규칙.md`
+
+### 3. 트럭이 있으면 외부 작업이 할 만한가요?
+
+**조금 도움이 되는 정도입니다.**
+
+- 기본 시나리오에서 10–3월에 약 $3,000을 더해 줍니다(5.3절, 추정).
+- 보수 시나리오에서는 거터가 초기 비용을 겨우 회수합니다.
+- 관문(G1, S)과 구매 조건을 지킬 때만 하세요.
+
+### 4. 지금 HST를 받아야 하나요?
+
+**아니요.**
+
+- 기본 시나리오 매출이면 2027년 5월경부터입니다(5.5절, 추정).
+- 분기별로 매출을 기록하세요.
+
+### 5. 사업자 이름을 등록해야 하나요?
+
+온타리오 규정은 **확인되지 않았습니다.** 브랜드 이름({BRAND})을 인쇄하기 전에 ServiceOntario에 확인하세요.
+
+### 6. 워크퍼밋이 있는데 이 일을 할 수 있나요?
+
+**조사하지 않았습니다.** 판매하기 전에 허가증 조건을 확인하거나 IRCC에 물어보세요.
+
+### 7. 차가 없으면요?
+
+**B1(청소 + 플랫폼)만 하고, 더 천천히 늘어납니다.**
+
+- 걸어서 다닐 수 있는 클러스터에서 삽으로 하는 눈 작업은 가능합니다.
+- 조건: 서면 보험을 받아야 합니다(관문 S).
+- 처음에는 진입로 10곳까지만 받습니다. 이 숫자는 가정이고, 한 곳에 걸리는 시간을 재기 전까지의 상한입니다.
+
+### 8. 크리스마스 조명 설치는 왜 안 하나요?
+
+- 예약 시기가 끝나 갑니다. "9월 말 – 10월 첫 주"가 적기이고, 11월 중순이면 업체들이 "예약이 꽉 찹니다"(F33).
+- 가격 자료가 2–3배씩 서로 다릅니다.
+- 겨울 사다리 작업입니다.
+- 1월 철거는 돈을 받지 못합니다.
+- **유일한 예외:** G1을 통과한 거터 고객이 먼저 요청하는 경우입니다.
+  - 고객 소유 조명, 단층 지붕선에 한합니다.
+  - 설치할 때 전액을 받고, 철거는 따로 청구합니다.
+  - 이 매출은 계획에 넣지 않습니다.
+
+### 9. 눈 치우기 돈을 지금 받아도 되나요?
+
+**아니요. 12월 1일 전에는 한 푼도 받지 않습니다.**
+
+- 온타리오 방문 계약은 10일 취소권이 있습니다(F32).
+- GTA에서 선불을 낸 고객들이 피해를 봤습니다(CP24).
+- 11/20(금)까지 손익분기 건수가 안 되면 계약은 무효입니다.
+
+### 10. 방문 영업은 합법인가요?
+
+- CASL은 방문 영업에 적용되지 않습니다.
+- 온타리오 방문 계약(direct agreement) 규칙이 적용됩니다(F32).
+- 시의 방문판매 조례는 **조사하지 않았습니다.** 클러스터가 속한 시의 조례를 확인하세요.
+
+### 11. 보험료는 얼마인가요?
+
+**내 작업에 맞는 금액은 모릅니다.**
+
+- 스니펫 자료의 최저선은 연 약 $450–500입니다(청소 또는 창문 청소).
+- 눈 작업은 $450–3,000, 핸디맨은 약 $1,800입니다(F23, F27, F29).
+- **1주차에 서면 견적을 받아야 합니다.**
+
+### 12. TaskRabbit에서 일이 빨리 들어오나요?
+
+**모릅니다.**
+
+- 승인 기간과 신규 태스커 수요는 찾지 못했습니다.
+- 신청 자체가 처리되지 않을 수도 있습니다(F21).
+- 플랫폼 수입은 보장된 돈이 아니라, 다른 일이 안 될 때를 위한 대비책입니다.
+
+### 13. 웹사이트를 상업용으로 무료 호스팅할 수 있나요?
+
+- Cloudflare의 한도는 공식 문서로 확인했습니다(F39).
+- 무료 플랜의 상업적 사용 가능 여부는 2차 자료에만 나옵니다(F40).
+- 가입할 때 약관을 읽으세요.
+- Vercel Hobby는 비상업용 전용이라 쓰지 않습니다.
+
+### 14. 예전 공구 가격비교 사이트는요?
+
+- 2026-08-08 이후 매일 스냅샷에서 가격이 잡힌 검색어가 하나도 없습니다(2026-08-07에는 12개였음, F44).
+- 제작 항목 0에서 보관 처리됩니다.
+
+### 15. 무엇을 보장해 줄 수 있나요?
+
+**소득에 대해서는 아무것도 보장할 수 없습니다.** 보장할 수 있는 것은 이것뿐입니다.
+
+- 메모 10절의 자산이 만들어집니다.
+- 컴플라이언스 단계가 출처와 함께 정리되어 있습니다.
+- 7, 14, 21, 28일차 점검에서 큰 돈을 쓰기 전에 이 계획이 통하는지 보입니다.
+
+---
+
+## 아직 찾지 못한 것 (믿고 쓰기 전에 하나씩 확인)
+
+- [ ] 퍼널 전환율(방문 → 대화 → 견적 → 계약), 플랫폼 승인 기간, 신규 태스커 수요
+- [ ] 소모품 비용, 사다리의 캐나다 가격, 거터 전용 보험
+- [ ] 몬트리올 가격. 캘거리·오타와·밴쿠버 청소 가격
+- [ ] 시 방문판매 조례
+- [ ] 10일 취소 기간 안에 작업을 해 주면 어떻게 되는지
+- [ ] 워크퍼밋 소지자의 자영업 규칙
+- [ ] 개인 사업자의 WSIB
+- [ ] Cloudflare Email Routing과 KV 한도
+- [ ] EI Pilot 24가 2026-10-10 이후로 연장되는지
+
+---
+
+## 출처 (메모에서 옮김)
+
+- F1 EI Pilot 24: [SOR-96-332](https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-96-332.xml) — 법령 확인
+- F21 TaskRabbit:
+  - [등록비](https://support.taskrabbit.com/hc/en-ca/articles/360032936511-What-s-the-Registration-Fee)
+  - [요건](https://support.taskrabbit.com/hc/en-ca/articles/204411070-What-s-Required-to-Become-a-Tasker)
+  - [NerdWallet](https://www.nerdwallet.com/article/finance/taskrabbit?trk=newwnb)
+  - (스니펫)
+- F23 청소 보험: [thinkinsure](https://www.thinkinsure.ca/business-insurance/cleaning-insurance) — 스니펫
+- F27 창문 청소 보험: [rates.ca](https://rates.ca/insurance-quotes/business/contractor/window-cleaning) — 스니펫
+- F29 눈 보험: [getcertain](https://getcertain.ca/how-much-does-snow-removal-insurance-cost-in-canada/), [rates.ca](https://rates.ca/resources/what-does-snow-removal-business-insurance-canada-really-cover-and-how-much-does-it-cost) — 스니펫
+- F32 온타리오 방문 계약: [ontario.ca](https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract) — 스니펫
+- F33 조명 예약 시기: [settoshine](https://www.settoshine.ca/post/christmas-lights-cost-gta) — 스니펫, 업체 블로그
+- 조명 가격 충돌: [weinstallchristmaslights](https://weinstallchristmaslights.ca/how-much-does-it-really-cost-to-install-christmas-lights-in-ontario/) vs [settoshine](https://www.settoshine.ca/post/christmas-lights-cost-gta)
+- CP24 선불 피해 기사: [CP24, 2026-01-16](https://www.cp24.com/local/toronto/2026/01/16/gta-customers-who-paid-in-advance-for-snow-removal-feel-cheated-after-company-stopped-providing-service/) — 스니펫
+- F39 Cloudflare 한도: [limits.mdx](https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/pages/platform/limits.mdx), [pricing.mdx](https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/workers/platform/pricing.mdx) — 법령 확인(공식 문서)
+- F40 무료 호스팅 상업 사용:
+  - [botingw](https://github.com/botingw/langgraph-dev-navigator/blob/6e1d0c9c1f7732f97765920085eeb8857a2538ae/memory/tasks/story_create_landing_page/replit_migration_spike.md)
+  - [cmaven](https://github.com/cmaven/cmaven.github.io/blob/master/_posts/en/tech/hosting/2026-06-08-netlify-vercel-static-hosting-comparison.md)
+  - (2차 자료)
+- F44 공구 사이트: `git log -- public/cache/index.json` — 저장소에서 확인

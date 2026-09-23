@@ -1,0 +1,41 @@
+{
+ "topic": "Cross-cutting base-rate sweep: how quickly new small businesses and side hustles reach CAD/USD $5,000/month, and what the fast cases have in common. STATUS: BLOCKED. I verified no on-topic facts in this run because the web search budget was already used up and the network proxy blocked every data source I tried.",
+ "key_facts": [
+  {
+   "fact": "WebSearch did not run. All 3 queries were refused with the message 'this session has used its web search budget (200 of 200 WebSearch calls)'. The queries were: Bankrate side hustle survey 2025, Side Hustle Nation time-to-first-dollar survey, and Statistics Canada self-employed median income 2024 2025. So the required minimum of 8 distinct searches was NOT met.",
+   "source_url": "none (tool error returned in this session, 2026-09-23)",
+   "applies_to": "research process / reliability of this shard"
+  },
+  {
+   "fact": "WebFetch returned EGRESS_BLOCKED (proxy message 'Access to <domain> is blocked by the network egress proxy') for every data source tried: www.bankrate.com, www.lendingtree.com, www.sidehustlenation.com, ised-isde.canada.ca, www.upwork.com, www150.statcan.gc.ca, www.bls.gov, www.canada.ca, en.wikipedia.org, investors.fiverr.com, www.federalreserve.gov and www.jpmorganchase.com. www.reddit.com returned 'unable to fetch'.",
+   "source_url": "none (tool errors returned in this session, 2026-09-23)",
+   "applies_to": "research process / reliability of this shard"
+  },
+  {
+   "fact": "The only domain that answered WebFetch was github.com. A GitHub search for 'side hustle survey' returned 4 personal repositories with zero stars and no usable income data. GitHub is not an authoritative source for base rates.",
+   "source_url": "https://github.com/search?q=side+hustle+survey&type=repositories",
+   "applies_to": "research process"
+  }
+ ],
+ "implications": [
+  "NO EVIDENCE-BACKED CONCLUSION IS POSSIBLE FROM THIS SHARD. I could not verify any figure for side-hustle income, freelance platform earnings, Statistics Canada self-employment income, business survival rates, or time to $5k/month. Downstream synthesis must not treat any base rate as established by this sweep. Every earnings claim in other dossiers needs its own citation.",
+  "The orchestrator should re-run this shard once the user raises CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION (the WebSearch refusal message names this setting) and the egress proxy allows the source domains. Until then, the sweep is 'not found' on every question.",
+  "Framing arithmetic that needs no outside data (my own numbers, not evidence): ESTIMATE: $5,000 net per month / (5 working days x 4.33 weeks = 21.65 days) = about $231 net per working day.",
+  "ESTIMATE of billable hours for $5,000 net per month: at $25/h net, 5000/25 = 200 h per month, and 200/4.33 = about 46 h per week. At $40/h net, 5000/40 = 125 h per month, about 29 h per week. At $75/h net, 5000/75 = about 67 h per month, about 15 h per week. Paid hours only; unpaid time spent selling, quoting and travelling comes on top.",
+  "ESTIMATE of sales volume for $5,000 net per month: at $20 net per sale, 5000/20 = 250 sales. At $150 net per job, 5000/150 = about 33 jobs (about 7.7 per week). At $500 net per job, 10 jobs. At $2,000 net per engagement, 2.5 engagements. From arithmetic alone, a low-ticket product needs hundreds of buyers in month 1, which usually assumes an existing audience or traffic. A local service needs tens of customers, and a high-ticket service needs only a few.",
+  "HYPOTHESIS (not supported by evidence gathered here; must be verified before anyone relies on it): the business types most likely to fit a 30-60 day ramp are local, in-person services with high tickets or pre-paid contracts that can be sold directly (door-to-door, neighbourhood groups, the owner's existing network), rather than audience-dependent digital products or new freelance-platform profiles. I could not confirm this with base-rate data, so treat it as a lead, not a finding.",
+  "Any guru or 'sweaty startup' income claims (for example, from social media personalities) used downstream should be labelled guru or anecdotal claims and kept apart from survey or government data. None were collected in this run."
+ ],
+ "unknowns": [
+  "Share of side hustlers earning $1,000+ or $5,000+ per month, and median monthly side-hustle income (Bankrate and LendingTree 2024-2026 surveys): not found. Domains blocked.",
+  "Time to first dollar and time to $X per month for new side hustles (Side Hustle Nation / Nick Loper surveys): not found. Domain blocked.",
+  "Median self-employment or gig income in Canada (Statistics Canada Labour Force Survey self-employment tables and gig-economy studies): not found. Domain blocked; no table IDs verified.",
+  "Canadian small business survival rates at 1, 2 and 5 years (ISED Key Small Business Statistics): not found. Domain blocked.",
+  "US establishment survival rates (BLS Business Employment Dynamics): not found. Domain blocked.",
+  "Freelance platform earnings, meaning average freelancer earnings, spend per buyer and the share earning full-time income (Upwork Research Institute / Freelance Forward; Fiverr 20-F and investor reports; Payoneer freelancer income report): not found. Domains blocked or not attempted after the pattern of blocks was clear.",
+  "Gig and platform earnings distributions (Federal Reserve SHED report; JPMorgan Chase Institute online platform economy): not found. Domains blocked.",
+  "Community and anecdotal evidence on sweaty-startup and service businesses reaching $5k per month in 1-2 months (r/sweatystartup, r/smallbusiness, r/PersonalFinanceCanada, YouTube, Instagram): not found. Reddit unfetchable, WebSearch budget exhausted.",
+  "What distinguishes people who reach $5k per month within 1-2 months (pre-selling, existing network, service vs product, high vs low ticket): no evidence collected. Only the arithmetic framing and the labelled hypothesis in 'implications' are available.",
+  "Whether the 200-call WebSearch budget and the egress blocks apply to the whole workflow session or only to this subagent: unknown. Other shards' outputs should be checked for the same failure before synthesis."
+ ]
+}

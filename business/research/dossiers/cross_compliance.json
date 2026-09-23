@@ -1,0 +1,161 @@
+{
+ "topic": "Quick-start compliance for a new sole proprietor starting October 2026 in Ontario (main case), BC and Alberta: GST/HST, Business Number and business name registration, T2125, CPP, instalments, CASL, PIPEDA, liability insurance, and how EI treats self-employment while on a claim. Research method note: WebSearch returned 'budget exhausted (200 of 200)' on every call, and the egress proxy blocked canada.ca, ontario.ca, gov.bc.ca, alberta.ca, crtc.gc.ca, priv.gc.ca, laws-lois.justice.gc.ca, wikipedia, taxtips, wealthsimple, zensurance and reddit. So the facts below come from the official consolidated XML of federal Acts and Regulations that Justice Canada publishes on GitHub (justicecanada/laws-lois-xml, clone HEAD 8eea850 dated 2026-09-22). I cloned it and read the section text myself. A few secondary GitHub sources are labelled SECONDARY.",
+ "key_facts": [
+  {
+   "fact": "ETA s.148(1): a person is a small supplier 'throughout a particular calendar quarter and the first month immediately following the particular calendar quarter if' the total taxable supplies (worldwide, excluding financial services and sales of capital property; associates included) 'in the four calendar quarters immediately preceding the particular calendar quarter' does 'not exceed ... $30,000'. s.148(2) is the single-quarter test: if at any time in a calendar quarter the total for that quarter 'exceeds ... $30,000', the person 'is not a small supplier throughout the period beginning immediately before that time and ending on the last day of the calendar quarter.' (Consolidation current to 2026-06-21.)",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml",
+   "applies_to": "GST/HST registration, all provinces"
+  },
+  {
+   "fact": "ETA s.240(1): 'Every person who makes a taxable supply in Canada in the course of a commercial activity ... is required to be registered ... except where (a) the person is a small supplier'. s.240(2.1)(b): the application must be made 'before the day that is 30 days after ... the day the person first makes a taxable supply in Canada, otherwise than as a small supplier'. s.166: while a small supplier is not a registrant, the consideration is not included in calculating the tax (so it does not charge GST/HST).",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml",
+   "applies_to": "GST/HST registration timing, all provinces"
+  },
+  {
+   "fact": "The small-supplier exemption does not cover taxi or rideshare work. ETA s.240(1.1): 'every small supplier who carries on a taxi business is required to be registered'. The s.123(1) definition of 'taxi business' includes '(b) a business ... of transporting passengers for fares by motor vehicle ... within a particular municipality and its environs'. That wording covers rideshare-type driving, so GST/HST registration is needed from the first dollar.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml",
+   "applies_to": "Any rideshare/passenger-transport option, all provinces"
+  },
+  {
+   "fact": "Voluntary registration: ETA s.240(3) lets a person who is not required to register apply if it 'is engaged in a commercial activity in Canada'. Once registered, s.221(1) requires collecting tax on every taxable supply, and s.169(1) allows input tax credits for GST/HST paid on business inputs. s.242(2): a small supplier (other than a taxi business) can ask to cancel only if registered 'for a period of not less than one year', and cancellation takes effect after the last day of a fiscal year.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml",
+   "applies_to": "Voluntary GST/HST registration pros/cons, all provinces"
+  },
+  {
+   "fact": "Tax rates: GST is 5% under ETA s.165(1). ETA Schedule VIII lists Ontario as a participating province at 8%, so Ontario HST totals 13%. BC and Alberta are not participating provinces, so GST is 5%. BC PST 7% is SECONDARY only (openaccountants skill file v2.0, updated 2026-07-13) and was not verified against a BC government source.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml",
+   "applies_to": "Pricing/quote calculators: ON 13%, BC 5% GST (+ PST, unverified), AB 5%"
+  },
+  {
+   "fact": "SECONDARY: a GitHub file that encodes CRA T4127 (Payroll Deductions Formulas), effective 2026-01-01, gives: YMPE $74,600; YAMPE $85,000; basic exemption $3,500; employee CPP total rate 5.95% (base 4.95% + first additional 1.00%), employee maximum $4,230.45; CPP2 employee rate 4.00%, maximum $416.00; EI maximum insurable earnings $68,900; EI employee premium rate outside Quebec 1.63%; QPP employee total rate 6.30%. It cites the canada.ca T4127 page, which I could not open.",
+   "source_url": "https://github.com/TheAxiomFoundation/rulespec-ca/blob/main/ca/policies/cra/t4127-2026/payroll-contributions.yaml",
+   "applies_to": "CPP/EI 2026 parameters (ON/BC/AB); QPP for Montreal"
+  },
+  {
+   "fact": "CPP for the self-employed (official statute): CPP Act s.10(1) requires a base contribution on 'contributory self-employed earnings' minus the unused basic exemption. It is capped at maximum contributory earnings minus salary and wages on which a base contribution was already made that year. Schedule 1 sets the self-employed base rate at 9.9% (2003 onward). Schedule 2 sets the self-employed first additional rate at 2.0% (2024 onward) and the second additional rate at 8.0% (2024 onward). s.20(2) fixes the Year's Basic Exemption at $3,500. ESTIMATE, using the secondary 2026 YMPE/YAMPE: (74,600 − 3,500) × 11.9% = $8,460.90, plus (85,000 − 74,600) × 8% = $832.00, for a 2026 self-employed maximum of $9,292.90. This matches 2 × the T4127 employee maximums (2 × 4,230.45 and 2 × 416).",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/C-8.xml",
+   "applies_to": "CPP on self-employment income; ON/BC/AB (not Quebec, which uses QPP)"
+  },
+  {
+   "fact": "Income tax filing (ITA, current to 2026-06-21). s.150(1)(d)(ii): the return is due 'the following June 15' for 'an individual who carried on a business in the year'. s.248(1) 'balance-due day' for an individual is 'April 30 in the following taxation year', so payment is due before the filing deadline. SECONDARY (openaccountants T2125 file v2.0, updated 2026-07-13): the form is T2125 'Statement of Business or Professional Activities', filed with the T1 by sole proprietors; supporting guide is CRA T4002. The T2125 name was not verified on canada.ca.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/I-3.3.xml",
+   "applies_to": "Income tax reporting, all provinces"
+  },
+  {
+   "fact": "Tax instalments. ITA s.156.1(1): the 'instalment threshold' is $3,000 (outside Quebec; $1,800 in Quebec). s.156.1(2)(b): no instalments are required where 'net tax owing for the particular year, or for each of the 2 preceding taxation years, does not exceed' the threshold. s.156(1): instalment due dates are March 15, June 15, September 15 and December 15.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/I-3.3.xml",
+   "applies_to": "Instalments, all provinces (Quebec threshold differs)"
+  },
+  {
+   "fact": "EI working while on claim. EI Act s.19(2) (current to 2026-06-21): for weeks after the waiting period, the benefit is reduced by '(a) 50% of the earnings that are less than or equivalent to 90% of the claimant’s weekly insurable earnings, and (b) 100% of the earnings that are greater than 90%'. s.19(3): undeclared earnings are clawed back, fully where the claimant knowingly failed to declare them. s.14(1): the benefit rate is 55% of weekly insurable earnings. s.14(1.1)(b): maximum weekly insurable earnings = maximum yearly insurable earnings ÷ 52.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-5.6.xml",
+   "applies_to": "EI claimants starting a business (all provinces)"
+  },
+  {
+   "fact": "EI 2026 maximum weekly benefit: SECONDARY source states '$729' (55% of MIE/52, up from $695) and MIE '$68,900'. It cites no URL. ESTIMATE from the statute formula: 68,900 ÷ 52 = $1,325.00 maximum weekly insurable earnings; × 55% = $728.75, which rounds to $729. Not verified on canada.ca.",
+   "source_url": "https://github.com/Artzp/RetireOps/blob/main/docs/source-of-truth/19-benefits-tax-credits-2026.md",
+   "applies_to": "EI benefit amount 2026"
+  },
+  {
+   "fact": "The EI 'minor in extent' test for self-employment. EI Regulations s.30(1): a claimant who is 'self-employed or engaged in the operation of a business on the claimant's own account ... is considered to have worked a full working week during that week'. s.30(2) is the exception: this does not apply where the business is operated 'to such a minor extent that a person would not normally rely on that employment or engagement as a principal means of livelihood'. s.30(3) lists the factors: '(a) the time spent; (b) the nature and amount of the capital and resources invested; (c) the financial success or failure ...; (d) the continuity ...; (e) the nature of the employment or business; and (f) the claimant's intention and willingness to seek and immediately accept alternate employment.' EI Act s.11(1): a week of unemployment is one in which the claimant 'does not work a full working week'. EI Act s.18(1)(a): the claimant must also prove they are 'capable of and available for work and unable to obtain suitable employment'.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-96-332.xml",
+   "applies_to": "Running a business while on EI (all provinces)"
+  },
+  {
+   "fact": "How self-employment earnings count on an EI claim. EI Regulations s.35(10)(c): self-employment income is 'the gross income ... remaining after deducting the operating expenses, other than capital expenditures'. s.36(6): self-employment earnings 'that arise from the performance of services shall be allocated to the weeks in which those services are performed'.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-96-332.xml",
+   "applies_to": "Declaring business earnings on EI reports"
+  },
+  {
+   "fact": "Temporary pilot measures, highly time-sensitive (EI Regulations, Pilot Project No. 24). s.77.996: 'The Commission may waive the waiting period in respect of any benefit period that begins during the period beginning on March 30, 2025 and ending on October 10, 2026.' s.77.997: earnings paid 'by reason of a lay-off or separation' (severance and the like) 'do not constitute earnings' for benefit periods beginning in that window. s.77.999: 'long-tenured workers' (paid at least 30% of the maximum annual EI premium in 7 of the last 10 years, among other conditions) get +20 weeks for benefit periods beginning June 15, 2025 to October 10, 2026. Amended by SOR/2026-64. The regulation consolidation is current to 2026-04-28, and the file was last committed 2026-05-29, per the GitHub commit history. Any extension beyond October 10, 2026 was NOT found.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-96-332.xml",
+   "applies_to": "Owner's EI claim if they lose the job next week"
+  },
+  {
+   "fact": "When the EI benefit period starts. EI Act s.10(1): 'A benefit period begins on the later of (a) the Sunday of the week in which the interruption of earnings occurs, and (b) the Sunday of the week in which the initial claim for benefits is made.' s.10(4): a late initial claim can be antedated only if the claimant shows 'good cause for the delay throughout the period'. EI Regulations s.14(1): an interruption of earnings requires a lay-off or separation plus 'seven or more consecutive days during which no work is performed'. s.26(1): ongoing claims must be made 'within three weeks after the week for which benefits are claimed'. EI Act s.13: one-week waiting period. ESTIMATE, using calendar arithmetic I checked: October 4, 2026 is a Sunday and October 10, 2026 is a Saturday. An initial claim made in the week of Sunday October 4 (by Saturday October 10, 2026) gives a benefit period beginning October 4, inside the Pilot 24 window. A claim made on or after Sunday October 11 falls outside it unless antedated.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-5.6.xml",
+   "applies_to": "EI application timing after job loss"
+  },
+  {
+   "fact": "Who qualifies for EI. EI Act s.7(2) requires an interruption of earnings plus 420 to 700 insurable hours in the qualifying period, depending on the regional unemployment rate (700 hours at 6% and under, falling to 420 hours above 13%). s.30(1): a claimant is disqualified if they 'lost any employment because of their misconduct or voluntarily left any employment without just cause'.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-5.6.xml",
+   "applies_to": "EI eligibility check"
+  },
+  {
+   "fact": "What CASL covers. CASL s.1(2): a commercial electronic message (CEM) is an electronic message whose purpose, or one of whose purposes, is 'to encourage participation in a commercial activity', including offers and ads. s.1(1): an 'electronic address' includes email, 'instant messaging account', 'telephone account; or (d) any similar account'. s.6(1) prohibits sending a CEM unless the recipient consented ('express or implied') and the message meets s.6(2): sender identification, contact information, and an unsubscribe mechanism. s.6(8)(a): the section does not apply to 'interactive two-way voice communication between individuals' (live phone calls). The Act is current to 2026-03-02.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-1.6.xml",
+   "applies_to": "All email/SMS/DM marketing outreach templates (federal law, all provinces)"
+  },
+  {
+   "fact": "CASL implied consent, s.10(9). Consent is implied only if: (a) there is an existing business or non-business relationship; or (b) the recipient 'has conspicuously published ... the electronic address', the publication 'is not accompanied by a statement that the person does not wish to receive unsolicited commercial electronic messages', and 'the message is relevant to the person’s business, role, functions or duties in a business or official capacity'; or (c) the recipient disclosed the address to the sender without saying they do not want messages, and the message is relevant to their business role. s.10(10): an existing business relationship arises from a purchase within the prior 2 years, or 'an inquiry or application, within the six-month period' before the message. s.13: the sender bears the 'onus of proving' consent. s.6(6)(a): a requested quote or estimate is exempt from the consent requirement.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-1.6.xml",
+   "applies_to": "B2B cold email rules; follow-ups to leads"
+  },
+  {
+   "fact": "CASL unsubscribe rules and penalties. s.11(1): the unsubscribe must work 'at no cost' by the same electronic means (or another practicable electronic means), and must give an electronic address or web link. s.11(2): it must stay valid for at least 60 days. s.11(3): requests must be honoured 'no later than 10 business days'. s.20(4): the maximum penalty is '$1,000,000 in the case of an individual, and $10,000,000 in the case of any other person.'",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-1.6.xml",
+   "applies_to": "Outreach templates/email tool configuration"
+  },
+  {
+   "fact": "Required content of every CEM (CRTC regulations SOR/2012-36, current to 2025-07-24). s.2(1): each CEM must include the business name, and 's.2(1)(d) the mailing address, and either a telephone number providing access to an agent or a voice messaging system, an email address or a web address'. s.3: this information and the unsubscribe must be 'clearly and prominently' set out, and the unsubscribe must be 'readily performed'. s.4: a request for express consent may be oral or written and must include this identification plus 'a statement indicating that the person whose consent is sought can withdraw their consent'.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-2012-36.xml",
+   "applies_to": "Email footer/signature and signup forms"
+  },
+  {
+   "fact": "CASL exemptions in the ISED regulations (SOR/2013-221). s.3(b): s.6 does not apply to a CEM 'sent in response to a request, inquiry or complaint or is otherwise solicited'. s.4(1): consent is not needed for 'the first commercial electronic message' sent after a referral by someone who has a relationship with both parties, provided the message 'discloses the full name of the individual or individuals who made the referral and states that the message is sent as a result of the referral.'",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-2013-221.xml",
+   "applies_to": "Referral-based outreach; replying to inbound leads"
+  },
+  {
+   "fact": "PIPEDA s.4(1)(a) applies to 'every organization in respect of personal information that ... the organization collects, uses or discloses in the course of commercial activities'. 'Personal information means information about an identifiable individual.' s.4.01 exempts business contact information used solely to communicate with a person about their employment, business or profession. Schedule 1 sets out 10 principles: Accountability, Identifying Purposes, Consent, Limiting Collection, Limiting Use/Disclosure/Retention, Accuracy, Safeguards, Openness, Individual Access, Challenging Compliance. Current to 2026-03-31.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/P-8.6.xml",
+   "applies_to": "Customer data handling in Ontario (and federally)"
+  },
+  {
+   "fact": "PIPEDA breach duties. s.10.1(1) and (3): an organization must report to the Commissioner, and notify affected individuals of, any breach of security safeguards that creates 'a real risk of significant harm'. s.10.3(1): it must keep a record of every breach. Breach regulations SOR/2018-64 s.6(1): the record must be kept 'for 24 months after the day on which the organization determines that the breach has occurred'.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-2018-64.xml",
+   "applies_to": "Customer database/CRM built by the AI"
+  },
+  {
+   "fact": "Provincial privacy laws replace PIPEDA in BC, Alberta and Quebec, but not for general businesses in Ontario. Exemption orders SOR/2004-219 (Alberta) and SOR/2004-220 (BC) exempt organizations (other than federal works) that are subject to Alberta PIPA (S.A. 2003, c. P-6.5) or BC PIPA (S.B.C. 2003, c. 63) from PIPEDA Part 1 'in respect of the collection, use and disclosure of personal information that occurs within the Province'. SOR/2003-374 does the same for Quebec. For Ontario, the only exemption order found (SOR/2005-399) covers health information custodians, so PIPEDA applies to an ordinary Ontario sole proprietor.",
+   "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-2004-220.xml",
+   "applies_to": "Privacy law choice: ON = PIPEDA; BC/AB = provincial PIPA; Montreal = Quebec law"
+  },
+  {
+   "fact": "BC business name registration, SECONDARY and possibly outdated. A BC Registries payment-system database migration dated 2021-11-30 in the bcgov/sbc-pay repository maps filing type 'FRREG' ('Statement of Registration') for corporation types 'SP' (Sole Proprietorship) and 'GP' to fee code EN116 with amount $40. This is source code, not a published fee schedule. The current fee and the separate Name Request fee were not found.",
+   "source_url": "https://raw.githubusercontent.com/bcgov/sbc-pay/main/pay-api/migrations/versions/b336780735dc_registration_filing_type.py",
+   "applies_to": "BC (Metro Vancouver) sole proprietorship registration"
+  }
+ ],
+ "implications": [
+  "EI deadline, top priority. If the owner's job ends next week (week of Sunday September 27, 2026), they should file the initial EI claim right after the last day of work, and no later than Saturday October 10, 2026. A claim in that week gives a benefit period beginning Sunday October 4, inside the Pilot Project No. 24 window (EI Regs ss.77.996–77.999). Inside the window the waiting week may be waived, severance/separation pay is not counted as earnings, and long-tenured workers get +20 weeks. A claim on or after October 11 loses these unless antedated with 'good cause'. ESTIMATE: the waived waiting week alone is worth up to $729 (1 × the 2026 maximum weekly benefit).",
+  "EI and the business do not mix well at full scale. Under EI Regs s.30(1), any week the owner runs a business that is more than 'minor in extent' counts as a full working week, which means $0 EI for that week. A business sized for a $5,000/month average is almost certainly not 'minor in extent' under the s.30(3) factors (time, capital, success, continuity, willingness to take a job). The plan must choose one path explicitly: (A) stay on EI with a small declared side activity and report net earnings weekly; or (B) run the business fully and stop claiming, or accept that most weeks pay nothing. The owner should confirm with Service Canada before launching. Non-disclosure risks full clawback (EI Act s.19(3)).",
+  "ESTIMATE, path A math: weekly benefit $729 (assumes maximum), weekly insurable earnings $1,325; 90% × 1,325 = $1,192.50. Net self-employment earnings of $400 in a week → deduction 50% × 400 = $200 → EI paid $529, total $929 that week. This holds only if the activity is judged 'minor in extent'.",
+  "GST/HST: no registration is needed at launch unless the business is taxi/rideshare, which must register from day one (ETA s.240(1.1)). ESTIMATE with gross revenue of $6,000/month from October 2026: Q4 2026 = $18,000 and Q1 2027 = $18,000. The four quarters before Q1 2027 total $18,000, which is ≤ $30,000, so the owner is a small supplier through Q1 2027 plus April 2027. The four quarters before Q2 2027 total $36,000, which is over $30,000. So HST must be charged from about May 1, 2027, with the application due within 30 days (s.240(2.1)(b)). The AI's quote calculators should include an HST toggle now: ON 13%, AB 5%, BC 5% + PST (PST unverified).",
+  "Voluntary GST/HST registration trade-off. It gains input tax credits on tools, vehicle costs and software (s.169), and B2B clients can usually claim the GST/HST back. It costs a 13% higher sticker price for Ontario consumers, periodic filings, and a minimum 1-year registration before cancelling (s.242(2)). This favours voluntary registration for B2B-heavy or capital-heavy models, and staying unregistered for B2C services in the early months.",
+  "Budget CPP at 11.9% of net self-employment profit between $3,500 and the YMPE, plus 8% on the band from YMPE to YAMPE. Any CPP already deducted from 2026 employment wages reduces the room (CPP Act s.10(1)(b)). ESTIMATE: $5,000/month net = $60,000/year; with no employment income that year, CPP = (60,000 − 3,500) × 11.9% = $6,723.50/year (about $560/month), on top of income tax.",
+  "Tax calendar: file the 2026 T1 with T2125 by June 15, 2027, and pay any balance by April 30, 2027. Instalments are unlikely in 2026, because they are required only if net tax owing exceeds $3,000 in the current year AND in one of the 2 preceding years. If the owner was a salaried employee with full withholding in 2024 and 2025, that condition likely fails (ESTIMATE, based on typical withholding, not verified for this owner). Instalments may apply in 2027 if 2026 net owing exceeds $3,000.",
+  "CASL rules for everything the AI drafts. Every email, SMS or DM template must include the business name, a mailing address, one more contact method (phone, email or web), and a working one-click unsubscribe that stays live for 60 days and is honoured within 10 business days. The owner therefore needs a usable mailing address, such as a PO box or virtual mailbox if they do not want to publish their home address. Cold B2B email is allowed only to conspicuously published addresses with no 'no solicitation' statement, and only when the message is relevant to the recipient's role. Cold email or texts to consumers with no prior relationship are not allowed. Inbound inquiries give 6 months of implied consent; purchases give 2 years. Referral first-messages must name the referrer. Keep consent evidence, because the sender bears the onus (s.13). Maximum penalty: $1M for an individual.",
+  "Live phone calls fall outside CASL s.6, but the National DNCL / CRTC Unsolicited Telecommunications Rules were not verified. Door-to-door and printed flyers are not CEMs under CASL.",
+  "Privacy: the website and quote forms need a privacy notice covering purposes, consent and how to contact the owner. Keep a breach log for 24 months. Ontario (GTA, Ottawa) falls under PIPEDA; Metro Vancouver and Calgary fall under BC/Alberta PIPA; Montreal falls under Quebec law, which also means QPP instead of CPP and QST.",
+  "What the human must do; the AI cannot: open CRA My Business Account / GST-HST registration, register the business name with the province, file the EI claim and the biweekly EI reports, and buy insurance. The AI can prepare step-by-step checklists, a CASL-compliant email footer and consent forms, a privacy policy draft, an HST-aware pricing calculator, and a bookkeeping spreadsheet with T2125 expense categories."
+ ],
+ "unknowns": [
+  "METHOD LIMITATION: 0 successful WebSearch calls. The session's search budget was already used up (200/200), and the egress proxy blocked every canada.ca, ontario.ca, gov.bc.ca, alberta.ca, crtc.gc.ca, priv.gc.ca and Justice Laws page. Only federal statute/regulation text from Justice Canada's official GitHub XML, plus a few labelled secondary GitHub files, could be verified. The owner or the orchestrator should re-check the key numbers on canada.ca before acting.",
+  "Ontario business name registration fee, online process via the Ontario Business Registry, and renewal period: not found (ontario.ca blocked).",
+  "Alberta trade name registration fee and registry-agent process: not found.",
+  "BC current sole proprietorship registration fee and Name Request fee: not found. Only a 2021 source-code value of $40 for the registration.",
+  "When a Business Number is required: not verified. The CRA's practice of issuing a BN when a program account such as GST/HST is opened could not be confirmed from canada.ca.",
+  "Typical cost of general liability insurance for small service businesses in Canada: not found from any verifiable source. The only figure seen, 'CGL $2M, $1,200–$2,500/yr' for GTA car detailing, is in an unverified, apparently AI-generated GitHub dossier (NishantRajiitkgp/gleam-landing) and should not be relied on.",
+  "The 2026 EI maximum weekly benefit of $729 comes only from a secondary source plus my own formula check. The official canada.ca figure was not opened.",
+  "Whether Pilot Project No. 24 (waiting-period waiver, separation-money exclusion, +20 weeks) was extended beyond October 10, 2026: not found. The consolidation is current to 2026-04-28, with the file last updated 2026-05-29, so a late amendment may not be consolidated yet. Also, s.77.996 says the Commission 'may' waive, so the waiver is discretionary.",
+  "Service Canada's administrative guidance: the canada.ca 'working while on claim' page, the Digest of Benefit Entitlement Principles chapter on self-employment and 'minor in extent', and the canada.ca guidance on applying within 4 weeks of the last day of work were not accessed. Only the statutory text was verified.",
+  "Owner-specific facts that decide EI outcomes are unknown: insurable hours in the qualifying period, regional unemployment rate (which sets 420–700 hours), the reason for job loss (misconduct or quitting disqualifies), severance amount, whether they are a long-tenured worker, and their 2024/2025 net tax owing (relevant to instalments).",
+  "The CPP/EI 2026 parameters (YMPE $74,600, YAMPE $85,000, MIE $68,900) come from a secondary GitHub encoding of CRA T4127, not from canada.ca directly.",
+  "T2125 form name and details and the CPP half-deduction line come only from a secondary source (openaccountants).",
+  "BC PST requirements for services (7% rate, which services are taxable, the PST registration threshold) were not verified with a BC source.",
+  "CRTC National Do Not Call List / Unsolicited Telecommunications Rules for phone outreach were not verified.",
+  "Alberta PIPA and BC PIPA specific duties (for example Alberta's mandatory breach notification) were not verified beyond the federal exemption orders.",
+  "Montreal/Quebec specifics (enterprise registration, QST, Law 25 privacy duties, QPP self-employed rates) were not verified, apart from the federal Quebec privacy exemption order and the secondary QPP employee rate."
+ ]
+}

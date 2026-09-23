@@ -1,0 +1,323 @@
+{
+ "dossier": {
+  "candidate": "Freelancing marketplaces (Upwork, Fiverr, Contra) — brand-new seller starting October 2026, Canada (GTA primary)",
+  "summary": "VERDICT: This works as a supplement, not as the main plan. For a brand-new seller whose skills are unknown, the evidence makes it unlikely to reach an average of CAD 5,000/month net within 60 days. What makes it attractive: it costs almost nothing to start (Upwork Connects are USD 0.15 each and Freelancer Plus is USD 19.99/month; Fiverr and Contra charged no listing fee in the sources I saw), it needs no vehicle, licence or physical labour, and the AI can produce most of the digital deliverables (profile copy, proposals, portfolio sites, draft work). What weighs against it: (1) Guides published by Upwork itself and by third parties put the first job at 2–8 weeks, and some say it can take 40–50 proposals. (2) Cash arrives late. Fixed-price earnings are held 5 days after the client approves, hourly pay arrives about 10 days after the billing week ends, and Fiverr holds earnings 14 days for new sellers. Withdrawals then take up to 4 more business days. (3) Upwork's own Q2 2026 results, as reported in search results, show fewer active clients (-4%) and lower gross services volume (-4% YoY). Earnings coverage says management blamed AI automating low-complexity work. (4) The categories most exposed to AI have shrunk. An analysis of 5M Upwork job posts found writing down 33%, translation down 19% and customer service down 16%, while video editing (+39%), web design (+10%) and graphic design (+8%) grew. An academic paper found writing demand down 30.37%. (5) Upwork may turn a new profile away with \"already many freelancers with a similar skillset\" (anecdotal reports on Medium and Quora, mostly older). I found no Korean–English translation rate or demand data in this session, so any Korean-language edge is unproven. The general translation category is shrinking. Best sub-strategy the evidence supports (a judgement, not a sourced fact): sell website/landing-page building or video editing where Claude does the build and the owner handles client communication, and use Upwork Direct Contracts (5% fee) for clients the owner finds off-platform. METHOD LIMITS (read this first): the network proxy blocked WebFetch on every domain I tried: support.upwork.com, upwork.com, investors.upwork.com, help.fiverr.com, bloomberry.com, entrepreneur.com, sciencedirect.com, wise.com, arxiv.org, canada.ca, proz.com and reddit.com. The session's shared web-search budget ran out after 17 successful searches. So every citation below points to a page I saw in search results, as summarised by the search tool. I did not open or read any of these pages myself. Six items could not be checked and are marked 'not found': Korean–English rates, Fiverr's 2026 financials, CRA GST/HST and CPP rules, IRCC certified-translation rules, the USD/CAD exchange rate, and seasonality.",
+  "time_to_first_revenue": "ESTIMATE: best case about 3 weeks from sign-up to cash in the bank; typical 5–10 weeks. Each step: (a) Upwork identity verification (government ID, possibly a video call) is usually done 'within minutes' but must be completed within 7 days (https://support.upwork.com/hc/en-us/articles/360001176427-How-to-verify-your-identity-as-a-freelancer, seen in search results). (b) First job: 'most freelancers land their first job within 2–4 weeks' with a strong profile (Upwork's own blog: https://www.upwork.com/resources/how-long-project-on-upwork); '2 to 8 weeks' is realistic (https://www.upworkincomeclub.com/blog/how-long-does-it-take-to-get-a-job-on-upwork); it 'might take 40–50 proposals' (https://giguphq.com/blog/how-long-does-it-take-to-get-your-first-upwork-client). These are industry/blog claims, not audited data. (c) Payment release on Upwork: fixed-price funds are released 5 days after the client approves a milestone. Hourly work is usually paid 10 days after the weekly billing period ends on Sunday (https://support.upwork.com/hc/en-us/articles/211063718-How-payments-for-milestones-and-fixed-price-contracts-work ; https://support.upwork.com/hc/en-us/articles/211063668-How-payments-for-hourly-contracts-work). On Fiverr, earnings clear 14 days after the order completes, or 7 days for Seller Plus, Top Rated and Pro sellers (https://help.fiverr.com/hc/en-us/articles/9234443621137-Your-earnings-page). (d) Withdrawal: Upwork Direct to Local Bank 'should arrive within four business days' (https://support.upwork.com/hc/en-us/articles/211060578-What-are-the-fees-limits-and-timing-of-Direct-to-Local-Bank-payments). Fiverr local-currency payouts take 1–3 business days; a USD wire outside the US takes 5–7 (https://help.fiverr.com/hc/en-us/articles/360010530058-Withdrawing-your-earnings-managing-payout-methods). ESTIMATE, best case on Upwork: ID verified by day 2 + small fixed-price job won by day 7 + delivered and approved by day 11 + 5-day hold = day 16 + about 4 business days to withdraw ≈ day 22. Typical case: first job in week 4–8 (day 28–56) + about 5–14 days of holds + up to 4 business days ≈ day 37–75. Fiverr typical: first order date unknown (not found) + 14-day clearance + 1–3 business days.",
+  "pricing_facts": [
+   {
+    "fact": "Upwork freelancer service fee is variable, 0%–15% per contract. It is shown when you submit a proposal or receive an offer, stays fixed for the life of the contract, and applies to all earnings including bonuses. (Seen in search results; page not opened.)",
+    "source_url": "https://support.upwork.com/hc/en-us/articles/211062538-Learn-about-the-Freelancer-Service-Fee"
+   },
+   {
+    "fact": "Upwork Direct Contracts (bringing your own client onto Upwork) carry a 5% freelancer service fee; Any Hire contracts carry no freelancer service fee; freelancers working with Enterprise clients 'typically pay a 10% service fee'.",
+    "source_url": "https://support.upwork.com/hc/en-us/articles/211062538-Learn-about-the-Freelancer-Service-Fee"
+   },
+   {
+    "fact": "Since May 1, 2025, Upwork has used the variable fee in place of the old tiered fee (20% on the first $500 billed per client, then 10%, then 5%). Third-party source.",
+    "source_url": "https://golance.com/blogs/upwork-fees-explained-2026"
+   },
+   {
+    "fact": "Upwork Connects cost USD 0.15 each, sold in bundles of 10 or a custom amount.",
+    "source_url": "https://support.upwork.com/hc/en-us/articles/211062898-Understanding-and-using-Connects"
+   },
+   {
+    "fact": "Connects per proposal depend on the job. 'Most standard jobs cost 2–6 Connects per proposal'; large or featured contracts cost up to 16. Third-party/industry source, not official.",
+    "source_url": "https://snipework.com/blog/upwork-connects-cost-2026"
+   },
+   {
+    "fact": "Basic-plan freelancers may get 10 free Connects/month; Freelancer Plus (USD 19.99/month) gives 100. Upwork stopped giving free Connects at sign-up in May 2024. New freelancers may get up to 50 bonus Connects after buying their first bundle or subscribing to Freelancer Plus.",
+    "source_url": "https://www.upwork.com/resources/how-to-get-free-connects"
+   },
+   {
+    "fact": "Freelancer Plus costs USD 19.99/month when bought through Upwork's website or desktop app.",
+    "source_url": "https://support.upwork.com/hc/en-us/articles/211062888-What-is-Freelancer-Plus"
+   },
+   {
+    "fact": "Fiverr sellers receive 80% of the client's cleared payment, so Fiverr keeps 20% commission on every order.",
+    "source_url": "https://help.fiverr.com/hc/en-us/articles/34069565843985-How-Fiverr-works-for-freelancers"
+   },
+   {
+    "fact": "Fiverr charges buyers a service fee of 5.5% of the purchase amount, plus USD 3.50 on orders under USD 200. This fee is charged to the buyer, not the seller.",
+    "source_url": "https://help.fiverr.com/hc/en-us/articles/360050216133-Paying-for-orders-extras-or-custom-offers"
+   },
+   {
+    "fact": "Contra says it charges zero commission on freelancer earnings (official marketing page).",
+    "source_url": "https://contra.com/commission-free"
+   },
+   {
+    "fact": "UNVERIFIED third-party claim: Contra's Free plan charges freelancers a tiered per-payment platform fee (up to USD 29 on payments of USD 1,000+). A Pro plan costs USD 29/month or USD 199/year. Clients pay a USD 19 contract fee. Not confirmed on an official Contra fee page.",
+    "source_url": "https://memvers.com/for-freelancers/platforms/contra"
+   }
+  ],
+  "cost_facts": [
+   {
+    "fact": "Upwork Direct to Local Bank withdrawal costs USD 0.99 per withdrawal. The receiving bank may charge its own incoming fee.",
+    "source_url": "https://support.upwork.com/hc/en-us/articles/211060578-What-are-the-fees-limits-and-timing-of-Direct-to-Local-Bank-payments"
+   },
+   {
+    "fact": "Fiverr withdrawal: PayPal minimum USD 1 with no Fiverr fee. Bank transfer via Payoneer has a USD 20 minimum; a Payoneer account has a USD 10 minimum. The Payoneer fee is USD 1 or USD 3 depending on method. Maximum USD 5,000 per transaction, one withdrawal per 24 hours. Currency conversion and provider fees may reduce what you receive.",
+    "source_url": "https://help.fiverr.com/hc/en-us/articles/360010530058-Withdrawing-your-earnings-managing-payout-methods"
+   },
+   {
+    "fact": "Fiverr earnings clear 14 days after order completion, or 7 days for Seller Plus, TRS and Pro freelancers. This is a cash-flow cost for a new seller.",
+    "source_url": "https://help.fiverr.com/hc/en-us/articles/9234443621137-Your-earnings-page"
+   },
+   {
+    "fact": "Upwork holds fixed-price funds for a 5-day security period after the client approves; hourly pay usually arrives 10 days after the weekly billing period ends.",
+    "source_url": "https://support.upwork.com/hc/en-us/articles/211063668-How-payments-for-hourly-contracts-work"
+   },
+   {
+    "fact": "Proposal cost (derived from sourced prices): ESTIMATE: 2–6 Connects × USD 0.15 = USD 0.30–0.90 per proposal. 50 proposals ≈ USD 15–45.",
+    "source_url": "https://support.upwork.com/hc/en-us/articles/211062898-Understanding-and-using-Connects"
+   },
+   {
+    "fact": "USD→CAD exchange rate and PayPal/Payoneer FX spreads for Canada: not found in this session. Check Bank of Canada and provider fee pages.",
+    "source_url": "not found"
+   }
+  ],
+  "earnings_evidence": [
+   {
+    "claim": "Upwork Q2 2026: gross services volume USD 966M (-4% YoY), active clients 763K (-4%), GSV per active client a record USD 5,230 (+5% YoY), revenue USD 191.7M. Seen in search-result summaries of the press release; not opened.",
+    "kind": "official",
+    "source_url": "https://investors.upwork.com/news-releases/news-release-details/upwork-reports-second-quarter-2026-financial-results"
+   },
+   {
+    "claim": "Earnings-call coverage says management named AI adoption in freelance work categories as the main driver of the decline, with low-complexity assignments automated faster than expected.",
+    "kind": "industry",
+    "source_url": "https://finance.yahoo.com/markets/stocks/articles/upwork-q2-earnings-call-highlights-020359431.html"
+   },
+   {
+    "claim": "Upwork reports that contracts worth more than USD 1,000 increased across disciplines after generative AI arrived, and that freelancers with AI-related skills earn about 40% more. This is Upwork's own claim, as reported in a search-result summary.",
+    "kind": "industry",
+    "source_url": "https://techxplore.com/news/2026-04-commodified-job-ai-lessons-online.html"
+   },
+   {
+    "claim": "Blogs say freelancers who land a first client within 30 days are more likely to build sustainable income, and those past 90 days are far more likely to drop off ('community surveys and platform reports as of mid-2026'). Underlying data not shown.",
+    "kind": "community",
+    "source_url": "https://uphunt.io/blog/how-to-get-first-client-upwork-2026-complete-guide"
+   },
+   {
+    "claim": "New freelancers may need 40–50 proposals to land a first job.",
+    "kind": "community",
+    "source_url": "https://giguphq.com/blog/how-long-does-it-take-to-get-your-first-upwork-client"
+   },
+   {
+    "claim": "Hard data on how much brand-new Upwork or Fiverr sellers earn in their first 1–3 months: not found.",
+    "kind": "estimate",
+    "source_url": "not found"
+   },
+   {
+    "claim": "Korean–English translation or localization rates (per word or hourly) and demand volume for 2025–2026: not found. The search budget ran out, and proz.com was blocked.",
+    "kind": "estimate",
+    "source_url": "not found"
+   }
+  ],
+  "path_to_5k_math": "All figures are ESTIMATES. Assumed FX rate: 1 USD = 1.35 CAD. This rate is NOT sourced in this session; check it at bankofcanada.ca before relying on it. Target: CAD 5,000 net / 1.35 = USD 3,704 net per month. UPWORK, worst-case fee 15%: USD 3,704 / 0.85 = USD 4,357 gross billed. Add proposal costs: 100 proposals × 4 Connects (midpoint of the third-party 2–6 range) × USD 0.15 = USD 60, plus Freelancer Plus USD 19.99, plus 4 withdrawals × USD 0.99 = USD 3.96. Total ≈ USD 4,441 gross per month. At 120 billable hours/month (30 h/week), USD 4,441 / 120 = USD 37/h. At 80 billable hours/month, USD 4,441 / 80 = USD 56/h. If the fee is 10% instead: USD 3,704 / 0.90 = USD 4,116, plus about USD 84 in costs = USD 4,200 → USD 35/h at 120 h, USD 52.50/h at 80 h. FIVERR, 20% commission: USD 3,704 / 0.80 = USD 4,630 in order value per month. At a USD 50 average order that is 93 orders/month (about 3 per day). At USD 150 average, 31 orders. At USD 300, 16 orders. The first 14 days of each month's sales are still clearing, so month 1 cash comes in lower. TIMING: if the first job lands at week 2–8 (blog range) and pay is released 5–14 days after the work, averaging CAD 5,000/month over the first 60 days would mean billing about USD 8,900 across roughly 3–6 working weeks with no reviews (ESTIMATE: 2 × USD 4,441). I found nothing showing that a typical new seller does this. It becomes plausible only if the owner already has a proven, in-demand skill (web development, video editing) and can quickly charge USD 35–56/h, or brings existing clients through Direct Contracts at the 5% fee.",
+  "startup_cost_cad": "ESTIMATE: about CAD 0–110 per month, assuming the owner already has a laptop, smartphone and internet (hardware cost not sourced). The Upwork range comes from: Freelancer Plus USD 19.99 + about USD 60 of Connects (100 proposals × 4 Connects × USD 0.15) = about USD 80 ≈ CAD 108 at an assumed, unsourced 1.35 FX rate. The minimum is 10 free Connects/month plus USD 1.50 per extra 10. Fiverr and Contra: no listing fee appeared in the sources I saw. The real cost is time, plus the cash-flow gap of 5–14+ days of payout holds.",
+  "requirements": [
+   "Government-issued photo ID. Upwork accepts a valid government ID showing photo, signature, name, date of birth and address (a passport needs no address). Fiverr requires a PHYSICAL ID (driver's licence, passport, PR card, etc.) plus a selfie; digital copies are not accepted.",
+   "A smartphone or webcam. Upwork may schedule a short video call with your camera on, to be completed within 7 days. Fiverr needs a phone camera for the ID and selfie photos.",
+   "A payout method in the owner's name: a Canadian bank account for Upwork Direct to Local Bank, or PayPal/Payoneer for Fiverr.",
+   "A marketable skill with evidence (portfolio). Upwork may reject profiles when 'there are already many freelancers with a similar skillset' (anecdotal).",
+   "Written English good enough for proposals and client messages, and spoken English if clients ask for video calls. This is my judgement; I found no platform rule setting a minimum English level.",
+   "Vehicle: NOT required. Physical labour: NOT required. Trade licence: none found for general freelancing. Certified translation in Canada may need provincial certification, but this was not verified in this session.",
+   "Capital: minimal (see startup cost). Enough savings to cover a 5–10 week lag before the first payout (ESTIMATE; see time_to_first_revenue).",
+   "Time: steady daily proposal writing. One blog claims 40–50 proposals may be needed for a first job (community source)."
+  ],
+  "regulations": [
+   {
+    "fact": "Upwork freelancer identity verification can include a government ID, location confirmation, visual matching (video call or phone photo) and phone confirmation, and must be completed within 7 days. Falsified documents can lead to permanent suspension.",
+    "source_url": "https://support.upwork.com/hc/en-us/articles/360001176427-How-to-verify-your-identity-as-a-freelancer"
+   },
+   {
+    "fact": "Upwork's accepted ID must show photo, signature, name, date of birth and address (passport exempt from the address requirement).",
+    "source_url": "https://support.upwork.com/hc/en-us/articles/360000563227-How-to-verify-your-identity-with-a-government-ID"
+   },
+   {
+    "fact": "Fiverr ID verification 'may be necessary to offer your services'. It requires a physical government ID and a selfie taken with a smartphone camera; ID images are kept 30 days.",
+    "source_url": "https://help.fiverr.com/hc/en-us/articles/6348992414097-Verifying-your-identity-as-a-new-freelancer"
+   },
+   {
+    "fact": "Canadian tax obligations (GST/HST small-supplier threshold, self-employed CPP contributions, reporting platform income) were NOT verified in this session because the search budget ran out and canada.ca was blocked. Check CRA sources before launch.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "IRCC rules on certified translations (relevant if pursuing Korean–English document translation for immigrants): NOT verified in this session.",
+    "source_url": "not found"
+   }
+  ],
+  "ai_can_build": [
+   "Upwork profile and Fiverr gig copy: titles, overviews and 3-tier package pricing, tuned toward categories with growing demand (web design, video editing) and away from categories with shrinking demand (general writing, translation).",
+   "Portfolio pieces: 3–5 sample websites or landing pages deployed from the GitHub repo, which are real work samples for a web-design offer.",
+   "A proposal generator: a template library and per-job custom drafts. The owner reviews and submits them from their own account.",
+   "A job-screening spreadsheet: Connect cost, client hire rate, client spend, budget, fit score. Plus a weekly log of proposals, replies, interviews and hires to track conversion.",
+   "Delivery work where the AI does the production: website/landing-page builds, copy edits, data cleanup, spreadsheet automation, and first-draft Korean–English translations for human review.",
+   "A fee/FX calculator that turns gross USD billed into net CAD after the platform fee, Connects, withdrawal fees and an FX rate the owner enters.",
+   "Gmail outreach templates and a follow-up schedule for bringing warm off-platform contacts into Upwork Direct Contracts (5% fee).",
+   "Client onboarding documents, scope and revision policy, delivery checklists and FAQ templates."
+  ],
+  "human_must_do": [
+   "Create the Upwork, Fiverr and Contra accounts in their own name and pass ID verification (Upwork video call; Fiverr ID + selfie).",
+   "Link their bank, PayPal or Payoneer account and receive the payouts.",
+   "Buy Connects or Freelancer Plus with their own payment card.",
+   "Submit proposals and accept contracts from their own account. Upwork's rules on AI-written or automated proposals were not verified in this session; the owner must review every proposal.",
+   "Take client video/voice calls and handle real-time messaging, revisions and disputes.",
+   "Judge and sign off on quality before anything is delivered, and be accountable for the work (especially translation accuracy).",
+   "Register for and file Canadian taxes as self-employed (the rules were not verified here).",
+   "Reach out personally to their own network for Direct Contract clients."
+  ],
+  "seasonality": "Not found. I did not find sourced data on seasonal demand on freelance marketplaces (for example, a Q4 or December slowdown) in this session. The structural trend is sourced: Upwork active clients fell 4% YoY in Q2 2026 (https://investors.upwork.com/news-releases/news-release-details/upwork-reports-second-quarter-2026-financial-results, seen in search results).",
+  "risks": [
+   "Too slow for a 30-day income need. The first job takes 2–8 weeks per blogs, and payout holds add 5–14 days.",
+   "Profile rejection. Upwork may decline new profiles in crowded skill categories (anecdotal Medium/Quora reports, mostly older).",
+   "Shrinking demand in AI-exposed categories. Writing -33%, translation -19%, customer service -16% on Upwork per Bloomberry's 5M-job analysis; an academic study found writing demand -30.37%.",
+   "A shrinking client pool overall. Upwork active clients -4% and GSV -4% YoY in Q2 2026, with management reportedly blaming AI automation of low-complexity work.",
+   "Connects spent without results. Money and time go into proposals that get no reply; Upwork no longer gives free Connects at sign-up (since May 2024).",
+   "Fee uncertainty. Upwork's variable fee can reach 15%, and the percentage for a given contract is only visible when bidding.",
+   "FX and payout friction. USD earnings, conversion spreads and possible incoming bank fees (Canadian FX costs not sourced).",
+   "Account suspension or verification failure, which cuts income off immediately. Suspension for falsified documents is sourced; other suspension triggers were not researched.",
+   "Relying on AI for delivery can lower quality or breach client expectations. Upwork's own claims point to higher-value work (>USD 1,000 contracts), which requires real expertise.",
+   "Korean–English translation: no rate or demand data found, so this cannot be counted on as a differentiator."
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Analysis of 5M Upwork job posts, 84-day moving average, since ChatGPT's release: writing jobs -33%, translation -19%, customer service -16%. Publication date not visible in the snippet.",
+    "source_url": "https://bloomberry.com/blog/i-analyzed-5m-freelancing-jobs-to-see-what-jobs-are-being-replaced-by-ai/"
+   },
+   {
+    "fact": "'Who Is AI Replacing?' (Demirci, Hannane, Zhu): after generative AI, writing jobs showed the largest demand decrease (30.37%), followed by software and web/app development (20.62%) and engineering (10.42%).",
+    "source_url": "https://www.researchgate.net/publication/388370894_Who_Is_AI_Replacing_The_Impact_of_Generative_AI_on_Online_Freelancing_Platforms"
+   },
+   {
+    "fact": "Writing and translation gigs contracted after ChatGPT; demand fell faster than the supply of freelancers, which intensified competition (2026 news coverage of research).",
+    "source_url": "https://techxplore.com/news/2026-04-commodified-job-ai-lessons-online.html"
+   },
+   {
+    "fact": "Research reports that demand for substitutable skills such as writing and translation fell 20–50% relative to the counterfactual trend (seen in a search-result summary of academic work on freelancer demand).",
+    "source_url": "https://www.sciencedirect.com/science/article/pii/S0167268124004591"
+   },
+   {
+    "fact": "Freelancers in AI-exposed writing occupations saw about 2% fewer jobs per month and about 5% lower monthly earnings after ChatGPT's release (research summary).",
+    "source_url": "https://arxiv.org/pdf/2509.15265"
+   },
+   {
+    "fact": "Upwork Q2 2026: active clients fell 4% to 763K and GSV fell 4% YoY to USD 966M.",
+    "source_url": "https://investors.upwork.com/news-releases/news-release-details/upwork-reports-second-quarter-2026-financial-results"
+   },
+   {
+    "fact": "Upwork has rejected new profiles with the message 'There are already many freelancers with a similar skillset to yours and we cannot accept your registration' (anecdotal).",
+    "source_url": "https://www.quora.com/My-Upwork-profile-is-not-getting-approved-I-am-getting-the-same-message-again-and-again-that-unfortunately-at-this-time-there-are-already-many-freelancers-with-a-similar-skillset-to-yours-and-we-cannot-accept-your"
+   },
+   {
+    "fact": "Upwork stopped giving free Connects at sign-up in May 2024, so new freelancers must pay to bid beyond the monthly free allotment.",
+    "source_url": "https://www.upwork.com/resources/how-to-get-free-connects"
+   },
+   {
+    "fact": "Evidence that some categories are growing: video editing/production +39%, web design +10%, graphic design +8%, backend development +6%, frontend development +4% since ChatGPT (Bloomberry). This partly contradicts the academic finding that software/web demand fell, so the data sources disagree.",
+    "source_url": "https://bloomberry.com/blog/i-analyzed-5m-freelancing-jobs-to-see-what-jobs-are-being-replaced-by-ai/"
+   }
+  ],
+  "scores": {
+   "speed": 4,
+   "probability_5k": 2,
+   "capital_light": 9,
+   "ai_leverage": 6.5,
+   "low_risk": 7
+  },
+  "score_rationale": "Speed 4: accounts and ID verification can be done within days (minutes to 7 days on Upwork). But sourced blog timelines put the first job at 2–8 weeks, and the platforms add 5–14 days of payout holds plus up to 4 business days to withdraw. Cash could arrive in about 3 weeks at best and often takes 5–10 weeks (ESTIMATE). Probability of CAD 5k within 60 days, 2: the owner would need about USD 4,400/month gross billed (ESTIMATE), i.e. USD 37–56/h for 80–120 billable hours, or 93 Fiverr orders at USD 50, starting from zero reviews. Meanwhile Upwork's client base is shrinking (-4%), text categories are shrinking (writing -33%, translation -19%), and I found no data showing typical new sellers reach this quickly. It rises only if the owner already has a proven, in-demand skill or existing clients. Capital-light 9: Connects are USD 0.15 each, Freelancer Plus is USD 19.99/month, and there is no inventory or vehicle. AI leverage 6.5: the AI can produce the profile, portfolio, proposals and much of the deliverable work (web builds, drafts). The human must still verify ID, submit proposals, take calls, own quality and receive payouts, and the work AI does most easily is the work whose demand is falling. Low risk 7: no physical or legal-licence exposure and little money at stake. The main risks are wasted time, Connects spend, payout delays and possible account suspension. Confidence caveat: the proxy blocked page opening, so all citations are search-result snippets rather than pages I read. Korean-specific demand and rates, Fiverr's 2026 financials and Canadian tax rules were not found."
+ },
+ "verification": {
+  "checked_claims": [
+   {
+    "claim": "Upwork freelancer service fee is variable, 0%–15% per contract, and is fixed for the life of the contract.",
+    "status": "unverifiable",
+    "correction": "I could not re-open this: WebFetch to support.upwork.com returned EGRESS_BLOCKED, and the session's WebSearch budget was used up (200/200). My pre-cutoff training knowledge, which is not a source, is consistent with a variable 0–15% fee from roughly May 2025. For planning, assume 10–15% until the owner sees the actual fee on a live proposal.",
+    "source_url": "https://support.upwork.com/hc/en-us/articles/211062538-Learn-about-the-Freelancer-Service-Fee (blocked, not opened)"
+   },
+   {
+    "claim": "Since May 1, 2025 the variable fee replaced the old tiered fee (20% on the first $500 per client, then 10%, then 5%).",
+    "status": "unverifiable",
+    "correction": "This is probably wrong on the history, though I could not source that here. From reviewer training knowledge (unsourced), the 20/10/5 tier ended in 2023 and was replaced by a flat 10%, and the 2025 variable fee then replaced that flat 10%. The dossier's own source for this claim is a third-party blog (golance.com), not Upwork. The fee history is not important to the decision; the current 0–15% range is what matters.",
+    "source_url": "https://golance.com/blogs/upwork-fees-explained-2026 (not opened; third-party)"
+   },
+   {
+    "claim": "Upwork Q2 2026: GSV USD 966M (-4% YoY), active clients 763K (-4%), revenue USD 191.7M, GSV per active client USD 5,230.",
+    "status": "unverifiable",
+    "correction": "I could not open investors.upwork.com or sec.gov (both EGRESS_BLOCKED). The dossier itself says these figures come only from search-result snippets. Treat them as unconfirmed. The direction (flat to shrinking client base) matches reviewer pre-cutoff knowledge of 2024–2025 trends, but I verified no numbers.",
+    "source_url": "https://investors.upwork.com/news-releases/news-release-details/upwork-reports-second-quarter-2026-financial-results (blocked, not opened)"
+   },
+   {
+    "claim": "'Most freelancers land their first job within 2–4 weeks' (Upwork blog); 2–8 weeks is realistic; it may take 40–50 proposals.",
+    "status": "unverifiable",
+    "correction": "Blocked (www.upwork.com EGRESS_BLOCKED; no search budget). Even as stated, these are marketing and blog claims with no underlying data; Upwork's own blog has a reason to be optimistic. The 40–50 proposal figure is from one blog (giguphq.com). Neither is evidence of typical outcomes. Planning should treat the first job as arriving at week 4 or later.",
+    "source_url": "https://www.upwork.com/resources/how-long-project-on-upwork (blocked, not opened)"
+   },
+   {
+    "claim": "Fiverr earnings clear 14 days after order completion, or 7 days for Seller Plus/TRS/Pro.",
+    "status": "unverifiable",
+    "correction": "help.fiverr.com was blocked (curl CONNECT 403). The 14-day clearance for new sellers matches reviewer pre-cutoff knowledge, but I did not confirm it. Either way, Fiverr cash in month 1 would be only what completed in roughly the first two weeks.",
+    "source_url": "https://help.fiverr.com/hc/en-us/articles/9234443621137-Your-earnings-page (blocked, not opened)"
+   },
+   {
+    "claim": "Contra charges zero commission on freelancer earnings.",
+    "status": "unverifiable",
+    "correction": "contra.com was blocked (curl CONNECT 403). The dossier's own third-party source (memvers.com) contradicts the marketing page by describing per-payment fees on the Free plan and a USD 29/month Pro plan. Treat 'commission-free' as unconfirmed marketing until the owner sees the fee screen at signup.",
+    "source_url": "https://contra.com/commission-free (blocked, not opened)"
+   },
+   {
+    "claim": "Upwork Connects cost USD 0.15 each; Freelancer Plus is USD 19.99/month.",
+    "status": "unverifiable",
+    "correction": "support.upwork.com was blocked. USD 0.15/Connect matches long-standing reviewer knowledge (unsourced). The dossier's '2–6 Connects per proposal' comes from a third-party blog. Connect prices change with competition, and boosted proposals cost more, so USD 60 for 100 proposals may be an underestimate. ESTIMATE: at 8 Connects average × 100 proposals × USD 0.15 = USD 120.",
+    "source_url": "https://support.upwork.com/hc/en-us/articles/211062898-Understanding-and-using-Connects (blocked, not opened)"
+   },
+   {
+    "claim": "Path-to-5k arithmetic (USD 3,704 net → USD 4,357 gross at 15% fee → ~USD 4,441 incl. costs → USD 37/h at 120 h, ~USD 56/h at 80 h; Fiverr USD 4,630 → 93 orders at USD 50).",
+    "status": "confirmed",
+    "correction": "The arithmetic is internally correct (3,704/0.85 = 4,357.6; + 60 + 19.99 + 3.96 = 4,441.6; /120 = 37.0; /80 = 55.5; 3,704/0.80 = 4,630; /50 = 92.6). The FX input of 1.35 is unsourced, since bankofcanada.ca was blocked. The math also leaves out several costs: GST/HST charged on platform fees, FX spread on USD→CAD conversion, and self-employed CPP. All three were not verifiable here.",
+    "source_url": "not found (internal arithmetic check only)"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "METHOD NOTE: I could not gather new external counter-evidence. Every WebSearch call returned 'session has used its web search budget (200 of 200)'. WebFetch and curl to support.upwork.com, investors.upwork.com, www.upwork.com, help.fiverr.com, contra.com, canada.ca, bankofcanada.ca, reddit.com, community.upwork.com, en.wikipedia.org and sec.gov all returned EGRESS_BLOCKED / CONNECT 403. So neither the dossier nor this review includes a claim confirmed by opening a page.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Internal contradiction in the dossier: its best sub-strategy is web design built by AI, yet its own academic source reports software and web/app development demand down 20.62%. Bloomberry reports web design up 10%. The evidence on the recommended niche is therefore mixed, not supportive.",
+    "source_url": "https://www.researchgate.net/publication/388370894_Who_Is_AI_Replacing_The_Impact_of_Generative_AI_on_Online_Freelancing_Platforms (cited by dossier; not opened by me)"
+   },
+   {
+    "fact": "Internal contradiction: the dossier reports Upwork's claim that contracts over USD 1,000 and AI-skilled freelancers are growing. That suggests the growing demand is for experienced specialists, the opposite of the zero-review, unknown-skill profile this owner starts with.",
+    "source_url": "https://techxplore.com/news/2026-04-commodified-job-ai-lessons-online.html (cited by dossier; not opened by me)"
+   },
+   {
+    "fact": "Timing trap (ESTIMATE, derived from dossier's sourced-in-snippet hold periods): a first job won in week 4, delivered in week 5, then a 5-day hold and up to 4 business days to withdraw means first cash around day 40–45. That is outside the owner's 30-day income window.",
+    "source_url": "not found (ESTIMATE from dossier timings)"
+   },
+   {
+    "fact": "Anecdotal profile-rejection evidence ('already many freelancers with a similar skillset') comes from Quora and Medium and is mostly older, per the dossier. There is no current evidence either way, so the risk of not being approved at all in week 1 cannot be quantified.",
+    "source_url": "https://www.quora.com/My-Upwork-profile-is-not-getting-approved-I-am-getting-the-same-message-again-and-again-that-unfortunately-at-this-time-there-are-already-many-freelancers-with-a-similar-skillset-to-yours-and-we-cannot-accept-your (cited by dossier; not opened by me)"
+   }
+  ],
+  "hidden_costs_or_blockers": [
+   "Nothing in the dossier was verified from an opened page. The dossier author and this reviewer were both blocked by the egress proxy, so every platform fee, hold period and financial figure rests on search snippets or unsourced memory. The owner must check each fee on the live signup and proposal screens before relying on it.",
+   "The 30-day income requirement is structurally missed. Even the dossier's own best-case ESTIMATE, day ~22, needs a job won by day 7 with zero reviews, and its typical case is day 37–75.",
+   "A 60-day average of CAD 5,000 would need about USD 8,900 billed as a brand-new seller (ESTIMATE: 2 × USD 4,441). No source shows a new seller doing this.",
+   "English is unknown. Proposals, client messaging and video calls with mostly US clients need strong written and ideally spoken English. A Korean-speaking owner with limited English would face a large conversion penalty (a judgement; no source).",
+   "Risk from AI-produced deliverables: some clients ban AI-generated work, and platform terms on misrepresenting AI output were not verified. An owner who cannot personally review the quality of code or design carries dispute, refund and account-suspension risk.",
+   "Tax and fee items the path-to-5k math leaves out, none verified here because canada.ca was blocked: whether GST/HST applies to Upwork and Fiverr fees charged to Canadian freelancers, FX spread on USD→CAD payouts, self-employed CPP (both employee and employer shares), and platform reporting of seller income to CRA.",
+   "Connects spend may be higher than the dossier's USD 60/month. Competitive jobs and boosted proposals cost more Connects (ESTIMATE: 8 avg × 100 × USD 0.15 = USD 120).",
+   "Dispute and refund exposure on fixed-price work. Clients can dispute before approval, which delays or zeroes the first payouts (mechanics not verified here).",
+   "Seasonality is unknown. A launch in October–November runs straight into the December and holiday client slowdown commonly reported anecdotally, but I found no source for it (not found).",
+   "Single-platform dependency: an ID-verification failure or suspension immediately cuts off all income and any balance still pending."
+  ],
+  "adjusted_scores": {
+   "speed": 3,
+   "probability_5k": 1,
+   "capital_light": 8.5,
+   "ai_leverage": 5.5,
+   "low_risk": 6
+  },
+  "verdict": "DOWNGRADE to a side track only; do not use it as the primary income plan. Reasons: (1) Cash cannot realistically arrive within the 30-day window. Even the dossier's own best case, about day 22, depends on winning a job in the first week with zero reviews, and its typical case is day 37–75. (2) The sourced trends, all unverified snippets, point against a new seller: fewer Upwork clients and less GSV year on year, text and translation categories shrinking, and growth concentrated in higher-value specialist contracts. (3) The owner's English level and skills are unknown, and both are decisive on these platforms. (4) Neither the dossier author nor I could open a single source page, since the proxy blocked every domain and the search budget was used up, so confidence is low across the board. Keep it only as a low-cost background channel (a ready-made Upwork/Fiverr profile plus Direct Contracts at a 5% fee for clients the owner finds personally), and only if the owner has a proven, sellable skill and working business English. Otherwise, eliminate."
+ }
+}

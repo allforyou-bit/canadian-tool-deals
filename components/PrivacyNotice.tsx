@@ -1,0 +1,62 @@
+import { business } from '@/config/business'
+import type { Lang } from '@/lib/i18n'
+
+// Plain-language privacy notice. Ontario businesses fall under PIPEDA; BC and Alberta have their
+// own private-sector laws (PIPA). This is a template, not legal advice.
+
+export default function PrivacyNotice({ lang }: { lang: Lang }) {
+  const brand = business.brand[lang]
+  const contact = [business.contact.email, business.contact.mailingAddress].filter(Boolean).join(' · ')
+  const usesSheet = Boolean(business.leadEndpoint)
+
+  if (lang === 'ko') {
+    return (
+      <article className="prose-legal mx-auto max-w-3xl px-4 py-10" lang="ko">
+        <h1 className="mb-4 text-3xl font-bold">개인정보 안내</h1>
+        <p className="text-sm text-muted">영문본이 우선합니다. 이 안내는 이해를 돕기 위한 번역입니다.</p>
+        <h2 className="mt-6 text-xl font-semibold">수집하는 정보</h2>
+        <p>견적 요청 시 입력하신 성함, 전화번호, 이메일(선택), 주소, 희망 일정, 요청 내용과 선택하신 서비스 항목입니다.</p>
+        <h2 className="mt-6 text-xl font-semibold">사용 목적</h2>
+        <p>견적 안내, 방문 일정 조율, 서비스 제공, 청구·영수증 발행, 서비스 관련 문의 응대에만 사용합니다. 정보를 판매하지 않습니다.</p>
+        <h2 className="mt-6 text-xl font-semibold">마케팅 메시지</h2>
+        <p>양식에서 별도로 동의하신 경우에만 할인·소식을 보냅니다. 모든 메시지에 수신 거부 방법이 있으며, 언제든 거부하실 수 있습니다.</p>
+        <h2 className="mt-6 text-xl font-semibold">보관과 제3자</h2>
+        <p>
+          이 웹사이트는 Cloudflare에서 호스팅됩니다.
+          {usesSheet ? ' 견적 요청은 사업자의 Google 계정(Google 스프레드시트·Gmail)에 저장됩니다.' : ' 견적 요청은 고객님이 직접 보내시는 문자·이메일로 전달됩니다.'}{' '}
+          서비스 제공과 법적 기록 보관에 필요한 기간 동안만 보관합니다.
+        </p>
+        <h2 className="mt-6 text-xl font-semibold">사진</h2>
+        <p>분쟁 예방을 위해 작업 전후 사진을 찍을 수 있으며 비공개로 보관합니다. 광고·홍보에는 별도 서면 동의를 받은 경우에만 사용합니다.</p>
+        <h2 className="mt-6 text-xl font-semibold">열람·정정·동의 철회</h2>
+        <p>본인 정보의 열람·정정·삭제나 동의 철회를 원하시면 연락 주세요{contact ? `: ${contact}` : ''}.</p>
+        <p className="mt-6 text-sm text-muted">{brand}</p>
+      </article>
+    )
+  }
+
+  return (
+    <article className="prose-legal mx-auto max-w-3xl px-4 py-10">
+      <h1 className="mb-4 text-3xl font-bold">Privacy notice</h1>
+      <h2 className="mt-6 text-xl font-semibold">What we collect</h2>
+      <p>When you request a quote: your name, phone number, email (optional), address, preferred dates, your notes and the service options you chose.</p>
+      <h2 className="mt-6 text-xl font-semibold">Why we use it</h2>
+      <p>Only to answer your request, schedule and deliver the service, invoice you, and handle questions about the service. We do not sell your information.</p>
+      <h2 className="mt-6 text-xl font-semibold">Marketing messages</h2>
+      <p>We send offers or news only if you tick the separate opt-in box. Every message tells you how to unsubscribe, and you can withdraw consent at any time.</p>
+      <h2 className="mt-6 text-xl font-semibold">Storage and service providers</h2>
+      <p>
+        This website is hosted by Cloudflare.
+        {usesSheet
+          ? ' Quote requests are stored in the business owner’s Google account (Google Sheets and Gmail).'
+          : ' Quote requests reach us through the text message or email you choose to send.'}{' '}
+        We keep your information only as long as needed to provide the service and to meet legal record-keeping requirements.
+      </p>
+      <h2 className="mt-6 text-xl font-semibold">Photos</h2>
+      <p>We may take before-and-after photos to document our work; they are kept private. We use photos of your home in marketing only with your separate written consent.</p>
+      <h2 className="mt-6 text-xl font-semibold">Access, correction and withdrawal</h2>
+      <p>To see, correct or delete your information, or to withdraw consent, contact us{contact ? `: ${contact}` : ''}.</p>
+      <p className="mt-6 text-sm text-muted">{brand}</p>
+    </article>
+  )
+}

@@ -1,0 +1,352 @@
+{
+ "dossier": {
+  "candidate": "Digital products, content & affiliate (Etsy/Gumroad digital downloads, courses, YouTube/TikTok/Instagram, SEO affiliate sites incl. the owner's existing Canadian tool price-comparison site)",
+  "summary": "VERDICT: this is a poor primary income plan for the next 30–60 days, though it could be a low-cost side bet. Every monetization gate I found has a threshold or a clock that a brand-new account cannot clear in 30–60 days, and the per-sale economics need large volume.\n\n- YouTube ads: you need 1,000 subscribers plus either 4,000 watch hours in 12 months or 10M Shorts views in 90 days. For new applicants from 1 Feb 2027, this doubles to 8,000 hours or 20M Shorts views.\n- TikTok Creator Rewards: available in Canada, but only with 10,000 followers, 100,000 views in the last 30 days, and videos over 1 minute.\n- Instagram: bonuses are invite-only. Subscriptions need about 10,000 followers (third-party source).\n- Amazon Associates: Tools & Home Improvement pays about 3%. The account closes if it does not refer 3 qualifying sales within 180 days.\n- Etsy: fees for Canadian sellers take roughly 10% of each sale plus fixed fees, and 12–15% more when Offsite Ads applies.\n- Google: since 2024 its spam policy targets 'scaled content abuse' (mass-produced low-value pages, including AI-made ones). Third-party reports say the March 2026 core update and the August 2026 spam update hit AI-scaled and thin affiliate sites.\n- The owner's existing repo shows 0 of 54 tracked products with a live price. Every entry is a 'checkManually' search link with price 0. As it stands the site has no unique value, which is the profile that thin-affiliate enforcement targets.\n- I found no sourced evidence that a new creator or site reaches CAD 5,000/month within 1–3 months.\n\nResearch limitation, stated for transparency: WebFetch was blocked by the egress proxy for every domain tried (support.google.com, associates.amazon.ca, tiktok.com, help.etsy.com, developers.google.com, blog.youtube, ppc.land, gsqi.com, jonescosman.com). The session-wide WebSearch budget (200 calls, shared with other agents) ran out after 10 searches. So every fact below comes from search-result snippets and the search tool's summaries of them, not from pages I read in full. Items marked 'not found' were not researched because of this. Treat all figures as needing a check on the official page before anyone acts on them.",
+  "time_to_first_revenue": "No sourced data was found on how long a new Etsy shop, affiliate site or creator takes to make a first sale. That remains 'not found'. What the sourced gates imply:\n\n- YouTube ad revenue: impossible until 1,000 subscribers and 4,000 watch hours (or 10M Shorts views in 90 days) are reached. Sources: https://support.google.com/youtube/answer/72851?hl=en&co=GENIE.Platform%3DAndroid and https://vidiq.com/blog/post/youtube-partner-program-guide/. From 1 Feb 2027 new applicants need 8,000 hours or 20M Shorts views: https://tbreak.com/youtube-partner-program-8000-watch-hours/\n- TikTok Creator Rewards: impossible until 10,000 followers and 100,000 views in the last 30 days. Sources: https://www.tiktok.com/creator-academy/en/article/creator-rewards-program and https://ttcalculator.net/learn/creator-fund-countries/\n- Amazon.ca Associates: commission is earned per qualifying purchase. The account is closed if it has fewer than 3 qualifying sales within 180 days: https://affiliate-program.amazon.com/help/node/topic/G7MJTPEP9NC3YKMG. Amazon.ca payout timing: not found.\n- Etsy digital downloads: products can be listed as soon as the human opens and verifies a shop. Time to first sale and payout schedule: not found.\n\nESTIMATE, not sourced: first small dollars (tens of CAD) from Etsy or affiliate links are plausible within 2–6 weeks. This rests only on the fact that listing or linking has no follower threshold. Meaningful income (CAD 1,000+/month) within 60 days has no supporting evidence.",
+  "pricing_facts": [
+   {
+    "fact": "YouTube Partner Program (full ad revenue sharing) requires 1,000 subscribers plus either 4,000 valid public watch hours on long-form videos in the last 12 months or 10 million valid public Shorts views in the last 90 days. The two pathways never combine. Other requirements: live in a YPP country, no active Community Guidelines strikes, and 2-Step Verification turned on.",
+    "source_url": "https://support.google.com/youtube/answer/72851?hl=en&co=GENIE.Platform%3DAndroid"
+   },
+   {
+    "fact": "Same 2026 thresholds (1,000 subs + 4,000 hours / 12 months or 10M Shorts views / 90 days), confirmed by a third-party 2026 guide.",
+    "source_url": "https://vidiq.com/blog/post/youtube-partner-program-guide/"
+   },
+   {
+    "fact": "From 1 Feb 2027, new YPP applicants need 8,000 qualified watch hours in the last 365 days or 20M qualified Shorts views in the last 90 days, plus 1,000 subscribers. Channels already in YPP are not affected for entry. Fan Funding and shopping entry thresholds are unchanged. Existing members need 10M Shorts views per 90 days to keep earning Shorts ad revenue. The change was reported in August 2026.",
+    "source_url": "https://blog.youtube/news-and-events/youtube-partner-program-updates-2027-new-opportunities-earn/"
+   },
+   {
+    "fact": "Business Standard also reports the YPP threshold doubling from 1 Feb 2027 (article URL dated 2026-08-11).",
+    "source_url": "https://www.business-standard.com/technology/tech-news/technology-tech-news-youtube-partner-program-monetisation-rules-2027-watch-hours-shorts-views-126081100708_1.html"
+   },
+   {
+    "fact": "TikTok Creator Rewards Program: Canada is listed as an eligible country in 2026. Requirements are 10,000 followers, 100,000 views in the last 30 days, age 18+, original videos over 1 minute, and a Personal account in good standing. Duets, Stitches, Photo Mode and sponsored content do not qualify. These details come from third-party summaries; the official Creator Academy page could not be opened.",
+    "source_url": "https://www.tiktok.com/creator-academy/en/article/creator-rewards-program"
+   },
+   {
+    "fact": "Third-party 2026 list of TikTok Creator Rewards countries that includes Canada.",
+    "source_url": "https://ttcalculator.net/learn/creator-fund-countries/"
+   },
+   {
+    "fact": "Instagram in Canada (third-party sources): Subscriptions are supported, need about 10,000+ followers and are priced at $4.99–$49.99/month. Gifts on Reels need 500 followers. Bonuses are invite-only and vary by country. All features require a Professional account and age 18+.",
+    "source_url": "https://loca.us/blog/instagram-monetization-eligibility"
+   },
+   {
+    "fact": "Amazon Associates: Tools & Home Improvement is in the 3% commission tier. Home improvement and furniture were cut from 8% to 3% in April 2020. Caveat: this source describes the Amazon.com schedule. The Amazon.ca Commission Income Schedule (https://associates.amazon.ca/help/node/topic/GRXPHT8U84RAYDXZ) could not be opened, so the exact Amazon.ca rate for tools is not verified.",
+    "source_url": "https://geniuslink.com/blog/amazon-affiliate-commission-rates/"
+   },
+   {
+    "fact": "Amazon Associates: accounts that have not referred 3 qualifying purchases within 180 days of sign-up are closed. A closed Associates ID cannot be reinstated, but you can reapply for a new ID.",
+    "source_url": "https://affiliate-program.amazon.com/help/node/topic/G7MJTPEP9NC3YKMG"
+   },
+   {
+    "fact": "The Amazon.ca Associates Program Operating Agreement and Program Policies were updated effective April 14, 2026. For a purchase to qualify, the product must be shipped, streamed or downloaded, and paid for within 180 days.",
+    "source_url": "https://associates.amazon.ca/help/operating/compare"
+   },
+   {
+    "fact": "Etsy 2026 fees: $0.20 listing fee per item (charged again each time an item sells and renews), 6.5% transaction fee on the total including shipping, a country-specific payment processing fee, and a possible 15% Offsite Ads fee.",
+    "source_url": "https://craftybase.com/blog/the-complete-guide-to-etsy-fees"
+   },
+   {
+    "fact": "Etsy fees for a Canadian seller: listing fee about US$0.20, 6.5% transaction fee, and payment processing of about 3% + C$0.25. Etsy charges GST/HST on its fees at the seller's provincial rate: 5% in AB/BC/MB/SK/QC per the source, 13% HST in Ontario.",
+    "source_url": "https://jonescosman.com/etsy-fees-canada/"
+   },
+   {
+    "fact": "Etsy's Regulatory Operating Fee for Canada is 0.50% of item price plus shipping, effective June 22, 2026. The search summary noted conflicting rates in older 2026 sources.",
+    "source_url": "https://www.growtsy.com/etsy-fees/regulatory-operating-fee"
+   },
+   {
+    "fact": "Etsy Offsite Ads become mandatory once a shop exceeds $10,000 in annual sales, at a 12% fee (15% for smaller shops that stay opted in).",
+    "source_url": "https://printify.com/blog/how-much-does-etsy-take-per-sale/"
+   },
+   {
+    "fact": "Gumroad fees, Etsy digital-download category data, and course-platform fees: not found (search budget exhausted).",
+    "source_url": "not found"
+   }
+  ],
+  "cost_facts": [
+   {
+    "fact": "Etsy listing fee: $0.20 per listing, charged again on each sale and renewal.",
+    "source_url": "https://craftybase.com/blog/the-complete-guide-to-etsy-fees"
+   },
+   {
+    "fact": "Etsy payment processing in Canada: about 3% + C$0.25 per order.",
+    "source_url": "https://jonescosman.com/etsy-fees-canada/"
+   },
+   {
+    "fact": "Etsy charges GST/HST on its seller fees based on the seller's province (13% HST in Ontario).",
+    "source_url": "https://jonescosman.com/etsy-fees-canada/"
+   },
+   {
+    "fact": "Etsy Regulatory Operating Fee for Canada: 0.50% (effective June 22, 2026).",
+    "source_url": "https://www.growtsy.com/etsy-fees/regulatory-operating-fee"
+   },
+   {
+    "fact": "Joining YouTube, TikTok, Instagram and Amazon Associates costs nothing (no fee found in any source). The real cost is the owner's time before any monetization threshold is met.",
+    "source_url": "https://vidiq.com/blog/post/youtube-partner-program-guide/"
+   },
+   {
+    "fact": "The existing repo (Next.js site, GitHub Actions scraper, browser extension) is already built. On 2026-09-23, 0 of the 54 products in public/cache/index.json had a live price; every entry is a store search link with price 0 and checkManually=true. It has a hardcoded Amazon tag, canadiantool-20.",
+    "source_url": "file:///home/user/canadian-tool-deals/public/cache/index.json"
+   },
+   {
+    "fact": "Domain and hosting costs, and paid-ad costs for promoting digital products: not found in this session.",
+    "source_url": "not found"
+   }
+  ],
+  "earnings_evidence": [
+   {
+    "claim": "Creators report $50 to $500 per month in extra income from Instagram Reels Gifts. This is a creator-reported figure repeated in a blog, not platform data.",
+    "source_url": "https://loca.us/blog/instagram-monetization-eligibility",
+    "kind": "community"
+   },
+   {
+    "claim": "Tools & Home Improvement commission is 3% on Amazon Associates (Amazon.com schedule; Amazon.ca not verified). So every CAD 100 of referred tool sales earns about CAD 3.",
+    "source_url": "https://getlasso.co/amazon-affiliate-commission-rate/",
+    "kind": "industry"
+   },
+   {
+    "claim": "Sites that published hundreds or thousands of AI-generated pages without editorial oversight reportedly lost 50–80% of traffic in the March 2026 core update. This is an agency claim; no underlying dataset was seen.",
+    "source_url": "https://www.digitalapplied.com/blog/scaled-content-abuse-google-march-update-ai-pages-decimated",
+    "kind": "industry"
+   },
+   {
+    "claim": "Case studies on Google's August 2026 spam update cover scaled content abuse, AI content, programmatic content and thin affiliate sites. Only the title and summary were seen; the page could not be opened.",
+    "source_url": "https://www.gsqi.com/marketing-blog/august-2026-google-spam-update-case-studies/",
+    "kind": "industry"
+   },
+   {
+    "claim": "Users on Quora report Amazon affiliate accounts closed for no sales within 180 days, meaning new sites failed to produce even 3 qualifying sales in 6 months.",
+    "source_url": "https://www.quora.com/My-Amazon-affiliate-account-has-closed-due-to-no-sale-in-180-days-Now-what-should-I-do-for-reactivation-Can-I-use-the-same-account-or-create-a-new-one",
+    "kind": "community"
+   },
+   {
+    "claim": "Typical time for a new creator or niche site to reach $1,000/month, and verified earnings of new creators in months 1–3: NOT FOUND in this session (search budget exhausted, page fetches blocked).",
+    "source_url": "not found",
+    "kind": "estimate"
+   }
+  ],
+  "path_to_5k_math": "All figures are ESTIMATES built from the sourced rates above. Assumptions that have no source are marked (ASSUMPTION).\n\n(1) Amazon.ca affiliate on tools at 3%: ESTIMATE: CAD 5,000 / 0.03 = CAD 166,667 of referred sales per month. With an average referred order of CAD 120 (ASSUMPTION), that is 166,667 / 120 = about 1,389 orders a month, or about 46 a day. At a click-to-purchase conversion of 5% (ASSUMPTION), it needs about 27,800 outbound clicks a month. The existing site currently shows 0 live prices, and a brand-new domain getting that traffic in 60 days has no evidence behind it.\n\n(2) Etsy digital download priced at C$10: percentage fees are 6.5% + about 3% + 0.5% ROF = 10%, or C$1.00. Fixed fees are C$0.25 processing plus about C$0.28 listing (US$0.20; the exchange rate is an ASSUMPTION, not sourced). Net is about C$10 − 1.00 − 0.25 − 0.28 = C$8.47 before HST on fees and before any ads.\n- C$5,000 / 8.47 = about 590 sales a month, or about 20 a day.\n- At C$25: net is about 25 − 2.50 − 0.25 − 0.28 = C$21.97, so about 228 sales a month, or about 7.6 a day.\n- If 15% Offsite Ads applies to a sale, the C$25 net falls by C$3.75 to about C$18.22, which needs about 275 sales a month.\n\n(3) YouTube ads: can't be computed. RPM for a Canadian tools channel was not found, and a new channel has to reach 1,000 subscribers + 4,000 hours first. The 4,000 hours equal 240,000 minutes; at a 5-minute average view (ASSUMPTION) that is 48,000 long-form views before any ad dollar.\n\n(4) TikTok Creator Rewards: can't be computed. Payout per qualified view was not found, and the gate is 10,000 followers + 100,000 views in 30 days.\n\n(5) A mix, e.g. C$2,500 Etsy + C$2,500 affiliate: ESTIMATE: about 114 Etsy sales at C$21.97 plus CAD 83,333 of referred Amazon sales.\n\nConclusion: every route to CAD 5,000/month needs volumes a new account has no sourced evidence of reaching in 60 days. ESTIMATE: realistic 60-day outcome is CAD 0–500/month. This is not sourced; it is inferred from the gating thresholds.",
+  "startup_cost_cad": "ESTIMATE: C$0–150, not counting the owner's time.\n- Etsy listing fees: 50 listings × US$0.20 = US$10, about C$14 (the exchange rate is an assumption).\n- Platform accounts (YouTube, TikTok, Instagram, Amazon Associates): no fee found.\n- The existing Next.js repo is already built. Domain and hosting prices were not found in this session.\n- Optional: a phone or microphone for video if the owner doesn't have one (cost not sourced).\n- The main 'cost' is opportunity cost: 30–60 days with little or no income.",
+  "requirements": [
+   "Vehicle: not required.",
+   "Capital: minimal (see startup_cost_cad). Enough savings to live on for 2+ months while revenue is near zero is effectively required, since no sourced evidence shows meaningful income within 60 days.",
+   "Licence: no platform licence is required. Registering a business or a GST/HST number may be needed as income grows; the CRA thresholds were not verified in this session.",
+   "Age 18+ for TikTok Creator Rewards and Instagram monetization features.",
+   "A Google account with 2-Step Verification, and residence in a YPP country (Canada qualifies), for YouTube monetization.",
+   "A Personal TikTok account in good standing, 10,000 followers and 100,000 views in 30 days for Creator Rewards.",
+   "A Professional Instagram account for any Instagram monetization.",
+   "Identity, bank and tax information to open Etsy, Amazon Associates and platform payout accounts. The human must do this; the exact documents were not verified in this session.",
+   "English level: an English-language Canadian tools or affiliate audience needs readable English, which the AI can draft. On-camera or voice-over content needs spoken English, or a Korean-language channel for a different audience (no data found on the size or RPM of such an audience).",
+   "Physical labour: none, apart from optionally filming tool demos, which requires owning or buying the tools.",
+   "Time: daily posting and consistency for creator platforms. Frequency benchmarks were not found.",
+   "The Amazon Associates 180-day clock: 3 qualifying sales are needed, or the account closes."
+  ],
+  "regulations": [
+   {
+    "fact": "Google's spam policy on scaled content abuse forbids generating many pages mainly to manipulate search rankings rather than to help users. It applies however the content is made (AI, human or scraped). The policy was introduced in March 2024 with enforcement from May 2024.",
+    "source_url": "https://developers.google.com/search/docs/essentials/spam-policies"
+   },
+   {
+    "fact": "In May 2026 Google said its spam policies (scaled content abuse, site reputation abuse, cloaking, link spam) also apply to AI Overviews and AI Mode.",
+    "source_url": "https://ppc.land/google-spam-policies-now-officially-cover-ai-overviews-and-ai-mode-in-search/"
+   },
+   {
+    "fact": "Google's guidance on generative-AI content (an official page seen in search results; its full text could not be opened).",
+    "source_url": "https://developers.google.com/search/docs/fundamentals/using-gen-ai-content"
+   },
+   {
+    "fact": "The Amazon.ca Associates Operating Agreement and Program Policies were updated effective April 14, 2026. The 3-qualifying-sales-in-180-days closure rule applies to new accounts (the rule is shown on the Amazon.com help page).",
+    "source_url": "https://associates.amazon.ca/help/operating/compare"
+   },
+   {
+    "fact": "Etsy charges GST/HST on seller fees at the rate of the seller's province (13% HST in Ontario; 5% GST in AB/BC per the source). This affects net margin by province and is the main difference between GTA, Vancouver, Calgary, Ottawa and Montreal found for this online model.",
+    "source_url": "https://jonescosman.com/etsy-fees-canada/"
+   },
+   {
+    "fact": "YPP requires no active Community Guidelines strikes. Existing members must accept the new terms by 31 January 2027.",
+    "source_url": "https://tbreak.com/youtube-partner-program-8000-watch-hours/"
+   },
+   {
+    "fact": "Affiliate-disclosure rules in Canada (Competition Bureau), CRA self-employment and GST/HST small-supplier rules, and Quebec French-language rules for Montreal: not found or not verified in this session (search budget exhausted). Check canada.ca before launch.",
+    "source_url": "not found"
+   }
+  ],
+  "ai_can_build": [
+   "Fix the existing canadian-tool-deals repo so it shows real content: at present 0 of 54 products have prices. For example, switch from scraping to hand-curated comparison tables, spec sheets and Canadian-store availability notes, so the site offers original value rather than thin affiliate links.",
+   "Digital product files for Etsy or Gumroad: printable or spreadsheet templates (tool inventory trackers, home-maintenance checklists, contractor quote/invoice templates, budget planners) as PDF, XLSX or Google Sheets.",
+   "Etsy listing copy, 13-tag keyword sets, titles, and product-mockup images drawn with code (SVG/HTML-rendered previews).",
+   "YouTube, TikTok and Instagram scripts, shot lists, hooks, captions, hashtags, thumbnail layouts and a 30-day content calendar.",
+   "Amazon.ca affiliate link builder, disclosure text, buying guides with original comparison tables, and an internal-link structure.",
+   "A landing page or email capture, plus an email welcome sequence for a digital product.",
+   "A revenue and KPI tracker spreadsheet: Etsy views/sales, affiliate clicks and orders, follower counts against the YPP and TikTok thresholds, and the 180-day Amazon clock.",
+   "Fee and margin calculators (Etsy net per sale by province, required sales volume for a given income target)."
+  ],
+  "human_must_do": [
+   "Open and verify accounts with ID, bank and tax info: Etsy shop, Amazon.ca Associates, YouTube (turn on 2-Step Verification), TikTok, Instagram Professional, and optionally Gumroad.",
+   "Receive all payouts in their own name and handle tax filing.",
+   "Record face and voice content, or approve AI-drafted scripts and record them. Buy or borrow the tools if filming demos.",
+   "Post to their own social accounts every day and reply to comments and Etsy buyer messages.",
+   "Review and approve all published content for accuracy. This also reduces 'scaled content abuse' risk.",
+   "Add affiliate disclosures and decide on business or GST registration.",
+   "Decide whether to fund living costs during the 30–60+ day near-zero-revenue period, or to pair this with a faster-cash service business."
+  ],
+  "seasonality": "- Q4 is the usual retail gift season. Black Friday falls on 27 Nov 2026 (a calendar fact). An October start lines up with it, but no sourced data on how much Q4 lifts Etsy digital or tool-affiliate sales was found in this session.\n- Time pressures from the sourced rules:\n  - YPP entry thresholds double for new applicants on 1 Feb 2027, so a new YouTube channel has about 4 months to reach 4,000 hours under the current rules.\n  - Amazon Associates' 180-day clock (3 qualifying sales) starts at sign-up.\n- Printable planners and calendars may peak around the new year: not sourced, not verified.",
+  "risks": [
+   "No income within the 30-day window: YouTube and TikTok ad programs are blocked by follower and watch thresholds that new accounts almost never reach in 30 days (no counter-evidence found).",
+   "Google enforcement against AI-scaled and thin affiliate content (March 2026 core update, August 2026 spam update). An AI-mass-produced affiliate site is exactly the profile being penalized.",
+   "The existing site currently shows 0 live prices on 54 products. Scraping retailer sites may breach their terms and is fragile (retailer terms not researched).",
+   "Amazon Associates closes the account without 3 qualifying sales in 180 days. The IDs cannot be reinstated.",
+   "The 3% commission on tools means very high sales volume is needed (about CAD 166,667 referred per month for CAD 5,000).",
+   "Etsy fees of about 10% + fixed fees + HST on fees, and Offsite Ads at 12–15% (mandatory above $10k/year), squeeze margin on low-priced digital files.",
+   "Etsy digital-download saturation: no sourced data found, which is itself a gap, since many sellers use AI for templates. Anecdotal saturation claims were not verified this session.",
+   "YPP entry becomes harder on 1 Feb 2027 (8,000 hours / 20M Shorts views).",
+   "Instagram bonuses are invite-only, so they can't be planned for.",
+   "Platform or policy risk: account strikes or bans, algorithm changes.",
+   "Opportunity cost: time spent here is not spent on a service business with faster cash.",
+   "Research-quality risk: all facts in this dossier come from search snippets because page fetches were blocked. Check official pages before acting."
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Amazon cut Home Improvement (and furniture) commissions from 8% to 3% in April 2020, which permanently worsened tool-affiliate economics.",
+    "source_url": "https://geniuslink.com/blog/amazon-affiliate-commission-rates/"
+   },
+   {
+    "fact": "New Amazon Associates accounts are closed if they don't make 3 qualifying sales in 180 days. Quora users report exactly this happening to new sites.",
+    "source_url": "https://www.quora.com/My-Amazon-affiliate-account-has-closed-due-to-no-sale-in-180-days-Now-what-should-I-do-for-reactivation-Can-I-use-the-same-account-or-create-a-new-one"
+   },
+   {
+    "fact": "Sites publishing hundreds or thousands of AI-generated pages without editorial oversight saw 50–80% traffic drops in the March 2026 core update (agency claim).",
+    "source_url": "https://www.digitalapplied.com/blog/scaled-content-abuse-google-march-update-ai-pages-decimated"
+   },
+   {
+    "fact": "Google's August 2026 spam update targeted scaled content abuse, AI content, programmatic content and thin affiliate sites (case-study article title and summary).",
+    "source_url": "https://www.gsqi.com/marketing-blog/august-2026-google-spam-update-case-studies/"
+   },
+   {
+    "fact": "YouTube is doubling YPP entry thresholds to 8,000 hours / 20M Shorts views for new applicants from 1 Feb 2027.",
+    "source_url": "https://www.business-standard.com/technology/tech-news/technology-tech-news-youtube-partner-program-monetisation-rules-2027-watch-hours-shorts-views-126081100708_1.html"
+   },
+   {
+    "fact": "Instagram bonus programs are invite-only and vary by country, so a new creator cannot count on them.",
+    "source_url": "https://bosswallah.com/blog/creator-hub/instagram-monetization-eligibility/"
+   },
+   {
+    "fact": "Etsy Offsite Ads become mandatory above $10,000/year in sales, at 12%, on top of about 10% + fixed fees.",
+    "source_url": "https://printify.com/blog/how-much-does-etsy-take-per-sale/"
+   },
+   {
+    "fact": "The owner's own affiliate site has been auto-updating daily (GitHub Actions commits through 2026-09-23), but 0 of its 54 products have a live price. Every entry is a manual store-search link with price 0.",
+    "source_url": "file:///home/user/canadian-tool-deals/public/cache/index.json"
+   }
+  ],
+  "scores": {
+   "speed": 3,
+   "probability_5k": 1,
+   "capital_light": 9,
+   "ai_leverage": 7,
+   "low_risk": 7
+  },
+  "score_rationale": "**Speed 3:** Etsy listings and affiliate links can go live within days, since there is no follower gate. But YouTube, TikTok and Instagram payouts are gated by thresholds (1k subs + 4k hours; 10k followers + 100k views in 30 days) that new accounts can't realistically clear in 30 days. No sourced time-to-first-sale data was found.\n\n**Probability of CAD 5k/month 1:** The sourced economics need about CAD 166,667/month in referred Amazon tool sales at 3%, or about 230–590 Etsy sales a month. I found no evidence of new accounts reaching that in 60 days, and several enforcement and threshold headwinds point the other way. The existing site has 0 live prices.\n\n**Capital-light 9:** Almost no cash outlay (Etsy at US$0.20 per listing, free platform sign-ups). It loses a point because the owner must live on savings while revenue is near zero.\n\n**AI leverage 7:** The AI can build nearly all digital assets: products, copy, the site, scripts, calculators. The human must still verify accounts, appear on camera or post, and review content. Google's scaled-content policy caps how far pure AI mass production can safely go.\n\n**Low risk 7:** No physical or legal hazard, and small financial outlay. The risks are opportunity cost, account closures (the Amazon 180-day rule), algorithm or penalty exposure, and the fact that this dossier's facts could not be checked on full official pages because fetches were blocked.\n\n**Recommendation from the evidence:** use this only as a low-cost side bet on top of a faster-cash primary business. If used, repurpose the existing tool site into genuinely original, human-reviewed Canadian comparison content rather than scaled AI pages."
+ },
+ "verification": {
+  "checked_claims": [
+   {
+    "claim": "YouTube Partner Program requires 1,000 subscribers plus 4,000 long-form watch hours in 12 months, or 10M Shorts views in 90 days.",
+    "status": "unverifiable",
+    "correction": "I could not re-open the page. WebFetch to support.google.com was refused with EGRESS_BLOCKED, and the session-wide WebSearch budget (200/200) was already used up, so no search could run. The dossier's own evidence is search snippets only. The figure is plausible, but it was not confirmed on a primary page in either research pass.",
+    "source_url": "https://support.google.com/youtube/answer/72851?hl=en"
+   },
+   {
+    "claim": "From 1 Feb 2027, new YPP applicants need 8,000 watch hours or 20M Shorts views (reported August 2026).",
+    "status": "unverifiable",
+    "correction": "WebFetch to blog.youtube was blocked (EGRESS_BLOCKED) and no search budget remained. This is a large, recent policy claim. The dossier supports it with snippets from three outlets (blog.youtube, business-standard.com, tbreak.com), but nobody has read the official post in full. It does not change the verdict: the current thresholds are already out of reach in 30–60 days.",
+    "source_url": "https://blog.youtube/news-and-events/youtube-partner-program-updates-2027-new-opportunities-earn/"
+   },
+   {
+    "claim": "Amazon Associates Tools & Home Improvement commission is about 3%, as applied to Amazon.ca.",
+    "status": "unverifiable",
+    "correction": "WebFetch to associates.amazon.ca was blocked (EGRESS_BLOCKED). The dossier itself admits the 3% comes from the Amazon.com schedule (geniuslink/getlasso). The Amazon.ca rate for tools is therefore not verified, and every '166,667 CAD referred sales' calculation rests on an unverified rate. The direction of the conclusion (thousands of orders a month needed) holds at any single-digit rate. ESTIMATE: even at 8%, 5,000/0.08 = CAD 62,500/month referred.",
+    "source_url": "https://associates.amazon.ca/help/node/topic/GRXPHT8U84RAYDXZ"
+   },
+   {
+    "claim": "Amazon Associates closes accounts that have not referred 3 qualifying sales within 180 days.",
+    "status": "unverifiable",
+    "correction": "The Amazon help pages are blocked by the egress proxy and search is unavailable. The dossier's source is the Amazon.com help node, not Amazon.ca. The Quora anecdote is consistent with the rule, but it is community evidence only.",
+    "source_url": "https://affiliate-program.amazon.com/help/node/topic/G7MJTPEP9NC3YKMG"
+   },
+   {
+    "claim": "Etsy fees for a Canadian seller: US$0.20 listing, 6.5% transaction, about 3% + C$0.25 processing, 0.5% Regulatory Operating Fee, Offsite Ads 12–15% (mandatory above $10k/yr).",
+    "status": "unverifiable",
+    "correction": "WebFetch to etsy.com/legal/fees and craftybase.com was blocked, and search was exhausted. All the figures are third-party blog snippets. I checked the arithmetic: C$25 × 10% = 2.50, and 25 − 2.50 − 0.25 − 0.28 = 21.97, which is correct. The calculation leaves out HST on Etsy's fees, which the dossier itself says Etsy charges. ESTIMATE for Ontario at 13%: (2.50 + 0.25 + 0.28) × 0.13 = C$0.39, so net ≈ C$21.58 per C$25 sale. That is unrecoverable if the owner is not GST/HST-registered (the input-tax-credit rule was not verified this session). It also leaves out any currency-conversion cost on USD-denominated fees (not found).",
+    "source_url": "https://www.etsy.com/legal/fees/"
+   },
+   {
+    "claim": "TikTok Creator Rewards is available in Canada with 10,000 followers, 100,000 views in 30 days, and videos over 1 minute.",
+    "status": "unverifiable",
+    "correction": "The dossier itself says the official Creator Academy page could not be opened. It was not re-checked here: no search budget remained, and TikTok was not fetchable. The figures come from third-party summaries only.",
+    "source_url": "https://www.tiktok.com/creator-academy/en/article/creator-rewards-program"
+   },
+   {
+    "claim": "The owner's repo: 0 of 54 tracked products have a live price; every entry is a store search link with price 0 and checkManually=true.",
+    "status": "corrected",
+    "correction": "Verified locally. public/cache/index.json has 54 entries, all with lowestPrice=null and priceCount=0. But the 60 per-product cache files hold 360 store entries: 154 are checkManually=true, and 6 carry non-zero prices. All 6 are Walmart Canada prices timestamped 2026-04-13, for example makita-cordless C$843.70 and dewalt-20v-circular-saw C$59.98. Those prices are more than 5 months stale, which is a consumer-accuracy risk rather than evidence of live data. Git history shows index.json last had a non-null lowestPrice in commit 815be96 on 2026-08-08; the local history is shallow, with 50 commits starting 2026-08-05. Since then the daily bot commits have produced no prices.",
+    "source_url": "file:///home/user/canadian-tool-deals/public/cache/index.json"
+   },
+   {
+    "claim": "The repo has a hardcoded Amazon tag, canadiantool-20.",
+    "status": "confirmed",
+    "correction": "Found in lib/scrapers/amazon.ts (AFFILIATE_TAG), extension/brands.js line 83, and extension/background.js lines 125 and 240. Whether this tag belongs to an active, approved Amazon.ca Associates account owned by the owner, and when its 180-day clock started: not found.",
+    "source_url": "file:///home/user/canadian-tool-deals/lib/scrapers/amazon.ts"
+   },
+   {
+    "claim": "Sites with mass AI-generated pages lost 50–80% of traffic in the March 2026 core update; the August 2026 spam update hit thin affiliate sites.",
+    "status": "unverifiable",
+    "correction": "These are an agency blog claim and a case-study title only. Neither page was fetchable, and no underlying dataset was seen. Treat them as industry anecdote, not measured fact.",
+    "source_url": "https://www.digitalapplied.com/blog/scaled-content-abuse-google-march-update-ai-pages-decimated"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "The repo's Amazon scraper requests amazon.ca search-results HTML directly with a spoofed desktop Chrome User-Agent and falls back to a search link when a robot/captcha page is detected. That fits the zero live prices since 2026-08-08. Whether this scraping breaches the Amazon.ca Associates Operating Agreement (which would put account and commissions at risk) was not verified, because associates.amazon.ca is blocked from this environment. It must be checked before sending traffic.",
+    "source_url": "file:///home/user/canadian-tool-deals/lib/scrapers/amazon.ts"
+   },
+   {
+    "fact": "The cache still holds 6 Walmart Canada prices from 2026-04-13 (for example, a Makita item at C$843.70), shown alongside 'checkManually' links. If the site shows these as current, it displays prices more than 5 months stale, which undermines trust and any 'price comparison' value claim.",
+    "source_url": "file:///home/user/canadian-tool-deals/public/cache/makita-cordless.json"
+   },
+   {
+    "fact": "All 50 commits in the local history (2026-08-05 to 2026-09-23) are github-actions 'chore: update price cache' commits. The only 'activity' on the owner's affiliate asset is an automated job that has produced no priced data for about 6 weeks. There is no sign of content, traffic, or sales history to build on.",
+    "source_url": "file:///home/user/canadian-tool-deals/.github/workflows/scrape.yml"
+   },
+   {
+    "fact": "Two separate research passes (the dossier author's and this one) could not open any primary source: support.google.com, blog.youtube, associates.amazon.ca, etsy.com, gumroad.com, canada.ca, craftybase.com and reddit.com were all blocked by the egress proxy, and the search budget ran out. No threshold, fee or commission rate in this candidate has been confirmed on an official page.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "No search budget remained for new external counter-evidence: Etsy digital-download saturation, Gumroad fees, Amazon.ca payout lag, Canadian affiliate-disclosure rules, or Quebec French-language rules. All of these remain 'not found'.",
+    "source_url": "not found"
+   }
+  ],
+  "hidden_costs_or_blockers": [
+   "Evidence gap: every platform fee, threshold and commission in the dossier rests on search snippets or third-party blogs. None was confirmed on an official page in two passes, so the owner must check each one on the official page before spending time.",
+   "Payout timing: Amazon.ca Associates payout schedule and Etsy deposit schedule: not found. If payouts lag the sale by weeks (unverified), even a first sale in October may not become cash inside the 30-day window.",
+   "Unrecoverable HST on Etsy fees for an unregistered seller. ESTIMATE for Ontario: about C$0.39 lost per C$25 sale ((2.50 + 0.25 + 0.28) × 0.13), which the dossier's net-per-sale math omits. The small-supplier and input-tax-credit rules were not verified.",
+   "Currency: the Etsy listing fee is quoted in USD. The FX rate and any conversion fee on payouts: not found.",
+   "The Amazon scraper with a spoofed User-Agent and stale cached prices may conflict with the Associates Operating Agreement or retailer terms (not verified, since the agreement page is blocked). Worst case, the account is terminated and commissions forfeited.",
+   "Unknown status of the canadiantool-20 Associates ID: whether it is approved, owned by the owner, and how many days remain on its 180-day clock is not found. A tag that has been live since before August with no sales could already be near closure.",
+   "Content platforms (YouTube, TikTok, Instagram) need the human to film or voice content, post daily, and in practice speak English on camera. Filming tool demos needs the tools, at a cost not sourced.",
+   "Living-cost runway: the realistic 60-day income is near zero (the dossier's own ESTIMATE is CAD 0–500/month), so the owner must fund 2+ months of expenses from savings, which are unknown.",
+   "Compliance items not researched: Competition Bureau affiliate-disclosure expectations, CRA self-employment and GST/HST registration, and Quebec French-language requirements for Montreal-facing commercial content."
+  ],
+  "adjusted_scores": {
+   "speed": 2,
+   "probability_5k": 1,
+   "capital_light": 8,
+   "ai_leverage": 6,
+   "low_risk": 5
+  },
+  "verdict": "ELIMINATE as the primary 30–60-day income plan; at most keep as an optional side bet of 5 hours or less a week. Reasons: (1) The dossier's own sourced gates (YPP, TikTok and Instagram thresholds; 3% tool commission; Etsy fees of about 10% plus fixed and HST) require volumes (hundreds of Etsy sales a month, or roughly CAD 60k–170k of referred sales a month) that no evidence shows a new account reaching in 60 days. (2) None of those numbers could be confirmed on an official page in two separate research passes, so even the downside math is unverified. (3) The owner's only existing asset is weaker than described: index.json shows 0 live prices since 2026-08-08, the only non-zero prices are 5-month-stale Walmart figures, and the Amazon price scraper uses a spoofed User-Agent, which may conflict with Associates terms (unverified). (4) Payout timing is not found, so even a first sale may not become cash inside 30 days. Scores are down on speed (first cash within 30 days unlikely, payout lag unknown), AI leverage (on-camera work, account verification and Google scaled-content limits leave real work with the human), and low risk (Associates-closure and scraping-terms exposure, stale-price accuracy, opportunity cost). Pursue a faster-cash service business as the primary plan."
+ }
+}

@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 우리동네 홈케어 (Neighbourhood Home Care) — 1인 홈서비스 사업 키트
 
-## Getting Started
+2026-09-23 기준. "다음 주부터 일이 없고, 한 달 안에 수입이 필요하며, 목표는 월 평균 CAD 5,000"이라는 가정에서 시작해
+13개 사업 모델을 조사·검증·비교한 뒤 고른 사업과, 그 사업을 바로 시작할 수 있는 웹사이트·영업 도구·운영 문서입니다.
 
-First, run the development server:
+> **먼저 읽을 것:** [`business/README.md`](business/README.md) (한국어 안내) → [`business/01-30일-실행계획.md`](business/01-30일-실행계획.md)
+
+---
+
+## 1. 결론 (한 문단)
+
+**가정용 청소(딥클린·이사 청소·정기 청소)를 주력으로 하는 동네 홈서비스 1인 사업**을 한 동네(클러스터)에서 집집마다 영업해 시작합니다.
+차량·사다리·보험 조건이 충족될 때만 **홈통 청소**와 **수동 제설 시즌 계약**(12월 1일 전 결제 없음, 4회 분할)을 추가합니다.
+실직 후 **고용보험(EI)** 자격이 있으면 **2026년 10월 10일(토)까지 신청**하는 것이 가장 확실한 현금 안전망입니다
+(근거: EI 규정 시범사업 24호 s.77.996–77.999, [법령 원문](https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-96-332.xml)).
+
+## 2. 솔직한 기대치 (모두 추정치, 근거는 [결정 메모 5장](business/research/decision-memo.md))
+
+| 시나리오 | 10월 | 11월 | 월 $5,000 첫 도달 |
+|---|---|---|---|
+| 청소만 (기본) | 약 $973 | 약 $3,545 | 2027년 1월 (약 $5,073) |
+| 청소 + 홈통 + 제설 (기본) | 현금 약 −$220 (운영이익 $2,230) | 현금 약 $4,811 (운영이익 $7,110) | 운영이익 기준 11월, 현금 기준 12월 |
+| 보수적 경우 | 적자 가능 | $1,400–2,800 | 1인으로는 이번 겨울 내 도달 못 함 |
+
+- **10월에 월 $5,000은 어떤 시나리오에서도 나오지 않습니다.** 이 사실을 숨기지 않습니다.
+- EI 최대 수령 시(주 $729, 2차 출처 + 법정 공식) 10월에는 "EI + 신고한 소규모 부업"이 사업 단독보다 많습니다. 전환 규칙은 [`business/03-EI-결정규칙.md`](business/03-EI-결정규칙.md).
+- 모든 시장 가격은 검색 결과 요약(페이지 미열람) 수준의 근거입니다. 첫 주에 경쟁사 가격 5–10곳을 직접 확인하세요.
+- 수입은 보장할 수 없습니다. 보장하는 것은 (1) 아래 도구가 모두 만들어져 있다는 것, (2) 규정 확인 목록과 출처, (3) 7·14·21·28일째 점검으로 큰돈을 쓰기 전에 계획이 통하는지 판단할 수 있다는 것입니다.
+
+## 3. 무엇을 조사했나
+
+- 후보 13개: 제설, 크리스마스 조명, 가을 외부 청소(홈통 등), 청소, 이사·조립 등 노동 서비스, AI 기반 소상공인 서비스, 프리랜서 플랫폼, 과외, 재판매, 콘텐츠·제휴, 마이크로 SaaS, 배달·라이드셰어, 한인 대상 서비스
+- 공통 주제 4개: 규제·세금·EI, 결제·운영 도구, 수요 시점, 성공 기준율
+- 각 후보마다 반박 검증 → 심사위원 3명(속도·위험·실행 가능성) → 종합 → 비판 검토 → 수정
+- 자료: [`business/research/`](business/research/) (결정 메모, 후보별 도시에, 심사 결과, 검색 196건 원문)
+- **한계:** 세션의 웹 검색 한도(200회)가 조사 도중 소진되었고, 컨테이너 네트워크 정책상 대부분의 웹페이지(canada.ca 등)를 직접 열 수 없었습니다. 법령은 GitHub에 공개된 캐나다 법무부 원문으로 확인했고, 시장 가격은 검색 요약 수준입니다.
+
+## 4. 이 저장소에 있는 것
+
+| 경로 | 내용 |
+|---|---|
+| `app/`, `components/`, `lib/`, `config/`, `content/` | 웹사이트(영어 `/`, 한국어 `/ko/`): 즉시 견적 계산기, 견적 요청 폼, FAQ, 개인정보 안내, 서비스 약관, 인쇄물(문고리 전단·전단·가격표) |
+| `config/prices.ts` | **가격표 단일 원본.** 모든 기본 가격에 출처·확인 상태 표시. 사이트 `/admin/prices/`에서 한눈에 확인 |
+| `config/business.ts` | 상호, 도시, 연락처, 서비스 켜기/끄기, 보험·세금 등록 여부 (Cloudflare 환경변수로도 변경 가능) |
+| `business/` | 한국어 운영 문서: 30일 계획, 규정 체크리스트, EI 규칙, 중단 기준, 수익 시나리오, 예상 질문, 도시별 분기, 배포 가이드 |
+| `business/scripts/`, `business/marketing/`, `business/b2b/`, `business/checklists/` | 영업 대본(EN/KO), 게시글, 플랫폼 프로필, 작업 체크리스트, B2B 이메일(CASL 준수) |
+| `business/crm/` | CRM·재무 엑셀(`crm.xlsx`)과 CSV 템플릿 |
+| `business/print/` | 인쇄용 PDF (문고리 전단, 전단, 가격표, 약관) |
+| `integrations/google-apps-script/` | (선택) 견적 요청을 Google 시트에 기록하고 이메일로 알려주는 스크립트 |
+| `archive/tool-deals/` | 이전 프로젝트(공구 가격 비교). 8월 8일 이후 가격 수집 0건이라 보관 처리. 빌드·배포 안 됨 |
+
+## 5. 명령어
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install        # 처음 한 번
+npm run dev        # 개발 서버 (http://localhost:3000)
+npm test           # 견적 계산기 테스트
+npm run build      # 정적 사이트 생성 → out/
+npm run pdf        # 인쇄물 PDF 재생성 (Playwright 필요)
+npm run crm        # CRM 엑셀 재생성
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+배포: Cloudflare Pages 무료 플랜 권장 (Vercel Hobby는 비상업 용도 전용). 단계별 안내는 [`business/08-배포-가이드.md`](business/08-배포-가이드.md).

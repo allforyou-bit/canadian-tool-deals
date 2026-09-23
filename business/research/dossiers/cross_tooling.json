@@ -1,0 +1,143 @@
+{
+ "topic": "Payment and operations tooling for a Canadian micro-business starting Oct 2026: payments (Interac, Stripe, Square, PayPal), invoicing and scheduling, Google Business Profile, ads, listings, flyers, domains, hosting, SMS. Evidence was badly limited by tool restrictions. See the first unknown.",
+ "key_facts": [
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY (the official page itself was not opened). Stripe Canada charges 2.9% + C$0.30 per domestic card payment. Four independent 2026-era GitHub sources agree. This one (2026) cites https://stripe.com/en-ca/pricing and adds '+0.8% international cards, +2% FX'. The others are https://github.com/wisemandenny/village-checkin/blob/d4e9355642b6245261fd44518b653f215dca5628/web/src/lib/fees.ts, https://github.com/Flatter-coder/lotcheck/blob/77012c150b1763c28d3fc720193a093756289ea4/supabase/migrations/20260815_stripe_fees.sql (dated 2026-08-15) and https://github.com/Jaeyeon-Kang/feebreaker/blob/52f619c081216af1028235211751da24693d9fee/src/app/ca/stripe/page.tsx. CONFLICT: that last source says international cards are 3.9% + C$0.30, which implies a +1.0% surcharge, not +0.8%.",
+   "source_url": "https://github.com/kurtrgoddard/Bilingua-App/blob/b1f427aae94ef32e9f78ad5543dad81c330e7956/economy/research-pricing.md",
+   "applies_to": "Card payments, all Canadian cities"
+  },
+  {
+   "fact": "ESTIMATE, using the secondary Stripe rate above. On a $150 job: 0.029 x 150 = $4.35, plus $0.30 = $4.65, which is about 3.1% of the job. For $5,000/month of revenue at a $150 average ticket: 5000 / 150 = 33.3 payments. Fees would be 0.029 x 5000 = $145, plus 33.3 x $0.30 = $10, so about $155/month (about 3.1%).",
+   "source_url": "https://github.com/kurtrgoddard/Bilingua-App/blob/b1f427aae94ef32e9f78ad5543dad81c330e7956/economy/research-pricing.md",
+   "applies_to": "Unit economics, card-paid service jobs"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY, unverified. One third-party calculator page says Stripe supports Interac only in person via Stripe Terminal in Canada. It also says Stripe does not support Interac e-Transfer online, and that online card payments cost 2.9% + CA$0.30.",
+   "source_url": "https://github.com/BinaryBard27/stripe-qb-converter/blob/319cdc71ebb3e99fe4a997ce6ceb3f5a00903d6a/app/tools/stripe-fee-calculator-canada/page.tsx",
+   "applies_to": "Stripe, Canada"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY and CONFLICTING. Source 1 (BinaryBard27 page, undated) says 'Square Canada charges 2.9% + CA$0.30 for online and 2.65% flat for in-person' and 'PayPal Canada (2.9% + CA$0.30)'. Source 2 (andyfengc draft dated 2026-02-01, table header 'Square, Moneris (Go), Shopify POS, Clover, Lightspeed') lists Square in-person at '2.6% + $0.10' and Interac debit at '$0.10'. It lists Moneris at '2.65% + $0.10'. The official squareup.com/ca and paypal.com/ca pages could not be opened.",
+   "source_url": "https://github.com/andyfengc/andyfengc.github.io/blob/4faf0fc362578a4ac37d251add3085f5de607240/_drafts/to%20release/2026-02-01-tax-self-employed-bank-account.md",
+   "applies_to": "Square and PayPal, Canada"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY, and NOT APPLICABLE AS-IS. Archived PayPal fee-page snapshots from 2022–2023 in a third-party repo list a fixed fee of '0.30 CAD' for transactions received in Canadian dollars. These appear to be US PayPal terms, not PayPal Canada's merchant-fee page, so they should not be relied on for a Canadian account.",
+   "source_url": "https://github.com/LORDLYAMIGO/eudia-hackathon-eula-handler/blob/c14248211056725d97ebe83c9b0d958836635e7e/EULA/paypal.com/Terms%20of%20Service/2023-10-25T19-11-36Z.md",
+   "applies_to": "PayPal"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY. A 2026 payments-scheme data file says Interac publishes no single universal limit. It says 'transaction limits are set by each financial institution and are typically $2,000-3,000 per transaction for consumers; higher limits are available under Interac e-Transfer for Business'. It also says e-Transfer clearing moves to the Real-Time Rail, which 'launches in Q4 2026'.",
+   "source_url": "https://github.com/nifabulous/Relay/blob/885bdf20a690d77dd2b93e46a52a597382039c6e/app/data/payment_schemes.py",
+   "applies_to": "Interac e-Transfer, all Canada"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY. EQ Bank Business e-Transfer limits: max $10,000 per transfer, $10,000 per 24 hours, $30,000 per week, $50,000 per month. Wealthsimple Cash (personal): $5,000 per 24 hours, $10,000 per week, $30,000 per 30 days. The source cites https://www.eqbank.ca/business/rates and is a draft dated 2026-02-01.",
+   "source_url": "https://github.com/andyfengc/andyfengc.github.io/blob/4faf0fc362578a4ac37d251add3085f5de607240/_drafts/to%20release/2026-02-01-tax-self-employed-bank-account.md",
+   "applies_to": "Interac e-Transfer limits (EQ Bank Business, Wealthsimple)"
+  },
+  {
+   "fact": "ANECDOTAL. An Oakville, ON flooring contractor's operations notes (2026-08-26) record a customer's '$1,972 balance still pending on an e-transfer limit delay'. This is real-world evidence that customer-side e-Transfer limits can delay payment on larger service jobs.",
+   "source_url": "https://github.com/albertngo/titan-vault/blob/cdf7d0fa6c1c2da41bb14bce705f99d6f3837fac/01_daily/2026-08-26.md",
+   "applies_to": "GTA home-service businesses collecting by e-Transfer"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY, internally CONFLICTING, currency not stated. One 2026 review site gives three different sets of Jobber prices. Article 1: Lite $19, Core $49, Connect $149, Grow $299 per month billed annually, or $29/$79/$199/$449 month-to-month. Article 2: Core $69, Connect $169, Grow $349. Article 3: Core $49, Connect $129, Grow $249. Treat as unverified; the official Jobber page was not opened.",
+   "source_url": "https://github.com/epiphany-dynamics/fieldservicestack/blob/1227a24e452be63eb0227b9bdc5d39b72695f0e1/src/content/guides/jobber-pricing-per-month-2026.md",
+   "applies_to": "Jobber field-service software"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY, a human-verified playbook dated 2026-07-06 (marked stale after 2026-10-06) built from Google help pages. Google Business Profile has six verification methods, assigned by Google rather than chosen: video recording, phone or text, email, live video call, postcard ('most codes arrive within 14 days') and Search Console. 'Codes expire after 30 days.' 'Once you submit, review can take up to five business days.'",
+   "source_url": "https://github.com/MrBigleg/okf-local-seo/blob/128c1744cf4c8cd87ab2fbe04cc18ab6d6316810/bundles/local-seo/gbp/verification.md",
+   "applies_to": "Google Business Profile, all Canadian cities"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY, same playbook dated 2026-07-06. Video verification must be one continuous live mobile recording of at least 30 seconds. It must show the location, business evidence (for service-area businesses: tools, equipment, branded vehicle or apparel) and proof of management (e.g., business licence or utility bill). Service-area businesses must remove the address, can list up to 20 service areas (by city or postal code), and should keep them within about 2 hours' driving. Edits can take up to 48 hours to appear.",
+   "source_url": "https://github.com/MrBigleg/okf-local-seo/blob/128c1744cf4c8cd87ab2fbe04cc18ab6d6316810/bundles/local-seo/gbp/verification.md",
+   "applies_to": "Google Business Profile for service-area (no-storefront) businesses"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY, verbatim quotes of vercel.com/docs/limits/fair-use-guidelines in several dated 2026 notes (2026-05-17, accessed 2026-06-16, 2026-08-18). The quote: 'Hobby teams are restricted to non-commercial personal use only. All commercial usage of the platform requires either a Pro or Enterprise plan.' Commercial usage is defined as 'any Deployment that is used for the purpose of financial gain of anyone involved in any part of the production of the project'. It includes 'Advertising the sale of a product or service', and 'Asking for Donations fall under commercial usage.'",
+   "source_url": "https://github.com/botingw/langgraph-dev-navigator/blob/6e1d0c9c1f7732f97765920085eeb8857a2538ae/memory/tasks/story_create_landing_page/replit_migration_spike.md",
+   "applies_to": "Website hosting (the repo is a Next.js app)"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY. Vercel Pro costs '$20 per user per month' for Developer seats; Viewer seats are free. Source cites https://vercel.com/docs/plans/hobby, accessed 2026-06-16; currency not stated in the note. Hobby includes 100 GB Fast Data Transfer, 1,000,000 Edge Requests and 1,000,000 Function Invocations per month (vercel.com/docs/limits, accessed 2026-07-01). ANECDOTAL (a 2026-08-30 note): Vercel's create-team dialog now offers only Pro or a 14-day Pro trial, and enforcement of the Hobby rule is reactive.",
+   "source_url": "https://github.com/its-everdred/kevinweaver-dev/blob/main/docs/research/2026-07-31-vercel-platform.md",
+   "applies_to": "Vercel hosting"
+  },
+  {
+   "fact": "EVIDENCE GRADE: OFFICIAL (Cloudflare's own docs repository, fetched 2026-09-23). Cloudflare Pages Free plan limits: 500 builds per month, 1 build at a time, 100 projects per account, up to 20,000 files. The limits page states no bandwidth limit.",
+   "source_url": "https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/pages/platform/limits.mdx",
+   "applies_to": "Cloudflare Pages hosting"
+  },
+  {
+   "fact": "EVIDENCE GRADE: OFFICIAL (Cloudflare docs repo). Workers Free: 100,000 requests per day and 10 ms CPU per invocation. Workers Paid: '$5 USD per month' with 10 million requests included, then $0.30 per additional million. 'Requests to static assets are free and unlimited.'",
+   "source_url": "https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/workers/platform/pricing.mdx",
+   "applies_to": "Cloudflare Workers / static-asset hosting"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY. The official Cloudflare docs fetched here contain no statement on commercial use; the claim comes only from third-party notes. A 2026-06-08 comparison marks commercial use 'Allowed' on Netlify Free and on Cloudflare Pages Free, and 'Prohibited (non-commercial only)' on Vercel Hobby. It says Netlify Free has 300 build minutes and 100 GB bandwidth per month, and that Netlify moved to credit-based billing in Sept 2025. Paid Netlify prices were not given. A second note (https://github.com/rachitg36/criclife/blob/b4e59b6c4e51e2a31c51e9cf7bae28f0e5dfa9f7/docs/14-FREE-TIER-PLAN.md) also says Cloudflare free static hosting allows commercial use with unlimited bandwidth.",
+   "source_url": "https://github.com/cmaven/cmaven.github.io/blob/master/_posts/en/tech/hosting/2026-06-08-netlify-vercel-static-hosting-comparison.md",
+   "applies_to": "Netlify and Cloudflare Pages free tiers"
+  },
+  {
+   "fact": "EVIDENCE GRADE: OFFICIAL (Cloudflare docs repo). 'Cloudflare Registrar sells domains at cost: you pay the registry and ICANN list price with no markup.' Domains auto-renew by default at the registry list price. Whether .ca is supported is NOT stated in the pages fetched.",
+   "source_url": "https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/registrar/faq.mdx",
+   "applies_to": "Domain registration"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY. A 2026 research note citing Twilio's support article (https://support.twilio.com/hc/en-us/articles/5377174717595-Toll-Free-Message-Verification-for-US-Canada) makes three points. Toll-Free Verification is required for US/Canada toll-free SMS. It is free and takes about 3–5 business days. Twilio has blocked unverified toll-free sending since Jan 31, 2024. The Sole Proprietor 10DLC path 'might take several weeks'; 10DLC is US-specific.",
+   "source_url": "https://github.com/MidfieldMafia/cfb-pickem/blob/7cf41af9611f842a34bf10968a4ccd201a6e81e8/docs/research/sms-provider-and-reminders.md",
+   "applies_to": "Twilio SMS to Canadian numbers"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY, US ONLY (not Canada). A July 2026 note lists Twilio US SMS at $0.0083 per segment outbound and inbound, plus carrier fees. It lists numbers at $1.15/month local and $2.15/month toll-free. It says Canada-specific rates are in Twilio's CSV at https://assets.cdn.prod.twilio.com/pricing-csv/SMSPricing.csv, which this session could not reach.",
+   "source_url": "https://github.com/yuanboP/frugal/blob/main/research/round2/twilio.md",
+   "applies_to": "Twilio pricing (US reference only)"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY, about Shops rather than Marketplace listings. Meta's native checkout on Facebook and Instagram Shops was fully deprecated on September 4, 2025. Instagram Commerce eligibility is described as 'Physical goods only (no digital products or services)'. Facebook Marketplace personal listings are described as a contact-the-seller flow.",
+   "source_url": "https://github.com/squadcodercom/squadcoder/blob/75051b8b08b8cf70d4a26fb20dbe69e8ab052f3d/.squadcoder/skills/israeli-marketplace-seller/references/platform-guides.md",
+   "applies_to": "Facebook/Instagram commerce"
+  },
+  {
+   "fact": "ANECDOTAL/HISTORICAL. During the December 2024 Canada Post service disruption, date-specific Neighbourhood Mail was unavailable; other Neighbourhood Mail was 'delivered as received'. This is a delivery-timing risk for flyer campaigns. No 2026 pricing was found.",
+   "source_url": "https://github.com/K-Games-Collectables/K-Games-Collectables.github.io/blob/968c35ffd84e4bd29421e2e19899074ae4c51b3f/posts/2024-12-17.md",
+   "applies_to": "Canada Post Neighbourhood Mail flyers"
+  },
+  {
+   "fact": "EVIDENCE GRADE: SECONDARY, context for invoicing. The GST/HST small-supplier threshold is $30,000 in worldwide taxable supplies over four consecutive calendar quarters. The source cites CRA pages https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/when-register-charge.html and the small-suppliers publication. ESTIMATE: at $5,000/month of revenue, 30,000 / 5,000 = 6 months, so by that measure the threshold would be crossed around month 6.",
+   "source_url": "https://github.com/kurtrgoddard/Bilingua-App/blob/b1f427aae94ef32e9f78ad5543dad81c330e7956/economy/research-pricing.md",
+   "applies_to": "Invoicing / tax setup, all provinces"
+  }
+ ],
+ "implications": [
+  "Treat every price and rule here as provisional. Nearly all of it comes from third-party GitHub notes rather than official pages, and the Jobber data shows those notes can contradict themselves. Before launch, the owner or a later agent with web access must confirm each number on the official pages: stripe.com/en-ca/pricing, squareup.com/ca/en/pricing, paypal.com/ca merchant fees, each bank's e-Transfer page, getjobber.com/pricing, support.google.com/business, vercel.com/pricing, twilio.com/en-us/sms/pricing/ca and canadapost-postescanada.ca Neighbourhood Mail.",
+  "Hosting: the only official-source hosting facts are Cloudflare's (Pages Free: 500 builds/month; Workers static assets free and unlimited). Vercel Hobby is quoted, consistently across several dated 2026 notes, as non-commercial only, and a service-business landing page counts as 'advertising the sale of a product or service'. So either deploy the business site to Cloudflare (static export) or budget for Vercel Pro (about $20 per seat per month, currency unconfirmed). Do not put a paid-service landing page on Vercel Hobby.",
+  "Payments for a service business: Interac e-Transfer is the default Canadian way to get paid, but limits are set by each bank. Consumer limits of roughly $2,000–3,000 per transfer (secondary) and the Oakville contractor anecdote mean jobs over about $2,000 may need split payments or card/invoice links. For cards, ESTIMATE: about 3.1% of revenue (about $155/month on $5,000) at 2.9% + C$0.30 and a $150 average ticket.",
+  "Google Business Profile will probably not be verified in week 1. Review takes up to 5 business days after submission, postcards up to 14 days, and video verification needs visible tools, equipment or branding plus proof-of-management documents. Start verification on day 1, prepare branded items, and do not count on Maps visibility for October income.",
+  "SMS automation (Twilio) is not a week-1 channel. Toll-free verification takes about 3–5 business days and unverified toll-free sending is blocked, and Canada per-message pricing was not found. Use Gmail and Google Calendar (available now) for confirmations first; the human must open any Twilio account (ID/KYC).",
+  "Paid field-service software (Jobber, Housecall Pro) is not needed to earn in month 1, and its pricing could not be verified. The AI can build quoting, booking and invoicing with Google Sheets, Gmail and Calendar, and the owner can decide on paid software once job volume justifies it.",
+  "Things only the owner can do: open the bank business or payment accounts (ID verification), verify Google Business Profile (video from their phone), post on Kijiji and Facebook, and create any Meta ad account. The AI can prepare all the copy, pages and checklists in advance."
+ ],
+ "unknowns": [
+  "RESEARCH LIMITATION (critical): WebSearch returned 'used its web search budget (200 of 200)' on the first call, so 0 web searches ran. WebFetch and curl were blocked by the network egress proxy (EGRESS_BLOCKED) for stripe.com, squareup.com, paypal.com, interac.ca, vercel.com, canadapost-postescanada.ca, support.google.com, twilio.com, assets.cdn.prod.twilio.com, canada.ca, docs.stripe.com, en.wikipedia.org and r.jina.ai. Only GitHub code search and raw.githubusercontent.com worked. No official page was opened directly except Cloudflare's docs repo on GitHub.",
+  "Interac e-Transfer per-transfer fees and send/receive limits for personal vs business accounts at RBC, TD, Scotiabank, BMO and CIBC: not found.",
+  "Square Canada official 2026 rates (in-person, Interac, online, invoices, keyed, Tap to Pay) and reader hardware price: not found officially. Secondary sources conflict (2.65% flat vs 2.6% + $0.10).",
+  "PayPal Canada official commercial-transaction rates, invoicing fees, chargeback fee and currency-conversion spread: not found officially.",
+  "Stripe Canada international-card surcharge (+0.8% vs +1.0%), Stripe Invoicing fee, dispute fee, instant payout fee and Tap to Pay/Terminal rates: not verified.",
+  "Housecall Pro pricing: not found. Wave (Canada) invoicing/payment fees: not found. Jobber official pricing and currency (CAD vs USD): not verified; secondary figures conflict.",
+  "Google Calendar appointment scheduling: whether booking pages are free on personal accounts vs requiring Workspace, and the price: not found.",
+  "Google Local Services Ads: availability in Canadian cities (GTA, Vancouver, Calgary, Ottawa, Montreal) and eligible categories: not found.",
+  "Meta (Facebook/Instagram) ads minimum daily budget in CAD: not found.",
+  "Kijiji rules and any posting fees for service listings: not found. Whether Facebook Marketplace permits service listings in Canada: not found (only Shops/Instagram 'physical goods only' was found, secondary).",
+  "Canada Post Neighbourhood Mail 2026 price per piece, minimum order and size/weight limits: not found.",
+  "Door-hanger printing costs at Staples Canada or VistaPrint Canada: not found.",
+  ".ca domain registration price, and whether Cloudflare Registrar supports .ca: not found.",
+  "Netlify official free-plan commercial terms and current paid price under credit billing: not verified (secondary only).",
+  "Cloudflare's official statement that the free plan allows commercial use: not found in the docs fetched (secondary only).",
+  "Twilio Canada SMS per-segment price, Canadian long-code number price, carrier fees, and whether Canadian long codes need registration: not found.",
+  "Google Business Profile: official current help-page wording and whether video verification is the method usually assigned to Canadian service-area businesses: not verified directly (secondary playbook dated 2026-07-06 only)."
+ ]
+}

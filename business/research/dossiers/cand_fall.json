@@ -1,0 +1,363 @@
+{
+ "dossier": {
+  "candidate": "Fall exterior home services (gutters, leaves, windows, pressure washing, winterizing): GTA primary, with notes on Vancouver and Calgary",
+  "summary": "Price data from GTA, Vancouver and Calgary price guides (2025–2026) shows gutter cleaning is the core ticket. Typical jobs run about $150–$350 in Toronto, $150–$275 for a bungalow or 2-storey in Calgary, and about $100–$300 in Vancouver BC. Exterior window cleaning ($170–$375) and pressure washing ($149–$400 per job, $500–$900+ for full packages) add to the ticket. On paper, about 22 jobs a month would clear CAD $5k net (ESTIMATE, math below). That is only 7–8 working days at 3 jobs a day, so crew capacity is not what limits income. What limits it is getting leads from zero reviews in a crowded market: the search results were full of GTA companies publishing 2026 price guides. The real peak is short (late fall, after the leaves drop and before snow). Gutter demand in Dec–Mar is weak unless the business bridges into snow removal or holiday lights, and I found no pricing for those. Hard requirements: a vehicle that can carry a 24–28 ft ladder, physical fitness, comfort on ladders and liability insurance (from about $450/yr). Pressure washing in Toronto appears to need a City Building Renovator licence, because the licence covers every 'building cleaner'. Research limits: every WebFetch attempt was blocked by the egress proxy (callmantle.ca, homestars.com, canada.ca, ontario.ca, toronto.ca, reddit.com, thefastlaneforum.com, cleaninginaction.ca). The session's web-search budget also ran out after 16 successful searches. So every fact below comes from search-result titles and snippets, not from pages I opened. Some attributions inside combined snippets could not be checked page by page. Items I could not find are marked 'not found'. Ottawa and Montreal specifics: not found.",
+  "time_to_first_revenue": "ESTIMATE: 7–14 days if the owner already has a suitable vehicle. Basis: the equipment is sold at retail (28 ft Werner extension ladders are listed at US$382–$479 on homedepot.com, US site, https://www.homedepot.com/p/Werner-28-ft-Aluminum-Extension-Ladder-27-ft-Reach-Height-with-250-lb-Load-Capacity-Type-I-Duty-Rating-D1328-2/100659874). Canadian liability insurance for window cleaning is advertised from about $450/yr (https://rates.ca/insurance-quotes/business/contractor/window-cleaning). I found no Ontario-wide licence for gutter cleaning, but pressure washing in Toronto falls under the Building Renovator licence, which needs an exam (https://www.toronto.ca/services-payments/permits-licences-bylaws/building-renovators/). Demand timing: a Calgary operator recommends cleaning 'in late fall (after leaves drop, before snow)' (https://guttercleaningcalgary.ca/cost-gutter-cleaning-calgary/). That puts the peak in roughly late October through November, which fits an October 2026 start. I found no official leaf-drop date for Toronto. The 7–14 day figure is my own estimate, not sourced: equipment purchase plus insurance bind in days 1–3, flyers/door-knocking/Marketplace posts in days 2–7, first booked jobs in the second week. Without a vehicle able to carry a ladder, time to first revenue is not meaningful for gutters and windows.",
+  "pricing_facts": [
+   {
+    "fact": "Toronto: most homeowners pay $150–$350 for a standard residential gutter cleaning (2026 pricing per page title).",
+    "source_url": "https://professionalroofers.com/blogs/gutter-cleaning-cost-in-toronto-2025/"
+   },
+   {
+    "fact": "Ontario eavestrough/gutter cleaning is quoted at $150–$400 (2026 guide title).",
+    "source_url": "https://ddhomeservices.ca/blog/eavestrough-cleaning-cost-ontario"
+   },
+   {
+    "fact": "GTA guides in the same search results give a bungalow at about $150–$225 and a 2-storey detached at $200–$275 (another guide says $250–$400). Some firms charge $1.25–$2.00 per linear foot. The snippet combined several GTA guides, so exact page attribution was not verified.",
+    "source_url": "https://ntpropertycare.com/eavestrough-gutter-cleaning-cost-in-toronto/"
+   },
+   {
+    "fact": "Calgary: bungalow gutter cleaning about $150–$225, 2-storey $225–$275, 3-storey $275–$375. Custom homes with non-walkable roofs $350+. Downspout unclogging $70+, corner leak repair $70 per corner.",
+    "source_url": "https://guttercleaningcalgary.ca/cost-gutter-cleaning-calgary/"
+   },
+   {
+    "fact": "Calgary low-end competitor advertises gutter cleaning 'Starting At $75' (page title).",
+    "source_url": "https://cleaninginaction.ca/gutter-cleaning/"
+   },
+   {
+    "fact": "Vancouver BC: 'Gutter Cleaning Cost Vancouver (2026) | $100-$300' (page title). Other snippets ($200–$400 for a 2-storey, $0.95–$2.25/linear ft) may come from Vancouver, WA pages and are not verified for BC.",
+    "source_url": "https://shinecitypressurewashing.ca/blogs/gutter-cleaning-cost-vancouver/"
+   },
+   {
+    "fact": "Toronto window cleaning: 2-storey detached with 18–24 windows about $170–$250 exterior-only and $300–$400 interior plus exterior (2026). Another 2026 guide: about $300 exterior / $450 in and out for 18–20 windows. Snippet combined several GTA guides.",
+    "source_url": "https://dtcleaning.ca/window-cleaning-toronto-prices/"
+   },
+   {
+    "fact": "Window cleaning in New Toronto: '2026 Prices: $225–$375' (page title).",
+    "source_url": "https://skypole.ca/window-cleaning-cost-new-toronto-2026-prices-225-375/"
+   },
+   {
+    "fact": "Canadian window cleaners charge $3–$8 per pane exterior-only and $8–$15 per pane in and out (2026). Many use a base trip fee of $149–$250.",
+    "source_url": "https://biller.ca/pricing-guides/how-much-to-charge-window-cleaning-canada"
+   },
+   {
+    "fact": "Ontario pressure washing: '$150–$850' (2026 guide title).",
+    "source_url": "https://ddhomeservices.ca/blog/pressure-washing-cost-ontario"
+   },
+   {
+    "fact": "Toronto pressure washing 2026: most jobs $149–$400. Driveway alone $149–$249 (single-car $150–$225, two-car $300–$375). Decks $250–$500. Full package (driveway + walkways + patio + siding) $500–$900+. $0.25–$1.00/sq ft. Interlock costs 15–30% more.",
+    "source_url": "https://callmantle.ca/blog-pressure-washing-prices-toronto-2026"
+   },
+   {
+    "fact": "Leaf removal (US national data, USD, not Canada-specific): average $160–$290 for a 1/4-acre yard, small yards $80–$200, hauling $5–$10 per bag. Fall pricing can be about double other seasons. Toronto-specific leaf cleanup pricing: not found.",
+    "source_url": "https://www.lawnstarter.com/blog/cost/leaf-removal-price/"
+   },
+   {
+    "fact": "Winterizing add-ons (hose bib shut-off, AC unit covers) in GTA/Vancouver/Calgary: prices not found.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Snow removal seasonal contracts and Christmas-light installation prices (winter bridge) for GTA 2026: not found (search budget exhausted before these could be researched).",
+    "source_url": "not found"
+   }
+  ],
+  "cost_facts": [
+   {
+    "fact": "Werner 28 ft extension ladders listed at US$382 (fibreglass D6028-2), US$419 (fibreglass 300 lb D6228-2) and US$479 (aluminum D1328-2) on homedepot.com (US site, USD). Canadian store price: not found.",
+    "source_url": "https://www.homedepot.com/p/Werner-28-ft-Aluminum-Extension-Ladder-27-ft-Reach-Height-with-250-lb-Load-Capacity-Type-I-Duty-Rating-D1328-2/100659874"
+   },
+   {
+    "fact": "Canada: window cleaning general liability typically starts around $450/yr for $2M coverage. Comprehensive packages start around $575/yr. Premium rises with working height.",
+    "source_url": "https://rates.ca/insurance-quotes/business/contractor/window-cleaning"
+   },
+   {
+    "fact": "Canada: cleaning-business insurance can start at $500 for self-employed cleaners.",
+    "source_url": "https://www.thinkinsure.ca/business-insurance/cleaning-insurance"
+   },
+   {
+    "fact": "City of Vancouver business licence: one-time application fee $77. Trade contractors/related services $277–$376 annually, prorated in the first year (third-party 2026 summary).",
+    "source_url": "https://www.vancubers.com/start-a-business-in-canada/vancouver-business-licence-2026-fees-address/"
+   },
+   {
+    "fact": "Metro West Inter-Municipal Business Licence: $300/yr (2026), covering Vancouver, Burnaby, Delta, New Westminster, Richmond and Surrey for mobile contractors doing maintenance/repair of buildings (third-party summary).",
+    "source_url": "https://www.arkandmason.com/vancouver-business-license-everything-entrepreneurs-need/"
+   },
+   {
+    "fact": "Toronto yard waste is collected curbside in kraft paper bags or rigid open-top containers (55–95 cm tall), max 20 kg per item, roughly biweekly from mid-March to mid-December. Plastic bags are not collected. Price of kraft bags: not found.",
+    "source_url": "https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/"
+   },
+   {
+    "fact": "Toronto Building Renovator licence fee and exam fee: not found in search results (the City page exists, but fetch was blocked).",
+    "source_url": "https://www.toronto.ca/services-payments/permits-licences-bylaws/building-renovators/"
+   },
+   {
+    "fact": "Prices for a pressure washer, leaf blower, gutter vacuum, ladder stabilizer, roof rack and Working at Heights course in Canada: not found.",
+    "source_url": "not found"
+   }
+  ],
+  "earnings_evidence": [
+   {
+    "claim": "Vendor blog: average gutter jobs $200–$300, 3–4 houses/day, 3–4 days/week gives $7,200–$14,400/month. Peak seasons (fall/spring) produce 60–70% of annual revenue. US-focused, gross revenue, not net.",
+    "source_url": "https://www.upperinc.com/blog/how-much-can-a-gutter-cleaning-business-make/",
+    "kind": "estimate"
+   },
+   {
+    "claim": "Forum thread titled 'SIDE HUSTLE - How to make $10,000/month with roof and gutter cleaning'. Anecdotal; page could not be opened, so details are unverified.",
+    "source_url": "https://www.thefastlaneforum.com/community/threads/how-to-make-10-000-month-with-roof-and-gutter-cleaning.112247/",
+    "kind": "community"
+   },
+   {
+    "claim": "Side-hustle article: gutter cleaners earn $15–$50/hour depending on location and experience. Unverified testimonial quotes ('made $12,000 last month') appeared in the same results. Anecdotal and marketing-grade.",
+    "source_url": "https://www.profitduel.com/side-hustle/gutter-cleaning-as-a-side-hustle",
+    "kind": "community"
+   },
+   {
+    "claim": "GTA ticket-size evidence: several 2026 GTA price guides quote $150–$400 per gutter job, which supports a roughly $200–$275 average for 2-storey homes.",
+    "source_url": "https://ddhomeservices.ca/blog/eavestrough-cleaning-cost-ontario",
+    "kind": "industry"
+   },
+   {
+    "claim": "Canada-specific Reddit/YouTube/Instagram income reports for GTA/Vancouver/Calgary gutter or leaf operators: not found (Reddit fetch blocked; search budget exhausted).",
+    "source_url": "not found",
+    "kind": "community"
+   }
+  ],
+  "path_to_5k_math": "ESTIMATE (GTA, one person, Oct 15 – Nov 30 peak). Sourced inputs: 2-storey gutter ticket $200–$275 (GTA guides), exterior window add-on $170–$250 (Toronto 2026 guide), liability insurance about $450–$575/yr (rates.ca). Unsourced assumptions, labelled as such: variable cost $20/job (fuel, bags, consumables), monthly overhead $250 (insurance about $48 + phone/flyers/ads about $200), 20% of gutter clients add exterior windows at $200.\n(1) Blended ticket: $225 + 0.20 × $200 = $265/job.\n(2) Contribution per job: $265 − $20 = $245.\n(3) Jobs for $5,000 net: ($5,000 + $250) ÷ $245 = 21.4, so about 22 jobs/month.\n(4) At 3 jobs/day (vendor-blog claim of 3–4/day): 22 ÷ 3 ≈ 7–8 working days/month. Capacity is not the constraint; getting leads is.\n(5) Gross revenue: 22 × $265 = $5,830/month.\n(6) Startup equipment (ladder, stabilizer, tools, blower): about $1,500 CAD (ESTIMATE, not sourced). Recovering it in the first 2 months adds about $750/month, so 25 jobs/month in Oct–Nov.\n(7) Lead funnel: flyer/door-hanger response rates were not found. If 1% (assumption), 22 jobs need about 2,200 households reached per month. If 0.5%, about 4,400.\n(8) GST/HST: at $5,830/month gross, cumulative taxable revenue passes $30,000 in about 5.1 months ($30,000 ÷ $5,830). One quarter over $30k would need about $10k/month. So registration is likely needed around month 5–6.\n(9) Winter: gutter demand is seasonal (60–70% of revenue in spring/fall per the vendor blog). Averaging $5k/month over 12 months (= $60k net) needs about 245 gutter-equivalent jobs a year ($60,000 ÷ $245), concentrated in about 4 peak months, or a winter line (snow/lights) whose pricing was not found. Verdict: $5k in November is plausible with a vehicle and aggressive door-to-door. A $5k average through Dec–Mar is unproven.",
+  "startup_cost_cad": "ESTIMATE: about $1,000–$2,500 CAD if the owner already has a vehicle able to carry a 24–28 ft ladder. Arithmetic: 28 ft extension ladder US$382–$479 (US Home Depot listing; Canadian price and exchange rate not sourced) + first-year liability insurance $450–$575 (rates.ca) + hand tools/blower/tarps/flyers $300–$1,000 (assumption, unsourced). Add-ons: pressure washer (price not found); Toronto Building Renovator licence if pressure washing (fee not found); Vancouver licence $77 + $277–$376 prorated, or the $300 Metro West inter-municipal licence. Without a vehicle, add vehicle/roof rack costs (not researched), which likely makes this model impractical.",
+  "requirements": [
+   "Vehicle able to transport a 24–28 ft extension ladder (roof rack, truck or van). Effectively mandatory for gutters and 2-storey windows; not optional.",
+   "Physical labour: repeated ladder climbs, carrying a ladder, raking/bagging leaves (Toronto yard-waste bags max 20 kg each).",
+   "Comfort and safe technique working at heights. 2-storey eaves need ladders in the 24–28 ft class (Werner 28 ft = 27 ft reach per the listing).",
+   "Commercial general liability insurance (about $2M limit, from about $450/yr per rates.ca). Customers and property managers often ask for proof (not sourced; common practice).",
+   "English: at least conversational, for door-to-door, phone/text quoting and handling complaints. Level not specified by any source. A Korean-community niche could reduce this need (not researched).",
+   "Capital: about $1,000–$2,500 CAD (ESTIMATE) excluding vehicle.",
+   "Toronto only: a Building Renovator licence appears required for pressure washing ('building cleaner' definition), which needs an exam.",
+   "Vancouver: City business licence or the $300 Metro West inter-municipal licence.",
+   "Working at Heights training (Ontario): required for workers on construction projects at 3 m+. Whether it applies to a self-employed residential gutter cleaner is ambiguous (see regulations).",
+   "Smartphone, e-Transfer/card payment acceptance, a Google Business Profile (needs human verification)."
+  ],
+  "regulations": [
+   {
+    "fact": "GST/HST: you must register once worldwide taxable revenue exceeds $30,000 in a single calendar quarter or over four consecutive calendar quarters. Register within 29 days of the sale that pushed you over.",
+    "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/when-register-charge.html"
+   },
+   {
+    "fact": "Toronto Municipal Code Ch. 545: a Building Renovator licence is required for businesses that repair or renovate buildings, including any business that advertises renovation services. 'Building Renovator' includes every 'building cleaner'. A building cleaner is anyone who for gain uses chemicals or pressurized air, water, steam, sand or other abrasives to clean or restore building exteriors, which captures pressure washing. Applicants must pay the fee and pass examinations. Whether plain hand/scoop gutter cleaning or squeegee window cleaning is covered was not confirmed.",
+    "source_url": "https://www.toronto.ca/services-payments/permits-licences-bylaws/building-renovators/"
+   },
+   {
+    "fact": "Toronto Municipal Code Chapter 545 (Licensing), version dated January 1, 2025, holds the definitions above.",
+    "source_url": "https://www.toronto.ca/legdocs/municode/1184_545.pdf"
+   },
+   {
+    "fact": "Ontario O. Reg. 297/13: any worker on a construction project who may use fall protection must complete CPO-approved Working at Heights training. One law-firm page says this applies to eavestrough installation, cleaning and repair where fall exposure is 3 m+. Application to a self-employed person with no workers doing residential cleaning: not found / ambiguous.",
+    "source_url": "https://www.bronsonjohnson.com/working-at-heights-law-ontario"
+   },
+   {
+    "fact": "Ontario Regulation 859 (Window Cleaning) sets rules for equipment, training, weather, fall protection, anchors and inspection in window cleaning. How it applies to residential ladder work was not verified in the official text.",
+    "source_url": "https://www.ontario.ca/page/access-and-fall-protection-window-cleaning"
+   },
+   {
+    "fact": "Toronto yard waste: kraft paper bags or rigid open-top containers only, max 20 kg per item, set out by 8 p.m. the night before. Collection roughly biweekly mid-March to mid-December.",
+    "source_url": "https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/"
+   },
+   {
+    "fact": "City of Vancouver: a business licence is required. The Metro West Inter-Municipal Business Licence ($300, 2026) covers mobile contractors doing building maintenance/repair across Vancouver, Burnaby, Delta, New Westminster, Richmond and Surrey (third-party summary).",
+    "source_url": "https://www.vancubers.com/start-a-business-in-canada/vancouver-business-licence-2026-fees-address/"
+   },
+   {
+    "fact": "Calgary, Ottawa and Montreal licensing rules for exterior cleaning services: not found.",
+    "source_url": "not found"
+   }
+  ],
+  "ai_can_build": [
+   "One-page website/landing page with an instant quote calculator (storeys × linear feet × debris level, plus add-ons: downspout flush, exterior windows, driveway wash) using sourced price bands.",
+   "Bundle/tier pricing sheet (e.g., gutter + exterior windows fall package; fall + spring prepaid plan) and a printable price card.",
+   "Door-hanger, flyer and lawn-sign copy and layouts (English + Korean). A route-based canvassing plan by neighbourhood (spreadsheet).",
+   "Scripts for door-knocking, text/phone quoting, objection handling, review requests and referral offers.",
+   "Facebook Marketplace / Kijiji / Nextdoor / community-group ad copy and before/after photo caption templates, for the human to post.",
+   "Google Business Profile description, services list and FAQ text.",
+   "Booking and CRM spreadsheet: leads, quotes, jobs, route order, payment status, follow-up dates. Automated Gmail follow-up drafts and Calendar job scheduling.",
+   "Job-safety checklist (ladder setup, weather go/no-go, power-line check) and a pre/post-job photo checklist for damage disputes.",
+   "Invoice/receipt templates, a GST/HST $30k threshold tracker, and a mileage/expense log.",
+   "Research memo and email templates for insurance quotes and the Toronto Building Renovator licence inquiry.",
+   "Winter-bridge offer pages (snow clearing / light install) once pricing is researched."
+  ],
+  "human_must_do": [
+   "Buy or rent the ladder and tools, arrange a vehicle/roof rack, and do all physical work on site.",
+   "Buy liability insurance (identity/business verification) and keep the certificate.",
+   "Register the business name if not using their own legal name (Ontario rules not researched). Apply for the Toronto Building Renovator licence and pass the exam if offering pressure washing in Toronto. Apply for the Vancouver/Metro West licence if in BC.",
+   "Consider Working at Heights training (Ontario). Applicability is ambiguous, but it cuts injury risk and may help with insurers.",
+   "Knock doors, hand out flyers, make calls and texts, and post ads on their own social/Marketplace/Nextdoor accounts.",
+   "Create and verify the Google Business Profile, ask customers for reviews, take before/after photos.",
+   "Receive payments (e-Transfer/card), track cash, register for GST/HST when over $30k, and file taxes.",
+   "Make on-site safety judgements (weather, roof condition, power lines) and decline unsafe jobs."
+  ],
+  "seasonality": "Fall peak: a Calgary operator recommends gutter cleaning twice a year, spring and 'late fall (after leaves drop, before snow)' (https://guttercleaningcalgary.ca/cost-gutter-cleaning-calgary/). A vendor blog says fall and spring produce 60–70% of annual revenue (https://www.upperinc.com/blog/how-much-can-a-gutter-cleaning-business-make/). US leaf-removal data says fall is the busiest season, with prices up to double other seasons (https://www.lawnstarter.com/blog/cost/leaf-removal-price/). Toronto curbside yard-waste collection runs roughly mid-March to mid-December (https://www.toronto.ca/services-payments/recycling-organics-garbage/houses/yard-waste/), which bounds the leaf-bagging season. Official leaf-drop timing for Toronto/Vancouver/Calgary: not found. Winter bridge (snow clearing contracts, holiday light installation): pricing and demand not found in this research. The December–March revenue gap is the main unresolved risk to a 12-month $5k average. ESTIMATE (unsourced): pressure washing and window work get much harder once temperatures stay below freezing. Treat those lines as Sept–early Nov only.",
+  "risks": [
+   "Ladder fall and serious injury. Falls are a leading cause of injury hospitalizations in Canada (CIHI: about 291,000 injury hospitalizations in 2024–25). A solo operator with no employer WSIB coverage has no income if injured (WSIB applicability not researched).",
+   "Property damage (bent gutters, cracked shingles, broken windows, interlock damaged by pressure washing) causing liability claims. Insurance cost rises with working height.",
+   "Lead generation from zero: no reviews, no Google profile history, crowded search results. Capacity (22 jobs ≈ 7–8 days) is not the constraint; demand capture is.",
+   "Price competition: Calgary operators advertise from $75. Platforms and aggregators publish price guides and capture search traffic.",
+   "Very short window: from leaf drop to first snow is a few weeks. Rain and early snow lose days; unpaid weather days are not recoverable.",
+   "December–March revenue cliff unless a winter line (snow/lights) is added. Those economics were not researched here.",
+   "Regulatory: Toronto Building Renovator licence and exam for pressure washing. Working at Heights applicability is ambiguous. Operating unlicensed in Toronto risks fines (amounts not found).",
+   "No vehicle means the model is effectively not viable.",
+   "GST/HST registration around month 5–6 at target volume (ESTIMATE). Pricing must absorb 13% HST in Ontario, or clients see a price increase.",
+   "Income tax is not included in the $5k net target."
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Search results for 'gutter cleaning cost Toronto' and 'pressure washing cost Toronto' were dominated by established operators and aggregators with 2026 SEO price guides (callmantle.ca, ddhomeservices.ca, silverlightwindowsandeaves.ca, ntpropertycare.com, outwash.ca, topdawg.ca, dtcleaning.ca, beaverwoodtoronto.com, renohouse.ca, protasker.ca). This is my own observation of a crowded online market, not a sourced saturation metric.",
+    "source_url": "https://callmantle.ca/gutter-cleaning-cost-toronto"
+   },
+   {
+    "fact": "A low-price competitor advertises gutter cleaning in Calgary 'Starting At $75', undercutting the $150–$225 bungalow benchmark.",
+    "source_url": "https://cleaninginaction.ca/gutter-cleaning/"
+   },
+   {
+    "fact": "Seasonality: fall/spring make up 60–70% of annual revenue for gutter businesses, so the run-rate collapses outside the peaks (vendor blog, US).",
+    "source_url": "https://www.upperinc.com/blog/how-much-can-a-gutter-cleaning-business-make/"
+   },
+   {
+    "fact": "Falls are among the leading causes of injury hospitalizations and emergency department visits in Canada. About 291,000 acute inpatient injury hospitalizations in 2024–25, up from 284,000 in 2023–24.",
+    "source_url": "https://www.cihi.ca/en/injury-and-trauma-emergency-department-and-hospitalization-statistics"
+   },
+   {
+    "fact": "A Canadian safety-equipment vendor blog claims about 22,710 ladder-fall injuries and 161 fatalities in 2024. Its industry categories look like US BLS categories, so provenance is questionable; cited only as a signal of ladder risk.",
+    "source_url": "https://www.heightworks.ca/blogs/news/2024-ladder-fall-statistics-in-canada-a-closer-look"
+   },
+   {
+    "fact": "Liability premium rises with working height. Street-level cleaners pay less than those working higher, which raises cost for 2-storey/3-storey work.",
+    "source_url": "https://rates.ca/insurance-quotes/business/contractor/window-cleaning"
+   },
+   {
+    "fact": "The high earnings claims found ($7.2k–$14.4k/month, '$10,000/month', '$12,000 last month') come from US vendor blogs, a forum thread title and marketing testimonials. None is a verified Canadian income report.",
+    "source_url": "https://www.thefastlaneforum.com/community/threads/how-to-make-10-000-month-with-roof-and-gutter-cleaning.112247/"
+   },
+   {
+    "fact": "Toronto treats pressure-based exterior cleaning as a licensed 'building cleaner' activity that requires an exam, which adds friction and delay before that service line can be sold legally.",
+    "source_url": "https://www.toronto.ca/services-payments/permits-licences-bylaws/building-renovators/"
+   }
+  ],
+  "scores": {
+   "speed": 7,
+   "probability_5k": 4,
+   "capital_light": 6,
+   "ai_leverage": 3,
+   "low_risk": 3
+  },
+  "score_rationale": "Speed 7: equipment is sold at retail, gutter cleaning has no licence I could find outside Toronto pressure washing, and the late-fall peak starts right in the October–November target window. Held back from higher because leads start from zero reviews. Probability of $5k 4: the math needs only about 22 jobs a month at a $265 blended ticket (ESTIMATE), so November alone is plausible. But three things work against it. It depends on having a vehicle, fitness and heights tolerance, all unknown for this owner. The market is crowded and the season is short and weather-exposed. And the December–March cliff has no sourced winter bridge. Averaging $5k over the first ~60 days is roughly a coin flip at best, and a 12-month average is lower. Capital-light 6: about $1,000–$2,500 CAD (ESTIMATE) if a suitable vehicle is already owned; this drops to about 2 without one. AI leverage 3: AI can build the quote site, flyers, scripts, CRM and follow-ups, but the revenue-driving work (door-knocking, climbing, cleaning, collecting payment) is physical and in person. Low risk 3: ladder falls are a known serious-injury mechanism, property-damage claims are possible, there are licence and Working at Heights ambiguities, and a solo injured operator earns nothing. Caveat: all evidence comes from search-result titles and snippets, because WebFetch was blocked for every domain tried and the search budget ran out after 16 searches. Canadian community income reports and winter-bridge pricing were not found."
+ },
+ "verification": {
+  "checked_claims": [
+   {
+    "claim": "GST/HST: you must register once taxable revenue exceeds $30,000 in a single calendar quarter or over four consecutive calendar quarters, and must register within 29 days of the sale that pushed you over. At $5,830/month, registration is needed around month 5–6.",
+    "status": "corrected",
+    "correction": "I confirmed the $30,000 threshold in the primary statute (Excise Tax Act s.148(1) and (2), Justice Canada XML, repo commit dated 2026-09-22). The dossier merges the two tests. Under the four-quarter test (s.148(1)), the person stays a small supplier 'throughout a particular calendar quarter and the first month immediately following' the quarter in which the rolling total passed $30k. So the obligation starts later than month 5–6, and the '29 days after the sale' timing applies only to the single-quarter test (s.148(2)). s.240(2.1) requires applying 'before the day that is 30 days after' the triggering point. I could not open canada.ca because the egress proxy blocked it. ESTIMATE: at $5,830/month from October 2026, the rolling total passes $30k in about the 6th month (30,000 ÷ 5,830 = 5.1). That is Q1 2027, so mandatory registration falls around April–May 2027. Winter revenue gaps would push it later.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml"
+   },
+   {
+    "claim": "Toronto Municipal Code Ch. 545: pressure washing requires a Building Renovator licence ('building cleaner' definition), with an exam.",
+    "status": "unverifiable",
+    "correction": "Re-fetching toronto.ca failed (EGRESS_BLOCKED), and the web-search budget is exhausted (200/200). The dossier also got this only from snippets. The licence fee, exam fee, processing time and any insurance-proof requirement are still not found. Treat pressure washing in Toronto as blocked until the owner confirms directly with Municipal Licensing & Standards.",
+    "source_url": "https://www.toronto.ca/services-payments/permits-licences-bylaws/building-renovators/"
+   },
+   {
+    "claim": "Canadian liability insurance from about $450/yr for $2M (rates.ca), used as the insurance cost for a gutter + window + pressure-washing business.",
+    "status": "unverifiable",
+    "correction": "rates.ca was blocked on re-fetch. There is also a category mismatch. The quote is for window cleaning, but the dossier applies it to gutter cleaning and pressure washing, which insurers may rate or exclude differently: roof access, working at height, and damage to interlock or siding. No gutter-cleaning quote was sourced, so treat $450 as a floor, not a price.",
+    "source_url": "https://rates.ca/insurance-quotes/business/contractor/window-cleaning"
+   },
+   {
+    "claim": "28 ft Werner extension ladders cost US$382–$479 (homedepot.com), used in the CAD startup cost.",
+    "status": "unverifiable",
+    "correction": "homedepot.ca was blocked, so the Canadian retail price is still not found. The dossier puts a USD figure from the US site into a CAD budget with no exchange rate or Canadian price, so the $1,000–$2,500 CAD startup ESTIMATE is not grounded for the ladder line.",
+    "source_url": "https://www.homedepot.com/p/Werner-28-ft-Aluminum-Extension-Ladder-27-ft-Reach-Height-with-250-lb-Load-Capacity-Type-I-Duty-Rating-D1328-2/100659874"
+   },
+   {
+    "claim": "GTA ticket size: $150–$350 standard gutter cleaning, 2-storey $200–$275, used as the $225 base ticket.",
+    "status": "unverifiable",
+    "correction": "All GTA price pages (professionalroofers.com, ddhomeservices.ca, ntpropertycare.com) were blocked. The dossier itself says a combined snippet supplied the 2-storey range and that page attribution was never checked. These are also list prices published by established firms. A new operator with no reviews and no photos may have to price below them, and the dossier's own Calgary example advertises 'Starting At $75'.",
+    "source_url": "https://ddhomeservices.ca/blog/eavestrough-cleaning-cost-ontario"
+   },
+   {
+    "claim": "Vendor blog: $200–$300 jobs × 3–4 houses/day × 3–4 days/week = $7,200–$14,400/month, and fall/spring produce 60–70% of annual revenue.",
+    "status": "unverifiable",
+    "correction": "upperinc.com was blocked. The source is a US software vendor's marketing blog giving gross revenue, not net. It says nothing about how long lead acquisition takes, which the dossier itself names as the binding constraint. It should not support the '3 jobs/day' capacity assumption for a new operator.",
+    "source_url": "https://www.upperinc.com/blog/how-much-can-a-gutter-cleaning-business-make/"
+   },
+   {
+    "claim": "Time to first revenue is 7–14 days if the owner has a suitable vehicle.",
+    "status": "unverifiable",
+    "correction": "The dossier says this is its own unsourced estimate. There is also a timing problem it does not reconcile: it places the demand peak in late October–November, after leaf drop. So early October, when the owner needs cash, is off-peak for gutters. The owner could be paid in week 2, but the jobs that make up the volume come later.",
+    "source_url": "https://guttercleaningcalgary.ca/cost-gutter-cleaning-calgary/"
+   },
+   {
+    "claim": "The path-to-$5k arithmetic: blended ticket $265, contribution $245/job, 22 jobs/month, gross $5,830.",
+    "status": "corrected",
+    "correction": "The arithmetic checks out: ESTIMATE: 225 + 0.2×200 = 265; 265 − 20 = 245; (5,000 + 250) ÷ 245 = 21.4; 22 × 265 = 5,830. What it leaves out: self-employed CPP is 9.9% base + 2.0% first additional = 11.9% (CPP Act Schedules 1 and 2, '2003 and each subsequent year' and '2024 and each subsequent year'). ESTIMATE: on $60,000/yr net, (60,000 − 3,500 basic exemption) × 11.9% = about $6,724/yr, about $560/month. The $3,500 basic exemption is from my own knowledge; I did not re-verify it here. The $5k 'net of direct costs' target is really about $4.44k after CPP, so matching $5k take-home before income tax needs about 24–25 jobs/month. The $20/job cost for fuel and vehicle is unsourced.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/C-8.xml"
+   },
+   {
+    "claim": "Ontario O. Reg. 297/13 Working at Heights training applies to eavestrough cleaning at 3 m+ (law-firm page). Whether it applies to a self-employed residential cleaner is ambiguous.",
+    "status": "unverifiable",
+    "correction": "The ontario.ca and law-firm pages were blocked. Still ambiguous. Training cost and duration are not found.",
+    "source_url": "https://www.bronsonjohnson.com/working-at-heights-law-ontario"
+   },
+   {
+    "claim": "CIHI: about 291,000 injury hospitalizations in 2024–25.",
+    "status": "unverifiable",
+    "correction": "The CIHI page was blocked on re-fetch. The figure is also for all injuries, not ladder or gutter work, so it signals general risk only.",
+    "source_url": "https://www.cihi.ca/en/injury-and-trauma-emergency-department-and-hospitalization-statistics"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "The dossier misses the Employment Insurance trap. Under EI Regulations s.30(1), a claimant who is self-employed or operates a business on their own account in any week 'is considered to have worked a full working week' and so gets no EI for that week. The exception is s.30(2), where the business is 'to such a minor extent' that a person would not normally rely on it as their principal means of livelihood. The factors (s.30(3)) include time spent, capital invested, financial success, continuity, and the claimant's willingness to accept other work immediately. The owner is losing a job next week and may qualify for EI. Running this as a full-time business aimed at $5k/month would likely forfeit EI for those weeks. The version I read is SOR/96-332, consolidated 2026-04-29.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-96-332.xml"
+   },
+   {
+    "fact": "Self-employed CPP is 11.9% of net self-employment earnings above the basic exemption: 9.9% base (CPP Act Schedule 1, 2003 onward) plus 2.0% first additional (Schedule 2, 2024 onward). Income above the first earnings ceiling also pays the 8.0% second additional rate. None of this is in the dossier's net figure. ESTIMATE: about $560/month at a $60k/yr net run-rate (arithmetic in checked_claims).",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/C-8.xml"
+   },
+   {
+    "fact": "GST small-supplier status under the four-quarter test lasts through the quarter in which the threshold is passed and the following month (ETA s.148(1)). HST collection starts later than the dossier implies. Once registered, though, 13% HST in Ontario lands in the middle of the next peak season (spring 2027), when prices are already set against competitors.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml"
+   },
+   {
+    "fact": "Evidence quality: every price, insurance, licence, earnings and seasonality claim in the dossier comes from search-result snippets. My re-fetches of toronto.ca, canada.ca, rates.ca, guttercleaningcalgary.ca, upperinc.com, homedepot.ca and wikipedia were all blocked by the egress proxy. The web-search budget was exhausted at 200/200, so I could not find new community evidence, failure stories or platform policies. The only facts actually opened in this whole candidate chain are the federal statutes above. This is an observation of the research environment, not a market fact.",
+    "source_url": "https://www.toronto.ca/services-payments/permits-licences-bylaws/building-renovators/"
+   },
+   {
+    "fact": "The dossier's own evidence contradicts its October timing. Its only seasonality source says to clean 'in late fall (after leaves drop, before snow)', so the gutter peak comes after most of October. Only about the second half of the 60-day window (Oct–Nov) is peak, and that half is exposed to rain and early snow.",
+    "source_url": "https://guttercleaningcalgary.ca/cost-gutter-cleaning-calgary/"
+   },
+   {
+    "fact": "A low-price competitor advertises 'Starting At $75' in Calgary (snippet only, not re-verified). A new operator without reviews may have to price well below the $225 base ticket used in the math, which pushes the job count toward 30+/month.",
+    "source_url": "https://cleaninginaction.ca/gutter-cleaning/"
+   }
+  ],
+  "hidden_costs_or_blockers": [
+   "Possible loss of EI benefits: under EI Regulations s.30, running this business at more than a 'minor extent' makes each week count as a full working week. This could erase several hundred dollars a week of EI income the owner might otherwise receive, and it is not counted in the plan's comparison.",
+   "Self-employed CPP is 11.9% of net earnings above the basic exemption. ESTIMATE: about $560/month at a $60k/yr run-rate, missing from the '$5k net' target.",
+   "The ladder is priced in USD from the US Home Depot site. The Canadian price, a ladder stabilizer/standoff, a roof rack, and the pressure washer, blower and gutter tools are all not found, so the startup cost ESTIMATE is weak.",
+   "The insurance quote is for window cleaning, not gutter or roof-access work. The gutter-cleaning premium and any exclusions for roof walking, working height or pressure-washing damage are not found.",
+   "A vehicle able to carry a 24–28 ft ladder is an absolute prerequisite. It is unknown whether the owner has one, and without it the model does not work.",
+   "Toronto pressure washing needs a Building Renovator licence and exam (snippet-level only). The fee, exam scheduling and processing time are not found, so that service line may miss the fall 2026 window entirely.",
+   "Unpaid door-knocking and flyer time is not costed. At the dossier's own assumed 0.5–1% response rate, 2,200–4,400 households must be reached per month, which is plausibly more hours than the 7–8 days of job work.",
+   "Weather days (rain, early snow) cannot be recovered in a peak window a few weeks long, and there is no sourced winter bridge. Snow-contract and holiday-light pricing are not found, and seasonal snow contracts are typically sold before the season, so the owner may already be late (not verified).",
+   "Ontario consumer-protection rules for agreements made at the customer's door (written contract, cooling-off rights) could apply to door-to-door quoting. I could not verify them because search and fetch were unavailable. The owner should check the Ontario consumer protection rules before canvassing.",
+   "WSIB and disability risk: a solo operator injured in a ladder fall has no income. WSIB's applicability to an independent operator and the cost of private disability cover are not found.",
+   "English level: door-to-door selling and complaint handling need at least conversational English. The owner's English level is unknown."
+  ],
+  "adjusted_scores": {
+   "speed": 5,
+   "probability_5k": 3,
+   "capital_light": 5,
+   "ai_leverage": 3,
+   "low_risk": 2
+  },
+  "verdict": "DOWNGRADE (not eliminate). The arithmetic is internally correct (22 jobs × $265 = $5,830 gross), but every market input behind it comes from snippets I could not re-verify. Re-fetches of all non-statute sources were blocked, and the search budget was exhausted. The only claims I could confirm against primary sources were federal: the GST $30k small-supplier rule (with a timing correction), plus two costs the dossier missed. First, 11.9% self-employed CPP. Second, EI Regulations s.30, under which a full-time business likely disqualifies the owner from EI in each week they operate. That matters a lot for someone losing their job next week. Averaging $5k/month over the first ~60 days means about $10k net across October–November, starting with zero reviews. Only the second half of that window is the real gutter peak. The plan also depends on a ladder-capable vehicle, fitness and comfort at heights, none of which is known for this owner. It has no sourced winter income. Toronto pressure washing appears licence-gated, and the insurance cost is based on a window-cleaning quote. Speed goes 7→5 because October comes before the leaf-drop peak. Probability goes 4→3 because of the unverified prices, the missing CPP/EI costs and competitors at $75. Capital-light goes 6→5 because the ladder is priced only in USD and equipment is unpriced. Low risk goes 3→2 because of falls, insurance exclusions and EI loss. Keep it only as a conditional short-term November bridge, and only if the owner already has a suitable vehicle, is fit and comfortable on ladders, and has weighed it against EI. Do not treat it as a path to a 12-month $5k average."
+ }
+}

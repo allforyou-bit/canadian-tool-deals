@@ -1,0 +1,334 @@
+{
+ "dossier": {
+  "candidate": "Residential snow removal seasonal contracts (owner-operator with shovel/snowblower, or broker/subcontract model), sold Oct–Nov 2026",
+  "summary": "Research limits: every WebFetch returned EGRESS_BLOCKED, including toronto.ca, ottawa.ca, canada.ca, canadiantire.ca, mypropertycare.ca, monsterplow.ca and blizzardpro.ca. Reddit could not be fetched. After 13 distinct searches, the web-search budget ran out (a limit of 200 calls shared across the session). So every fact below comes from search-result snippets and summaries I saw, not from pages I opened. Where a summary did not show which page a figure came from, I say so.\n\nWhat the evidence shows:\n(1) Seasonal residential contracts are a well-established product. Published price ranges vary widely. For the GTA they include $500–$1,500, $200–$600, $570–$1,730 and $400–$950 per season, with per-visit prices of $50–$150. Ottawa ranges include $300–$500, $400–$700 and $400–$900 per season. Calgary ranges are $350–$600 or $800–$1,200 per season, or $129–$300 per month.\n(2) The season is roughly November to March, so a seasonal price has to cover about five months of work. Snow work earns nothing from May to October.\n(3) Every jurisdiction checked bans putting snow from private property onto roads. Ontario's Highway Traffic Act s.181 applies explicitly to contractors, with fines of $60–$1,000. Toronto Municipal Code 743-9 prohibits it. Calgary has fines and a 24-hour sidewalk rule.\n(4) Ottawa licenses snow plow contractors under By-law 2002-189, Schedule 4. Requirements include $2M insurance, signage and giving clients a copy of the regulations every year. One search summary gave a $441 annual fee expiring October 31, but I could not confirm it.\n(5) Liability insurance quotes start at about $450–$1,000 a year for general liability and run $1,000–$3,000 for typical contractors. Operators with 1–2 trucks pay $5,000–$12,000. One source says insurers limit or stop writing snow removal policies by late autumn, so buying cover in October is urgent.\n\nWhat I could not find: snowblower retail prices, how many accounts one person can service per storm, when homeowners typically sign up, rates paid to subcontractors, Montreal pricing, Vancouver snowfall, low-snow-winter statistics, and any community earnings stories.\n\nMy math (ESTIMATE) says one owner-operator in the GTA needs about 42 or more contracts at $600 to reach $5,000/month during the season only. Averaging $5,000/month across a full year from snow alone would take about 100 contracts, which is probably beyond what one person can do. The broker model needs roughly 139 or more contracts at an assumed 30% margin. The business is feasible as winter income but is physically demanding, carries liability risk, and depends on the weather.",
+  "time_to_first_revenue": "ESTIMATE: pre-payments or deposits could arrive within about 1–3 weeks of starting sales in October 2026, but only if the human sells hard: door-to-door, flyers, local Facebook/Nextdoor groups. I found no sourced data on how fast customers are acquired or when homeowners sign up. Basis: the pricing guides describe seasonal contracts covering roughly November to March (e.g., \"A whole winter (typically November-March) seasonal contract costs $400-950\", from a search summary drawing on https://silverlightwindowsandeaves.ca/how-much-does-snow-removal-cost-in-toronto/, https://mypropertycare.ca/snow-removal-cost-toronto-gta/ and https://torontosnowremovals.ca/snow-removal-toronto-cost/). Monthly billing also exists (Calgary \"unlimited snow removal from $129 a month\", https://bluefrogservices.ca/snow-removal-cost-in-calgary/ and https://goldenangel.co/snow-removal-cost-calgary/). With monthly billing, October cash is only the first instalment. Revenue is earned (service delivered) from the first snowfall; the 2026 first-snow date was not found. Insurance has to be bound first, and insurers reportedly restrict snow removal policies by late autumn (https://rates.ca/resources/what-does-snow-removal-business-insurance-canada-really-cover-and-how-much-does-it-cost, https://getcertain.ca/how-much-does-snow-removal-insurance-cost-in-canada/).",
+  "pricing_facts": [
+   {
+    "fact": "Toronto: 'Most Toronto homeowners pay between $500 and $1,500 per season for a flat-rate snow removal contract' (2026 price guide; seen in search summary, page not opened).",
+    "source_url": "https://silverlightwindowsandeaves.ca/how-much-does-snow-removal-cost-in-toronto/"
+   },
+   {
+    "fact": "Other GTA ranges in the same search summary: '$200 and $600 for the entire winter'; 'Seasonal contracts: $570 to $1,730 for full-season coverage (usually 4–5 months)'; 'A whole winter (typically November-March) seasonal contract costs $400-950'. The summary did not show which of these GTA guides gave which figure.",
+    "source_url": "https://mypropertycare.ca/snow-removal-cost-toronto-gta/"
+   },
+   {
+    "fact": "GTA per-visit residential pricing is '$50 to $150 per visit'. Walkways, front steps, side paths and salting are 'almost universally charged as add-ons' (search summary of GTA 2025–2026 guides).",
+    "source_url": "https://www.monsterplow.ca/post/how-much-snow-removal-cost-toronto-2026-pricing-guide"
+   },
+   {
+    "fact": "Ottawa: 'Most Ottawa homeowners pay between $400 and $700 per season'. Other Ottawa figures: '$40 to $100 per visit ... or $400 to $900 for a full-season contract'; '$40 to $75 for a one-time visit, $100 to $200 per month, or about $300 to $500 for a seasonal contract' (2026 guides, search summary).",
+    "source_url": "https://blizzardpro.ca/guides/ottawa-snow-removal-costs"
+   },
+   {
+    "fact": "Ottawa: 'With Ottawa averaging 30+ snow events a winter, capped contracts almost always cost more by April' (contractor guide, search summary; the 30+ figure is not from an official source).",
+    "source_url": "https://ottawasnowremovals.ca/average-cost-of-snow-removal/"
+   },
+   {
+    "fact": "Calgary: seasonal contracts (November–March) '$350–$600 CAD' per one source, and '$800 and $1,200' per another. Monthly plans run '$130 to $300 per month', and 'Some services offer unlimited snow removal from $129 a month' (2025–2026 guides, search summary).",
+    "source_url": "https://bluefrogservices.ca/snow-removal-cost-in-calgary/"
+   },
+   {
+    "fact": "Calgary 2026 pricing guide (listed in the same search results as a Calgary price source).",
+    "source_url": "https://goldenangel.co/snow-removal-cost-calgary/"
+   },
+   {
+    "fact": "Montreal seasonal contract prices: not found (search budget exhausted).",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Metro Vancouver: not found. No sourced snowfall or contract-pricing data was obtained.",
+    "source_url": "not found"
+   }
+  ],
+  "cost_facts": [
+   {
+    "fact": "General liability for snow removal 'typically starts at around $450 per year for a $2 million coverage limit' (search summary of Canadian insurance pages; page not opened, per-page mapping not verified).",
+    "source_url": "https://getcertain.ca/how-much-does-snow-removal-insurance-cost-in-canada/"
+   },
+   {
+    "fact": "'A standard general liability insurance policy with a $1 million limit starts at around $1,000 per year ... policies with additional coverages typically range from $1,000 to $3,000 annually for most snow removal contractors in Canada' (search summary).",
+    "source_url": "https://rates.ca/resources/what-does-snow-removal-business-insurance-canada-really-cover-and-how-much-does-it-cost"
+   },
+   {
+    "fact": "Small contractors with '1–2 trucks handling light commercial or residential sites typically pay $5,000 – $12,000 annually for $2M liability'. Commercial auto insurance for vehicle snow plows 'likely starts at over $1,000 per year' (search summary).",
+    "source_url": "https://www.zensurance.com/blog/how-much-does-snowplow-insurance-in-canada-cost"
+   },
+   {
+    "fact": "Ottawa snow plow contractor licence: 'annual licence fee of $441 and a licence expiration date of Oct. 31' (from one search summary). A second search could NOT confirm the $441 figure, so treat it as unverified.",
+    "source_url": "https://www.ottawa.ca/en/business/permits-and-licences/business-licences/snow-plow-contractor-and-vehicle-licences"
+   },
+   {
+    "fact": "Snowblower prices at Canadian retailers: NOT FOUND. Canadian Tire lists 24-inch two-stage gas models (Toro Power Max 724 OE, YardForce 212cc, Briggs & Stratton 208cc/223cc, Certified 224cc), but prices did not appear in results and canadiantire.ca could not be fetched. Home Depot Canada prices: not found.",
+    "source_url": "https://www.canadiantire.ca/en/cat/outdoor-living/snow-removal-equipment-tools/snowblowers/gas-snowblowers-DC0003034.html"
+   },
+   {
+    "fact": "Rates paid to subcontracted shovellers or snowblower operators: not found.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Fuel, maintenance, salt and ice-melt costs: not found.",
+    "source_url": "not found"
+   }
+  ],
+  "earnings_evidence": [
+   {
+    "claim": "Revenue per contract, GTA: $500–$1,500 per season ('most Toronto homeowners'). This is a price, not proof that any operator earned it.",
+    "source_url": "https://silverlightwindowsandeaves.ca/how-much-does-snow-removal-cost-in-toronto/",
+    "kind": "industry"
+   },
+   {
+    "claim": "Revenue per contract, Ottawa: $400–$700 per season (typical).",
+    "source_url": "https://blizzardpro.ca/guides/ottawa-snow-removal-costs",
+    "kind": "industry"
+   },
+   {
+    "claim": "Revenue per contract, Calgary: monthly plans $129–$300 per month.",
+    "source_url": "https://bluefrogservices.ca/snow-removal-cost-in-calgary/",
+    "kind": "industry"
+   },
+   {
+    "claim": "A Calgary snow removal startup story exists ('How to Start a Snow Removal Business in Canada: A Calgary Entrepreneur's Story'). Only the title was seen; no earnings figures were obtained.",
+    "source_url": "https://incorporationpro.ca/how-to-start-a-snow-removal-business-in-canada",
+    "kind": "community"
+   },
+   {
+    "claim": "Community earnings reports (r/snowremoval, r/sweatystartup, r/lawncare, r/ontario, r/toronto): NOT FOUND. Reddit could not be fetched and the search budget was exhausted.",
+    "source_url": "not found",
+    "kind": "community"
+   },
+   {
+    "claim": "ESTIMATE: 42 GTA contracts x $600 = $25,200 gross per season, which is about $5,040/month over a 5-month Nov–Mar season, before costs.",
+    "source_url": "https://silverlightwindowsandeaves.ca/how-much-does-snow-removal-cost-in-toronto/",
+    "kind": "estimate"
+   }
+  ],
+  "path_to_5k_math": "ESTIMATE (all inputs are sourced price ranges, and each assumption is labelled). \n\nA) Owner-operator, GTA. Price assumed $600 per season, the low-middle of the $500–$1,500 range (silverlightwindowsandeaves.ca). Season is Nov–Mar, 5 months (per the guides). Insurance assumed $1,000/yr, the low end of the $1,000–$3,000 range (rates.ca). Snowblower cost = C_eq, not found.\n- Target: $5,000/month net during the 5 active months = $25,000 net.\n- Gross needed = $25,000 + $1,000 + C_eq = $26,000 + C_eq.\n- Contracts needed = ($26,000 + C_eq) / $600 = 43.3 + C_eq/600. For example, if C_eq = $1,500 (a hypothetical figure, not a sourced price), that is (26,000 + 1,500) / 600 = 45.8, so about 46 contracts.\n- To average $5,000/month over all 12 months from snow alone: $60,000 + $1,000 + C_eq = $61,000+ gross, and $61,000 / $600 = about 102 contracts.\n\nCapacity check. How many accounts one person can do per storm was NOT FOUND. Conditional arithmetic only: IF each driveway plus travel takes 20 minutes (an unsourced assumption), then 46 x 20 = 920 min, about 15.3 hours per snow event. The 102-contract version is about 34 hours per event, which one person cannot do before morning commutes. Ottawa's cited 30+ events per winter x 15.3 h = about 460 hours per season.\n\nB) Broker/subcontract model. Subcontractor pay rates were NOT FOUND. IF the broker keeps 30% (unsourced assumption) of $600 = $180 per contract, then $25,000 net for the season / $180 = about 139 contracts to reach $5,000/month over the 5-month season. The full-year average would need $60,000 / $180 = about 333 contracts.\n\nC) Cash-flow view for the first 60 days. IF 45 clients each prepay $600 in Oct–Nov, collections are 45 x 600 = $27,000. That is cash received, but it is unearned money owed back as service through March. With monthly billing (e.g., the $129/month floor seen in Calgary), 45 x $129 = $5,805 per month in collections, and October would be only the first instalment.\n\nConclusion (ESTIMATE): about $5,000/month is reachable only during the winter months, with about 45 or more contracts and a full-time physical workload. It is not reachable as a 12-month average from snow alone.",
+  "startup_cost_cad": "ESTIMATE: at least $450–$3,000 for general liability insurance (sourced range: rates.ca, getcertain.ca), plus a snowblower (Canadian retail price NOT FOUND in this session), plus shovels, salt and ice melt (not found), plus a vehicle or trailer if no car (not found). Add $5,000–$12,000/yr insurance if operating 1–2 plow trucks (zensurance.com). Ottawa adds a snow plow contractor licence (reported $441/yr, unverified) if using a vehicle-mounted plow. The broker model needs insurance plus marketing (flyer printing cost not found), but little equipment.",
+  "requirements": [
+   "Physical labour: heavy, repetitive, often overnight or pre-dawn work during storms. Must be available on short notice for the whole Nov–Mar season (owner-operator model).",
+   "Equipment: at least one gas two-stage snowblower and shovels, ideally a backup machine. Prices not found in this session.",
+   "Vehicle: not strictly required if the route is hyper-local (walkable cluster of streets), but strongly helpful for moving a snowblower across a wider area. A vehicle-mounted plow triggers commercial auto insurance and, in Ottawa, a snow plow contractor licence.",
+   "Capital: roughly $450–$3,000 for insurance plus equipment (see startup_cost_cad). Pre-payments can partly fund equipment, but create a service liability.",
+   "Liability insurance: commercial general liability. Ottawa requires a $2M minimum for licensed snow plow contractors. Must be bought early because insurers restrict cover by late autumn.",
+   "English: conversational English (or French in Montreal) for door-to-door sales, contracts, dispute handling and neighbourhood groups. A Korean-community niche (e.g., North York/Willowdale, Thornhill) could be a sales channel, but that is an untested idea.",
+   "Licensing: Ottawa snow plow contractor licence if plowing with a vehicle. Toronto, Mississauga and Brampton snow-specific licences: not found (general business licensing by-laws exist).",
+   "Payment collection: a business bank account or e-transfer, a payment processor, and a written contract with refund and cancellation terms.",
+   "Broker model: a network of reliable subcontractors with their own equipment and insurance (subcontractor pay rates not found), plus a phone kept on during storms for dispatch."
+  ],
+  "regulations": [
+   {
+    "fact": "Ontario Highway Traffic Act s.181 makes it illegal to plow or shovel snow onto the roadway, including for contractors hired to clear laneways or walkways. The fine is $60 to $1,000 under s.214(1), plus victim surcharge and court costs.",
+    "source_url": "https://defendcharges.ca/EN/provincial-offences2/municipal-bylaw-offences/deposit-of-snow-on-roadway"
+   },
+   {
+    "fact": "Toronto Municipal Code Chapter 743, Section 743-9 prohibits placing debris, including shovelled snow, on a City roadway or sidewalk (City of Toronto 311 page, seen in search results).",
+    "source_url": "https://www.toronto.ca/home/311-toronto-at-your-service/find-service-information/article/?kb=kA06g000001cvVXCAY"
+   },
+   {
+    "fact": "Toronto Municipal Code Chapter 719, Snow and Ice Removal (June 16, 2022 version), governs sidewalk snow and ice clearing duties. A contractor guide titled 'Toronto's Snow Removal Bylaw: The 12-Hour Rule' refers to a 12-hour clearing window (title only; not verified on toronto.ca).",
+    "source_url": "https://www.toronto.ca/legdocs/municode/1184_719.pdf"
+   },
+   {
+    "fact": "Ottawa: snow plow contractors are licensed under Licensing By-law 2002-189, Schedule 4. The category covers businesses providing snow plowing or removal on or from private property 'using a snow plow'. Requirements: an active City business licence, a City-issued numbered plate on every plow vehicle, business name and phone number on both sides of the plow vehicle, and $2M minimum insurance. Licences run Nov 1 to Oct 31. I could not confirm whether shovel- or walk-behind-snowblower-only operators need this licence.",
+    "source_url": "https://www.ottawa.ca/en/business/permits-and-licences/business-licences/snow-plow-contractor-and-vehicle-licences"
+   },
+   {
+    "fact": "Ottawa Council approved new snow plow contractor rules on Oct 2, 2024, effective Oct 16, 2024. They ban dumping snow on accessible parking spaces or private property other than the client's, set a 4-hour limit to clean up snow dumped on City property, raise minimum insurance from $1M to $2M, require replacing damaged driveway markers, and require contractors to give clients a copy of the regulations every year.",
+    "source_url": "https://engage.ottawa.ca/snow-plow-contractor-licensing-review/news_feed/new-regulations-approved-by-city-council"
+   },
+   {
+    "fact": "Ottawa publishes a list of licensed snow plow contractors, so homeowners can check licence status.",
+    "source_url": "https://ottawa.ca/en/business/permits-and-licences/business-licences/snow-plow-list-licensed-contractors"
+   },
+   {
+    "fact": "Calgary: property owners must clear sidewalks within 24 hours after snowfall ends. Snow from private property (e.g., a driveway) may not be put onto public space such as a road or bike lane. Contractors who store snow must do so on their own property. Bylaws were updated with new fines for moving private-property snow into public space.",
+    "source_url": "https://www.calgary.ca/bylaws/snow-shovelling.html"
+   },
+   {
+    "fact": "Calgary Traffic Bylaw 26M96 prohibits shovelling snow or ice onto the road, and this applies to contractors. Fines are reported as $250 for a first offence, $500 for a second, and $750 for a third and later offences within 12 months (search summary; exact page mapping not verified).",
+    "source_url": "https://www.calgary.ca/bylaws/snow-ice.html"
+   },
+   {
+    "fact": "Mississauga: general Business Licensing By-law 0001-2006 exists. A snow-removal-specific contractor licence was NOT FOUND.",
+    "source_url": "https://www.mississauga.ca/publication/business-licensing-by-law/"
+   },
+   {
+    "fact": "Brampton: general Business Licensing By-law 184-2023 exists. A snow-plow-operator-specific licence was NOT FOUND.",
+    "source_url": "https://www.brampton.ca/EN/City-Hall/Bylaws/All%20Bylaws/Business%20Licensing.pdf"
+   },
+   {
+    "fact": "Ottawa (not snow, but related): since March 1, 2026, hardscaping contractors (driveways, walkways, patios, etc.) need a business licence. This matters if the owner later adds summer hardscape work.",
+    "source_url": "https://ottawa.ca/en/living-ottawa/laws-licences-and-permits/law-reviews/completed-law-reviews/landscaper-regulatory-review"
+   },
+   {
+    "fact": "Slip-and-fall law: Ontario occupiers' liability for snow and ice is discussed in legal articles (titles seen only). Specific statutory notice periods and how they apply to contractors: NOT verified in this session.",
+    "source_url": "https://www.preszlerlaw.com/faqs/what-is-the-law-in-ontario-for-clearing-snow-and-ice-from-your-premises/"
+   }
+  ],
+  "ai_can_build": [
+   "Landing page or website with a driveway-size and add-on quote calculator (single, double or triple driveway; walkway, steps and salting as add-ons, reflecting the add-on pricing shown in GTA guides)",
+   "Seasonal contract template with a trigger depth, service window, capped vs unlimited visits, snow-bank and property-damage terms, a 'no snow onto road' compliance clause, a low-snow or no-refund clause, cancellation and refund schedule, and instalment terms. Must be reviewed by a lawyer before use.",
+   "Subcontractor agreement template (broker model): pay per visit, insurance proof, response time, photo proof, penalties",
+   "Route and cluster planner in a spreadsheet: client addresses grouped by street, estimated minutes per stop, storm-day sequence",
+   "Storm dispatch checklist, and SMS and email templates for 'we're on our way', 'completed with photo', and delay notices",
+   "Flyer and door-hanger copy and print-ready designs; Facebook Marketplace, Kijiji and Nextdoor post copy; Korean-language versions for community channels",
+   "CRM and payment tracker (Google Sheet) with instalment schedule and e-transfer reconciliation",
+   "Ottawa compliance pack: annual regulation handout for clients (required under the 2024 rules), a signage spec checklist",
+   "Google Business Profile description and FAQ copy",
+   "Weather-watch automation: an email alert template when snowfall forecasts exceed the trigger depth (would need a weather API; feasibility not tested)"
+  ],
+  "human_must_do": [
+   "Register the business, open a business bank account and payment processor, and sign any contracts (all need ID)",
+   "Buy commercial general liability insurance in October, before insurers restrict cover in late autumn",
+   "Buy and maintain the snowblower, shovels and salt; pick up and store equipment",
+   "Sell: knock on doors, drop flyers, post in local and Korean-community groups under their own accounts, answer phone calls",
+   "Do the physical work during storms (owner-operator), or recruit, vet, pay and backstop subcontractors (broker)",
+   "Handle complaints, damage claims and slip-and-fall incidents; attend any bylaw or court matters",
+   "In Ottawa, apply for the snow plow contractor licence and plate if using a vehicle-mounted plow",
+   "Keep records for CRA (GST/HST registration threshold not verified in this session because canada.ca could not be fetched)"
+  ],
+  "seasonality": "Highly seasonal. Pricing guides describe contracts covering about November to March (Toronto 'typically November-March'; Calgary 'November–March'). Snow income is zero from about April to October. Averaging CAD $5,000/month over 12 months from snow alone would take about 100+ owner-operated contracts (ESTIMATE, see math), so it would realistically need pairing with fall leaf cleanup or summer lawn and landscaping work. For October 2026 specifically, this is the sales window: pre-sold contracts produce cash now, but the work is owed later. Metro Vancouver: no sourced snowfall data was found. Its low-snow reputation is widely stated, but I could not verify it here. Montreal: not researched successfully (search budget exhausted). Low-snow-winter frequency and impact on per-visit vs seasonal revenue: NOT FOUND.",
+  "risks": [
+   "Slip-and-fall and property-damage liability. Claims can exceed a small operator's capacity, so insurance is essential. Specific Ontario statutory rules for contractors were not verified.",
+   "Insurance availability: sources say insurers limit or stop writing snow removal cover by late autumn. A late start could mean no insurance.",
+   "Capacity or overflow: a big storm or back-to-back storms could make it impossible for one person to clear 40+ driveways in the clearing window (Toronto '12-hour rule' per a contractor guide; Calgary 24-hour sidewalk rule). Missed service means refunds and reputation damage.",
+   "Weather variance: a low-snow winter makes seasonal flat-rate contracts profitable but clients may demand refunds. A heavy winter (Ottawa '30+ snow events') makes unlimited contracts unprofitable. Historical low-snow frequency: not found.",
+   "Prepaid money is a liability: if the operator gets injured, sick or quits mid-season, pre-paid clients are owed service or refunds.",
+   "Bylaw and HTA fines for pushing snow onto roads ($60–$1,000 in Ontario; $250/$500/$750 in Calgary), which also apply to subcontractors acting on your behalf",
+   "Broker model: subcontractor no-shows during storms (industry-typical risk; no sourced data), unknown sub pay rates, and the broker still bears client and liability exposure",
+   "Physical injury to the operator (back injury, cold exposure, snowblower injuries); injury statistics not found",
+   "Competition: GTA, Ottawa and Calgary search results are dominated by established companies publishing SEO pricing guides, which suggests a crowded market (observation, not a measured fact)",
+   "Equipment breakdown mid-storm with no backup machine",
+   "Income cliff from April to October unless paired with other seasonal services"
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Contractors hired to clear laneways or walkways are explicitly covered by Ontario HTA s.181's ban on depositing snow on the roadway. Fines are $60–$1,000 plus surcharge and costs, so easy disposal shortcuts are illegal.",
+    "source_url": "https://defendcharges.ca/EN/provincial-offences2/municipal-bylaw-offences/deposit-of-snow-on-roadway"
+   },
+   {
+    "fact": "Insurers reportedly limit or stop offering snow removal policies by late autumn because of high liability risk. This is a hard timing constraint for an October 2026 start.",
+    "source_url": "https://rates.ca/resources/what-does-snow-removal-business-insurance-canada-really-cover-and-how-much-does-it-cost"
+   },
+   {
+    "fact": "Insurance for 1–2 truck operators runs $5,000–$12,000/yr for $2M liability, which would eat 8–20 contracts at $600 (ESTIMATE: 5,000/600 = 8.3; 12,000/600 = 20).",
+    "source_url": "https://www.zensurance.com/blog/how-much-does-snowplow-insurance-in-canada-cost"
+   },
+   {
+    "fact": "Ottawa's contractor rules tightened in Oct 2024: insurance minimum doubled to $2M, plus clean-up deadlines, driveway-marker replacement duties and annual client disclosure. Compliance burden is rising.",
+    "source_url": "https://engage.ottawa.ca/snow-plow-contractor-licensing-review/news_feed/new-regulations-approved-by-city-council"
+   },
+   {
+    "fact": "Ottawa averages '30+ snow events a winter', and 'capped contracts almost always cost more by April'. Unlimited flat-rate contracts expose the operator to heavy-winter labour overruns.",
+    "source_url": "https://ottawasnowremovals.ca/average-cost-of-snow-removal/"
+   },
+   {
+    "fact": "Published GTA seasonal prices are wide and partly low ($200–$600 per season in one guide), which points to price competition at the low end.",
+    "source_url": "https://torontosnowremovals.ca/snow-removal-toronto-cost/"
+   },
+   {
+    "fact": "Failure stories from r/snowremoval, r/sweatystartup, r/lawncare, r/ontario and r/toronto: NOT FOUND (reddit fetch failed; search budget exhausted). This means the bear case is under-evidenced here, not that there are no failures.",
+    "source_url": "not found"
+   }
+  ],
+  "scores": {
+   "speed": 6,
+   "probability_5k": 3,
+   "capital_light": 5,
+   "ai_leverage": 4,
+   "low_risk": 3
+  },
+  "score_rationale": "Speed 6: October to November is the sales window, so pre-payments or first instalments could arrive within weeks. But service revenue waits for snowfall, and insurance must be bought first. Customer acquisition speed is unsourced.\n\nProbability of $5k 3: prices of $400–$1,500 per season mean about 45 or more owner-operated contracts are needed to reach $5,000/month during the season (ESTIMATE). A 12-month average needs about 100+, likely beyond one person's per-storm capacity. The broker model needs about 139+ contracts at an assumed 30% margin. None of this is backed by sourced proof that a first-year solo operator reaches these numbers. Community stories were not found.\n\nCapital-light 5: insurance is $450–$3,000. Equipment prices could not be verified. A vehicle may be needed.\n\nAI leverage 4: the AI can build the website, calculator, contracts, routing, templates and flyers. The core value, which is physical clearing, door-to-door sales and storm-time reliability, is all human.\n\nLow risk 3: slip-and-fall and property-damage liability, fines for snow on roads, weather variance, prepaid-service liability if the operator is injured, and restricted late-season insurance.\n\nAll scores are tempered by a research limitation: no pages could be opened (egress blocked), and the search budget ran out after 13 searches. Evidence is snippet-level only."
+ },
+ "verification": {
+  "checked_claims": [
+   {
+    "claim": "Ottawa snow plow contractor licence: $441 annual fee, expires Oct 31, $2M minimum insurance, applies to businesses 'using a snow plow'.",
+    "status": "unverifiable",
+    "correction": "Re-fetch attempted 2026-09-23. WebFetch returned EGRESS_BLOCKED for www.ottawa.ca, and the session's WebSearch budget (200/200) was already used up, so no new search was possible. The $441 fee was unconfirmed in the dossier itself and is still unconfirmed. The open question that matters most is also unanswered: does a shovel or walk-behind snowblower operator need this licence? Treat it as 'check with the City before operating in Ottawa'.",
+    "source_url": "https://www.ottawa.ca/en/business/permits-and-licences/business-licences/snow-plow-contractor-and-vehicle-licences"
+   },
+   {
+    "claim": "Insurers limit or stop writing snow removal policies by late autumn, so cover must be bought in October.",
+    "status": "unverifiable",
+    "correction": "Re-fetch was EGRESS_BLOCKED. The claim rests on one search-snippet source, an insurance-broker marketing page with a commercial incentive to create urgency. No independent insurer or broker confirmation was found. The dossier's counter-evidence section presents it as a 'hard timing constraint', which overstates a single-snippet claim. Downgrade it to 'reported by one broker page, unverified'. The practical advice (get quotes immediately) is still prudent.",
+    "source_url": "https://rates.ca/resources/what-does-snow-removal-business-insurance-canada-really-cover-and-how-much-does-it-cost"
+   },
+   {
+    "claim": "Snow removal general liability costs $450–$1,000/yr at the low end and $1,000–$3,000 for typical contractors; 1–2 truck operators pay $5,000–$12,000/yr for $2M liability.",
+    "status": "corrected",
+    "correction": "Neither page could be opened (EGRESS_BLOCKED for rates.ca and zensurance.com), so the figures stay snippet-level and unverified. There is also a logic error. The $5,000–$12,000 figure is for truck/plow operators, but the dossier's counter-evidence applies it to the shovel/snowblower model ('would eat 8–20 contracts at $600'). That misapplies it. The walk-behind model should use the $450–$3,000 range, which is itself unverified and would be an actual quote, not a published price.",
+    "source_url": "https://www.zensurance.com/blog/how-much-does-snowplow-insurance-in-canada-cost"
+   },
+   {
+    "claim": "Most Toronto homeowners pay $500–$1,500 per season for a flat-rate snow removal contract (2026 guide).",
+    "status": "unverifiable",
+    "correction": "Re-fetch was EGRESS_BLOCKED. The source is a competitor's SEO marketing page, not a survey. The same search summary shows much lower GTA figures ($200–$600 per season; $400–$950). The dossier's $600 base price is inside the overlap, but a new operator with no reviews may have to price at the low end. ESTIMATE: at $400 per contract, the season-only target becomes (25,000 + 1,000) / 400 = 65 contracts, not 43–46.",
+    "source_url": "https://silverlightwindowsandeaves.ca/how-much-does-snow-removal-cost-in-toronto/"
+   },
+   {
+    "claim": "Ontario HTA s.181 bans depositing snow on a roadway, applies to contractors, fine $60–$1,000.",
+    "status": "unverifiable",
+    "correction": "The official statute page (ontario.ca/laws, HTA R.S.O. 1990 c. H.8) and the defendcharges.ca page were both EGRESS_BLOCKED. The substance (no snow on the roadway) is consistent across all jurisdictions in the dossier, so it is low-risk to rely on as a compliance rule. The exact fine range and whether the text names contractors specifically are not verified here.",
+    "source_url": "https://www.ontario.ca/laws/statute/90h08"
+   },
+   {
+    "claim": "Calgary: sidewalks must be cleared within 24 hours of snowfall ending; fines of $250/$500/$750 for putting snow onto the road.",
+    "status": "unverifiable",
+    "correction": "calgary.ca could not be fetched, and a web.archive.org fetch also failed. The fine schedule was already flagged in the dossier as 'exact page mapping not verified' and stays unverified.",
+    "source_url": "https://www.calgary.ca/bylaws/snow-shovelling.html"
+   },
+   {
+    "claim": "ESTIMATE: 42 contracts x $600 = $25,200 gross, which is about $5,040/month over 5 months.",
+    "status": "corrected",
+    "correction": "The arithmetic is right (42 x 600 = 25,200; 25,200 / 5 = 5,040), but it is GROSS, and the dossier's own net version is 46+ contracts. Two more corrections. (a) The target is an AVERAGE of $5,000/month. Over the user's ~60-day evaluation window (Oct–Nov 2026), almost no service is delivered, so prepayments are cash, not earned income. (b) Over a full year, the 46-contract scenario averages ESTIMATE: (27,600 − 1,000 − C_eq) / 12 ≈ $2,200/month before equipment costs. That is less than half the target.",
+    "source_url": "https://silverlightwindowsandeaves.ca/how-much-does-snow-removal-cost-in-toronto/"
+   },
+   {
+    "claim": "Capacity: about 20 minutes per driveway, so 46 contracts is about 15.3 hours per snow event.",
+    "status": "unverifiable",
+    "correction": "The 20-minute figure is unsourced, and the dossier says so. 46 x 20 = 920 min = 15.3 h is correct arithmetic. But a 15-hour solo shift per storm, after overnight snowfall and before morning commutes, contradicts the clearing windows cited in the dossier (Toronto '12-hour rule', Calgary 24 h). The realistic solo capacity is therefore probably lower than 46, which means the season-only target may also be out of reach for one person. Real per-driveway time data: not found.",
+    "source_url": "not found"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Could not be gathered in this session. The WebSearch budget was exhausted (200 of 200 calls), and every WebFetch attempted (ottawa.ca, ontario.ca, canada.ca, rates.ca, zensurance.com, silverlightwindowsandeaves.ca, defendcharges.ca) returned EGRESS_BLOCKED. Failure stories, saturation data and community earnings reports: NOT FOUND. This is an evidence gap, not evidence that such stories don't exist. The dossier's bear case is under-researched, and so is its bull case.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "There is conflicting price evidence inside the dossier's own sources. GTA seasonal figures range from $200–$600 up to $570–$1,730 in guides published by competing operators. A low floor of $200–$600 per season points to price competition that a new, unreviewed entrant would face.",
+    "source_url": "https://torontosnowremovals.ca/snow-removal-toronto-cost/"
+   },
+   {
+    "fact": "The dossier's own Ottawa source says '30+ snow events a winter' and 'capped contracts almost always cost more by April'. For an unlimited flat-rate seller, that means heavy winters turn contracts into labour losses. Weather risk is two-sided: low-snow years bring refund or renewal pressure, and high-snow years bring labour overruns.",
+    "source_url": "https://ottawasnowremovals.ca/average-cost-of-snow-removal/"
+   },
+   {
+    "fact": "All sourced price data comes from SEO marketing pages written by snow removal companies, not from independent surveys (CMHC, StatCan, HomeStars aggregate data, etc.). Search results dominated by established operators suggest a crowded market for a newcomer. That is an observation, not a measured fact.",
+    "source_url": "https://www.monsterplow.ca/post/how-much-snow-removal-cost-toronto-2026-pricing-guide"
+   }
+  ],
+  "hidden_costs_or_blockers": [
+   "The 30-day income need conflicts with timing. First GTA snowfall (not found for 2026) typically comes after the 30-day window, so the only October–November cash is customer prepayments. Those are unearned liabilities, owed back as service or refunds through March, and a new operator with no reviews may struggle to get anyone to prepay (acquisition speed: not found).",
+   "Possible EI conflict (UNVERIFIED; canada.ca was blocked). If the owner claims Employment Insurance after losing the job next week, starting a self-employment business and receiving self-employment income may reduce or disqualify benefits. This must be checked with Service Canada before selling contracts, because it could cost more than the business earns in the first months.",
+   "GST/HST registration: the small-supplier threshold was not verified in this session (canada.ca blocked). ESTIMATE: 46 x $600 = $27,600 is close to the commonly cited $30,000 small-supplier level (unverified), so a strong season could trigger registration and require collecting and remitting tax.",
+   "Vehicle: moving a snowblower between non-adjacent clients needs a vehicle or trailer. Using a personal vehicle for business may require commercial or business-use auto coverage (cost not found). Truck-mounted plowing puts the operator in the $5,000–$12,000/yr insurance range and, in Ottawa, triggers the plow licence.",
+   "Equipment: Canadian two-stage snowblower price is not found. A backup machine is needed to avoid missed service mid-storm, and storing gasoline and equipment may affect home insurance (not verified).",
+   "No income protection for the operator's own injury. A self-employed person without their own coverage generally lacks workers' compensation (Ontario WSIB rules for independent operators not verified). A back injury in January could end the season with prepaid clients still owed service.",
+   "Hiring helpers or subcontractors may create WSIB, employment-standards or payroll obligations in Ontario (not verified), plus the risk of no-shows during storms. Subcontractor pay rates: not found.",
+   "A lawyer's review of the seasonal contract (refunds, damage, slip-and-fall indemnity, trigger depth) costs extra; price not found.",
+   "Metro Vancouver: no sourced snowfall or pricing data, and it is plausibly non-viable as a market. Montreal: no pricing found, and French-language sales would be required. The model is really only evidenced for the GTA, Ottawa and Calgary.",
+   "Zero income from April to October. A full-year $5,000/month average is impossible from snow alone (the dossier's own ESTIMATE is 100+ contracts solo), so another business is needed anyway."
+  ],
+  "adjusted_scores": {
+   "speed": 4,
+   "probability_5k": 2,
+   "capital_light": 4,
+   "ai_leverage": 3,
+   "low_risk": 2
+  },
+  "verdict": "DOWNGRADE, to a winter add-on only, not the primary business. I could not independently verify a single decision-critical claim: the search budget was exhausted, and every fetch (ottawa.ca, ontario.ca, canada.ca, rates.ca, zensurance.com, the pricing guides) was EGRESS_BLOCKED. Every fact in the dossier therefore still rests on search snippets from competitor and insurance-broker marketing pages. On the dossier's own numbers, a 12-month $5,000/month average needs about 100+ solo contracts, which one person cannot service per storm. Even the season-only target (46 contracts at $600) needs about 15-hour solo shifts per storm, based on an unsourced 20-minute-per-driveway guess, and rises to about 65 contracts if a new entrant has to price at $400. Within the owner's 30-day window, any cash would come mostly from prepayments. Those are liabilities, not net income, and they depend on strangers prepaying an unreviewed operator. There are also unpriced blockers: insurance timing, vehicle, equipment, a possible EI conflict, and injury risk. Keep it only as a seasonal complement to a primary income source, and only if the owner has a vehicle, is physically fit and can bind insurance in October. Do not rank it as the answer to the $5,000/month goal."
+ }
+}

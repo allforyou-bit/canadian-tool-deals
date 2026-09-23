@@ -1,0 +1,316 @@
+{
+ "dossier": {
+  "candidate": "On-demand labour services (moving help, junk removal, furniture assembly, TV mounting, handyman) via TaskRabbit Canada + Kijiji / Facebook Marketplace / Google",
+  "summary": "EVIDENCE LIMITATION (read first): I ran 15 web searches before the workflow's shared search budget (200 per session) ran out. WebFetch and curl were blocked by the egress policy for every domain I tried: support.taskrabbit.com, taskrabbit.ca, canada.ca, ontario.ca, toronto.ca, reddit.com, wikipedia, businesswire, yahoo finance, loanscanada, finlywealth and therideshareguy. So every fact below comes from search-result titles, URLs and search-engine summaries. I did not open any page in full. Four topics were never searched before the budget ran out and are marked \"not found\": Ontario/BC trade-licensing rules, Toronto's renovator licence, junk-removal dump and truck fees, and Kijiji/Facebook rates.\n\nWHAT THE EVIDENCE SAYS: TaskRabbit is live across Canada. Search results list Toronto, Vancouver, Ottawa/Gatineau, Montreal, Edmonton and many smaller cities as of January 2026. A 24 March 2026 press release names Toronto, Vancouver, Montreal and Calgary as hubs for its new \"Truck Assisted Moving\" category in 90+ Canadian cities. Taskers pay a one-time, non-refundable $25 registration fee that does not guarantee approval. Taskers keep 100% of the hourly rate they set plus tips. TaskRabbit's Service fee and Trust & Support fee are charged to clients on top. TaskRabbit's Toronto pages show moving help \"starting at\" $40/hr, local movers $45/hr and full-service movers $55/hr. The Vancouver page shows TV mounting starting at $45/hr. For IKEA flat-rate jobs, one Canadian blog puts the price for a PAX wardrobe at about $90–110 and says speed decides the hourly pay: about $50/hr for an experienced person, about $20/hr for a beginner. Third-party blogs say new Taskers often charge $15–25/hr to win their first reviews and make about $1,000–1,500/month while building up. They say full-time Taskers in competitive cities can reach $4,000–6,000/month. Those blogs are mostly US-centric and unverified.\n\nBOTTOM LINE: This can bring in cash fast, since the fee is $25 and payouts reportedly take 1–3 business days. It is labour-bound: about 85–125 billable hours a month at the posted rates to reach $5k. Several things push against averaging $5k net in the first 60 days: new-Tasker ramp-up pricing, saturation in big cities, TaskRabbit not guaranteeing to process applications, and October–March being outside the summer moving season (an unverified assumption). The better version is a hybrid. The AI builds a direct-booking site, quote calculator and Kijiji/Facebook ad system. The human uses TaskRabbit for early reviews and volume, then moves repeat and local clients to direct booking with no platform fees. Even then, 60-day odds of a $5k/month average are low.",
+  "time_to_first_revenue": "ESTIMATE: about 1–3 weeks to the first TaskRabbit payout IF the application is approved quickly. Approval and background-check turnaround time: NOT FOUND. Basis: (1) Registration is a one-time $25 fee, and paying it does not guarantee acceptance (https://support.taskrabbit.com/hc/en-ca/articles/360032936511-What-s-the-Registration-Fee, seen in search results). (2) NerdWallet says TaskRabbit doesn't guarantee all applications will be processed, to avoid oversaturating a location (https://www.nerdwallet.com/article/finance/taskrabbit?trk=newwnb, search summary). So approval may take a long time or never come. (3) Third-party 2026 guides say payments go through Stripe and usually arrive within 1–3 business days after a task is done (search summary covering https://walletgrower.com/blog/taskrabbit-review-how-much-can-you-really-make-in-2026 and https://sidequesthustle.com/guides/taskrabbit-worker-pay; industry/unverified). Kijiji/Facebook Marketplace direct jobs could in principle pay same-day in cash or e-transfer, but I found no data on lead volume or time to a first job: NOT FOUND.",
+  "pricing_facts": [
+   {
+    "fact": "Toronto Help Moving on TaskRabbit starts at $40/hour. Search summary: some Taskers charge as little as $35/hr depending on vehicle, unpacking or furniture removal. Data date not shown.",
+    "source_url": "https://www.taskrabbit.ca/locations/toronto/help-moving"
+   },
+   {
+    "fact": "Toronto local movers on TaskRabbit start at $45/hour.",
+    "source_url": "https://www.taskrabbit.ca/locations/toronto/local-movers"
+   },
+   {
+    "fact": "Toronto full-service movers on TaskRabbit start at $55/hour.",
+    "source_url": "https://www.taskrabbit.ca/locations/toronto/full-service-movers"
+   },
+   {
+    "fact": "Vancouver TV mounting on TaskRabbit starts at $45/hour and varies by Tasker. Most installations take 1–2 hours; cable management or drilling into a facade can take longer.",
+    "source_url": "https://www.taskrabbit.ca/locations/vancouver/wall-mount-tv"
+   },
+   {
+    "fact": "Truck Assisted Moving (launched about 24 March 2026, 90+ Canadian cities including Toronto, Vancouver, Montreal and Calgary): Taskers set hourly rates that include vehicle usage fees and give customers an all-in hourly estimate.",
+    "source_url": "https://www.businesswire.com/news/home/20260324860928/en/Taskrabbit-Launches-Vehicle-Integrated-Moving-Category-Across-90-Cities-in-Canada"
+   },
+   {
+    "fact": "IKEA flat rates in Canada: about $90–110 for a standard 2-frame PAX wardrobe, varying by city. Experienced Taskers finishing in about 2 hours earn about $50/hr; beginners taking about 5 hours earn about $20/hr (third-party blog).",
+    "source_url": "https://www.betterpayjobs.ca/taskrabbit-canada-earnings-ikea/"
+   },
+   {
+    "fact": "IKEA Assembly jobs have a minimum task time of 40 minutes and earn at least $32.26 (as quoted in the search summary of the betterpayjobs page; TaskRabbit's own 'How Does Payment on IKEA Tasks Work?' page exists but was not opened).",
+    "source_url": "https://support.taskrabbit.com/hc/en-ca/articles/360012457092-How-Does-Payment-on-IKEA-Tasks-Work"
+   },
+   {
+    "fact": "Taskers keep 100% of the hourly rate they set plus 100% of tips. Clients pay a Service fee (a percentage of the task price) and a Trust & Support fee on top.",
+    "source_url": "https://support.taskrabbit.com/hc/en-us/articles/46260411872155-What-s-the-Taskrabbit-Service-Fee"
+   },
+   {
+    "fact": "The Trust & Support fee is 'usually 5–15%' of the task price, charged to the client (third-party 2026 cost guide; the official T&S fee page exists but its percentage was not shown).",
+    "source_url": "https://rentahuman.co/blog/how-much-does-taskrabbit-cost-cheaper-alternatives"
+   },
+   {
+    "fact": "Furniture assembly cost guide: hourly rates 'typically starting $34 on average' (TaskRabbit .com cost guide; currency and country not confirmed as Canadian).",
+    "source_url": "https://www.taskrabbit.com/cost-guides/assemble-furniture"
+   }
+  ],
+  "cost_facts": [
+   {
+    "fact": "Tasker registration fee: one-time, non-refundable $25 (Canada support page). Paying it does not guarantee acceptance. Beyond it, all fees are charged to clients, not Taskers.",
+    "source_url": "https://support.taskrabbit.com/hc/en-ca/articles/360032936511-What-s-the-Registration-Fee"
+   },
+   {
+    "fact": "A valid credit or debit card and a Canadian chequing account are required. Savings accounts, prepaid debit and reloadable cards are not accepted.",
+    "source_url": "https://support.taskrabbit.com/hc/en-ca/articles/204411070-What-s-Required-to-Become-a-Tasker"
+   },
+   {
+    "fact": "Junk removal: truck rental cost, Toronto/Vancouver transfer-station or landfill tipping fees, and competitor pricing: NOT FOUND (searches for these were never run before the budget ran out).",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Commercial or business-use auto insurance and general liability insurance costs for a handyman or mover in Ontario/BC: NOT FOUND.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Tool costs (drill, stud finder, level, mounting hardware, dolly, straps): NOT FOUND from a sourced price list.",
+    "source_url": "not found"
+   }
+  ],
+  "earnings_evidence": [
+   {
+    "claim": "New Taskers often start around $15–25/hr to win their first reviews and report roughly $1,000–1,500/month while building up. Experienced Taskers in moving, assembly, TV mounting and handyman work charge $60–75/hr or more.",
+    "source_url": "https://www.betterpayjobs.ca/taskrabbit-canada-earnings-ikea/",
+    "kind": "industry"
+   },
+   {
+    "claim": "IKEA assembly pay depends on speed: about $50/hr if a $90–110 PAX job takes 2 hours, about $20/hr if it takes 5. 'You only make money on IKEA tasks if you are fast.'",
+    "source_url": "https://www.betterpayjobs.ca/taskrabbit-canada-earnings-ikea/",
+    "kind": "industry"
+   },
+   {
+    "claim": "Most active Taskers earn $1,200–3,500/month part-time. Full-time Taskers in competitive cities can reach $4,000–6,000/month (third-party 2026 guides, mostly US-centric, methodology not shown).",
+    "source_url": "https://wealthvieu.com/taskrabbit-earnings-guide/",
+    "kind": "estimate"
+   },
+   {
+    "claim": "Taskers earn $20–50/hr on average and skilled trades $40–80/hr (third-party 2026 guide, US-centric).",
+    "source_url": "https://walletgrower.com/blog/taskrabbit-review-how-much-can-you-really-make-in-2026",
+    "kind": "estimate"
+   },
+   {
+    "claim": "TaskRabbit Canada offers a Truck Assisted Moving category in 90+ cities (launched March 2026), which lets Taskers who own a large vehicle charge an all-in hourly rate that includes vehicle usage.",
+    "source_url": "https://www.businesswire.com/news/home/20260324860928/en/Taskrabbit-Launches-Vehicle-Integrated-Moving-Category-Across-90-Cities-in-Canada",
+    "kind": "official"
+   }
+  ],
+  "path_to_5k_math": "All figures below are ESTIMATES using the sourced rates above. The direct-cost figure is my assumption and is not sourced.\nTarget: $5,000/month net of direct costs.\nESTIMATE (assumption, not sourced): without a truck, direct costs such as transit or fuel, phone, drill bits, anchors and wear total about $300–600/month. Required gross = $5,300–5,600. I use $5,600 below.\n(A) New-Tasker pricing at $25/hr (top of the $15–25 range cited by betterpayjobs.ca): 5,600 / 25 = 224 billable hrs/month. 224 / 4.33 = about 52 billable hrs/week. Not realistic with sporadic demand and unpaid travel time.\n(B) Toronto/Vancouver posted 'starting at' rates, blended $45/hr (moving $40–55, TV mounting $45): 5,600 / 45 = about 124 billable hrs/month, about 29 billable hrs/week. Add unpaid travel between jobs, likely 35–40 working hrs/week.\n(C) Experienced rate of $65/hr (midpoint of $60–75): 5,600 / 65 = about 86 billable hrs/month, about 20 hrs/week. Feasible, but only after reviews build up.\n(D) IKEA flat rate of $100 per PAX-type job: 5,600 / 100 = 56 jobs/month, about 13 per week. At 2 hrs each that is 112 hrs. At a beginner's 5 hrs each it is 280 hrs, which is impossible.\n60-day average test: an average of $5k over 60 days requires $10,000 in total. If month 1 matches the reported new-Tasker range (midpoint $1,250), month 2 would need $8,750. 8,750 / 45 = about 194 billable hrs, about 45/week. ESTIMATE: very unlikely.\n(E) Off-platform direct jobs from Kijiji/Facebook/Google: the owner keeps 100% and can undercut TaskRabbit's all-in client price, which includes the Service and Trust & Support fees, while still earning more per hour. Lead volume and conversion rates: NOT FOUND, so this cannot be quantified.\nConclusion (ESTIMATE): about $1,000–2,500 in month 1 and a possible $3,000–4,500 run-rate by months 2–3 if the owner is fit, fast, has tools and ideally a vehicle. Averaging $5k net within 60 days is improbable. Reaching $5k/month later is plausible only at 20–30+ billable hrs/week at $50–65/hr.",
+  "startup_cost_cad": "Sourced: $25 TaskRabbit registration fee. Not sourced (ESTIMATE, assumption): about $0–600 for basic tools if not already owned (drill/driver, bits, stud finder, level, anchors, moving straps, dolly). Truck or van for junk removal and truck-assisted moving: NOT FOUND (rental and insurance costs not researched). With a truck, capital needs and insurance obligations rise sharply. Liability insurance: cost NOT FOUND. Minimum viable start (assembly and mounting only, using own tools and transit or an existing car): ESTIMATE $25–650.",
+  "requirements": [
+   "Age: 19+ per the search summary of TaskRabbit Canada's 'What's Required to Become a Tasker' page (https://support.taskrabbit.com/hc/en-ca/articles/204411070-What-s-Required-to-Become-a-Tasker).",
+   "SIN for ID verification, a Canadian chequing account (not savings or prepaid), and a valid credit/debit card (same TaskRabbit page).",
+   "Must pass TaskRabbit identity and criminal background checks (TaskRabbit Global Terms of Service, https://support.taskrabbit.com/hc/en-ca/articles/360008913792-Taskrabbit-Global-Terms-of-Service). Turnaround time: NOT FOUND.",
+   "Must live or work in an active TaskRabbit city. GTA, Metro Vancouver, Ottawa/Gatineau, Montreal, Edmonton and Calgary are all listed as active in search results.",
+   "Work authorization: whether TaskRabbit Canada requires a specific immigration status or work permit: NOT FOUND. Owner must confirm their own eligibility for self-employment.",
+   "Physical labour: REQUIRED. Lifting for moving and junk jobs; kneeling, ladders and drilling for assembly and mounting. Speed matters a lot: a beginner taking 5 hours on an IKEA job earns about $20/hr (betterpayjobs.ca).",
+   "Vehicle: NOT required for assembly and mounting (transit is possible but hard with tools). REQUIRED for junk removal and Truck Assisted Moving (a large vehicle).",
+   "English: conversational English needed for client messaging, on-site communication and reviews (not a sourced platform rule; practical requirement). Montreal and Quebec likely need French (unverified).",
+   "Tools: own tools required (the platform does not supply them). Sourced cost: NOT FOUND.",
+   "Licences and insurance: see regulations. Trade licensing for electrical, plumbing and gas was NOT verified in this session, so the owner must stay strictly within non-regulated tasks until confirmed."
+  ],
+  "regulations": [
+   {
+    "fact": "TaskRabbit Canada has a support article titled 'Income Tax Act Requirements for Taskers', which indicates the platform collects tax information from Canadian Taskers. I did not see its contents. Specific CRA platform-reporting obligations: NOT FOUND in this session.",
+    "source_url": "https://support.taskrabbit.com/hc/en-ca/articles/11613285635085-Income-Tax-Act-Requirements-for-Taskers"
+   },
+   {
+    "fact": "Taskers agree to background checks that may include identity verification and criminal background checks through third-party services.",
+    "source_url": "https://support.taskrabbit.com/hc/en-ca/articles/360008913792-Taskrabbit-Global-Terms-of-Service"
+   },
+   {
+    "fact": "Ontario: what an unlicensed handyman may legally do in electrical work (Electrical Safety Authority), plumbing (compulsory trade under Skilled Trades Ontario) and gas (TSSA): NOT FOUND. The search was blocked by the budget limit. The owner must verify directly with ESA, Skilled Trades Ontario and TSSA before offering anything beyond assembly, mounting, moving and non-regulated repairs.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "BC: rules on unlicensed electrical and gas work (Technical Safety BC) and plumbing: NOT FOUND.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "City of Toronto licensing for renovators or handymen (Municipal Code) and for moving or junk hauling: NOT FOUND. Vancouver, Calgary, Ottawa and Montreal business-licence rules: NOT FOUND.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "GST/HST registration threshold for self-employed Taskers: NOT FOUND (canada.ca blocked by egress policy; no search run).",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Regional fee law example (US only, not Canada): due to California and Massachusetts law changes, invoices there show only a Service Fee with no Trust & Support fee. This shows the fee structure varies by jurisdiction.",
+    "source_url": "https://support.taskrabbit.com/hc/en-us/articles/46260504648731-What-s-the-Taskrabbit-Trust-Support-Fee"
+   }
+  ],
+  "ai_can_build": [
+   "TaskRabbit profile bio, skills descriptions and category-by-category rate strategy (the human pastes them in, since the AI cannot log in with ID-verified accounts).",
+   "A one-page direct-booking website (GitHub Pages or Vercel) with service menu, service area and an instant quote calculator (e.g., IKEA item or TV size x flat price, moving hours x crew rate).",
+   "Kijiji and Facebook Marketplace ad copy variants in English and Korean, with photos checklist and posting schedule (the human posts them).",
+   "A Google Business Profile description, services list and review-request message templates.",
+   "Gmail templates for quotes, booking confirmations, day-before reminders, follow-ups and review requests. A Google Calendar booking workflow with travel buffers.",
+   "A job and expense tracking spreadsheet (revenue, fuel, tools, mileage) set up for self-employment bookkeeping and tax prep.",
+   "An IKEA and furniture assembly time-and-price reference sheet and a TV-mount pre-visit checklist (wall type, bracket, cable concealment), so quotes are accurate.",
+   "A 'do-not-do list' and scope-of-work disclaimer for the site, excluding electrical, plumbing and gas work pending licensing verification.",
+   "Outreach templates to property managers, realtors and Korean community groups for repeat move-in and move-out work (the human sends them)."
+  ],
+  "human_must_do": [
+   "Register on TaskRabbit, pay the $25 fee, provide SIN, pass background and ID checks, and link a Canadian chequing account.",
+   "Do all physical work: moving, lifting, assembly, drilling and mounting, junk hauling.",
+   "Buy or own tools; drive or rent a vehicle if doing moving or junk jobs.",
+   "Post ads on Kijiji and Facebook Marketplace, and create a Google Business Profile (ID and phone verification).",
+   "Take phone calls and texts from clients, go to on-site visits, and collect payment (e-transfer or cash). Keep receipts.",
+   "Verify licensing boundaries with ESA, Skilled Trades Ontario, TSSA and Technical Safety BC, plus the city's business-licence rules. Arrange liability and vehicle insurance.",
+   "Register for GST/HST if and when required, and file self-employment income taxes."
+  ],
+  "seasonality": "Sourced seasonality data: NOT FOUND. UNVERIFIED hypotheses (not facts): residential moving demand in Canada is widely assumed to peak in summer, and Quebec has a concentrated 1 July moving day. An October start would fall in the shoulder or off-peak season for moving. Winter weather may reduce junk-removal and outdoor jobs. Holiday-season TV and furniture purchases (Nov–Jan) may support mounting and assembly demand. These should be checked against TaskRabbit's in-app demand and local Kijiji ad volume before relying on them.",
+  "risks": [
+   "Income ramp risk: third-party sources say new Taskers underprice ($15–25/hr) and earn about $1,000–1,500/month while building reviews, far below $5k.",
+   "Onboarding risk: TaskRabbit doesn't guarantee applications will be processed, to avoid oversaturation (NerdWallet). Approval timing is unknown.",
+   "Saturation: big cities have many competing Taskers, and gigs are sporadic (NerdWallet).",
+   "Platform-dependency risk: TaskRabbit has changed its fee model before, e.g., Fast Company (2016) reported that it 'quietly doubled the cut' from many workers. The algorithm, visibility or fee structure can change at any time.",
+   "Client-side fees (Service plus Trust & Support, reportedly 5–15% for T&S) make TaskRabbit pricier for clients than direct Kijiji/Facebook hires. This pushes down Taskers' competitive rates.",
+   "Physical injury risk (lifting, ladders, power tools) with no employer benefits or WSIB coverage by default (WSIB rules not verified).",
+   "Property-damage liability (dropped TVs, wall damage, scratched floors). TaskRabbit protection terms were not verified, and own insurance cost was NOT FOUND.",
+   "Legal risk: doing electrical (e.g., hardwiring TV outlets or light fixtures), plumbing or gas work without a licence. Exact Ontario and BC boundaries were NOT verified in this session.",
+   "Vehicle risk: using a personal vehicle for commercial hauling may not be covered by personal auto insurance (not verified). Junk removal needs a truck plus disposal fees (NOT FOUND).",
+   "Seasonal dip: starting in October may coincide with lower moving demand (unverified).",
+   "Cash-flow risk: off-platform jobs carry no-show, non-payment and scam risk. There is no platform dispute protection."
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Big cities may have many Taskers competing for work, making regular gigs hard to get. Gigs are sporadic and won't guarantee consistent income. TaskRabbit doesn't guarantee all applications will be processed, to avoid oversaturating a location.",
+    "source_url": "https://www.nerdwallet.com/article/finance/taskrabbit?trk=newwnb"
+   },
+   {
+    "fact": "Beginner IKEA assemblers taking about 5 hours on a $90–110 flat-rate job earn about $20/hr. 'If you have to read the instructions for 20 minutes, you will lose money.'",
+    "source_url": "https://www.betterpayjobs.ca/taskrabbit-canada-earnings-ikea/"
+   },
+   {
+    "fact": "Anecdotal (Facebook group post title): 'Why have I stopped receiving new orders on TaskRabbit…'. A Tasker reports job flow drying up.",
+    "source_url": "https://www.facebook.com/groups/taskrabbitnationwide/posts/1546774295918709/"
+   },
+   {
+    "fact": "Anecdotal (Facebook post title, US): 'Why is TaskRabbit not onboarding new taskers in San…', with the caption 'Been checking back for months'. This shows city-level onboarding freezes can happen.",
+    "source_url": "https://www.facebook.com/matt.heinrich.92/photos/been-checking-back-for-months-anyone-elses-run-into-this-problem/1943443999516357/"
+   },
+   {
+    "fact": "Anecdotal (Facebook group post title): 'TaskRabbit's 40% service fee for furniture assembly'. This suggests total client-side fees can be high, which hurts price competitiveness against direct hires.",
+    "source_url": "https://www.facebook.com/groups/taskrabbitnationwide/posts/1757940321468771/"
+   },
+   {
+    "fact": "History of fee changes: Fast Company reported TaskRabbit 'quietly doubled the cut it takes from many of its workers' (2016), moving from 15% to 30% on repeat clients and raising the Trust & Support fee from 5% to 7.5%. These are old figures but show platform-term risk.",
+    "source_url": "https://www.fastcompany.com/3065993/taskrabbit-workers-fee-increase"
+   },
+   {
+    "fact": "Harvard Digital Initiative case: 'TaskRabbit: how weak network effects prevent companies to scale'. It notes clients and Taskers tend to leave the platform after the first match.",
+    "source_url": "https://d3.harvard.edu/platform-digit/?p=11436"
+   }
+  ],
+  "scores": {
+   "speed": 6,
+   "probability_5k": 2.5,
+   "capital_light": 6,
+   "ai_leverage": 3,
+   "low_risk": 4
+  },
+  "score_rationale": "Speed 6: the entry fee is only $25, TaskRabbit is active in all target cities, and payouts reportedly take 1–3 business days. Approval time is unknown, and TaskRabbit may not process applications in saturated areas, so it is not a 9. Probability of $5k within 60 days, 2.5: sourced ramp-up earnings for new Taskers are $1,000–1,500/month. The optimistic $4,000–6,000/month figures are for established full-time Taskers and come from US-centric blogs. The ESTIMATE math needs about 124 billable hrs/month at the posted $45 floor, and a 60-day average would need a month-2 of about $8,750. An October start is also likely off-peak for moving (unverified). Capital-light 6: assembly and mounting need only the fee plus tools. Junk removal and truck moving need a vehicle, insurance and dump fees, and none of those costs were found. AI leverage 3: the AI can build the website, quote calculator, ad copy, templates, scheduling and bookkeeping, but the revenue-producing work is 100% physical and human, as are account creation and calls. Low-risk 4: injury, property-damage liability, unverified trade-licensing limits (electrical, plumbing, gas), vehicle insurance gaps and platform-term changes. Confidence note: scores rest on search-result summaries only, because page fetching was blocked by egress policy and the shared search budget ran out after 15 queries. The licensing, junk-disposal and insurance sections are materially incomplete."
+ },
+ "verification": {
+  "checked_claims": [
+   {
+    "claim": "The Tasker registration fee in Canada is a one-time, non-refundable $25, and paying it does not guarantee acceptance.",
+    "status": "unverifiable",
+    "correction": "I tried to open the page directly and the egress proxy blocked it (EGRESS_BLOCKED on support.taskrabbit.com). My first WebSearch came back 'budget exhausted (200 of 200)'. The dossier author also never opened this page and relied on a search snippet. The claim is plausible, but neither of us has confirmed it on the page itself. The owner should open the page before paying.",
+    "source_url": "https://support.taskrabbit.com/hc/en-ca/articles/360032936511-What-s-the-Registration-Fee"
+   },
+   {
+    "claim": "TaskRabbit's Toronto page shows Help Moving starting at $40/hr, local movers at $45/hr and full-service movers at $55/hr.",
+    "status": "unverifiable",
+    "correction": "WebFetch was blocked for www.taskrabbit.ca, so these figures are unconfirmed. They are also 'starting at' marketing floors that the platform shows to clients. They are not median or realized Tasker rates, and the page shows no data date. Scenario B in the dossier treats these floors as a blended realized rate, which is optimistic. It also contradicts scenario A: if the lowest listed Toronto moving rate is $35–40/hr, the '$15–25/hr new Tasker' figure from a third-party blog does not describe the Toronto moving category. That internal inconsistency is unresolved.",
+    "source_url": "https://www.taskrabbit.ca/locations/toronto/help-moving"
+   },
+   {
+    "claim": "IKEA PAX flat rate is about $90–110, which works out to about $50/hr for an experienced Tasker and about $20/hr for a beginner. There is a 40-minute minimum paying at least $32.26.",
+    "status": "unverifiable",
+    "correction": "WebFetch was blocked for www.betterpayjobs.ca, and the official IKEA-payment help page was never opened by anyone. This is a single third-party blog read through a search snippet. Internal check: ESTIMATE $32.26 / (40/60 h) = $48.39/hr implied minimum. That is a floor for short tasks only and says nothing about realized hourly pay on long flat-rate jobs. The 'speed decides pay' point is directionally logical but unsourced here.",
+    "source_url": "https://www.betterpayjobs.ca/taskrabbit-canada-earnings-ikea/"
+   },
+   {
+    "claim": "Taskers keep 100% of their rate plus tips, and clients pay the Service fee and Trust & Support fee.",
+    "status": "unverifiable",
+    "correction": "The cited source is the en-us help centre (hc/en-us), not the Canadian one (hc/en-ca). The dossier itself notes that the fee structure varies by jurisdiction (CA/MA), and support.taskrabbit.com is blocked, so I could not check the Canadian terms. The dossier's own Fast Company counter-evidence (2016: a 15% to 30% cut on repeat clients) shows Tasker-side commissions existed in the past. Whether any Tasker-side deduction applies in Canada in 2026 is not verified.",
+    "source_url": "https://support.taskrabbit.com/hc/en-us/articles/46260411872155-What-s-the-Taskrabbit-Service-Fee"
+   },
+   {
+    "claim": "The Trust & Support fee is 'usually 5–15%' of the task price.",
+    "status": "unverifiable",
+    "correction": "The source is rentahuman.co, whose article title promotes 'cheaper alternatives'. That makes it a potentially biased competitor blog, not TaskRabbit. The official T&S page's percentage was never seen. Treat this figure as unreliable.",
+    "source_url": "https://rentahuman.co/blog/how-much-does-taskrabbit-cost-cheaper-alternatives"
+   },
+   {
+    "claim": "The furniture assembly cost guide says rates typically start at $34 on average.",
+    "status": "corrected",
+    "correction": "The source is the taskrabbit.com (US) cost guide, so the figure is almost certainly USD for US markets. It should not be used as a Canadian rate. I did not re-open the page because the domain family is blocked, but the domain itself shows it is not a Canadian source.",
+    "source_url": "https://www.taskrabbit.com/cost-guides/assemble-furniture"
+   },
+   {
+    "claim": "Truck Assisted Moving launched on 24 March 2026 in 90+ Canadian cities, with Taskers setting all-in hourly rates that include vehicle use.",
+    "status": "unverifiable",
+    "correction": "The dossier listed businesswire.com as blocked, and WebSearch is exhausted, so the press release was never opened by either agent. Even if accurate, this category requires the owner to already have a large vehicle, with commercial-use insurance whose cost is not found. It does not help an owner without a truck.",
+    "source_url": "https://www.businesswire.com/news/home/20260324860928/en/Taskrabbit-Launches-Vehicle-Integrated-Moving-Category-Across-90-Cities-in-Canada"
+   },
+   {
+    "claim": "Full-time Taskers in competitive cities can reach $4,000–6,000/month, and new Taskers earn about $1,000–1,500/month.",
+    "status": "unverifiable",
+    "correction": "Both ranges come from third-party affiliate-style blogs (wealthvieu.com, walletgrower.com, betterpayjobs.ca) that show no methodology. They are mostly US-centric and were read only as search snippets. I cannot count them as evidence. They should get near-zero weight in the probability score.",
+    "source_url": "https://wealthvieu.com/taskrabbit-earnings-guide/"
+   },
+   {
+    "claim": "Path-to-$5k arithmetic: 5,600/25 = 224 h; 5,600/45 ≈ 124 h; 5,600/65 ≈ 86 h; a 60-day average needs month 2 = $8,750, which is about 194 h at $45.",
+    "status": "confirmed",
+    "correction": "I rechecked the arithmetic and it is correct. ESTIMATE: 5600/25=224, 224/4.33=51.7 h/wk; 5600/45=124.4, /4.33=28.7; 5600/65=86.2, /4.33=19.9; 10000-1250=8750, 8750/45=194.4, /4.33=44.9 h/wk. The inputs to the math are unverified, as noted above. Also, the $5,600 gross target leaves out self-employment CPP contributions and GST/HST (see hidden costs), so the real hours needed are higher.",
+    "source_url": "not found (internal arithmetic check of dossier figures)"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "SESSION LIMITATION: my new counter-evidence searches could not run. WebSearch returned 'used its web search budget (200 of 200)'. WebFetch and curl were blocked for support.taskrabbit.com, www.taskrabbit.ca, www.betterpayjobs.ca, www.canada.ca, reddit.com, nerdwallet.com, fastcompany.com, ontario.ca, esasafe.com, toronto.ca, web.archive.org and r.jina.ai. Only GitHub was reachable. So no counter-evidence URL below was opened by me. Items are either internal contradictions within the dossier's own sources, or leads the owner must verify.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Internal contradiction in the dossier: its earnings claims carry the most weight in scoring ($1,000–1,500 ramp, $4,000–6,000 full-time). They come only from unverified, mostly US affiliate blogs. The only near-official Canadian data points are 'starting at' client-facing floor prices, which say nothing about how many hours a new Tasker actually gets booked. Booked hours per week for a new Canadian Tasker: not found. That is the single number that decides this business, and it is missing.",
+    "source_url": "https://wealthvieu.com/taskrabbit-earnings-guide/"
+   },
+   {
+    "fact": "Onboarding-freeze risk, as flagged by the dossier's own sources (NerdWallet: applications may not be processed, to avoid oversaturation; anecdotal Facebook post: 'Been checking back for months'). If GTA onboarding is paused, time to first revenue on TaskRabbit is not 1–3 weeks but unbounded. The 30-day income requirement then rests entirely on unproven Kijiji/Facebook lead generation, whose volume and conversion are not found.",
+    "source_url": "https://www.nerdwallet.com/article/finance/taskrabbit?trk=newwnb"
+   },
+   {
+    "fact": "Anecdotal (Facebook group post title, dossier-cited, not opened): a Tasker reports orders stopping. This suggests visibility is controlled by an algorithm, and income can drop with no recourse.",
+    "source_url": "https://www.facebook.com/groups/taskrabbitnationwide/posts/1546774295918709/"
+   },
+   {
+    "fact": "Anecdotal (Facebook post title, dossier-cited): 'TaskRabbit's 40% service fee for furniture assembly'. If total client-side fees approach this level, clients pay far more than the Tasker's rate. That squeezes the rate a Tasker can set and still win jobs against direct Kijiji/Facebook hires.",
+    "source_url": "https://www.facebook.com/groups/taskrabbitnationwide/posts/1757940321468771/"
+   }
+  ],
+  "hidden_costs_or_blockers": [
+   "GST/HST: NOT VERIFIED this session (canada.ca blocked). The dossier marked the threshold 'not found' and left it out of the math. It has to be checked. ESTIMATE: at the dossier's $5,600/month gross, cumulative revenue reaches $30,000 in 30000/5600 ≈ 5.4 months, if the small-supplier threshold is $30,000 as commonly cited (unverified here). After that, 13% HST in Ontario (unverified) must be charged or absorbed. Absorbing it cuts net by about 11.5% (ESTIMATE: 13/113).",
+   "Self-employed CPP contributions (employee and employer shares) are a real cash cost that the 'net of direct costs' target ignores. The rate for 2026: not verified this session.",
+   "Unpaid time: travel between jobs, quoting and messaging, and failed or cancelled bookings. The dossier mentions travel but does not size it. At a sporadic 1–3 jobs a day on transit in the GTA, non-billable time could equal billable time (unverified). That would push real hours for $5k well above 40 per week.",
+   "Transit with tools: assembly and mounting without a car means carrying a drill, level, stud finder, anchors and possibly a ladder on the TTC/GO. This limits jobs per day. There is no sourced data on this.",
+   "Vehicle-dependent categories (junk removal, Truck Assisted Moving): commercial or business-use auto insurance, a truck or van, and landfill/transfer-station tipping fees are all unsourced ('not found'). These are the higher-ticket categories, so the realistic no-vehicle version is limited to lower-ticket assembly and mounting.",
+   "Liability: TaskRabbit's Canadian damage-protection terms and the cost of the owner's own CGL insurance were not verified. One dropped TV or damaged wall could wipe out a week's net.",
+   "Regulated-trade boundary: the Ontario ESA/TSSA/plumbing and BC Technical Safety BC rules were never verified. TV mounting often includes in-wall power or outlet relocation requests, which are likely regulated electrical work (unverified). Refusing those jobs lowers ticket size, and doing them risks legal exposure.",
+   "Municipal licensing: the Toronto Municipal Code rules for renovators, movers and haulers, and other cities' business-licence rules, remain 'not found'.",
+   "Onboarding may be paused in saturated cities, and approval or background-check time is not found. The whole 30-day timeline hinges on this unknown.",
+   "Seasonality: October–March is likely off-peak for moves, and winter makes hauling and moving harder (both hypotheses, unverified). Quebec's 1 July moving-day peak is 9 months away.",
+   "Physical capacity is unknown: the owner's fitness, tool skill and English level are unknown, and every dollar of revenue requires them.",
+   "Montreal: French is likely needed for client communication (unverified), and QST adds a separate tax registration layer (unverified)."
+  ],
+  "adjusted_scores": {
+   "speed": 5,
+   "probability_5k": 1.5,
+   "capital_light": 6,
+   "ai_leverage": 2.5,
+   "low_risk": 3.5
+  },
+  "verdict": "DOWNGRADE. Keep this only as a fast bridge-income fallback, not as the primary $5k/month vehicle. Reasons: (1) None of the decision-critical claims could be confirmed from a primary source, either by the dossier author (snippets only) or by me (all relevant domains blocked, search budget exhausted). The one fully confirmed item is the dossier's own arithmetic. (2) The earnings evidence that drives the score comes from US-centric affiliate blogs with no methodology. The number that decides the business, booked hours per week for a new GTA Tasker in October–November, is missing. (3) The dossier's math leaves out GST/HST (likely triggered within about 5–6 months at $5k/month gross; threshold unverified), self-employed CPP, and unpaid travel and quoting time. All three raise the hours needed above the already strained 29–45 billable hours per week. (4) Onboarding may be frozen in saturated cities, so time to first TaskRabbit dollar is unbounded, not 1–3 weeks. (5) The high-ticket categories (truck moving, junk removal) need a vehicle, commercial insurance and disposal fees, all unsourced. Without a vehicle, the owner is limited to lower-ticket assembly and mounting in the off-peak season. Speed is lowered to 5 because of the onboarding and approval unknowns. Probability of averaging $5k within 60 days is lowered to 1.5 because the evidence is weak and hidden costs were left out. AI leverage is lowered to 2.5 because all revenue is human physical labour. Low-risk is lowered to 3.5 because injury, damage liability and regulated-trade exposure are all unverified. Recommended use: the owner applies to TaskRabbit in parallel on day 1 (cost $25, unverified) as a hedge while pursuing a higher-leverage primary option. They should verify the GST/HST threshold, the ESA scope and the TaskRabbit Canada fee terms on official pages before relying on any number here."
+ }
+}

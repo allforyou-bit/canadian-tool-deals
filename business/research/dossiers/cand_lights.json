@@ -1,0 +1,385 @@
+{
+ "dossier": {
+  "candidate": "Holiday / Christmas light installation (residential + small commercial, Oct–Dec 2026 install, January 2027 takedown; lease vs customer-owned lights)",
+  "summary": "This is a real, established seasonal service in every target city, and ticket sizes are high. GTA prices: single-storey homes $400–$800, two-storey $700–$1,500, large or complex homes $1,500–$3,000+ (settoshine.ca). Shack Shine Toronto and Ottawa typically start around $1,100. The lease model (the company supplies the lights) takes in most of its revenue in year 1. In years 2+ customers pay only install and takedown, about 45–55% of the first-year price (Ottawa), or $900–$950 vs $2,050+ (weinstallchristmaslights.ca). Three things work against this candidate. (1) Timing: GTA customers book September to early October, and 'most reputable GTA companies are fully booked by mid-November' (settoshine.ca). A brand-new operator starting in October 2026 enters at the tail of the booking window with no reviews. (2) Saturation: franchises such as Shack Shine and Christmas Décor, plus local specialists, landscapers who add lights on, and TaskRabbit taskers from $45/hr (Ottawa) all compete. Permanent lighting, averaging $3,000–$6,500 in Canada in 2025, is taking some of the market. Established firms report about 90% repeat customers. (3) Seasonality: revenue stops after the January takedown. ESTIMATE: net contribution is about $570 per home in year 1 on the lease model, so netting $10k over Oct–Nov needs about 20 booked homes, and $20k over Oct–Jan needs about 38. A 12-month average of $5k/month is not supported by any evidence found. The work also carries real fall, property-damage and weather risk, and it requires a vehicle, ladders and physical ability at heights. METHOD CAVEAT: every page fetch was blocked by the organization's egress proxy (settoshine.ca, shackshine.com, ontario.ca, canada.ca, reddit.com, zensurance.com and others returned EGRESS_BLOCKED/403). The shared web-search budget ran out after 17 searches by this agent. All facts below therefore come from search-engine result summaries of the cited URLs, not full page reads, and some summaries may misattribute figures between pages; this is flagged where it applies. No Reddit (r/sweatystartup) or YouTube operator posts or failure stories could be retrieved: 'not found'.",
+  "time_to_first_revenue": "ESTIMATE: about 4–8 weeks, i.e. late October to mid-November 2026, if the first bookings are closed in early October. Basis: the best booking time in the GTA is September to early October, and most reputable companies are fully booked by mid-November (https://www.settoshine.ca/post/christmas-lights-cost-gta, search summary). Ottawa services 'typically fill up by October' (search summary of Ottawa results incl. https://www.christmasdecorottawa.com/). Deposit and payment-timing norms (deposit at booking vs payment at install): not found. If the owner takes a deposit at booking through their own payment account, some cash could arrive in October. That depends on the owner's setup and was not observed as an industry norm. The January takedown is already included in the season price, so it brings no new revenue.",
+  "pricing_facts": [
+   {
+    "fact": "GTA (Set to Shine blog): professional installation for a typical single-storey home $400–$800; two-storey with standard roofline $700–$1,500; larger or complex homes or extensive tree/yard lighting $1,500–$3,000+. Linear footage is the main driver: an ~80 ft bungalow vs a ~200 ft two-storey with peaks and valleys. (Search-result summary; page fetch blocked.)",
+    "source_url": "https://www.settoshine.ca/post/christmas-lights-cost-gta"
+   },
+   {
+    "fact": "Shack Shine (franchise) Toronto: prices typically start at $1,100. The same search summary said 'most homes range from $500–$1,500', but that range may come from another Toronto provider in the same results (not isolated).",
+    "source_url": "https://www.shackshine.com/locations/toronto/christmas-light-installation/"
+   },
+   {
+    "fact": "Shack Shine Ottawa prices typically start around $1,100. Another Ottawa provider: basic residential displays start at $1,500, and most Ottawa homeowners spend $2,500–$4,000 for complete roofline plus landscape.",
+    "source_url": "https://www.christmasdecorottawa.com/"
+   },
+   {
+    "fact": "Ottawa: for year two and beyond, install+takedown costs about 45–55% of the first-year amount (no new lights needed). TaskRabbit Ottawa Christmas-light taskers start at $45/hour.",
+    "source_url": "https://www.taskrabbit.ca/locations/ottawa/christmas-light-installation"
+   },
+   {
+    "fact": "We Install Christmas Lights (Ontario): installation with light rental starts at $18 per foot, i.e. $2,050+ for the first season; future seasons (install+takedown only) $900–$950.",
+    "source_url": "https://weinstallchristmaslights.ca/how-much-does-it-really-cost-to-install-christmas-lights-in-ontario/"
+   },
+   {
+    "fact": "Ontario general range for professional installation: $500–$2,000+ depending on size, design complexity and light type (2026 cost pages).",
+    "source_url": "https://careelectrical.ca/christmas-light-installation-cost/"
+   },
+   {
+    "fact": "GTA first-year price typically bundles lights, extension cords, timers, installation, take-down and secure storage. Attribution to one specific provider page among the Toronto results is uncertain.",
+    "source_url": "https://lawnsavers.com/blog/professional-christmas-decorators-and-led-lighting-installation/"
+   },
+   {
+    "fact": "Metro Vancouver: a Surrey provider (Revive Services) charges $8 per linear foot, and most homes need about 100 linear feet. North Vancouver installation is $8.50–$12 per linear foot.",
+    "source_url": "https://reviveservices.ca/services/christmas-light-installation/"
+   },
+   {
+    "fact": "North Vancouver: $8.50–$12 per linear foot (Forever Party Rentals).",
+    "source_url": "https://www.foreverpartyrentals.com/christmas-lights-north-vancouver"
+   },
+   {
+    "fact": "Calgary: 'most Calgary homeowners spend between $20 and $30 per linear foot', with 1,500 sq ft homes at about $2,500–$3,500. CAUTION: this source may be describing permanent lighting; not confirmed.",
+    "source_url": "https://numberonelights.com/blog/xmas-light-installation-calgary-guide"
+   },
+   {
+    "fact": "Seasonal install services in Canada charge $500 to $2,000+ per visit. Permanent lights run $15–$30 per linear foot installed, with most homes between about $1,400 and $6,500+. This is from a seller of permanent lighting.",
+    "source_url": "https://www.getdiamondbright.com/blog/permanent-christmas-lights-canada"
+   },
+   {
+    "fact": "Permanent holiday lighting (the competing product): Canadian homeowners spent on average $3,000–$6,500 for a professionally installed permanent system in 2025.",
+    "source_url": "https://celebright.com/blog/permanent-lighting-cost-canada"
+   },
+   {
+    "fact": "Montreal pricing: not found (no search budget remained to query Montreal/Quebec providers).",
+    "source_url": "not found"
+   }
+  ],
+  "cost_facts": [
+   {
+    "fact": "Christmas Lights, Etc (US retailer, prices presumed USD): 1000 ft C9 commercial socket spool, SPT-2, 12-inch spacing: green wire $449.99, white wire $529.99; 15-inch spacing green $419.99. Sockets only; bulbs are separate.",
+    "source_url": "https://www.christmaslightsetc.com/p/C9-Christmas-Lights-Spool-1000-ft-Length-12-inch-Spacing-10-Amp-Green-Wire--15083.htm"
+   },
+   {
+    "fact": "Christmas Light Source (US, presumed USD): C9 1000 ft spool, 9-inch spacing, white SPT-2, $369.25.",
+    "source_url": "https://www.christmas-light-source.com/products/c9-1000-foot-9-inch-white-wire-spt2"
+   },
+   {
+    "fact": "1000Bulbs.com (US, presumed USD): 1000 ft C9 spools start at $320.50. A 25-bulb LED warm-white commercial C9 system (12-inch spacing, 25 ft green wire) is $17.23.",
+    "source_url": "https://www.1000bulbs.com/product/10309/HLS-C85393.html"
+   },
+   {
+    "fact": "Wintergreen Corporation (US, presumed USD): C9 Multicolor OptiCore commercial LED Christmas lights from $32.60; C9 Warm White OptiCore from $32.80. The unit (string length or bulb count) was not captured.",
+    "source_url": "https://wintergreencorp.com/p/C9-Warm-White-Opticore-Commercial-LED-Christmas-Lights-14953.htm"
+   },
+   {
+    "fact": "Canadian installer suppliers exist: LightingByHHD (stocked in Canada, wholesale pricing for trade), Christmas Light Supplies (CAD pricing, free shipping on orders $99+), Christmas Lights Canada, and Canada Christmas Lights (flat-rate shipping). CAD unit prices were not captured. A search summary claimed OptiCore C9 at '$34.50 per bulb (sale from $42.00)' at a Canadian distributor. That is almost certainly a per-25-pack price misread as per-bulb and is UNVERIFIED.",
+    "source_url": "https://www.lightingbyhhd.com/"
+   },
+   {
+    "fact": "Christmas Light Supplies (Canada) sells C9 LED faceted 25-packs in CAD; the price was not shown in search results.",
+    "source_url": "https://christmaslightsupplies.ca/product/c9-led-warm-white-faceted-25/"
+   },
+   {
+    "fact": "Light clips: 500-count gutter-and-shingle clip packs (Walmart/Christmas Central) and a 500-pack 'Omni Clip' all-in-one clip (Take Three Lighting) are sold; prices not found.",
+    "source_url": "https://www.takethreelighting.com/led-all-in-one-shingle-gutter-mounting-clip-50.html"
+   },
+   {
+    "fact": "General liability insurance for Christmas-light businesses in the US: $400–$700 per year for $1M coverage (US data). Canadian premium: not found.",
+    "source_url": "https://howtostartanllc.com/business-insurance/business-insurance-for-christmas-lights-installation-business"
+   },
+   {
+    "fact": "GL coverage for installers typically covers damage to a customer's roof, siding, gutters, landscaping or electrical system, bodily injury to bystanders, and completed-operations claims; limits of $1M–$2M per occurrence (US-oriented source).",
+    "source_url": "https://www.strandr.com/blog/christmas-light-business-insurance-guide"
+   },
+   {
+    "fact": "Ladder, extension cord, timer, vehicle/ladder-rack, cross-border shipping/duty and advertising costs: not found in this session.",
+    "source_url": "not found"
+   }
+  ],
+  "earnings_evidence": [
+   {
+    "claim": "Average Christmas light installation job is about $1,200–$1,300. First-year earnings for trained installers are reported at $50,000 to $100,000+ in 60–70 working days. This is a PROMOTIONAL paid press release (ABNewswire, 2025-09-18), not independent data.",
+    "source_url": "https://markets.financialcontent.com/dowtheoryletters/article/abnewswire-2025-9-18-christmas-light-installation-emerges-as-fastest-growing-seasonal-service-business-driving-year-round-revenue-for-service-contractors",
+    "kind": "industry"
+   },
+   {
+    "claim": "Businesses for sale on BizQuest include holiday-lighting operations, often bundled with power washing. One holiday lighting division founded in 2020 reports a ~90% annual repeat rate. Revenue figures were not captured, and the specific listing is not isolated among the results.",
+    "source_url": "https://www.bizquest.com/business-for-sale/high-margin-service-business-christmas-light-installation/BW2410977",
+    "kind": "industry"
+   },
+   {
+    "claim": "Operators commonly run holiday lights as an add-on to exterior services (window cleaning, e.g. Shack Shine; landscaping in Calgary, e.g. Result Landscaping, Clover, Bugaboo, Yard Busters), which suggests it is rarely a stand-alone year-round income.",
+    "source_url": "https://www.resultlandscaping.com/christmas-lights/",
+    "kind": "industry"
+   },
+   {
+    "claim": "r/sweatystartup and YouTube operator season-revenue reports: not found. Reddit was blocked by the egress proxy, and search returned no r/sweatystartup threads.",
+    "source_url": "https://www.reddit.com/r/sweatystartup/",
+    "kind": "community"
+   },
+   {
+    "claim": "ESTIMATE: GTA average ticket about $850 = (single-storey midpoint $600 + two-storey midpoint $1,100) / 2, using Set to Shine ranges.",
+    "source_url": "https://www.settoshine.ca/post/christmas-lights-cost-gta",
+    "kind": "estimate"
+   }
+  ],
+  "path_to_5k_math": "ESTIMATE. All inputs come from the sourced prices above. The CAD/USD rate of 1.38 is an UNSOURCED assumption; verify it.\n(1) Ticket: GTA single-storey $400–$800 (midpoint $600) and two-storey $700–$1,500 (midpoint $1,100). With a 50/50 mix: (600+1,100)/2 = $850 per home.\n(2) Year-1 materials, lease model, 150 ft roofline: 150/25 = 6 strings of 25-bulb C9.\n- 6 × US$17.23 (1000Bulbs) = US$103.38 × 1.38 = about C$143.\n- 6 × US$32.60 (Wintergreen OptiCore) = US$195.60 × 1.38 = about C$270.\n- Clips, cords, timers, shipping and duty are 'not found'. Placeholder ESTIMATE: +C$50–$100.\n- Result: about C$190–$370 per home, midpoint about C$280.\n(3) Contribution per home ≈ $850 − $280 = $570. This price also covers the January takedown labour.\n(4) Fixed season costs:\n- Insurance US$400–$700 × 1.38 = C$552–$966 (US benchmark; the Canadian premium is not found).\n- Marketing and fuel: not found.\n- Placeholder total fixed = C$1,500.\n(5) Targets:\n- A: $5k/month over the ~60-day window (Oct–Nov) = $10,000 net → (10,000+1,500)/570 = 20.2, so about 20–21 booked homes.\n- B: $5k/month averaged over the 4-month season (Oct–Jan) = $20,000 → (20,000+1,500)/570 = 37.7, so about 38 homes.\n- C: $5k/month averaged over 12 months = $60,000 → (60,000+1,500)/570 ≈ 108 homes. No evidence found that a first-year newcomer reaches this.\n(6) Higher-ticket case: Shack Shine 'from $1,100', or the press-release average of $1,200. Then $1,200 − $280 = $920 per home, and Target A ≈ (10,000+1,500)/920 = 12.5, so about 13 homes.\n(7) Customer-owned-lights model: materials cost is near $0, but tickets likely approach hourly benchmarks (TaskRabbit Ottawa from $45/hr). Per-home install time was not found, so per-home margin cannot be computed from sources.\n(8) Capacity: if one crew installs about 2 homes per day (UNSOURCED assumption), 20 homes take about 10 working days and 38 take about 19. Lead generation and the late start are the binding constraints, not labour capacity.\nConclusion: Target A is arithmetically reachable with about 13–21 bookings. Target C (a year-round average) is not.",
+  "startup_cost_cad": "ESTIMATE: about C$1,500–$6,000+. There are two models.\nCustomer-owned-lights model (lowest capital):\n- Ladders, extension cords and a clip stock: prices not found.\n- GL insurance: C$552–$966 per year, converted from the US$400–$700 benchmark at an assumed 1.38; the Canadian price was not found.\n- Basic marketing: amount not found.\n- A suitable vehicle and roof rack are assumed to be already owned. If not, that cost is excluded and potentially large.\nLease model: add about C$190–$370 per home in first-year lights (see the math). For 15 homes: 15 × 190 = C$2,850 up to 15 × 370 = C$5,550. For 25 homes: C$4,750–$9,250. This is paid upfront before customer payments arrive, unless deposits are collected.\nWAH training cost: not found.",
+  "requirements": [
+   "Vehicle able to carry extension ladders (truck, van, or car with ladder rack): effectively REQUIRED. Ownership status of the owner is unknown.",
+   "Extension ladder(s) long enough for two-storey eaves, plus a step ladder. Exact length and price were not sourced.",
+   "Physical ability: repeated ladder and roof work in cold, wet or icy late-October-to-January conditions; carrying ladders and light bins. Not suitable for anyone with fear of heights or mobility limits.",
+   "A second person (helper or partner) strongly advisable for ladder footing and safety. If hired, employer obligations such as OHSA training and possibly WSIB apply (not verified).",
+   "Capital: low for customer-owned lights; about C$190–$370 per home upfront for the lease model (ESTIMATE), plus insurance.",
+   "Commercial general liability insurance (strongly advisable; Canadian price not found). Confirm that the policy does not exclude roof or ladder work.",
+   "Storage space (garage or locker) for leased lights between the January takedown and next season.",
+   "English: enough to quote on-site, write estimates and handle complaints in the general market. Korean fluency could serve a Korean-Canadian homeowner and business niche; the size of that niche was not researched.",
+   "Ontario: possibly CPO-approved Working at Heights training if the work is treated as a construction project (applicability not confirmed). The certificate is valid 3 years.",
+   "Payment account in the owner's name (e-transfer, Square or Stripe) to take deposits and final payments.",
+   "Basic electrical safety knowledge: GFCI outlets, circuit loads, outdoor-rated cords, timers. Any new wiring or outlets would likely need a licensed electrician (not verified)."
+  ],
+  "regulations": [
+   {
+    "fact": "Ontario: workers on construction projects who could fall more than 3 metres, or who must use travel-restraint, fall-restricting or fall-arrest systems (O. Reg. 213/91), must complete a Chief Prevention Officer (CPO)-approved Working at Heights program before working at height. The certificate is valid 3 years. Source: provider and government search summaries; the ontario.ca page itself was blocked.",
+    "source_url": "https://www.ontario.ca/page/training-working-heights"
+   },
+   {
+    "fact": "The same requirement is summarised by Ontario training providers for 2026 (valid 3 years; refresher required).",
+    "source_url": "https://achievesafety.ca/wah-training-laws-requirements-ontario/"
+   },
+   {
+    "fact": "Whether seasonal holiday-light installation on a private home is a 'construction project' that triggers the WAH requirement: NOT determined. No official source was found; the search summary itself flagged the ambiguity. A Canadian Contractor article is titled as covering Ontario law for rooftop work 'including residential homes' (title only; not opened). Treat WAH training as a prudent step, not a confirmed legal duty.",
+    "source_url": "https://www.canadiancontractor.ca/canadian-contractor/workers-sub-trades-work-near-skylights-roof-tops-including-residential-homes/1003274986/"
+   },
+   {
+    "fact": "GST/HST registration threshold and obligations for a new sole proprietor: not verified in this session (canada.ca blocked; search budget exhausted). The owner must confirm with the CRA.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "WSIB (Ontario) mandatory coverage for independent operators or for any hired helper in this activity: not verified. The owner must confirm with the WSIB.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Electrical rules (e.g., whether adding outdoor outlets requires a licensed electrical contractor under ESA in Ontario): not verified.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Fall-protection and training rules in BC (WorkSafeBC), Alberta (OHS Code) and Quebec (CNESST) for this work: not found in this session.",
+    "source_url": "not found"
+   }
+  ],
+  "ai_can_build": [
+   "Bilingual (English/Korean) landing page with an instant quote calculator: roofline linear feet × per-foot rate, bungalow vs two-storey presets, lease vs customer-owned toggle, and add-ons (trees, wreaths)",
+   "Booking/intake form collecting address, roofline photos and preferred install date. Deposit link pointing to the owner's payment account (owner must create it).",
+   "Material takeoff calculator: strings, spools, bulbs, clips, cords and timers per job from measured footage. Supplier price comparison sheet for US vs Canadian suppliers with FX and shipping fields.",
+   "Job CRM and schedule spreadsheet, install route batching by neighbourhood, and Google Calendar events for install dates, mid-season service checks and January takedown",
+   "Door-hanger, flyer and yard-sign designs (print-ready PDF); Facebook Marketplace, Kijiji and Instagram post copy; Google Business Profile description and FAQ text",
+   "Outreach email templates for small businesses, restaurants, plazas and property managers. Gmail drafts can be prepared for the owner to review and send.",
+   "Service agreement, quote and invoice templates, including takedown date, outage-callback policy, damage and weather clauses and deposit terms (for the owner or a lawyer to review)",
+   "Safety checklist (ladder setup, GFCI/load check, weather go/no-go) and a new-helper briefing sheet",
+   "Review-request and year-2 renewal messages (lease-model customers renewing at the reduced install+takedown price)",
+   "Research memos on insurance quotes to request, WAH training providers, and the CRA/WSIB questions to ask"
+  ],
+  "human_must_do": [
+   "All physical work: measuring rooflines, installing, mid-season fixes, January takedown, storage",
+   "Door-knocking, on-site quoting, phone calls and customer service",
+   "Opening business accounts needing ID: payment processor, business bank account, Google Business Profile verification, supplier trade accounts",
+   "Buying insurance, and confirming that roof and ladder work is covered",
+   "Deciding and confirming legal and tax status (business name registration, GST/HST, WSIB) with official bodies",
+   "Taking Working at Heights (or equivalent) training if chosen or required",
+   "Buying and receiving ladders, lights and clips; owning or arranging a vehicle and storage",
+   "Posting on the owner's social accounts, Kijiji, Facebook groups and community boards (incl. Korean-community channels)",
+   "Recruiting, paying and supervising any helper",
+   "Collecting deposits and payments and handling refunds or disputes"
+  ],
+  "seasonality": "Extreme. The booking window is roughly September to early October; GTA companies are fully booked by mid-November (settoshine.ca). Ottawa services fill by October (search summary). Installs run from about late October to mid-December (install timing is inferred from the booking data; no direct source). Takedown is in January and is already paid for in the season price, which creates an unpaid labour obligation and weather risk in January. There is essentially no revenue from February to September unless it is paired with other exterior services (window cleaning, gutter cleaning, pressure washing, snow removal) or with permanent lighting, which sells year-round. Incumbents such as Shack Shine (window cleaning) and Calgary landscapers bundle it this way. For the target of about $5k/month on average, this candidate can at best fund October–January; it cannot on its own sustain a 12-month average.",
+  "risks": [
+   "Fall injury from ladders or roofs. This is the dominant risk: serious or permanent injury, and lost income for a person with no other job.",
+   "Property damage (shingles, gutters, siding, eavestroughs) and electrical issues (tripped GFCIs, overloaded circuits). Insurance cost and exclusions in Canada are not verified.",
+   "Late entry: the prime booking window (September to early October) is already underway on 2026-09-23. With no reviews or brand, a newcomer may book too few homes.",
+   "Saturated GTA market: Shack Shine franchise (from $1,100), Christmas Décor, LawnSavers, GTA Christmas Lighting, christmaslights.to, TaskRabbit taskers (from $45/hr in Ottawa), and landscapers and window cleaners adding lights.",
+   "Incumbent lock-in: ~90% repeat rates reported at a mature operation, so the available pool of new customers is smaller than raw demand suggests",
+   "Permanent lighting substitution (Canadian average $3,000–$6,500 in 2025) is shrinking the seasonal install market over time",
+   "Cash-flow squeeze in the lease model: lights are bought upfront (US suppliers add FX, shipping and duty, none of which was sourced) before installs are paid. Deposit norms were not found.",
+   "Weather: snow, freezing rain and wind in November delay installs; icy January conditions make takedown dangerous. Customers may cancel if installs slip.",
+   "Service obligations during the season: outage callbacks, wind damage, timer failures. These are unpaid time.",
+   "January takedown obligation plus storage and inventory management. Damaged or lost lights in storage reduce year-2 margin.",
+   "Regulatory uncertainty: WAH applicability, WSIB, GST/HST and electrical rules are all unverified in this session",
+   "Income stops after January. Averaging $5k/month over a year requires a second business line.",
+   "Evidence quality: earnings claims found are promotional (press release); no independent operator data or failure stories could be retrieved"
+  ],
+  "counter_evidence": [
+   {
+    "fact": "The best time to book is September to early October, and most reputable GTA companies are fully booked by mid-November. A new entrant starting in October 2026 misses much of the booking window.",
+    "source_url": "https://www.settoshine.ca/post/christmas-lights-cost-gta"
+   },
+   {
+    "fact": "There is heavy competition in Toronto search results alone: Shack Shine franchise locations (Toronto, Markham, Etobicoke, Ottawa), Christmas Décor Toronto, LawnSavers, GTA Christmas Lighting, Toronto Christmas Lights and TaskRabbit.",
+    "source_url": "https://gtachristmaslighting.ca/"
+   },
+   {
+    "fact": "Low-price competition: TaskRabbit Christmas-light taskers in Ottawa start at $45/hour.",
+    "source_url": "https://www.taskrabbit.ca/locations/ottawa/christmas-light-installation"
+   },
+   {
+    "fact": "Revenue per customer falls after year one: year-2+ install+takedown is about 45–55% of the first-year price (Ottawa), or $900–$950 vs $2,050+ (Ontario provider).",
+    "source_url": "https://weinstallchristmaslights.ca/how-much-does-it-really-cost-to-install-christmas-lights-in-ontario/"
+   },
+   {
+    "fact": "The permanent-lighting alternative ($3,000–$6,500 average in Canada, 2025) competes with seasonal installs for the same homeowners.",
+    "source_url": "https://celebright.com/blog/permanent-lighting-cost-canada"
+   },
+   {
+    "fact": "A mature holiday-lighting operation for sale reports ~90% annual repeat rate, meaning established firms retain their customers.",
+    "source_url": "https://images.bizquest.com/business-for-sale/holiday-lighting/BW2404544"
+   },
+   {
+    "fact": "The widely repeated '$50k–$100k in the first year' figure comes from a paid press release (ABNewswire), not independent operator data.",
+    "source_url": "https://markets.financialcontent.com/dowtheoryletters/article/abnewswire-2025-9-18-christmas-light-installation-emerges-as-fastest-growing-seasonal-service-business-driving-year-round-revenue-for-service-contractors"
+   },
+   {
+    "fact": "A Canadian insurance broker publishes an article titled 'Contractors: Are You Insured for Installing Christmas Lights for Your Customers?', which suggests existing contractor policies may not cover this work. Only the title was seen; content not opened.",
+    "source_url": "https://www.zensurance.com/blog/contractors-are-you-insured-for-installing-christmas-lights-for-your-customers"
+   },
+   {
+    "fact": "Calgary's market includes many landscaping firms offering lights as an add-on (Result, Clover, Bugaboo, Yard Busters, Roman Exteriors), which points to saturation outside Toronto too.",
+    "source_url": "https://www.cloverlandscaping.ca/christmas-lights/"
+   },
+   {
+    "fact": "Failure stories from Reddit, YouTube or forums: not found. Reddit was blocked by the egress proxy and the search budget was exhausted.",
+    "source_url": "not found"
+   }
+  ],
+  "scores": {
+   "speed": 5,
+   "probability_5k": 3,
+   "capital_light": 5,
+   "ai_leverage": 4,
+   "low_risk": 3
+  },
+  "score_rationale": "Speed 5: demand exists right now and tickets are large ($400–$1,500+ per home in the GTA). First payments could land in late October to November, but the prime booking window (September to early October) is already open and incumbents fill up by mid-November.\n\nProbability_5k 3: netting about $10k over Oct–Nov needs roughly 13–21 booked homes (ESTIMATE). That is achievable only for someone who already has a vehicle, ladders, comfort at heights and strong local selling, in a crowded market with franchises, landscapers, TaskRabbit and permanent-lighting substitutes, and with no reviews. A year-round $5k/month average is not supported, because revenue stops after the January takedown.\n\nCapital_light 5: the customer-owned model is cheap, but the lease model needs about C$190–$370 per home upfront (ESTIMATE). A suitable vehicle is effectively required.\n\nAI_leverage 4: AI can build the quote calculator, site, flyers, CRM, routing, material takeoffs and outreach. But selling, quoting on-site and all physical work are human.\n\nLow_risk 3: fall injury, property damage, electrical faults, winter weather, an unpaid January takedown obligation, unverified Canadian insurance cost and exclusions, and unresolved WAH/WSIB/HST status.\n\nEvidence caveat: all facts come from search-result summaries, since page fetches were blocked. Community and operator evidence could not be retrieved."
+ },
+ "verification": {
+  "checked_claims": [
+   {
+    "claim": "GTA pricing: single-storey $400-$800, two-storey $700-$1,500, large/complex $1,500-$3,000+ (Set to Shine blog).",
+    "status": "unverifiable",
+    "correction": "The re-fetch on 2026-09-23 returned EGRESS_BLOCKED for www.settoshine.ca. I could not re-search because the shared session WebSearch budget is exhausted (200/200). The dossier's own figures also came only from search-engine summaries. Treat the ranges as unconfirmed. The source is one small operator's blog, not a market survey.",
+    "source_url": "https://www.settoshine.ca/post/christmas-lights-cost-gta"
+   },
+   {
+    "claim": "The GTA booking window is September to early October, and most reputable GTA companies are fully booked by mid-November.",
+    "status": "unverifiable",
+    "correction": "Could not re-open: EGRESS_BLOCKED. This is the single most decision-critical claim for a start on 2026-09-23, and it rests on one search-result summary of one operator's marketing blog. 'Book early' urgency copy is a common sales tactic on vendor blogs, so it is not neutral evidence of capacity or of when demand runs out. It could cut either way: incumbents that are full could leave overflow demand for a newcomer, but no data on that was found.",
+    "source_url": "https://www.settoshine.ca/post/christmas-lights-cost-gta"
+   },
+   {
+    "claim": "Shack Shine Toronto and Ottawa pricing 'typically starts at $1,100'.",
+    "status": "unverifiable",
+    "correction": "The shackshine.com fetch was blocked (curl CONNECT 403 on 2026-09-23). The dossier itself admits the figure may be mixed up with another provider's '$500-$1,500' range in the same search summary. Do not use $1,100 as the high-ticket case in the path-to-5k math until the page itself confirms it.",
+    "source_url": "https://www.shackshine.com/locations/toronto/christmas-light-installation/"
+   },
+   {
+    "claim": "Year-2+ install and takedown cost about 45-55% of the first-year price (Ottawa). TaskRabbit Ottawa taskers start at $45/hour.",
+    "status": "unverifiable",
+    "correction": "The fetch of taskrabbit.ca was blocked. There is also a source-attribution problem: the dossier puts the '45-55% of first-year' claim on a TaskRabbit location page. A TaskRabbit location page is unlikely to state a lease-model renewal ratio, so this looks like a misattribution between search summaries. The $45/hr floor is Ottawa-only and unconfirmed for the GTA.",
+    "source_url": "https://www.taskrabbit.ca/locations/ottawa/christmas-light-installation"
+   },
+   {
+    "claim": "We Install Christmas Lights (Ontario): $18/ft with rental, $2,050+ first season, $900-$950 in future seasons.",
+    "status": "unverifiable",
+    "correction": "Fetch blocked (EGRESS_BLOCKED). There is also an internal inconsistency: $2,050 / $18 per ft ≈ 114 ft, while the dossier's material math uses 150 ft. At $18/ft, a 150 ft home would be about $2,700. That is far above the $850 average ticket used in the path-to-5k math. The pricing inputs mix incompatible models (lease at $18/ft vs Set to Shine ranges whose inclusions are unknown).",
+    "source_url": "https://weinstallchristmaslights.ca/how-much-does-it-really-cost-to-install-christmas-lights-in-ontario/"
+   },
+   {
+    "claim": "The GST/HST registration threshold for a new sole proprietor is 'not verified'.",
+    "status": "unverifiable",
+    "correction": "The canada.ca fetch was blocked again on 2026-09-23. From general knowledge, NOT verified this session: the CRA small-supplier threshold has long been $30,000 of taxable revenue over four consecutive calendar quarters. If that still holds, 20-38 homes at about $850 (ESTIMATE: 38 × 850 = $32,300) could cross it within one season. That would make HST (13% in Ontario) a compliance and pricing issue. The owner must confirm with the CRA.",
+    "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/when-register-charge.html"
+   },
+   {
+    "claim": "The Canadian insurer article suggests existing contractor policies may not cover Christmas-light installation.",
+    "status": "unverifiable",
+    "correction": "Fetch of zensurance.com blocked. Only the title is known. The Canadian premium, and whether roof and ladder work is excluded, remain not found. The dossier's C$552-$966 figure is a US benchmark converted at an unsourced 1.38 FX rate.",
+    "source_url": "https://www.zensurance.com/blog/contractors-are-you-insured-for-installing-christmas-lights-for-your-customers"
+   },
+   {
+    "claim": "First-year earnings of $50,000-$100,000+ in 60-70 working days, with an average job of $1,200-$1,300.",
+    "status": "unverifiable",
+    "correction": "Not re-opened (the search budget is exhausted). The dossier correctly flags it as a paid ABNewswire press release, which is promotional and gives no independent evidence. It should carry zero weight in the probability score.",
+    "source_url": "https://markets.financialcontent.com/dowtheoryletters/article/abnewswire-2025-9-18-christmas-light-installation-emerges-as-fastest-growing-seasonal-service-business-driving-year-round-revenue-for-service-contractors"
+   },
+   {
+    "claim": "Calgary: $20-$30 per linear foot, with 1,500 sq ft homes at $2,500-$3,500.",
+    "status": "unverifiable",
+    "correction": "Not re-opened. The dossier itself suspects the figure describes permanent lighting. It is inconsistent with Metro Vancouver seasonal rates of $8-$12/ft, so it should be excluded from any seasonal-install pricing.",
+    "source_url": "https://numberonelights.com/blog/xmas-light-installation-calgary-guide"
+   },
+   {
+    "claim": "Established firms report about 90% repeat customers.",
+    "status": "corrected",
+    "correction": "This comes from a single BizQuest for-sale listing, a seller's claim about one division founded in 2020, and was not re-opened. It is overstated when generalised to 'established firms'. The correct wording is 'one business-for-sale listing claims ~90% repeat'.",
+    "source_url": "https://images.bizquest.com/business-for-sale/holiday-lighting/BW2404544"
+   },
+   {
+    "claim": "Permanent lighting is taking some of the seasonal install market.",
+    "status": "corrected",
+    "correction": "Both cited sources (celebright.com and getdiamondbright.com) sell permanent lighting. No market-share or substitution data was found. The accurate statement is that a substitute product exists at $3,000-$6,500 (seller-reported). Substitution itself is not evidenced.",
+    "source_url": "https://celebright.com/blog/permanent-lighting-cost-canada"
+   },
+   {
+    "claim": "Path-to-5k math: contribution is about $570 per home, so about 20 homes are needed for $10k net over Oct-Nov.",
+    "status": "corrected",
+    "correction": "ESTIMATE, recomputed. The math omits (a) helper wages. The dossier itself says a second person is strongly advisable, and at an assumed $25/hr × 2 people... more simply, a helper at $25/hr × 5 hrs per home (install + takedown) ≈ $125 per home is itself an UNSOURCED assumption. (b) Fuel, clips, cords and timers: 'not found'. (c) HST if registered. (d) Lights damaged at takedown. With a $125 helper cost: 850 − 280 − 125 = $445 per home, and (10,000 + 1,500) / 445 ≈ 26 homes for Target A and (20,000 + 1,500) / 445 ≈ 48 homes for Target B. The 50/50 bungalow/two-storey mix and the 2-homes-per-day capacity are unsourced assumptions. No lead-conversion rate was sourced, so there is no evidence that a no-review newcomer can close 20-26 bookings in about 3-6 weeks.",
+    "source_url": "not found"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Method limitation (not evidence about the market): my new counter-evidence search was impossible this session. WebSearch returned 'used its web search budget (200 of 200)', and every WebFetch/curl target returned EGRESS_BLOCKED / CONNECT 403. That included settoshine.ca, shackshine.com, taskrabbit.ca, weinstallchristmaslights.ca, canada.ca, ontario.ca, zensurance.com, reddit.com, youtube.com, web.archive.org and wikipedia.org. Failure stories, saturation data and platform-ban evidence are therefore 'not found', and the absence of failure stories must NOT be read as absence of failures.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Dossier-cited, not re-verified: the only earnings evidence is a paid press release. No independent Canadian operator revenue data or first-season outcomes exist in the dossier. Survivorship bias is likely.",
+    "source_url": "https://markets.financialcontent.com/dowtheoryletters/article/abnewswire-2025-9-18-christmas-light-installation-emerges-as-fastest-growing-seasonal-service-business-driving-year-round-revenue-for-service-contractors"
+   },
+   {
+    "fact": "Dossier-cited, not re-verified: incumbents bundle lights with year-round exterior services (Shack Shine window cleaning; Calgary landscapers). This implies the service is typically sold to an existing customer base, which a newcomer lacks. Customer acquisition cost is the binding constraint and is unmeasured.",
+    "source_url": "https://www.resultlandscaping.com/christmas-lights/"
+   },
+   {
+    "fact": "Internal inconsistency in the dossier's own sources: the Ontario lease pricing ($18/ft, $2,050+ first season) and the Set to Shine ranges ($400-$1,500 for most homes) differ by 2-3x for similar homes. Either the Set to Shine ranges exclude lights, which would make the lease-model margin math wrong, or markets differ widely. The $570/home contribution is therefore not reliable.",
+    "source_url": "https://weinstallchristmaslights.ca/how-much-does-it-really-cost-to-install-christmas-lights-in-ontario/"
+   },
+   {
+    "fact": "Dossier-cited, not re-verified: the WAH requirement under O. Reg. 213/91 applies to 'construction projects'. Whether residential light installation qualifies is undetermined. If it does, CPO-approved training (cost and scheduling not found) must be completed BEFORE the first install, which adds delay in an already late window.",
+    "source_url": "https://www.ontario.ca/page/training-working-heights"
+   }
+  ],
+  "hidden_costs_or_blockers": [
+   "Verification blocker: none of the dossier's decision-critical claims could be re-opened. Egress was blocked and the search budget exhausted, so every price, timing and legal claim remains at search-summary quality. Before committing, the owner or a later agent with web access must confirm the Set to Shine booking-window claim and the Canadian insurance price and exclusions.",
+   "Helper labour is omitted from the unit economics. The dossier says a second person is strongly advisable for ladder safety but costs the job as solo. ESTIMATE: +~$125 per home at an unsourced $25/hr × 5 hrs raises the homes needed for $10k net from about 20 to about 26.",
+   "Unpaid January takedown labour and risk: the takedown is prepaid in the season price. Its cost (time, helper wages, icy-ladder risk, damaged lights) falls in January, when no new revenue comes in.",
+   "HST: if the small-supplier threshold is still $30k (not verified this session), about 35-38+ homes at about $850 would exceed it. Registration mid-season complicates pricing (13% in Ontario).",
+   "WSIB: whether coverage is mandatory for a sole operator or any hired helper in this activity was not verified. If it is mandatory, premiums apply from the first hire.",
+   "Working at Heights training (cost and course availability not found) may be legally required before the first install if the work counts as a construction project. Unresolved.",
+   "Vehicle able to carry a 24-28 ft extension ladder, plus ladders themselves: effectively mandatory, cost not sourced, and owner's ownership unknown. If absent, the candidate is effectively infeasible within 30 days.",
+   "Lease-model upfront inventory: ESTIMATE C$190-$370 per home (dossier), paid before installs. The figure relies on US prices converted at an unsourced 1.38 FX rate, with no duty or shipping added. US shipping in October may also arrive too late for installs.",
+   "Customer-acquisition cost and conversion: door hangers, flyers, Google/Facebook ads and yard signs are all unpriced. No conversion-rate data exists, so the core driver (bookings closed in October with zero reviews) is completely unevidenced.",
+   "Liability exposure before insurance is bound: a single roof or gutter damage claim or fall injury could wipe out the season's income. Canadian premiums and exclusions for ladder and roof work: not found.",
+   "Cash timing: deposit norms were not found. Without deposits, the first cash lands at install (late Oct-Nov), missing the 30-day income need that started this task.",
+   "A 12-month $5k/month average is structurally impossible from this line alone. Revenue from February to September is zero unless a second business is added."
+  ],
+  "adjusted_scores": {
+   "speed": 4,
+   "probability_5k": 2,
+   "capital_light": 4,
+   "ai_leverage": 4,
+   "low_risk": 2
+  },
+  "verdict": "DOWNGRADE, and eliminate as a standalone primary business. Keep it only as a conditional seasonal side-line. Reasons:\n\n(1) None of the key claims could be re-verified this session: egress was blocked on every domain and the search budget was exhausted. All pricing and timing rests on search-snippet summaries of vendor marketing blogs.\n\n(2) The only earnings evidence is a paid press release.\n\n(3) The dossier's own price sources conflict by 2-3x. Its margin math omits the helper labour it deems necessary, as well as unpaid January takedown labour and possible HST. After correction, the homes needed for $10k net rise to about 26, and to about 48 for a $5k average over October-January. There is zero sourced evidence that a no-review entrant starting in late September can book that many.\n\n(4) Revenue is structurally zero from February to September, so the owner's goal of a $5k/month average cannot be met by this line alone.\n\n(5) It hard-requires a vehicle, ladders, comfort at heights and possibly WAH training. None of these are known to be available, and the fall and property-damage risk falls on a person with no other income.\n\nConsider it only if the owner already has a vehicle, ladders and height comfort, and pairs it with a year-round service such as window, gutter or pressure-washing work."
+ }
+}

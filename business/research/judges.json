@@ -1,0 +1,527 @@
+[
+ {
+  "lens": "SPEED-TO-CASH & PROBABILITY: the chance that the owner has actually received at least CAD 5,000 net by about Nov 30 2026 (roughly 9 weeks from today, 2026-09-23), and then averages CAD 5,000/month. I weighted four things: prepayment and deposit mechanics, sales-cycle length, late-September seasonality, and hard prerequisites (vehicle, ID-verified platform approval, reviews). Every fact comes from the bundle or corpus with a URL. Almost all market facts are search snippets the verifiers could not re-open. The only primary-verified facts are the federal statutes (ETA, CPP Act, EI Act and Regulations, CASL).",
+  "ranking": [
+   {
+    "candidate": "BUNDLE: Seasonal exterior home-services stack in one neighbourhood cluster (fall gutter/leaf cleanup Oct-Nov, paid per job; holiday-light installs, paid at install; seasonal snow contracts sold Oct-Nov and billed in instalments Dec-Mar). Conditional on the owner having a ladder-capable vehicle, fitness and comfort at heights",
+    "score_0_10": 6,
+    "reason": "Best timing fit of anything in the files. Three things are live right now. The gutter peak is 'late fall (after leaves drop, before snow)'. The GTA lights booking 'sweet spot is late September through the first week of October', though October callers 'can often be accommodated'. Snow contracts are sold before the season. Tickets are 5-20x a cleaning hour: gutters $150-$350 per job, lights $400-$1,500 per home, snow $400-$1,500 per season in the GTA. ESTIMATE of cash by Nov 30: 12 gutter jobs x $245 contribution = $2,940, plus 5 light installs x $570 = $2,850, gives $5,790 before any snow money. One door-knock can pitch all three services (my judgement, not sourced). Incumbents do bundle lights with exterior services (Shack Shine, Calgary landscapers). Two limits. First, winter falls short: snow alone needs about 46 contracts at $600 (65 at $400) to reach $5k/month in season, which is beyond evidenced solo capacity. Second, January brings an unpaid lights takedown. Everything is gated on vehicle, ladder and insurance, all unknown for this owner. All prices are unverified snippets."
+   },
+   {
+    "candidate": "cand_cleaning (residential deep and move-out cleaning via TaskRabbit/Jiffy plus direct Kijiji, FB and Korean-community leads)",
+    "score_0_10": 5,
+    "reason": "Fewest prerequisites of the physical options. The only sourced start cost is the $25 TaskRabbit fee, no licence was found, and a vehicle helps but is not required. Jiffy pays the Friday after the job week. No seasonal cliff was found, but seasonality is marked NOT FOUND rather than proven flat. ESTIMATE: $5,000 cumulative by Nov 30 at $45/hr = 111 billable hours over about 8 weeks, about 14 h/week. That is plausible even from zero reviews. Negatives: platform approval time is not found, and the price inputs conflict ($15-$30, $35-$65 and $85-$125/hr). Sustaining $5k/month needs 26-41 billable h/wk, or 35-45+ h/wk once unpaid time is counted. The best choice as the floor and the winter line."
+   },
+   {
+    "candidate": "cand_fall (gutters, leaves, windows; standalone)",
+    "score_0_10": 4.5,
+    "reason": "Paid at completion. The peak falls inside the window (late Oct-Nov). 22 jobs x $265 ≈ $5,830 gross/month (dossier arithmetic confirmed). Early October is before the peak, so first cash comes around week 2 and volume later. It hard-requires a vehicle for a 24-28 ft ladder. Toronto pressure washing likely needs a Building Renovator licence and exam. The Dec-Mar cliff has no winter line."
+   },
+   {
+    "candidate": "cand_snow (seasonal contracts; standalone)",
+    "score_0_10": 4,
+    "reason": "The only candidate with a structural prepayment mechanism in Oct-Nov. GTA precedent: a company offered a prepay discount and one customer paid $1,200 upfront for 2025-26. ESTIMATE: about 9-10 contracts at $550-$600 = $5k collected. Three problems. Ontario door-to-door direct agreements carry a 10-day cooling-off right with refund within 15 days (search summary). Quebec's OPC advises consumers against any deposit before service starts. The same GTA prepay precedent ended in 'feel cheated' news coverage, which damages trust for newcomers. Prepaid money is an unearned liability until snow falls. Insurance timing, snowfall and solo capacity are unknown. Vancouver is not evidenced."
+   },
+   {
+    "candidate": "cand_lights (standalone)",
+    "score_0_10": 3.5,
+    "reason": "High ticket, paid at install from late Oct. ESTIMATE: 9-12 homes = $5k contribution (5,000/570 = 8.8; 5,000/445 with a helper = 11.2). But the booking window is closing now, most GTA firms are full by mid-November, and deposit norms were not found. The owner would enter with no reviews against franchises. Revenue is zero Feb-Sep, and the source prices conflict 2-3x. Useful only as a layer on the exterior stack."
+   },
+   {
+    "candidate": "cand_labour (TaskRabbit moving, assembly, TV mounting)",
+    "score_0_10": 3.5,
+    "reason": "Cheap and fast if approved: the $25 fee is reported, and payouts reportedly arrive 1-3 business days after a task. But TaskRabbit 'doesn't guarantee all applications will be processed' because of saturation, and approval time is not found. The new-Tasker ramp is $1,000-1,500/month per blogs. October is likely off-peak for moves (unverified). Works best inside the same TaskRabbit account as cleaning, adding to the floor."
+   },
+   {
+    "candidate": "cand_aismb (AI productized services for local SMBs)",
+    "score_0_10": 2,
+    "reason": "Build deposits could arrive early, and the AI does most of the delivery. But sales-cycle and close-rate data are not found. The dossier's own 60-day scenario averages about $3k/month (ESTIMATE: $6,000 / 2). CASL limits cold email (the sender carries the onus of proof; penalties up to $1M for an individual). Everything depends on the owner's unknown English and sales ability."
+   },
+   {
+    "candidate": "cand_tutoring",
+    "score_0_10": 2,
+    "reason": "Preply keeps 100% of trial lessons, and Superprof norms favour a free first lesson. A VSC takes 2-4 weeks and may not be available to a self-employed tutor. The school-year intake timing was not found. The dossier's own ramp reaches about $1,979/month average over 60 days."
+   },
+   {
+    "candidate": "cand_resell (local flipping, Amazon.ca, pallets)",
+    "score_0_10": 2,
+    "reason": "The first cash could come within days from small local flips, but that is unsourced. The only earnings anecdote is about $2,333/month, unverified and not confirmed as Canadian. Scaling needs $4k-$19k of capital. The owner's scraper has returned 0 prices for about 7 weeks (confirmed locally). DeWalt ungating reportedly failed for 5 months."
+   },
+   {
+    "candidate": "cand_korean (translation, bilingual services; standalone)",
+    "score_0_10": 1.5,
+    "reason": "Paid immigration help is legally closed. Uncertified translation competes with certified providers at $58-$109 per document, and a notarization proxy of $75+ per document wipes out the margin. The website line has no price or demand evidence. Keep only as the owner's sales channel, if they have community ties."
+   },
+   {
+    "candidate": "cand_freelance (Upwork, Fiverr, Contra)",
+    "score_0_10": 1,
+    "reason": "The dossier's typical first cash is day 37-75. Payout holds are 5 days for Upwork fixed-price, about 10 days for hourly, and 14 days for new Fiverr sellers. Upwork's reported active clients are -4% YoY (snippet). Both ends fall outside the window."
+   },
+   {
+    "candidate": "cand_gig (Uber, DoorDash etc.)",
+    "score_0_10": 1,
+    "reason": "Toronto median net is $5.97/hr across all road time. $5k would need about 193 h/week (ESTIMATE). Onboarding time is not found. Rideshare must register for GST/HST from the first dollar (ETA s.240(1.1), verified). Useful at most as a few hundred dollars of bridge cash."
+   },
+   {
+    "candidate": "cand_content (Etsy, affiliate, YouTube, TikTok)",
+    "score_0_10": 0.5,
+    "reason": "Follower and watch-hour gates block payouts: YPP needs 1k subs plus 4k hours, and TikTok needs 10k followers. Tool affiliate commission is about 3%. The dossier's own realistic 60-day outcome is CAD 0-500/month."
+   },
+   {
+    "candidate": "cand_saas (micro-SaaS, Chrome extension)",
+    "score_0_10": 0.5,
+    "reason": "The TrustMRR year-0 median is $148 MRR. Median time to $1K MRR is 8 months even among survivors. Hitting the target needs about 418 new C$9 subscribers every month from launch (ESTIMATE)."
+   }
+  ],
+  "recommended_primary": "A seasonal exterior home-services stack sold street by street in one neighbourhood cluster: fall gutter/eavestrough and leaf cleanup now (paid per job), holiday-light installs (customer-owned-lights option to limit capital; paid at install; take a deposit only through the owner's own account), and seasonal snow-clearing contracts sold in October-November and billed in 2-3 instalments over Dec-Mar, not one lump prepayment. Hard gate to decide by about Sep 30: the owner must have a vehicle that can carry a 24-28 ft ladder, be physically fit and comfortable at heights, and be able to bind liability insurance in October. If any gate fails, drop gutters and lights, make cleaning the primary, and keep only walkable-cluster shovel/snowblower contracts as the add-on. City notes: GTA and Ottawa fit best. In Ottawa, a vehicle-mounted plow needs a licence and $2M insurance, and lights 'fill up by October'. Calgary snow sells monthly ($129-$300/month). Metro Vancouver: snow is not evidenced, so drop it. Montreal: French is required, and the OPC gives a 10-day cancellation right and advises consumers against deposits. Pricing is not found for Montreal.",
+  "recommended_parallel": "A cleaning floor starting in week 1, whatever the gate outcome: residential deep and move-out cleans through TaskRabbit ($25 fee, reported) and Jiffy (paid the Friday after the job week), plus direct Kijiji/Facebook/Korean-community leads that the owner posts, with light TaskRabbit assembly/TV-mount tasks on the same account. It fills the January-March gap the exterior stack leaves. ESTIMATE of a winter blend: 25 snow contracts x $500 = $12,500 / 5 months = $2,500/month, plus cleaning $2,500/month = 56 billable h/month at $45 (about 13 h/week), for about $5,000/month. Before either line starts, file the EI claim no later than Saturday Oct 10 2026, so the benefit period begins Oct 4 inside the Pilot 24 window (possible waiting-week waiver; separation pay not counted as earnings). Then choose explicitly. Path A: a declared side activity kept 'minor in extent', where EI is cut by 50% of earnings up to 90% of weekly insurable earnings. Path B: the full business, where EI is $0 for every week it runs. ESTIMATE: at the $729/week maximum, EI is worth about $3,159/month (729 x 52 / 12). A full-time business has to beat that before it adds anything in Oct-Nov.",
+  "eliminate": [
+   "cand_content (as any income source inside the window; at most a 5 h/week side bet)",
+   "cand_saas",
+   "cand_freelance (as primary; only a background profile if the owner has a proven skill and business English)",
+   "cand_gig (as a $5k path; rideshare also triggers GST/HST from the first dollar)",
+   "cand_korean as a standalone business (keep Korean-community channels only as a sales channel for the chosen services; never paid immigration paperwork)",
+   "cand_resell beyond a capped few-hundred-dollar cash flip; drop Amazon.ca tool arbitrage and pallets",
+   "cand_tutoring as primary (conditional side line only if the owner has a proven subject specialty and a parent network)",
+   "cand_aismb for the 30-60 day window (revisit later only if the owner has existing SMB relationships and business English)",
+   "standalone cand_lights and standalone cand_snow (keep only as layers of the exterior stack)"
+  ],
+  "key_facts_relied_on": [
+   {
+    "fact": "GTA holiday-light booking: 'the sweet spot is late September through the first week of October'; 'Most reputable GTA companies are fully booked by mid-November'; 'New clients who reach out in October can often be accommodated' (search summary, corpus S065; verifier: unverifiable, vendor blog).",
+    "source_url": "https://www.settoshine.ca/post/christmas-lights-cost-gta"
+   },
+   {
+    "fact": "GTA light installation pricing: single-storey $400-$800, two-storey $700-$1,500, large $1,500-$3,000+ (snippet, unverifiable). Deposit and payment-timing norms: not found.",
+    "source_url": "https://www.settoshine.ca/post/christmas-lights-cost-gta"
+   },
+   {
+    "fact": "Gutter cleaning should be done 'in late fall (after leaves drop, before snow)'. Calgary: bungalow $150-$225, 2-storey $225-$275 (snippet).",
+    "source_url": "https://guttercleaningcalgary.ca/cost-gutter-cleaning-calgary/"
+   },
+   {
+    "fact": "Toronto standard residential gutter cleaning $150-$350 (2026 guide, snippet, unverifiable).",
+    "source_url": "https://professionalroofers.com/blogs/gutter-cleaning-cost-in-toronto-2025/"
+   },
+   {
+    "fact": "Toronto: most homeowners pay $500-$1,500 per season for flat-rate snow removal. Other GTA guides show $200-$600 and $400-$950; per-visit $50-$150 (snippets).",
+    "source_url": "https://silverlightwindowsandeaves.ca/how-much-does-snow-removal-cost-in-toronto/"
+   },
+   {
+    "fact": "GTA precedent for prepaid snow contracts: a company offered a discount for paying in advance for 2025-26, one customer paid $1,200, and service stopped after one visit. Customers 'feel cheated' (CP24, Jan 16 2026, via corpus S045 summary).",
+    "source_url": "https://www.cp24.com/local/toronto/2026/01/16/gta-customers-who-paid-in-advance-for-snow-removal-feel-cheated-after-company-stopped-providing-service/"
+   },
+   {
+    "fact": "Ontario Consumer Protection Act: direct agreements made at the consumer's home (door-to-door, including snow removal) can be cancelled within 10 days of receiving the signed copy, with a refund within 15 days (search summary, corpus S037; not verified on ontario.ca).",
+    "source_url": "https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract"
+   },
+   {
+    "fact": "Quebec OPC: paying the whole snow contract before service starts is a risk borne by the consumer, and it is 'recommended not to give any deposit' before service begins. Spread payments, e.g. two instalments. 10 days to cancel if solicited at home (corpus S038 summary).",
+    "source_url": "https://opc.gouv.qc.ca/en/consumer/good-service/housing-renovation/landscaping-exterior/snow-removal/cancelling-contract"
+   },
+   {
+    "fact": "Snow insurance: general liability 'typically starts at around $450 per year for a $2 million coverage limit' (snippet). One broker page says insurers restrict snow policies by late autumn (verifier: single broker source, unverified).",
+    "source_url": "https://getcertain.ca/how-much-does-snow-removal-insurance-cost-in-canada/"
+   },
+   {
+    "fact": "Toronto cleaning: $35-$65/hr per cleaner, reputable firms $45-$55 (snippet). The sources conflict with $85-$125/hr (HomeStars) and $15-$30 for independents.",
+    "source_url": "https://hellamaid.ca/blog/toronto-hourly-vs-flat-rate-cleaning-prices-in-2026/"
+   },
+   {
+    "fact": "TaskRabbit Canada: one-time non-refundable $25 Tasker registration fee, and paying it does not guarantee acceptance (snippet). NerdWallet says applications may not be processed, to avoid oversaturation.",
+    "source_url": "https://support.taskrabbit.com/hc/en-ca/articles/360032936511-What-s-the-Registration-Fee"
+   },
+   {
+    "fact": "Jiffy pays pros on the Friday after the week the job was done; commission reportedly 12-18% (up to 25-30% per app reviews). Search summary.",
+    "source_url": "https://urbantasker.com/blog/is-jiffy-on-demand-app-good-for-contractors"
+   },
+   {
+    "fact": "EI Regulations s.30(1)-(3): a claimant operating a business is considered to have worked a full working week (no EI) unless the business is 'to such a minor extent' that it would not normally be relied on as a principal livelihood. The factors include time, capital, success, continuity and willingness to take other work. Primary statute, verified.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-96-332.xml"
+   },
+   {
+    "fact": "EI Act s.19(2): benefit reduced by 50% of earnings up to 90% of weekly insurable earnings and 100% above. s.14(1): the rate is 55%. The 2026 maximum is about $729/week (secondary source plus formula check: 68,900 / 52 x 0.55 = 728.75).",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-5.6.xml"
+   },
+   {
+    "fact": "EI Pilot Project No. 24 (Regs ss.77.996-77.999): waiting period may be waived, and separation earnings are not counted, for benefit periods beginning Mar 30 2025 - Oct 10 2026. Benefit period begins the Sunday of the week of the claim (EI Act s.10(1)). So a claim by Sat Oct 10 2026 starts Oct 4. Extension beyond Oct 10: not found.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-96-332.xml"
+   },
+   {
+    "fact": "GST/HST small supplier: $30,000 over four calendar quarters, with status lasting through the quarter plus the first following month (ETA s.148(1)). Rideshare/taxi must register from the first dollar (s.240(1.1)). Ontario HST is 13%. Primary statute.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml"
+   },
+   {
+    "fact": "Self-employed CPP: 9.9% base + 2.0% first additional (Schedules 1-2), $3,500 basic exemption (s.20(2)). ESTIMATE about $560/month at $60k/yr net.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/C-8.xml"
+   },
+   {
+    "fact": "CASL: consent is required for commercial electronic messages (email, SMS, IM). Implied consent covers conspicuously published business addresses relevant to the recipient's role, and inquiries (6 months). The sender bears the onus. Penalty up to $1M for an individual. Live two-way voice calls are excluded. Door-to-door and printed flyers are not electronic messages.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-1.6.xml"
+   },
+   {
+    "fact": "Toronto median ride-hail net was $5.97/hr across all time on the road (Jan-Apr 2024, City of Toronto analysis via Globe snippet).",
+    "source_url": "https://www.theglobeandmail.com/business/article-rideshare-drivers-in-toronto-earn-substantially-below-minimum-wage/"
+   },
+   {
+    "fact": "Upwork: fixed-price funds released 5 days after approval, hourly pay about 10 days after the billing week. Fiverr new-seller earnings clear after 14 days. Guides put the first job at 2-8 weeks (snippets).",
+    "source_url": "https://support.upwork.com/hc/en-us/articles/211063718-How-payments-for-milestones-and-fixed-price-contracts-work"
+   },
+   {
+    "fact": "Google Business Profile verification review can take up to 5 business days, and postcards up to 14 days (secondary playbook dated 2026-07-06). Maps visibility should not be counted on for October income.",
+    "source_url": "https://github.com/MrBigleg/okf-local-seo/blob/128c1744cf4c8cd87ab2fbe04cc18ab6d6316810/bundles/local-seo/gbp/verification.md"
+   },
+   {
+    "fact": "Consumer Interac e-Transfer limits are typically $2,000-3,000 per transaction and set per bank (secondary). An Oakville contractor had a $1,972 balance delayed by an e-transfer limit. Large snow or lights tickets may need split payments or card links.",
+    "source_url": "https://github.com/nifabulous/Relay/blob/885bdf20a690d77dd2b93e46a52a597382039c6e/app/data/payment_schemes.py"
+   },
+   {
+    "fact": "The owner's scraper returned 0 prices for all 54 queries on every snapshot from 2026-08-05 to 2026-09-23 (verified locally by the resell verifier).",
+    "source_url": "file:///home/user/canadian-tool-deals/public/cache/index.json"
+   }
+  ],
+  "notes": "WHY THIS RANKING (lens: cash actually received by Nov 30, then sustained):\n(1) It is late September. The only candidates whose demand peaks inside Oct-Nov and pay per ticket at completion or install are fall exterior work and holiday lights. Snow is the only one with a sales window now and money collected before service. Every digital or platform option has a gate (reviews, follower thresholds, payout holds, approval queues) that pushes typical first cash past day 30. The dossiers' own estimates are day 37-75 on freelance platforms, CAD 0-500 at day 60 for content, and a $148 year-0 median MRR for SaaS.\n(2) Cash by Nov 30 at modest volumes. ESTIMATE, exterior stack: 12 gutter jobs x $245 + 5 light installs x $570 = $2,940 + $2,850 = $5,790. ESTIMATE, cleaning only: 5,000 / 45 = 111 billable h over about 8 weeks, about 14 h/week.\n(3) Sustaining $5k/month is where every seasonal line fails on its own. Gutters: Dec-Mar cliff. Lights: zero Feb-Sep, and the January takedown is unpaid. Snow: 46+ contracts at $600 is beyond evidenced solo capacity. So cleaning is paired in as the winter carrier.\n\nTREAT PREPAYMENT AS CASH, NOT INCOME. Snow prepayments are real cash in hand but also an unearned liability. Ontario direct agreements carry a 10-day cooling-off right with a 15-day refund (search summary). The CP24 Jan-2026 'Snow Pros' story shows GTA homeowners have been burned by prepay, so a newcomer should offer instalments (deposit plus a mid-season payment) and a written contract with no-snow-onto-road and low-snow terms. ESTIMATE: 10 contracts x $600 = $6,000 collected, but only about $1,200/month of it is earned over a 5-month season.\n\nEI IS THE BIGGEST HIDDEN VARIABLE for the 30-day need, and the dossiers largely missed it. If the owner qualifies, EI at the maximum is worth about $3,159/month (ESTIMATE 729 x 52 / 12). A full-scale business makes each operating week pay $0 EI (Regs s.30). Filing by Oct 10 keeps the Pilot 24 benefits available. Whether to run the business beyond 'minor in extent' in October should be decided with Service Canada, not assumed. Eligibility (insurable hours, reason for job loss, severance) is unknown.\n\nGATING UNKNOWNS that change the answer. Vehicle, fitness, heights comfort and English level decide between the exterior stack and cleaning as primary. Savings decide whether insurance, a ladder or snowblower and a GST-free runway are affordable; snowblower and Canadian ladder prices were not found. Every market price here is an unverified search snippet (all non-GitHub domains were blocked), so the AI should build quote calculators with editable price inputs, not hard-coded 'facts'.\n\nWHAT THE AI SHOULD BUILD FIRST (supports speed). A one-page bilingual EN/KO site, deployed to Cloudflare Pages because Vercel Hobby is reported non-commercial. Door-hanger and flyer PDFs combining fall, lights and snow offers. A snow contract with a cooling-off notice, instalment schedule and low-snow clause (for a lawyer to review). A cleaning/TaskRabbit profile and a checklist pack. A route and CRM sheet. An EI weekly-earnings declaration tracker. A GST $30k and CPP set-aside tracker. Flyers and door-knocking avoid CASL. Any email or SMS follow-up must carry CASL identification and an unsubscribe.\n\nCITY DIFFERENCES (from the files only). GTA: evidence strongest. Ottawa: vehicle-plow licence, $2M insurance, 30+ snow events, lights 'fill up by October'. Calgary: snow billed monthly $129-$300; a gutter competitor advertises from $75. Metro Vancouver: no snow evidence; lights $8-$12/ft; gutters $100-$300; BC gig floor $21.89 per engaged hour. Montreal: French selling, QPP/QST, OPC anti-deposit guidance; prices not found."
+ },
+ {
+  "lens": "DOWNGRADE & ROBUSTNESS: how much capital is at risk; legal and regulatory exposure (CASL, licensing, insurance, liability, EI, GST/HST); physical and safety risk; and how much each option depends on owner attributes that are UNKNOWN (vehicle, English fluency, trade skills, savings). Options that still work with little capital and average skills score higher, and car dependence is penalized. I read all 17 bundle files. Verifier corrections override dossier claims. Only the federal statute facts (Justice Canada XML on GitHub) and Cloudflare docs were confirmed from primary text. Everything else is at search-snippet level, and I treat it that way below.",
+  "ranking": [
+   {
+    "candidate": "cleaning (residential deep clean / move-in-move-out at flat rates, recurring clients; TaskRabbit/Jiffy for first reviews, then direct booking)",
+    "score_0_10": 6.5,
+    "reason": "The most robust option that still has a plausible path to $5k. Capital is small: the only sourced cost is the $25 TaskRabbit fee, and supplies were not found. No licence was found, though that is unverified. It needs no vehicle, though one helps (dossier). The skill involved is average and trainable, not a trade. It works in every metro and is not tied to the weather; seasonality was not found. Unlike gutters, lights and snow, there is no work at height. Downsides: the owner does physical labour and carries the risk of damage or theft claims. Insurance cost is unverified; one snippet says 'can start at $500 for self-employed cleaners', with unclear attribution. The price inputs conflict ($15–30, $35–65 and $85–125/hr). The verifier puts probability_5k at 2.5, which is still the highest of the low-capital, low-skill options."
+   },
+   {
+    "candidate": "tutoring (direct-pay K-12 curriculum / Korean language, online or at the library)",
+    "score_0_10": 5.5,
+    "reason": "Low capital: about $72 for a VSC plus existing devices. No licence is needed in Ontario (OCT help snippet). Physical risk is near zero. K-12 curriculum tutoring is HST-exempt (CRA Memo 20-6 snippet), and no vehicle is needed if it is done online or at a library. But it depends entirely on an UNKNOWN subject skill and English level. There is liability exposure with minors, and it is unclear whether a self-employed person can obtain a VSC. The verifier's probability is 1.5. This is a strong conditional secondary line, not a primary one."
+   },
+   {
+    "candidate": "labour (TaskRabbit furniture assembly / TV mounting only; no truck categories)",
+    "score_0_10": 5,
+    "reason": "Uses the same $25 TaskRabbit account as cleaning, and assembly and mounting need tools but no vehicle. Downsides: property-damage liability (dropped TVs, walls), and the regulated-trade boundary is unverified, since in-wall power requests are likely regulated electrical work. The IKEA payout depends on speed ($20/hr for a beginner vs $50/hr for a fast worker, per a blog snippet). TaskRabbit may not process applications in saturated cities (NerdWallet snippet). Works best bundled with cleaning to fill the schedule, not on its own."
+   },
+   {
+    "candidate": "aismb (AI-built websites/GBP for local SMBs)",
+    "score_0_10": 4.5,
+    "reason": "Very safe on capital and physical risk, and the AI does most of the delivery. But revenue depends completely on the owner's UNKNOWN business English and sales ability. CASL puts the burden of proving consent on the sender (s.13), the maximum penalty for an individual is $1M (s.20(4)), and cold email to consumers is prohibited. The verifier found the dossier's own 60-day scenario averages about $3k/month, not $5k. Only a small legal risk remains if it is sold in person or through inbound inquiries. Keep it as upside only if the owner has English and SMB contacts."
+   },
+   {
+    "candidate": "freelance (Upwork/Fiverr/Contra)",
+    "score_0_10": 4,
+    "reason": "Near-zero capital and no physical or licence risk. But it depends heavily on English and on proven skills, both UNKNOWN. Cash arrives slowly: the typical case is day 37–75, and Fiverr holds funds for 14 days. Upwork active clients fell 4% (snippet). If the owner cannot pay rent in month 1, being slow is itself the downside."
+   },
+   {
+    "candidate": "korean (KO/EN bilingual websites for Korean-owned SMBs; translation)",
+    "score_0_10": 3.5,
+    "reason": "Low capital, but the community pulls toward paid immigration paperwork help, and that is legally closed without CICC or law-society authorization (canada.ca snippet: anyone compensated 'in any way' must be authorized). Uncertified IRCC translation likely loses money once the affidavit/notary cost is included (verifier ESTIMATE: $45 price − $75 notarization proxy = −$30 per document). It needs both native Korean and professional English. The website line has no evidence of price or demand."
+   },
+   {
+    "candidate": "saas (micro-SaaS / Chrome extension)",
+    "score_0_10": 3,
+    "reason": "Little capital (US$5 CWS fee) and no physical or licence risk, but it depends on UNKNOWN savings to fund a runway. The year-0 median is $148/month MRR (TrustMRR, n=5,079), and the median time to $1K MRR is 8 months. For someone who needs income within 30 days, the realistic downside is no income, even though the cash at risk is small."
+   },
+   {
+    "candidate": "gig (Uber/Lyft/DoorDash/Skip etc.)",
+    "score_0_10": 2.5,
+    "reason": "Rideshare must register for GST/HST from the first dollar (ETA s.240(1.1), verified in the statute). Ride-hail needs a car, insurance gaps are unverified, and the Toronto median net was $5.97/hr across all road time (snippet, Jan–Apr 2024). There is road and fatigue risk. Bike delivery lowers the capital needed, but its earnings are unknown. Onboarding and payout timing were not found. It can serve as a small cash bridge but offers no path to $5k."
+   },
+   {
+    "candidate": "snow (residential seasonal contracts)",
+    "score_0_10": 2.5,
+    "reason": "Carries slip-and-fall and property-damage liability. Prepayments are a liability owed back through March if the operator is injured. One broker page says insurers restrict cover by late autumn (unverified). Throwing snow onto the road draws HTA and bylaw fines, and Ottawa requires a plow licence plus $2M insurance for vehicle plows. The owner would need a snowblower (price not found) and ideally a vehicle. Weather cuts both ways, and Metro Vancouver snowfall data was not found. Almost nothing is earned in Oct–Nov."
+   },
+   {
+    "candidate": "content (Etsy/affiliate/YouTube/TikTok, incl. existing tool site)",
+    "score_0_10": 2.5,
+    "reason": "Low cash at risk, but reaching income depends on having savings runway. The platform gates (YPP, TikTok 10k followers) and the 3% tool commission require large volumes. The existing repo's Amazon scraper uses a spoofed User-Agent, which may conflict with the Associates agreement (unverified), and it shows prices more than 5 months stale. There is no realistic path to 30-day income."
+   },
+   {
+    "candidate": "fall (gutters/windows/pressure washing)",
+    "score_0_10": 2,
+    "reason": "A vehicle that can carry a 24–28 ft ladder is mandatory, and whether the owner has one is UNKNOWN. Ladder falls are the dominant risk. Pressure washing in Toronto appears to require the Building Renovator licence with an exam (snippet). Working at Heights applicability is ambiguous. The insurance quote is a window-cleaning quote, not a gutter quote. The verifier's low_risk score is 2."
+   },
+   {
+    "candidate": "resell (FB/Kijiji flips, Amazon arbitrage, pallets)",
+    "score_0_10": 2,
+    "reason": "This option has the most capital at risk: an estimated $4k–$19k to approach $5k/month, and that money comes from the survival fund of someone who just lost a job. There is dead-inventory and pallet-dud risk. DeWalt ungating failed for 5 months in one report, and Amazon account suspensions can freeze payouts. Returns pallets can contain personal data. A vehicle and storage are needed for anything bulky."
+   },
+   {
+    "candidate": "lights (holiday light installation)",
+    "score_0_10": 1.5,
+    "reason": "Worst on downside. It involves ladder and roof work in Nov–Jan ice. A vehicle and ladders are mandatory. The lease model means buying lights upfront before customers pay. The January takedown is prepaid, so it is unpaid labour in bad weather. The GTA booking window is 'September through early October' and firms are 'fully booked by mid-November' (settoshine snippet), so a zero-review entrant is late. Canadian insurance cost and exclusions were not found."
+   }
+  ],
+  "recommended_primary": "A residential cleaning service in the GTA focused on flat-rate deep cleans and move-in/move-out cleans, plus recurring biweekly clients. Launch through TaskRabbit (and Jiffy if accepted) to get first reviews, and in parallel run an AI-built bilingual EN/KO direct-booking site with an instant quote calculator. It works without a car: take transit-reachable jobs first and pack a portable supply kit. The owner must get a liability-insurance quote before taking any direct (off-platform) client; the cost is unverified. Why this wins under a downside lens: little capital at stake, no licence found, no work at heights, not seasonal or weather-dependent, and doable with average skills and functional English. It also carries over to every metro. Vancouver: BC STR rules cut entire-home listings 22%, so skip STR turnover. Calgary/Ottawa: rates not found, check locally. Montreal: QPP and QST instead of CPP/HST, Quebec privacy law applies, and French is likely needed (unverified). Honest expectation from the verifier: probability 2.5/10 of averaging $5k net in the first 60 days. A $5k run-rate by month 2–3 is plausible only for a fit owner working about 32–43 h/week. ESTIMATE: 6,250/45 = 138.9 billable h/month = 32.1 h/week; ÷0.75 for unbillable time = 42.8 h/week. Marketing design keeps CASL exposure near zero: flyers and door-to-door (not commercial electronic messages), replies to inbound inquiries (SOR/2013-221 s.3(b)), requested quotes (CASL s.6(6)(a)), and no cold email or SMS to consumers. Host the site on Cloudflare Pages, not Vercel Hobby (non-commercial only).",
+  "recommended_parallel": "INCOME FLOOR = EI, handled explicitly. (1) File the initial EI claim right after the last day of work, and no later than Saturday October 10, 2026. That puts the benefit period start (Sunday October 4) inside Pilot Project No. 24 (EI Regs ss.77.996–77.999): a possible waiting-week waiver (discretionary), separation money not counted as earnings, and +20 weeks for long-tenured workers. No extension beyond October 10 was found. Maximum benefit is about $729/week (secondary source plus the statute formula). ESTIMATE: 729 × 52 / 12 ≈ $3,159/month at most; the owner's actual rate is unknown. (2) Stage the business. Under EI Regs s.30(1), any week the business is more than 'minor in extent' counts as a full working week, which pays $0 EI. So in October, run cleaning at small declared volume and report net earnings. EI Act s.19(2): benefits are reduced by 50% of earnings up to 90% of weekly insurable earnings. ESTIMATE: $400 net → EI $529 + $400 = $929 that week. Go full-time and stop claiming only once weekly business net reliably exceeds the EI rate. Confirm the minor-extent treatment with Service Canada first; undeclared earnings are clawed back (s.19(3)). (3) BACKUP on the same TaskRabbit account ($25): furniture assembly and TV mounting (no in-wall electrical) to fill gaps in the schedule. (4) CONDITIONAL add-ons, only if the owner confirms the attribute: direct-pay K-12 or Korean tutoring (needs subject skill; no licence), and KO/EN websites for Korean SMBs sold in person (needs business English or Korean networks; never paid immigration paperwork).",
+  "eliminate": [
+   "Holiday light installation (heights in winter, vehicle and ladders mandatory, lease inventory bought upfront, late booking window, unpaid January takedown)",
+   "Reselling beyond a few hundred dollars of small local flips: Amazon.ca arbitrage (brand gating, ~$19k capital tied up, suspension risk) and liquidation pallets (duds, personal-data exposure)",
+   "Gig/rideshare as a $5k vehicle (ETA s.240(1.1) GST/HST from the first dollar, car and insurance gap, $5.97/hr Toronto median net); at most bike delivery as a small bridge",
+   "Digital content/affiliate/YouTube/TikTok as a 30–60 day income plan (keep at most 5 h/week as a side bet; stop the spoofed-UA Amazon scraper until Associates terms are checked)",
+   "Micro-SaaS/Chrome extension as the income plan (year-0 median $148 MRR)",
+   "Freelance marketplaces as the primary plan (first cash typically day 37–75)",
+   "Korean-community paid immigration/'paperwork' help (illegal without CICC or law-society authorization) and uncertified IRCC translation at sub-$59 prices (likely loss-making after affidavit costs)",
+   "Fall exterior services unless the owner already has a ladder-capable vehicle and is comfortable at heights; pressure washing in Toronto in any case until the Building Renovator licence is confirmed",
+   "Snow removal with a truck-mounted plow (insurance $5k–$12k/yr for 1–2 trucks, Ottawa plow licence); walk-behind snow contracts only as a winter add-on if the owner is fit and insurance can be bound in October"
+  ],
+  "key_facts_relied_on": [
+   {
+    "fact": "EI Regs s.30(1)–(3): a claimant operating a business is 'considered to have worked a full working week' unless it is 'to such a minor extent' that a person would not rely on it as a principal livelihood. Factors: time, capital, financial success, continuity, nature of business, willingness to accept a job. (Primary statute text read by the compliance researcher.)",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-96-332.xml"
+   },
+   {
+    "fact": "EI Pilot Project No. 24 (ss.77.996–77.999): waiting week may be waived, separation money not counted as earnings, +20 weeks for long-tenured workers, for benefit periods beginning up to October 10, 2026. No extension found.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-96-332.xml"
+   },
+   {
+    "fact": "EI Act s.19(2): benefit reduced by 50% of earnings up to 90% of weekly insurable earnings and 100% above that. s.19(3): undeclared earnings clawed back. s.10(1): benefit period begins on the later of the Sunday of the interruption week and the Sunday of the claim week.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-5.6.xml"
+   },
+   {
+    "fact": "2026 EI maximum weekly benefit is stated as $729 (SECONDARY source). The statute formula check gives 68,900/52 × 55% = $728.75.",
+    "source_url": "https://github.com/Artzp/RetireOps/blob/main/docs/source-of-truth/19-benefits-tax-credits-2026.md"
+   },
+   {
+    "fact": "CASL: s.13 sender bears onus of proving consent; s.20(4) maximum penalty $1,000,000 for an individual; s.6(6)(a) requested quotes exempt; s.6(8)(a) live voice calls excluded; implied consent via conspicuous publication only when relevant to the recipient's business role (s.10(9)).",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-1.6.xml"
+   },
+   {
+    "fact": "SOR/2013-221 s.3(b): CASL s.6 does not apply to a CEM sent in response to a request, inquiry or complaint. s.4(1): a first message after a referral is exempt if it names the referrer.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-2013-221.xml"
+   },
+   {
+    "fact": "ETA s.148: $30,000 small-supplier threshold (four-quarter and single-quarter tests). s.240(1.1): small suppliers carrying on a taxi business, which includes transporting passengers for fares by motor vehicle, must register.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml"
+   },
+   {
+    "fact": "CPP Act Schedules 1–2: self-employed base rate 9.9% plus first additional 2.0% = 11.9%, plus 8% on the second tier. ESTIMATE: (60,000 − 3,500) × 11.9% = $6,723.50/yr on $5k/month net.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/C-8.xml"
+   },
+   {
+    "fact": "Toronto cleaning: $35–$65/hr per cleaner typical; reputable companies $45–$55/hr (search snippet; verifier: unverifiable, conflicts with other snippets giving $15–30 and $85–125).",
+    "source_url": "https://hellamaid.ca/blog/toronto-hourly-vs-flat-rate-cleaning-prices-in-2026/"
+   },
+   {
+    "fact": "TaskRabbit Canada: one-time non-refundable $25 Tasker registration fee; paying it does not guarantee acceptance (snippet, unverifiable).",
+    "source_url": "https://support.taskrabbit.com/hc/en-ca/articles/360032936511-What-s-the-Registration-Fee"
+   },
+   {
+    "fact": "TaskRabbit doesn't guarantee all applications will be processed, to avoid oversaturating a location (snippet).",
+    "source_url": "https://www.nerdwallet.com/article/finance/taskrabbit?trk=newwnb"
+   },
+   {
+    "fact": "Cleaning insurance 'can start at $500 for self-employed cleaners' (combined search snippet; attribution to this Canadian broker page uncertain).",
+    "source_url": "https://www.thinkinsure.ca/business-insurance/cleaning-insurance"
+   },
+   {
+    "fact": "BC principal-residence STR rule: entire-home listings fell 22% in Vancouver from May 2024 to Feb 2025 (snippet), which weakens STR-turnover cleaning in Metro Vancouver.",
+    "source_url": "https://www.nationalobserver.com/2025/04/24/news/year-after-bcs-short-term-rental-crackdown-has-it-made-housing-cheaper"
+   },
+   {
+    "fact": "Toronto Building Renovator licence covers any 'building cleaner' using pressurized water or chemicals on exteriors; applicants must pass examinations (snippet, unverifiable).",
+    "source_url": "https://www.toronto.ca/services-payments/permits-licences-bylaws/building-renovators/"
+   },
+   {
+    "fact": "GTA holiday lights: best to book September through early October; most reputable GTA companies fully booked by mid-November (snippet from an operator blog).",
+    "source_url": "https://www.settoshine.ca/post/christmas-lights-cost-gta"
+   },
+   {
+    "fact": "Toronto ride-hail median net was $5.97/hr across all road time after vehicle costs, Jan–Apr 2024 (City of Toronto data via Globe snippet; unverifiable).",
+    "source_url": "https://www.theglobeandmail.com/business/article-rideshare-drivers-in-toronto-earn-substantially-below-minimum-wage/"
+   },
+   {
+    "fact": "Snow removal: insurers reportedly limit or stop writing snow removal policies by late autumn (single broker snippet; verifier: unverified). 1–2 truck operators pay $5,000–$12,000/yr for $2M liability.",
+    "source_url": "https://rates.ca/resources/what-does-snow-removal-business-insurance-canada-really-cover-and-how-much-does-it-cost"
+   },
+   {
+    "fact": "Paid immigration or citizenship help requires an authorized representative (CICC, lawyer or paralegal, Quebec notary) if compensated 'in any way' (snippet).",
+    "source_url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigration-citizenship-representative/learn-about-representatives.html"
+   },
+   {
+    "fact": "Amazon.ca seller forum: repeated DeWalt ungating applications over about 5 months with no approval (snippet).",
+    "source_url": "https://sellercentral.amazon.ca/seller-forums/discussions/t/ca50bc31-2fc3-4a92-8bed-5eb7596c4ff8"
+   },
+   {
+    "fact": "TrustMRR analysis (n=5,079 Stripe-verified products): year-0 median MRR $148/month; only 0.9% 'breaking out' (secondary GitHub capture).",
+    "source_url": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md"
+   },
+   {
+    "fact": "Cloudflare Pages Free: 500 builds/month, no bandwidth limit stated (official docs). Vercel Hobby is reported as non-commercial only (secondary), so the business site should go on Cloudflare.",
+    "source_url": "https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/pages/platform/limits.mdx"
+   },
+   {
+    "fact": "Interac e-Transfer consumer limits are set by each bank, typically $2,000–3,000 per transaction (secondary). Fine for cleaning tickets; a problem for large lights or snow prepayments.",
+    "source_url": "https://github.com/nifabulous/Relay/blob/885bdf20a690d77dd2b93e46a52a597382039c6e/app/data/payment_schemes.py"
+   }
+  ],
+  "notes": "1) Evidence grade. The only primary-verified facts are the federal statutes (EI, ETA, CPP, CASL, PIPEDA) and the Cloudflare docs. Every market price, fee, earnings figure and municipal rule in this ranking is an unopened search snippet that the verifier marked 'unverifiable'. No candidate's path to $5k is evidenced; the ranking is about which option fails most gently. No option shows sourced evidence of averaging $5k net in the first 60 days. The verifiers' best probability_5k is 3 (fall), which is not an option I can recommend under this lens, and cleaning is next at 2.5.\n2) The most robust move in the whole plan is not a business: it is filing EI before Oct 10, 2026 (pilot window) and staging the business so it stays 'minor in extent' until its net income beats the EI rate. ESTIMATE of the path-A example from the compliance file: $400 net week → EI 729 − 200 = $529 → $929 total, which assumes the maximum benefit. Eligibility (insurable hours of 420–700, reason for separation, severance) is UNKNOWN. A full-time business forfeits EI week by week (s.30). This affects every candidate, including gig, TaskRabbit and tutoring, because they are all self-employment.\n3) Why cleaning beats fall and snow under this lens even though fall has a higher verifier probability (3 vs 2.5): fall needs a ladder-capable vehicle (UNKNOWN), involves ladder-fall risk and a possible Toronto licence, and its peak does not start until after leaf drop. Cleaning works without a car, carries no height risk, and is not seasonal. If the owner turns out to have a suitable vehicle, is fit and is comfortable on ladders, gutter cleaning in Nov becomes a reasonable short add-on, but only after an insurance quote that covers roof and ladder work.\n4) Conditional re-ranking. If the owner has strong high-school math/science or native Korean plus a parent network, tutoring rises to near-parity with cleaning, because it has lower physical risk and K-12 curriculum tutoring is HST-exempt (CRA Memo 20-6 snippet). If the owner has business-level English and existing SMB contacts, aismb becomes a viable upside line, sold in person or through inbound inquiries only (CASL).\n5) Required checks before spending money: a real CGL insurance quote for residential cleaning; whether TaskRabbit/Jiffy GTA onboarding is open and how long approval takes (not found); Service Canada's position on 'minor in extent'; a service contract with a damage/lockout clause (AI drafts it, a lawyer or insurer reviews it). Keep a CASL-compliant footer on all emails (name, mailing address, contact, unsubscribe that works for 60 days, honoured within 10 business days) and a PIPEDA privacy notice on the quote form.\n6) Tax-driven pricing. ESTIMATE: at $6,250/month gross from Oct 2026, Q4 = $18,750 and Q1 2027 = $18,750. The four quarters before Q2 2027 total $37,500, which is over $30k, so HST is likely charged from about May 1, 2027 (s.148(1) small-supplier status lasts through the quarter plus one month). Budget CPP at 11.9% of net."
+ },
+ {
+  "lens": "AI LEVERAGE & EXECUTION FEASIBILITY. How much of the business the AI can concretely build and run from the GitHub repo (site, quoting, booking, outreach drafts, content, automation), how much the human must still do, and how clear and mechanical a 30-day plan to first cash is. A high AI share counts only if it sits on the path to revenue inside the window. Building a product nobody buys scores low on feasibility. Scores use the verifier-adjusted numbers where the verifier corrected the dossier. The SaaS file has no verification block, so its dossier numbers are used with that caveat.",
+  "ranking": [
+   {
+    "candidate": "aismb: AI-built productized services for local SMBs (website + Google Business Profile setup + review-reply drafts + monthly care retainer)",
+    "score_0_10": 6.5,
+    "reason": "This is the highest AI share that sits directly on the revenue path. The AI builds the product being sold: vertical demo sites, GBP audits, review replies, proposal and contract templates, CASL-compliant outreach and a lead sheet, and it can deploy the sites to Cloudflare Pages Free, which is officially documented. The human only sells, collects deposits, verifies accounts and gets client access. The 30-day plan is mechanical: days 1-3 demos, then walk-ins, deposit, 48-hour build. Penalties: (1) sales is 100% human, and the owner's English and sales ability are unknown; (2) the verifier found the dossier's 60-day blended case averages about $3k/month, not $5k (ESTIMATE $6,000/2); (3) price anchors are unverified snippets (freelancer sites $500-3,000; one Nova Scotia agency at CAN$285/mo); (4) CASL limits cold email to conspicuously published, role-relevant addresses. In-person walk-ins and live calls are outside CASL s.6, which keeps the channel open."
+   },
+   {
+    "candidate": "korean: bilingual KO/EN websites + GBP for Korean-owned SMBs (translation and paperwork lines removed)",
+    "score_0_10": 5.5,
+    "reason": "The web line is the same AI-heavy delivery as aismb, with a language edge. It gives the Korean-speaking owner a warm, in-person sales channel, and the CASL referral exemption (SOR/2013-221 s.4(1)) supports referral chains. Penalized as a standalone because the verifier found zero sourced price, demand or SMB-count evidence for the web line. The uncertified-translation line looks loss-making against a ~$75 notarization proxy. Paid immigration 'paperwork help' is legally closed without CICC or law-society authorization. Best used as the beachhead segment of aismb, not as a separate business."
+   },
+   {
+    "candidate": "saas: micro-SaaS / Chrome extension / AI tools",
+    "score_0_10": 4,
+    "reason": "The AI can build about 90% of it: MV3 extension, Next.js backend, payments via ExtPay, Polar or Stripe, listing assets. But the build does not lead to cash in the window. Sourced base rates: TrustMRR year-0 median $148/mo, and a median of 8 months to $1K MRR among survivors. Distribution (posting and customer conversations) is human-only and is the stated bottleneck. The plan to first dollar is not mechanical. Note: no verifier pass exists for this file."
+   },
+   {
+    "candidate": "freelance: Upwork / Fiverr / Contra",
+    "score_0_10": 4,
+    "reason": "The AI can draft profiles, portfolio sites, proposals and much of the deliverable work. But the human must pass ID checks, submit every proposal, take client calls and own quality. Payout holds push typical first cash to day 37-75 (verifier ESTIMATE ~day 40-45). The categories AI serves best (writing, translation) are shrinking in the dossier's snippets. Useful only as a side channel for Direct Contracts (5% fee) with clients the owner finds personally."
+   },
+   {
+    "candidate": "cleaning: move-out / deep-clean / recurring residential, TaskRabbit + direct booking",
+    "score_0_10": 4,
+    "reason": "This physical option gains the most from the AI's funnel work. Move-out cleans have sourced flat-rate anchors ($325-559 + HST at one firm; 'from $185' at another; all unverified). That makes an instant quote calculator, booking form, Calendar holds, Gmail confirmations, Kijiji and Korean-channel ad copy, and TaskRabbit profile copy directly useful. It is the most mechanical physical plan and needs no vehicle, ladder or licence (none found). Penalized hard because the verifier puts the AI at only about 20-25% of the work, and $5k needs roughly 35-45 real hours a week of physical labour (verifier ESTIMATE 42.8 h/wk)."
+   },
+   {
+    "candidate": "snow: residential seasonal contracts",
+    "score_0_10": 3.5,
+    "reason": "The AI can build the quote calculator, seasonal contract, route clustering, dispatch templates and Ottawa compliance pack. But October cash is only prepayments, which are service liabilities, and all storm labour is human. It needs insurance bound in October, a snowblower (price not found) and probably a vehicle. The verifier puts the season-only target at 46-65 contracts, and ~15-hour solo shifts per storm."
+   },
+   {
+    "candidate": "fall: gutters / windows / leaf cleanup",
+    "score_0_10": 3.5,
+    "reason": "The dossier's arithmetic is simple (22 jobs at a $265 blended ticket; verifier-confirmed), and the AI can build the quote site, door-hanger copy, canvassing route plan and CRM. But revenue needs a ladder-capable vehicle, comfort at heights and door-knocking, all human and all unknown for this owner. Toronto pressure washing appears licence-gated. The peak is a few weeks in late Oct-Nov, then a winter cliff."
+   },
+   {
+    "candidate": "lights: holiday light installation",
+    "score_0_10": 3.5,
+    "reason": "High tickets make a per-linear-foot quote calculator and material takeoff tool valuable, so AI leverage is 4. But selling on site, ladder work and a vehicle are human. The booking window (Sept to early Oct per one vendor blog) is already closing on 2026-09-23. Verifier-corrected math needs about 26 homes for $10k net, and revenue is zero Feb-Sept."
+   },
+   {
+    "candidate": "tutoring: K-12 / Korean / IELTS-CELPIP",
+    "score_0_10": 3,
+    "reason": "The AI can build curricula, worksheets, a bilingual site and CRM. But every dollar is a live human teaching hour, and it only works if the owner has a proven subject skill (unknown). The dossier's own ramp estimate reaches about $1,979/mo average, and platform trials pay $0."
+   },
+   {
+    "candidate": "content: Etsy / affiliate / YouTube / the existing tool-deals site",
+    "score_0_10": 3,
+    "reason": "The AI can produce nearly all the assets. But the monetization gates (YPP 1k subs + 4k hours; TikTok 10k followers) and 3% tool commissions block income within 60 days. Google's scaled-content-abuse policy penalizes exactly the mass AI output that would make AI leverage high. The existing repo asset was verified locally as 0 of 54 products priced."
+   },
+   {
+    "candidate": "labour: moving help / assembly / TV mounting",
+    "score_0_10": 3,
+    "reason": "The AI can build a direct-booking site and ad system, but revenue is 100% physical. TaskRabbit onboarding may be frozen in saturated cities (NerdWallet snippet). The only earnings evidence is from US affiliate blogs."
+   },
+   {
+    "candidate": "resell: FB Marketplace / Kijiji / Amazon arbitrage",
+    "score_0_10": 2,
+    "reason": "The AI adds only calculators, listing copy and trackers. Sourcing, meetups, lifting and posting from the owner's accounts are human. The owner's scraper was confirmed locally to produce 0 prices for 7+ weeks. DeWalt and Milwaukee are gated on Amazon.ca. Scaling needs $4k-$19k of working capital (ESTIMATE)."
+   },
+   {
+    "candidate": "gig: Uber / DoorDash / Instacart etc.",
+    "score_0_10": 1,
+    "reason": "The AI can build a shift tracker and nothing that changes revenue. The City of Toronto median net is $5.97/hr across all road time (snippet), which makes $5k impossible (ESTIMATE 192.8 h/wk). Rideshare must also register for GST/HST from the first dollar (ETA s.240(1.1), verified in the statute)."
+   }
+  ],
+  "recommended_primary": "A bundle of aismb and korean: an AI-built 'local presence' productized service for GTA small businesses, starting with Korean-owned SMBs. The package is a fixed-price bilingual KO/EN website plus Google Business Profile setup, with a deposit up front, then an optional monthly care retainer (GBP posts, review-reply drafts, small edits).\n\nThrough the AI-leverage lens, this is the only option where the AI builds the product the owner sells, and the human only sells and collects. Mechanical 30-day plan:\n- Days 1-3: the AI builds 3 vertical demo templates (restaurant, salon, academy) in the repo and deploys them to Cloudflare Pages Free. Do not use Vercel Hobby, which is non-commercial per secondary sources. The AI also builds a price sheet, proposal and contract templates (lawyer review advised), a deposit invoice template, a CASL-compliant email footer and unsubscribe log, and a lead sheet with a per-lead conspicuous-publication evidence column.\n- Days 3-30: the human walks into 15-20 businesses a day in person. Live conversation, door-to-door and printed flyers are not CEMs, so CASL consent does not apply to them. Each first client gets asked for a referral, and the first message to a referred business names the referrer (SOR/2013-221 s.4(1)).\n- Delivery: the AI builds each site within 48 hours of the deposit. The human gets GBP manager access and verification, which takes up to 5 business days, or 14 days for a postcard.\n\nESTIMATE of volume needed for $5k/month: 2 builds × $1,500 = $3,000, plus 7 retainers × $300 = $2,100, for $5,100 gross before software. That means 2-3 closes every month plus a growing retainer base. Both prices are unverified anchors.\n\nHard condition: the owner must be willing and able to sell face to face in Korean and/or English. If not, this option collapses, and the fallback below becomes the primary.",
+  "recommended_parallel": "Two layers.\n\n(1) Income floor, which is not a business: file the EI initial claim right after the last day of work, and no later than Saturday October 10, 2026. A claim that week gives a benefit period starting Sunday October 4, inside EI Pilot Project No. 24 (SOR-96-332 ss.77.996-77.999). In that window the waiting week can be waived, and separation money is not counted as earnings. The 2026 maximum is about $729/week (secondary source plus statute formula).\n\nCritical conflict: under EI Regs s.30(1), each week the business runs at more than 'minor extent' counts as a full working week, which means $0 EI for that week. The owner must confirm with Service Canada which path to take: EI plus a small declared side activity, or the full business with no EI. This must be settled before invoicing anyone.\n\n(2) Fast-cash physical backup, if the owner is physically able and the SMB sales test shows no deposits by about day 14: flat-rate move-out and deep cleaning, run through TaskRabbit ($25 fee, unverified) plus a direct-booking funnel the AI builds (instant quote calculator, Calendar holds, Gmail confirmation drafts, Kijiji and Korean-channel ad copy). Among the physical options it has the lowest barrier: no ladder, no licence found, and no vehicle strictly required. It also has the most mechanical AI-built funnel.\n\nSnow contracts or fall gutter work are alternatives only if the owner already has a vehicle, and for gutters, ladders and comfort at heights.",
+  "eliminate": [
+   "gig (as any $5k candidate; AI adds ~nothing; $5.97/hr median net; rideshare GST/HST registration required from the first dollar)",
+   "resell (AI adds only calculators; capital-heavy; the owner's scraper produces 0 prices)",
+   "content / affiliate / YouTube / Etsy as a 30-60-day income plan (monetization gates; scaled-content-abuse risk; repo site 0/54 priced)",
+   "saas / Chrome extension as a primary (AI-buildable but base rates are ~$148/mo in year 0; revisit only after income is stable)",
+   "lights as a standalone (booking window closing; zero revenue Feb-Sept; needs vehicle, ladders, heights)",
+   "freelance marketplaces as a standalone (typical first cash day 37-75; keep only Direct Contracts for clients found in person)",
+   "korean translation and immigration-paperwork lines specifically (translation loss-making vs the notarization proxy; paid immigration help is illegal without CICC or law-society authorization)"
+  ],
+  "key_facts_relied_on": [
+   {
+    "fact": "CASL implied consent by conspicuous publication applies only if the address was conspicuously published with no 'no unsolicited CEMs' statement and the message is relevant to the recipient's business role. The sender bears the onus of proof (s.13). The maximum penalty is $1,000,000 for an individual (s.20(4)). Live two-way voice calls are excluded from s.6 (s.6(8)(a)). Verified in the Justice Canada statute XML.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-1.6.xml"
+   },
+   {
+    "fact": "Consent is not needed for the first commercial electronic message after a referral, if the message names the referrer and says it is sent because of the referral (SOR/2013-221 s.4(1)).",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-2013-221.xml"
+   },
+   {
+    "fact": "EI Regs s.30(1): a claimant running a business on their own account is considered to have worked a full working week, unless the business is 'minor in extent' (s.30(2)), judged on time, capital, success, continuity and willingness to take other work (s.30(3)).",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-96-332.xml"
+   },
+   {
+    "fact": "EI Pilot Project No. 24: the waiting-period waiver (discretionary, 'may') and the exclusion of separation money apply to benefit periods beginning by October 10, 2026. A claim made in the week of Sunday October 4, 2026 starts the benefit period on October 4 (EI Act s.10(1)). No extension was found.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/regulations/SOR-96-332.xml"
+   },
+   {
+    "fact": "EI Act s.19(2): benefits are reduced by 50% of earnings up to 90% of weekly insurable earnings, and 100% above that. The 2026 maximum weekly benefit of about $729 comes from a secondary source plus the statute formula (68,900/52 × 55% = $728.75).",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-5.6.xml"
+   },
+   {
+    "fact": "GST/HST small supplier: $30,000 threshold under the four-quarter test (ETA s.148(1)) and the single-quarter test (s.148(2)). Taxi and rideshare businesses must register regardless (s.240(1.1)). Ontario HST is 13%.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml"
+   },
+   {
+    "fact": "Self-employed CPP is 9.9% base plus 2.0% first additional, 11.9% in total above the $3,500 exemption. ESTIMATE: about $560/month at $60k/yr net.",
+    "source_url": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/C-8.xml"
+   },
+   {
+    "fact": "Cloudflare Pages Free plan (official docs repo): 500 builds/month, 100 projects, 20,000 files, and no bandwidth limit stated. This makes it a zero-cost host for AI-built client and demo sites.",
+    "source_url": "https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/pages/platform/limits.mdx"
+   },
+   {
+    "fact": "SECONDARY: Vercel Hobby is non-commercial only, and advertising a service counts as commercial use. So business sites should not be deployed on Vercel Hobby.",
+    "source_url": "https://github.com/botingw/langgraph-dev-navigator/blob/6e1d0c9c1f7732f97765920085eeb8857a2538ae/memory/tasks/story_create_landing_page/replit_migration_spike.md"
+   },
+   {
+    "fact": "SECONDARY: Google Business Profile verification review can take up to 5 business days, and postcards up to 14 days. Video verification needs visible tools or branding plus proof of management.",
+    "source_url": "https://github.com/MrBigleg/okf-local-seo/blob/128c1744cf4c8cd87ab2fbe04cc18ab6d6316810/bundles/local-seo/gbp/verification.md"
+   },
+   {
+    "fact": "UNVERIFIED snippet: Canadian freelance small-business websites cost $500-$3,000, agencies $3,000-$15,000+, and DIY builders $25-$60/mo.",
+    "source_url": "https://dotcanada.com/blog/website-cost-canada"
+   },
+   {
+    "fact": "UNVERIFIED snippet: a Nova Scotia agency lists GBP management at CAN$285/mo (Essentials) and CAN$475/mo (Growth). This is the only retainer price anchor.",
+    "source_url": "https://storytellermedia.ca/google-business-profile-management/"
+   },
+   {
+    "fact": "The verifier corrected the aismb dossier: its '3 builds + 5 retainers = $6,000 by day 60' is cumulative over two months, about $3,000/month on average. Sustaining $5k needs about 3+ closes every month.",
+    "source_url": "https://instantly.ai/cold-email-benchmark-report-2026"
+   },
+   {
+    "fact": "UNVERIFIED snippet: the 2021 Census counted 74,975 people of Korean ethnic origin in the Toronto CMA. This is the size of the warm-channel market.",
+    "source_url": "https://en.wikipedia.org/wiki/Korean_Canadians"
+   },
+   {
+    "fact": "Paid immigration or citizenship help requires CICC, law-society or Quebec-notary authorization (snippet of the official page). This removes the 'paperwork help' line.",
+    "source_url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigration-citizenship-representative/learn-about-representatives.html"
+   },
+   {
+    "fact": "UNVERIFIED snippets: Toronto move-out flat rates of $325-$559 + HST at one firm, and 'From $185' at another. These are the inputs for the AI-built cleaning quote calculator.",
+    "source_url": "https://mastermaid.ca/prices/"
+   },
+   {
+    "fact": "The cleaning verifier puts the AI at only about 20-25% of the work, and $5k at about 42.8 real hours a week (ESTIMATE 32.1 billable / 0.75).",
+    "source_url": "https://hellamaid.ca/blog/toronto-hourly-vs-flat-rate-cleaning-prices-in-2026/"
+   },
+   {
+    "fact": "SaaS base rates (secondary GitHub capture of an Indie Hackers/TrustMRR analysis): median MRR is $148/mo in year 0, and median time to $1K MRR is 8 months among survivors.",
+    "source_url": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md"
+   },
+   {
+    "fact": "Verified locally: the owner's tool-deals site has 0 of 54 products priced, and the scraper has produced no prices for 7+ weeks.",
+    "source_url": "file:///home/user/canadian-tool-deals/public/cache/index.json"
+   },
+   {
+    "fact": "UNVERIFIED snippet: City of Toronto data puts median ride-hail net pay at $5.97/hr across all road time (Jan-Apr 2024).",
+    "source_url": "https://www.theglobeandmail.com/business/article-rideshare-drivers-in-toronto-earn-substantially-below-minimum-wage/"
+   },
+   {
+    "fact": "Evidence-corpus snippet (search S037, official page not opened): under the Ontario Consumer Protection Act, direct agreements signed at the customer's home, such as snow-removal contracts sold door to door, carry a 10-day cooling-off cancellation right. Any door-to-door-sold physical service contract the AI drafts must account for this.",
+    "source_url": "https://www.ontario.ca/page/your-rights-when-signing-or-cancelling-contract"
+   }
+  ],
+  "notes": "1. Evidence quality. Every market price, conversion rate and earnings figure behind the primary is an unverified search snippet. Only the federal statutes (CASL, ETA, EI, CPP) and the Cloudflare limits were read at source. The recommendation is therefore a lens judgement about where AI work turns into sellable output, not a proven path to $5k. No candidate has sourced evidence of a newcomer averaging $5k/month within 60 days. Every verifier's probability score is 3 or below.\n\n2. Why the primary wins through this lens. For aismb and the Korean web line, the AI produces the actual deliverable, so each close costs the human about 1-2 hours of selling and access work. For every physical option, the AI only builds the funnel, and the human still sells plus supplies 30-45+ hours a week of labour.\n\n3. The single human bottleneck is face-to-face selling. The owner's English, sales comfort and Korean-community network are unknown. The go/no-go test: if the owner will not do 15-20 walk-ins a day, or has no deposits by about day 14, switch the primary to the physical backup (cleaning), and keep the web service as a referral-driven side line.\n\n4. EI vs business conflict (EI Regs s.30). A business sized for $5k/month is very unlikely to be 'minor in extent'. The owner must choose EI plus a small declared side activity, or the full business with no EI, and confirm with Service Canada. File the claim by October 10, 2026 either way.\n\n5. Execution details the AI can do today:\n- Build the demo and client sites as a static export on Cloudflare Pages. The repo is Next.js 16; read node_modules/next/dist/docs before coding, per AGENTS.md.\n- Build HST toggles into the pricing calculators (ON 13%) even though registration is not needed until about month 6-7 at target volume.\n- Add a privacy notice (PIPEDA in Ontario).\n- Add CASL footers with the business name, a mailing address (a PO box if the owner won't publish their home address), a second contact method, and an unsubscribe honoured within 10 business days.\n- Show demo sites for prospects' businesses to that owner in person only. Do not publish them publicly under the business's name without consent.\n\n6. Regional notes:\n- Montreal: French-language and Quebec privacy obligations (unverified) weaken the KO/EN web offer.\n- Metro Vancouver: BC PST on software/services is unverified. The Korean population there is growing per a Korean-media snippet, but the figures are internally inconsistent.\n- Calgary and Ottawa: no niche-specific data.\n\n7. SaaS: no verifier pass was run on this file, so its scores are the dossier's own."
+ }
+]

@@ -1,0 +1,327 @@
+{
+ "dossier": {
+  "candidate": "Gig platforms as a cash-flow floor (Uber, Lyft, DoorDash, Skip, Instacart, Amazon Flex, Spark), Canada 2026, GTA primary",
+  "summary": "Limits on this research: the network egress proxy blocked every page I tried to open (ontario.ca, gov.bc.ca, news.gov.bc.ca, toronto.ca, cbc.ca, sciencedirect.com, blogto.com, hicksmorley.com, achkarlaw.com). The shared session web-search budget (200 calls) ran out after I had run 10 distinct searches. So every fact below comes from search-result titles and snippets, not from pages I opened, and the owner should check key numbers on the linked pages. I found nothing verifiable on onboarding time, background checks, insurance, the BC Class 4 rule, EI, or any Instacart, Amazon Flex or Spark rules, and I mark those \"not found\".\n\nThe main finding comes from official City of Toronto data. In the first four months of 2024 the median Toronto ride-hail driver netted $5.97 per hour across all time on the road after vehicle costs. The median gross was $22.46 per logged-in hour and $33.18 per engaged hour in 2024. Drivers spent about 25-33% of app time waiting, and time with a passenger fell from 61.4% (2023) to 54.4% (2024), which points to saturation. Ontario's Digital Platform Workers' Rights Act has been in force since July 1, 2025. It guarantees the ESA general minimum wage only for work-assignment time, from accepting a task to completing it. Waiting time is not paid and tips do not count. That wage is $17.60 until Sept 30, 2026, and $17.95 from Oct 1, 2026 (inference: the Act references the ESA rate). BC has paid $21.89 per engaged hour since June 1, 2026 (120% of the $18.25 general minimum), plus $0.35/km for delivery and $0.45/km for ride-hail. BC's rules started Sept 3, 2024 at $20.88.\n\nESTIMATE: at the Toronto median net of $5.97/hr, $5,000/month would take about 838 hours a month (about 193 hours a week), which is more hours than a week has. Even with zero vehicle costs, the median gross of $22.46 per logged-in hour would need about 51 hours a week. Verdict: gig work can help as a part-time cash bridge, roughly $650-$1,500/month at 25 hours a week (ESTIMATE). It is very unlikely to reach $5,000/month net on its own.",
+  "time_to_first_revenue": "Not found. I could not verify any of the following: how long onboarding or background checks take, how long activation takes, or how often platforms pay out (weekly or instant cash-out). This applies to Uber, Lyft, DoorDash, Skip, Instacart, Amazon Flex and Spark. All platform help pages and government sites returned EGRESS_BLOCKED, and the search budget was used up. I have no sourced basis, so I give no ESTIMATE. The owner should read each platform's current sign-up help page and time it themselves. The only related fact I found: BC's minimum wage applies from the moment a worker accepts an assignment, and Ontario's from the start of a work assignment. Pay therefore accrues from the first accepted task once the account is active (https://www.labourandemploymentlaw.com/2024/11/a-new-gig-for-digital-platform-work-ontarios-legal-framework-for-digital-platform-workers-comes-into-force-july-1-2025/, https://news.gov.bc.ca/releases/2024LBR0011-000900).",
+  "pricing_facts": [
+   {
+    "fact": "Ontario: the Digital Platform Workers' Rights Act, 2022 and its regulation came into force on July 1, 2025 (seen in search results; page not opened).",
+    "source_url": "https://www.osler.com/en/insights/blogs/employment-and-labour-law-blog/new-legal-framework-for-digital-platform-workers-coming-into-force-july-1-2025/"
+   },
+   {
+    "fact": "Ontario: digital platform workers are entitled to at least the ESA minimum wage for each 'work assignment', not counting tips and other gratuities. If the ESA rate changes, the new rate applies (DLA Piper summary, seen in search results).",
+    "source_url": "https://knowledge.dlapiper.com/dlapiperknowledge/globalemploymentlatestdevelopments/2024/ontarios-digital-platform-workers-rights-act-is-coming-into-force-in-july-2025"
+   },
+   {
+    "fact": "Ontario general minimum wage went from $17.20 to $17.60/hour on October 1, 2025 (seen in search results).",
+    "source_url": "https://workersactioncentre.org/minimum-wage-2025/"
+   },
+   {
+    "fact": "Ontario announced on April 1, 2026 that the general minimum wage rises from $17.60 to $17.95/hour on October 1, 2026 (Hicks Morley, April 1 2026 and Sept 22 2026; seen in search results). Inference, not stated in the snippet: under the DPWRA the platform-worker floor per work-assignment hour should also become $17.95.",
+    "source_url": "https://hicksmorley.com/2026/04/01/ontario-minimum-wage-to-increase-october-1-2026/"
+   },
+   {
+    "fact": "BC: rules for app-based ride-hail and delivery workers took effect Sept 3, 2024, with a minimum of $20.88 per hour of engaged time (120% of the then general minimum of $17.40). They apply to Uber, Lyft, Uber Eats, SkipTheDishes, DoorDash and others (seen in search results).",
+    "source_url": "https://www.cbc.ca/news/canada/british-columbia/uber-lyft-door-dash-minimum-wage-1.7233199"
+   },
+   {
+    "fact": "BC: from June 1, 2026 the app-based ride-hail and delivery minimum is $21.89 per hour of engaged time, and the general minimum is $18.25. All BC minimums are indexed each June 1 to BC CPI (seen in search results).",
+    "source_url": "https://news.gov.bc.ca/releases/2026LBR0002-000191"
+   },
+   {
+    "fact": "BC distance expense allowance: at least $0.35/km for delivery by any mode other than walking, and at least $0.45/km for ride-hail in a motor vehicle, during engaged time (seen in search results).",
+    "source_url": "https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/forms-resources/igm/esr-part-4-section-18-2"
+   },
+   {
+    "fact": "Platform commission/service-fee percentages and per-trip or per-order base pay for Uber, Lyft, DoorDash, Skip, Instacart, Amazon Flex and Spark in Canada in 2026: not found (egress blocked, search budget exhausted).",
+    "source_url": "not found"
+   }
+  ],
+  "cost_facts": [
+   {
+    "fact": "RideFairTO (advocacy group; per a search summary, published around January 2023) estimated that fuel, car insurance and maintenance cost a typical Toronto Uber driver at least $12/hour. Uber told the Globe and Mail the numbers 'do not align' with what its drivers see (seen in search results).",
+    "source_url": "https://www.theglobeandmail.com/business/article-uber-drivers-pay-toronto/"
+   },
+   {
+    "fact": "City of Toronto 2024 analysis: median gross $33.18 per engaged hour (2024) vs median net $15.35 per engaged hour (2024). ESTIMATE of implied vehicle cost per engaged hour: 33.18 - 15.35 = $17.83 (seen in search results).",
+    "source_url": "https://www.toronto.ca/legdocs/mmis/2024/ex/bgrd/backgroundfile-251343.pdf"
+   },
+   {
+    "fact": "Rideshare insurance premiums, vehicle cost per km (e.g., a CRA or CAA rate), phone/data costs, and thermal bag or e-bike costs for 2026: not found in this session.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "BC offsets part of the vehicle cost through a legislated km allowance ($0.35/km delivery, $0.45/km ride-hail). Ontario's DPWRA snippets mention no equivalent allowance (seen in search results).",
+    "source_url": "https://news.gov.bc.ca/releases/2024LBR0011-000900"
+   }
+  ],
+  "earnings_evidence": [
+   {
+    "claim": "City of Toronto (2024 report on vehicle-for-hire driver earnings): median gross ride-hail driver earnings were $33.52 per engaged hour in 2023 and $33.18 in 2024. Engaged means from accepting a trip to drop-off. Counting all logged-in time, median gross was $25.23/hour in 2023 and $22.46/hour in 2024 (seen in search results).",
+    "source_url": "https://www.toronto.ca/legdocs/mmis/2024/ex/bgrd/backgroundfile-251343.pdf",
+    "kind": "official"
+   },
+   {
+    "claim": "Per the City of Toronto report as covered by the Globe and Mail: the median hourly wage in the first four months of 2024 was $5.97 across all time on the road, after the cost of supplying one's own vehicle. The Ontario minimum wage was $16.55 for most of 2024 (seen in search results).",
+    "source_url": "https://www.theglobeandmail.com/business/article-rideshare-drivers-in-toronto-earn-substantially-below-minimum-wage/",
+    "kind": "official"
+   },
+   {
+    "claim": "Median net earnings per engaged hour were $15.31 (2023) and $15.35 (2024), per search summaries of the City of Toronto analysis (seen in search results).",
+    "source_url": "https://www.toronto.ca/legdocs/mmis/2024/ex/bgrd/backgroundfile-251342.pdf",
+    "kind": "official"
+   },
+   {
+    "claim": "Time use in the same study: drivers spent about one-quarter to one-third of in-app time waiting for a request and about 10% driving to pickup. Time with a passenger on board fell from 61.4% (2023) to 54.4% (2024) (seen in search results).",
+    "source_url": "https://www.toronto.ca/legdocs/mmis/2024/ex/bgrd/backgroundfile-251343.pdf",
+    "kind": "official"
+   },
+   {
+    "claim": "RideFairTO advocacy report: Toronto-area Uber drivers average $7.90/hour after car costs, or about $20/hour before costs. Uber disputes these numbers (seen in search results).",
+    "source_url": "https://www.theglobeandmail.com/business/article-uber-drivers-pay-toronto/",
+    "kind": "community"
+   },
+   {
+    "claim": "A third-party site estimates 2025 Toronto Uber net income at $10-$14/hour after fuel, insurance, maintenance and fees. Its methodology is unverified and it has low credibility (seen in search results).",
+    "source_url": "https://rideincomecalculator.org/uber-driver-pay-toronto-2025/",
+    "kind": "estimate"
+   },
+   {
+    "claim": "Anecdotal: CBC headline 'Even at $20.88 an hour, B.C. gig workers say they will still be underpaid', about BC workers' concerns over the engaged-time-only minimum (headline only; page blocked).",
+    "source_url": "https://www.cbc.ca/news/canada/british-columbia/bc-gig-work-law-workers-concerns-1.7234737",
+    "kind": "community"
+   },
+   {
+    "claim": "Peer-reviewed paper 'Unveiling Inequalities in the gig Economy: Analyzing driver earnings in Toronto's ridehailing industry' (Case Studies on Transport Policy, 2025). Title only; the page was blocked, so no figures were extracted.",
+    "source_url": "https://www.sciencedirect.com/science/article/pii/S2213624X25001002",
+    "kind": "industry"
+   },
+   {
+    "claim": "Statistics Canada figures on gig-worker earnings, and DoorDash, Skip, Instacart, Amazon Flex, Spark or Uber Canada earnings disclosures for 2025-2026: not found (search budget exhausted before these searches could run).",
+    "source_url": "not found",
+    "kind": "estimate"
+   }
+  ],
+  "path_to_5k_math": "All figures in this section are ESTIMATES built from the sourced numbers above. I use 4.345 weeks/month (52.14/12), and every result is net of platform fees but before income tax.\n\n(A) Toronto median net across all time on the road, $5.97/hr (City of Toronto 2024): 5000 / 5.97 = 837.5 hr/month; / 4.345 = 192.8 hr/week. A week has 168 hours, so this is impossible.\n\n(B) RideFairTO $7.90/hr net: 5000 / 7.90 = 632.9 hr/month; / 4.345 = 145.7 hr/week. Also impossible.\n\n(C) Net $15.35 per engaged hour (Toronto 2024). Engaged share is about 10% en route plus 54.4% with a passenger = 64.4%. 5000 / 15.35 = 325.7 engaged hr/month; / 0.644 = 505.8 in-app hr/month; / 4.345 = 116.4 hr/week. This is still optimistic because it leaves out vehicle costs while driving between trips.\n\n(D) Best case for a median driver, with zero vehicle costs, at the gross in-app rate of $22.46/hr: 5000 / 22.46 = 222.6 hr/month = 51.2 hr/week. Real costs of about $12-17.83 per hour make the net far lower. Sanity check: 33.18 x 0.644 = $21.37 per in-app hour, close to the reported $22.46.\n\n(E) BC legal floor, $21.89 per engaged hour, gross: 5000 / 21.89 = 228.4 engaged hr/month = 52.6 engaged hr/week. Using the Toronto 64.4% engaged share as a proxy, because I found no BC figure: 228.4 / 0.644 = 354.7 logged-in hr/month = 81.6 hr/week, before vehicle costs. The km allowance covers only part of those costs.\n\n(F) Ontario floor from Oct 1, 2026, $17.95 per assignment hour, gross: 5000 / 17.95 = 278.6 assignment hr/month; / 0.644 = 432.6 logged-in hr/month = 99.6 hr/week. This floor is below the median gross per engaged hour ($33.18), so it barely lifts a typical ride-hail driver's pay.\n\nRealistic bridge income at 25 hr/week: 25 x 4.345 = 108.6 hr/month. At $5.97/hr that is $648/month. At the unverified third-party range of $10-$14/hr it is $1,086-$1,521/month. Conclusion: $5,000/month net is not achievable at median outcomes. It would take hours no one can safely work, or top-percentile results that I found no source for.",
+  "startup_cost_cad": "Not found. I found no sourced prices for background-check fees, vehicle inspection, rideshare insurance, delivery bags, or e-bike or car purchase in 2026. I give no ESTIMATE because I have no sourced basis. Qualitatively (not a fact): the cash outlay is near zero only if the owner already has an eligible, properly insured vehicle or a bicycle. Otherwise getting a vehicle is the biggest cost, and I could not quantify it.",
+  "requirements": [
+   "Vehicle: ride-hail (Uber/Lyft) needs a car. BC's delivery allowance applies to 'a form of transport other than walking', which implies non-car delivery modes exist (sourced: gov.bc.ca IGM 18.2). Age, model and inspection rules for each platform: not found.",
+   "Licence: whether Ontario requires a full G licence for Uber/Lyft, and whether BC still requires a Class 4 licence for ride-hail in 2026: NOT FOUND in this session. Check the BC Passenger Transportation Board/ICBC and Uber/Lyft Canada driver requirement pages before relying on ride-hail in BC.",
+   "Insurance: Ontario or BC rideshare insurance products, and whether personal auto policies exclude delivery or ride-hail use: NOT FOUND. The owner must call their insurer before driving for any app.",
+   "Background check or criminal record check, plus driving abstract: which checks each platform needs and how long they take: NOT FOUND.",
+   "Work authorization and SIN, and age minimums for each platform: NOT FOUND.",
+   "English level: no sourced requirement. Judgement, not fact: enough English to use the app, read delivery notes and handle customer messages.",
+   "Physical: long hours of driving or cycling. The hours in the math section (50-190/week) are beyond safe limits at median pay.",
+   "Capital: an insured vehicle or a bike, a smartphone with a data plan, and fuel float until first payout. Amounts not found.",
+   "Bank account in the owner's name to receive payouts (the AI cannot receive money)."
+  ],
+  "regulations": [
+   {
+    "fact": "Ontario Digital Platform Workers' Rights Act, 2022 is in force from July 1, 2025.",
+    "source_url": "https://hicksmorley.com/2024/09/06/digital-platform-workers-rights-act-2022-in-force-july-1-2025/"
+   },
+   {
+    "fact": "Ontario DPWRA: a work assignment generally starts when the worker accepts it and ends when it is performed. The regulations set detailed start and end points. Operators must give information when offering an assignment, within 24 hours of completion, and when removing a worker's access.",
+    "source_url": "https://www.labourandemploymentlaw.com/2024/11/a-new-gig-for-digital-platform-work-ontarios-legal-framework-for-digital-platform-workers-comes-into-force-july-1-2025/"
+   },
+   {
+    "fact": "Ontario DPWRA: time spent waiting between assignments, such as sitting in the car waiting for a request, is not paid at the minimum wage.",
+    "source_url": "https://workersactioncentre.org/ontarios-new-gig-work-law/"
+   },
+   {
+    "fact": "Ontario DPWRA minimum wage is the ESA general minimum wage, not counting tips. The ESA general rate is $17.60 until Sept 30, 2026 and $17.95 from Oct 1, 2026. Inference: the DPWRA floor follows the ESA rate.",
+    "source_url": "https://knowledge.dlapiper.com/dlapiperknowledge/globalemploymentlatestdevelopments/2024/ontarios-digital-platform-workers-rights-act-is-coming-into-force-in-july-2025"
+   },
+   {
+    "fact": "Ontario general minimum wage becomes $17.95/hr on Oct 1, 2026 (announced April 1, 2026).",
+    "source_url": "https://hicksmorley.com/2026/09/22/reminder-to-employers-ontario-to-increase-minimum-wage-effective-october-1-2026/"
+   },
+   {
+    "fact": "BC (Bill 48, in effect Sept 3, 2024) amended the Employment Standards Act and Workers Compensation Act to define 'online platform workers'. It also covers tips, suspensions, terminations and workers' compensation for app-based ride-hail and delivery workers.",
+    "source_url": "https://www.retailcouncil.org/new-protections-for-b-c-app-based-workers/"
+   },
+   {
+    "fact": "BC engaged time runs from accepting an order or request until it is completed or cancelled. The minimum is $21.89 per engaged hour from June 1, 2026, with km allowances of $0.35 (delivery, not walking) and $0.45 (ride-hail), indexed annually to BC CPI.",
+    "source_url": "https://www2.gov.bc.ca/gov/content/employment-business/employment-standards-advice/employment-standards/wages/minimum-wage"
+   },
+   {
+    "fact": "EI: how gig or self-employment earnings interact with EI regular benefits (reporting, earnings deductions, and whether self-employment counts as 'working a full week'): NOT FOUND in this session because canada.ca was blocked and the search budget was exhausted. Before taking gig work while claiming EI, the owner must read the canada.ca pages 'EI regular benefits: Working while on claim' and the rules for self-employed people, or call Service Canada.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "CRA GST/HST registration rules for commercial ride-sharing drivers, and business-income or vehicle-expense rules for delivery workers: NOT FOUND in this session. Check CRA pages on the sharing economy and ride-sharing before starting.",
+    "source_url": "not found"
+   },
+   {
+    "fact": "Alberta (Calgary) and Quebec (Montreal) gig-worker minimum pay rules: not found in this session. The only sourced provincial rules are Ontario and BC. Ottawa falls under Ontario rules.",
+    "source_url": "not found"
+   }
+  ],
+  "ai_can_build": [
+   "Earnings and expense tracker spreadsheet: per-shift gross, tips, km, fuel, net per logged-in hour and net per engaged hour, benchmarked against the Toronto median of $5.97 (all time) and $15.35 (engaged).",
+   "Trip or offer acceptance calculator: enter offer $, km and minutes to get net $/hr after a user-entered cost per km, to help decline unprofitable offers.",
+   "Ontario DPWRA and BC compliance checker: compare each assignment's pay with $17.95 x assignment time (ON, from Oct 1, 2026) or $21.89 x engaged time + km allowance (BC), and draft a complaint or inquiry letter if pay falls short.",
+   "Mileage log template and year-end tax worksheet (the owner must confirm CRA rules; the AI cannot verify them here).",
+   "Multi-app shift planner in Google Calendar, placing peak blocks the owner picks (the AI has no sourced demand data).",
+   "Checklist and email drafts for insurer questions (rideshare/delivery coverage) and for Service Canada EI questions.",
+   "Weekly dashboard showing how far part-time gig income plus other income falls short of $5,000."
+  ],
+  "human_must_do": [
+   "Sign up on each platform with ID, SIN, licence, vehicle documents and a bank account, and complete background checks and any in-person steps.",
+   "Confirm licence class (BC Class 4 question), vehicle eligibility and insurance with the insurer and platforms. Unverified in this research.",
+   "Do all driving and delivery, handle customer interactions and in-app messaging.",
+   "Contact Service Canada or read canada.ca about reporting gig earnings on EI claims before starting (not found here).",
+   "Register for GST/HST or taxes if required, and file taxes (rules not verified here).",
+   "Log hours and km honestly so the AI can compute true net per hour."
+  ],
+  "seasonality": "Not found. No sourced data on seasonal demand or earnings for Canadian gig platforms turned up before the search budget ran out. The one sourced trend is a year-over-year decline, not a seasonal pattern: in Toronto, time with a passenger fell from 61.4% (2023) to 54.4% (2024), and gross per in-app hour fell from $25.23 to $22.46 (https://www.toronto.ca/legdocs/mmis/2024/ex/bgrd/backgroundfile-251343.pdf).",
+  "risks": [
+   "Sourced median pay is too low: $5.97/hr net across all time in Toronto (2024). $5,000/month would take more than 168 hours a week (ESTIMATE, see math).",
+   "Waiting time is unpaid in both Ontario and BC, and the floor covers only engaged or assignment time. The Toronto data show 25-33% of in-app time spent waiting.",
+   "Saturation: Toronto gross per in-app hour fell from $25.23 (2023) to $22.46 (2024), and passenger-on-board time fell from 61.4% to 54.4%. Losing a job next week plus a flood of new drivers could push this further (the extra-inflow effect is inference, not sourced).",
+   "Vehicle costs of at least $12/hr (RideFairTO) or about $17.83 per engaged hour (ESTIMATE from City data) eat most of gross pay. Depreciation and repairs arrive later as lump sums.",
+   "Insurance gap: if the personal policy excludes commercial use, one accident could be financially catastrophic. Coverage rules were not verified here.",
+   "EI risk: unverified. Reporting mistakes with self-employment or gig earnings while on EI could lead to overpayments or disqualification. Check with Service Canada.",
+   "Deactivation risk: Ontario requires information when access is removed, but the platform can still remove access.",
+   "Onboarding time is unknown. If background checks take weeks, first revenue could miss the 30-day window (not found).",
+   "Physical and safety risk from long driving hours. Fatigue grows if the owner chases $5,000 with 80-190 hours a week.",
+   "Tax: platforms do not withhold income tax from independent workers (not verified here). The owner must set aside money for tax."
+  ],
+  "counter_evidence": [
+   {
+    "fact": "City of Toronto analysis: median ride-hail earnings of $5.97/hour across all time on the road after vehicle costs (Jan-Apr 2024), well below Ontario's $16.55 minimum wage at the time.",
+    "source_url": "https://www.theglobeandmail.com/business/article-rideshare-drivers-in-toronto-earn-substantially-below-minimum-wage/"
+   },
+   {
+    "fact": "Median gross per logged-in hour in Toronto fell from $25.23 (2023) to $22.46 (2024), and time with a passenger fell from 61.4% to 54.4%. More time is spent unpaid and waiting.",
+    "source_url": "https://www.toronto.ca/legdocs/mmis/2024/ex/bgrd/backgroundfile-251343.pdf"
+   },
+   {
+    "fact": "Ontario's DPWRA pays minimum wage only for work-assignment time. Waiting between assignments is not covered.",
+    "source_url": "https://workersactioncentre.org/ontarios-new-gig-work-law/"
+   },
+   {
+    "fact": "RideFairTO: Uber drivers average $7.90/hr after at least $12/hr in car costs. This is advocacy data; Uber disputes it.",
+    "source_url": "https://www.theglobeandmail.com/business/article-uber-drivers-pay-toronto/"
+   },
+   {
+    "fact": "BC gig workers told CBC they would still be underpaid even at $20.88 per engaged hour (anecdotal; headline only).",
+    "source_url": "https://www.cbc.ca/news/canada/british-columbia/bc-gig-work-law-workers-concerns-1.7234737"
+   },
+   {
+    "fact": "Reported 'Hope and skepticism' as BC gig-worker regulations took effect (headline only; anecdotal).",
+    "source_url": "https://www.cbc.ca/news/canada/british-columbia/bc-gig-worker-regulations-1.7306709"
+   },
+   {
+    "fact": "Counter to the bear case: Uber said the RideFairTO numbers 'do not align' with what its drivers see.",
+    "source_url": "https://www.theglobeandmail.com/business/article-uber-drivers-pay-toronto/"
+   }
+  ],
+  "scores": {
+   "speed": 5,
+   "probability_5k": 1,
+   "capital_light": 5,
+   "ai_leverage": 1.5,
+   "low_risk": 4
+  },
+  "score_rationale": "probability_5k = 1. The official City of Toronto median net of $5.97/hr (2024) means about 838 hours a month for $5,000 (ESTIMATE). Even gross pay with zero costs at $22.46 per in-app hour needs about 51 hours a week, and the BC floor needs about 82 logged-in hours a week gross (ESTIMATE, using the Toronto engaged share as a proxy). The legal floors cover only engaged time and sit below the median gross per engaged hour, so they do not change the math. It is not 0 because top-decile drivers exist and I found no source on their distribution.\n\nspeed = 5. The platforms are designed for fast sign-up, but I could not verify onboarding or background-check times or payout schedules (blocked or not found), so I cannot score higher on evidence.\n\ncapital_light = 5. Near zero if the owner already has an insured eligible car or a bike, and expensive otherwise. Vehicle, insurance and licence requirements (BC Class 4, rideshare insurance) could not be verified.\n\nai_leverage = 1.5. The AI can only build trackers, calculators and planners. All revenue-producing work is physical driving or delivery done by the owner.\n\nlow_risk = 4. Road and fatigue risk, possible insurance gaps, deactivation, unverified EI interaction, and vehicle costs that eat most of gross pay.\n\nOverall: gig work is a partial cash-flow bridge, roughly $650-$1,500/month at 25 hr/week (ESTIMATE). It is not a path to $5,000/month net.\n\nResearch limits: every source was seen only as search-result snippets. The WebFetch proxy blocked all target domains, and the shared search budget ran out after 10 searches. The owner should verify the key numbers at the linked official pages."
+ },
+ "verification": {
+  "checked_claims": [
+   {
+    "claim": "City of Toronto: median ride-hail driver net earnings were $5.97/hr across all time on the road after vehicle costs (Jan-Apr 2024).",
+    "status": "unverifiable",
+    "correction": "I could not re-open this. WebSearch returned 'budget exhausted (200 of 200)', and WebFetch to toronto.ca and theglobeandmail.com returned EGRESS_BLOCKED on 2026-09-23. The figure rests only on search snippets the original researcher saw. There is also a caveat the dossier leaves out: the Globe snippet says the $5.97 covers only Jan-Apr 2024 (winter and early spring). A four-month winter window cannot stand for a full year, and $5.97 should not be treated as a yearly median.",
+    "source_url": "https://www.theglobeandmail.com/business/article-rideshare-drivers-in-toronto-earn-substantially-below-minimum-wage/"
+   },
+   {
+    "claim": "Toronto median gross per logged-in hour fell from $25.23 (2023) to $22.46 (2024), and passenger-on-board time fell from 61.4% to 54.4%. The dossier reads this as evidence of saturation.",
+    "status": "corrected",
+    "correction": "I could not re-open the figures (toronto.ca EGRESS_BLOCKED). The interpretation is overstated. If the 2024 figures cover Jan-Apr 2024 only, as the $5.97 snippet suggests, the 'year-over-year decline' compares a full year (or another period) with a winter window. Seasonality and saturation are then mixed together. Treat 'saturation' as a hypothesis, not a finding.",
+    "source_url": "https://www.toronto.ca/legdocs/mmis/2024/ex/bgrd/backgroundfile-251343.pdf"
+   },
+   {
+    "claim": "BC platform-worker minimum is $21.89 per engaged hour from June 1, 2026, described as '120% of the $18.25 general minimum'.",
+    "status": "corrected",
+    "correction": "I could not verify this (www2.gov.bc.ca and news.gov.bc.ca EGRESS_BLOCKED; no search budget). The dossier's own numbers do not add up. ESTIMATE: 18.25 x 1.20 = 21.90, not 21.89. The $21.89 figure is more likely the separately CPI-indexed gig rate, so '120% of general minimum' is an approximation, not the legal formula. The one-cent gap does not matter to the decision. The owner should confirm the exact figure on the BC page.",
+    "source_url": "https://news.gov.bc.ca/releases/2026LBR0002-000191"
+   },
+   {
+    "claim": "Ontario DPWRA (in force July 1, 2025) guarantees the ESA general minimum wage only for work-assignment time. Waiting is unpaid and tips are excluded.",
+    "status": "unverifiable",
+    "correction": "I could not re-open this (ontario.ca and workersactioncentre.org EGRESS_BLOCKED). The claim matches several independent law-firm snippets the dossier lists (Osler, DLA Piper, Hicks Morley, labourandemploymentlaw.com), so it is consistent. It is still unconfirmed by me.",
+    "source_url": "https://workersactioncentre.org/ontarios-new-gig-work-law/"
+   },
+   {
+    "claim": "The Ontario general minimum wage becomes $17.95/hr on Oct 1, 2026, and so does the DPWRA floor.",
+    "status": "unverifiable",
+    "correction": "I could not re-open this (hicksmorley.com blocked earlier; no search budget). The step from the ESA rate to the DPWRA rate is the dossier's own inference and is labelled as such. For the business decision it barely matters: the floor ($17.95/hr) is below the reported median gross per engaged hour ($33.18), so it does not bind for typical drivers.",
+    "source_url": "https://hicksmorley.com/2026/04/01/ontario-minimum-wage-to-increase-october-1-2026/"
+   },
+   {
+    "claim": "Time to first revenue, onboarding and background-check duration, and payout frequency for Uber, DoorDash, Skip, Instacart, Amazon Flex and Spark.",
+    "status": "unverifiable",
+    "correction": "This is still not found. uber.com and help.doordash.com returned EGRESS_BLOCKED, and reddit.com was unfetchable. This is the most decision-critical gap for someone who needs cash in 30 days. The dossier's speed score of 5 has no evidence behind it.",
+    "source_url": "https://www.uber.com/ca/en/drive/requirements/"
+   },
+   {
+    "claim": "Path-to-$5k arithmetic (A)-(F) and the bridge range of $648-$1,521/month at 25 hr/week.",
+    "status": "confirmed",
+    "correction": "I re-checked the arithmetic only; the source inputs remain unverified. ESTIMATE checks: 5000/5.97 = 837.5 hr/mo, /4.345 = 192.8 hr/wk. 5000/22.46 = 222.6 hr/mo = 51.2 hr/wk. 5000/21.89 = 228.4, /0.644 = 354.7 hr/mo = 81.6 hr/wk. 5000/17.95 = 278.6, /0.644 = 432.5 hr/mo = 99.5 hr/wk (dossier says 99.6, a rounding difference). 25 x 4.345 = 108.6 hr; x 5.97 = $648; x 10 = $1,086; x 14 = $1,521. One assumption is weak: the 64.4% engaged share (10% en route + 54.4% with passenger) comes from Toronto ride-hail and is reused for BC and for delivery without any source.",
+    "source_url": "https://www.toronto.ca/legdocs/mmis/2024/ex/bgrd/backgroundfile-251343.pdf"
+   },
+   {
+    "claim": "CRA GST/HST registration rules for ride-share drivers: 'not found' in the dossier.",
+    "status": "unverifiable",
+    "correction": "canada.ca returned EGRESS_BLOCKED. Unverified background knowledge, not a sourced fact: CRA has long treated commercial ride-sharing as taxi-like, so drivers must register for GST/HST from the first dollar and cannot use the $30k small-supplier exemption. If that is true, it is an admin and cost blocker the dossier missed. The owner must confirm on the CRA page.",
+    "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/gst-hst-specific-situations/commercial-ride-sharing-services.html"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Official median net across all road time was $5.97/hr (Jan-Apr 2024 per the Globe snippet), below the $16.55 Ontario minimum at the time. I did not open this myself (blocked), but it is the strongest evidence against gig work reaching $5k/month.",
+    "source_url": "https://www.theglobeandmail.com/business/article-rideshare-drivers-in-toronto-earn-substantially-below-minimum-wage/"
+   },
+   {
+    "fact": "The implied vehicle cost per engaged hour is large. ESTIMATE: 33.18 gross - 15.35 net = $17.83 per engaged hour, which is more than half of gross. Source figures are from snippets; the page is blocked for me.",
+    "source_url": "https://www.toronto.ca/legdocs/mmis/2024/ex/bgrd/backgroundfile-251342.pdf"
+   },
+   {
+    "fact": "Ontario's legal floor covers only assignment time, and waiting is unpaid. The median gross already exceeds the floor, so the law does not raise typical earnings. Page blocked for me; this matches multiple law-firm snippets.",
+    "source_url": "https://workersactioncentre.org/ontarios-new-gig-work-law/"
+   },
+   {
+    "fact": "BC workers told CBC they would be underpaid even at $20.88 per engaged hour (anecdotal, headline only, blocked).",
+    "source_url": "https://www.cbc.ca/news/canada/british-columbia/bc-gig-work-law-workers-concerns-1.7234737"
+   },
+   {
+    "fact": "Unverified, background knowledge, not sourced this session: GST/HST registration from the first dollar for ride-share drivers. It adds quarterly or annual filing and cuts net pay unless the platform remits for the driver. The dossier marks this 'not found' and does not flag it as a likely blocker.",
+    "source_url": "https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/gst-hst-specific-situations/commercial-ride-sharing-services.html"
+   },
+   {
+    "fact": "Methodological counterpoint to the dossier's 'saturation' claim: the 2024 data window appears to be Jan-Apr only (per the Globe snippet), so the decline from 2023 may partly be seasonal, not structural. This cuts both ways. Summer or holiday-season earnings may be higher, and winter earnings may be lower still.",
+    "source_url": "https://www.toronto.ca/legdocs/mmis/2024/ex/bgrd/backgroundfile-251343.pdf"
+   }
+  ],
+  "hidden_costs_or_blockers": [
+   "Research environment limit: in this fact-check session every target domain (toronto.ca, gov.bc.ca, ontario.ca, canada.ca, uber.com, doordash.com, cbc.ca, theglobeandmail.com, workersactioncentre.org, reddit.com) was EGRESS_BLOCKED, and the shared WebSearch budget was exhausted (200/200). Both the original dossier and this check rely only on search snippets. No number in the dossier has been confirmed from an opened page.",
+   "Time to first payout is completely unknown (background checks, document review, vehicle inspection, payout cadence). For a 30-day cash need this is the single most important unknown. Its speed score has no evidence behind it.",
+   "GST/HST (unverified, from background knowledge): ride-share drivers may have to register from the first dollar, with no small-supplier exemption. That adds filing work and possible remittance costs. Delivery couriers are likely treated differently. Confirm with CRA.",
+   "Canada's digital-platform reporting rules (unverified, from background knowledge): platforms may report worker earnings to CRA, so income cannot be under-reported, and income tax is not withheld. The owner must reserve money for tax.",
+   "EI interaction: this is unverified in both sessions. Self-employed gig work while on an EI claim can reduce benefits or raise the question of whether the claimant is unemployed. If the owner expects EI after losing the job, gig income could partly replace EI rather than add to it. The owner must check with Service Canada before starting.",
+   "Insurance: a personal auto policy may not cover ride-hail or delivery use. An accident without proper coverage is catastrophic, and the dossier leaves the extra premium unquantified.",
+   "Winter: the target window (Oct-Nov 2026 onward) runs into Canadian winter. That brings winter-tire costs, slower driving and, for bike or e-bike delivery, severe weather. None of this is quantified.",
+   "Vehicle depreciation and repairs arrive as lump sums and are not captured in weekly cash flow, so short-term cash looks better than true net.",
+   "Engaged-time share (64.4%) is borrowed from Toronto ride-hail and applied to BC and to delivery apps without any source.",
+   "Deactivation can cut income instantly. Ontario's DPWRA requires notice and reasons, but it does not prevent deactivation."
+  ],
+  "adjusted_scores": {
+   "speed": 4,
+   "probability_5k": 0.5,
+   "capital_light": 4,
+   "ai_leverage": 1,
+   "low_risk": 3.5
+  },
+  "verdict": "DOWNGRADE, and eliminate it as a standalone $5k/month candidate. Keep it only as an optional part-time cash bridge next to the main business.\n\nThe dossier's core conclusion holds even under skeptical review. Every sourced median (net $5.97/hr all-time; gross $22.46 per logged-in hour; net $15.35 per engaged hour) needs roughly 51 to 190+ hours a week for $5,000 net. ESTIMATE, arithmetic re-checked: 5000/22.46/4.345 = 51.2 hr/wk gross with zero costs, and 5000/5.97/4.345 = 192.8 hr/wk net.\n\nI could not confirm a single number from an opened page: all domains were blocked and the search budget was exhausted. So the scores go down, not up.\n\nSpecific issues with the dossier:\n(1) The 'saturation' claim is overstated. The 2024 window appears to be Jan-Apr only, which confounds seasonality with market change.\n(2) Its BC '120% of $18.25' framing does not match $21.89 (18.25 x 1.2 = 21.90).\n(3) Speed = 5 has no evidence. Onboarding and payout timing, the most critical factor for a 30-day cash need, are still unknown.\n(4) It misses likely GST/HST registration for ride-share drivers and the risk that gig income reduces EI benefits. Both are unverified here, but either could materially cut net pay.\n\nprobability_5k was lowered to 0.5 because no source shows any share of Canadian gig workers netting $5k/month at sane hours."
+ }
+}
