@@ -56,6 +56,8 @@ export interface MeResponse {
   signedIn: boolean
   email?: string
   pass?: Pass | null
+  /** signed-in only: current CASL marketing consent */
+  marketingOptIn?: boolean
   /** free samples still available to this device/user */
   free: { writing: boolean; speaking: boolean }
   usage: { writingToday: number; speakingToday: number; graded30d: number }

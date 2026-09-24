@@ -71,6 +71,8 @@ CREATE TABLE purchases (
 );
 CREATE INDEX purchases_user ON purchases(user_id);
 CREATE INDEX purchases_fingerprint ON purchases(card_fingerprint);
+CREATE INDEX purchases_charge ON purchases(charge_id);
+CREATE INDEX purchases_payment_intent ON purchases(payment_intent);
 
 CREATE TABLE webhook_events (
   id TEXT PRIMARY KEY,                -- Stripe event id (idempotency)
@@ -115,9 +117,11 @@ CREATE TABLE refunds (
   purchase_id TEXT NOT NULL REFERENCES purchases(id),
   user_id TEXT NOT NULL,
   amount_cents INTEGER NOT NULL,
-  reason TEXT NOT NULL,               -- self_serve | region | dispute | owner
+  reason TEXT NOT NULL,               -- self_serve | region | owner (disputes set purchases.status only)
   created_at TEXT NOT NULL
 );
+CREATE INDEX refunds_purchase ON refunds(purchase_id);
+CREATE INDEX refunds_reason_user ON refunds(reason, user_id);
 
 CREATE TABLE events (
   id INTEGER PRIMARY KEY AUTOINCREMENT,

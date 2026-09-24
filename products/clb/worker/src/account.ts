@@ -42,7 +42,11 @@ export async function me(_req: Request, ctx: Ctx): Promise<Response> {
     return json(body)
   }
 
-  const [pass, usage] = await Promise.all([getActivePass(env, user.id, now), getUsage(env, user.id, now)])
+  const [pass, usage, consent] = await Promise.all([
+    getActivePass(env, user.id, now),
+    getUsage(env, user.id, now),
+    env.DB.prepare('SELECT marketing_opt_in FROM users WHERE id = ?1').bind(user.id).first<{ marketing_opt_in: number }>(),
+  ])
   await env.DB.prepare('UPDATE users SET last_active_at = ?2 WHERE id = ?1 AND last_active_at < ?3')
     .bind(user.id, now.toISOString(), new Date(now.getTime() - ACTIVITY_REFRESH_MS).toISOString())
     .run()
@@ -50,6 +54,7 @@ export async function me(_req: Request, ctx: Ctx): Promise<Response> {
     signedIn: true,
     email: user.email,
     pass: pass ? { sku: pass.sku, startsAt: pass.starts_at, endsAt: pass.ends_at } : null,
+    marketingOptIn: consent?.marketing_opt_in === 1,
     free,
     usage,
     flags: publicFlags,

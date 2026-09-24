@@ -1,0 +1,131 @@
+# Kill switches (memo B10): set one KV flag from the Actions tab — also from the GitHub mobile app
+# (Actions → "Set a kill switch" → Run workflow). The Worker reads `flag:<name>` from the FLAGS
+# namespace (worker/src/lib/flags.ts). band_enabled is not offered: it stays false through
+# Jan 31 2027 and the Worker ignores it anyway.
+#
+# Wrangler 4.137.0 flags checked with --help: kv key put <key> [value] --binding --remote,
+# kv key get <key> --binding --remote --text, kv key delete <key> --binding --remote.
+name: Set a kill switch
+
+on:
+  workflow_dispatch:
+    inputs:
+      flag:
+        description: Switch to change
+        required: true
+        type: choice
+        options:
+          - checkout_enabled
+          - grading_enabled
+          - free_enabled
+          - banner
+      value:
+        description: "true or false for the switches; for banner, the text to show (leave empty to remove it)"
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: flags
+  cancel-in-progress: false
+
+jobs:
+  set-flag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: products/clb
+    env:
+      FLAG: ${{ inputs.flag }}
+      RAW_VALUE: ${{ inputs.value }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      WRANGLER_SEND_METRICS: 'false'
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Validate input
+        id: input
+        run: |
+          case "$FLAG" in
+            free_enabled|grading_enabled|checkout_enabled)
+              value=$(printf '%s' "$RAW_VALUE" | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')
+              if [ "$value" != true ] && [ "$value" != false ]; then
+                echo "::error::$FLAG takes true or false (got '$RAW_VALUE')."
+                exit 1
+              fi
+              ;;
+            banner)
+              value="$RAW_VALUE"
+              if [ "$(printf '%s' "$value" | wc -l)" != 0 ]; then echo "::error::The banner must be one line."; exit 1; fi
+              if [ "${#value}" -gt 200 ]; then echo "::error::The banner must be 200 characters or fewer."; exit 1; fi
+              ;;
+            *)
+              echo "::error::Unknown or locked flag: $FLAG"
+              exit 1
+              ;;
+          esac
+          {
+            echo "value<<__MPC_EOF__"
+            printf '%s\n' "$value"
+            echo "__MPC_EOF__"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Check secrets
+        id: cfg
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::notice::Nothing changed: add the CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID repository secrets first."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Node
+        if: steps.cfg.outputs.ready == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: products/clb/package-lock.json
+
+      - name: Install
+        if: steps.cfg.outputs.ready == 'true'
+        run: npm ci
+
+      - name: Lint the banner text
+        if: steps.cfg.outputs.ready == 'true' && inputs.flag == 'banner' && steps.input.outputs.value != ''
+        env:
+          VALUE: ${{ steps.input.outputs.value }}
+        run: node scripts/run.mjs scripts/content-lint.ts --text "$VALUE"
+
+      - name: Write the flag
+        if: steps.cfg.outputs.ready == 'true'
+        env:
+          VALUE: ${{ steps.input.outputs.value }}
+        run: |
+          key="flag:$FLAG"
+          if [ "$FLAG" = banner ] && [ -z "$VALUE" ]; then
+            npx wrangler kv key delete "$key" --binding FLAGS --remote -c worker/wrangler.jsonc
+            echo "Removed the banner." | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          npx wrangler kv key put "$key" "$VALUE" --binding FLAGS --remote -c worker/wrangler.jsonc
+          got=$(npx wrangler kv key get "$key" --binding FLAGS --remote --text -c worker/wrangler.jsonc 2>/dev/null | tail -n 1)
+          if [ "$got" != "$VALUE" ]; then
+            echo "::error::Read-back of $key did not match the value just written."
+            exit 1
+          fi
+          {
+            echo "Set \`$key\` to \`$VALUE\` at $(date -u +%Y-%m-%dT%H:%MZ)."
+            echo ""
+            echo "- Workers KV is eventually consistent, so other locations can take a short while to see the change [unverified: typical delay not measured here]."
+            echo "- While a spend tier is exceeded, the Worker's 15-minute spend monitor turns free_enabled or grading_enabled off again; it only turns back on what it turned off itself (worker/src/cron.ts)."
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,234 @@
+# Production deploy of the practice coach Worker + static site (memo §5.2, B11).
+#
+# Runs only when the repository variable MPC_DEPLOY is 'true'. Without Cloudflare secrets it stops
+# with a notice. Steps: tests → site build (public env from repository variables) → content lint →
+# note the live Worker version → D1 migrations → deploy with secrets and vars → smoke test
+# (GET /api/health must report this commit's version, GET / must be 200) → on smoke failure,
+# `wrangler rollback` to the noted version and fail. D1 migrations are never rolled back.
+#
+# Wrangler 4.137.0 flags used here were checked with `npx wrangler <cmd> --help`:
+#   deploy --secrets-file --var KEY:VALUE --message · deployments status --json ·
+#   d1 migrations apply <db> --remote · rollback [version-id] -y --message
+name: Deploy practice coach
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'products/clb/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-clb
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: vars.MPC_DEPLOY == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: products/clb
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      MPC_SITE_URL: ${{ vars.MPC_SITE_URL }}
+      MPC_MAILING_ADDRESS: ${{ vars.MPC_MAILING_ADDRESS }}
+      MPC_FROM_EMAIL: ${{ vars.MPC_FROM_EMAIL }}
+      MPC_OWNER_EMAIL: ${{ vars.MPC_OWNER_EMAIL }}
+      MPC_GRADER_MODEL: ${{ vars.MPC_GRADER_MODEL }}
+      MPC_TURNSTILE_SITE_KEY: ${{ vars.MPC_TURNSTILE_SITE_KEY }}
+      WRANGLER_SEND_METRICS: 'false'
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Check configuration
+        id: cfg
+        run: |
+          # Contact details are repository variables, not secrets: mask them so logs never show them.
+          for v in "$MPC_OWNER_EMAIL" "$MPC_FROM_EMAIL" "$MPC_MAILING_ADDRESS"; do
+            if [ -n "$v" ]; then echo "::add-mask::$v"; fi
+          done
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::notice::Deploy skipped: add the CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID repository secrets (business/online/owner-setup.md)."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          problems=0
+          case "$MPC_SITE_URL" in
+            https://*) ;;
+            *) echo "::error::Set the repository variable MPC_SITE_URL to the site's https:// address; the smoke test needs it."; problems=1 ;;
+          esac
+          if ! grep -Eq '^[[:space:]]*"database_id"[[:space:]]*:' worker/wrangler.jsonc; then
+            echo "::error::worker/wrangler.jsonc has no D1 database_id yet (owner-setup: create the database and paste its id)."; problems=1
+          fi
+          if ! grep -Eq '^[[:space:]]*"id"[[:space:]]*:' worker/wrangler.jsonc; then
+            echo "::error::worker/wrangler.jsonc has no KV namespace id yet (owner-setup: create the namespace and paste its id)."; problems=1
+          fi
+          case "$MPC_GRADER_MODEL" in
+            ''|claude-opus-5|claude-sonnet-5) ;;
+            *) echo "::error::MPC_GRADER_MODEL must be claude-opus-5 or claude-sonnet-5 (or unset for the default)."; problems=1 ;;
+          esac
+          if [ -z "$MPC_MAILING_ADDRESS" ]; then echo "::warning::MPC_MAILING_ADDRESS is not set: emails and the consent text will show the placeholder from wrangler.jsonc."; fi
+          if [ -z "$MPC_TURNSTILE_SITE_KEY" ]; then echo "::warning::MPC_TURNSTILE_SITE_KEY is not set: the site is built with Cloudflare's always-pass test key."; fi
+          if [ "$problems" != 0 ]; then exit 1; fi
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node
+        if: steps.cfg.outputs.ready == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: products/clb/package-lock.json
+
+      - name: Install
+        if: steps.cfg.outputs.ready == 'true'
+        run: npm ci
+
+      - name: Typecheck and test
+        if: steps.cfg.outputs.ready == 'true'
+        run: |
+          npm run typecheck
+          npx vitest run
+
+      - name: Build site
+        if: steps.cfg.outputs.ready == 'true'
+        env:
+          NEXT_PUBLIC_SITE_URL: ${{ vars.MPC_SITE_URL }}
+          NEXT_PUBLIC_MAILING_ADDRESS: ${{ vars.MPC_MAILING_ADDRESS }}
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.MPC_TURNSTILE_SITE_KEY }}
+          NEXT_PUBLIC_CF_BEACON_TOKEN: ${{ vars.MPC_CF_BEACON_TOKEN }}
+          NEXT_PUBLIC_GADS_SEND_TO: ${{ vars.MPC_GADS_SEND_TO }}
+        run: |
+          # unset variables arrive as empty strings; drop them so the site's safe defaults apply
+          for v in NEXT_PUBLIC_SITE_URL NEXT_PUBLIC_MAILING_ADDRESS NEXT_PUBLIC_TURNSTILE_SITE_KEY NEXT_PUBLIC_CF_BEACON_TOKEN NEXT_PUBLIC_GADS_SEND_TO; do
+            if [ -z "${!v}" ]; then unset "$v"; fi
+          done
+          npm run build
+
+      - name: Content lint
+        if: steps.cfg.outputs.ready == 'true'
+        run: node scripts/run.mjs scripts/content-lint.ts --out out --ads ../../ops/ads/google.csv
+
+      - name: Note the live Worker version
+        id: prev
+        if: steps.cfg.outputs.ready == 'true'
+        run: |
+          prev=""
+          if out=$(npx wrangler deployments status --json -c worker/wrangler.jsonc 2>/dev/null); then
+            prev=$(printf '%s' "$out" | node -e '
+              let s = ""
+              process.stdin.on("data", (d) => (s += d)).on("end", () => {
+                try {
+                  const j = JSON.parse(s.slice(s.search(/[{[]/)))
+                  const v = (j.versions || []).find((x) => x.percentage === 100)
+                  console.log(v ? v.version_id : "")
+                } catch { console.log("") }
+              })')
+          fi
+          echo "version=$prev" >> "$GITHUB_OUTPUT"
+          echo "Live version before deploy: ${prev:-none (first deploy)}"
+
+      - name: Apply D1 migrations
+        if: steps.cfg.outputs.ready == 'true'
+        run: npx wrangler d1 migrations apply DB --remote -c worker/wrangler.jsonc
+
+      - name: Deploy
+        id: deploy
+        if: steps.cfg.outputs.ready == 'true'
+        env:
+          PREV_VERSION: ${{ steps.prev.outputs.version }}
+          SECRET_ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          SECRET_STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          SECRET_STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+          SECRET_RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          SECRET_TURNSTILE_SECRET: ${{ secrets.TURNSTILE_SECRET }}
+          SECRET_HASH_SALT: ${{ secrets.HASH_SALT }}
+        run: |
+          app_version="$(node -p 'require("./package.json").version')+${GITHUB_SHA::7}"
+          echo "app_version=$app_version" >> "$GITHUB_OUTPUT"
+
+          # Worker secrets from GitHub secrets, written to a private temp file and deleted afterwards.
+          # Secrets that are not set keep their current value on the Worker (--secrets-file is additive).
+          umask 077
+          secrets_file="$RUNNER_TEMP/worker-secrets.json"
+          trap 'rm -f "$secrets_file"' EXIT
+          node -e '
+            const names = ["ANTHROPIC_API_KEY", "STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET", "RESEND_API_KEY", "TURNSTILE_SECRET", "HASH_SALT"]
+            const out = {}
+            const missing = []
+            for (const n of names) {
+              const v = process.env["SECRET_" + n]
+              if (v) out[n] = v
+              else missing.push(n)
+            }
+            require("fs").writeFileSync(process.argv[1], JSON.stringify(out), { mode: 0o600 })
+            console.log("Worker secrets sent with this deploy: " + (Object.keys(out).join(", ") || "none"))
+            if (missing.length) console.log("::warning::Not in GitHub secrets (the Worker keeps any value it already has): " + missing.join(", "))
+          ' "$secrets_file"
+          if [ -z "$SECRET_HASH_SALT" ] && [ -z "$PREV_VERSION" ]; then
+            echo "::error::First deploy needs the HASH_SALT secret (sessions and hashed ids depend on it)."
+            exit 1
+          fi
+
+          args=(-c worker/wrangler.jsonc --message "GitHub Actions deploy ${GITHUB_SHA::7}" --var "APP_VERSION:$app_version")
+          if [ "$(node -p 'Object.keys(JSON.parse(require("fs").readFileSync(process.argv[1], "utf8"))).length' "$secrets_file")" != 0 ]; then
+            args+=(--secrets-file "$secrets_file")
+          fi
+          if [ -n "$MPC_SITE_URL" ]; then args+=(--var "SITE_URL:${MPC_SITE_URL%/}"); fi
+          if [ -n "$MPC_FROM_EMAIL" ]; then args+=(--var "FROM_EMAIL:$MPC_FROM_EMAIL"); fi
+          if [ -n "$MPC_MAILING_ADDRESS" ]; then args+=(--var "MAILING_ADDRESS:$MPC_MAILING_ADDRESS"); fi
+          if [ -n "$MPC_OWNER_EMAIL" ]; then args+=(--var "OWNER_EMAIL:$MPC_OWNER_EMAIL"); fi
+          if [ -n "$MPC_GRADER_MODEL" ]; then args+=(--var "GRADER_MODEL:$MPC_GRADER_MODEL"); fi
+          npx wrangler deploy "${args[@]}"
+
+      - name: Smoke test
+        id: smoke
+        if: steps.cfg.outputs.ready == 'true'
+        env:
+          APP_VERSION: ${{ steps.deploy.outputs.app_version }}
+        run: |
+          base="${MPC_SITE_URL%/}"
+          code=000
+          version=""
+          # the new version can take a little while to reach every location
+          for attempt in $(seq 1 12); do
+            code=$(curl -sS -o "$RUNNER_TEMP/health.json" -w '%{http_code}' --max-time 15 "$base/api/health" || echo 000)
+            version=$(node -e 'try { console.log(JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")).version || "") } catch { console.log("") }' "$RUNNER_TEMP/health.json")
+            if [ "$code" = 200 ] && [ "$version" = "$APP_VERSION" ]; then break; fi
+            echo "attempt $attempt: /api/health HTTP $code, version '$version' (want $APP_VERSION)"
+            sleep 10
+          done
+          if [ "$code" != 200 ] || [ "$version" != "$APP_VERSION" ]; then
+            echo "::error::GET /api/health did not return 200 with version $APP_VERSION"
+            exit 1
+          fi
+          home=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 15 "$base/" || echo 000)
+          if [ "$home" != 200 ]; then
+            echo "::error::GET / returned HTTP $home"
+            exit 1
+          fi
+          echo "Smoke test passed: /api/health 200 ($APP_VERSION), / 200" | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Roll back after a failed smoke test
+        if: failure() && steps.smoke.outcome == 'failure'
+        env:
+          PREV_VERSION: ${{ steps.prev.outputs.version }}
+        run: |
+          if [ -z "$PREV_VERSION" ]; then
+            echo "::error::Smoke test failed on the first deploy; there is no earlier Worker version to roll back to."
+            exit 1
+          fi
+          npx wrangler rollback "$PREV_VERSION" -y --message "Smoke test failed for ${GITHUB_SHA::7}" -c worker/wrangler.jsonc
+          echo "::error::Smoke test failed. Rolled back to Worker version $PREV_VERSION. D1 migrations are not rolled back."
+          echo "Rolled back to $PREV_VERSION after a failed smoke test (D1 migrations stay applied)." >> "$GITHUB_STEP_SUMMARY"
+          exit 1
