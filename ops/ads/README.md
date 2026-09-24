@@ -34,7 +34,9 @@ After creating the Purchase conversion action, copy its tag's send-to value (it 
 tag on `/checkout/success/` only (`NEXT_PUBLIC_GADS_SEND_TO`, CONTRACT §6).
 
 Replace `YOUR-DOMAIN` in every `final_url` row with the live domain (the value of `MPC_SITE_URL`
-without `https://`) before you enter or import the ads.
+without `https://`; the deploy attaches that domain to the Worker, owner-setup 2-2) before you enter or
+import the ads. Check that `https://<domain>/` opens the site first: ads that point at a domain the
+Worker does not serve waste clicks.
 
 ## File layout
 

@@ -1,0 +1,96 @@
+# Level-B checks on demand (memo W3 "level-B checks in Actions"; B0, B3, B15), against staging or
+# production. Run from the Actions tab (also the GitHub mobile app): "Level-B checks" → Run workflow.
+#
+#   smoke        GET /api/health (200, ok, version), the key pages and robots.txt / sitemap.xml (200),
+#                GET /api/me signed out (200 JSON in the MeResponse shape, no email) — scripts/smoke.ts
+#   prompt cache the production grader request (buildGraderParams) sent twice; the second response
+#                must report cache_read_input_tokens > 0 (memo B3) — scripts/eval/cache-check.ts.
+#                Needs ANTHROPIC_EVAL_API_KEY (preferred) or ANTHROPIC_API_KEY; skipped without one.
+#                Costs two grader calls (about US$0.05–0.15 on claude-opus-5, ESTIMATE).
+#
+# The URL is MPC_STAGING_SITE_URL or MPC_SITE_URL (repository variables) unless one is given.
+# Not covered here: the Stripe CLI test events of B6 and E2E against staging (e2e/run.mjs mocks /api).
+name: Level-B checks
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Which site to check
+        required: true
+        type: choice
+        default: staging
+        options:
+          - staging
+          - production
+      url:
+        description: Site origin to check instead of the repository variable (https://…)
+        required: false
+        type: string
+        default: ''
+      cache_check:
+        description: Also run the prompt-cache check (two paid grader calls)
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: level-b-${{ inputs.target }}
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: products/clb
+    env:
+      TARGET: ${{ inputs.target }}
+      URL_INPUT: ${{ inputs.url }}
+      MPC_SITE_URL: ${{ vars.MPC_SITE_URL }}
+      MPC_STAGING_SITE_URL: ${{ vars.MPC_STAGING_SITE_URL }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: products/clb/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Choose the site
+        run: |
+          if [ -n "$URL_INPUT" ]; then site="$URL_INPUT"
+          elif [ "$TARGET" = staging ]; then site="$MPC_STAGING_SITE_URL"
+          else site="$MPC_SITE_URL"; fi
+          case "$site" in
+            https://*) ;;
+            *) echo "::error::No https:// site URL for $TARGET: set MPC_STAGING_SITE_URL / MPC_SITE_URL or pass the url input."; exit 1 ;;
+          esac
+          echo "SITE_URL=${site%/}" >> "$GITHUB_ENV"
+          echo "## Level-B checks ($TARGET)" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Smoke checks (health, key pages, /api/me shape)
+        id: smoke
+        run: node scripts/run.mjs scripts/smoke.ts --base "$SITE_URL"
+
+      - name: Prompt-cache check (memo B3)
+        if: always() && inputs.cache_check
+        env:
+          ANTHROPIC_EVAL_API_KEY: ${{ secrets.ANTHROPIC_EVAL_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GRADER_MODEL: ${{ vars.MPC_GRADER_MODEL }}
+          GRADER_EFFORT: ${{ vars.MPC_GRADER_EFFORT }}
+          GRADER_MAX_TOKENS: ${{ vars.MPC_GRADER_MAX_TOKENS }}
+        run: node scripts/run.mjs scripts/eval/cache-check.ts

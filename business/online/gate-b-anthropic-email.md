@@ -44,8 +44,8 @@ corrections, one or two improved sentences, and a next step, with explanations i
 
 **What it does not do.** The product does not administer, score or proctor any test, and it is not used
 by any school, employer, test provider or government for decisions. It shows no score, band, level or
-prediction of a test result; an automatic filter also removes wording that presents a score, band, level
-or numeric result. Every practice page tells the learner, before they submit, that the feedback comes
+prediction of a test result; an automatic filter also removes sentences that use set words or number
+patterns presenting a test result (such as "score", "band", "level" or a number out of 12). Every practice page tells the learner, before they submit, that the feedback comes
 from an AI (Claude by Anthropic), that it can make mistakes and that it does not predict test results.
 Requests for immigration or legal advice receive a fixed message that points to a licensed immigration
 consultant or a lawyer, instead of an answer. Users must confirm they are 18 or older. No person reviews
@@ -53,8 +53,8 @@ the feedback before the learner sees it; I may review a small sample afterwards 
 Learners pay for a 30-day or 90-day practice pass (Canada outside Quebec only).
 
 > **하지 않는 일.** 이 제품은 어떤 시험도 실시·채점·감독하지 않고, 학교·고용주·시험 기관·정부가 결정에 쓰지도
-> 않아요. 점수, 밴드, 레벨, 시험 결과 예측을 보여 주지 않고, 자동 필터가 점수·밴드·레벨·숫자 결과처럼 보이는
-> 표현을 지워요. 모든 연습 페이지는 제출 전에 피드백이 AI(Anthropic의 Claude)에서 나오며 틀릴 수 있고 시험
+> 않아요. 점수, 밴드, 레벨, 시험 결과 예측을 보여 주지 않고, 자동 필터가 시험 결과를 나타내는 정해진 단어나
+> 숫자 형식("score", "band", "level", 12점 만점의 숫자 등)이 든 문장을 지워요. 모든 연습 페이지는 제출 전에 피드백이 AI(Anthropic의 Claude)에서 나오며 틀릴 수 있고 시험
 > 결과를 예측하지 않는다고 알려요. 이민·법률 조언 요청에는 답 대신, 등록된 이민 컨설턴트나 변호사를 안내하는
 > 고정 문구를 보여 줘요. 사용자는 18세 이상임을 확인해야 해요. 학습자가 보기 전에 사람이 피드백을 검토하지는
 > 않아요. 품질 문제를 고치려고 나중에 일부 표본을 제가 볼 수 있어요. 학습자는 30일 또는 90일 연습 이용권을

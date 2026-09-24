@@ -11,7 +11,7 @@ writers put files here:
 
 ## Personal-data guard
 
-`products/clb/scripts/metrics.ts guard` checks **every file in this folder, including subfolders**, in
+`products/clb/scripts/metrics.ts guard` checks **every file in this folder and in any subfolder**, in
 `metrics.yml` before each commit and in `ci.yml` on every push. Only three kinds of file may be here:
 this `README.md`, `ads.json` and `<YYYY-MM-DD>.json` (no subfolders, lower-case `.json`); anything else
 fails. Every file except this README is scanned, whatever its name, and fails on:

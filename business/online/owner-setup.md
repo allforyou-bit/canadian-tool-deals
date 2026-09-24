@@ -117,10 +117,9 @@ AI는 보관본(2025-09-15 시행, OpenTermsArchive)만 읽었어요. 보관본�
 
 1. Console에서 **작업 공간(workspace)을 두 개** 써요: 운영용(예: `production`)과 평가용(예: `eval`). 작업 공간별 월 지출 한도가 있다는 것은 Claude API 안내(`shared/cost-optimization.md`: "a workspace spend limit is the final backstop on the whole workspace")에서 확인했어요. 화면 메뉴 이름과 설정 방법은 [미확인]이에요.
 2. **운영용 작업 공간:** API 키를 만들어 GitHub 비밀 `ANTHROPIC_API_KEY`에 넣어요(2-6). **월 지출 한도 US$150**과 알림을 설정해요(메모 §3.4).
-3. **평가용 작업 공간:** API 키를 따로 만들어 GitHub 비밀 `ANTHROPIC_EVAL_API_KEY`에 넣어요. 월 한도는 메모 §3.3의 개발·평가 몫인 **약 US$30**으로 설정해요. 주간 평가(`Grading eval` 워크플로)와 프롬프트 PR 평가는 이 키로 돌아서, 운영 한도를 쓰지 않아요. 이 비밀이 없으면 평가가 운영 키 `ANTHROPIC_API_KEY`로 돌고 경고를 보여 줘요(운영 한도를 써요). 한 번 돌릴 때 비용 상한은 변수 `MPC_EVAL_BUDGET_USD`(비우면 US$60, 스크립트 실행 1회당)예요: 모든 요청이 출력 상한까지 쓴다고 가정한 최악 비용이 이 값을 넘으면 아무것도 보내지 않고 실패해요(2-6). 리뷰 추정으로 전체 평가 1회(샘플 120개와 점검 항목, 각 3회)는 Opus 5에서 약 US$13–27이라, 매주 돌리면 한 달에 약 US$57–116이에요(추정). US$30 한도로는 부족하니 한도를 올리거나(고정비 F가 늘어요) `MPC_EVAL_LIMIT`로 샘플 수를 줄여요. PR 평가는 `MPC_EVAL_PR_LIMIT`(비우면 20개)만 채점해요. 평가 작업 공간이 한도에 닿으면 그달 남은 평가만 실패하고, 운영 채점에는 영향이 없어요.
-4. 운영 한도와 **같은 숫자**를 저장소 변수 `MPC_ANTHROPIC_LIMIT_USD`에 넣어요(예: `150`). 배포할 때 Worker의 `ANTHROPIC_MONTHLY_LIMIT_USD`가 되고, Worker의 지출 단계(70%에서 무료 샘플 끄기, 95%에서 알림, 하루 지출이 비정상적으로 크면 채점 일시 중지)는 **메모 공식 L과 이 값 중 작은 쪽**을 기준으로 해요(통합 담당이 이미 적용, `worker/src/lib/spend.ts`, 메모 §7.1 B10). 비워 두면 공식 L만 써서, Console이 먼저 막을 수 있어요.
-5. 같은 숫자를 `ops/config/anthropic-limit.json`의 `monthlyLimitUsd`에 적고 `confirmedByOwner`를 `true`로 바꿔 커밋해요. KPI Routine이 이 파일을 읽어요.
-6. **한도를 올릴 때(순서대로):** ① Console에서 운영 작업 공간 한도를 올려요, ② 변수 `MPC_ANTHROPIC_LIMIT_USD`를 같은 숫자로 바꿔요, ③ KPI Routine의 인상 PR을 병합하거나 `monthlyLimitUsd`를 고쳐요, ④ **Actions → Deploy practice coach → Run workflow**로 다시 배포해요(변수는 배포 때만 Worker에 들어가요). KPI Routine은 L이 설정값을 넘거나, 이번 달 채점 비용이 설정값의 95% 이상이면 인상을 제안해요(`ops/routines/kpi.md`).
+3. **평가용 작업 공간:** API 키를 따로 만들어 GitHub 비밀 `ANTHROPIC_EVAL_API_KEY`에 넣어요. 스테이징 Worker의 채점도 이 키를 써요(2-7). 월 한도는 메모 §3.3의 개발·평가 몫인 **약 US$30**으로 설정해요. 주간 평가(`Grading eval` 워크플로)와 프롬프트 PR 평가는 이 키로 돌아서, 운영 한도를 쓰지 않아요. 이 비밀이 없으면 평가가 운영 키 `ANTHROPIC_API_KEY`로 돌고 경고를 보여 줘요(운영 한도를 써요). 한 번 돌릴 때 비용 상한은 변수 `MPC_EVAL_BUDGET_USD`(비우면 US$60, 스크립트 실행 1회당)예요: 모든 요청이 출력 상한까지 쓴다고 가정한 최악 비용이 이 값을 넘으면 아무것도 보내지 않고 실패해요(2-6). 리뷰 추정으로 전체 평가 1회(샘플 120개와 점검 항목, 각 3회)는 Opus 5에서 약 US$13–27이라, 매주 돌리면 한 달에 약 US$57–116이에요(추정). US$30 한도로는 부족하니 한도를 올리거나(고정비 F가 늘어요) `MPC_EVAL_LIMIT`로 샘플 수를 줄여요. PR 평가는 `MPC_EVAL_PR_LIMIT`(비우면 20개)만 채점해요. 평가 작업 공간이 한도에 닿으면 그달 남은 평가만 실패하고, 운영 채점에는 영향이 없어요.
+4. 운영 한도와 **같은 숫자**를 `ops/config/anthropic-limit.json`의 `monthlyLimitUsd`에 적고(기본 150), `confirmedByOwner`를 `true`로 바꿔 커밋해요. 평가용 한도는 같은 파일의 `evalMonthlyLimitUsd`에 기록용으로 적어요. 배포 워크플로가 `monthlyLimitUsd`를 Worker의 `ANTHROPIC_MONTHLY_LIMIT_USD`로 넣고, Worker의 지출 단계(70%에서 무료 샘플 끄기, 95%에서 알림, 하루 지출이 비정상적으로 크면 채점 일시 중지)는 **메모 공식 L과 이 값 중 작은 쪽**을 기준으로 해요(`worker/src/lib/spend.ts`, 메모 §7.1 B10). 그래서 Console 한도보다 먼저 무료 샘플이 꺼져요. `confirmedByOwner`가 `false`인 동안에는 배포할 때마다 "확인되지 않음" 경고가 나와요. KPI Routine도 이 파일을 읽어요.
+5. **한도를 올릴 때(순서대로):** ① Console에서 **먼저** 운영 작업 공간 한도를 올려요, ② KPI Routine의 인상 PR을 병합하거나 `monthlyLimitUsd`를 같은 숫자로 고쳐 `master`에 커밋해요. 이 파일이 바뀌면 배포 워크플로가 **자동으로 다시 배포**해서 Worker가 새 값을 써요. 순서를 거꾸로 하면 Worker가 Console보다 큰 한도를 믿게 돼요. KPI Routine은 L이 설정값을 넘거나, 이번 달 채점 비용이 설정값의 95% 이상이면 인상을 제안해요(`ops/routines/kpi.md`).
 
 **채점 모델 선택 (`MPC_GRADER_MODEL`, 결정 1 — 오너가 정해요)**
 
@@ -146,8 +145,8 @@ AI는 보관본(2025-09-15 시행, OpenTermsArchive)만 읽었어요. 보관본�
 
 1. 계정을 만들고 **Workers Paid(US$5/월)**로 올려요(메모 §3.3). 상업적 사용 약관을 읽어요(decision-memo.md F40).
 2. **API 토큰:** 대시보드 → My Profile → API Tokens → Create Token [미확인: 메뉴]. "Edit Cloudflare Workers" 템플릿에서 시작해 **D1 편집**과 **Workers KV 편집** 권한이 있는지 확인해요. Worker가 Workers AI(받아쓰기)를 쓰므로 그 권한도 필요할 수 있어요. 도메인을 Worker에 붙이려면 그 도메인(zone)의 **Workers Routes 편집**과 **DNS 편집** 권한도 필요할 수 있어요 [미확인: 템플릿과 권한 이름]. 토큰은 GitHub 비밀 `CLOUDFLARE_API_TOKEN`, 계정 ID는 `CLOUDFLARE_ACCOUNT_ID`에 넣어요.
-3. **도메인 연결:** 도메인을 사면(약 C$20/년, [미확인]) Cloudflare에 사이트로 추가하고 등록 업체에서 네임서버를 Cloudflare로 바꿔요 [미확인: 화면]. 그다음 변수 `MPC_SITE_URL`을 `https://도메인`으로 넣어요. 배포 워크플로가 이 주소가 `workers.dev`가 아니면 Worker에 그 도메인을 **사용자 지정 도메인**으로 붙여요(wrangler 4.137 `deploy --domain`, `--help`로 확인). 도메인을 붙이지 않으면 Worker 주소(`workers.dev`)를 `MPC_SITE_URL`에 넣어요. 사이트 주소는 Stripe 웹훅, Turnstile, Resend, 광고 최종 URL에 모두 쓰이니 **먼저 정하고 바꾸지 않는 것**이 좋아요.
-4. **Turnstile 위젯:** Cloudflare 대시보드의 Turnstile에서 사이트 주소(호스트 이름)로 위젯을 만들어요 [미확인: 메뉴]. **사이트 키**는 변수 `MPC_TURNSTILE_SITE_KEY`, **비밀 키**는 비밀 `TURNSTILE_SECRET`에 넣어요. 사이트 키가 없으면 사이트가 Cloudflare 테스트 키(항상 통과)로 빌드돼요. 스테이징 주소도 위젯의 호스트 이름에 추가하거나 스테이징용 위젯을 따로 만들어요 [미확인].
+3. **도메인 연결:** 도메인을 사면(약 C$20/년, [미확인]) Cloudflare에 사이트로 추가하고 등록 업체에서 네임서버를 Cloudflare로 바꿔요 [미확인: 화면]. 그다음 변수 `MPC_SITE_URL`을 `https://도메인`으로 넣어요(경로 없이, 예: `https://example.ca`. 경로나 포트가 있으면 배포 전 검사에서 멈춰요). 배포 워크플로가 이 주소가 `workers.dev`가 아니면 Worker에 그 도메인을 **사용자 지정 도메인**으로 붙여요(wrangler 4.137 `deploy --domain`, `--help`로 확인). 도메인을 붙이지 않으면 Worker 주소(`workers.dev`)를 `MPC_SITE_URL`에 넣어요. 사이트 주소는 Stripe 웹훅, Turnstile, Resend, 광고 최종 URL에 모두 쓰이니 **먼저 정하고 바꾸지 않는 것**이 좋아요.
+4. **Turnstile 위젯:** Cloudflare 대시보드의 Turnstile에서 사이트 주소(호스트 이름)로 위젯을 만들어요 [미확인: 메뉴]. **사이트 키**는 변수 `MPC_TURNSTILE_SITE_KEY`, **비밀 키**는 비밀 `TURNSTILE_SECRET`에 넣어요. 사이트 키가 없으면 사이트가 Cloudflare 테스트 키(항상 통과)로 빌드돼요. 스테이징은 배포 워크플로가 항상 Cloudflare 테스트 키를 쓰니 따로 만들 필요가 없어요.
 5. (선택) Web Analytics 토큰은 변수 `MPC_CF_BEACON_TOKEN`에 넣어요 [미확인: 발급 위치].
 
 ### 2-3. D1 데이터베이스와 KV 만들기 (7번, 명령어)
@@ -185,7 +184,7 @@ npx wrangler kv namespace create FLAGS_STAGING      # 스테이징용. 출력의
   ],
 ```
 
-스테이징 ID는 같은 파일의 `"env"` → `"staging"` 부분에 있는 `d1_databases`와 `kv_namespaces`에 같은 방식으로 넣어요(스테이징 데이터베이스 이름은 `mpc-staging`). wrangler 설정에서 `d1_databases`, `kv_namespaces`, `vars`는 환경마다 따로 적어야 해요(`config-schema.json`: "not automatically inherited"). 그 부분이 파일에 아직 없으면 AI에게 알려 주세요(파일은 통합 담당이 고쳐요).
+스테이징 ID는 같은 파일의 `"env"` → `"staging"` 부분에 있는 `d1_databases`와 `kv_namespaces`에 같은 방식으로 넣어요(`d1 create`에 쓴 이름이 그 부분의 `database_name`과 같아야 해요. 예: `mpc-staging`). KV 이름은 아무거나 괜찮고 ID만 맞으면 돼요. wrangler 설정에서 `d1_databases`, `kv_namespaces`, `vars`는 환경마다 따로 적어야 해요(`config-schema.json`: "not automatically inherited"). 그 부분이 파일에 아직 없으면 AI에게 알려 주세요(파일은 통합 담당이 고쳐요).
 
 GitHub 웹에서 파일을 고쳐 `master`에 커밋해도 돼요. 테이블은 배포 워크플로가 `wrangler d1 migrations apply DB --remote`로 만들어요.
 
@@ -232,7 +231,7 @@ GitHub 웹에서 파일을 고쳐 `master`에 커밋해도 돼요. 테이블은 
 | `CLOUDFLARE_API_TOKEN` | 2-2의 API 토큰 |
 | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare 계정 ID |
 | `ANTHROPIC_API_KEY` | 2-1 운영용 작업 공간의 키 (운영 Worker) |
-| `ANTHROPIC_EVAL_API_KEY` | 2-1 평가용 작업 공간의 키 (`Grading eval` 워크플로) |
+| `ANTHROPIC_EVAL_API_KEY` | 2-1 평가용 작업 공간의 키 (`Grading eval` 워크플로와 스테이징 Worker) |
 | `STRIPE_SECRET_KEY` | 2-4 운영용 (테스트 키로 시작하면 출시 때 실사용 키로 교체) |
 | `STRIPE_WEBHOOK_SECRET` | 2-4 운영 엔드포인트의 서명 비밀 |
 | `STRIPE_TEST_SECRET_KEY` | 2-4 테스트 키 (스테이징) |
@@ -254,26 +253,33 @@ GitHub 웹에서 파일을 고쳐 `master`에 커밋해도 돼요. 테이블은 
 | `MPC_GRADER_MODEL` | (선택) `claude-sonnet-5`. 비우면 `claude-opus-5` (2-1) |
 | `MPC_GRADER_EFFORT` | (선택) 2-1. 비우면 `high` |
 | `MPC_GRADER_MAX_TOKENS` | (선택) 2-1. 비우면 8000 |
-| `MPC_ANTHROPIC_LIMIT_USD` | 2-1 운영용 작업 공간의 Console 월 한도(USD, 숫자만). Worker의 `ANTHROPIC_MONTHLY_LIMIT_USD`가 돼요 |
 | `MPC_EVAL_LIMIT` | (선택) 주간·수동 평가에서 채점할 연습 샘플 수 상한(비용 조절). 비우거나 0이면 전부(120개) |
 | `MPC_EVAL_PR_LIMIT` | (선택) 프롬프트 PR 평가에서 채점할 연습 샘플 수. 비우면 20 |
 | `MPC_EVAL_BUDGET_USD` | (선택) 평가 스크립트 실행 1회의 최악 예상 비용 상한(USD). 비우면 60. 넘으면 아무것도 보내지 않고 실패해요 |
 | `MPC_CF_BEACON_TOKEN` | (선택) Web Analytics |
 | `MPC_GADS_SEND_TO` | (15번 뒤) Google Ads 전환 태그의 send-to 값 |
+| `MPC_INDEXNOW_KEY` | (선택) IndexNow 키(메모 B9): 영문자·숫자·`-`로 된 8–128자 무작위 문자열. 예: `node -e "console.log(require('crypto').randomBytes(16).toString('hex'))"`. 비밀이 아니에요(검색엔진이 사이트에서 읽어요). 넣으면 운영 배포 뒤 검색엔진에 새 페이지를 알려요. 비우면 건너뛰어요 |
 | `MPC_STAGING` | 스테이징 준비(2-3의 스테이징 ID, `STRIPE_TEST_*` 비밀)가 끝나면 `true`. 이 저장소의 PR마다 스테이징 Worker에 배포하고 점검해요 |
 | `MPC_STAGING_SITE_URL` | 스테이징 Worker 주소, `https://`로 시작(`workers.dev` 주소) [미확인: 주소 형식] |
 | `MPC_DEPLOY` | 위 준비가 끝나면 `true`. 그 전에는 비워 두면 운영 배포가 돌지 않아요 |
 
-배포할 때 `MPC_SITE_URL`, `MPC_MAILING_ADDRESS`, `MPC_FROM_EMAIL`, `MPC_OWNER_EMAIL`, `MPC_GRADER_MODEL`, `MPC_GRADER_EFFORT`, `MPC_GRADER_MAX_TOKENS`, `MPC_ANTHROPIC_LIMIT_USD`는 Worker의 `SITE_URL`, `MAILING_ADDRESS`, `FROM_EMAIL`, `OWNER_EMAIL`, `GRADER_MODEL`, `GRADER_EFFORT`, `GRADER_MAX_TOKENS`, `ANTHROPIC_MONTHLY_LIMIT_USD`로 들어가요. `wrangler.jsonc`의 자리표시 값은 고치지 않아도 돼요. 변수를 바꾸면 **다시 배포해야** Worker에 반영돼요.
+배포할 때 `MPC_SITE_URL`(스테이징은 `MPC_STAGING_SITE_URL`), `MPC_MAILING_ADDRESS`, `MPC_FROM_EMAIL`, `MPC_OWNER_EMAIL`, `MPC_GRADER_MODEL`, `MPC_GRADER_EFFORT`, `MPC_GRADER_MAX_TOKENS`는 Worker의 `SITE_URL`, `MAILING_ADDRESS`, `FROM_EMAIL`, `OWNER_EMAIL`, `GRADER_MODEL`, `GRADER_EFFORT`, `GRADER_MAX_TOKENS`로 들어가요. `ANTHROPIC_MONTHLY_LIMIT_USD`는 변수가 아니라 `ops/config/anthropic-limit.json`에서 와요(2-1). `wrangler.jsonc`의 자리표시 값은 고치지 않아도 돼요. 변수를 바꾸면 **다시 배포해야**(Actions → Deploy practice coach → Run workflow) Worker에 반영돼요. 잘못된 모델·effort·max tokens 값이나 빠진 우편 주소는 배포 전에 오류로 멈춰요.
 
 ### 2-7. 첫 배포와 스테이징
 
 1. 2-3의 ID 커밋, 2-6의 비밀과 변수를 모두 넣어요(`HASH_SALT`는 첫 배포에 **반드시** 필요하고, `MPC_MAILING_ADDRESS`가 없으면 배포가 실패해요).
 2. 변수 `MPC_DEPLOY`를 `true`로 바꿔요.
-3. **Actions** → **Deploy practice coach** → **Run workflow**. 테스트 → 사이트 빌드 → 콘텐츠 검사(우편 주소 자리표시가 남아 있으면 실패) → D1 테이블 생성 → 배포 → 점검(`/api/health`가 이 커밋의 버전을 돌려주고 `/`가 200인지) 순서로 돌아요. 점검에 실패하면 이전 버전으로 자동 롤백해요(D1 변경은 롤백되지 않아요). 첫 배포는 되돌릴 이전 버전이 없어서, 도메인이 아직 Worker에 연결되지 않았으면 점검이 실패할 수 있어요 → 2-2의 3번을 확인해요.
-4. 이후에는 `products/clb/**`가 `master`에 바뀔 때마다 자동으로 배포돼요.
+3. **Actions** → **Deploy practice coach** → **Run workflow**. 설정 검사(우편 주소, 모델 값, D1·KV ID) → 테스트 → 사이트 빌드 → 콘텐츠 검사(우편 주소 자리표시가 남아 있으면 실패) → D1 테이블 생성 → 배포(도메인 연결 포함) → 점검(`/api/health`가 이 커밋의 버전을 돌려주는지, 주요 페이지가 열리는지, `/api/me` 형식) → `MPC_INDEXNOW_KEY`가 있으면 IndexNow 알림(실패해도 배포는 성공) 순서로 돌아요. 점검에 실패하면 이전 버전으로 자동 롤백해요(D1 변경은 롤백되지 않아요). 첫 배포는 되돌릴 이전 버전이 없어서, 도메인이 아직 Worker에 연결되지 않았으면 점검이 실패할 수 있어요 → 2-2의 3번을 확인해요.
+4. 이후에는 `products/clb/**`나 `ops/config/anthropic-limit.json`이 `master`에 바뀔 때마다 자동으로 배포돼요.
 5. **결제는 꺼진 상태로 시작해요**(`checkout_enabled` 기본값 false). 17번 전에는 켜지 않아요.
-6. **스테이징(메모 §5.2 "staging on PR", B0·B6·B15의 B단계 점검):** 2-3의 스테이징 ID, `STRIPE_TEST_SECRET_KEY`, `STRIPE_TEST_WEBHOOK_SECRET`, `MPC_STAGING_SITE_URL`을 넣고 `MPC_STAGING`을 `true`로 바꿔요. 스테이징은 **테스트 키**만 써요. 스테이징의 킬 스위치는 `Set a kill switch` 워크플로에서 `target`을 `staging`으로 골라요. Day-21 관문의 "B단계 점검 통과"는 스테이징 점검이 초록색인지로 확인해요. 스테이징 워크플로가 실제로 어떤 점검을 하는지는 `ops/README.md`의 워크플로 표를 보세요.
+6. **스테이징(메모 §5.2 "staging on PR", B0·B6·B15의 B단계 점검):** 2-3의 스테이징 ID, `STRIPE_TEST_SECRET_KEY`, `STRIPE_TEST_WEBHOOK_SECRET`, `MPC_STAGING_SITE_URL`을 넣고 `MPC_STAGING`을 `true`로 바꿔요. 그러면 이 저장소에서 연 PR 중 `products/clb/**`를 바꾸는 PR마다(그리고 **Deploy practice coach**를 `target`=`staging`으로 수동 실행하면) 같은 워크플로가 스테이징 Worker에 배포하고 점검해요. 스테이징은:
+   - Stripe **테스트 키만** 받아요(실사용 키를 넣으면 배포가 멈춰요).
+   - Turnstile은 Cloudflare 테스트 키, Web Analytics와 광고 태그는 없고, 검색엔진 수집을 막는 `robots.txt`를 써요.
+   - 채점은 `ANTHROPIC_EVAL_API_KEY`(평가용 작업 공간)가 있으면 그 키를 써요. 없으면 운영 키를 쓰고 경고가 나와요.
+   - `HASH_SALT`는 첫 배포 때 따로 무작위로 만들어서 운영과 섞이지 않아요.
+   - 이메일은 운영과 같은 Resend 키로 **실제로 발송**돼요. 시험할 때는 본인 이메일만 써요.
+   - 스테이징의 킬 스위치는 `Set a kill switch` 워크플로에서 `target`을 `staging`으로 골라요(스테이징도 `checkout_enabled`는 처음에 꺼져 있어요).
+   Day-21 관문의 "B단계 점검 통과"는 ① 스테이징 배포와 점검이 초록색인지, ② **Actions → Level-B checks → Run workflow**(`target`=`staging`)가 초록색인지(점검 + 프롬프트 캐시 확인. 유료 채점 2회, Opus 5에서 약 US$0.05–0.15, 추정)로 확인해요. 메모 B6의 Stripe CLI 테스트 이벤트와 스테이징 대상 E2E는 자동화되지 않았어요. 스테이징에서 캐나다 테스트 카드로 구매·셀프 환불을 한 번 직접 해 봐요(2-4의 6번). 어떤 워크플로가 어떤 점검을 하는지는 `ops/README.md`의 표를 보세요.
 
 ### 2-8. 법률 페이지와 제품 페이지 검토 (14번)
 

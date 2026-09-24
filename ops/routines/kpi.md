@@ -85,10 +85,10 @@ dollars. When only the 95% condition holds (L is not above the configured limit)
 number: do not open a PR; put the proposal in the digest with the question "Month-to-date grading spend is
 US$<mtdUsd>, at least 95% of the US$<limit> limit. Raise the Console limit, and to what amount?" The raise
 PR body (and the digest proposal) lists the owner's steps in this order: (1) raise the limit of the
-**production** workspace in the Anthropic Console, (2) set the repository variable
-`MPC_ANTHROPIC_LIMIT_USD` to the same number, (3) merge the PR or change `monthlyLimitUsd` to that number,
-(4) run the **Deploy practice coach** workflow so the Worker reads the new value (owner-setup 2-1). If
-`confirmedByOwner` is `false`, say in the digest that the configured limit is not confirmed.
+**production** workspace in the Anthropic Console first, (2) then merge the PR (or change
+`monthlyLimitUsd` to that number on `master`); a change to this file redeploys the Worker, which passes
+`monthlyLimitUsd` to it as `ANTHROPIC_MONTHLY_LIMIT_USD` (owner-setup 2-1). If `confirmedByOwner` is
+`false`, say in the digest that the configured limit is not confirmed.
 
 ## Outputs
 

@@ -1,5 +1,6 @@
 # CI for both packages in this repo (memo B11, B16). Needs no secrets.
 #
+# workflows: actionlint on .github/workflows (memo B11 level A).
 # root: the home-services site (repo root). Lint, test, build, and on pull requests prove that the
 #       exported site did not change: the out/ file list of the PR must equal the base commit's
 #       (the build id directory is normalised, it is random per build).
@@ -24,6 +25,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  workflows:
+    name: Workflow lint (actionlint)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # memo B11 level A. Pinned release, verified against its published checksum
+      # (actionlint_1.7.12_checksums.txt); shellcheck on the runner image checks the run: scripts.
+      - name: actionlint 1.7.12
+        run: |
+          v=1.7.12
+          sum=8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+          curl -sSfL -o "$RUNNER_TEMP/actionlint.tgz" "https://github.com/rhysd/actionlint/releases/download/v${v}/actionlint_${v}_linux_amd64.tar.gz"
+          echo "$sum  $RUNNER_TEMP/actionlint.tgz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/actionlint.tgz" -C "$RUNNER_TEMP" actionlint
+          "$RUNNER_TEMP/actionlint" -color
+
   root:
     name: Root site
     runs-on: ubuntu-latest

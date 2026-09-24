@@ -25,7 +25,8 @@ user data. Still, never commit it or paste more than one short quoted sentence f
 
 If no eval run finished in the last 8 days, or the artifact is missing, open or update the issue
 **"Eval review: no recent eval run"** and stop. If the newest run stopped before sending anything
-because its worst-case cost was above the budget (`run-live: not started` in the log; the budget is the
+because its worst-case cost was above the budget (`run-live: not started` or `gen-synthetic: not started`
+in the log; the budget is the
 repository variable `MPC_EVAL_BUDGET_USD`), say so in the report with the numbers from the log and
 propose nothing else: raising the budget or lowering `MPC_EVAL_LIMIT` is the owner's choice.
 
