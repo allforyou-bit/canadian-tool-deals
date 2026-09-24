@@ -108,7 +108,8 @@ Identifier hashing conventions (must match across modules):
   `RETENTION_DAYS`). IPs and device ids only as salted hashes. No personal data in logs (`console.*` must not
   print emails, essays, tokens or Stripe payloads).
 - No secrets in the repo. Test secrets live only in `vitest.config.mts` bindings (dummy values).
-- Grader explanations, pages, emails and ads must pass `findClaims` (ads also `AD_ONLY_FORBIDDEN`) except
+- Grader explanations, pages and emails must pass `findClaims` (there are no ads — memo §7.2; `AD_ONLY_FORBIDDEN` is kept
+  only for community-post drafts) except
   inside `ALLOWED_PHRASES`. Every practice page shows `AI_DISCLOSURE` before submission; every page shows
   `NOT_AFFILIATED` in the footer. No band/score output anywhere (`bandShown:false`).
 - Brand name is `BRAND` from config; never put CELPIP/IELTS/CLB in names, titles or ads.
