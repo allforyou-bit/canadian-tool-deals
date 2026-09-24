@@ -31,7 +31,7 @@ export default defineConfig(async () => {
       }),
     ],
     test: {
-      include: ['worker/test/**/*.test.ts', 'shared/**/*.test.ts', 'lib/**/*.test.ts', 'scripts/**/*.test.ts'],
+      include: ['worker/test/**/*.test.ts', 'shared/**/*.test.ts', 'lib/**/*.test.ts', 'scripts/**/*.test.ts', 'content/**/*.test.ts'],
       setupFiles: ['./worker/test/setup.ts'],
       // istanbul (not v8) is the provider that works inside workerd
       coverage: {

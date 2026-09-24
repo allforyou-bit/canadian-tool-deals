@@ -125,3 +125,18 @@ export const NOT_AFFILIATED = {
   en: 'Independent practice tool. Not affiliated with or endorsed by Paragon Testing Enterprises, IDP, the British Council, Cambridge, or IRCC. Feedback is not calibrated against official scores.',
   ko: '독립적인 연습 도구입니다. Paragon Testing Enterprises, IDP, British Council, Cambridge, IRCC와 관련이 없으며 보증받지 않았습니다. 피드백은 공식 점수 기준으로 보정되지 않았습니다.',
 } as const
+
+/**
+ * CASL express-consent request (s.10(1)): states the purpose, identifies who is asking (name + mailing
+ * address + a contact method) and says consent can be withdrawn. Shown next to an UNTICKED box; the
+ * exact text sent with the form is stored with MARKETING_CONSENT.version (memo B2).
+ * `address` is the owner's mailing address (build-time NEXT_PUBLIC_MAILING_ADDRESS on the site;
+ * MAILING_ADDRESS var in the Worker).
+ */
+export const MARKETING_CONSENT = {
+  version: '2026-09-24',
+  en: (address: string, siteUrl: string) =>
+    `Yes, send me occasional emails about new practice tasks and offers from Maple Practice Coach, ${address}, ${siteUrl}. I can withdraw my consent at any time from my account page or with the unsubscribe link in any email.`,
+  ko: (address: string, siteUrl: string) =>
+    `네, Maple Practice Coach(${address}, ${siteUrl})로부터 새 연습 과제와 혜택에 관한 이메일을 가끔 받겠습니다. 동의는 계정 페이지나 이메일의 수신 거부 링크로 언제든지 철회할 수 있습니다.`,
+} as const
