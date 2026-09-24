@@ -28,6 +28,8 @@ jobs:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+      # production site: sessions whose success_url is on another host (staging) are left out
+      SITE_URL: ${{ vars.MPC_SITE_URL }}
       WRANGLER_SEND_METRICS: 'false'
     steps:
       - name: Check out

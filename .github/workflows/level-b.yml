@@ -1,15 +1,35 @@
-# Level-B checks on demand (memo W3 "level-B checks in Actions"; B0, B3, B15), against staging or
-# production. Run from the Actions tab (also the GitHub mobile app): "Level-B checks" → Run workflow.
+# Level-B checks on demand (memo W3 "all level-B checks green" by Day 21; memo §7 "B:" acceptance cells),
+# against staging or production. Run from the Actions tab (also the GitHub mobile app):
+# "Level-B checks" → Run workflow.
 #
-#   smoke        GET /api/health (200, ok, version), the key pages and robots.txt / sitemap.xml (200),
-#                GET /api/me signed out (200 JSON in the MeResponse shape, no email) — scripts/smoke.ts
-#   prompt cache the production grader request (buildGraderParams) sent twice; the second response
-#                must report cache_read_input_tokens > 0 (memo B3) — scripts/eval/cache-check.ts.
-#                Needs ANTHROPIC_EVAL_API_KEY (preferred) or ANTHROPIC_API_KEY; skipped without one.
-#                Costs two grader calls (about US$0.05–0.15 on claude-opus-5, ESTIMATE).
+# Automated here:
+#   smoke        (B0: the deployed site works) GET /api/health (200, ok, version), the key pages and
+#                robots.txt / sitemap.xml (200), GET /api/me signed out (200 JSON in the MeResponse shape,
+#                no email) — scripts/smoke.ts
+#   prompt cache (B3) the production grader request (buildGraderParams) sent twice; the second response
+#                must report cache_read_input_tokens > 0 — scripts/eval/cache-check.ts. Needs
+#                ANTHROPIC_EVAL_API_KEY (preferred) or ANTHROPIC_API_KEY; skipped without one. Costs two
+#                grader calls (about US$0.05–0.15 on claude-opus-5, ESTIMATE).
+#   lighthouse   (B1) Lighthouse 13.5.0 on / with the mobile form factor (Lighthouse's default mobile
+#                emulation and simulated throttling), performance only, 3 runs; the MEDIAN performance
+#                score must be at least 85 — scripts/lighthouse-check.ts. Chrome is the runner image's
+#                Google Chrome. The JSON and HTML reports are kept as a run artifact for 14 days.
+# Automated elsewhere: B16 root out/ diff (ci.yml), B0 staging deploy + smoke and B11 rollback
+# (deploy.yml), B8 Stripe ↔ D1 reconciliation (reconcile.yml), B11 missing-metrics alert (metrics.yml),
+# B12 eval (eval.yml).
+# MANUAL owner checks (memo §7.1 B11 / level B; steps and pass criteria in business/online/owner-setup.md
+# 2-7a): B6 test-mode purchase, self-refund and dispute on staging; B4 60-second speaking clips graded
+# in under 20 s on a real phone (mp4) and a desktop browser (webm); B15 a signed-in walkthrough of
+# staging; B13 the Google Ads import. The full list is in ops/README.md.
+#
+# Lighthouse CLI flags checked against the Lighthouse README (GoogleChrome/lighthouse readme.md, "CLI
+# options", fetched 2026-09-24; the same flags in `npx lighthouse@13.5.0 --help`): --only-categories, --form-factor (mobile|desktop), --output (json, html;
+# several allowed), --output-path (with several outputs the extension is replaced: <path>.report.json /
+# .report.html), --chrome-flags, --no-enable-error-reporting, --quiet; Chrome from CHROME_PATH.
+# Report fields: docs/understanding-results.md (runtimeError, configSettings.formFactor,
+# categories.performance.score). lighthouse 13.5.0 needs Node >= 22.19 (npm registry engines field).
 #
 # The URL is MPC_STAGING_SITE_URL or MPC_SITE_URL (repository variables) unless one is given.
-# Not covered here: the Stripe CLI test events of B6 and E2E against staging (e2e/run.mjs mocks /api).
 name: Level-B checks
 
 on:
@@ -42,17 +62,39 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      url: ${{ steps.site.outputs.url }}
+    env:
+      TARGET: ${{ inputs.target }}
+      URL_INPUT: ${{ inputs.url }}
+      MPC_SITE_URL: ${{ vars.MPC_SITE_URL }}
+      MPC_STAGING_SITE_URL: ${{ vars.MPC_STAGING_SITE_URL }}
+    steps:
+      - name: Choose the site
+        id: site
+        run: |
+          if [ -n "$URL_INPUT" ]; then site="$URL_INPUT"
+          elif [ "$TARGET" = staging ]; then site="$MPC_STAGING_SITE_URL"
+          else site="$MPC_SITE_URL"; fi
+          case "$site" in
+            https://*) ;;
+            *) echo "::error::No https:// site URL for $TARGET: set MPC_STAGING_SITE_URL / MPC_SITE_URL or pass the url input."; exit 1 ;;
+          esac
+          echo "url=${site%/}" >> "$GITHUB_OUTPUT"
+          echo "## Level-B checks ($TARGET): ${site%/}" >> "$GITHUB_STEP_SUMMARY"
+
   checks:
+    needs: site
     runs-on: ubuntu-latest
     timeout-minutes: 15
     defaults:
       run:
         working-directory: products/clb
     env:
-      TARGET: ${{ inputs.target }}
-      URL_INPUT: ${{ inputs.url }}
-      MPC_SITE_URL: ${{ vars.MPC_SITE_URL }}
-      MPC_STAGING_SITE_URL: ${{ vars.MPC_STAGING_SITE_URL }}
+      SITE_URL: ${{ needs.site.outputs.url }}
     steps:
       - name: Check out
         uses: actions/checkout@v7
@@ -69,18 +111,6 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Choose the site
-        run: |
-          if [ -n "$URL_INPUT" ]; then site="$URL_INPUT"
-          elif [ "$TARGET" = staging ]; then site="$MPC_STAGING_SITE_URL"
-          else site="$MPC_SITE_URL"; fi
-          case "$site" in
-            https://*) ;;
-            *) echo "::error::No https:// site URL for $TARGET: set MPC_STAGING_SITE_URL / MPC_SITE_URL or pass the url input."; exit 1 ;;
-          esac
-          echo "SITE_URL=${site%/}" >> "$GITHUB_ENV"
-          echo "## Level-B checks ($TARGET)" >> "$GITHUB_STEP_SUMMARY"
-
       - name: Smoke checks (health, key pages, /api/me shape)
         id: smoke
         run: node scripts/run.mjs scripts/smoke.ts --base "$SITE_URL"
@@ -94,3 +124,65 @@ jobs:
           GRADER_EFFORT: ${{ vars.MPC_GRADER_EFFORT }}
           GRADER_MAX_TOKENS: ${{ vars.MPC_GRADER_MAX_TOKENS }}
         run: node scripts/run.mjs scripts/eval/cache-check.ts
+
+  lighthouse:
+    needs: site
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: products/clb
+    env:
+      SITE_URL: ${{ needs.site.outputs.url }}
+      LIGHTHOUSE_VERSION: 13.5.0
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: products/clb/package-lock.json
+
+      # for scripts/run.mjs (esbuild) only; Lighthouse itself comes from npx below
+      - name: Install
+        run: npm ci
+
+      - name: Lighthouse, mobile performance on / (memo B1), 3 runs
+        env:
+          REPORT_DIR: ${{ runner.temp }}/lighthouse
+        run: |
+          chrome="$(command -v google-chrome || command -v google-chrome-stable || true)"
+          if [ -z "$chrome" ]; then
+            echo "::error::No Google Chrome on this runner; Lighthouse needs Chrome (CHROME_PATH)."
+            exit 1
+          fi
+          export CHROME_PATH="$chrome"
+          echo "Chrome: $("$chrome" --version)"
+          mkdir -p "$REPORT_DIR"
+          for i in 1 2 3; do
+            # a failed run leaves no report; lighthouse-check.ts counts only the runs that produced one
+            npx --yes "lighthouse@$LIGHTHOUSE_VERSION" "$SITE_URL/" \
+              --only-categories=performance \
+              --form-factor=mobile \
+              --output=json --output=html \
+              --output-path="$REPORT_DIR/run-$i" \
+              --chrome-flags="--headless=new --no-sandbox" \
+              --no-enable-error-reporting \
+              --quiet || echo "::warning::Lighthouse run $i failed"
+          done
+          node scripts/run.mjs scripts/lighthouse-check.ts --min 85 \
+            "$REPORT_DIR/run-1.report.json" "$REPORT_DIR/run-2.report.json" "$REPORT_DIR/run-3.report.json"
+
+      - name: Keep the Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lighthouse-${{ inputs.target }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/lighthouse
+          if-no-files-found: warn
+          retention-days: 14

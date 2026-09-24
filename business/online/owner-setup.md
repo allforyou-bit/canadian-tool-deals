@@ -109,7 +109,7 @@ AI는 보관본(2025-09-15 시행, OpenTermsArchive)만 읽었어요. 보관본�
 
 **합계(추정):** 11.0–12.0시간으로 예산 약 10시간을 넘어요(메모 §4.1은 10번을 이미 0.5시간으로 셌어요). 1, 8, 9번(1.75–2.75시간)은 소득 기반 작업이라 이 제품 몫은 약 9.25시간이에요. 사업자명 등록이 필수가 되어(결정 17) "법적 실명으로 영업해 0.5시간 줄이기"는 더 이상 쓸 수 없어요. 모두 세고 줄이려면 Google Ads를 빼는 것(−1.65시간, 광고 없는 운영)만 남고, 그러면 9.35–10.35시간이에요. **설정이 12시간을 넘으면 K2가 발동해요.**
 
-**리뷰 뒤 추가된 설정(시간 추정 없음):** 평가용 Anthropic 키(2-1), 도메인을 Worker에 연결(2-2), 스테이징 환경(2-3, 2-7), Stripe 결제수단 끄기와 웹훅 이벤트 추가(2-4). 메모 §4.1의 시간 추정에는 없어요. 실제로 걸린 설정 시간을 `ops/owner/hours.json`에 `{"setupHours": 9.5}`처럼 적으면 KPI Routine이 K2에 써요.
+**리뷰 뒤 추가된 설정(시간 추정 없음):** 평가용 Anthropic 키(2-1), 도메인을 Worker에 연결(2-2), Turnstile 위젯(2-2, 운영 필수), 스테이징 환경과 허용 이메일(2-3, 2-6, 2-7), Stripe 결제수단 끄기와 웹훅 이벤트 추가(2-4), B단계 수동 점검(2-7a). 메모 §4.1의 시간 추정에는 없어요. 실제로 걸린 설정 시간을 `ops/owner/hours.json`에 `{"setupHours": 9.5}`처럼 적으면 KPI Routine이 K2에 써요.
 
 ### 2-1. Anthropic Console (6번)
 
@@ -117,8 +117,8 @@ AI는 보관본(2025-09-15 시행, OpenTermsArchive)만 읽었어요. 보관본�
 
 1. Console에서 **작업 공간(workspace)을 두 개** 써요: 운영용(예: `production`)과 평가용(예: `eval`). 작업 공간별 월 지출 한도가 있다는 것은 Claude API 안내(`shared/cost-optimization.md`: "a workspace spend limit is the final backstop on the whole workspace")에서 확인했어요. 화면 메뉴 이름과 설정 방법은 [미확인]이에요.
 2. **운영용 작업 공간:** API 키를 만들어 GitHub 비밀 `ANTHROPIC_API_KEY`에 넣어요(2-6). **월 지출 한도 US$150**과 알림을 설정해요(메모 §3.4).
-3. **평가용 작업 공간:** API 키를 따로 만들어 GitHub 비밀 `ANTHROPIC_EVAL_API_KEY`에 넣어요. 스테이징 Worker의 채점도 이 키를 써요(2-7). 월 한도는 메모 §3.3의 개발·평가 몫인 **약 US$30**으로 설정해요. 주간 평가(`Grading eval` 워크플로)와 프롬프트 PR 평가는 이 키로 돌아서, 운영 한도를 쓰지 않아요. 이 비밀이 없으면 평가가 운영 키 `ANTHROPIC_API_KEY`로 돌고 경고를 보여 줘요(운영 한도를 써요). 한 번 돌릴 때 비용 상한은 변수 `MPC_EVAL_BUDGET_USD`(비우면 US$60, 스크립트 실행 1회당)예요: 모든 요청이 출력 상한까지 쓴다고 가정한 최악 비용이 이 값을 넘으면 아무것도 보내지 않고 실패해요(2-6). 리뷰 추정으로 전체 평가 1회(샘플 120개와 점검 항목, 각 3회)는 Opus 5에서 약 US$13–27이라, 매주 돌리면 한 달에 약 US$57–116이에요(추정). US$30 한도로는 부족하니 한도를 올리거나(고정비 F가 늘어요) `MPC_EVAL_LIMIT`로 샘플 수를 줄여요. PR 평가는 `MPC_EVAL_PR_LIMIT`(비우면 20개)만 채점해요. 평가 작업 공간이 한도에 닿으면 그달 남은 평가만 실패하고, 운영 채점에는 영향이 없어요.
-4. 운영 한도와 **같은 숫자**를 `ops/config/anthropic-limit.json`의 `monthlyLimitUsd`에 적고(기본 150), `confirmedByOwner`를 `true`로 바꿔 커밋해요. 평가용 한도는 같은 파일의 `evalMonthlyLimitUsd`에 기록용으로 적어요. 배포 워크플로가 `monthlyLimitUsd`를 Worker의 `ANTHROPIC_MONTHLY_LIMIT_USD`로 넣고, Worker의 지출 단계(70%에서 무료 샘플 끄기, 95%에서 알림, 하루 지출이 비정상적으로 크면 채점 일시 중지)는 **메모 공식 L과 이 값 중 작은 쪽**을 기준으로 해요(`worker/src/lib/spend.ts`, 메모 §7.1 B10). 그래서 Console 한도보다 먼저 무료 샘플이 꺼져요. `confirmedByOwner`가 `false`인 동안에는 배포할 때마다 "확인되지 않음" 경고가 나와요. KPI Routine도 이 파일을 읽어요.
+3. **평가용 작업 공간:** API 키를 따로 만들어 GitHub 비밀 `ANTHROPIC_EVAL_API_KEY`에 넣어요. 스테이징 Worker는 **이 키만** 써요. 운영 키(`ANTHROPIC_API_KEY`)는 스테이징에 절대 보내지 않아요. 이 비밀이 없으면 스테이징은 가짜 키로 배포되고, 스테이징의 채점은 모두 실패하며 배포 로그에 경고가 나와요(2-7). 월 한도는 메모 §3.3의 개발·평가 몫인 **약 US$30**으로 설정해요. 주간 평가(`Grading eval` 워크플로)와 프롬프트 PR 평가는 이 키로 돌아서, 운영 한도를 쓰지 않아요. 이 비밀이 없으면 평가가 운영 키 `ANTHROPIC_API_KEY`로 돌고 경고를 보여 줘요(운영 한도를 써요). 한 번 돌릴 때 비용 상한은 변수 `MPC_EVAL_BUDGET_USD`(비우면 US$60, 스크립트 실행 1회당)예요: 모든 요청이 출력 상한까지 쓴다고 가정한 최악 비용이 이 값을 넘으면 아무것도 보내지 않고 실패해요(2-6). 리뷰 추정으로 전체 평가 1회(샘플 120개와 점검 항목, 각 3회)는 Opus 5에서 약 US$13–27이라, 매주 돌리면 한 달에 약 US$57–116이에요(추정). US$30 한도로는 부족하니 한도를 올리거나(고정비 F가 늘어요) `MPC_EVAL_LIMIT`로 샘플 수를 줄여요. PR 평가는 `MPC_EVAL_PR_LIMIT`(비우면 20개)만 채점해요. 평가 작업 공간이 한도에 닿으면 그달 남은 평가만 실패하고, 운영 채점에는 영향이 없어요.
+4. 운영 한도와 **같은 숫자**를 `ops/config/anthropic-limit.json`의 `monthlyLimitUsd`에 적고(기본 150), `confirmedByOwner`를 `true`로 바꿔 커밋해요. 평가용 한도는 같은 파일의 `evalMonthlyLimitUsd`에 적어요. 배포 워크플로가 이 값을 **스테이징** Worker의 `ANTHROPIC_MONTHLY_LIMIT_USD`로 넣어서(스테이징은 평가용 키로 채점해요), 스테이징의 지출 단계는 평가용 한도를 기준으로 해요. 평가용 Console 한도를 바꾸면 이 값도 같은 숫자로 고쳐요. 배포 워크플로가 `monthlyLimitUsd`를 Worker의 `ANTHROPIC_MONTHLY_LIMIT_USD`로 넣고, Worker의 지출 단계(70%에서 무료 샘플 끄기, 95%에서 알림, 하루 지출이 비정상적으로 크면 채점 일시 중지)는 **메모 공식 L과 이 값 중 작은 쪽**을 기준으로 해요(`worker/src/lib/spend.ts`, 메모 §7.1 B10). 그래서 Console 한도보다 먼저 무료 샘플이 꺼져요. `confirmedByOwner`가 `false`인 동안에는 배포할 때마다 "확인되지 않음" 경고가 나와요. KPI Routine도 이 파일을 읽어요.
 5. **한도를 올릴 때(순서대로):** ① Console에서 **먼저** 운영 작업 공간 한도를 올려요, ② KPI Routine의 인상 PR을 병합하거나 `monthlyLimitUsd`를 같은 숫자로 고쳐 `master`에 커밋해요. 이 파일이 바뀌면 배포 워크플로가 **자동으로 다시 배포**해서 Worker가 새 값을 써요. 순서를 거꾸로 하면 Worker가 Console보다 큰 한도를 믿게 돼요. KPI Routine은 L이 설정값을 넘거나, 이번 달 채점 비용이 설정값의 95% 이상이면 인상을 제안해요(`ops/routines/kpi.md`).
 
 **채점 모델 선택 (`MPC_GRADER_MODEL`, 결정 1 — 오너가 정해요)**
@@ -146,7 +146,9 @@ AI는 보관본(2025-09-15 시행, OpenTermsArchive)만 읽었어요. 보관본�
 1. 계정을 만들고 **Workers Paid(US$5/월)**로 올려요(메모 §3.3). 상업적 사용 약관을 읽어요(decision-memo.md F40).
 2. **API 토큰:** 대시보드 → My Profile → API Tokens → Create Token [미확인: 메뉴]. "Edit Cloudflare Workers" 템플릿에서 시작해 **D1 편집**과 **Workers KV 편집** 권한이 있는지 확인해요. Worker가 Workers AI(받아쓰기)를 쓰므로 그 권한도 필요할 수 있어요. 도메인을 Worker에 붙이려면 그 도메인(zone)의 **Workers Routes 편집**과 **DNS 편집** 권한도 필요할 수 있어요 [미확인: 템플릿과 권한 이름]. 토큰은 GitHub 비밀 `CLOUDFLARE_API_TOKEN`, 계정 ID는 `CLOUDFLARE_ACCOUNT_ID`에 넣어요.
 3. **도메인 연결:** 도메인을 사면(약 C$20/년, [미확인]) Cloudflare에 사이트로 추가하고 등록 업체에서 네임서버를 Cloudflare로 바꿔요 [미확인: 화면]. 그다음 변수 `MPC_SITE_URL`을 `https://도메인`으로 넣어요(경로 없이, 예: `https://example.ca`. 경로나 포트가 있으면 배포 전 검사에서 멈춰요). 배포 워크플로가 이 주소가 `workers.dev`가 아니면 Worker에 그 도메인을 **사용자 지정 도메인**으로 붙여요(wrangler 4.137 `deploy --domain`, `--help`로 확인). 도메인을 붙이지 않으면 Worker 주소(`workers.dev`)를 `MPC_SITE_URL`에 넣어요. 사이트 주소는 Stripe 웹훅, Turnstile, Resend, 광고 최종 URL에 모두 쓰이니 **먼저 정하고 바꾸지 않는 것**이 좋아요.
-4. **Turnstile 위젯:** Cloudflare 대시보드의 Turnstile에서 사이트 주소(호스트 이름)로 위젯을 만들어요 [미확인: 메뉴]. **사이트 키**는 변수 `MPC_TURNSTILE_SITE_KEY`, **비밀 키**는 비밀 `TURNSTILE_SECRET`에 넣어요. 사이트 키가 없으면 사이트가 Cloudflare 테스트 키(항상 통과)로 빌드돼요. 스테이징은 배포 워크플로가 항상 Cloudflare 테스트 키를 쓰니 따로 만들 필요가 없어요.
+4. **Turnstile 위젯 (운영 필수):** Cloudflare 대시보드의 Turnstile에서 사이트 주소(호스트 이름)로 위젯을 만들어요 [미확인: 메뉴]. **사이트 키**는 변수 `MPC_TURNSTILE_SITE_KEY`, **비밀 키**는 비밀 `TURNSTILE_SECRET`에 넣어요. **둘 다 필수예요.** 하나라도 없거나 Cloudflare 테스트 키(`1x00000000000000000000AA` 같은 값)이면 **운영 배포가 설정 검사에서 멈춰요.**
+   - 이유: Cloudflare 테스트 사이트 키는 가짜 토큰(`XXXX.DUMMY.TOKEN.XXXX`)만 만들고, 이 토큰은 **테스트 비밀 키로만** 통과해요. 실제 비밀 키는 가짜 토큰을 거부해요(Cloudflare 문서 turnstile/troubleshooting/testing.mdx). 그래서 운영에서 사이트 키만 빠지면 **모든 로그인과 무료 샘플이 실패**해요(`turnstile_failed`). 배포 뒤 점검(스모크 테스트)은 Turnstile을 거치지 않아서 이 문제를 잡지 못해요.
+   - 스테이징은 배포 워크플로가 항상 Cloudflare **테스트 사이트 키와 테스트 비밀 키를 한 쌍으로** 써요. 테스트 비밀 키는 누구나 아는 가짜 토큰을 통과시키지만, 스테이징은 허용 이메일(2-6 `MPC_STAGING_ALLOWED_EMAILS`)로 잠겨 있어서 괜찮아요: 로그인 링크는 허용된 주소로만 가고, 로그인하지 않은 채점(익명 무료 샘플)은 꺼져 있어요. 스테이징용 위젯은 따로 만들 필요가 없어요.
 5. (선택) Web Analytics 토큰은 변수 `MPC_CF_BEACON_TOKEN`에 넣어요 [미확인: 발급 위치].
 
 ### 2-3. D1 데이터베이스와 KV 만들기 (7번, 명령어)
@@ -191,7 +193,7 @@ GitHub 웹에서 파일을 고쳐 `master`에 커밋해도 돼요. 테이블은 
 ### 2-4. Stripe Canada (11번, Service Canada 통화 뒤에만)
 
 1. 본인 인증, 은행 계좌, SIN을 등록해요.
-2. **제한된 키(restricted key)**를 테스트용과 실사용용으로 하나씩 만들어요. 코드가 부르는 API는 Checkout Sessions(생성, 목록 — 목록은 Reconcile 워크플로), PaymentIntents(조회, 최신 결제 포함), Refunds(생성, 목록)예요 [미확인: 권한 이름]. 실사용 키는 비밀 `STRIPE_SECRET_KEY`, 테스트 키는 스테이징용 비밀 `STRIPE_TEST_SECRET_KEY`에 넣어요(2-6). 운영 Worker에도 처음에는 테스트 키로 시작하고 출시일(2-10)에 바꿔도 돼요.
+2. **제한된 키(restricted key)**를 테스트용과 실사용용으로 하나씩 만들어요. 코드가 부르는 API는 Checkout Sessions(생성, 목록 — 목록은 Reconcile 워크플로), PaymentIntents(조회, 최신 결제 포함), Refunds(생성, 목록)예요 [미확인: 권한 이름]. 실사용 키는 비밀 `STRIPE_SECRET_KEY`, 테스트 키는 스테이징용 비밀 `STRIPE_TEST_SECRET_KEY`에 넣어요(2-6). 운영 Worker에도 처음에는 테스트 키로 시작하고 출시일(2-10)에 바꿔도 돼요. 운영 `STRIPE_SECRET_KEY`가 테스트 키인 동안에는 스테이징의 테스트 구매(2-7a의 B6 점검)도 같은 Stripe 테스트 모드에 있어요. **Reconcile payments** 워크플로는 결제 세션의 `success_url`이 운영 주소(변수 `MPC_SITE_URL`)로 시작하는 것만 비교하므로 스테이징 구매는 빠져요. 그래서 `MPC_SITE_URL`을 꼭 넣어 두세요(비어 있으면 모든 세션을 비교해서 스테이징 구매가 "missing in D1"로 보고될 수 있어요. 코드와 테스트로 확인했고 실제 Stripe로는 돌려 보지 않았어요).
 3. **웹훅 엔드포인트:** `<사이트 주소>/api/stripe/webhook`, 이벤트 **5개**: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `charge.refunded`, `charge.dispute.created`, **`refund.failed`**(결정 13, 이벤트 이름은 Stripe OpenAPI 명세 `2026-09-30.endive`로 확인). 엔드포인트의 **API 버전은 `2026-08-26.dahlia`**로 골라요(코드의 `STRIPE_API_VERSION`과 같아야 이벤트 내용의 형식이 맞아요). 서명 비밀을 비밀 `STRIPE_WEBHOOK_SECRET`에 넣어요. 테스트와 실사용은 엔드포인트와 비밀이 따로예요. 스테이징에는 테스트 모드에서 `<스테이징 주소>/api/stripe/webhook`로 엔드포인트를 하나 더 만들고 비밀을 `STRIPE_TEST_WEBHOOK_SECRET`에 넣어요.
 4. **카드만 받아요 (결정 13):** Checkout은 코드에서 카드만 요청해요(Stripe API 버전 `2026-08-26.dahlia`로 고정, `payment_method_types: ['card']`). 그래도 대시보드의 결제수단 설정에서 **Link와 후불 결제(Klarna, Afterpay/Clearpay, Affirm 등)를 꺼요** [미확인: 메뉴 이름, 예: Settings → Payment methods]. 카드가 아닌 결제는 카드 발행국을 확인할 수 없어서 지역 규칙으로 **자동 환불**되고, 수수료는 돌려받지 못해요(메모 §3.2). 그런 결제가 오면 `[MPC] Non-card payment refunded` 알림이 와요 → 결제수단 설정을 다시 확인해요.
 5. 가능하면 캐나다 외 카드를 막는 Radar 규칙을 추가해요 [미확인: 사용 가능 여부]. 없어도 서버가 결제 전후에 국가를 확인해요(메모 B6).
@@ -219,6 +221,7 @@ GitHub 웹에서 파일을 고쳐 `master`에 커밋해도 돼요. 테이블은 
 2. API 키를 비밀 `RESEND_API_KEY`에 넣어요.
 3. 보내는 주소를 변수 `MPC_FROM_EMAIL`에 넣어요. 예: `Maple Practice Coach <coach@도메인>`.
 4. 무료 한도는 [미확인]이에요(메모 §8). 지원 메일 전달은 하루 30통으로 제한돼서(결정 7) 로그인 링크 발송 몫을 다 쓰지 않아요.
+5. **스테이징도 같은 Resend 키를 써요.** 스테이징은 허용 이메일(2-6 `MPC_STAGING_ALLOWED_EMAILS`, 비우면 `MPC_OWNER_EMAIL`)로만 로그인 링크를 보내고, 그 밖의 메일은 오너 알림(`MPC_OWNER_EMAIL`)뿐이라 남에게 메일을 보내거나 발송 한도를 크게 쓰는 일이 없어요. 스테이징 메일의 보내는 이름 앞에는 **`STAGING - `**가 붙어요(예: `STAGING - Maple Practice Coach <coach@도메인>`). 운영 메일과 헷갈리지 않게 하려는 거예요. 스테이징 알림(`[MPC] …`)도 이 이름으로 와요.
 
 ### 2-6. GitHub 비밀과 변수 (이름만)
 
@@ -230,14 +233,14 @@ GitHub 웹에서 파일을 고쳐 `master`에 커밋해도 돼요. 테이블은 
 |---|---|
 | `CLOUDFLARE_API_TOKEN` | 2-2의 API 토큰 |
 | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare 계정 ID |
-| `ANTHROPIC_API_KEY` | 2-1 운영용 작업 공간의 키 (운영 Worker) |
-| `ANTHROPIC_EVAL_API_KEY` | 2-1 평가용 작업 공간의 키 (`Grading eval` 워크플로와 스테이징 Worker) |
+| `ANTHROPIC_API_KEY` | 2-1 운영용 작업 공간의 키 (운영 Worker만. 스테이징에는 보내지 않아요) |
+| `ANTHROPIC_EVAL_API_KEY` | 2-1 평가용 작업 공간의 키 (`Grading eval` 워크플로와 스테이징 Worker. 없으면 스테이징 채점이 실패해요) |
 | `STRIPE_SECRET_KEY` | 2-4 운영용 (테스트 키로 시작하면 출시 때 실사용 키로 교체) |
 | `STRIPE_WEBHOOK_SECRET` | 2-4 운영 엔드포인트의 서명 비밀 |
 | `STRIPE_TEST_SECRET_KEY` | 2-4 테스트 키 (스테이징) |
 | `STRIPE_TEST_WEBHOOK_SECRET` | 2-4 스테이징 엔드포인트의 서명 비밀 (테스트 모드) |
-| `RESEND_API_KEY` | 2-5 |
-| `TURNSTILE_SECRET` | 2-2 |
+| `RESEND_API_KEY` | 2-5 (운영과 스테이징이 함께 써요) |
+| `TURNSTILE_SECRET` | **필수(운영).** 2-2의 비밀 키. 없거나 Cloudflare 테스트 비밀 키이면 운영 배포가 멈춰요. 스테이징은 이 값을 쓰지 않아요(테스트 비밀 키) |
 | `HASH_SALT` | 무작위 긴 문자열. 예: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"` 출력값. **한 번 정하면 바꾸지 마세요.** 바꾸면 모든 로그인이 끊기고, "이메일당 한 번" 환불 규칙과 수신 거부 링크가 이전 기록과 맞지 않게 돼요 |
 
 **변수(Variables)**
@@ -246,10 +249,10 @@ GitHub 웹에서 파일을 고쳐 `master`에 커밋해도 돼요. 테이블은 
 |---|---|
 | `MPC_SITE_URL` | 사이트 주소, `https://`로 시작(2-2). 도메인을 붙이지 않으면 Worker의 `workers.dev` 주소예요 [미확인: 주소 형식] |
 | `MPC_MAILING_ADDRESS` | **필수.** 13번의 우편 주소(CASL). 사이트, 이메일, 마케팅 동의 문구에 표시돼요. **없으면 배포가 실패해요**(결정 16). 비어 있거나 자리표시(`SET-BEFORE-LAUNCH…`)인 동안 Worker는 마케팅 수신 동의를 기록하지 않아요(결정 10) |
-| `MPC_FROM_EMAIL` | 2-5의 보내는 주소 |
+| `MPC_FROM_EMAIL` | 2-5의 보내는 주소. `이름 <주소>` 또는 `주소`. 스테이징에서는 이름 앞에 `STAGING - `가 붙어요 |
 | `MPC_OWNER_EMAIL` | 알림과 지원 티켓을 받을 사업용 이메일(Gmail) |
 | `MPC_SUPPORT_EMAIL` | (선택) 사이트의 법률·도움말 페이지에 공개할 지원 이메일. 비우면 계정 페이지의 문의 양식(로그인 필요)과 우편 주소를 안내해요 |
-| `MPC_TURNSTILE_SITE_KEY` | 2-2의 사이트 키 |
+| `MPC_TURNSTILE_SITE_KEY` | **필수(운영).** 2-2의 사이트 키. 없거나 Cloudflare 테스트 사이트 키이면 운영 배포가 멈춰요(스테이징은 경고만) |
 | `MPC_GRADER_MODEL` | (선택) `claude-sonnet-5`. 비우면 `claude-opus-5` (2-1) |
 | `MPC_GRADER_EFFORT` | (선택) 2-1. 비우면 `high` |
 | `MPC_GRADER_MAX_TOKENS` | (선택) 2-1. 비우면 8000 |
@@ -261,25 +264,82 @@ GitHub 웹에서 파일을 고쳐 `master`에 커밋해도 돼요. 테이블은 
 | `MPC_INDEXNOW_KEY` | (선택) IndexNow 키(메모 B9): 영문자·숫자·`-`로 된 8–128자 무작위 문자열. 예: `node -e "console.log(require('crypto').randomBytes(16).toString('hex'))"`. 비밀이 아니에요(검색엔진이 사이트에서 읽어요). 넣으면 운영 배포 뒤 검색엔진에 새 페이지를 알려요. 비우면 건너뛰어요 |
 | `MPC_STAGING` | 스테이징 준비(2-3의 스테이징 ID, `STRIPE_TEST_*` 비밀)가 끝나면 `true`. 이 저장소의 PR마다 스테이징 Worker에 배포하고 점검해요 |
 | `MPC_STAGING_SITE_URL` | 스테이징 Worker 주소, `https://`로 시작(`workers.dev` 주소) [미확인: 주소 형식] |
+| `MPC_STAGING_ALLOWED_EMAILS` | (선택) 스테이징에 로그인할 수 있는 이메일, 쉼표로 구분(예: `me@도메인,me@gmail.com`). 비우면 `MPC_OWNER_EMAIL` 하나만. **둘 다 비어 있으면 스테이징 배포가 멈춰요.** 운영에는 절대 쓰이지 않아요 |
 | `MPC_DEPLOY` | 위 준비가 끝나면 `true`. 그 전에는 비워 두면 운영 배포가 돌지 않아요 |
 
-배포할 때 `MPC_SITE_URL`(스테이징은 `MPC_STAGING_SITE_URL`), `MPC_MAILING_ADDRESS`, `MPC_FROM_EMAIL`, `MPC_OWNER_EMAIL`, `MPC_GRADER_MODEL`, `MPC_GRADER_EFFORT`, `MPC_GRADER_MAX_TOKENS`는 Worker의 `SITE_URL`, `MAILING_ADDRESS`, `FROM_EMAIL`, `OWNER_EMAIL`, `GRADER_MODEL`, `GRADER_EFFORT`, `GRADER_MAX_TOKENS`로 들어가요. `ANTHROPIC_MONTHLY_LIMIT_USD`는 변수가 아니라 `ops/config/anthropic-limit.json`에서 와요(2-1). `wrangler.jsonc`의 자리표시 값은 고치지 않아도 돼요. 변수를 바꾸면 **다시 배포해야**(Actions → Deploy practice coach → Run workflow) Worker에 반영돼요. 잘못된 모델·effort·max tokens 값이나 빠진 우편 주소는 배포 전에 오류로 멈춰요.
+배포할 때 `MPC_SITE_URL`(스테이징은 `MPC_STAGING_SITE_URL`), `MPC_MAILING_ADDRESS`, `MPC_FROM_EMAIL`(스테이징은 `STAGING - ` 붙임), `MPC_OWNER_EMAIL`, `MPC_GRADER_MODEL`, `MPC_GRADER_EFFORT`, `MPC_GRADER_MAX_TOKENS`는 Worker의 `SITE_URL`, `MAILING_ADDRESS`, `FROM_EMAIL`, `OWNER_EMAIL`, `GRADER_MODEL`, `GRADER_EFFORT`, `GRADER_MAX_TOKENS`로 들어가요. 스테이징에만 `STAGING_ALLOWED_EMAILS`(`MPC_STAGING_ALLOWED_EMAILS`, 비우면 `MPC_OWNER_EMAIL`)가 들어가요. `ANTHROPIC_MONTHLY_LIMIT_USD`는 변수가 아니라 `ops/config/anthropic-limit.json`에서 와요(운영은 `monthlyLimitUsd`, 스테이징은 `evalMonthlyLimitUsd`, 2-1). `wrangler.jsonc`의 자리표시 값은 고치지 않아도 돼요. 변수를 바꾸면 **다시 배포해야**(Actions → Deploy practice coach → Run workflow) Worker에 반영돼요. 잘못된 모델·effort·max tokens 값, 빠진 우편 주소, 운영의 빠진(또는 테스트용) Turnstile 키, 스테이징의 빈 허용 이메일은 배포 전에 오류로 멈춰요.
 
 ### 2-7. 첫 배포와 스테이징
 
 1. 2-3의 ID 커밋, 2-6의 비밀과 변수를 모두 넣어요(`HASH_SALT`는 첫 배포에 **반드시** 필요하고, `MPC_MAILING_ADDRESS`가 없으면 배포가 실패해요).
 2. 변수 `MPC_DEPLOY`를 `true`로 바꿔요.
-3. **Actions** → **Deploy practice coach** → **Run workflow**. 설정 검사(우편 주소, 모델 값, D1·KV ID) → 테스트 → 사이트 빌드 → 콘텐츠 검사(우편 주소 자리표시가 남아 있으면 실패) → D1 테이블 생성 → 배포(도메인 연결 포함) → 점검(`/api/health`가 이 커밋의 버전을 돌려주는지, 주요 페이지가 열리는지, `/api/me` 형식) → `MPC_INDEXNOW_KEY`가 있으면 IndexNow 알림(실패해도 배포는 성공) 순서로 돌아요. 점검에 실패하면 이전 버전으로 자동 롤백해요(D1 변경은 롤백되지 않아요). 첫 배포는 되돌릴 이전 버전이 없어서, 도메인이 아직 Worker에 연결되지 않았으면 점검이 실패할 수 있어요 → 2-2의 3번을 확인해요.
+3. **Actions** → **Deploy practice coach** → **Run workflow**. 설정 검사(우편 주소, Turnstile 키, 모델 값, D1·KV ID) → 테스트 → 사이트 빌드 → 콘텐츠 검사(우편 주소 자리표시가 남아 있으면 실패) → D1 테이블 생성 → 배포(도메인 연결 포함) → 점검(`/api/health`가 이 커밋의 버전을 돌려주는지, 주요 페이지가 열리는지, `/api/me` 형식) → `MPC_INDEXNOW_KEY`가 있으면 IndexNow 알림(실패해도 배포는 성공) 순서로 돌아요. wrangler는 새 버전을 **먼저 공개한 뒤** 도메인·cron을 붙이기 때문에, 배포 단계가 실패해도 배포가 시작됐으면 점검을 해요. **배포나 점검이 실패하면** 지금 서비스 중인 버전을 다시 읽어, 배포 전 버전과 다르면 그 버전으로 자동 롤백해요(D1 변경은 롤백되지 않아요). 실행은 실패로 끝나고, 오류 메시지에 실패한 단계(`Deploy` 또는 `Smoke test`)가 나와요. 첫 배포는 되돌릴 이전 버전이 없어서, 도메인이 아직 Worker에 연결되지 않았으면 점검이 실패할 수 있어요 → 2-2의 3번을 확인해요.
 4. 이후에는 `products/clb/**`나 `ops/config/anthropic-limit.json`이 `master`에 바뀔 때마다 자동으로 배포돼요.
 5. **결제는 꺼진 상태로 시작해요**(`checkout_enabled` 기본값 false). 17번 전에는 켜지 않아요.
-6. **스테이징(메모 §5.2 "staging on PR", B0·B6·B15의 B단계 점검):** 2-3의 스테이징 ID, `STRIPE_TEST_SECRET_KEY`, `STRIPE_TEST_WEBHOOK_SECRET`, `MPC_STAGING_SITE_URL`을 넣고 `MPC_STAGING`을 `true`로 바꿔요. 그러면 이 저장소에서 연 PR 중 `products/clb/**`를 바꾸는 PR마다(그리고 **Deploy practice coach**를 `target`=`staging`으로 수동 실행하면) 같은 워크플로가 스테이징 Worker에 배포하고 점검해요. 스테이징은:
-   - Stripe **테스트 키만** 받아요(실사용 키를 넣으면 배포가 멈춰요).
-   - Turnstile은 Cloudflare 테스트 키, Web Analytics와 광고 태그는 없고, 검색엔진 수집을 막는 `robots.txt`를 써요.
-   - 채점은 `ANTHROPIC_EVAL_API_KEY`(평가용 작업 공간)가 있으면 그 키를 써요. 없으면 운영 키를 쓰고 경고가 나와요.
+6. **스테이징(메모 §5.2 "staging on PR", B0·B6·B15의 B단계 점검):** 2-3의 스테이징 ID, `STRIPE_TEST_SECRET_KEY`, `STRIPE_TEST_WEBHOOK_SECRET`, `ANTHROPIC_EVAL_API_KEY`, `MPC_STAGING_SITE_URL`을 넣고(허용 이메일은 `MPC_OWNER_EMAIL`로 충분해요. 다른 주소도 쓰려면 `MPC_STAGING_ALLOWED_EMAILS`) `MPC_STAGING`을 `true`로 바꿔요. 그러면 이 저장소에서 연 PR 중 `products/clb/**`를 바꾸는 PR마다(그리고 **Deploy practice coach**를 `target`=`staging`으로 수동 실행하면) 같은 워크플로가 스테이징 Worker에 배포하고 점검해요. 스테이징 주소(`workers.dev`)는 누구나 열 수 있어서, 스테이징은 **잠긴 상태로만** 배포돼요:
+   - **허용 이메일만 로그인:** 로그인 링크는 `MPC_STAGING_ALLOWED_EMAILS`(비우면 `MPC_OWNER_EMAIL`)의 주소로만 가요. 다른 주소는 거절돼요(서버 문구: "This test site only accepts the owner’s email address"). 로그인하지 않은 채점(익명 무료 샘플)은 꺼져 있어요. 둘 다 비어 있으면 배포가 멈춰요. 운영에는 이 제한이 절대 들어가지 않아요.
+   - **Anthropic 키:** 평가용 키(`ANTHROPIC_EVAL_API_KEY`)만 써요. 운영 키는 받지 않아요. 평가용 키가 없으면 가짜 키로 배포되고 "Staging is deployed with a PLACEHOLDER Anthropic key" 경고가 나와요(스테이징 채점이 모두 실패해요).
+   - **지출 한도:** `ops/config/anthropic-limit.json`의 `evalMonthlyLimitUsd`(기본 US$30)가 스테이징의 `ANTHROPIC_MONTHLY_LIMIT_USD`예요. 평가 워크플로와 같은 작업 공간을 쓰니, Console의 평가용 한도가 최종 안전장치예요.
+   - **이메일:** 운영과 같은 Resend 키로 **실제로 발송**돼요. 받는 사람은 허용 이메일과 오너 알림뿐이에요. 보내는 이름 앞에 `STAGING - `가 붙어요(2-5).
+   - **Turnstile:** Cloudflare 테스트 키 한 쌍(항상 통과)을 써요. 누구나 통과할 수 있지만, 위의 허용 이메일 제한 때문에 통과해도 할 수 있는 일이 없어요(2-2의 4번).
+   - Stripe **테스트 키만** 받아요(실사용 키를 넣으면 배포가 멈춰요). Web Analytics와 광고 태그는 없고, 검색엔진 수집을 막는 `robots.txt`를 써요.
    - `HASH_SALT`는 첫 배포 때 따로 무작위로 만들어서 운영과 섞이지 않아요.
-   - 이메일은 운영과 같은 Resend 키로 **실제로 발송**돼요. 시험할 때는 본인 이메일만 써요.
    - 스테이징의 킬 스위치는 `Set a kill switch` 워크플로에서 `target`을 `staging`으로 골라요(스테이징도 `checkout_enabled`는 처음에 꺼져 있어요).
-   Day-21 관문의 "B단계 점검 통과"는 ① 스테이징 배포와 점검이 초록색인지, ② **Actions → Level-B checks → Run workflow**(`target`=`staging`)가 초록색인지(점검 + 프롬프트 캐시 확인. 유료 채점 2회, Opus 5에서 약 US$0.05–0.15, 추정)로 확인해요. 메모 B6의 Stripe CLI 테스트 이벤트와 스테이징 대상 E2E는 자동화되지 않았어요. 스테이징에서 캐나다 테스트 카드로 구매·셀프 환불을 한 번 직접 해 봐요(2-4의 6번). 어떤 워크플로가 어떤 점검을 하는지는 `ops/README.md`의 표를 보세요.
+7. Day-21 관문의 "B단계 점검 통과"는 아래 2-7a의 표 전체예요.
+
+### 2-7a. B단계 점검 (Day-21 관문, 10월 18일까지)
+
+메모 §6 W3은 21일차까지 "모든 B단계 점검이 초록색"일 것을 요구해요. 아래는 메모 §7 표의 **B단계 기준 칸(`B:`) 전부**와 각각을 어떻게 확인하는지예요. 통합 담당의 결정(메모 §7.1 "B11 / level B")으로 B6·B4·B15는 **오너가 스테이징에서 직접 하는 수동 점검**이고, 나머지는 워크플로가 자동으로 확인해요. B2·B5·B7·B9·B10·B14는 메모에 B단계 기준이 없어요(A단계 테스트로 끝났어요). 워크플로 목록은 `ops/README.md`에도 있어요.
+
+**자동 점검** (Actions 탭에서 최근 실행이 초록색이면 통과)
+
+| 메모 | 점검 | 워크플로 | 통과 기준 |
+|---|---|---|---|
+| B16 | 루트 사이트 `out/` 파일 목록이 그대로인지 | `CI` (`ci.yml`, 모든 PR) | 최근 PR의 CI가 초록색 |
+| B0 | 스테이징에 `wrangler deploy` | `Deploy practice coach` (`deploy.yml`, `target`=`staging`) | 스테이징 배포와 점검(스모크 테스트)이 초록색 |
+| B1 | 모바일 Lighthouse 성능 85 이상 (`/`) | `Level-B checks` (`level-b.yml`) → `lighthouse` 작업 | 3회 실행의 중앙값이 85 이상. 보고서는 실행의 Artifacts에 14일 보관돼요 |
+| B3 | 두 번째 채점 호출에서 프롬프트 캐시 읽기 > 0 | `Level-B checks` → `checks` 작업의 프롬프트 캐시 확인 | 초록색. 유료 호출 2회(Opus 5에서 약 US$0.05–0.15, **추정**) |
+| B8 | Stripe와 D1 대조 | `Reconcile payments` (`reconcile.yml`, 매일) | 최근 실행이 실패가 아니면 통과. 출시 전에는 대조할 실제 구매가 없어서, 진짜 확인은 2-10의 5번(출시 다음 날 불일치 0건)이에요 |
+| B11 | 점검 실패 시 롤백, 지표 파일이 없으면 알림 | `Deploy practice coach`(검증과 롤백 단계), `Daily metrics` (`metrics.yml`, 이슈 + 실패 알림) | 두 워크플로의 최근 실행이 초록색. 그리고 한 번: GitHub가 실패한 워크플로를 이메일로 알려 주는지 알림 설정을 확인해요(Settings → Notifications → Actions [미확인: 메뉴 이름]). 롤백 단계는 배포나 점검이 실제로 실패할 때만 돌아요 |
+| B12 | 주간 평가, 프롬프트 PR에서 5점 넘게 떨어지면 실패 | `Grading eval` (`eval.yml`) | 21일차 전에 초록색 실행이 한 번 이상. 비용은 2-1 참고(`MPC_EVAL_LIMIT`로 줄일 수 있어요) |
+
+**`Level-B checks` 실행 방법:** **Actions** → **Level-B checks** → **Run workflow** → `target`=`staging`(프롬프트 캐시 확인은 기본으로 켜져 있어요). `checks`와 `lighthouse` 작업이 모두 초록색이어야 해요.
+
+**수동 점검** (스테이징에서 오너가 직접. 합쳐서 약 1시간, **추정**)
+
+준비:
+- 스테이징 배포가 초록색이고, 배포 로그에 "PLACEHOLDER Anthropic key" 경고가 없어야 해요(`ANTHROPIC_EVAL_API_KEY` 필요).
+- Stripe **테스트 모드**에 스테이징 웹훅 엔드포인트가 있어야 해요(2-4의 3번).
+- **Set a kill switch** → `target`=`staging`, `flag`=`checkout_enabled`, `value`=`true`로 스테이징 결제를 켜요.
+- 스테이징 채점은 평가용 작업 공간 비용을 조금 써요(채점 1회 약 US$0.02–0.05, **추정**).
+
+순서(이 순서여야 해요: 말하기 채점에는 이용권이 필요하고, 셀프 환불은 이용권을 끝내요):
+
+1. **[B15]** 로그인하지 않은 채로 스테이징의 `/practice/`에서 쓰기 과제 하나를 열고 제출해 봐요.
+2. **[B15]** `/login/`에서 **허용되지 않은** 다른 이메일로 로그인 링크를 요청해 봐요.
+3. **[B15]** 허용된 이메일로 로그인해요. 메일의 보낸 이름이 `STAGING - …`인지 봐요.
+4. **[B6]** `/pricing/`에서 "I live in Canada, outside Quebec"에 체크하고 **30일 이용권**을 사요. Stripe 결제 화면에서 **캐나다 발행 테스트 카드**(Stripe 문서의 국가별 테스트 카드 중 캐나다, 예: `4000 0012 4000 0000` [미확인: 번호])와 퀘벡 외 청구 주소(예: 온타리오)를 써요.
+5. **[B15]** 쓰기 과제 하나를 제출해요.
+6. **[B4]** 컴퓨터의 **Chrome**(webm으로 녹음돼요)에서 말하기 과제 하나를 약 60초 녹음해 제출해요. 제출 버튼을 누른 순간부터 피드백이 화면에 나올 때까지 휴대폰 스톱워치로 재요.
+7. **[B4]** **실제 iPhone**의 Safari(mp4로 녹음돼요 [미확인: 메모 B4의 사전 지식])에서 같은 이메일로 로그인하고 6번을 똑같이 해요.
+8. **[B15]** 계정 페이지의 기록에서 채점 하나를 열어요.
+9. **[B6]** 계정 페이지에서 **셀프 환불**해요(지금까지 채점 3–5회라 조건 안이에요. 5회를 넘기지 마세요).
+10. **[B6]** 다시 30일 이용권을 사되, 이번에는 Stripe 문서의 **분쟁(dispute) 테스트 카드**(예: `4000 0000 0000 0259` [미확인: 번호와 발급 국가])로 결제해요.
+11. **[B15]** 로그아웃했다가 다시 로그인해요.
+12. 스테이징 결제를 다시 꺼요(`checkout_enabled`=`false`, `target`=`staging`).
+
+통과 기준:
+
+| 메모 | 점검 | 통과 기준 |
+|---|---|---|
+| B15 | 스테이징 E2E (자동 E2E 대신 오너가 직접 한 바퀴. CI의 Playwright E2E는 가짜 `/api`로 돌아요) | 1: 제출 전에 AI 안내("You are getting feedback from an AI (Claude)")가 보이고, 로그인 없이는 채점되지 않아요(스테이징은 익명 채점이 꺼져 있어요). 2: 거절 메시지가 나오고 메일이 오지 않아요. 3: 링크로 로그인돼요. 5: 피드백이 오고 점수·밴드·레벨·"official" 같은 표현이 없어요. 8: 저장된 답과 피드백이 열려요. 11: 문제없이 돼요. 어느 단계에서든 오류 화면이 나오면 실패예요 |
+| B6 | 결제·환불·분쟁 (Stripe 테스트 키. 메모의 "Stripe CLI 테스트 이벤트" 대신) | 4: `/checkout/success/`가 보이고, 계정 페이지에 이용권과 종료일이 보이고, Stripe 대시보드(테스트 모드)의 웹훅 전송이 성공(2xx)이에요. 9: Stripe(테스트 모드)에 환불이 보이고 계정 페이지에서 이용권이 사라져요. 10: 오너 메일로 `[MPC] Dispute opened` 알림(보낸 이름 `STAGING - …`)이 오고, 계정 페이지에 이용권이 없어요. 분쟁 카드가 캐나다 카드가 아니면 지역 규칙의 자동 환불이 먼저 시도되어 다른 알림(예: 환불 실패)이 함께 올 수 있어요 [미확인]. `Dispute opened` 알림이 안 오면 실패예요 |
+| B4 | 60초 말하기 채점 20초 이내 (webm과 mp4) | 6과 7 모두 **20초 미만**이고 받아쓰기와 피드백이 나와요. 20초를 넘으면 한 번 더 해 보고(채점 횟수가 늘어 9번의 셀프 환불 조건 5회를 넘지 않게 해요), 두 번 다 넘으면 기기, 브라우저, 걸린 초만 AI에게 알려 주세요(녹음 파일은 보내지 않아요). 출시일의 iPhone 점검(2-10의 6번)은 운영에서 한 번 더 해요 |
+| B13 | Google Ads 가져오기 (2-9, Gate C 통과와 Service Canada 통화 뒤에만) | 캠페인, 키워드, 광고가 모두 들어가고 비승인 항목이 없어요 [미확인: 화면의 상태 이름]. 광고 없이 운영하면 해당 없음 |
+
+셀프 환불은 같은 이메일로도, 같은 카드로도 한 번뿐이에요. 이 점검을 다시 하려면 `MPC_STAGING_ALLOWED_EMAILS`에 다른 주소를 더해 스테이징을 다시 배포하고, 그 주소와 **다른** 캐나다 테스트 카드 번호로 해요 [미확인: Stripe 테스트 카드마다 카드 식별값(fingerprint)이 다른지]. 스테이징 D1과 `HASH_SALT`는 운영과 따로라 운영의 출시일 셀프 환불(2-10)에는 영향이 없어요.
+
+결과(날짜, 통과 여부, B4의 초)는 저장소 이슈에 한 줄씩 남겨요. 개인정보(이메일, 카드 정보)는 적지 않아요.
 
 ### 2-8. 법률 페이지와 제품 페이지 검토 (14번)
 
@@ -360,6 +420,11 @@ GitHub 웹에서 파일을 고쳐 `master`에 커밋해도 돼요. 테이블은 
   ```
 
   출력에는 개인정보가 있어요. 저장소, 이슈, AI 대화에 붙여 넣지 않아요.
+- **계정 삭제 알림도 이 30통에 포함돼요.** 한도가 차면 삭제 알림은 따로 오지 않고, 그날의 한도 알림에 티켓 번호가 들어가요(한도 알림이 이미 나간 뒤라면 들어가지 않아요). 그래서 한도 알림을 받으면 아래 명령으로 **삭제된 계정의 메일로 전달된 티켓**도 확인해 메일함에서 지워요:
+
+  ```bash
+  npx wrangler d1 execute DB --remote -c worker/wrangler.jsonc --command "SELECT id, created_at FROM support_tickets WHERE forwarded = 1 AND user_id IS NULL AND message = '[deleted]' AND created_at >= '<날짜>'"
+  ```
 - 일일 Routine이 Gmail 안에서 답장 **초안**을 만들어요. 오너가 읽고 고쳐서 보내요. `[OWNER: …]`로 시작하는 줄은 오너에게 하는 말이니 보내기 전에 지워요.
 - `MPC_SUPPORT_EMAIL`을 공개했다면 그 주소로 온 메일도 지원 메시지예요. 같은 보관·삭제 규칙을 따라요.
 

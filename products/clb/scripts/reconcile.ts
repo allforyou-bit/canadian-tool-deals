@@ -16,7 +16,7 @@
 // Writes <out>/report.json and <out>/issue.md; exit 1 when there is any mismatch (the workflow
 // then opens an issue), 2 on a usage or fetch error.
 import { parseD1Json, queryRemoteD1 } from './lib/d1'
-import { modeSqlCondition, reconcile, renderIssue, stripeKeyMode, type D1Purchase, type StripeMode, type StripeSession } from './reconcile-core'
+import { modeSqlCondition, reconcile, renderIssue, sessionsForSite, stripeKeyMode, type D1Purchase, type StripeMode, type StripeSession } from './reconcile-core'
 
 const STRIPE_API = 'https://api.stripe.com/v1/checkout/sessions'
 const LOOKUP_MARGIN_MS = 86_400_000
@@ -31,6 +31,7 @@ function pickSession(o: Record<string, unknown>): StripeSession {
     amount_total: (o.amount_total as number | null) ?? null,
     currency: (o.currency as string | null) ?? null,
     livemode: Boolean(o.livemode),
+    success_url: typeof o.success_url === 'string' ? o.success_url : null,
   }
 }
 
@@ -102,6 +103,8 @@ export async function main(args: string[]): Promise<number> {
     return 2
   }
 
+  // SITE_URL (the production site) filters out staging sessions made with the same Stripe test key
+  sessions = sessionsForSite(sessions, process.env.SITE_URL)
   const report = reconcile({ sessions, purchases, windowStart, now, mode })
   const livemode = mode ? mode === 'live' : sessions.length ? sessions[0].livemode : null
   await mkdir(outDir, { recursive: true })

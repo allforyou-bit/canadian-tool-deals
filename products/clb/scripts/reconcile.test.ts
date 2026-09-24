@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { modeSqlCondition, reconcile, renderIssue, sessionIdMode, stripeKeyMode, type D1Purchase, type StripeSession } from './reconcile-core'
+import { modeSqlCondition, reconcile, renderIssue, sessionIdMode, sessionsForSite, stripeKeyMode, type D1Purchase, type StripeSession } from './reconcile-core'
 import { listPaidWindowSessions } from './reconcile'
 
 const now = new Date('2026-10-30T08:00:00Z')
@@ -152,5 +152,23 @@ describe('listPaidWindowSessions', () => {
   it('throws on an HTTP error without including the response body', async () => {
     const fetchImpl = vi.fn(async () => new Response('{"error":{"message":"secret detail"}}', { status: 401 }))
     await expect(listPaidWindowSessions('sk_test_dummy', 0, fetchImpl as unknown as typeof fetch)).rejects.toThrow('Stripe list failed with HTTP 401')
+  })
+})
+
+describe('sessionsForSite', () => {
+  const base = { created: 1, mode: 'payment', status: 'complete', payment_status: 'paid', amount_total: 3900, currency: 'cad', livemode: false }
+  const prod = { ...base, id: 'cs_test_prod', success_url: 'https://coach.example/checkout/success/?session_id={CHECKOUT_SESSION_ID}' }
+  const staging = { ...base, id: 'cs_test_stg', success_url: 'https://coach-staging.example/checkout/success/?session_id={CHECKOUT_SESSION_ID}' }
+  const other = { ...base, id: 'cs_test_other', success_url: null }
+
+  it('keeps only sessions made by the production site', () => {
+    expect(sessionsForSite([prod, staging, other], 'https://coach.example/').map((s) => s.id)).toEqual(['cs_test_prod'])
+  })
+  it('does not treat a longer host with the same prefix as the site', () => {
+    const lookalike = { ...base, id: 'cs_test_look', success_url: 'https://coach.example.evil/checkout/success/' }
+    expect(sessionsForSite([lookalike], 'https://coach.example')).toEqual([])
+  })
+  it('keeps everything when no site is configured', () => {
+    expect(sessionsForSite([prod, staging], undefined)).toHaveLength(2)
   })
 })

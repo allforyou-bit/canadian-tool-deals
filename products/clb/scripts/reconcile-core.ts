@@ -17,6 +17,19 @@ export interface StripeSession {
   amount_total: number | null
   currency: string | null
   livemode: boolean
+  /** set by our Worker from its SITE_URL; tells production sessions from staging ones on a shared test key */
+  success_url?: string | null
+}
+
+/**
+ * Keep only sessions created by the Worker at `siteUrl` (their success_url starts with it). Staging and
+ * production share a Stripe test key until launch, so staging purchases would otherwise be reported as
+ * missing from the production D1. With no siteUrl every session is kept.
+ */
+export function sessionsForSite(sessions: StripeSession[], siteUrl: string | undefined): StripeSession[] {
+  const base = (siteUrl ?? '').trim().replace(/\/+$/, '')
+  if (!base) return sessions
+  return sessions.filter((s) => typeof s.success_url === 'string' && s.success_url.startsWith(`${base}/`))
 }
 
 /** The D1 `purchases` columns we read (worker/migrations/0001_init.sql). */
