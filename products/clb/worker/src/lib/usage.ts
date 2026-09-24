@@ -2,7 +2,7 @@
 // availability (memo B5). Rows without feedback (refused = 1: refusals, failures, no speech) never
 // count toward the fair-use caps; they have their own daily bound, CAPS.noFeedbackPerDay. A row
 // whose model call is still running (pending = 1) has refused = 0, so it holds its cap slot.
-import { CAPS, FREE } from '../../../shared/config'
+import { CAPS, FREE, SPEAKING_DAILY_AUDIO_MINUTES } from '../../../shared/config'
 import type { Env, User } from '../env'
 import { addDays, dayKey, startOfUtcDay } from './time'
 
@@ -177,4 +177,23 @@ export async function recordFreeSpeaking(env: Env, userId: string): Promise<bool
     .bind(userId)
     .run()
   return res.meta.changes === 1
+}
+
+/**
+ * Audio minutes transcribed today (UTC) across all users, including calls still in flight — the Workers AI
+ * free allocation is shared, so speaking closes for the day at SPEAKING_DAILY_AUDIO_MINUTES (memo §7.2 Z2).
+ */
+export async function speakingMinutesToday(env: Env, now: Date): Promise<number> {
+  const row = await env.DB.prepare(
+    `SELECT COALESCE(SUM(audio_seconds), 0) AS s, COALESCE(SUM(CASE WHEN pending = 1 AND kind = 'speaking' THEN 1 ELSE 0 END), 0) AS p
+       FROM grades WHERE created_at >= ?1`,
+  )
+    .bind(startOfUtcDay(now).toISOString())
+    .first<{ s: number; p: number }>()
+  // a speaking call in flight counts as a full-length answer until it finishes
+  return ((row?.s ?? 0) + (row?.p ?? 0) * CAPS.maxAudioSeconds) / 60
+}
+
+export async function speakingAvailableToday(env: Env, now: Date): Promise<boolean> {
+  return (await speakingMinutesToday(env, now)) < SPEAKING_DAILY_AUDIO_MINUTES
 }

@@ -22,6 +22,7 @@ const STATUS: Record<ApiError['error'], number> = {
   internal: 500,
   grading_paused: 503,
   checkout_unavailable: 503,
+  at_capacity: 503,
 }
 
 export function error(code: ApiError['error'], message: string, extraHeaders?: HeadersInit): Response {

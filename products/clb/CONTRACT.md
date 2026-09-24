@@ -33,6 +33,8 @@ type Handler = (req: Request, ctx: Ctx) => Promise<Response>   // Ctx: worker/sr
 | `GET /api/me` | `account.me` | → `MeResponse` |
 | `POST /api/auth/magic-link` | `auth.requestMagicLink` | `MagicLinkRequest` → `MagicLinkResponse` |
 | `POST /api/auth/verify` | `auth.verify` | `VerifyRequest` → `VerifyResponse` + `Set-Cookie` |
+| `POST /api/auth/google/start` | `authGoogle.start` | `GoogleStartRequest` → `GoogleStartResponse` (memo §7.2 Z3) |
+| `GET /api/auth/google/callback` | `authGoogle.callback` | Google redirect → 303 to `next` or `/account/` with the session cookie; errors → `/login/?error=…` |
 | `POST /api/auth/logout` | `auth.logout` | → `{ok:true}` + cookie cleared |
 | `POST /api/account/delete` | `account.deleteAccount` | → `DeleteAccountResponse` |
 | `POST /api/account/marketing` | `account.setMarketing` | `MarketingRequest` → `{ok:true}` |
@@ -64,6 +66,8 @@ same-origin check on POSTs (webhook exempt), device cookie, `ctx.user`, salted `
   pending grades row in one conditional statement), `noFeedbackToday`.
 - `lib/spend.ts`: `tokenCostMicroUsd(model, usage)`, `whisperCostMicroUsd(seconds)`, `spendSnapshot(env, now)` (L capped by
   `ANTHROPIC_MONTHLY_LIMIT_USD` when set), `evaluateTiers(snapshot)`.
+- `lib/usage.ts` (zero-capital): `speakingMinutesToday(env, now)`, `speakingAvailableToday(env, now)` (global Workers AI
+  budget `SPEAKING_DAILY_AUDIO_MINUTES`).
 - `lib/time.ts`: `dayKey`, `startOfUtcDay`, `startOfUtcMonth`, `addDays` (all UTC).
 - `email.ts`: `sendEmail(env, {to, subject, text, kind, replyTo?, idempotencyKey?})` → `boolean` (never throws; every
   non-alert email gets the CASL unsubscribe link), `alertOwner(env, subject, text)`, `unsubscribeUrl(env, email)`,
@@ -134,3 +138,12 @@ Identifier hashing conventions (must match across modules):
   `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CF_BEACON_TOKEN` (Web Analytics), `NEXT_PUBLIC_GADS_SEND_TO`
   (conversion tag on `/checkout/success/` only), `NEXT_PUBLIC_SUPPORT_EMAIL` (public support address on legal/help
   pages; unset → account-page support form + mailing address).
+
+## 7. Zero-capital launch (memo §7.2)
+
+Binding decisions: Z1–Z11 (no ads; Workers Free + workers.dev; Google sign-in for learners and the email link only for
+the owner; no learner email; the owner's legal name as seller; prepaid Anthropic credits with a ledger; trimmed Actions;
+revised kill rules; a free practice mode without AI; an organic launch kit; the root site's Next.js patch).
+New env: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, MAGIC_LINK ('owner'|'all'|'off'), LEARNER_EMAIL ('off'|'on'),
+LEGAL_NAME, ANTHROPIC_PREPAID_USD, ANTHROPIC_PREPAID_SINCE. New error code `at_capacity` (503). New client events
+`practice_start`, `practice_done`.

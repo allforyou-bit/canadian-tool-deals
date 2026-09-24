@@ -27,6 +27,18 @@ export interface Env {
    * spend model credit. Never set in production.
    */
   STAGING_ALLOWED_EMAILS?: string
+  /** Google sign-in (memo §7.2): OAuth client id (plain var) — the secret is GOOGLE_CLIENT_SECRET */
+  GOOGLE_CLIENT_ID?: string
+  GOOGLE_CLIENT_SECRET?: string
+  /** 'owner' (default): the email sign-in link only for OWNER_EMAIL; 'all'; 'off' */
+  MAGIC_LINK?: string
+  /** 'off' (default): no email to learners, only owner alerts; 'on' once a sending domain exists */
+  LEARNER_EMAIL?: string
+  /** the owner's legal name, shown as the seller (memo §7.2 Z5) */
+  LEGAL_NAME?: string
+  /** prepaid Anthropic credits in USD and the ISO date they were bought (ops/config/anthropic-limit.json) */
+  ANTHROPIC_PREPAID_USD?: string
+  ANTHROPIC_PREPAID_SINCE?: string
   FROM_EMAIL: string
   /** CASL: every commercial email must include the sender's mailing address */
   MAILING_ADDRESS: string

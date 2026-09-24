@@ -16,6 +16,7 @@ export interface ApiError {
     | 'region_not_supported'
     | 'grading_paused'
     | 'checkout_unavailable'
+    | 'at_capacity'
     | 'free_unavailable'
     | 'turnstile_failed'
     | 'too_large'
@@ -37,6 +38,17 @@ export interface MagicLinkRequest {
 }
 export interface MagicLinkResponse {
   ok: true
+}
+/** POST /api/auth/google/start — same checks as the magic-link request, then a Google sign-in URL */
+export interface GoogleStartRequest {
+  lang: Lang
+  adult: boolean
+  turnstileToken: string
+  /** safe same-origin path to return to after sign-in, e.g. /account/ */
+  next?: string
+}
+export interface GoogleStartResponse {
+  url: string
 }
 export interface VerifyRequest {
   token: string
@@ -61,12 +73,20 @@ export interface MeResponse {
   /** signed-in only: end of the contiguous chain of unrevoked passes (includes queued passes), or null */
   accessEndsAt?: string | null
   /** signed-in only: the most recent purchase, so /checkout/success/ can wait for that exact purchase */
-  latestPurchase?: { id: string; sku: Sku; status: 'pending' | 'paid' | 'refunded' | 'disputed' | 'rejected_region' } | null
+  latestPurchase?: {
+    id: string
+    sku: Sku
+    status: 'pending' | 'paid' | 'refunded' | 'disputed' | 'rejected_region'
+    /** Stripe's hosted receipt for the charge (kept current after refunds); learners get no email from us */
+    receiptUrl?: string | null
+  } | null
   /** free samples still available to this device/user */
   free: { writing: boolean; speaking: boolean }
   usage: { writingToday: number; speakingToday: number; graded30d: number }
   /** freeEnabled: free samples are switched on (KV free_enabled and not turned off by the spend tiers) */
-  flags: { checkoutEnabled: boolean; gradingEnabled: boolean; freeEnabled: boolean; banner: string }
+  flags: { checkoutEnabled: boolean; gradingEnabled: boolean; freeEnabled: boolean; banner: string; speakingAvailable: boolean }
+  /** sign-in methods this deployment offers: Google for everyone (when configured); the email link only per MAGIC_LINK */
+  auth: { google: boolean; magicLink: 'owner' | 'all' | 'off' }
 }
 export interface DeleteAccountResponse {
   ok: true
@@ -197,7 +217,17 @@ export interface RefundResponse {
 }
 
 // ---------- events (first-party analytics, no personal data) ----------
-export type EventName = 'landing' | 'sample_start' | 'sample_done' | 'signup' | 'checkout_start' | 'purchase' | 'refund'
+export type EventName =
+  | 'landing'
+  | 'sample_start'
+  | 'sample_done'
+  /** free practice mode (no AI, nothing uploaded) */
+  | 'practice_start'
+  | 'practice_done'
+  | 'signup'
+  | 'checkout_start'
+  | 'purchase'
+  | 'refund'
 export interface EventRequest {
   name: EventName
   /** utm_source/medium/campaign and gclid captured on landing; never personal data */

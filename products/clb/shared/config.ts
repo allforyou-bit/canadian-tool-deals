@@ -43,7 +43,10 @@ export const CAPS = {
   gradedPer30Days: 150,
   maxEssayChars: 6000,
   maxAudioSeconds: 120,
-  maxAudioBytes: 3 * 1024 * 1024,
+  /** 120 s at 32 kbps ≈ 0.48 MB; 1 MB keeps the speaking request far below the Workers Free 10 ms CPU limit */
+  maxAudioBytes: 1024 * 1024,
+  /** MediaRecorder audioBitsPerSecond for speaking answers */
+  recordingBitsPerSecond: 32_000,
   /** requests that produced no feedback (refusals, failures) per user per UTC day — bounds per-user model spend */
   noFeedbackPerDay: 10,
 } as const
@@ -53,8 +56,9 @@ export const FREE = {
   anonymousWritingPerDevice: 1,
   anonymousWritingPerIpPerDay: 3,
   speakingAfterEmailVerification: 1,
-  budgetUsdPerDay: 2,
-  budgetUsdPerMonth: 40,
+  /** zero-capital launch (memo §7.2): small until revenue exists */
+  budgetUsdPerDay: 0.5,
+  budgetUsdPerMonth: 5,
 } as const
 
 /**
@@ -104,6 +108,29 @@ export const SESSION = {
   magicLinkMinutes: 15,
   magicLinksPerEmailPerHour: 3,
 } as const
+
+/**
+ * Workers AI free allocation is 10,000 neurons/day; whisper-large-v3-turbo uses 46.63 neurons per audio minute
+ * (cloudflare-docs workers-ai/platform/pricing.mdx, read 2026-09-24) → about 214 audio minutes/day. Keep a margin.
+ */
+export const SPEAKING_DAILY_AUDIO_MINUTES = 200
+
+/**
+ * Prepaid Anthropic credits (memo §7.2). With ANTHROPIC_PREPAID_USD and ANTHROPIC_PREPAID_SINCE set, spend since that
+ * date is compared with the credits bought: free samples off at freeOffAt, owner alerts at alertAt, grading paused at
+ * pauseAt so a call never fails half-way when the balance runs out.
+ */
+export const PREPAID = {
+  freeOffAt: 0.7,
+  alertAt: [0.5, 0.8],
+  pauseAt: 0.97,
+} as const
+
+/** Sign-in and email defaults for the zero-capital launch (memo §7.2): Google sign-in, email link for the owner only. */
+export const AUTH_DEFAULTS = {
+  magicLink: 'owner' as 'owner' | 'all' | 'off',
+  learnerEmail: 'off' as 'off' | 'on',
+}
 
 /** Privacy (memo §4.1 PIPEDA design): essays/transcripts purged this many days after last activity. */
 export const RETENTION_DAYS = 90

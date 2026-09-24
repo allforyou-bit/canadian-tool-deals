@@ -6,6 +6,7 @@ CREATE TABLE users (
   id TEXT PRIMARY KEY,                -- random id
   email TEXT NOT NULL UNIQUE,         -- lower-cased; replaced by 'deleted:<id>' on account deletion
   email_hash TEXT NOT NULL,           -- saltedHash('email:'+email); kept after deletion so the once-per-email refund rule survives re-signup
+  google_sub TEXT,                    -- Google account id (OpenID 'sub'); cleared on deletion
   created_at TEXT NOT NULL,
   last_active_at TEXT NOT NULL,
   lang TEXT NOT NULL DEFAULT 'en',
@@ -21,6 +22,20 @@ CREATE TABLE users (
 );
 
 CREATE INDEX users_email_hash ON users(email_hash);
+CREATE UNIQUE INDEX users_google_sub ON users(google_sub) WHERE google_sub IS NOT NULL AND deleted_at IS NULL;
+
+-- Google sign-in round trips (state, nonce, PKCE verifier); purged daily
+CREATE TABLE oauth_states (
+  state_hash TEXT PRIMARY KEY,        -- saltedHash('oauth:'+state)
+  created_at TEXT NOT NULL,
+  expires_at TEXT NOT NULL,
+  used_at TEXT,
+  code_verifier TEXT NOT NULL,
+  nonce TEXT NOT NULL,
+  pending_json TEXT,                  -- lang/adult/consent captured at start
+  device_hash TEXT NOT NULL,
+  next_path TEXT
+);
 
 CREATE TABLE sessions (
   id_hash TEXT PRIMARY KEY,           -- SHA-256 of the cookie value
@@ -68,6 +83,7 @@ CREATE TABLE purchases (
   status TEXT NOT NULL,               -- pending | paid | refunded | disputed | rejected_region
   amount_refunded_cents INTEGER NOT NULL DEFAULT 0, -- cumulative, from charge.refunded
   terms_version TEXT,                 -- TERMS_VERSION shown next to the buy button
+  receipt_url TEXT,                   -- Stripe's hosted receipt (charge.receipt_url)
   created_at TEXT NOT NULL,
   paid_at TEXT,
   refunded_at TEXT
@@ -76,6 +92,7 @@ CREATE INDEX purchases_user ON purchases(user_id);
 CREATE INDEX purchases_fingerprint ON purchases(card_fingerprint);
 CREATE INDEX purchases_charge ON purchases(charge_id);
 CREATE INDEX purchases_payment_intent ON purchases(payment_intent);
+CREATE INDEX purchases_paid ON purchases(status, paid_at);
 
 CREATE TABLE webhook_events (
   id TEXT PRIMARY KEY,                -- Stripe event id (idempotency)

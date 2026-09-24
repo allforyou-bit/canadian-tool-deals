@@ -7,6 +7,7 @@
 import type { HealthResponse } from '../../shared/api'
 import * as account from './account'
 import * as auth from './auth'
+import * as authGoogle from './auth-google'
 import * as billing from './billing'
 import { handleScheduled } from './cron'
 import type { Ctx, Env } from './env'
@@ -23,6 +24,8 @@ const ROUTES: Record<string, Handler> = {
   'GET /api/me': account.me,
   'POST /api/auth/magic-link': auth.requestMagicLink,
   'POST /api/auth/verify': auth.verify,
+  'POST /api/auth/google/start': authGoogle.start,
+  'GET /api/auth/google/callback': authGoogle.callback,
   'POST /api/auth/logout': auth.logout,
   'POST /api/account/delete': account.deleteAccount,
   'POST /api/account/marketing': account.setMarketing,
