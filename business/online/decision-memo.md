@@ -275,6 +275,14 @@ C$5k is **before income tax and self-employed CPP**. ESTIMATE of CPP at that lev
 - Cold: 40 × 0.031 + 80 × 0.030 = **US$3.64** (C$4.99).
 - At the fair-use cap: 150 × 0.031 = US$4.65 = **C$6.37**.
 
+> **Revised during the build (2026-09-24, see §7.1).** The shipped grader differs from this table: one call to
+> `claude-opus-5` (the Claude API guidance's default; the owner may switch to `claude-sonnet-5` with `GRADER_MODEL`), with
+> adaptive thinking, so output tokens include thinking. The review's ESTIMATE from the committed test fixtures (short
+> essays, so real use is likely higher): about 1,950 cached + 527 input + 1,576 output tokens per writing grade, i.e.
+> **≈ US$0.043 warm / ≈ US$0.054 cold on Opus 5** and **≈ US$0.017 on Sonnet 5**. On Opus 5 a 30-day pass holder at the
+> dossier's 120 tasks costs roughly **US$5.2–6.5 (C$7.1–8.9)** instead of C$2.69–4.99, so §3.2 net per C$39 pass falls to
+> roughly C$24–29 (ESTIMATE). These numbers must be replaced by measured usage from the weekly eval and the first live weeks.
+
 ### 3.2 Per-sale economics (ESTIMATE)
 
 | Line | C$39 30-day pass | C$79 90-day pass |
@@ -522,6 +530,37 @@ Architecture (cross_operator): the Worker runs time-critical jobs, GitHub Action
 | **B15** | Tests | Vitest for pricing, entitlement, caps and tiers, cost calculator, webhook signature and idempotency, refund policy (including once-only), CA/QC/card checks, CASL text, guardrail routing including false positives, output filter. Worker integration tests with Miniflare / the Workers vitest pool [prior knowledge, unverified]. Playwright on Chromium and WebKit: sample → signup → checkout (mocked in A, Stripe test mode in B) → grade → refund. | A: all green; coverage ≥80% on `worker/src/billing` and `worker/src/caps`. B: E2E green against staging. |
 
 ---
+
+### 7.1 Amendments made during the build and review (2026-09-24)
+
+These replace the matching parts of the table above. Each came from a build or review finding; tests cover them.
+
+- **B0.** `products/clb` runs `next` **16.3.6** (16.2.3 has a critical advisory); test tooling is pinned through npm
+  `overrides`; `npm audit` is clean. The root site stays on 16.2.3 because B16 requires its output to stay identical — the
+  owner decides on that upgrade (owner-setup).
+- **B16.** A fourth root file changed: `app/globals.css` gained `@source not` lines for `products/`, `ops/`, `.github/`
+  and `business/online/`. Tailwind 4 scans every non-ignored file, and without these lines the new documents added classes
+  to the root CSS. With them, the root `out/` is byte-identical to commit `47f9414` (268 files, build id normalised).
+- **B3.** One grader call instead of a Haiku 4.5 pre-check plus a Sonnet 5 grader. The structured output has a `refused`
+  flag; out-of-scope (immigration/legal advice) requests get a **fixed** bilingual refusal pointing to a CICC-licensed
+  consultant or a lawyer, never model-written text. Default model `claude-opus-5` (see the 3.1 note); `GRADER_EFFORT` and
+  `GRADER_MAX_TOKENS` are owner-tunable after an eval sweep. At most three top errors, as the pages say. The guardrail
+  acceptance numbers (10/10 probes, ≤1/20 benign refusals) can only be measured live (B12 eval), not with mocks.
+- **B10.** A cap slot is reserved atomically before every model call (a pending `grades` row), so parallel requests cannot
+  exceed the caps. Requests that give no feedback (refusals, failures) do not count toward the fair-use caps but are
+  limited to 10 per user per UTC day, which bounds one account's model spend. Spend tiers use
+  `min(formula L, the Anthropic Console limit)` when the owner sets that limit. **Any** grading pause (automatic or the
+  owner's) extends active passes; the cron never re-enables a switch the owner turned off.
+- **B6.** Card payments only; the Stripe API version is pinned; partial refunds and failed refunds are handled; the buyer
+  agrees to the terms version shown next to the button, which is stored with the purchase.
+- **B7.** Account deletion de-identifies grade rows (text, user id and device id removed) instead of deleting them, so
+  the cost ledger that drives the spend tiers stays correct. Saved answers and feedback are viewable from the account page
+  until the 90-day purge.
+- **B2 / CASL.** Every learner email carries an unsubscribe link (no sign-in; hashed id + HMAC). The server writes the
+  consent text itself and records opt-in only when the link is opened on the requesting device and the mailing address is
+  configured; deploys fail without `MPC_MAILING_ADDRESS`.
+- **B14.** Routines never read essays or transcripts. The daily Routine may read support emails **inside Gmail** to draft
+  replies for the owner to review; the privacy page discloses this.
 
 ## 8. Risks, mitigations and unknowns
 
