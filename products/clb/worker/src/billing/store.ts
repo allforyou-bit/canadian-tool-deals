@@ -1,5 +1,5 @@
-// D1 access shared by the billing handlers: purchases, server-side funnel events, refund rows and the
-// buyer's contact details for transactional email.
+// D1 access shared by the billing handlers: purchases (with Stripe's receipt link), server-side funnel
+// events, refund rows and the buyer's contact details for transactional email.
 import type { Lang } from '../../../shared/api'
 import { SKUS, type Sku } from '../../../shared/config'
 import type { Env } from '../env'
@@ -24,12 +24,14 @@ export interface PurchaseRow {
   /** cumulative amount Stripe reports as refunded (charge.amount_refunded); never decreases */
   amount_refunded_cents: number
   terms_version: string | null
+  /** Stripe's hosted receipt for the charge (charge.receipt_url), shown on the site instead of an email */
+  receipt_url: string | null
   paid_at: string | null
 }
 
 const PURCHASE_COLUMNS =
   'id, user_id, sku, amount_cents, currency, payment_intent, charge_id, card_fingerprint, payment_method_type, status, ' +
-  'amount_refunded_cents, terms_version, paid_at'
+  'amount_refunded_cents, terms_version, receipt_url, paid_at'
 
 /** Route paths recorded with server-side events (CONTRACT §6). */
 export const EVENT_PATHS = {
@@ -148,6 +150,17 @@ export function ownerRefundEvent(env: Env, purchaseId: string, cumulativeCents: 
     `INSERT INTO events (name, path, utm_json, day, created_at)
      SELECT 'refund', ?1, NULL, ?2, ?3 WHERE EXISTS (SELECT 1 FROM refunds WHERE id = ?4 AND created_at = ?3)`,
   ).bind(EVENT_PATHS.webhook, dayKey(now), now.toISOString(), ownerRefundRowId(purchaseId, cumulativeCents))
+}
+
+/**
+ * Stores (or refreshes) the receipt link of the purchase's charge. Only the charge recorded on the purchase
+ * (or any charge while none is recorded yet) sets it; a null link never erases a stored one.
+ */
+export function setReceiptUrl(env: Env, purchaseId: string, chargeId: string, receiptUrl: string | null): D1PreparedStatement {
+  return env.DB.prepare(
+    `UPDATE purchases SET receipt_url = ?1
+      WHERE id = ?2 AND ?1 IS NOT NULL AND (charge_id IS NULL OR charge_id = ?3)`,
+  ).bind(receiptUrl, purchaseId, chargeId)
 }
 
 export function deleteRefund(env: Env, reason: OwnRefundReason, purchaseId: string): Promise<D1Result> {

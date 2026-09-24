@@ -65,6 +65,11 @@ export interface Charge {
   disputed?: boolean
   /** cumulative amount refunded so far (partial refunds included) */
   amount_refunded?: number
+  /**
+   * Stripe's hosted receipt for this charge, "kept up-to-date to the latest state of the charge, including
+   * any refunds" (spec3.json 2026-08-26.dahlia, charge.receipt_url: nullable string, maxLength 5000)
+   */
+  receipt_url?: string | null
 }
 
 export interface PaymentIntent {
@@ -101,6 +106,25 @@ export interface Dispute {
 export function idOf(ref: Expandable<{ id: string }>): string | null {
   if (!ref) return null
   return typeof ref === 'string' ? ref : ref.id
+}
+
+/** charge.receipt_url's maxLength in the spec */
+export const MAX_RECEIPT_URL_LENGTH = 5000
+
+/**
+ * The charge's receipt link, or null. The site shows it as a link (/account/, /checkout/success/), so
+ * only an absolute https URL of at most MAX_RECEIPT_URL_LENGTH characters is kept. The host is not
+ * checked: the spec documents none (its fixture uses a Stripe dev host).
+ */
+export function receiptUrlOf(charge: Pick<Charge, 'receipt_url'>): string | null {
+  const raw = charge.receipt_url
+  if (typeof raw !== 'string' || raw.length > MAX_RECEIPT_URL_LENGTH) return null
+  try {
+    const url = new URL(raw)
+    return url.protocol === 'https:' && url.hostname !== '' && url.username === '' && url.password === '' ? raw : null
+  } catch {
+    return null
+  }
 }
 
 // ---------- form encoding ----------
