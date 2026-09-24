@@ -35,9 +35,9 @@ export function capReached(usage: Usage, kind: 'writing' | 'speaking'): 'daily' 
   return null
 }
 
-/** Requests without feedback (refused = 1) this UTC day. */
+/** Requests without feedback this UTC day, counting calls still in flight (any of them may end without feedback). */
 export async function noFeedbackToday(env: Env, userId: string, now: Date): Promise<number> {
-  const row = await env.DB.prepare('SELECT COUNT(*) AS n FROM grades WHERE user_id = ?1 AND refused = 1 AND created_at >= ?2')
+  const row = await env.DB.prepare('SELECT COUNT(*) AS n FROM grades WHERE user_id = ?1 AND (refused = 1 OR pending = 1) AND created_at >= ?2')
     .bind(userId, startOfUtcDay(now).toISOString())
     .first<{ n: number }>()
   return row?.n ?? 0
@@ -78,7 +78,7 @@ export async function reserveGrade(env: Env, r: GradeReservation, now: Date, opt
       `INSERT INTO grades (id, user_id, device_hash, task_id, prompt_index, kind, free, refused, pending, model, cost_micro_usd, created_at)
        SELECT ?1, ?2, NULL, ?3, ?4, ?5, ?6, 0, 1, ?7, ?8, ?9
         WHERE ?2 IS NULL OR (
-          (SELECT COUNT(*) FROM grades WHERE user_id = ?2 AND refused = 1 AND created_at >= ?10) < ?11
+          (SELECT COUNT(*) FROM grades WHERE user_id = ?2 AND (refused = 1 OR pending = 1) AND created_at >= ?10) < ?11
           AND (?12 = 0 OR (
             (SELECT COUNT(*) FROM grades WHERE user_id = ?2 AND refused = 0 AND kind = ?5 AND created_at >= ?10) < ?13
             AND (SELECT COUNT(*) FROM grades WHERE user_id = ?2 AND refused = 0 AND created_at >= ?14) < ?15

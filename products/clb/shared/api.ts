@@ -65,7 +65,8 @@ export interface MeResponse {
   /** free samples still available to this device/user */
   free: { writing: boolean; speaking: boolean }
   usage: { writingToday: number; speakingToday: number; graded30d: number }
-  flags: { checkoutEnabled: boolean; gradingEnabled: boolean; banner: string }
+  /** freeEnabled: free samples are switched on (KV free_enabled and not turned off by the spend tiers) */
+  flags: { checkoutEnabled: boolean; gradingEnabled: boolean; freeEnabled: boolean; banner: string }
 }
 export interface DeleteAccountResponse {
   ok: true
@@ -151,8 +152,10 @@ export interface HistoryItem {
 }
 export interface HistoryResponse {
   items: HistoryItem[]
-  /** recurring error kinds across the learner's recent work */
+  /** recurring error kinds across the learner's recent work (first page only) */
   recurring: { kind: string; count: number }[]
+  /** cursor for the next (older) page: pass as GET /api/history?before=<nextBefore>; null when there is none */
+  nextBefore: string | null
 }
 
 /** GET /api/history/item?id=<gradeId> — the learner's own saved answer and feedback (404 once purged) */

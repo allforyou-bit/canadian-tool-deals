@@ -80,11 +80,13 @@ describe('reserveGrade (decision 2)', () => {
     expect((await getUsage(env, u, now)).writingToday).toBe(1)
   })
 
-  it(`lets exactly ${CAPS.writingPerDay} of 20 parallel reservations through the daily writing cap`, async () => {
+  it(`lets parallel reservations through only up to the daily writing cap (${CAPS.writingPerDay})`, async () => {
     const u = await user()
-    const results = await Promise.all(Array.from({ length: 20 }, () => reserveGrade(env, slot(u), now, { fairUse: true })))
-    expect(results.filter((r) => r === null)).toHaveLength(CAPS.writingPerDay)
-    expect(results.filter((r) => r === 'daily')).toHaveLength(20 - CAPS.writingPerDay)
+    // 10 finished graded tasks today, so 5 slots remain — fewer than the in-flight limit, isolating the cap
+    await insertRows(u, 10)
+    const results = await Promise.all(Array.from({ length: 10 }, () => reserveGrade(env, slot(u), now, { fairUse: true })))
+    expect(results.filter((r) => r === null)).toHaveLength(CAPS.writingPerDay - 10)
+    expect(results.filter((r) => r === 'daily')).toHaveLength(10 - (CAPS.writingPerDay - 10))
     expect((await getUsage(env, u, now)).writingToday).toBe(CAPS.writingPerDay)
     // the speaking cap is separate
     expect(await reserveGrade(env, slot(u, { kind: 'speaking' }), now, { fairUse: true })).toBeNull()
@@ -102,8 +104,8 @@ describe('reserveGrade (decision 2)', () => {
   it(`allows ${CAPS.noFeedbackPerDay} requests without feedback a day, for pass holders and free users alike`, async () => {
     const u = await user()
     await insertRows(u, CAPS.noFeedbackPerDay - 1, { refused: 1 })
+    // the 10th may still be reserved; while it is in flight it counts, because it may end without feedback
     expect(await reserveGrade(env, slot(u), now, { fairUse: true })).toBeNull()
-    await insertRows(u, 1, { refused: 1 })
     expect(await reserveGrade(env, slot(u), now, { fairUse: true })).toBe('no_feedback')
     expect(await reserveGrade(env, slot(u, { free: true }), now, { fairUse: false })).toBe('no_feedback')
     expect(await noFeedbackToday(env, u, now)).toBe(CAPS.noFeedbackPerDay)
@@ -130,5 +132,44 @@ describe('reserveGrade (decision 2)', () => {
     expect(capReached({ writingToday: 0, speakingToday: CAPS.speakingPerDay, graded30d: 0 }, 'speaking')).toBe('daily')
     expect(capReached({ writingToday: 0, speakingToday: 0, graded30d: CAPS.gradedPer30Days }, 'writing')).toBe('rolling30')
     expect(capReached({ writingToday: 0, speakingToday: 0, graded30d: 0 }, 'speaking')).toBeNull()
+  })
+})
+
+describe('round-2 fixes', () => {
+  const at = new Date('2026-10-06T12:00:00Z')
+  const insertUser = (id: string) =>
+    env.DB.prepare(`INSERT INTO users (id, email, email_hash, created_at, last_active_at) VALUES (?1, ?2, ?3, ?4, ?4)`)
+      .bind(id, `${id}@coach.test`, `h-${id}`, at.toISOString())
+      .run()
+  const row = (id: string, userId: string | null, o: { refused?: number; pending?: number; free?: number; cost?: number }) =>
+    env.DB.prepare(
+      `INSERT INTO grades (id, user_id, task_id, prompt_index, kind, free, refused, pending, model, cost_micro_usd, created_at)
+       VALUES (?1, ?2, 'email', 0, 'writing', ?3, ?4, ?5, 'claude-opus-5', ?6, ?7)`,
+    ).bind(id, userId, o.free ?? 0, o.refused ?? 0, o.pending ?? 0, o.cost ?? 0, at.toISOString())
+
+  it('counts calls in flight against the no-feedback limit, so parallel requests cannot exceed it', async () => {
+    const { reserveGrade } = await import('../src/lib/usage')
+    await insertUser('u_nf')
+    await env.DB.batch(Array.from({ length: 9 }, (_, i) => row(`nf_${i}`, 'u_nf', { refused: 1 })))
+    const results = await Promise.all(
+      Array.from({ length: 15 }, (_, i) =>
+        reserveGrade(
+          env,
+          { id: `nf_p_${i}`, userId: 'u_nf', taskId: 'email', promptIndex: 0, kind: 'writing', free: false, model: 'claude-opus-5', costMicroUsd: 1, createdAt: at.toISOString() },
+          at,
+          { fairUse: true },
+        ),
+      ),
+    )
+    expect(results.filter((r) => r === null)).toHaveLength(1)
+    expect(results.filter((r) => r === 'no_feedback')).toHaveLength(14)
+  })
+
+  it('leaves pending worst-case placeholders out of the spend tiers', async () => {
+    const { evaluateTiers, spendSnapshot } = await import('../src/lib/spend')
+    await env.DB.batch(Array.from({ length: 12 }, (_, i) => row(`sp_${i}`, null, { free: 1, pending: 1, cost: 234_200 })))
+    const s = await spendSnapshot(env, at)
+    expect(s.freeTodayUsd).toBe(0)
+    expect(evaluateTiers(s).freeOff).toBe(false)
   })
 })

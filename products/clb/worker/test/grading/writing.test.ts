@@ -344,23 +344,34 @@ describe('caps (pass holder)', () => {
     expect(limited.message).toContain('30 days')
   })
 
-  it(`parallel requests cannot exceed the cap: 20 at once against a daily cap of ${CAPS.writingPerDay}`, async () => {
+  it(`parallel requests cannot exceed the cap: 20 at once with ${CAPS.writingPerDay - 8} slots left`, async () => {
     const { user, cookie } = await createUser({ pass: true })
+    // 8 graded tasks already done today: 7 slots remain, below the 10-in-flight limit, so the cap decides
+    const done = 8
+    const left = CAPS.writingPerDay - done
+    await env.DB.batch(
+      Array.from({ length: done }, (_, i) =>
+        env.DB.prepare(
+          `INSERT INTO grades (id, user_id, task_id, prompt_index, kind, refused, pending, outcome, model, created_at)
+           VALUES (?1, ?2, 'email', 0, 'writing', 0, 0, 'graded', 'm', ?3)`,
+        ).bind(`g_done_${user.id}_${i}`, user.id, new Date().toISOString()),
+      ),
+    )
     // hold every model call open until the cap is full, so no request can finish before the others check
     let open!: () => void
     const gate = new Promise<void>((resolve) => (open = resolve))
     const failsafe = setTimeout(() => open(), 3000)
     const stub = stubFetch(async () => {
-      if (stub.calls.length >= CAPS.writingPerDay) open()
+      if (stub.calls.length >= left) open()
       await gate
       return jsonResponse(apiMessage(SIMPLE_OUTPUT))
     })
     const results = await Promise.all(Array.from({ length: 20 }, () => postWriting(writingBody(SAMPLE), { cookie })))
     clearTimeout(failsafe)
     const statuses = results.map((r) => r.status)
-    expect(statuses.filter((st) => st === 200)).toHaveLength(CAPS.writingPerDay)
-    expect(statuses.filter((st) => st === 429)).toHaveLength(20 - CAPS.writingPerDay)
-    expect(stub.calls).toHaveLength(CAPS.writingPerDay)
+    expect(statuses.filter((st) => st === 200)).toHaveLength(left)
+    expect(statuses.filter((st) => st === 429)).toHaveLength(20 - left)
+    expect(stub.calls).toHaveLength(left)
     expect((await getUsage(env, user.id, new Date())).writingToday).toBe(CAPS.writingPerDay)
     expect(await gradeRowsFor(user.id)).toHaveLength(CAPS.writingPerDay)
   })
@@ -578,5 +589,30 @@ describe('GRADER_MODEL override', () => {
     const row = await gradeRow(body.gradeId)
     expect(row?.model).toBe('claude-sonnet-5')
     expect(row?.cost_micro_usd).toBe(tokenCostMicroUsd('claude-sonnet-5', USAGE))
+  })
+})
+
+describe('in-flight limit (round 2)', () => {
+  it(`never has more than ${CAPS.noFeedbackPerDay} model calls in flight for one account`, async () => {
+    const { cookie } = await createUser({ pass: true })
+    let open!: () => void
+    const gate = new Promise<void>((resolve) => (open = resolve))
+    const failsafe = setTimeout(() => open(), 3000)
+    let active = 0
+    let maxActive = 0
+    const stub = stubFetch(async () => {
+      active++
+      maxActive = Math.max(maxActive, active)
+      if (active >= CAPS.noFeedbackPerDay) open()
+      await gate
+      active--
+      return jsonResponse(apiMessage(SIMPLE_OUTPUT))
+    })
+    const results = await Promise.all(Array.from({ length: 14 }, () => postWriting(writingBody(SAMPLE), { cookie })))
+    clearTimeout(failsafe)
+    // every in-flight call may still end without feedback, so it counts against the 10-a-day limit while it runs
+    expect(maxActive).toBe(CAPS.noFeedbackPerDay)
+    expect(results.filter((r) => r.status === 429).length).toBeGreaterThan(0)
+    expect(stub.calls.length).toBe(results.filter((r) => r.status === 200).length)
   })
 })

@@ -53,12 +53,14 @@ export async function spendSnapshot(env: Env, now: Date): Promise<SpendSnapshot>
   const month = startOfUtcMonth(now).toISOString()
   const [costs, gross] = await Promise.all([
     env.DB.prepare(
+      // Rows still pending carry a worst-case placeholder cost; they count once finished (or once the
+      // cron sweep closes an orphaned call at that worst case), so a burst in flight cannot trip the tiers.
       `SELECT
          COALESCE(SUM(cost_micro_usd), 0) AS mtd,
          COALESCE(SUM(CASE WHEN created_at >= ?2 THEN cost_micro_usd ELSE 0 END), 0) AS today,
          COALESCE(SUM(CASE WHEN free = 1 AND created_at >= ?2 THEN cost_micro_usd ELSE 0 END), 0) AS free_today,
          COALESCE(SUM(CASE WHEN free = 1 THEN cost_micro_usd ELSE 0 END), 0) AS free_month
-       FROM grades WHERE created_at >= ?1`,
+       FROM grades WHERE created_at >= ?1 AND pending = 0`,
     )
       .bind(month, day)
       .first<{ mtd: number; today: number; free_today: number; free_month: number }>(),
