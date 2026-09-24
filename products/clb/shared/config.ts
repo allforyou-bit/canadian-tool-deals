@@ -44,6 +44,8 @@ export const CAPS = {
   maxEssayChars: 6000,
   maxAudioSeconds: 120,
   maxAudioBytes: 3 * 1024 * 1024,
+  /** requests that produced no feedback (refusals, failures) per user per UTC day — bounds per-user model spend */
+  noFeedbackPerDay: 10,
 } as const
 
 /** Free samples (memo B5): one anonymous writing task, one speaking task after email verification. */
@@ -92,6 +94,8 @@ export const MODELS = {
   whisperUsdPerMinute: 0.000513,
   /** covers adaptive thinking + the JSON answer on Opus 5 (max_tokens caps both); billed on use only */
   graderMaxTokens: 8000,
+  /** Opus 5 / Sonnet 5 effort; API default. Owner may override with GRADER_EFFORT after an eval sweep */
+  graderEffort: 'high' as 'low' | 'medium' | 'high' | 'xhigh' | 'max',
 } as const
 
 export const SESSION = {
@@ -103,6 +107,9 @@ export const SESSION = {
 
 /** Privacy (memo §4.1 PIPEDA design): essays/transcripts purged this many days after last activity. */
 export const RETENTION_DAYS = 90
+
+/** Version of the terms of use and refund policy shown next to the buy button; stored on each purchase. */
+export const TERMS_VERSION = '2026-09-24'
 
 /** Words that must never appear in grader output, pages or ads (memo §1.4, B3, B9, B13). */
 export const FORBIDDEN_OUTPUT_TERMS = ['official', 'guarantee', 'guaranteed', 'CLB', 'band', 'level', 'score', 'accurate', 'aligned'] as const

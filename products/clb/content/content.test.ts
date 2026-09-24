@@ -19,7 +19,7 @@ import { FACTS, LAST_REVIEWED, mailingAddressText } from './site'
 import type { DocPage } from './types'
 
 // Every content module, found by Vite's import.meta.glob so a new content file is linted automatically.
-const MODULES = import.meta.glob<Record<string, unknown>>(['./**/*.ts', '!./**/*.test.ts'], { eager: true })
+const MODULES = import.meta.glob(['./**/*.ts', '!./**/*.test.ts'], { eager: true }) as Record<string, Record<string, unknown>>
 
 /** All string leaves reachable from a value (objects, arrays, sets, maps); functions are skipped. */
 function collectStrings(value: unknown, path: string, out: { path: string; text: string }[], seen = new Set<unknown>()) {

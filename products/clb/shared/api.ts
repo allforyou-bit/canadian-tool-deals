@@ -58,6 +58,10 @@ export interface MeResponse {
   pass?: Pass | null
   /** signed-in only: current CASL marketing consent */
   marketingOptIn?: boolean
+  /** signed-in only: end of the contiguous chain of unrevoked passes (includes queued passes), or null */
+  accessEndsAt?: string | null
+  /** signed-in only: the most recent purchase, so /checkout/success/ can wait for that exact purchase */
+  latestPurchase?: { id: string; sku: Sku; status: 'pending' | 'paid' | 'refunded' | 'disputed' | 'rejected_region' } | null
   /** free samples still available to this device/user */
   free: { writing: boolean; speaking: boolean }
   usage: { writingToday: number; speakingToday: number; graded30d: number }
@@ -151,9 +155,29 @@ export interface HistoryResponse {
   recurring: { kind: string; count: number }[]
 }
 
+/** GET /api/history/item?id=<gradeId> — the learner's own saved answer and feedback (404 once purged) */
+export interface HistoryItemResponse {
+  gradeId: string
+  taskId: string
+  kind: 'writing' | 'speaking'
+  createdAt: string
+  /** the essay or transcript */
+  text: string
+  result: GradeResult
+}
+
+// ---------- unsubscribe (CASL s.11) ----------
+/** POST /api/unsubscribe — no sign-in; h and s come from the link in every user email (#h=..&s=..) */
+export interface UnsubscribeRequest {
+  h: string
+  s: string
+}
+
 // ---------- payments ----------
 export interface CheckoutRequest {
   sku: Sku
+  /** TERMS_VERSION the buyer saw next to the button ('By buying you agree to…') */
+  termsVersion?: string
   /** "I live in Canada, outside Quebec" checkbox */
   residentAttestation: boolean
   lang: Lang

@@ -16,6 +16,11 @@ export interface Env {
   APP_VERSION: string
   /** optional model override, e.g. "claude-sonnet-5"; default config.MODELS.defaultGrader */
   GRADER_MODEL?: string
+  /** optional grader tuning (defaults: config.MODELS.graderEffort / graderMaxTokens) */
+  GRADER_EFFORT?: string
+  GRADER_MAX_TOKENS?: string
+  /** optional: the monthly spend limit actually set in the Anthropic Console (USD); tiers use min(formula, this) */
+  ANTHROPIC_MONTHLY_LIMIT_USD?: string
   FROM_EMAIL: string
   /** CASL: every commercial email must include the sender's mailing address */
   MAILING_ADDRESS: string

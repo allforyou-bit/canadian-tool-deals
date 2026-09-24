@@ -359,3 +359,8 @@ export async function history(_req: Request, ctx: Ctx): Promise<Response> {
     .slice(0, RECURRING_LIMIT)
   return json({ items, recurring } satisfies HistoryResponse)
 }
+
+/** STUB — implemented by the grading fixer: GET /api/history/item?id= (HistoryItemResponse). */
+export async function historyItem(_req: Request, _ctx: Ctx): Promise<Response> {
+  return error('not_found', 'Not implemented')
+}

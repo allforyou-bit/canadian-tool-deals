@@ -38,6 +38,11 @@ export default defineConfig(async () => {
         provider: 'istanbul',
         include: ['worker/src/**/*.ts'],
         reporter: ['text-summary', 'json-summary'],
+        // memo B15: >= 80% on billing and the caps/spend code
+        thresholds: {
+          'worker/src/billing/**': { lines: 80 },
+          'worker/src/lib/{usage,spend}.ts': { lines: 80 },
+        },
       },
     },
   }

@@ -62,9 +62,12 @@ CREATE TABLE purchases (
   charge_id TEXT,
   card_fingerprint TEXT,
   card_country TEXT,
+  payment_method_type TEXT,           -- e.g. card; anything else is flagged to the owner
   billing_country TEXT,
   billing_region TEXT,
   status TEXT NOT NULL,               -- pending | paid | refunded | disputed | rejected_region
+  amount_refunded_cents INTEGER NOT NULL DEFAULT 0, -- cumulative, from charge.refunded
+  terms_version TEXT,                 -- TERMS_VERSION shown next to the buy button
   created_at TEXT NOT NULL,
   paid_at TEXT,
   refunded_at TEXT
@@ -91,7 +94,9 @@ CREATE TABLE grades (
   result_json TEXT,                   -- GradeResult (purged after retention)
   error_kinds TEXT,                   -- comma-separated error categories (kept for the recurring-error log)
   free INTEGER NOT NULL DEFAULT 0,
-  refused INTEGER NOT NULL DEFAULT 0,
+  refused INTEGER NOT NULL DEFAULT 0, -- 1 = no feedback given (scope/safety refusal, failure, no speech)
+  pending INTEGER NOT NULL DEFAULT 0, -- 1 while the model call runs (cap slot reserved before the call)
+  outcome TEXT,                       -- graded | scope_refused | safety_refused | failed | no_speech | too_long
   model TEXT NOT NULL,
   input_tokens INTEGER NOT NULL DEFAULT 0,
   output_tokens INTEGER NOT NULL DEFAULT 0,

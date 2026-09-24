@@ -164,3 +164,8 @@ export async function support(req: Request, ctx: Ctx): Promise<Response> {
   }
   return json({ ok: true })
 }
+
+/** STUB — implemented by the core fixer: POST /api/unsubscribe (UnsubscribeRequest). */
+export async function unsubscribe(_req: Request, _ctx: Ctx): Promise<Response> {
+  return error('not_found', 'Not implemented')
+}

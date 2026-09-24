@@ -36,8 +36,10 @@ type Handler = (req: Request, ctx: Ctx) => Promise<Response>   // Ctx: worker/sr
 | `POST /api/auth/logout` | `auth.logout` | → `{ok:true}` + cookie cleared |
 | `POST /api/account/delete` | `account.deleteAccount` | → `DeleteAccountResponse` |
 | `POST /api/account/marketing` | `account.setMarketing` | `MarketingRequest` → `{ok:true}` |
-| `POST /api/support` | `account.support` | `SupportRequest` → `{ok:true}` |
+| `POST /api/support` | `account.support` | `SupportRequest` → `{ok:true}` (signed-in only) |
+| `POST /api/unsubscribe` | `account.unsubscribe` | `UnsubscribeRequest` → `{ok:true}` (no sign-in; HMAC-checked) |
 | `GET /api/history` | `grading.history` | → `HistoryResponse` |
+| `GET /api/history/item?id=` | `grading.historyItem` | → `HistoryItemResponse` (own rows only; 404 when purged/refused) |
 | `POST /api/grade/writing` | `grading.gradeWriting` | `WritingGradeRequest` → `GradeResponse` |
 | `POST /api/grade/speaking` | `grading.gradeSpeaking` | multipart (`taskId`, `promptIndex`, `explanationLang`, `audio`, optional `durationSeconds`) → `GradeResponse` |
 | `POST /api/checkout` | `billing.checkout` | `CheckoutRequest` → `CheckoutResponse` |
@@ -52,14 +54,18 @@ same-origin check on POSTs (webhook exempt), device cookie, `ctx.user`, salted `
 
 ## 3. Shared helpers (frozen — use, don't copy)
 
-- `lib/http.ts`: `json`, `error`, `readJson<T>(req, maxBytes)`, `getCookie`, `setCookie(name, value, {maxAgeSeconds, httpOnly})`.
+- `lib/http.ts`: `json`, `error`, `readJson<T>(req, maxBytes)` (streamed byte limit), `readFormDataLimited(req, maxBytes)`,
+  `readTextLimited(req, maxBytes)`, `readBodyLimited`, `getCookie`, `setCookie(name, value, {maxAgeSeconds, httpOnly})`.
 - `lib/crypto.ts`: `sha256Hex`, `saltedHash(salt, value)`, `randomToken(bytes)`, `randomId(prefix)`, `hmacSha256Hex`, `timingSafeEqualHex`.
 - `lib/session.ts`: `getUser(req, env, now)`, `getActivePass(env, userId, now)`.
 - `lib/flags.ts`: `getFlags(env)`, `setFlag(env, name, value)`.
 - `lib/usage.ts`: `getUsage`, `capReached`, `freeAvailability`, `recordFreeWriting`, `recordFreeSpeaking`.
-- `lib/spend.ts`: `tokenCostMicroUsd(model, usage)`, `whisperCostMicroUsd(seconds)`, `spendSnapshot(env, now)`, `evaluateTiers(snapshot)`.
+- `lib/spend.ts`: `tokenCostMicroUsd(model, usage)`, `whisperCostMicroUsd(seconds)`, `spendSnapshot(env, now)` (L capped by
+  `ANTHROPIC_MONTHLY_LIMIT_USD` when set), `evaluateTiers(snapshot)`.
 - `lib/time.ts`: `dayKey`, `startOfUtcDay`, `startOfUtcMonth`, `addDays` (all UTC).
-- `email.ts`: `sendEmail(env, {to, subject, text, kind, replyTo?, idempotencyKey?})` → `boolean` (never throws), `alertOwner(env, subject, text)`.
+- `email.ts`: `sendEmail(env, {to, subject, text, kind, replyTo?, idempotencyKey?})` → `boolean` (never throws; every
+  non-alert email gets the CASL unsubscribe link), `alertOwner(env, subject, text)`, `unsubscribeUrl(env, email)`,
+  `unsubscribeSignature(env, emailHash)`.
 - `turnstile.ts`: `verifyTurnstile(env, token)` → `boolean`.
 - `shared/content-rules.ts`: `FORBIDDEN_CLAIMS`, `AD_ONLY_FORBIDDEN`, `ALLOWED_PHRASES`, `findClaims(text, rules?)`.
 

@@ -40,7 +40,9 @@ export interface SpendSnapshot {
   freeTodayUsd: number
   freeMonthUsd: number
   trailingGrossUsd: number
-  /** L = max(minMonthlyLimitUsd, grossShare × trailing-30-day gross) */
+  /** the Anthropic Console monthly limit from ANTHROPIC_MONTHLY_LIMIT_USD, when set */
+  configuredLimitUsd: number | null
+  /** L = min(max(minMonthlyLimitUsd, grossShare × trailing-30-day gross), configuredLimitUsd) */
   limitUsd: number
   /** daily anomaly cap = max(dailyAnomalyMinUsd, L / dailyAnomalyDivisor) */
   dailyCapUsd: number
@@ -65,13 +67,18 @@ export async function spendSnapshot(env: Env, now: Date): Promise<SpendSnapshot>
       .first<{ cents: number }>(),
   ])
   const trailingGrossUsd = ((gross?.cents ?? 0) / 100) * SPEND.cadToUsdConservative
-  const limitUsd = Math.max(SPEND.minMonthlyLimitUsd, SPEND.grossShare * trailingGrossUsd)
+  const formulaLimitUsd = Math.max(SPEND.minMonthlyLimitUsd, SPEND.grossShare * trailingGrossUsd)
+  // The Anthropic Console limit is what actually stops the API; never plan above it.
+  const configured = Number(env.ANTHROPIC_MONTHLY_LIMIT_USD ?? '')
+  const configuredLimitUsd = Number.isFinite(configured) && configured > 0 ? configured : null
+  const limitUsd = configuredLimitUsd === null ? formulaLimitUsd : Math.min(formulaLimitUsd, configuredLimitUsd)
   return {
     monthToDateUsd: (costs?.mtd ?? 0) / 1e6,
     todayUsd: (costs?.today ?? 0) / 1e6,
     freeTodayUsd: (costs?.free_today ?? 0) / 1e6,
     freeMonthUsd: (costs?.free_month ?? 0) / 1e6,
     trailingGrossUsd,
+    configuredLimitUsd,
     limitUsd,
     dailyCapUsd: Math.max(SPEND.dailyAnomalyMinUsd, limitUsd / SPEND.dailyAnomalyDivisor),
   }
