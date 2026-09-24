@@ -20,6 +20,15 @@ import {
 } from './site'
 import type { DocPage, DocSection } from './types'
 
+/**
+ * Google refuses sign-in inside in-app browsers ("Error 403: disallowed_useragent") [unverified: Google's own
+ * policy page was not read; reported by many projects on GitHub]. The launch posts go to KakaoTalk, Naver/Daum
+ * cafés and Facebook groups, so the sign-in help says what to do; the sign-in page shows the same advice
+ * (lib/in-app-browser.ts).
+ */
+export const IN_APP_SIGN_IN_TIP =
+  'If you opened this site inside an app such as KakaoTalk, Naver, Daum, Facebook, Instagram or LINE, Google sign-in does not work there: it works only in a browser such as Chrome or Safari. On the sign-in page, choose "Open in browser" (shown where the app allows it), or use the app\'s menu to open the page in your browser, or copy the link and paste it into the address bar of Chrome or Safari. Practising without feedback works inside those apps too.'
+
 const contactSection = (id = 'contact', heading = 'Contact us'): DocSection => ({
   id,
   heading,
@@ -298,6 +307,7 @@ export const HELP_ACCOUNT: DocPage = doc({
       blocks: [
         {
           ul: [
+            IN_APP_SIGN_IN_TIP,
             `If you closed Google's page or chose Cancel, start again from the [sign-in page](${PATHS.login}).`,
             'If the sign-in page says your email address is not verified, verify it in your Google account, then try again.',
             'Start and finish signing in in the same browser, and allow cookies for this site: a short-lived cookie links the two steps.',
@@ -584,6 +594,7 @@ export const HELP_TROUBLESHOOTING: DocPage = doc({
         {
           ul: [
             `You need a Google account. See [account and sign-in](${PATHS.helpAccount}) if you do not have one.`,
+            IN_APP_SIGN_IN_TIP,
             `If you closed Google's page or chose Cancel, start again from the [sign-in page](${PATHS.login}).`,
             'If the sign-in page says your email address is not verified, verify it in your Google account, then try again.',
             'Start and finish signing in in the same browser, and allow cookies for this site.',

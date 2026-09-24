@@ -151,3 +151,9 @@ New env: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, MAGIC_LINK ('owner'|'all'|'off'
 LEGAL_NAME, ANTHROPIC_PREPAID_USD, ANTHROPIC_PREPAID_SINCE. New error code `at_capacity` (503). New client events
 `practice_start`, `practice_done`.
 - **Receipts.** Only billing writes `purchases.receipt_url` (https only); `/api/me` reads it; account deletion clears it.
+- **Credits used up.** `grading/claude.ts` `isCreditExhausted()` (HTTP 402 / `billing_error`, or a 400 about the credit
+  balance or a usage/spend limit) makes the grading handler answer `grading_paused`, give back a free sample and call
+  `cron.ts` `pauseGradingForCredits()`: KV marker `KV.creditsOut` (`auto:grading_off_credits`, with the prepaid ledger
+  key `prepaidLedgerKey()` in force), `flag:grading_enabled` off, `recordPauseStart`, and one owner alert a day
+  (`ALERT_GUARDS.creditsOut`, subject `CREDITS_OUT_SUBJECT`). The spend monitor lifts it only when a different prepaid
+  amount or date is deployed, or when the owner switches grading on.

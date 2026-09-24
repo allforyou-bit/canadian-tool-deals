@@ -76,6 +76,10 @@ describe('practiceCta', () => {
     })
     expect(practiceCta(me({ signedIn: true, pass: PASS }, { speakingAvailable: false }), 'speaking')).toMatchObject({ feedback: false })
     expect(practiceCta(me({}, { speakingAvailable: false }), 'speaking')).toMatchObject({ signIn: false, writingSample: true })
+    // nor while grading is paused
+    expect(
+      practiceCta(me({ signedIn: true, pass: PASS }, { gradingEnabled: false, speakingAvailable: false }), 'speaking'),
+    ).toMatchObject({ feedback: false })
   })
 
   it('offers the free options while /api/me is unknown (the server decides)', () => {

@@ -41,6 +41,18 @@ in `ops/metrics`. Write the run's cost from `ledger.json` (per batch, as the fil
 of the report, together with the model and settings it used (`MPC_GRADER_MODEL`, and
 `MPC_GRADER_EFFORT` / `MPC_GRADER_MAX_TOKENS` when set).
 
+**Tell the owner to re-record the balance.** The production Worker counts only its own grading against the
+prepaid balance in `ops/config/anthropic-limit.json`; it cannot see eval runs, staging checks (`Deploy
+practice coach` with target staging) or `Level-B checks` runs, which draw on the same credits. If the balance
+is not re-recorded, Anthropic can refuse production calls for lack of credit before the Worker's own count
+pauses grading (the Worker then pauses at once and alerts "Grading paused (Anthropic credits used up)").
+So after each new eval run, comment on the open issue **"Anthropic credits: top up"** (open it with exactly
+that title if none is open), in English and then Korean (해요체): the run id, its cost from `ledger.json`,
+and the request "Please look at the balance the Anthropic Console shows now and reply in this issue with it,
+even if you bought nothing (for example `잔액 US$8.40`). Do the same after staging checks and level-B runs.
+The daily Routine then opens the pull request that records the balance." Keep the existing top-up flow as
+`ops/routines/daily.md` step 2 describes it; this comment only adds the reminder.
+
 ## What to look at
 
 1. `metrics.json`: `pass`, `failures`, and every rate against `THRESHOLDS` in `harness.ts`
@@ -71,6 +83,7 @@ of the report, together with the model and settings it used (`MPC_GRADER_MODEL`,
    most `MPC_EVAL_BUDGET_USD` per run), and says: "Merge only if the Grading eval check on this PR
    passes." The `eval.yml` workflow runs on the PR automatically. If the PR exists, update it. At most
    one fix PR per review.
+3. The balance reminder on the issue "Anthropic credits: top up" (above): one comment per eval run id.
 
 ## Must not
 
@@ -83,7 +96,8 @@ of the report, together with the model and settings it used (`MPC_GRADER_MODEL`,
 
 ## Idempotency
 
-Re-running on the same day overwrites the same report and updates the same PR branch; a run that finds
-no new eval run writes nothing.
+Re-running on the same day overwrites the same report and updates the same PR branch; the balance
+reminder is skipped when the issue already has a comment naming the run id; a run that finds no new eval run
+writes nothing.
 
 ASSERT: ops/reports/eval/<today>.md exists and states PASS or FAIL for the newest Grading eval run, or the run summary says "no new eval run".

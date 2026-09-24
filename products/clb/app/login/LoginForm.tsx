@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useId, useRef, useState, type FormEvent } from 'react'
+import { InAppBrowserNotice } from '../../components/InAppBrowserNotice'
 import { LangToggle } from '../../components/LangToggle'
 import { ErrorNotice, Notice } from '../../components/Notice'
 import { Turnstile } from '../../components/Turnstile'
@@ -8,6 +9,7 @@ import { cls } from '../../components/ui'
 import { api, ApiClientError } from '../../lib/api'
 import { useMe, useUiLang } from '../../lib/hooks'
 import { t, type UiKey } from '../../lib/i18n'
+import { detectInAppBrowser, type InAppBrowser } from '../../lib/in-app-browser'
 import { LOGIN_ERROR_TEXT, loginErrorFromSearch, signInOptions, type LoginError } from '../../lib/login'
 import { rememberReturnPath } from '../../lib/return-path'
 import { isGoogleSignInUrl, safeNextPath } from '../../lib/url'
@@ -19,7 +21,8 @@ const toClientError = (e: unknown) => (e instanceof ApiClientError ? e : new Api
  * POST /api/auth/google/start for Google's URL and hands the tab over; the Worker's callback comes back
  * here with ?error= when Google sign-in did not work. The email link is shown only when the deployment
  * offers it (MeResponse.auth.magicLink): for the owner by default. No marketing box: learners get no
- * email from us (memo §7.2 Z4).
+ * email from us (memo §7.2 Z4). Inside an in-app browser (KakaoTalk, Naver, Facebook …), where Google refuses
+ * sign-in, the Google button gives way to a notice with "Open in browser" and "Copy link" (lib/in-app-browser.ts).
  */
 export function LoginForm() {
   const lang = useUiLang()
@@ -35,6 +38,9 @@ export function LoginForm() {
 
   const [googlePending, setGooglePending] = useState(false)
   const [googleError, setGoogleError] = useState<ApiClientError | null>(null)
+  // an embedded in-app browser (known only in the browser, after hydration), and the visitor's "try anyway"
+  const [inApp, setInApp] = useState<{ kind: InAppBrowser; userAgent: string } | null>(null)
+  const [tryHereAnyway, setTryHereAnyway] = useState(false)
 
   const [email, setEmail] = useState('')
   const [sending, setSending] = useState(false)
@@ -42,6 +48,7 @@ export function LoginForm() {
   const [linkError, setLinkError] = useState<ApiClientError | null>(null)
   const [emailMissing, setEmailMissing] = useState(false)
   const sentRef = useRef<HTMLHeadingElement>(null)
+  const googleRef = useRef<HTMLButtonElement>(null)
 
   const options = signInOptions(meState.status === 'ready' ? meState.me : null)
 
@@ -53,6 +60,8 @@ export function LoginForm() {
   useEffect(() => {
     setNext(safeNextPath(new URLSearchParams(window.location.search).get('next'), window.location.origin))
     setCallbackError(loginErrorFromSearch(window.location.search))
+    const kind = detectInAppBrowser(navigator.userAgent)
+    if (kind) setInApp({ kind, userAgent: navigator.userAgent })
   }, [])
 
   // Back from Google's page (the browser may restore this page from its cache): the button must work
@@ -66,6 +75,11 @@ export function LoginForm() {
     window.addEventListener('pageshow', onShow)
     return () => window.removeEventListener('pageshow', onShow)
   }, [])
+
+  // "try here anyway": the notice (and its focused button) gives way to the Google button
+  useEffect(() => {
+    if (tryHereAnyway) googleRef.current?.focus()
+  }, [tryHereAnyway])
 
   // the form (and the focused submit button) is replaced by the confirmation: move focus there
   useEffect(() => {
@@ -88,6 +102,12 @@ export function LoginForm() {
 
   async function continueWithGoogle() {
     if (googlePending || sending) return
+    // Google refuses sign-in inside in-app browsers: explain instead of starting a sign-in that cannot finish
+    const kind = tryHereAnyway ? null : detectInAppBrowser(navigator.userAgent)
+    if (kind) {
+      setInApp({ kind, userAgent: navigator.userAgent })
+      return
+    }
     setGoogleError(null)
     setLinkError(null)
     setEmailMissing(false)
@@ -160,6 +180,8 @@ export function LoginForm() {
 
   const busy = googlePending || sending
   const emailLink = options.emailLink
+  // in an in-app browser the notice replaces the Google button, unless the visitor chose to try here anyway
+  const showInApp = options.google && inApp !== null && !tryHereAnyway
 
   return (
     // data-me tells end-to-end tests when the sign-in options from /api/me are applied
@@ -176,6 +198,9 @@ export function LoginForm() {
         </Notice>
       )}
       <p className="text-slate-800">{t(lang, 'l.intro')}</p>
+      {showInApp && inApp && (
+        <InAppBrowserNotice kind={inApp.kind} lang={lang} userAgent={inApp.userAgent} onTryAnyway={() => setTryHereAnyway(true)} />
+      )}
 
       <div className="space-y-5" aria-busy={busy}>
         <div className="flex items-start gap-3">
@@ -204,9 +229,10 @@ export function LoginForm() {
         {localError && <Notice kind="error">{t(lang, localError)}</Notice>}
         {googleError && <ErrorNotice error={googleError} lang={lang} context="google" />}
 
-        {options.google ? (
+        {showInApp ? null : options.google ? (
           <div className="space-y-2">
             <button
+              ref={googleRef}
               type="button"
               className={`${cls.btn} ${cls.secondary} w-full border-slate-500`}
               onClick={() => void continueWithGoogle()}

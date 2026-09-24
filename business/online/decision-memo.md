@@ -117,7 +117,7 @@
    - EI filing is due by Sat Oct 10 (decision-memo.md F1).
 3. **Call Service Canada by Fri Oct 9** (decision-memo.md already schedules this for Mon Oct 5).
    - Describe **both** activities together: home services (decision-memo.md Path A) and this online product.
-   - Give hours and capital: the C$1,200 ad cap plus about C$100/month fixed costs.
+   - Give hours and capital: no ad spend, about US$10 of prepaid Anthropic credits once, no monthly fixed costs (zero-capital plan, §7.2).
    - Ask whether the combination would be "minor in extent" (EI Regs s.30(2)–(3)).
 4. **Do not open the Stripe account and do not buy ads until the call has happened.**
 5. If Service Canada says the combination would *not* be minor, **no paid sales while claiming EI.**

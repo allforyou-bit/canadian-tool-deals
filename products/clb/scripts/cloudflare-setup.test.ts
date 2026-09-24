@@ -428,8 +428,22 @@ describe('runSetup against a fake account', () => {
     expect(byTarget(results, 'production').ok).toBe(true)
     const stg = byTarget(results, 'staging')
     expect(stg.ok).toBe(false)
-    expect(stg.errors.join(' ')).toMatch(/already used by the other target; staging needs its own/)
+    expect(stg.errors.join(' ')).toMatch(/belongs to the other target; staging needs its own "maple-practice-coach-staging-flags"\. Nothing was changed/)
+    // decided before anything is created: no staging database was made either
+    expect(cf.creates()).toEqual([])
     expect(cf.applies().map((e) => e.database_name)).toEqual(['mpc'])
+    // the same mistake the other way round is reported on production
+    const cf2 = fakeCloudflare({ d1: [{ uuid: STG_D1, name: 'mpc-staging' }] })
+    const swapped = await runSetup(['production', 'staging'], withIds({ production: [STG_D1, PROD_KV], staging: [STG_D1, STG_KV] }), cf2.deps)
+    expect(byTarget(swapped, 'production').errors.join(' ')).toMatch(/D1 database .* belongs to the other target; production needs its own "mpc"/)
+    expect(byTarget(swapped, 'staging').ok).toBe(true)
+    // …also when only production is set up and staging has no ids yet: the name gives it away
+    const cf3 = fakeCloudflare({ d1: [{ uuid: STG_D1, name: 'mpc-staging' }], kv: [{ id: STG_KV, title: 'FLAGS_STAGING' }] })
+    const alone = await runSetup(['production'], withIds({ production: [STG_D1, PROD_KV] }), cf3.deps)
+    expect(alone[0].errors.join(' ')).toMatch(/\("mpc-staging"\) in worker\/wrangler\.jsonc belongs to the other target/)
+    const kvAlone = await runSetup(['production'], withIds({ production: ['99999999-1111-4222-8333-944455556666', STG_KV] }), cf3.deps)
+    expect(kvAlone[0].errors.join(' ')).toMatch(/KV namespace .*\("FLAGS_STAGING"\) in worker\/wrangler\.jsonc belongs to the other target/)
+    expect(cf3.creates()).toEqual([])
   })
 
   it('fails a target whose migrations fail, and still sets up the other one', async () => {

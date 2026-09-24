@@ -110,11 +110,24 @@ export function accessEndsAt(me: MeResponse, now = new Date()): string | null {
   return candidates.reduce((a, b) => (new Date(b).getTime() > new Date(a).getTime() ? b : a))
 }
 
-
 /**
- * Speaking feedback is open today: the site-wide daily budget for transcription is not used up (memo
- * §7.2 Z2, SPEAKING_DAILY_AUDIO_MINUTES; resets at 00:00 UTC). A missing flag (an older Worker) is open.
+ * Speaking feedback right now:
+ * - 'paused': grading is paused (the owner's switch, the spend tiers, or Anthropic credits used up). Passes are
+ *   extended by the pause, and nothing says when it ends. /api/me also reports speakingAvailable false during a
+ *   pause, so the pause is checked first: it must never be shown as "closed for today".
+ * - 'closed': grading is on, but the site-wide daily budget for transcription is used up (memo §7.2 Z2,
+ *   SPEAKING_DAILY_AUDIO_MINUTES); it reopens at 00:00 UTC.
+ * - 'open' otherwise. A missing flag (an older Worker) counts as on.
  */
+export type SpeakingStatus = 'open' | 'paused' | 'closed'
+
+export function speakingStatus(me: MeResponse): SpeakingStatus {
+  if (me.flags.gradingEnabled === false) return 'paused'
+  if (me.flags.speakingAvailable === false) return 'closed'
+  return 'open'
+}
+
+/** Speaking feedback can be requested now (neither paused nor closed for today). */
 export function speakingOpen(me: MeResponse): boolean {
-  return me.flags.speakingAvailable !== false
+  return speakingStatus(me) === 'open'
 }

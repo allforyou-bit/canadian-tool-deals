@@ -8,7 +8,7 @@ import type { TaskType } from '../shared/tasks'
 import { api, ApiClientError } from '../lib/api'
 import { useMe, useUiLang } from '../lib/hooks'
 import { formatClock, formatDate, formatTime, t, type UiKey } from '../lib/i18n'
-import { activePass, freeSample, refreshMe, speakingOpen } from '../lib/me'
+import { activePass, freeSample, refreshMe, speakingStatus } from '../lib/me'
 import { nextUtcMidnight } from '../lib/practice'
 import { fileExtension, recordingLimitSeconds } from '../lib/recorder'
 import { track } from '../lib/track'
@@ -129,7 +129,25 @@ interface ModeProps {
   onSwitch: () => void
 }
 
-/** Speaking closed for today (site-wide budget used up): say when it opens, and offer the practice mode. */
+/**
+ * Grading is paused (the owner's switch, the spend tiers or Anthropic credits used up): no reopening time is
+ * known, and active passes are extended by the pause. Offer the practice mode.
+ */
+function SpeakingPaused(props: { lang: Lang; onPractise: () => void }) {
+  const { lang } = props
+  return (
+    <Notice kind="warn">
+      <div data-testid="speaking-paused">
+        <p>{t(lang, 'p.paused')}</p>
+        <button type="button" className={`${cls.btn} ${cls.secondary} mt-3`} onClick={props.onPractise}>
+          {t(lang, 'pm.practice')}
+        </button>
+      </div>
+    </Notice>
+  )
+}
+
+/** Speaking closed for today (site-wide budget used up, grading on): say when it opens, and offer the practice mode. */
 function SpeakingClosed(props: { lang: Lang; onPractise: () => void }) {
   const { lang } = props
   const opensAt = formatTime(nextUtcMidnight().toISOString(), lang)
@@ -170,8 +188,9 @@ function SpeakingFeedback(props: ModeProps) {
   const pass = me ? activePass(me) : null
   // without a pass: is the free sample available, already used, or switched off for everyone?
   const free = me !== null && !pass ? freeSample(me, 'speaking') : null
-  // the site-wide daily speaking budget (memo §7.2 Z2); unknown while loading counts as open
-  const open = me ? speakingOpen(me) : true
+  // a grading pause, or the site-wide daily speaking budget used up (memo §7.2 Z2); unknown while loading counts as open
+  const status = me ? speakingStatus(me) : 'open'
+  const open = status === 'open'
 
   const busy = rec.phase === 'requesting' || rec.phase === 'prep' || rec.phase === 'recording' || submitting
   useBusyReport(busy, props.onBusyChange)
@@ -214,8 +233,11 @@ function SpeakingFeedback(props: ModeProps) {
     } catch (err) {
       const clientError = toClientError(err)
       setError(clientError)
-      // the free sample may have been used or switched off, or speaking closed for the day, since /api/me loaded
-      if (['free_unavailable', 'payment_required', 'at_capacity'].includes(clientError.code)) void refreshMe({ force: true })
+      // the free sample may have been used or switched off, speaking closed for the day, or grading paused (e.g.
+      // Anthropic credits used up), since /api/me loaded
+      if (['free_unavailable', 'payment_required', 'at_capacity', 'grading_paused'].includes(clientError.code)) {
+        void refreshMe({ force: true })
+      }
       setRefocus((n) => n + 1)
     } finally {
       setSubmitting(false)
@@ -246,7 +268,10 @@ function SpeakingFeedback(props: ModeProps) {
     recorder = <p className={cls.muted}>{t(lang, 'common.loading')}</p>
   } else if (meState.status === 'error') {
     recorder = <ErrorNotice error={meState.error} lang={lang} context="speaking" returnTo={returnTo} />
-  } else if (!open && !rec.recording) {
+  } else if (status === 'paused' && !rec.recording) {
+    // a pause is not a capacity closure: never "closed for today … 00:00 UTC" (passes are extended instead)
+    recorder = <SpeakingPaused lang={lang} onPractise={props.onSwitch} />
+  } else if (status === 'closed' && !rec.recording) {
     recorder = <SpeakingClosed lang={lang} onPractise={props.onSwitch} />
   } else if (!meState.me.signedIn) {
     recorder = (
@@ -467,8 +492,8 @@ function SpeakingSelfPractice(props: ModeProps) {
 }
 
 /**
- * Speaking task: AI feedback on a recording (sign-in needed; closed for the day when the site-wide
- * speaking budget is used up), or the free practice mode whose recording never leaves the device.
+ * Speaking task: AI feedback on a recording (sign-in needed; paused while grading is paused; closed for the day
+ * when the site-wide speaking budget is used up), or the free practice mode whose recording never leaves the device.
  */
 export function SpeakingPractice(props: { task: TaskType }) {
   const { task } = props

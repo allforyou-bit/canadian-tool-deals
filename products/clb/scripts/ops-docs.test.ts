@@ -21,6 +21,8 @@ import levelBYml from '../../../.github/workflows/level-b.yml?raw'
 import metricsGuardYml from '../../../.github/workflows/metrics-guard.yml?raw'
 import metricsYml from '../../../.github/workflows/metrics.yml?raw'
 import reconcileYml from '../../../.github/workflows/reconcile.yml?raw'
+import refundYml from '../../../.github/workflows/refund.yml?raw'
+import setupCloudflareYml from '../../../.github/workflows/setup-cloudflare.yml?raw'
 import gateB from '../../../business/online/gate-b-anthropic-email.md?raw'
 import launchKit from '../../../business/online/launch-kit-ko.md?raw'
 import legalKo from '../../../business/online/legal-summary-ko.md?raw'
@@ -37,6 +39,8 @@ const WORKFLOWS: Record<string, string> = {
   metrics: metricsYml,
   'metrics-guard': metricsGuardYml,
   reconcile: reconcileYml,
+  refund: refundYml,
+  'setup-cloudflare': setupCloudflareYml,
 }
 
 const ROUTINES: Record<string, string> = { books, daily, day90, eval: evalRoutine, kpi, nov30 }
@@ -126,6 +130,21 @@ describe('Routine prompts (ops/routines)', () => {
     expect(evalRoutine).toContain('`compare` input')
     expect(evalRoutine).toContain('Do not')
     expect(evalRoutine).toMatch(/recommend a model/)
+  })
+})
+
+describe('ops/README.md GitHub Actions table', () => {
+  const section = opsReadme.slice(opsReadme.indexOf('## GitHub Actions'), opsReadme.indexOf('### Kill switch without Actions'))
+  const rows = [...section.matchAll(/^\| `([a-z0-9-]+)\.yml` \|/gm)].map((m) => m[1])
+
+  it('has one row per workflow file, and no row for a workflow that is gone', () => {
+    expect(rows.slice().sort()).toEqual(Object.keys(WORKFLOWS).sort())
+  })
+
+  it('names the one-time Cloudflare setup the way the Actions tab shows it', () => {
+    const name = /^name: (.+)$/m.exec(setupCloudflareYml)?.[1]
+    expect(name).toBe('Set up Cloudflare (one time)')
+    expect(section).toContain(`"${name}"`)
   })
 })
 

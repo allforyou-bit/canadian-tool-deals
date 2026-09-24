@@ -1,0 +1,109 @@
+# Pro-rated refund of a pass's unused days that also ends the pass. The Terms promise it in some cases (service
+# ends, fair-use caps reduced, the owner ends the account, a material change to the Terms): "a pro-rated refund of
+# the unused days, and the pass ends". The owner runs it from the Actions tab in a browser (Actions → "Refund unused
+# days" → Run workflow), first with mode preview, then again with the same values and mode refund. Steps:
+# business/online/owner-setup.md section 9-8.
+#
+# Why a workflow: the Worker ends a pass on a partial refund only when the refund has the metadata end_pass=true
+# (worker/src/billing/webhook.ts, END_PASS_METADATA_KEY), and whether the Stripe Dashboard's refund dialog takes
+# metadata is unverified. A full refund from the Dashboard ends the pass without it (no workflow needed).
+#
+# products/clb/scripts/refund.ts (tests: refund.test.ts) reads the PaymentIntent (latest charge expanded) and the
+# charge's refunds, and refuses a payment that is not a succeeded CAD payment, a disputed charge, an amount above
+# what is left to refund, or a charge that already has a live end_pass refund (the pass has already ended).
+# preview refunds nothing and writes the amounts, the pro-rated table and the next step to the job summary. refund
+# creates the refund (reason requested_by_customer, metadata end_pass=true) with the idempotency key
+# mpc-refund-<payment_intent>-<cents>, so a second run with the same values never refunds twice; the Worker's
+# charge.refunded webhook then ends the pass. Only ids and amounts are printed: never the key, never the buyer.
+#
+# The inputs reach the script through environment variables only (never pasted into a shell script). The Stripe
+# key is given only to the two steps that need it, not to npm ci. STRIPE_SECRET_KEY is the live restricted key the
+# Worker uses (Checkout Sessions Write, PaymentIntents Read, Charges Read, Refunds Write: owner guide section 4-4),
+# so this refunds real money; with a test key (rk_test_…) the summary says "test". Missing key: a notice, not an error.
+name: Refund unused days
+
+run-name: Refund unused days (${{ inputs.mode }})
+
+on:
+  workflow_dispatch:
+    inputs:
+      payment_intent:
+        description: "payment_intent: the payment ID from the Stripe Dashboard's payment page (starts with pi_)"
+        required: true
+        type: string
+      amount_cad:
+        description: "amount_cad: the amount to refund in Canadian dollars, digits and a dot only (e.g. 15.60)"
+        required: true
+        type: string
+      mode:
+        description: "mode: preview = check and show the amounts, refunds nothing; refund = refund and end the pass"
+        required: true
+        type: choice
+        default: preview
+        options:
+          - preview
+          - refund
+
+permissions:
+  contents: read
+
+# one refund at a time; a second click waits for the first run and is then refused (the pass has already ended)
+concurrency:
+  group: refund
+  cancel-in-progress: false
+
+jobs:
+  refund:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: products/clb
+    env:
+      PAYMENT_INTENT: ${{ inputs.payment_intent }}
+      AMOUNT_CAD: ${{ inputs.amount_cad }}
+      MODE: ${{ inputs.mode }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Check the Stripe secret
+        id: secrets
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+        run: |
+          if [ -z "$STRIPE_SECRET_KEY" ]; then
+            echo "::notice::Nothing was refunded: add the STRIPE_SECRET_KEY repository secret first (business/online/owner-setup.md), then run \"Refund unused days\" again."
+            {
+              echo "## Refund unused days: 시작하지 못했어요"
+              echo
+              echo "GitHub 저장소의 비밀(Settings → Secrets and variables → Actions)에 **STRIPE_SECRET_KEY** 가 없어서 아무것도 환불하지 않았어요. 넣은 뒤 이 워크플로를 다시 실행해요."
+              echo
+              echo "Nothing was refunded: the repository secret STRIPE_SECRET_KEY is missing."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node
+        if: steps.secrets.outputs.ready == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: products/clb/package-lock.json
+
+      - name: Install
+        if: steps.secrets.outputs.ready == 'true'
+        run: npm ci
+
+      # preview: reads Stripe and writes the job summary, refunds nothing. refund: also creates the refund.
+      # Fails (red) when the refund is refused or Stripe returns an error; the job summary says why.
+      - name: Check the payment and refund the unused days
+        if: steps.secrets.outputs.ready == 'true'
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+        run: node scripts/run.mjs scripts/refund.ts

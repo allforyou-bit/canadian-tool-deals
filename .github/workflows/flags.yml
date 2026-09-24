@@ -9,7 +9,8 @@
 #   npx wrangler kv key put owner:grading_enabled false --binding FLAGS --remote -c worker/wrangler.jsonc
 #   npx wrangler kv key put flag:grading_enabled false --binding FLAGS --remote -c worker/wrangler.jsonc
 # (owner:<flag> first, only for free_enabled and grading_enabled; add --env staging for staging), or in the
-# Cloudflare dashboard: Workers KV → the FLAGS namespace → add or edit the keys owner:<flag> and flag:<flag>
+# Cloudflare dashboard: Workers KV → the namespace maple-practice-coach-flags (staging:
+# maple-practice-coach-staging-flags; the FLAGS binding) → add or edit the keys owner:<flag> and flag:<flag>
 # with the value true or false [unverified: dashboard labels]. The Worker's own spend monitor runs on
 # Cloudflare's cron and keeps working without Actions.
 #

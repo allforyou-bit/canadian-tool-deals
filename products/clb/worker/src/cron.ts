@@ -12,7 +12,7 @@ import { alertOwner } from './email'
 import type { Env } from './env'
 import { EVENT_USAGE_KINDS } from './events'
 import { getFlags, setFlag } from './lib/flags'
-import { evaluateTiers, spendSnapshot, type SpendSnapshot } from './lib/spend'
+import { evaluateTiers, prepaidConfig, spendSnapshot, type SpendSnapshot } from './lib/spend'
 import { addDays, dayKey, startOfUtcDay } from './lib/time'
 
 export const SPEND_CRON = '*/15 * * * *'
@@ -24,6 +24,12 @@ export const KV = {
   autoFreeOff: 'auto:free_off',
   /** the spend monitor switched grading off; only then does it switch it back on */
   autoGradingOff: 'auto:grading_off',
+  /**
+   * a grade handler switched grading off because Anthropic refused a call for lack of credit (grading/claude.ts
+   * isCreditExhausted). JSON CreditsOutMarker. Unlike `auto:grading_off`, the spend monitor never lifts this pause
+   * on its own spend figures: only a recorded top-up (the prepaid amount or date changed) or the owner's switch.
+   */
+  creditsOut: 'auto:grading_off_credits',
   /**
    * ISO time grading was first seen off, whatever the cause (spend monitor, the owner's switch, or a
    * grade handler's live spend check). Removed once passes are extended for the pause (decision 12).
@@ -50,6 +56,8 @@ export const ALERT_GUARDS = {
   pause: (day: string) => `alert:pause:${day}`,
   /** grading paused because the prepaid credits are nearly used: once per UTC day until the top-up */
   prepaidPause: (day: string) => `alert:prepaid-pause:${day}`,
+  /** grading paused because Anthropic refused a call for lack of credit: once per UTC day while it lasts */
+  creditsOut: (day: string) => `alert:credits-out:${day}`,
   /** month spend at SPEND.alertAt of L: once per month */
   tier95: (month: string) => `alert:tier95:${month}`,
   /** a PREPAID.alertAt level of one top-up (amount and date): once per level and top-up */
@@ -144,6 +152,99 @@ async function kvWrite(what: string, op: () => Promise<unknown>): Promise<boolea
   }
 }
 
+/** Value of KV.creditsOut. */
+export interface CreditsOutMarker {
+  /** ISO time a grade handler recorded the credits pause */
+  at: string
+  /** prepaidLedgerKey(env) at that time; a different value later means a top-up has been deployed */
+  ledger: string
+}
+
+/** The prepaid ledger in force: `<ANTHROPIC_PREPAID_SINCE>|<ANTHROPIC_PREPAID_USD>`, or 'none' while it is off. */
+export function prepaidLedgerKey(env: Env): string {
+  const p = prepaidConfig(env)
+  return p ? `${p.since}|${p.usd}` : 'none'
+}
+
+/**
+ * KV is eventually consistent across locations, so a cron run shortly after a handler's credits pause may still
+ * read grading as on [unverified: KV propagation time, prior knowledge of Cloudflare's KV docs]. Within this many
+ * minutes of the marker, "grading on" is read as the handler's switch-off not having arrived yet; after it, as the
+ * owner having switched grading back on.
+ */
+export const CREDITS_SETTLE_MINUTES = 5
+
+/** An unreadable marker (never written by this code) is held until the owner switches grading on. */
+function parseCreditsMarker(raw: string, env: Env): CreditsOutMarker {
+  try {
+    const v = JSON.parse(raw) as Partial<CreditsOutMarker> | null
+    if (v && typeof v.at === 'string' && typeof v.ledger === 'string') return { at: v.at, ledger: v.ledger }
+  } catch {
+    // fall through
+  }
+  return { at: '', ledger: prepaidLedgerKey(env) }
+}
+
+/** Subject of the credits-pause alert; it names the credits, so the daily Routine files it under the top-up issue. */
+export const CREDITS_OUT_SUBJECT = 'Grading paused (Anthropic credits used up)'
+
+function creditsOutText(s: SpendSnapshot | null): string {
+  return [
+    'Anthropic refused a grading call because the prepaid credit balance is used up or a usage limit in the',
+    'Anthropic Console is reached, so grading is paused. The refused call cost nothing, any free sample was given',
+    'back, learners see the pause notice, and active and queued passes are extended by the length of the pause.',
+    'Eval runs, staging checks and level-B runs spend the same credits, which the Worker cannot count, so the',
+    "balance can run out before the Worker's own count says so.",
+    '\n\nTo resume: buy credits in the Anthropic Console (leave auto-reload off), reply in the GitHub issue',
+    '"Anthropic credits: top up" with the balance the Console shows now, and merge the pull request the daily',
+    'Routine opens. Grading resumes by itself once the new prepaid amount and date are deployed. If a Console',
+    'usage limit was the cause instead, raise it, then switch grading back on with the "Set a kill switch"',
+    'workflow (grading_enabled = true).',
+    ...(s ? [`\n\n${describe(s)}`] : []),
+  ].join(' ')
+}
+
+/**
+ * The credits-pause alert, once per UTC day (D1 guard, like the monitor's own alerts). The spend snapshot for
+ * the text is read only when today's alert has not been sent yet.
+ */
+async function alertCreditsOut(env: Env, now: Date, snapshot?: SpendSnapshot): Promise<void> {
+  const guardId = ALERT_GUARDS.creditsOut(dayKey(now))
+  if (await env.DB.prepare('SELECT 1 AS x FROM webhook_events WHERE id = ?1').bind(guardId).first()) return
+  let s: SpendSnapshot | null = snapshot ?? null
+  if (!s) {
+    try {
+      s = await spendSnapshot(env, now)
+    } catch {
+      s = null
+    }
+  }
+  await alertOnce(env, guardId, now, CREDITS_OUT_SUBJECT, creditsOutText(s))
+}
+
+/**
+ * Pauses grading because Anthropic refused a call for lack of credit (grading/index.ts, isCreditExhausted). The
+ * same steps as the spend monitor's own pause — the marker first, then the switch — with the credits marker
+ * (KV.creditsOut), which runSpendMonitor lifts only after a deployed top-up or the owner's switch; then the pause
+ * start (passes are extended by the pause) and the owner alert, once per UTC day. Never throws: KV writes are
+ * caught (Workers Free quota) and anything else is logged, so the handler can still answer grading_paused.
+ */
+export async function pauseGradingForCredits(env: Env, now: Date): Promise<void> {
+  try {
+    if ((await env.FLAGS.get(KV.creditsOut)) === null) {
+      const marker: CreditsOutMarker = { at: now.toISOString(), ledger: prepaidLedgerKey(env) }
+      await kvWrite('credits_out', () => env.FLAGS.put(KV.creditsOut, JSON.stringify(marker)))
+    }
+    if ((await getFlags(env)).grading_enabled && (await kvWrite('grading_enabled', () => setFlag(env, 'grading_enabled', false)))) {
+      console.log('grading paused: Anthropic credits used up')
+    }
+    await recordPauseStart(env, now)
+    await alertCreditsOut(env, now)
+  } catch {
+    console.warn('credits pause incomplete')
+  }
+}
+
 /**
  * Spend monitor (every 15 min). The cron only undoes what it did itself: free samples come back on only
  * when `auto:free_off` is present and grading only when `auto:grading_off` is, and never while the
@@ -159,6 +260,12 @@ async function kvWrite(what: string, op: () => Promise<unknown>): Promise<boolea
  * Prepaid credits (memo §7.2 Z6, when ANTHROPIC_PREPAID_USD/_SINCE are set): free samples off at
  * PREPAID.freeOffAt, one alert per PREPAID.alertAt level and top-up, and grading paused at PREPAID.pauseAt
  * until the owner tops up (evaluateTiers decides; this applies it).
+ *
+ * A credits pause (KV.creditsOut: Anthropic itself refused a call for lack of credit, pauseGradingForCredits) is
+ * never lifted on the Worker's own spend figures, which cannot see eval or staging spend: grading comes back on
+ * only when the prepaid amount or date differs from the one recorded with the pause (a top-up was deployed;
+ * handed to `auto:grading_off` if a spend tier still pauses) or when the owner has switched grading on. While it
+ * holds, `auto:grading_off` never switches grading on, and the owner gets one reminder per UTC day.
  */
 export async function runSpendMonitor(env: Env, now: Date): Promise<void> {
   await sweepStalePending(env, now, addDays(now, -2))
@@ -166,12 +273,13 @@ export async function runSpendMonitor(env: Env, now: Date): Promise<void> {
   const t = evaluateTiers(s)
   const flags = await getFlags(env)
   const day = dayKey(now)
-  const [autoFreeOff, autoGradingOff, ownerFree, ownerGrading, pauseStartedAt] = await Promise.all([
+  const [autoFreeOff, autoGradingOff, ownerFree, ownerGrading, pauseStartedAt, creditsOutRaw] = await Promise.all([
     env.FLAGS.get(KV.autoFreeOff),
     env.FLAGS.get(KV.autoGradingOff),
     env.FLAGS.get(ownerMarker('free_enabled')),
     env.FLAGS.get(ownerMarker('grading_enabled')),
     env.FLAGS.get(KV.pauseStartedAt),
+    env.FLAGS.get(KV.creditsOut),
   ])
 
   if (t.freeOff) {
@@ -204,6 +312,36 @@ export async function runSpendMonitor(env: Env, now: Date): Promise<void> {
   }
 
   let gradingOn = flags.grading_enabled
+  let creditsHold = false
+  if (creditsOutRaw !== null) {
+    const marker = parseCreditsMarker(creditsOutRaw, env)
+    const markedMs = Date.parse(marker.at)
+    const settled = !Number.isFinite(markedMs) || now.getTime() - markedMs >= CREDITS_SETTLE_MINUTES * 60_000
+    if (marker.ledger !== prepaidLedgerKey(env)) {
+      // a top-up was deployed: switch grading back on (or hand it to the spend pause), unless the owner said off
+      let handed = true
+      if (!gradingOn && ownerGrading !== 'false') {
+        if (t.pauseGrading) {
+          handed = await kvWrite('auto_grading_off', () => env.FLAGS.put(KV.autoGradingOff, '1'))
+        } else {
+          handed = await kvWrite('grading_enabled', () => setFlag(env, 'grading_enabled', true))
+          if (handed) {
+            gradingOn = true
+            console.log('spend monitor: grading resumed after a credit top-up')
+          }
+        }
+      }
+      if (handed) await kvWrite('credits_out', () => env.FLAGS.delete(KV.creditsOut))
+      else creditsHold = true
+    } else if (gradingOn && settled) {
+      // the owner switched grading back on (flags.yml): the credits pause is over
+      await kvWrite('credits_out', () => env.FLAGS.delete(KV.creditsOut))
+    } else {
+      creditsHold = true
+      if (!gradingOn) await alertCreditsOut(env, now, s)
+    }
+  }
+
   if (t.pauseGrading) {
     if (gradingOn) {
       await kvWrite('auto_grading_off', () => env.FLAGS.put(KV.autoGradingOff, '1'))
@@ -240,8 +378,9 @@ export async function runSpendMonitor(env: Env, now: Date): Promise<void> {
       }
     }
   } else if (autoGradingOff) {
+    // a credits pause outlives the spend monitor's own pause: the marker goes, grading stays off
     let restored = true
-    if (!gradingOn && ownerGrading !== 'false') {
+    if (!gradingOn && ownerGrading !== 'false' && !creditsHold) {
       restored = await kvWrite('grading_enabled', () => setFlag(env, 'grading_enabled', true))
       if (restored) {
         gradingOn = true
@@ -251,7 +390,8 @@ export async function runSpendMonitor(env: Env, now: Date): Promise<void> {
     if (restored) await kvWrite('auto_grading_off', () => env.FLAGS.delete(KV.autoGradingOff))
   }
 
-  if (!gradingOn) {
+  // a fresh credits pause counts as off even if this run still reads grading on (KV propagation)
+  if (!gradingOn || creditsHold) {
     if (!pauseStartedAt) await recordPauseStart(env, now)
   } else if (pauseStartedAt) {
     await extendPassesForPause(env, pauseStartedAt, now)

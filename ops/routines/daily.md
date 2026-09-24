@@ -69,7 +69,7 @@ per rule that fires, titled **"Anomaly: <rule id> <yesterday>"**, with the numbe
 | A3 cost spike | `costUsd` is more than twice the average of the previous 7 days **and** more than US$1 (the prepaid balance is small, about US$10 at launch — memo §7.2) |
 | A4 dispute | `disputes ≥ 1` (also a K7 input) |
 | A5 snapshot missing | there is no file for yesterday (the `metrics.yml` workflow also alerts) |
-| A6 Worker alerts | any `[MPC] …` alert email other than support tickets arrived (for example free samples switched off, grading paused, a prepaid-credit alert, a non-card payment, a failed refund, or the digest the Worker sends once it has forwarded 30 support tickets in a UTC day) — list the subjects only |
+| A6 Worker alerts | any `[MPC] …` alert email other than support tickets arrived (for example free samples switched off, grading paused, a prepaid-credit alert, Anthropic credits used up, a non-card payment, a failed refund, or the digest the Worker sends once it has forwarded 30 support tickets in a UTC day) — list the subjects only |
 
 ### 2. Prepaid Anthropic credits (top-up reminder)
 
@@ -78,6 +78,15 @@ prepaid amount (`PREPAID` in `shared/config.ts`): free samples off at 70%, an ow
 80% (once each per top-up), and grading paused at 97% so that no call fails half-way. The exact alert
 subjects are the Worker's; treat any `[MPC] …` alert whose subject mentions **credit** or **prepaid**
 (any case) as a prepaid-credit alert.
+
+The Worker counts only its own grading. **Eval runs (`Grading eval`), staging checks (`Deploy practice coach`
+with target staging) and `Level-B checks` runs draw on the same Anthropic credits**, so the real balance can run
+out before the Worker's count says so. When Anthropic itself refuses a grading call for lack of credit (or
+because a Console usage limit is reached), the Worker pauses grading at once and sends the alert
+**"Grading paused (Anthropic credits used up)"**, again once a day while the pause lasts. That pause does not
+lift on the Worker's own figures: grading comes back only when a new prepaid amount or date is deployed (the
+pull request below) or when the owner switches grading on with `flags.yml` (after raising a Console usage
+limit, for example).
 
 1. **Reminder.** For each prepaid-credit alert from the last 3 days, open or update the issue
    **"Anthropic credits: top up"**. Write, in English and then Korean (해요체): the alert subjects and dates;
@@ -92,10 +101,23 @@ subjects are the Worker's; treat any `[MPC] …` alert whose subject mentions **
    4. Merge the pull request the Routine then opens. Merging redeploys the Worker with the new balance.
    If an alert says grading is paused, put **"Grading is paused"** first in the issue body: paying
    customers get no feedback until the new balance is deployed (their passes are extended by the pause,
-   memo §7.1 B10). Add the ESTIMATE that one 30-day pass uses about US$7 of credits on Opus 5 and about
+   memo §7.1 B10). For **"Grading paused (Anthropic credits used up)"**, add that Anthropic itself refused a
+   call, so the Console balance (not the Worker's count) is what matters, and that if a Console usage limit
+   was the cause instead, raising it and switching grading on with `flags.yml` (`grading_enabled` = true) also
+   ends the pause. Add the ESTIMATE that one 30-day pass uses about US$7 of credits on Opus 5 and about
    US$3 on Sonnet 5.
+   End the issue body with this note, in English and then Korean: "Eval runs, staging checks and level-B
+   runs spend the same Anthropic credits, and the Worker cannot see that spend. After such a run, look at the
+   balance the Anthropic Console shows and reply in this issue with it, even if you bought nothing (for
+   example `잔액 US$8.40`). The Routine then opens the same pull request, and merging it makes the Worker
+   count from the real balance." / "평가(eval), 스테이징 확인, level-B 확인 실행도 같은 Anthropic 크레딧을 써요.
+   Worker는 이 사용량을 볼 수 없어요. 이런 실행 뒤에는 Anthropic Console에 보이는 잔액을 이 이슈에 답글로 적어
+   주세요. 산 게 없어도 돼요(예: `잔액 US$8.40`). 그러면 Routine이 같은 방식으로 PR을 열고, 병합하면 Worker가 실제
+   잔액부터 다시 세요."
 2. **Pull request.** If the issue has a comment by the **repository owner** with a balance line that no
-   open or merged PR has used yet, open (or update) a PR from branch `routine/prepaid-<comment date>`:
+   open or merged PR has used yet, open (or update) a PR from branch `routine/prepaid-<comment date>`. A
+   balance re-recorded after eval, staging or level-B runs, with no purchase, is handled the same way (it just
+   adds no expense row):
    - in `ops/config/anthropic-limit.json`, set `prepaidUsd` to that balance and `prepaidSince` to the
      comment's UTC date (`YYYY-MM-DD`); if the comment gives a limit (`한도`/`limit`), set `monthlyLimitUsd`
      to it. Change nothing else in the file.

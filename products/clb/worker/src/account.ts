@@ -315,17 +315,19 @@ async function forwardLimitDigest(env: Env, now: Date, deletedTicketIds: string[
     .bind(guardId, now.toISOString())
     .run()
   if (mark.meta.changes !== 1) return
-  const d1 = 'npx wrangler d1 execute DB --remote -c worker/wrangler.jsonc --command'
+  // Each query is one line the owner pastes into the Cloudflare dashboard's D1 console (owner-setup 9-5):
+  // no terminal. The first one joins users so the owner can reply to the learner.
   const lines = [
     `${SUPPORT_FORWARDS_PER_DAY} support emails (tickets and account-deletion notices) were sent to you today (UTC).`,
     'For the rest of the day new tickets are stored but not emailed, and deletion notices are not sent.',
-    'This is the only notice today. Run these from products/clb.',
+    'This is the only notice today. Paste each query below into the Cloudflare dashboard: D1, the production',
+    'database, Console. The results contain personal information: never paste them into Claude, an issue or the repository.',
     '',
     'Tickets not emailed today:',
-    `${d1} "SELECT id, lang, created_at, message FROM support_tickets WHERE forwarded = 0 AND created_at >= '${day}'"`,
+    `SELECT t.id, u.email, t.lang, t.created_at, t.message FROM support_tickets t LEFT JOIN users u ON u.id = t.user_id WHERE t.forwarded = 0 AND t.created_at >= '${day}'`,
     '',
     'Emailed tickets whose account was deleted (delete those emails and any replies from the mailbox):',
-    `${d1} "SELECT id, created_at FROM support_tickets WHERE forwarded = 1 AND user_id IS NULL AND message = '${DELETED_TICKET_MESSAGE}'"`,
+    `SELECT id, created_at FROM support_tickets WHERE forwarded = 1 AND user_id IS NULL AND message = '${DELETED_TICKET_MESSAGE}'`,
   ]
   if (deletedTicketIds.length > 0) {
     lines.push('', 'An account was deleted just now. Delete the emails for these tickets:', ...deletedTicketIds)

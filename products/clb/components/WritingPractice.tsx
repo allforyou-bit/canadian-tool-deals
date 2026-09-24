@@ -263,7 +263,8 @@ export function WritingPractice(props: { task: TaskType }) {
       const clientError = toClientError(err)
       setError(clientError)
       // the free sample may have been used or switched off since /api/me loaded: update the notice
-      if (clientError.code === 'free_unavailable' || clientError.code === 'payment_required') void refreshMe({ force: true })
+      // the sample may have been used or switched off, or grading paused (e.g. Anthropic credits), since /api/me loaded
+      if (['free_unavailable', 'payment_required', 'grading_paused'].includes(clientError.code)) void refreshMe({ force: true })
     } finally {
       setSubmitting(false)
       // Turnstile tokens are single-use

@@ -244,6 +244,20 @@ const en = {
   'l.again': 'Use a different email',
   'l.rateLimited': 'Too many sign-in links were requested for this address. Please wait an hour and try again.',
   'l.badEmail': 'Please enter a valid email address that can receive mail.',
+  // in-app browsers (KakaoTalk, Naver, Facebook …): Google refuses sign-in inside them (lib/in-app-browser.ts)
+  'l.inApp.title': 'Open this page in Chrome or Safari to sign in',
+  'l.inApp.body':
+    'Google sign-in works only in a browser such as Chrome or Safari, not inside apps such as KakaoTalk, Naver, Daum, Facebook, Instagram or LINE.',
+  'l.inApp.open': 'Open in browser',
+  'l.inApp.menuHint':
+    'You can also use the app\'s menu (⋯ or the share button, usually in a top or bottom corner) and choose "Open in Safari" or "Open in browser".',
+  'l.inApp.copy': 'Copy link',
+  'l.inApp.copyHint': 'Or copy the link, then paste it into the address bar of Chrome or Safari.',
+  'l.inApp.copied': 'Link copied. Open Chrome or Safari, paste it into the address bar and go.',
+  'l.inApp.copyFailed': 'The link could not be copied automatically. Press and hold the link below, copy it, then paste it into Chrome or Safari.',
+  'l.inApp.linkLabel': 'Link to this page',
+  'l.inApp.practice': 'Practising without feedback works here too. Only signing in needs Chrome or Safari.',
+  'l.inApp.anyway': 'Try Google sign-in here anyway',
 
   // verify
   'v.title': 'Signing you in',
@@ -580,6 +594,17 @@ const ko: Record<UiKey, string> = {
   'l.again': '다른 이메일 사용하기',
   'l.rateLimited': '이 주소로 로그인 링크를 너무 많이 요청했어요. 한 시간 뒤에 다시 시도해 주세요.',
   'l.badEmail': '메일을 받을 수 있는 올바른 이메일 주소를 입력해 주세요.',
+  'l.inApp.title': 'Chrome이나 Safari에서 열어 로그인해 주세요',
+  'l.inApp.body': 'Google 로그인은 Chrome이나 Safari 같은 브라우저에서만 돼요. 카카오톡·네이버·다음·페이스북·인스타그램·라인 같은 앱 안에서는 되지 않아요.',
+  'l.inApp.open': '다른 브라우저로 열기',
+  'l.inApp.menuHint': '앱 메뉴(보통 위나 아래 모서리의 ⋯ 또는 공유 버튼)에서 "Safari로 열기"나 "다른 브라우저로 열기"를 눌러도 돼요.',
+  'l.inApp.copy': '링크 복사',
+  'l.inApp.copyHint': '또는 링크를 복사해 Chrome이나 Safari 주소창에 붙여 넣어 주세요.',
+  'l.inApp.copied': '링크를 복사했어요. Chrome이나 Safari를 열고 주소창에 붙여 넣어 이동해 주세요.',
+  'l.inApp.copyFailed': '링크를 자동으로 복사하지 못했어요. 아래 링크를 길게 눌러 복사한 뒤 Chrome이나 Safari에 붙여 넣어 주세요.',
+  'l.inApp.linkLabel': '이 페이지 링크',
+  'l.inApp.practice': '피드백 없이 연습하기는 여기서도 할 수 있어요. 로그인만 Chrome이나 Safari에서 해 주세요.',
+  'l.inApp.anyway': '그래도 여기서 Google 로그인 시도하기',
 
   'v.title': '로그인하는 중',
   'v.working': '로그인하는 중이에요…',

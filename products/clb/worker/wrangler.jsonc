@@ -2,8 +2,9 @@
 // Keys checked against node_modules/wrangler/config-schema.json (wrangler 4.137.0) and
 // cloudflare-docs src/content/docs/workers/static-assets/binding.mdx (fetched 2026-09-24).
 //
-// IDs: the owner creates the D1 database and KV namespace once (business/online/owner-setup.md)
-// and pastes the printed IDs below. Secrets are never stored here — see worker/src/env.ts.
+// IDs: the owner runs the Actions workflow "Set up Cloudflare (one time)" (.github/workflows/setup-cloudflare.yml,
+// owner-setup step 6); it creates the D1 databases and KV namespaces and prints their IDs, which are
+// pasted below. Secrets are never stored here — see worker/src/env.ts.
 //
 // Plans (memo §7.2 Z2): everything here runs on Workers Free with the free workers.dev address — D1, KV,
 // Workers AI (AI), static assets and Workers Logs are all available on Free, and the two crons per Worker
@@ -40,14 +41,14 @@
     {
       "binding": "DB",
       "database_name": "mpc",
-      // "database_id": "<paste from `npx wrangler d1 create mpc`>",
+      // "database_id": "<from \"Set up Cloudflare (one time)\", target production>",
       "migrations_dir": "migrations"
     }
   ],
   "kv_namespaces": [
     {
       "binding": "FLAGS"
-      // "id": "<paste from `npx wrangler kv namespace create FLAGS`>"
+      // "id": "<from \"Set up Cloudflare (one time)\": maple-practice-coach-flags>"
     }
   ],
   "ai": { "binding": "AI" },
@@ -65,8 +66,8 @@
   },
 
   // Staging Worker: `wrangler … --env staging` (deploy.yml, only by a manual run with target=staging,
-  // memo §7.2 Z7). It has its own D1 database and KV namespace (owner-setup: `npx wrangler d1 create mpc-staging` and
-  // `npx wrangler kv namespace create FLAGS --env staging`, paste both ids below). Per
+  // memo §7.2 Z7). It has its own D1 database and KV namespace (D1 mpc-staging and KV
+  // maple-practice-coach-staging-flags, both created by "Set up Cloudflare (one time)" with target staging; paste both ids below). Per
   // config-schema.json, vars, d1_databases, kv_namespaces and ai are NOT inherited from the top level,
   // so they are repeated here; main, assets, compatibility settings and observability are inherited.
   // deploy.yml overrides SITE_URL, APP_VERSION and the owner vars with --var, like production, and adds
@@ -84,14 +85,14 @@
         {
           "binding": "DB",
           "database_name": "mpc-staging",
-          // "database_id": "<paste from `npx wrangler d1 create mpc-staging`>",
+          // "database_id": "<from \"Set up Cloudflare (one time)\", target staging>",
           "migrations_dir": "migrations"
         }
       ],
       "kv_namespaces": [
         {
           "binding": "FLAGS"
-          // "id": "<paste from `npx wrangler kv namespace create FLAGS --env staging`>"
+          // "id": "<from \"Set up Cloudflare (one time)\": maple-practice-coach-staging-flags>"
         }
       ],
       "ai": { "binding": "AI" },

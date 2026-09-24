@@ -89,10 +89,21 @@ export type Responder = (call: CapturedCall) => Response | Promise<Response>
 export const jsonResponse = (body: unknown, status = 200): Response =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', 'request-id': 'req_test' } })
 
-/** Stub global fetch: Anthropic calls go to `anthropic`; Turnstile passes unless the token is "bad-token". */
-export function stubFetch(anthropic: Responder): { calls: CapturedCall[]; turnstileTokens: string[] } {
+/** An email the Worker posted to Resend (owner alerts). */
+export interface SentEmail {
+  to: string[]
+  subject: string
+  text: string
+}
+
+/**
+ * Stub global fetch: Anthropic calls go to `anthropic`; Turnstile passes unless the token is "bad-token"; Resend
+ * (owner alerts) answers 200 and the email is recorded.
+ */
+export function stubFetch(anthropic: Responder): { calls: CapturedCall[]; turnstileTokens: string[]; emails: SentEmail[] } {
   const calls: CapturedCall[] = []
   const turnstileTokens: string[] = []
+  const emails: SentEmail[] = []
   vi.stubGlobal(
     'fetch',
     vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -108,10 +119,14 @@ export function stubFetch(anthropic: Responder): { calls: CapturedCall[]; turnst
         turnstileTokens.push(body.response ?? '')
         return jsonResponse({ success: body.response !== 'bad-token' })
       }
+      if (url.origin === 'https://api.resend.com' && url.pathname === '/emails' && req.method === 'POST') {
+        emails.push((await req.json()) as SentEmail)
+        return jsonResponse({ id: 'email_test' })
+      }
       throw new Error(`unexpected fetch in test: ${req.method} ${url.origin}${url.pathname}`)
     }),
   )
-  return { calls, turnstileTokens }
+  return { calls, turnstileTokens, emails }
 }
 
 /** Stub that always answers with the same Messages API body. */

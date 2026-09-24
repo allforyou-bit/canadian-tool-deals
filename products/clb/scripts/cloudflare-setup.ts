@@ -18,7 +18,9 @@
 //   3. else, for KV, a title from the earlier manual guide (FLAGS; FLAGS_STAGING or staging-FLAGS), with a warning;
 //   4. else create it, then list again and take the new id from the list (the id printed by `create` is the
 //      fallback). A create refused because the name exists (a second run at the same moment) lists again too.
-// A target never takes a resource the other target uses (by the ids in wrangler.jsonc or found in this run).
+// Both resources of a target are decided before anything is created. A target never takes a resource the other
+// target uses (its id in wrangler.jsonc, or found for it in this run) unless the resource carries this target's own
+// name; the mistaken target then fails with a message for Claude, and nothing is created for it.
 // The migrations are applied to exactly the database found, through a temporary wrangler config holding its id,
 // whatever worker/wrangler.jsonc says.
 //
@@ -332,49 +334,55 @@ export async function runSetup(targets: readonly Target[], wranglerText: string,
     const tc = configs.get(target)
     if (!tc) continue
     const other = configs.get(target === 'production' ? 'staging' : 'production')
-    const otherResult = results.find((r) => r.target !== target)
-    // ids the other target uses: never take one of them
-    const otherD1 = new Set([other?.configuredD1Id, otherResult?.d1?.id].filter((v): v is string => !!v))
-    const otherKv = new Set([other?.configuredKvId, otherResult?.kv?.id].filter((v): v is string => !!v))
+    const otherResult = results.find((x) => x.target !== target)
     const r: TargetResult = { target, workerName: tc.workerName, ok: false, errors: [], warnings: [] }
     results.push(r)
     deps.log(`— ${target}: Worker ${tc.workerName}, D1 "${tc.d1Name}", KV "${tc.kvTitle}"`)
     try {
-      // ---- D1 ----
+      // ---- decide both resources before changing anything ----
       const d1Plan = planD1(d1List ?? (await listD1()), { name: tc.d1Name, configuredId: tc.configuredD1Id })
-      r.warnings.push(...d1Plan.warnings)
+      const kvPlan = planKv(kvList ?? (await listKv()), { title: tc.kvTitle, earlierTitles: LEGACY_KV_TITLES[target], configuredId: tc.configuredKvId })
+      r.warnings.push(...d1Plan.warnings, ...kvPlan.warnings)
       if (d1Plan.action === 'error') throw new Error(d1Plan.message)
+      if (kvPlan.action === 'error') throw new Error(kvPlan.message)
+      // A resource that carries the other target's name, or that the other target uses (its id in wrangler.jsonc,
+      // or found for it in this run), is never taken, unless it carries this target's own name (then the other
+      // target's entry is the mistake, reported there). Only an id from wrangler.jsonc can lead here.
+      const otherKvNames = other ? [other.kvTitle, ...LEGACY_KV_TITLES[other.target]] : []
+      const foreign = (name: string, id: string, otherNames: string[], otherIds: (string | null | undefined)[]) => otherNames.includes(name) || otherIds.includes(id)
+      if (d1Plan.action === 'reuse' && d1Plan.name !== tc.d1Name && foreign(d1Plan.name, d1Plan.id, other ? [other.d1Name] : [], [other?.configuredD1Id, otherResult?.d1?.id])) {
+        throw new Error(`The D1 database ${d1Plan.id} ("${d1Plan.name}") in worker/wrangler.jsonc belongs to the other target; ${target} needs its own "${tc.d1Name}". Nothing was changed. Send this message to Claude.`)
+      }
+      const ownKvName = (name: string) => name === tc.kvTitle || LEGACY_KV_TITLES[target].includes(name)
+      if (kvPlan.action === 'reuse' && !ownKvName(kvPlan.name) && foreign(kvPlan.name, kvPlan.id, otherKvNames, [other?.configuredKvId, otherResult?.kv?.id])) {
+        throw new Error(`The KV namespace ${kvPlan.id} ("${kvPlan.name}") in worker/wrangler.jsonc belongs to the other target; ${target} needs its own "${tc.kvTitle}". Nothing was changed. Send this message to Claude.`)
+      }
+
+      // ---- D1 ----
       if (d1Plan.action === 'reuse') {
         r.d1 = { name: d1Plan.name, id: d1Plan.id, action: 'reused', via: d1Plan.via, config: configStatus(tc.configuredD1Id, d1Plan.id) }
       } else {
-        deps.log(`$ wrangler d1 create ${d1Plan.name} --location ${D1_LOCATION}`)
-        const created = await deps.wrangler(['d1', 'create', d1Plan.name, '--location', D1_LOCATION])
-        const found = (await listD1()).filter((d) => d.name === d1Plan.name)
-        const id = found.length === 1 ? found[0].uuid : created.code === 0 ? parseCreatedD1Id(created.stdout) : null
-        if (!id) throw new Error(created.code !== 0 ? explainFailure(`Creating the D1 database "${d1Plan.name}"`, created) : `Created the D1 database "${d1Plan.name}", but its id could not be read back.`)
-        const byUs = created.code === 0
-        if (!byUs) r.warnings.push(`The D1 database "${d1Plan.name}" appeared while this run was creating it (another run?); it is reused.`)
-        r.d1 = { name: d1Plan.name, id, action: byUs ? 'created' : 'reused', via: byUs ? 'created' : 'name', config: configStatus(tc.configuredD1Id, id) }
+        const made = await createAndReadBack(deps, r, {
+          what: `the D1 database "${d1Plan.name}"`,
+          args: ['d1', 'create', d1Plan.name, '--location', D1_LOCATION],
+          relist: async () => (await listD1()).filter((d) => d.name === d1Plan.name).map((d) => d.uuid),
+          parseId: parseCreatedD1Id,
+        })
+        r.d1 = { name: d1Plan.name, id: made.id, action: made.byUs ? 'created' : 'reused', via: made.byUs ? 'created' : 'name', config: configStatus(tc.configuredD1Id, made.id) }
       }
-      if (otherD1.has(r.d1.id)) throw new Error(`The D1 database ${r.d1.id} ("${r.d1.name}") is already used by the other target; ${target} needs its own. Nothing was changed. Send this message to Claude.`)
 
       // ---- KV ----
-      const kvPlan = planKv(kvList ?? (await listKv()), { title: tc.kvTitle, earlierTitles: LEGACY_KV_TITLES[target], configuredId: tc.configuredKvId })
-      r.warnings.push(...kvPlan.warnings)
-      if (kvPlan.action === 'error') throw new Error(kvPlan.message)
       if (kvPlan.action === 'reuse') {
         r.kv = { name: kvPlan.name, id: kvPlan.id, action: 'reused', via: kvPlan.via, config: configStatus(tc.configuredKvId, kvPlan.id) }
       } else {
-        deps.log(`$ wrangler kv namespace create ${kvPlan.name}`)
-        const created = await deps.wrangler(['kv', 'namespace', 'create', kvPlan.name])
-        const found = (await listKv()).filter((n) => n.title === kvPlan.name)
-        const id = found.length === 1 ? found[0].id : created.code === 0 ? parseCreatedKvId(created.stdout) : null
-        if (!id) throw new Error(created.code !== 0 ? explainFailure(`Creating the KV namespace "${kvPlan.name}"`, created) : `Created the KV namespace "${kvPlan.name}", but its id could not be read back.`)
-        const byUs = created.code === 0
-        if (!byUs) r.warnings.push(`The KV namespace "${kvPlan.name}" appeared while this run was creating it (another run?); it is reused.`)
-        r.kv = { name: kvPlan.name, id, action: byUs ? 'created' : 'reused', via: byUs ? 'created' : 'name', config: configStatus(tc.configuredKvId, id) }
+        const made = await createAndReadBack(deps, r, {
+          what: `the KV namespace "${kvPlan.name}"`,
+          args: ['kv', 'namespace', 'create', kvPlan.name],
+          relist: async () => (await listKv()).filter((n) => n.title === kvPlan.name).map((n) => n.id),
+          parseId: parseCreatedKvId,
+        })
+        r.kv = { name: kvPlan.name, id: made.id, action: made.byUs ? 'created' : 'reused', via: made.byUs ? 'created' : 'name', config: configStatus(tc.configuredKvId, made.id) }
       }
-      if (otherKv.has(r.kv.id)) throw new Error(`The KV namespace ${r.kv.id} ("${r.kv.name}") is already used by the other target; ${target} needs its own. Send this message to Claude.`)
 
       // ---- D1 migrations, on exactly this database ----
       const migrationsDir = tc.migrationsDir.startsWith('/') ? tc.migrationsDir : `${deps.configDir.replace(/\/+$/, '')}/${tc.migrationsDir}`
@@ -393,6 +401,27 @@ export async function runSetup(targets: readonly Target[], wranglerText: string,
     }
   }
   return results
+}
+
+/**
+ * Runs a create command, then lists again and takes the id from the list (the id printed by the create is the
+ * fallback while the list does not show it yet). A create refused because the name now exists (another run was
+ * faster) is fine when the list shows it: that resource is reused.
+ */
+async function createAndReadBack(
+  deps: SetupDeps,
+  r: TargetResult,
+  c: { what: string; args: string[]; relist: () => Promise<string[]>; parseId: (text: string) => string | null },
+): Promise<{ id: string; byUs: boolean }> {
+  deps.log(`$ wrangler ${c.args.join(' ')}`)
+  const created = await deps.wrangler(c.args)
+  const byUs = created.code === 0
+  if (byUs) deps.log(stripAnsi(created.stdout).trim())
+  const found = await c.relist()
+  const id = found.length === 1 ? found[0] : byUs ? c.parseId(created.stdout) : null
+  if (!id) throw new Error(byUs ? `Created ${c.what}, but its id could not be read back.` : explainFailure(`Creating ${c.what}`, created))
+  if (!byUs) r.warnings.push(`${c.what[0].toUpperCase()}${c.what.slice(1)} appeared while this run was creating it (another run?); it is reused.`)
+  return { id, byUs }
 }
 
 const omit = (o: Obj, keys: string[]): Obj => Object.fromEntries(Object.entries(o).filter(([k]) => !keys.includes(k)))
@@ -452,7 +481,7 @@ export function renderSummary(results: TargetResult[], meta: SummaryMeta): strin
   const names = results.map((r) => `${TARGET_KO[r.target]}(${r.target})`).join('과 ')
   const out: string[] = [`## ${SETUP_WORKFLOW_NAME}: ${ok ? '완료' : '끝나지 않았어요'}`, '']
   if (ok) {
-    out.push(`${names}의 데이터베이스(D1)와 스위치 저장소(KV)가 준비됐고, 데이터베이스 표도 만들었어요.`, '')
+    out.push(`${names}의 데이터베이스(D1)와 스위치 저장소(KV)가 준비됐고, 데이터베이스 표도 최신 상태예요.`, '')
   } else {
     out.push('일부가 실패했어요. 아래 상자 안의 `FAILED:` 줄에 이유가 있어요. 그대로 Claude에게 보내면 다음에 할 일을 알려 줘요. 이 워크플로는 다시 실행해도 안전해요(있는 것은 다시 쓰고, 두 번 만들지 않아요).', '')
   }

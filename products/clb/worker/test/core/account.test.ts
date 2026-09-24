@@ -648,8 +648,18 @@ describe('POST /api/support', () => {
       expect(sent).toHaveLength(1)
       expect(sent[0]?.subject).toContain('Support forwarding limit reached')
       expect(sent[0]?.text).toContain(`${SUPPORT_FORWARDS_PER_DAY} support emails`)
-      expect(sent[0]?.text).toContain(`WHERE forwarded = 0 AND created_at >= '${dayStart.slice(0, 10)}'`)
+      expect(sent[0]?.text).toContain(`WHERE t.forwarded = 0 AND t.created_at >= '${dayStart.slice(0, 10)}'`)
       expect(sent[0]?.text).not.toContain('over the ceiling')
+      // the owner pastes each SELECT line into the dashboard's D1 console (owner-setup 9-5): no terminal command,
+      // and the first query returns the unsent tickets with the learner's address so the owner can reply
+      expect(sent[0]?.text).not.toContain('npx')
+      const queries = (sent[0]?.text ?? '').split('\n').filter((l) => l.startsWith('SELECT '))
+      expect(queries).toHaveLength(2)
+      const unsent = await env.DB.prepare(queries[0] ?? '').all<{ email: string | null; message: string }>()
+      const overCeiling = unsent.results.filter((r) => r.message.startsWith('over the ceiling'))
+      expect(overCeiling).toHaveLength(3)
+      expect(overCeiling.every((r) => typeof r.email === 'string' && r.email.includes('@'))).toBe(true)
+      await env.DB.prepare(queries[1] ?? '').all()
       expect(await count("SELECT COUNT(*) AS n FROM support_tickets WHERE message LIKE 'over the ceiling %' AND forwarded = 0")).toBe(3)
       expect(await supportEmailsToday(env, new Date())).toBe(SUPPORT_FORWARDS_PER_DAY)
     } finally {

@@ -20,6 +20,7 @@ import {
   HELP_PRIVACY,
   HELP_RECORDING,
   HELP_TROUBLESHOOTING,
+  IN_APP_SIGN_IN_TIP,
 } from './help'
 import { faqJsonLd, plainText, productJsonLd, serializeJsonLd, websiteJsonLd } from './jsonld'
 import { LANDING, LANDING_EN, LANDING_KO } from './landing'
@@ -541,6 +542,13 @@ describe('zero-capital launch promises (memo §7.2)', () => {
     expect(text(section(PRIVACY, 'cookies'))).toMatch(/Google sign-in cookie/)
     expect(text(section(TERMS, 'accounts'))).toMatch(/You sign in with your Google account/)
     expect(text(section(HELP_TROUBLESHOOTING, 'sign-in'))).toMatch(/You need a Google account/)
+    // in-app browsers (KakaoTalk, Naver, Facebook …): Google sign-in works only in a browser such as Chrome or Safari
+    for (const s of [section(HELP_TROUBLESHOOTING, 'sign-in'), section(HELP_ACCOUNT, 'trouble')]) {
+      expect(text(s)).toContain(IN_APP_SIGN_IN_TIP)
+    }
+    expect(IN_APP_SIGN_IN_TIP).toMatch(/KakaoTalk, Naver, Daum, Facebook/)
+    expect(IN_APP_SIGN_IN_TIP).toMatch(/Chrome or Safari/)
+    expect(IN_APP_SIGN_IN_TIP).toMatch(/Practising without feedback works inside those apps too/)
     expect(LANDING_EN.pricing.items.join(' ')).toMatch(/after you sign in with Google/)
     expect(LANDING_KO.pricing.items.join(' ')).toMatch(/Google 계정으로 로그인/)
     expect(PRICING_EN.free.items.join(' ')).toMatch(/after you sign in with Google/)

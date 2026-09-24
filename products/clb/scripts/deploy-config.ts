@@ -445,10 +445,10 @@ export function checkDeployConfig({ target, env, wranglerText, anthropicLimitTex
   const siteKey = v('TURNSTILE_SITE_KEY')
   const secretMode = v('TURNSTILE_SECRET_MODE')
   if (production) {
-    if (!siteKey) errors.push("MPC_TURNSTILE_SITE_KEY is not set. Production is not deployed without it: the site would be built with Cloudflare's test site key, whose dummy token the real TURNSTILE_SECRET rejects, so every sign-in and free sample would fail (owner-setup 2-2).")
-    else if (TURNSTILE_TEST_SITE_KEY.test(siteKey)) errors.push("MPC_TURNSTILE_SITE_KEY is one of Cloudflare's test site keys; production needs the site key of your own Turnstile widget (owner-setup 2-2).")
-    if (secretMode === 'test') errors.push("The TURNSTILE_SECRET secret is one of Cloudflare's test secret keys; production needs the secret key of your own Turnstile widget (owner-setup 2-2).")
-    else if (secretMode !== 'set') errors.push('The TURNSTILE_SECRET secret is not set. Production is not deployed without it: the Worker could not verify Turnstile, so sign-in and the free sample would fail (owner-setup 2-2).')
+    if (!siteKey) errors.push("MPC_TURNSTILE_SITE_KEY is not set. Production is not deployed without it: the site would be built with Cloudflare's test site key, whose dummy token the real TURNSTILE_SECRET rejects, so every sign-in and free sample would fail (owner-setup 4-1).")
+    else if (TURNSTILE_TEST_SITE_KEY.test(siteKey)) errors.push("MPC_TURNSTILE_SITE_KEY is one of Cloudflare's test site keys; production needs the site key of your own Turnstile widget (owner-setup 4-1).")
+    if (secretMode === 'test') errors.push("The TURNSTILE_SECRET secret is one of Cloudflare's test secret keys; production needs the secret key of your own Turnstile widget (owner-setup 4-1).")
+    else if (secretMode !== 'set') errors.push('The TURNSTILE_SECRET secret is not set. Production is not deployed without it: the Worker could not verify Turnstile, so sign-in and the free sample would fail (owner-setup 4-1).')
   } else if (!siteKey) {
     warnings.push("MPC_TURNSTILE_SITE_KEY is not set. Staging does not need it (it always uses Cloudflare's test keys behind its email allowlist), but production deploys refuse to run without it and the TURNSTILE_SECRET secret.")
   }

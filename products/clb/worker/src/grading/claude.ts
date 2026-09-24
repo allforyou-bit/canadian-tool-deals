@@ -204,6 +204,38 @@ export class GraderApiError extends Error {
   }
 }
 
+/**
+ * Anthropic's message when a 400 means "cannot pay for this call" (see isCreditExhausted). [unverified: these
+ * wordings are prior knowledge of what the Messages API has returned — "Your credit balance is too low to access
+ * the Anthropic API…" and "You have reached your specified API usage limits…" — not documented anywhere read.]
+ */
+const CREDIT_MESSAGE = /credit balance|purchase credits|usage limit|spend(ing)? limit/i
+
+/** The API's own `error.message` (not the SDK's "<status> <json>" wrapper), or ''. */
+function apiErrorMessage(e: APIError): string {
+  const body = e.error as { error?: { message?: unknown }; message?: unknown } | undefined
+  const m = body?.error?.message ?? body?.message
+  return typeof m === 'string' ? m : ''
+}
+
+/**
+ * Anthropic refused the call because the organisation cannot pay for it: the prepaid credit balance is used up,
+ * or a usage (spend) limit set in the Console is reached. Retrying does not help until the owner tops up or
+ * raises the limit, so the grade handlers pause grading instead of failing each request (memo §7.2 Z6).
+ * - Documented: HTTP 402 `billing_error`, "Billing or payment problem" (claude-api skill, shared/error-codes.md);
+ *   the SDK's ErrorType lists 'billing_error', and its BetaManagedAgentsBillingError says "out of credits or spend
+ *   limit reached. Retrying with the same credentials will not succeed" (@anthropic-ai/sdk 0.128.0).
+ * - [unverified] A 400 `invalid_request_error` whose message names the credit balance or a usage limit
+ *   (CREDIT_MESSAGE): the docs read do not say which status these carry, so both are accepted.
+ * Accepts a GraderApiError (checks its cause) or an SDK error; never matches a timeout or a lost connection.
+ */
+export function isCreditExhausted(e: unknown): boolean {
+  const inner = e instanceof GraderApiError ? e.cause : e
+  if (!(inner instanceof APIError) || typeof inner.status !== 'number') return false
+  if (inner.status === 402 || inner.type === 'billing_error') return true
+  return inner.status === 400 && CREDIT_MESSAGE.test(apiErrorMessage(inner))
+}
+
 /** 529 overloaded and 429 rate limit are rejected before any work; other 5xx may have run. */
 function mayHaveRun(e: unknown): boolean {
   if (!(e instanceof APIError)) return true
@@ -214,6 +246,7 @@ function mayHaveRun(e: unknown): boolean {
 /** Worth one more attempt: rate limits, overload, server errors and failed connections, but not a timeout. */
 function retryable(e: unknown): boolean {
   if (!(e instanceof APIError) || e instanceof APIConnectionTimeoutError) return false
+  if (isCreditExhausted(e)) return false
   if (e.status === undefined) return true
   return e.status === 408 || e.status === 409 || e.status === 429 || e.status >= 500
 }

@@ -86,7 +86,7 @@ describe('reconcile', () => {
   })
 
   it('leaves out test purchases after the switch to live keys, and live ones on a test key (R62)', () => {
-    // owner-setup 2-10: live keys go in while test purchases of the last days are still in D1
+    // owner-setup 8-4: live keys go in while test purchases of the last days are still in D1
     const sessions = [session('cs_live_a1', '2026-10-29T10:00:00Z')]
     const purchases = [
       purchase('cs_live_a1', '2026-10-29T10:00:01.000Z'),

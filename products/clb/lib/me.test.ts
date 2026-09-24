@@ -153,9 +153,37 @@ describe('speakingOpen', () => {
     expect(store.speakingOpen({ ...me, flags: { ...me.flags, speakingAvailable: false } })).toBe(false)
   })
 
+  it('is not open while grading is paused', () => {
+    const me = meBody(true)
+    expect(store.speakingOpen({ ...me, flags: { ...me.flags, gradingEnabled: false, speakingAvailable: false } })).toBe(false)
+  })
+
   it('treats a missing flag (an older Worker) as open', () => {
     const me = meBody(false)
     const { speakingAvailable: _omit, ...older } = me.flags
     expect(store.speakingOpen({ ...me, flags: older } as unknown as MeResponse)).toBe(true)
+  })
+})
+
+describe('speakingStatus', () => {
+  const withFlags = (flags: Partial<MeResponse['flags']>): MeResponse => {
+    const me = meBody(true)
+    return { ...me, flags: { ...me.flags, ...flags } }
+  }
+
+  it('says "paused", never "closed for today", while grading is paused (/api/me then reports speaking unavailable too)', () => {
+    expect(store.speakingStatus(withFlags({ gradingEnabled: false, speakingAvailable: false }))).toBe('paused')
+    expect(store.speakingStatus(withFlags({ gradingEnabled: false, speakingAvailable: true }))).toBe('paused')
+  })
+
+  it('says "closed" only for a real capacity closure (grading on, the daily speaking budget used up)', () => {
+    expect(store.speakingStatus(withFlags({ gradingEnabled: true, speakingAvailable: false }))).toBe('closed')
+  })
+
+  it('is open otherwise, and for an older Worker without the flags', () => {
+    expect(store.speakingStatus(withFlags({}))).toBe('open')
+    const me = meBody(false)
+    const legacy = { ...me, flags: { checkoutEnabled: true, banner: '' } } as unknown as MeResponse
+    expect(store.speakingStatus(legacy)).toBe('open')
   })
 })

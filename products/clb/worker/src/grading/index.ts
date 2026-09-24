@@ -2,7 +2,8 @@
 // sign-in and the shared daily speech-to-text allowance, memo §7.2 Z2) → input checks → live spend
 // tiers → entitlement (pass, or a free sample) → a pending `grades` row that reserves the cap slot
 // before any model call (decision 2) → speech to text / grader → claim filter → the row is finished
-// with its outcome, tokens and cost, including refusals and failures (cost log).
+// with its outcome, tokens and cost, including refusals and failures (cost log). When Anthropic refuses a
+// call for lack of credit, grading is paused (cron.ts pauseGradingForCredits) and the learner hears so.
 // Essays and transcripts are stored only for signed-in users; audio is never stored or logged.
 import type {
   GradeResponse,
@@ -16,7 +17,7 @@ import type {
 import { CAPS, MODELS } from '../../../shared/config'
 import { taskById, type TaskKind, type TaskType } from '../../../shared/tasks'
 import { stagingAllows } from '../auth'
-import { recordPauseStart } from '../cron'
+import { pauseGradingForCredits, recordPauseStart } from '../cron'
 import type { Ctx, Env } from '../env'
 import { randomId } from '../lib/crypto'
 import { getFlags, type Flags } from '../lib/flags'
@@ -39,6 +40,7 @@ import {
   GraderApiError,
   GraderOutputError,
   graderSettings,
+  isCreditExhausted,
   worstCaseCallCostMicroUsd,
   type CallCost,
   type GraderInput,
@@ -270,6 +272,14 @@ async function runGrade(ctx: Ctx, job: GradeJob): Promise<Response> {
     // usage unknown: attempts that may have run are logged at their worst-case cost (never under-count)
     const estimate = e instanceof GraderApiError ? e.costMicroUsd : 0
     await finish(env, slot.gradeId, base, { outcome: 'failed', model: job.input.model, costMicroUsd: job.priorCostMicroUsd + estimate })
+    if (isCreditExhausted(e)) {
+      // Anthropic cannot bill the call (credits used up or a Console usage limit): a pause, not a failure. The
+      // refusal itself costs nothing (estimate is 0 unless an earlier attempt may have run). Grading is switched
+      // off until a top-up or the owner's switch (cron.ts), passes are extended, and the owner is alerted.
+      console.warn('grader call refused: Anthropic credits used up', errorName(e))
+      await pauseGradingForCredits(env, ctx.now)
+      return error('grading_paused', MSG.paused)
+    }
     console.error('grader call failed', errorName(e))
     return error('internal', MSG.graderUnreachable)
   }

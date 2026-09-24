@@ -272,10 +272,13 @@ function apiHandler(s, method, path, body, query) {
       return item ? ok(item) : err(404, 'not_found', 'Not found')
     }
     case 'POST /api/grade/writing':
+      // like the Worker: nothing is graded while grading is paused (owner, spend tiers, Anthropic credits used up)
+      if (s.flags.gradingEnabled === false) return err(503, 'grading_paused', 'Feedback is paused right now.')
       // like the Worker: without a pass, nothing is graded while free samples are switched off
       if (!s.pass && !s.flags.freeEnabled) return err(429, 'free_unavailable', 'The free writing sample is not available right now.')
       return ok({ gradeId: 'g-w', result: { ...WRITING_RESULT, explanationLang: body?.explanationLang ?? 'en' }, free: !s.pass })
     case 'POST /api/grade/speaking':
+      if (s.flags.gradingEnabled === false) return err(503, 'grading_paused', 'Feedback is paused right now.')
       if (!s.signedIn) return err(401, 'unauthorized')
       // the site-wide daily speaking budget is used up (checked before the upload is processed)
       if (s.flags.speakingAvailable === false) return err(503, 'at_capacity', 'Speaking feedback is closed for today.')
@@ -409,6 +412,7 @@ async function focusOn(page, text) {
 // ---------------------------------------------------------------- tests
 
 const tests = []
+/** opts: `needs` (a file under out/ the test requires), `context` (extra browser context options, e.g. userAgent) */
 const test = (name, fn, opts = {}) => tests.push({ name, fn, ...opts })
 
 /** 11 sentences × 15 words = 165 words (target 150–200) */
@@ -1335,6 +1339,126 @@ test('speaking closed for today (at_capacity): said before recording, after a re
   assert.equal(callsTo(state, '/api/grade/speaking').length, 1)
 })
 
+test('speaking during a grading pause: the pause notice (passes extended), never "closed for today"', async ({ page, base, state, browserName }) => {
+  state.signedIn = true
+  state.pass = ACTIVE_PASS
+  // like the Worker: /api/me reports speaking unavailable while grading is paused
+  state.flags.gradingEnabled = false
+  state.flags.speakingAvailable = false
+  await page.goto(`${base}/practice/speaking/advice/`)
+  const paused = page.getByTestId('speaking-paused')
+  await paused.waitFor()
+  const text = await paused.innerText()
+  assert.ok(text.includes('Feedback is paused right now.'), text)
+  assert.ok(text.includes('active passes are extended by the length of the pause'), text)
+  const main = await page.locator('main').innerText()
+  assert.ok(!main.includes('closed for today'), 'no capacity wording during a pause')
+  assert.ok(!main.includes('00:00 UTC'), 'no reopening time during a pause')
+  assert.equal(await page.getByTestId('speaking-closed').count(), 0)
+  assert.equal(await page.getByRole('button', { name: 'Start: preparation time' }).count(), 0, 'no recording for feedback')
+  // Korean
+  await page.goto(`${base}/practice/speaking/advice/?lang=ko`)
+  await paused.filter({ hasText: '지금은 피드백이 잠시 멈춰 있어요.' }).waitFor()
+  assert.ok(!(await page.locator('main').innerText()).includes('마감'), 'no "closed" wording in Korean either')
+  await page.goto(`${base}/practice/speaking/advice/?lang=en`)
+  // the practice mode still works
+  await paused.getByRole('button', { name: 'Practise without feedback' }).click()
+  await page.getByTestId('speaking-practice-mode').waitFor()
+  // the status page does not call it a closure either
+  await page.goto(`${base}/status/`)
+  const status = page.getByTestId('status-speaking')
+  await status.waitFor()
+  assert.ok(!(await status.innerText()).includes('Closed until 00:00 UTC'))
+
+  if (browserName === 'webkit' && process.env.E2E_WEBKIT_MEDIA !== '1') return
+  // open when the page loaded, paused by the time the answer is sent: the Worker answers grading_paused (503)
+  state.flags.gradingEnabled = true
+  state.flags.speakingAvailable = true
+  await page.goto(`${base}/practice/speaking/advice/`)
+  await page.getByRole('button', { name: 'Start: preparation time' }).click()
+  await page.getByRole('button', { name: 'Start speaking now' }).click()
+  await page.waitForTimeout(1200)
+  await page.getByRole('button', { name: 'Stop recording' }).click()
+  await page.locator('audio').waitFor()
+  state.flags.gradingEnabled = false
+  state.flags.speakingAvailable = false
+  await page.getByRole('button', { name: 'Get feedback' }).click()
+  await page.getByRole('alert').filter({ hasText: 'active passes are extended by the length of the pause' }).waitFor()
+  // /api/me is asked again: the pause notice, sending stays off, the recording can still be played
+  await page.getByRole('status').filter({ hasText: 'Feedback is paused right now.' }).waitFor()
+  await page.waitForFunction(
+    () => [...document.querySelectorAll('button')].find((b) => b.textContent?.trim() === 'Get feedback')?.disabled === true,
+  )
+  await page.locator('audio').waitFor()
+  assert.ok(!(await page.locator('main').innerText()).includes('closed for today'))
+  assert.equal(callsTo(state, '/api/grade/speaking').length, 1)
+})
+
+/** KakaoTalk's in-app browser on an iPhone (the shape of its user agent; version numbers are examples). */
+const KAKAOTALK_UA =
+  'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 KAKAOTALK 10.8.5'
+
+test(
+  'sign-in inside KakaoTalk: the in-app browser notice (EN/KO), open in browser and copy link, no Google start',
+  async ({ page, base, state, browserName }) => {
+    await page.goto(`${base}/login/?next=/account/`)
+    const notice = page.getByTestId('in-app-browser')
+    await notice.waitFor()
+    assert.equal(await notice.getAttribute('data-kind'), 'kakaotalk')
+    const text = await notice.innerText()
+    assert.ok(text.includes('Open this page in Chrome or Safari to sign in'), text)
+    assert.ok(text.includes('Google sign-in works only in a browser such as Chrome or Safari'), text)
+    // the Korean lines too: the launch posts are Korean, the page may not be yet
+    assert.ok(text.includes('Google 로그인은 Chrome이나 Safari 같은 브라우저에서만 돼요.'), text)
+    // no Google button to start a sign-in Google would refuse
+    assert.equal(await page.getByRole('button', { name: 'Continue with Google' }).count(), 0)
+
+    // the page's own address, with the return path and the UI language for the other browser
+    const expected = `${base}/login/?next=%2Faccount%2F&lang=en`
+    const open = page.getByRole('link', { name: 'Open in browser' })
+    assert.equal(await open.getAttribute('href'), `kakaotalk://web/openExternal?url=${encodeURIComponent(expected)}`)
+    assert.equal(await page.getByLabel('Link to this page').inputValue(), expected)
+    if (browserName === 'chromium') await page.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin: base })
+    await page.getByRole('button', { name: 'Copy link' }).click()
+    const copyStatus = page.getByTestId('in-app-copy-status')
+    await copyStatus.filter({ hasText: /Link copied|could not be copied/ }).waitFor()
+    if (browserName === 'chromium') {
+      assert.ok((await copyStatus.innerText()).includes('paste it into the address bar'))
+      assert.equal(await page.evaluate(() => navigator.clipboard.readText()), expected)
+    }
+
+    // Korean page
+    await page.goto(`${base}/login/?lang=ko`)
+    await notice.filter({ hasText: 'Chrome이나 Safari에서 열어 로그인해 주세요' }).waitFor()
+    await page.getByRole('link', { name: '다른 브라우저로 열기' }).waitFor()
+    await page.getByRole('button', { name: '링크 복사' }).waitFor()
+    // "try here anyway" is the visitor's choice: it brings the Google button back, nothing is started by itself
+    await page.getByRole('button', { name: '그래도 여기서 Google 로그인 시도하기' }).click()
+    await page.getByRole('button', { name: 'Google로 계속하기' }).waitFor()
+    assert.equal(await notice.count(), 0)
+    assert.equal(callsTo(state, '/api/auth/google/start').length, 0, 'no Google sign-in was started')
+
+    // the practice pages and the practice mode keep working inside the in-app browser
+    await page.goto(`${base}/practice/writing/email/?mode=practice&lang=en`)
+    await page.getByTestId('writing-practice-mode').waitFor()
+    await page.getByRole('button', { name: 'Start timer' }).click()
+    await page.getByRole('button', { name: 'Pause' }).waitFor()
+    await page.getByLabel('Your answer').fill(ESSAY)
+    await page.getByText('165 words', { exact: true }).waitFor()
+    await page.goto(`${base}/practice/speaking/advice/?mode=practice`)
+    await page.getByTestId('speaking-practice-mode').waitFor()
+    assert.equal(callsTo(state, '/api/auth/google/start').length, 0)
+  },
+  { context: { userAgent: KAKAOTALK_UA } },
+)
+
+test('sign-in in an ordinary browser shows no in-app notice', async ({ page, base }) => {
+  await page.goto(`${base}/login/`)
+  await page.getByRole('button', { name: 'Continue with Google' }).waitFor()
+  await page.locator('section[data-me="ready"]').waitFor()
+  assert.equal(await page.getByTestId('in-app-browser').count(), 0)
+})
+
 /** Every file under `dir` (recursively). */
 function walk(dir) {
   if (!existsSync(dir)) return []
@@ -1399,7 +1523,7 @@ async function main() {
         continue
       }
       const state = defaultState()
-      const context = await browser.newContext({ locale: 'en-CA', timezoneId: 'America/Toronto' })
+      const context = await browser.newContext({ locale: 'en-CA', timezoneId: 'America/Toronto', ...(t.context ?? {}) })
       if (browserName === 'chromium') await context.grantPermissions(['microphone'], { origin: base })
       await installRoutes(context, state, base)
       const page = await context.newPage()
