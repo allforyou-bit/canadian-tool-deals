@@ -42,8 +42,8 @@ corrections, one or two improved sentences, and a next step, with explanations i
 > 몇 가지 기준(과제 수행, 어휘 등)에 대한 짧은 코멘트, 고칠 점이 있는 중요한 언어 오류 최대 3개, 고친 문장 1–2개, 다음 연습 방향.
 > 설명은 영어나 한국어예요.
 
-**What it does not do.** The product does not administer, score or proctor any test, and it is not used
-by any school, employer, test provider or government for decisions. It shows no score, band, level or
+**What it does not do.** The product does not administer, score or proctor any test, and it is not offered
+to, or connected with, any school, employer, test provider or government, or with any of their decisions. It shows no score, band, level or
 prediction of a test result; an automatic filter also removes sentences that use set words or number
 patterns presenting a test result (such as "score", "band", "level" or a number out of 12). Every practice page tells the learner, before they submit, that the feedback comes
 from an AI (Claude by Anthropic), that it can make mistakes and that it does not predict test results.
@@ -52,15 +52,15 @@ consultant or a lawyer, instead of an answer. Users must confirm they are 18 or 
 the feedback before the learner sees it; I may review a small sample afterwards to fix quality problems.
 Learners pay for a 30-day or 90-day practice pass (Canada outside Quebec only).
 
-> **하지 않는 일.** 이 제품은 어떤 시험도 실시·채점·감독하지 않고, 학교·고용주·시험 기관·정부가 결정에 쓰지도
-> 않아요. 점수, 밴드, 레벨, 시험 결과 예측을 보여 주지 않고, 자동 필터가 시험 결과를 나타내는 정해진 단어나
+> **하지 않는 일.** 이 제품은 어떤 시험도 실시·채점·감독하지 않고, 학교·고용주·시험 기관·정부에 제공되거나
+> 그들의 결정과 연결되지 않아요. 점수, 밴드, 레벨, 시험 결과 예측을 보여 주지 않고, 자동 필터가 시험 결과를 나타내는 정해진 단어나
 > 숫자 형식("score", "band", "level", 12점 만점의 숫자 등)이 든 문장을 지워요. 모든 연습 페이지는 제출 전에 피드백이 AI(Anthropic의 Claude)에서 나오며 틀릴 수 있고 시험
 > 결과를 예측하지 않는다고 알려요. 이민·법률 조언 요청에는 답 대신, 등록된 이민 컨설턴트나 변호사를 안내하는
 > 고정 문구를 보여 줘요. 사용자는 18세 이상임을 확인해야 해요. 학습자가 보기 전에 사람이 피드백을 검토하지는
 > 않아요. 품질 문제를 고치려고 나중에 일부 표본을 제가 볼 수 있어요. 학습자는 30일 또는 90일 연습 이용권을
 > 사요(퀘벡을 제외한 캐나다에서만 판매).
 
-**My question.** The version of your Usage Policy that I was able to review (effective 2025-09-15) lists
+**My question.** The archived version of your Usage Policy that I reviewed (effective 2025-09-15) lists
 as a high-risk use case "Academic testing, accreditation and admissions: Use cases related to standardized
 testing companies that administer school admissions …, language proficiency, or professional certification
 exams", and it asks for review by a "qualified professional" before outputs are disseminated in high-risk
@@ -73,7 +73,7 @@ use cases. **[If the current policy text differs, quote the current wording here
    disclosure requirements beyond the AI notice described above?
 3. Is there anything else in the Usage Policy you would ask me to change before I launch?
 
-> **질문.** 제가 읽은 이용 정책(2025-09-15 시행본)은 고위험 사용 사례로 "학업 시험, 인증, 입학: 학교 입학,
+> **질문.** 제가 읽은 이용 정책 보관본(2025-09-15 시행)은 고위험 사용 사례로 "학업 시험, 인증, 입학: 학교 입학,
 > 언어 능력, 전문 자격 시험을 실시하는 표준화 시험 회사와 관련된 사용 사례"를 들고, 고위험 사용에서는 결과를
 > 내보내기 전에 "자격 있는 전문가(qualified professional)"의 검토를 요구해요. **[현재 정책 문구가 다르면 여기에
 > 현재 문구를 대신 인용해요.]**
