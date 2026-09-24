@@ -1,0 +1,161 @@
+# CI for both packages in this repo (memo B11, B16). Needs no secrets.
+#
+# root: the home-services site (repo root). Lint, test, build, and on pull requests prove that the
+#       exported site did not change: the out/ file list of the PR must equal the base commit's
+#       (the build id directory is normalised, it is random per build).
+# clb:  the practice coach (products/clb). Typecheck, vitest (billing coverage ≥ 80% lines), site
+#       build, Worker dry-run deploy, content lint, personal-data guard, Playwright e2e.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  root:
+    name: Root site
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          path: head
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: head/package-lock.json
+
+      - name: Install
+        working-directory: head
+        run: npm ci
+
+      - name: Lint
+        working-directory: head
+        run: npm run lint
+
+      - name: Test
+        working-directory: head
+        run: npm test
+
+      - name: Build
+        working-directory: head
+        run: npm run build
+
+      - name: Check out the PR base
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base
+          persist-credentials: false
+
+      - name: Build the PR base
+        if: github.event_name == 'pull_request'
+        working-directory: base
+        run: |
+          npm ci
+          npm run build
+
+      - name: Compare out/ file lists (memo B16)
+        if: github.event_name == 'pull_request'
+        run: |
+          # Lists every exported file; the random build-id directory is replaced by BUILD_ID.
+          list_out() {
+            local dir="$1" bid
+            bid=$(find "$dir/_next/static" -mindepth 2 -maxdepth 2 -name _buildManifest.js -printf '%h\n' 2>/dev/null | head -n 1)
+            bid=${bid##*/}
+            if [ -n "$bid" ]; then
+              (cd "$dir" && find . -type f | LC_ALL=C sort | sed "s#^\./_next/static/$bid/#./_next/static/BUILD_ID/#")
+            else
+              (cd "$dir" && find . -type f | LC_ALL=C sort)
+            fi
+          }
+          list_out head/out > "$RUNNER_TEMP/out-head.txt"
+          list_out base/out > "$RUNNER_TEMP/out-base.txt"
+          echo "head: $(wc -l < "$RUNNER_TEMP/out-head.txt") files, base: $(wc -l < "$RUNNER_TEMP/out-base.txt") files"
+          if ! diff -u "$RUNNER_TEMP/out-base.txt" "$RUNNER_TEMP/out-head.txt" > "$RUNNER_TEMP/out.diff"; then
+            cat "$RUNNER_TEMP/out.diff"
+            echo "::error::The root site's exported file list changed. The home-services site must stay identical (memo B16)."
+            exit 1
+          fi
+          echo "Root out/ file list is unchanged."
+
+  clb:
+    name: Practice coach
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: products/clb
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: products/clb/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck site and Worker
+        run: npm run typecheck
+
+      - name: Typecheck ops scripts
+        run: npx tsc -p scripts/tsconfig.json
+
+      - name: Tests (billing coverage ≥ 80% of lines)
+        run: >-
+          npx vitest run
+          --coverage.enabled
+          --coverage.include='worker/src/billing/**'
+          --coverage.thresholds.lines=80
+          --coverage.reporter=text-summary
+
+      - name: Build site
+        run: npm run build
+
+      - name: Worker dry-run deploy
+        run: npm run deploy:dry
+
+      - name: Content lint (pages and ads)
+        run: node scripts/run.mjs scripts/content-lint.ts --out out --ads ../../ops/ads/google.csv
+
+      - name: Personal-data guard (ops/metrics)
+        run: node scripts/run.mjs scripts/metrics.ts guard ../../ops/metrics
+
+      # Playwright is installed in CI only. The version matches the one the e2e script was written
+      # against (playwright 1.56.1); browsers go to Playwright's default cache on the runner.
+      - name: Install Playwright browsers
+        run: npx --yes playwright@1.56.1 install --with-deps chromium webkit
+
+      - name: Install the Playwright package for e2e
+        run: npm install --no-save --no-package-lock --prefix "$RUNNER_TEMP/pw" playwright@1.56.1
+
+      - name: E2E (Chromium and WebKit)
+        env:
+          E2E_BROWSERS: chromium,webkit
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/pw/node_modules/playwright/index.mjs
+        run: |
+          if [ ! -f e2e/run.mjs ]; then
+            echo "::error::products/clb/e2e/run.mjs is missing"
+            exit 1
+          fi
+          node e2e/run.mjs
