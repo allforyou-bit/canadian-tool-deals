@@ -9,10 +9,14 @@
 // through wrangler (scripts/lib/d1.ts). Only ids, amounts, statuses and timestamps are kept; nothing
 // about the customer is read into memory beyond what the list endpoint returns, and nothing is logged.
 //
+// Mode: the key's prefix (sk_live_/rk_live_ vs sk_test_/rk_test_) decides which D1 purchases are
+// compared: after the switch from test to live keys, test purchases (cs_test_…) are left out instead of
+// being reported as missing_in_stripe (and vice versa). --mode live|test overrides it (for --sessions files).
+//
 // Writes <out>/report.json and <out>/issue.md; exit 1 when there is any mismatch (the workflow
 // then opens an issue), 2 on a usage or fetch error.
 import { parseD1Json, queryRemoteD1 } from './lib/d1'
-import { reconcile, renderIssue, type D1Purchase, type StripeSession } from './reconcile-core'
+import { modeSqlCondition, reconcile, renderIssue, stripeKeyMode, type D1Purchase, type StripeMode, type StripeSession } from './reconcile-core'
 
 const STRIPE_API = 'https://api.stripe.com/v1/checkout/sessions'
 const LOOKUP_MARGIN_MS = 86_400_000
@@ -61,6 +65,12 @@ export async function main(args: string[]): Promise<number> {
   const windowStart = new Date(now.getTime() - days * 86_400_000)
   const lookupStart = new Date(windowStart.getTime() - LOOKUP_MARGIN_MS)
 
+  const modeArg = argValue(args, '--mode')
+  if (modeArg !== undefined && modeArg !== 'live' && modeArg !== 'test') {
+    console.error('reconcile: --mode must be live or test')
+    return 2
+  }
+  let mode: StripeMode | null = (modeArg as StripeMode | undefined) ?? null
   let sessions: StripeSession[]
   let purchases: D1Purchase[]
   try {
@@ -73,10 +83,12 @@ export async function main(args: string[]): Promise<number> {
         console.error('reconcile: STRIPE_SECRET_KEY is not set')
         return 2
       }
+      mode ??= stripeKeyMode(key)
+      if (!mode) console.log('reconcile: the key prefix shows neither live nor test mode; comparing every D1 purchase')
       sessions = await listPaidWindowSessions(key, Math.floor(lookupStart.getTime() / 1000))
     }
     const purchasesFile = argValue(args, '--purchases')
-    const sql = `SELECT id, status, amount_cents, currency, created_at FROM purchases WHERE created_at >= '${lookupStart.toISOString()}'`
+    const sql = `SELECT id, status, amount_cents, currency, created_at FROM purchases WHERE created_at >= '${lookupStart.toISOString()}'${modeSqlCondition(mode)}`
     const rows = purchasesFile ? parseD1Json(await readFile(purchasesFile, 'utf8')) : await queryRemoteD1(sql)
     purchases = rows.map((r) => ({
       id: String(r.id),
@@ -90,14 +102,14 @@ export async function main(args: string[]): Promise<number> {
     return 2
   }
 
-  const report = reconcile({ sessions, purchases, windowStart, now })
-  const livemode = sessions.length ? sessions[0].livemode : null
+  const report = reconcile({ sessions, purchases, windowStart, now, mode })
+  const livemode = mode ? mode === 'live' : sessions.length ? sessions[0].livemode : null
   await mkdir(outDir, { recursive: true })
   await writeFile(join(outDir, 'report.json'), `${JSON.stringify(report, null, 2)}\n`)
   await writeFile(join(outDir, 'issue.md'), `${renderIssue(report, livemode)}\n`)
   console.log(
     `reconcile: window ${report.windowStart} → ${report.checkedAt}; Stripe paid ${report.stripePaid}, D1 paid ${report.d1Paid}, ` +
-      `skipped recent ${report.skippedRecent}, mismatches ${report.mismatches.length}`,
+      `skipped recent ${report.skippedRecent}, other mode ${report.skippedOtherMode} (key mode ${mode ?? 'unknown'}), mismatches ${report.mismatches.length}`,
   )
   if (process.env.GITHUB_OUTPUT) await appendFile(process.env.GITHUB_OUTPUT, `mismatches=${report.mismatches.length}\n`)
   return report.mismatches.length ? 1 : 0

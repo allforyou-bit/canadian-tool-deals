@@ -1,13 +1,11 @@
 // Output filter (memo B3): no official/guarantee/score/band/level claims and no number presented
 // as a result, in anything the grader writes. Explanation fields lose only the offending
-// sentences; learner-language fields (quotes and rewrites) lose whole items, and only for the
-// claim ids that cannot be ordinary English ("sea level" in a rewrite is fine).
+// sentences (GRADER_OUTPUT_RULES); learner-language fields (quotes and rewrites) lose whole items,
+// and only for claim-shaped text (GRADER_LEARNER_TEXT_RULES: "sea level" or "a small band" in a
+// rewrite is fine). Refusals always show fixed copy, never model-written text (decision 3).
 import type { GradeResult, Lang } from '../../../shared/api'
-import { FORBIDDEN_CLAIMS, findClaims } from '../../../shared/content-rules'
-import { FIELD_FALLBACK, SCOPE_REFUSAL } from './copy'
-
-const LEARNER_FIELD_RULE_IDS = ['clb', 'band', 'score', 'numeric_result', 'official', 'guarantee']
-const LEARNER_FIELD_RULES = FORBIDDEN_CLAIMS.filter((r) => LEARNER_FIELD_RULE_IDS.includes(r.id))
+import { findClaims, GRADER_LEARNER_TEXT_RULES, GRADER_OUTPUT_RULES } from '../../../shared/content-rules'
+import { FIELD_FALLBACK, SAFETY_REFUSAL, SCOPE_REFUSAL } from './copy'
 
 /** Split on sentence-ending punctuation followed by space, or on line breaks. */
 export function splitSentences(text: string): string[] {
@@ -24,18 +22,20 @@ interface Cleaned {
 
 function cleanExplanation(text: string, fallback: string): Cleaned {
   const sentences = splitSentences(text)
-  const kept = sentences.filter((s) => findClaims(s).length === 0)
+  const kept = sentences.filter((s) => findClaims(s, GRADER_OUTPUT_RULES).length === 0)
   const joined = kept.join(' ')
   return { text: joined === '' ? fallback : joined, removed: sentences.length - kept.length }
 }
 
 function learnerFieldBlocked(text: string): boolean {
-  return findClaims(text, LEARNER_FIELD_RULES).length > 0
+  return findClaims(text, GRADER_LEARNER_TEXT_RULES).length > 0
 }
 
 /**
  * Remove forbidden claims from a GradeResult. `removed` counts dropped sentences plus dropped
- * items. Empty explanation fields get a safe fallback in the explanation language.
+ * items. Empty explanation fields get a safe fallback in the explanation language. A refused result
+ * gets SAFETY_REFUSAL when it came from the API's safety stop (parseGraderMessage sets that copy),
+ * otherwise the fixed SCOPE_REFUSAL, whatever text the result carried.
  */
 export function filterResult(result: GradeResult): { result: GradeResult; removed: number } {
   const lang: Lang = result.explanationLang
@@ -47,7 +47,7 @@ export function filterResult(result: GradeResult): { result: GradeResult; remove
   }
 
   if (result.refused) {
-    const refusalMessage = clean(result.refusalMessage ?? '', SCOPE_REFUSAL[lang])
+    const refusalMessage = result.refusalMessage === SAFETY_REFUSAL[lang] ? SAFETY_REFUSAL[lang] : SCOPE_REFUSAL[lang]
     return { result: { ...result, refusalMessage, criteria: [], topErrors: [], rewrites: [], nextStep: '' }, removed }
   }
 

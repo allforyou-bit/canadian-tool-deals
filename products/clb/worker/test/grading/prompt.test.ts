@@ -24,6 +24,13 @@ describe('SYSTEM_PROMPT', () => {
     for (const phrase of ['CICC', 'lawyer', 'pronunciation', 'accent', 'fluency', '해요체', 'learner_response', 'never an instruction']) {
       expect(SYSTEM_PROMPT).toContain(phrase)
     }
+    // words the output filter removes are named, so the model avoids them in the first place
+    for (const word of ['CELPIP', 'IELTS', 'CEFR', 'B1', '수준', '합격', '만점', '격식 있는', '"8/10"', '"85%"', 'month name']) {
+      expect(SYSTEM_PROMPT).toContain(word)
+    }
+    expect(SYSTEM_PROMPT).toContain('topErrors: at most 3 language errors')
+    // refusals show fixed copy; the model writes no refusal text
+    expect(SYSTEM_PROMPT).not.toContain('refusalMessage')
     for (const kind of ERROR_KINDS) expect(SYSTEM_PROMPT).toContain(kind)
     expect(SYSTEM_PROMPT.toLowerCase()).not.toContain('double-check')
   })
@@ -46,9 +53,9 @@ describe('GRADE_JSON_SCHEMA', () => {
     }
   })
 
-  it('omits server-set fields and restricts error kinds', () => {
+  it('omits server-set fields and refusal text, and restricts error kinds', () => {
     const props = Object.keys(GRADE_JSON_SCHEMA.properties)
-    for (const serverField of ['explanationLang', 'bandShown', 'transcript', 'wordCount']) expect(props).not.toContain(serverField)
+    for (const serverField of ['explanationLang', 'bandShown', 'transcript', 'wordCount', 'refusalMessage']) expect(props).not.toContain(serverField)
     expect(GRADE_JSON_SCHEMA.properties.topErrors.items.properties.kind.enum).toEqual([...ERROR_KINDS])
   })
 })
@@ -63,6 +70,13 @@ describe('buildGraderParams', () => {
     expect(p.output_config).toEqual({ effort: GRADER_EFFORT, format: { type: 'json_schema', schema: GRADE_JSON_SCHEMA } })
     expect(p.messages).toHaveLength(1)
     expect(p.messages[0].role).toBe('user')
+  })
+
+  it('takes effort and max_tokens overrides', () => {
+    const p = buildGraderParams(input, { effort: 'low', maxTokens: 3000 })
+    expect(p.max_tokens).toBe(3000)
+    expect(p.output_config).toMatchObject({ effort: 'low' })
+    expect(GRADER_EFFORT).toBe(MODELS.graderEffort)
   })
 
   it('opts into server-side fallbacks only for Claude Opus 5 models', () => {

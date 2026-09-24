@@ -118,6 +118,26 @@ describe('POST /api/refund-request', () => {
     expect((await purchaseRow(p.id))?.status).toBe('refunded')
   })
 
+  it('after an owner partial refund, refunds the rest and adds no owner row for it', async () => {
+    const { user } = await createUser()
+    const p = await seedPaidPurchase(user.id)
+    // Stripe refunds what is left of the payment when no amount is given
+    stripe.paymentIntents.set(p.paymentIntentId, { id: p.paymentIntentId, amount: 2900, latest_charge: { id: p.chargeId } })
+    stripe.ownerRefund({ chargeId: p.chargeId, paymentIntentId: p.paymentIntentId, amount: 1000 })
+    await postWebhook(chargeRefundedEvent({ chargeId: p.chargeId, paymentIntentId: p.paymentIntentId, amountRefunded: 1000, refunded: false }))
+    expect((await purchaseRow(p.id))?.status).toBe('paid')
+
+    const res = await ask(user)
+    expect(await res.json()).toEqual({ ok: true, refundedCents: 2900 })
+    await postWebhook(chargeRefundedEvent({ chargeId: p.chargeId, paymentIntentId: p.paymentIntentId, amountRefunded: 3900 }))
+
+    expect((await refundsOf(p.id)).map((r) => [r.reason, r.amount_cents]).sort()).toEqual([
+      ['owner', 1000],
+      ['self_serve', 2900],
+    ])
+    expect(await purchaseRow(p.id)).toMatchObject({ status: 'refunded', amount_refunded_cents: 3900 })
+  })
+
   it('refuses after 14 days', async () => {
     const { user } = await createUser()
     await seedPaidPurchase(user.id, { paidAt: addDays(new Date(), -15) })

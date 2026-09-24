@@ -10,7 +10,7 @@ import { useUiLang } from '../../../lib/hooks'
 import { t } from '../../../lib/i18n'
 import { refreshMe } from '../../../lib/me'
 import { takeReturnPath } from '../../../lib/return-path'
-import { safeNextPath, tokenFromHash } from '../../../lib/url'
+import { loginHref, safeNextPath, tokenFromHash } from '../../../lib/url'
 
 type State = 'working' | 'missing' | 'failed' | 'network' | 'done'
 
@@ -32,7 +32,8 @@ export function VerifyClient() {
       await api.verify({ token })
       tokenRef.current = null
       setState('done')
-      await refreshMe()
+      // force: the header's /api/me may still be in flight from before the cookie existed (R10)
+      await refreshMe({ force: true })
       const origin = window.location.origin
       const next =
         safeNextPath(new URLSearchParams(window.location.search).get('next'), origin) ?? takeReturnPath(origin) ?? '/account/'
@@ -72,7 +73,7 @@ export function VerifyClient() {
       {(state === 'missing' || state === 'failed') && (
         <>
           <Notice kind="error">{t(lang, state === 'missing' ? 'v.missing' : 'v.failed')}</Notice>
-          <Link href="/login/" className={`${cls.btn} ${cls.primary}`}>
+          <Link href={loginHref(undefined, lang)} className={`${cls.btn} ${cls.primary}`}>
             {t(lang, 'v.newLink')}
           </Link>
         </>

@@ -1,11 +1,12 @@
 // POST /api/stripe/webhook (memo B6). Verifies Stripe-Signature on the raw body, de-duplicates on the
-// event id, then grants a pass, refunds an out-of-region payment, or revokes on refund/dispute.
-// If processing fails, the webhook_events row is removed and 500 is returned so Stripe retries.
-// Payloads are never logged.
+// event id, then grants a pass, refunds an out-of-region or non-card payment, records refunds (partial
+// ones too), revokes on a full refund, an end_pass refund or a dispute, and alerts the owner about
+// failed refunds. If processing fails, the webhook_events row is removed and 500 is returned so Stripe
+// retries. Payloads are never logged.
 import { SKUS } from '../../../shared/config'
 import { alertOwner, sendEmail } from '../email'
 import type { Ctx, Env } from '../env'
-import { error, json } from '../lib/http'
+import { error, json, readTextLimited } from '../lib/http'
 import { grantPass, revokePasses } from './entitlement'
 import { formatCad, passActiveEmail, regionRefundEmail } from './messages'
 import { evidenceAllowed, type PaymentEvidence } from './region'
@@ -19,8 +20,10 @@ import {
   getContact,
   getPurchase,
   insertPurchase,
+  insertOwnerRefund,
   insertRefund,
   isSku,
+  ownerRefundEvent,
   siteUrl,
 } from './store'
 import {
@@ -31,6 +34,7 @@ import {
   type Refund,
   StripeError,
   type StripeEvent,
+  type StripeList,
   describeError,
   idOf,
   stripeFetch,
@@ -39,9 +43,16 @@ import {
 
 export const MAX_WEBHOOK_BYTES = 256 * 1024
 
+/**
+ * Refund metadata key the owner sets (to "true") on a partial refund that should also end the pass, e.g.
+ * a pro-rated refund of the unused days. A full refund always ends it.
+ */
+export const END_PASS_METADATA_KEY = 'end_pass'
+
 export async function webhook(req: Request, ctx: Ctx): Promise<Response> {
   const { env, now } = ctx
-  const raw = await readRawBody(req, MAX_WEBHOOK_BYTES)
+  // streamed byte limit: a chunked body without Content-Length cannot make the Worker buffer more
+  const raw = await readTextLimited(req, MAX_WEBHOOK_BYTES)
   if (raw === null) return error('too_large', 'Payload too large')
 
   const check = await verifyStripeSignature(
@@ -74,14 +85,6 @@ export async function webhook(req: Request, ctx: Ctx): Promise<Response> {
   return json({ received: true })
 }
 
-/** Raw body text, or null when it is larger than maxBytes. */
-async function readRawBody(req: Request, maxBytes: number): Promise<string | null> {
-  if (Number(req.headers.get('content-length') ?? '0') > maxBytes) return null
-  const buf = await req.arrayBuffer()
-  if (buf.byteLength > maxBytes) return null
-  return new TextDecoder().decode(buf)
-}
-
 function parseEvent(raw: string): StripeEvent | null {
   try {
     const e = JSON.parse(raw) as Partial<StripeEvent> | null
@@ -96,13 +99,15 @@ function parseEvent(raw: string): StripeEvent | null {
 async function processEvent(event: StripeEvent, ctx: Ctx): Promise<void> {
   const object = event.data.object
   switch (event.type) {
-    // async_payment_succeeded covers delayed payment methods, should any be enabled in the Dashboard
-    // (payment_status is 'unpaid' on their completion event) // [unverified: prior knowledge]
+    // async_payment_succeeded covers delayed payment methods (payment_status is 'unpaid' on their
+    // completion event) // [unverified: prior knowledge]. Checkout is card-only, so it is only a fallback.
     case 'checkout.session.completed':
     case 'checkout.session.async_payment_succeeded':
       return onCheckoutPaid(object as unknown as CheckoutSession, event.id, ctx)
     case 'charge.refunded':
       return onChargeRefunded(object as unknown as Charge, ctx)
+    case 'refund.failed':
+      return onRefundFailed(object as unknown as Refund, ctx)
     case 'charge.dispute.created':
       return onDisputeCreated(object as unknown as Dispute, ctx)
     default:
@@ -138,8 +143,9 @@ async function onCheckoutPaid(session: CheckoutSession, eventId: string, ctx: Ct
   const evidence = chargeEvidence(charge)
   await env.DB.prepare(
     `UPDATE purchases SET payment_intent = ?1, charge_id = ?2, card_fingerprint = ?3, card_country = ?4,
-            billing_country = ?5, billing_region = ?6
-      WHERE id = ?7`,
+            billing_country = ?5, billing_region = ?6, payment_method_type = ?7,
+            amount_refunded_cents = MAX(amount_refunded_cents, ?8)
+      WHERE id = ?9`,
   )
     .bind(
       paymentIntentId,
@@ -148,12 +154,17 @@ async function onCheckoutPaid(session: CheckoutSession, eventId: string, ctx: Ct
       evidence.cardCountry,
       evidence.billingCountry,
       evidence.billingRegion,
+      evidence.paymentMethodType,
+      charge.amount_refunded ?? 0,
       purchase.id,
     )
     .run()
 
-  // Events can arrive out of order: a charge refunded or disputed before we saw it gets no pass.
-  if (charge.refunded || charge.disputed) {
+  // Events can arrive out of order: a charge refunded (fully, or partly with end_pass) or disputed before
+  // we saw it gets no pass. Its charge.refunded event found no purchase to match, so it is handled here.
+  const refundedBefore = charge.amount_refunded ?? 0
+  const endedBefore = charge.refunded === true || (refundedBefore > 0 && (await refundEndsPass(env, charge.id)))
+  if (endedBefore || charge.disputed) {
     const status = charge.disputed ? 'disputed' : 'refunded'
     await env.DB.prepare('UPDATE purchases SET status = ?1 WHERE id = ?2').bind(status, purchase.id).run()
     await alertOwner(
@@ -166,6 +177,18 @@ async function onCheckoutPaid(session: CheckoutSession, eventId: string, ctx: Ct
 
   if (!evidenceAllowed(evidence)) {
     await rejectForRegion(purchase, paymentIntentId, eventId, ctx)
+    // Checkout asks for cards only, so another payment method means the Stripe settings let one through.
+    if (evidence.paymentMethodType !== 'card') {
+      await alertOwner(
+        env,
+        'Non-card payment refunded',
+        [
+          `Purchase ${purchase.id} was paid with "${evidence.paymentMethodType ?? 'unknown'}", not a card, so it was ` +
+            'refunded under the region rule and no pass was granted.',
+          'Checkout asks for cards only: check the payment method settings in the Stripe Dashboard.',
+        ].join('\n'),
+      )
+    }
     return
   }
 
@@ -175,6 +198,10 @@ async function onCheckoutPaid(session: CheckoutSession, eventId: string, ctx: Ct
       purchase.id,
     ),
     eventStatement(env, 'purchase', EVENT_PATHS.webhook, now),
+    // a partial refund (without end_pass) made before this event: recorded with the grant, pass kept
+    ...(refundedBefore > 0
+      ? [insertOwnerRefund(env, purchase.id, refundedBefore, now), ownerRefundEvent(env, purchase.id, refundedBefore, now)]
+      : []),
   ])
   const contact = await getContact(env, purchase.user_id)
   if (contact) {
@@ -196,6 +223,7 @@ async function purchaseFromSession(env: Env, session: CheckoutSession, now: Date
     sku,
     amountCents: session.amount_total ?? SKUS[sku].priceCents,
     currency: session.currency ?? CURRENCY,
+    termsVersion: session.metadata?.terms_version ?? null,
     now,
   }).run()
   return getPurchase(env, session.id)
@@ -206,6 +234,7 @@ function chargeEvidence(charge: Charge): PaymentEvidence {
   const card = charge.payment_method_details?.card
   return {
     chargeId: charge.id,
+    paymentMethodType: paymentMethodType(charge.payment_method_details?.type),
     billingCountry: address?.country ?? null,
     billingRegion: address?.state ?? null,
     cardCountry: card?.country ?? null,
@@ -213,7 +242,12 @@ function chargeEvidence(charge: Charge): PaymentEvidence {
   }
 }
 
-/** Refunds a payment from outside the sales region; no pass is granted. */
+/** Stripe's payment method type name ("card", "link", "us_bank_account"…); anything else is dropped. */
+function paymentMethodType(type: string | null | undefined): string | null {
+  return typeof type === 'string' && /^[a-z0-9_]{1,40}$/.test(type) ? type : null
+}
+
+/** Refunds a payment from outside the sales region (or not paid by card); no pass is granted. */
 async function rejectForRegion(purchase: PurchaseRow, paymentIntent: string, eventId: string, ctx: Ctx): Promise<void> {
   const { env, now } = ctx
   // The refunds row goes in first so a charge.refunded webhook racing this one sees the refund as ours.
@@ -254,29 +288,86 @@ async function rejectForRegion(purchase: PurchaseRow, paymentIntent: string, eve
 // ---------- charge.refunded ----------
 
 async function onChargeRefunded(charge: Charge, ctx: Ctx): Promise<void> {
-  const { env, now } = ctx
-  // Partial refunds (charge.refunded stays false) keep the pass; the owner decides case by case.
-  if (!charge.refunded) return
-  const purchase = await findPurchaseByCharge(env, charge.id, idOf(charge.payment_intent))
-  if (!purchase || purchase.status === 'refunded' || purchase.status === 'rejected_region') return
+  const purchase = await findPurchaseByCharge(ctx.env, charge.id, idOf(charge.payment_intent))
+  // A charge without a purchase yet (checkout.session.completed not processed) is handled there.
+  if (!purchase) return
+  await applyChargeRefund(purchase, charge, ctx)
+}
 
-  const known = await env.DB.prepare('SELECT 1 AS found FROM refunds WHERE purchase_id = ?1 LIMIT 1')
-    .bind(purchase.id)
-    .first()
+/**
+ * Records what Stripe reports as refunded on the purchase's charge, partial refunds included:
+ * - amount_refunded_cents keeps the cumulative amount (never lowered by a late, older event);
+ * - the part of it not yet covered by a refunds row (our self-serve and region rows are written before
+ *   Stripe is called) becomes an 'owner' row plus a 'refund' event, once per cumulative amount;
+ * - the pass ends only when the charge is fully refunded or a refund carries metadata end_pass=true
+ *   (a pro-rated refund of unused days); other partial refunds keep it.
+ * Everything is written in one D1 batch, so a failed attempt leaves nothing behind for Stripe's retry.
+ */
+async function applyChargeRefund(purchase: PurchaseRow, charge: Charge, ctx: Ctx): Promise<void> {
+  const { env, now } = ctx
+  const fully = charge.refunded === true
+  const total = charge.amount_refunded ?? (fully ? purchase.amount_cents : 0)
+  const endsPass = purchase.status === 'paid' && (fully || (await refundEndsPass(env, charge.id)))
+
   const statements = [
-    env.DB.prepare("UPDATE purchases SET status = 'refunded', refunded_at = COALESCE(refunded_at, ?1) WHERE id = ?2").bind(
-      now.toISOString(),
+    insertOwnerRefund(env, purchase.id, total, now),
+    ownerRefundEvent(env, purchase.id, total, now),
+    env.DB.prepare('UPDATE purchases SET amount_refunded_cents = ?1 WHERE id = ?2 AND amount_refunded_cents < ?1').bind(
+      total,
       purchase.id,
     ),
   ]
-  // Self-serve and region refunds record their own row and event; anything else was the owner.
-  if (!known) {
-    statements.push(
-      insertRefund(env, { reason: 'owner', purchase, amountCents: charge.amount_refunded ?? purchase.amount_cents, now }),
-      eventStatement(env, 'refund', EVENT_PATHS.webhook, now),
-    )
+  if (!endsPass) {
+    await env.DB.batch(statements)
+    return
   }
+  statements.push(
+    env.DB.prepare(
+      "UPDATE purchases SET status = 'refunded', refunded_at = COALESCE(refunded_at, ?1) WHERE id = ?2 AND status = 'paid'",
+    ).bind(now.toISOString(), purchase.id),
+  )
   await revokePasses(env, purchase.id, 'refunded', now, statements)
+}
+
+/** True when a live (not failed or canceled) refund of the charge has metadata end_pass=true. */
+async function refundEndsPass(env: Env, chargeId: string): Promise<boolean> {
+  // One page of up to 100 refunds: far more than one pass purchase ever gets.
+  const list = await stripeFetch<StripeList<Refund>>(env, 'GET', '/v1/refunds', { params: { charge: chargeId, limit: 100 } })
+  return list.data.some(
+    (r) =>
+      r.status !== 'failed' &&
+      r.status !== 'canceled' &&
+      r.metadata?.[END_PASS_METADATA_KEY]?.trim().toLowerCase() === 'true',
+  )
+}
+
+// ---------- refund.failed ----------
+
+/**
+ * A refund can fail days later (e.g. the card was closed). The buyer then has neither the money nor,
+ * after a self-serve refund, the pass: the owner has to sort it out, so alert them.
+ */
+async function onRefundFailed(refund: Refund, ctx: Ctx): Promise<void> {
+  const { env } = ctx
+  const purchase = await findPurchaseByCharge(env, idOf(refund.charge), idOf(refund.payment_intent))
+  const origin = refund.metadata?.reason
+  await alertOwner(
+    env,
+    'Refund failed',
+    [
+      `Refund ${refund.id} of ${formatCad(refund.amount)} failed` +
+        (refund.failure_reason ? ` (reason: ${refund.failure_reason}).` : '.'),
+      purchase
+        ? `Purchase ${purchase.id} (${purchase.sku}), status ${purchase.status}.`
+        : 'It does not match any purchase.',
+      origin === 'self_serve'
+        ? 'It was a self-serve refund: the pass has already ended and the buyer was told the money is on its way.'
+        : origin === 'region'
+          ? 'It was an automatic region refund: no pass was granted.'
+          : 'It was issued outside the Worker (Dashboard or API).',
+      'The buyer has not received this money. Find the payment in the Stripe Dashboard and arrange the refund with the buyer.',
+    ].join('\n'),
+  )
 }
 
 // ---------- charge.dispute.created ----------

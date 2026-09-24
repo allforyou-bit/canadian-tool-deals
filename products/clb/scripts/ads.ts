@@ -38,7 +38,13 @@ function nonNegative(v: unknown): v is number {
 
 /** Parse and validate ads.json. Throws with every problem found; returns rows sorted by date. */
 export function parseAdsJson(text: string): AdsDay[] {
-  const data: unknown = JSON.parse(text)
+  let data: unknown
+  try {
+    data = JSON.parse(text)
+  } catch {
+    // V8's message quotes part of the input; this one never does (the guard prints it)
+    throw new Error('ads.json is not valid JSON')
+  }
   if (!Array.isArray(data)) throw new Error('ads.json must be a JSON array of day rows')
   const problems: string[] = []
   const seen = new Set<string>()
@@ -48,7 +54,7 @@ export function parseAdsJson(text: string): AdsDay[] {
     if (!r || typeof r !== 'object' || Array.isArray(r)) return problems.push(`${at}: must be an object`)
     const o = r as Record<string, unknown>
     const extra = Object.keys(o).filter((k) => !['date', 'spendCad', 'clicks', 'impressions', 'conversions'].includes(k))
-    if (extra.length) problems.push(`${at}: unknown field(s) ${extra.join(', ')}`)
+    if (extra.length) problems.push(`${at}: unknown field(s) ${extra.map((k) => (/^[A-Za-z0-9_]{1,32}$/.test(k) ? k : `<${[...k].length} chars>`)).join(', ')}`)
     if (!validDay(o.date)) problems.push(`${at}: date must be a real YYYY-MM-DD day`)
     else if (seen.has(o.date)) problems.push(`${at}: duplicate date ${o.date}`)
     else seen.add(o.date)
@@ -83,13 +89,21 @@ function daysBetween(from: string, to: string): number {
   return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000)
 }
 
+function addDays(day: string, n: number): string {
+  return new Date(Date.parse(`${day}T00:00:00Z`) + n * 86_400_000).toISOString().slice(0, 10)
+}
+
 /**
  * ads.json is stale when its newest day is more than two days before today (UTC): yesterday's
  * report normally arrives today, so a missing row for two days means over 48 h without data.
+ * With the campaign's `startDate`, age is measured from max(newest row, startDate − 1 day), so the
+ * first 48 hours of a campaign never alert: the first report (for the start day) arrives a day later.
  */
-export function adsFreshness(rows: AdsDay[], today: string): { latest: string | null; ageDays: number | null; stale: boolean } {
+export function adsFreshness(rows: AdsDay[], today: string, startDate?: string): { latest: string | null; ageDays: number | null; stale: boolean } {
   const latest = rows.length ? rows[rows.length - 1].date : null
-  const ageDays = latest ? daysBetween(latest, today) : null
+  const floor = startDate ? addDays(startDate, -1) : null
+  const ref = latest && (!floor || latest >= floor) ? latest : floor
+  const ageDays = ref ? daysBetween(ref, today) : null
   return { latest, ageDays, stale: ageDays === null || ageDays > 2 }
 }
 
@@ -229,7 +243,7 @@ export async function main(args: string[]): Promise<number> {
     const cap = parseAdCap(await readFile(argValue(rest, '--cap', '../../ops/config/ad-cap.json')!, 'utf8'))
     const today = argValue(rest, '--today', new Date().toISOString().slice(0, 10))!
     const active = adsActive(cap, today)
-    const fresh = adsFreshness(rows, today)
+    const fresh = adsFreshness(rows, today, cap.startDate)
     const spend = capStatus(rows, cap)
     const alert = active && fresh.stale
     const message = alert

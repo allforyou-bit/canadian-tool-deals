@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isSafeCheckoutUrl, loginHref, safeNextPath, tokenFromHash } from './url'
+import { isSafeCheckoutUrl, loginHref, safeNextPath, tokenFromHash, unsubscribeFromHash } from './url'
 
 const ORIGIN = 'https://coach.test'
 
@@ -56,5 +56,23 @@ describe('tokenFromHash', () => {
     expect(tokenFromHash('#')).toBeNull()
     expect(tokenFromHash('#token=')).toBeNull()
     expect(tokenFromHash('#main')).toBeNull()
+  })
+})
+
+describe('unsubscribeFromHash', () => {
+  const h = 'a'.repeat(64)
+  const sig = '0123456789abcdef'.repeat(4)
+
+  it('reads the email hash and signature from the fragment', () => {
+    expect(unsubscribeFromHash(`#h=${h}&s=${sig}`)).toEqual({ h, s: sig })
+    expect(unsubscribeFromHash(`s=${sig}&h=${h}`)).toEqual({ h, s: sig })
+  })
+
+  it('rejects incomplete or altered links', () => {
+    expect(unsubscribeFromHash('')).toBeNull()
+    expect(unsubscribeFromHash(`#h=${h}`)).toBeNull()
+    expect(unsubscribeFromHash(`#h=${h}&s=`)).toBeNull()
+    expect(unsubscribeFromHash(`#h=${h}&s=${sig.slice(0, 10)}`)).toBeNull()
+    expect(unsubscribeFromHash(`#h=<script>&s=${sig}`)).toBeNull()
   })
 })

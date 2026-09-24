@@ -5,7 +5,7 @@ import type { Lang } from '../shared/api'
 import { AI_DISCLOSURE, BRAND } from '../shared/config'
 import { SPEAKING_TASKS, TASKS, WRITING_TASKS, type TaskType } from '../shared/tasks'
 import { FREE_WRITING_PATH, PATHS, practicePath } from './routes'
-import { FACTS, passLabel } from './site'
+import { FACTS, passLabel, QUEBEC_RULE } from './site'
 import type { FaqItem } from './types'
 
 export interface TaskLine {
@@ -91,7 +91,7 @@ export const LANDING_EN: LandingCopy = {
   },
   hero: {
     eyebrow: 'English practice for adults in Canada',
-    title: 'Practise English writing and speaking tasks, and learn exactly what to fix',
+    title: 'Practise English writing and speaking tasks, and see what to work on next',
     lead: `${BRAND.en} gives AI feedback on timed practice tasks modelled on the format of the CELPIP-General test. See what worked, fix your most important errors, and read improved versions of your own sentences. Explanations are available in English or Korean.`,
     cta: { label: 'Try a free writing task', href: FREE_WRITING_PATH },
     secondary: { label: 'See pricing', href: PATHS.pricing },
@@ -119,7 +119,7 @@ export const LANDING_EN: LandingCopy = {
     heading: 'Explanations in Korean',
     paragraphs: [
       'Choose Korean as your explanation language and the feedback explains your errors, and how to fix them, in Korean.',
-      'Corrections and improved sentences always stay in English, so you learn the exact wording to use. The practice pages and pricing are also available [in Korean](/ko/).',
+      'Corrections and improved sentences always stay in English, so you see the English wording to use. The practice pages and pricing are also available [in Korean](/ko/).',
     ],
   },
   tasks: {
@@ -140,7 +140,7 @@ export const LANDING_EN: LandingCopy = {
       'Your most important errors (up to three), each with a correction and a short explanation.',
       'One or two improved versions of your weaker sentences, or a short model paragraph.',
       'One clear next step for your next practice task.',
-      'When you are signed in, a record of the error types that keep coming back across your tasks.',
+      'When you are signed in, your saved answers and feedback, and a record of the error types that keep coming back across your tasks.',
     ],
     excludesHeading: 'Not included',
     excludes: [
@@ -159,7 +159,7 @@ export const LANDING_EN: LandingCopy = {
       `${passLabel('pass30', 'en')}. ${passLabel('pass90', 'en')}.`,
       'One-time payment in Canadian dollars. No subscription and no automatic renewal.',
     ],
-    note: 'Passes are sold only to residents of Canada outside Quebec. Not available in Quebec.',
+    note: `${QUEBEC_RULE.en} They are sold only to residents of Canada outside Quebec. The free tasks can be used from anywhere.`,
     cta: { label: 'Compare passes', href: PATHS.pricing },
   },
   faq: {
@@ -179,7 +179,7 @@ export const LANDING_EN: LandingCopy = {
       },
       {
         q: 'Do you keep my recordings?',
-        a: `No. Your recording is used only to make a transcript, and we never store audio. If you are signed in, we keep the text of your answers and your feedback for your history and delete it ${FACTS.retentionDays} days after your last activity. You can delete your account at any time. [See how we handle your data](${PATHS.helpPrivacy}).`,
+        a: `No. Your recording is used only to make a transcript, and we never store audio. If you are signed in, we keep the text of your answers and your feedback so you can open them again from your account page, and delete them ${FACTS.retentionDays} days after your last activity. You can delete your account at any time. [See how we handle your data](${PATHS.helpPrivacy}).`,
       },
       {
         q: 'Can I get explanations in Korean?',
@@ -260,7 +260,7 @@ export const LANDING_KO: LandingCopy = {
       '가장 중요한 오류(최대 3개)와 교정, 짧은 설명',
       '약한 문장을 고쳐 쓴 예시 1–2개 또는 짧은 모범 문단',
       '다음 연습에서 집중할 한 가지',
-      '로그인하면 여러 과제에서 반복되는 오류 유형을 모아서 보여 드려요.',
+      '로그인하면 저장된 답안과 피드백을 다시 볼 수 있고, 여러 과제에서 반복되는 오류 유형도 모아서 보여 드려요.',
     ],
     excludesHeading: '포함되지 않아요',
     excludes: [
@@ -279,7 +279,7 @@ export const LANDING_KO: LandingCopy = {
       `${passLabel('pass30', 'ko')}, ${passLabel('pass90', 'ko')}`,
       '캐나다 달러로 한 번만 결제해요. 구독이나 자동 갱신은 없어요.',
     ],
-    note: '이용권은 퀘벡을 제외한 캐나다 거주자에게만 판매해요. 퀘벡에서는 이용할 수 없어요.',
+    note: `${QUEBEC_RULE.ko} 이용권은 퀘벡을 제외한 캐나다 거주자에게만 판매하고, 무료 과제는 어디서나 이용할 수 있어요.`,
     cta: { label: '이용권 비교하기', href: PATHS.pricingKo },
   },
   faq: {
@@ -299,7 +299,7 @@ export const LANDING_KO: LandingCopy = {
       },
       {
         q: '녹음 파일을 저장하나요?',
-        a: `아니요. 녹음은 받아쓰기에만 쓰고 저장하지 않아요. 로그인한 경우 답안과 피드백 글은 연습 기록을 위해 보관했다가 마지막 활동 후 ${FACTS.retentionDays}일이 지나면 삭제해요. 계정 페이지에서 언제든지 계정을 삭제할 수도 있어요.`,
+        a: `아니요. 녹음은 받아쓰기에만 쓰고 저장하지 않아요. 로그인한 경우 답안과 피드백 글은 저장되어 계정 페이지에서 다시 볼 수 있고, 마지막 활동 후 ${FACTS.retentionDays}일이 지나면 삭제해요. 계정 페이지에서 언제든지 계정을 삭제할 수도 있어요.`,
       },
       {
         q: '설명은 모두 한국어로 나오나요?',

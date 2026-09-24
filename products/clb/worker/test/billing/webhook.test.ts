@@ -1,19 +1,26 @@
 import { env } from 'cloudflare:test'
 import { type MockInstance, afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { TERMS_VERSION } from '../../../shared/config'
 import { findClaims } from '../../../shared/content-rules'
+import { webhook } from '../../src/billing'
+import { STRIPE_API_VERSION } from '../../src/billing/stripe'
 import { addDays } from '../../src/lib/time'
 import {
   FakeStripe,
+  ORIGIN,
   chargeRefundedEvent,
   checkoutCompletedEvent,
   createUser,
   disputeCreatedEvent,
   eventCount,
+  makeCtx,
   passesOf,
   paymentIntent,
   postWebhook,
   purchase,
   purchaseRow,
+  refundFailedEvent,
+  refundedCents,
   refundsOf,
   setCheckoutEnabled,
   signatureHeader,
@@ -81,6 +88,23 @@ describe('POST /api/stripe/webhook', () => {
       const big = JSON.stringify({ id: 'evt_big', type: 'x', data: { object: { pad: 'x'.repeat(300 * 1024) } } })
       expect((await postWebhook(null, { rawBody: big })).status).toBe(413)
     })
+
+    it('stops reading a streamed body without Content-Length once it passes the limit', async () => {
+      let pulled = 0
+      const chunk = new TextEncoder().encode('x'.repeat(64 * 1024))
+      const body = new ReadableStream<Uint8Array>({
+        pull(controller) {
+          pulled++
+          if (pulled > 40) controller.close() // 2.5 MB if read to the end
+          else controller.enqueue(chunk)
+        },
+      })
+      const req = new Request(`${ORIGIN}/api/stripe/webhook`, { method: 'POST', body, headers: { 'stripe-signature': 't=1,v1=00' } })
+      expect(req.headers.get('content-length')).toBeNull()
+      const res = await webhook(req, makeCtx(null))
+      expect(res.status).toBe(413)
+      expect(pulled).toBeLessThan(10)
+    })
   })
 
   describe('checkout.session.completed', () => {
@@ -96,6 +120,7 @@ describe('POST /api/stripe/webhook', () => {
       const [piCall] = stripe.stripeCalls(`GET /v1/payment_intents/${p.paymentIntentId}`)
       expect(piCall.url.searchParams.get('expand[0]')).toBe('latest_charge')
       expect(piCall.headers.get('authorization')).toBe(`Bearer ${env.STRIPE_SECRET_KEY}`)
+      expect(piCall.headers.get('stripe-version')).toBe(STRIPE_API_VERSION)
 
       const row = await purchaseRow(p.sessionId)
       expect(row).toMatchObject({
@@ -104,8 +129,11 @@ describe('POST /api/stripe/webhook', () => {
         charge_id: p.chargeId,
         card_fingerprint: 'fp_grant_1',
         card_country: 'CA',
+        payment_method_type: 'card',
         billing_country: 'CA',
         billing_region: 'BC',
+        terms_version: TERMS_VERSION,
+        amount_refunded_cents: 0,
         refunded_at: null,
       })
       expect(Date.parse(row?.paid_at ?? '')).toBeGreaterThanOrEqual(started - 1000)
@@ -182,11 +210,46 @@ describe('POST /api/stripe/webhook', () => {
       expect(mail?.text).toContain('refunded it in full: C$39.00')
       expect(findClaims(mail?.text ?? '')).toEqual([])
 
-      // Stripe's charge.refunded for that refund changes nothing and is not counted as a customer refund
+      // Stripe's charge.refunded for that refund is not counted as a customer refund; only the amount is kept
       const refundsBefore = await eventCount('refund')
       await postWebhook(chargeRefundedEvent({ chargeId: p.chargeId, paymentIntentId: p.paymentIntentId }))
-      expect((await purchaseRow(p.sessionId))?.status).toBe('rejected_region')
+      expect(await purchaseRow(p.sessionId)).toMatchObject({ status: 'rejected_region', amount_refunded_cents: 3900 })
       expect(await eventCount('refund')).toBe(refundsBefore)
+      expect((await refundsOf(p.sessionId)).map((r) => r.reason)).toEqual(['region'])
+    })
+
+    it.each([
+      ['Link paid from a bank account', 'link'],
+      ['Klarna', 'klarna'],
+    ])('refunds a non-card payment (%s) by the region rule and alerts the owner', async (_label, type) => {
+      const { user } = await createUser()
+      const p = await purchase(stripe, user, { paymentMethodType: type })
+      expect(p.res.status).toBe(200)
+      expect(await purchaseRow(p.sessionId)).toMatchObject({
+        status: 'rejected_region',
+        payment_method_type: type,
+        card_country: null,
+        card_fingerprint: null,
+        billing_country: 'CA',
+        billing_region: 'ON',
+      })
+      expect(await passesOf(user.id)).toHaveLength(0)
+      expect(stripe.stripeCalls('POST /v1/refunds')).toHaveLength(1)
+      expect(await refundsOf(p.sessionId)).toMatchObject([{ reason: 'region', amount_cents: 3900 }])
+
+      const alert = stripe.emails.find((m) => m.to === env.OWNER_EMAIL)
+      expect(alert?.subject).toBe('[MPC] Non-card payment refunded')
+      expect(alert?.text).toContain(p.sessionId)
+      expect(alert?.text).toContain(`"${type}"`)
+      expect(alert?.text).not.toContain(user.email)
+      const mail = stripe.emails.find((m) => m.to === user.email)
+      expect(mail?.text).toContain('payment method')
+    })
+
+    it('does not alert about the payment method for a foreign card', async () => {
+      const { user } = await createUser()
+      await purchase(stripe, user, { cardCountry: 'US' })
+      expect(stripe.emails.some((m) => m.subject.includes('Non-card'))).toBe(false)
     })
 
     it('treats charge_already_refunded on a region refund retry as done', async () => {
@@ -277,11 +340,36 @@ describe('POST /api/stripe/webhook', () => {
 
     it('grants nothing when the charge was already refunded or disputed', async () => {
       const { user } = await createUser()
-      const refunded = await purchase(stripe, user, { refunded: true })
+      const refunded = await purchase(stripe, user, { refunded: true, amountRefunded: 3900 })
       const disputed = await purchase(stripe, user, { disputed: true })
-      expect((await purchaseRow(refunded.sessionId))?.status).toBe('refunded')
+      expect(await purchaseRow(refunded.sessionId)).toMatchObject({ status: 'refunded', amount_refunded_cents: 3900 })
       expect((await purchaseRow(disputed.sessionId))?.status).toBe('disputed')
       expect(await passesOf(user.id)).toHaveLength(0)
+    })
+
+    it('records a partial refund made before the completion event and still grants the pass', async () => {
+      const { user } = await createUser()
+      const refundsBefore = await eventCount('refund', '/api/stripe/webhook')
+      const p = await purchase(stripe, user, { amountRefunded: 1000, chargeId: `ch_${uid()}` })
+      expect(p.res.status).toBe(200)
+      expect(await purchaseRow(p.sessionId)).toMatchObject({ status: 'paid', amount_refunded_cents: 1000 })
+      expect(await refundsOf(p.sessionId)).toEqual([
+        { id: `owner_${p.sessionId}_1000`, reason: 'owner', amount_cents: 1000, user_id: user.id },
+      ])
+      expect(await eventCount('refund', '/api/stripe/webhook')).toBe(refundsBefore + 1)
+      expect((await passesOf(user.id))[0].revoked_at).toBeNull()
+      expect(stripe.stripeCalls('GET /v1/refunds')[0].url.searchParams.get('charge')).toBe(p.chargeId)
+    })
+
+    it('grants nothing when a partial refund with end_pass was made before the completion event', async () => {
+      const { user } = await createUser()
+      const chargeId = `ch_${uid()}`
+      stripe.ownerRefund({ chargeId, amount: 2000, metadata: { end_pass: 'true' } })
+      const p = await purchase(stripe, user, { chargeId, amountRefunded: 2000 })
+      expect(p.res.status).toBe(200)
+      expect(await purchaseRow(p.sessionId)).toMatchObject({ status: 'refunded', paid_at: null, amount_refunded_cents: 2000 })
+      expect(await passesOf(user.id)).toHaveLength(0)
+      expect(stripe.emails.some((m) => m.to === env.OWNER_EMAIL && m.subject.includes('after a refund'))).toBe(true)
     })
 
     it('does not process a purchase twice when a second completion event arrives', async () => {
@@ -308,8 +396,11 @@ describe('POST /api/stripe/webhook', () => {
       const [pass] = await passesOf(user.id)
       expect(pass.revoked_at).not.toBeNull()
       expect(pass.revoke_reason).toBe('refunded')
-      expect(await refundsOf(p.sessionId)).toEqual([{ id: `owner_${p.sessionId}`, reason: 'owner', amount_cents: 3900, user_id: user.id }])
+      expect(await refundsOf(p.sessionId)).toEqual([{ id: `owner_${p.sessionId}_3900`, reason: 'owner', amount_cents: 3900, user_id: user.id }])
+      expect(row?.amount_refunded_cents).toBe(3900)
       expect(await eventCount('refund', '/api/stripe/webhook')).toBe(refundsBefore + 1)
+      // a full refund ends the pass without asking Stripe for the refunds' metadata
+      expect(stripe.stripeCalls('GET /v1/refunds')).toHaveLength(0)
 
       // another delivery for the same charge (new event id) changes nothing
       await postWebhook(chargeRefundedEvent({ chargeId: p.chargeId, paymentIntentId: p.paymentIntentId }))
@@ -317,15 +408,105 @@ describe('POST /api/stripe/webhook', () => {
       expect(await refundsOf(p.sessionId)).toHaveLength(1)
     })
 
-    it('matches by payment_intent and keeps the pass on a partial refund', async () => {
+    it('records partial refunds as owner deltas and keeps the pass until the charge is fully refunded', async () => {
       const { user } = await createUser()
       const p = await purchase(stripe, user)
-      await postWebhook(chargeRefundedEvent({ chargeId: `ch_other_${uid()}`, paymentIntentId: p.paymentIntentId, amountRefunded: 1000, refunded: false }))
-      expect((await purchaseRow(p.sessionId))?.status).toBe('paid')
+      const refundsBefore = await eventCount('refund', '/api/stripe/webhook')
+      const partial = (total: number, refunded = false) =>
+        postWebhook(chargeRefundedEvent({ chargeId: p.chargeId, paymentIntentId: p.paymentIntentId, amountRefunded: total, refunded }))
+
+      // first partial refund (e.g. a pro-rated refund without end_pass)
+      stripe.ownerRefund({ chargeId: p.chargeId, amount: 1000 })
+      expect((await partial(1000)).status).toBe(200)
+      expect(await purchaseRow(p.sessionId)).toMatchObject({ status: 'paid', amount_refunded_cents: 1000, refunded_at: null })
+      expect((await passesOf(user.id))[0].revoked_at).toBeNull()
+      expect(await refundsOf(p.sessionId)).toEqual([
+        { id: `owner_${p.sessionId}_1000`, reason: 'owner', amount_cents: 1000, user_id: user.id },
+      ])
+      expect(await eventCount('refund', '/api/stripe/webhook')).toBe(refundsBefore + 1)
+      const [list] = stripe.stripeCalls('GET /v1/refunds')
+      expect(list.url.searchParams.get('charge')).toBe(p.chargeId)
+      expect(list.headers.get('stripe-version')).toBe(STRIPE_API_VERSION)
+
+      // a second partial refund: only the new part is recorded
+      stripe.ownerRefund({ chargeId: p.chargeId, amount: 1500 })
+      await partial(2500)
+      expect((await purchaseRow(p.sessionId))?.amount_refunded_cents).toBe(2500)
+      expect((await refundsOf(p.sessionId)).map((r) => [r.id, r.amount_cents])).toEqual([
+        [`owner_${p.sessionId}_1000`, 1000],
+        [`owner_${p.sessionId}_2500`, 1500],
+      ])
       expect((await passesOf(user.id))[0].revoked_at).toBeNull()
 
-      await postWebhook(chargeRefundedEvent({ chargeId: `ch_other_${uid()}`, paymentIntentId: p.paymentIntentId }))
-      expect((await purchaseRow(p.sessionId))?.status).toBe('refunded')
+      // redelivery of the same total (new event id) and a late, older event change nothing
+      await partial(2500)
+      await partial(1000)
+      expect((await purchaseRow(p.sessionId))?.amount_refunded_cents).toBe(2500)
+      expect(await refundedCents(p.sessionId)).toBe(2500)
+      expect(await eventCount('refund', '/api/stripe/webhook')).toBe(refundsBefore + 2)
+
+      // the rest: now fully refunded, so the pass ends
+      await partial(3900, true)
+      expect(await purchaseRow(p.sessionId)).toMatchObject({ status: 'refunded', amount_refunded_cents: 3900 })
+      expect(await refundedCents(p.sessionId)).toBe(3900)
+      expect((await passesOf(user.id))[0].revoke_reason).toBe('refunded')
+      expect(await eventCount('refund', '/api/stripe/webhook')).toBe(refundsBefore + 3)
+    })
+
+    it('ends the pass on a partial refund whose metadata has end_pass=true', async () => {
+      const { user } = await createUser()
+      const p = await purchase(stripe, user)
+      stripe.ownerRefund({ chargeId: p.chargeId, amount: 2600, metadata: { end_pass: ' TRUE ' } })
+      await postWebhook(chargeRefundedEvent({ chargeId: p.chargeId, paymentIntentId: p.paymentIntentId, amountRefunded: 2600, refunded: false }))
+      const row = await purchaseRow(p.sessionId)
+      expect(row).toMatchObject({ status: 'refunded', amount_refunded_cents: 2600 })
+      expect(row?.refunded_at).not.toBeNull()
+      const [pass] = await passesOf(user.id)
+      expect(pass.revoked_at).not.toBeNull()
+      expect(pass.revoke_reason).toBe('refunded')
+      expect(await refundsOf(p.sessionId)).toMatchObject([{ reason: 'owner', amount_cents: 2600 }])
+    })
+
+    it.each([
+      ['a failed refund', { end_pass: 'true' }, 'failed'],
+      ['a canceled refund', { end_pass: 'true' }, 'canceled'],
+      ['another metadata value', { end_pass: 'no' }, 'succeeded'],
+    ] as const)('ignores end_pass on %s', async (_label, metadata, status) => {
+      const { user } = await createUser()
+      const p = await purchase(stripe, user)
+      stripe.ownerRefund({ chargeId: p.chargeId, amount: 1000, metadata, status })
+      stripe.ownerRefund({ chargeId: p.chargeId, amount: 500 })
+      await postWebhook(chargeRefundedEvent({ chargeId: p.chargeId, paymentIntentId: p.paymentIntentId, amountRefunded: 1500, refunded: false }))
+      expect((await purchaseRow(p.sessionId))?.status).toBe('paid')
+      expect((await passesOf(user.id))[0].revoked_at).toBeNull()
+    })
+
+    it('counts each refunded cent once when partial refund events are processed at the same time', async () => {
+      const { user } = await createUser()
+      const p = await purchase(stripe, user)
+      const events = [1000, 2500, 3000].map((total) =>
+        chargeRefundedEvent({ chargeId: p.chargeId, paymentIntentId: p.paymentIntentId, amountRefunded: total, refunded: false }),
+      )
+      const results = await Promise.all(events.map((e) => postWebhook(e)))
+      expect(results.map((r) => r.status)).toEqual([200, 200, 200])
+      expect(await refundedCents(p.sessionId)).toBe(3000)
+      expect((await purchaseRow(p.sessionId))?.amount_refunded_cents).toBe(3000)
+      const rows = await refundsOf(p.sessionId)
+      expect(rows.every((r) => r.reason === 'owner' && r.amount_cents > 0)).toBe(true)
+    })
+
+    it('matches by payment_intent and keeps the event retryable when listing refunds fails', async () => {
+      const { user } = await createUser()
+      const p = await purchase(stripe, user)
+      const event = chargeRefundedEvent({ chargeId: `ch_other_${uid()}`, paymentIntentId: p.paymentIntentId, amountRefunded: 1000, refunded: false })
+      stripe.failures.set('GET /v1/refunds', { status: 500, code: 'api_error' })
+      expect((await postWebhook(event)).status).toBe(500)
+      expect(await refundsOf(p.sessionId)).toHaveLength(0)
+      expect((await purchaseRow(p.sessionId))?.amount_refunded_cents).toBe(0)
+
+      expect((await postWebhook(event)).status).toBe(200)
+      expect(await refundsOf(p.sessionId)).toMatchObject([{ reason: 'owner', amount_cents: 1000 }])
+      expect((await purchaseRow(p.sessionId))?.status).toBe('paid')
     })
 
     it('moves a queued pass forward when the pass before it is refunded', async () => {
@@ -342,6 +523,50 @@ describe('POST /api/stripe/webhook', () => {
     it('ignores charges that match no purchase', async () => {
       const res = await postWebhook(chargeRefundedEvent({ chargeId: `ch_${uid()}`, paymentIntentId: `pi_${uid()}` }))
       expect(res.status).toBe(200)
+    })
+  })
+
+  describe('refund.failed', () => {
+    it('alerts the owner about a failed self-serve refund with the purchase and the reason', async () => {
+      const { user } = await createUser()
+      const p = await purchase(stripe, user)
+      const res = await postWebhook(
+        refundFailedEvent({
+          id: `re_${uid()}`,
+          amount: 3900,
+          charge: p.chargeId,
+          payment_intent: p.paymentIntentId,
+          failure_reason: 'expired_or_canceled_card',
+          metadata: { reason: 'self_serve', purchase_id: p.sessionId },
+        }),
+      )
+      expect(res.status).toBe(200)
+      const alert = stripe.emails.find((m) => m.to === env.OWNER_EMAIL)
+      expect(alert?.subject).toBe('[MPC] Refund failed')
+      expect(alert?.text).toContain('C$39.00')
+      expect(alert?.text).toContain('expired_or_canceled_card')
+      expect(alert?.text).toContain(`Purchase ${p.sessionId} (pass30), status paid.`)
+      expect(alert?.text).toContain('self-serve refund')
+      expect(alert?.text).not.toContain(user.email)
+    })
+
+    it.each([
+      ['a region refund', { reason: 'region' }, 'region refund'],
+      ['an owner refund', {}, 'outside the Worker'],
+    ])('alerts about %s, matched by payment_intent alone', async (_label, metadata, text) => {
+      const { user } = await createUser()
+      const p = await purchase(stripe, user)
+      await postWebhook(refundFailedEvent({ id: `re_${uid()}`, amount: 1000, charge: null, payment_intent: p.paymentIntentId, metadata }))
+      const alert = stripe.emails.find((m) => m.to === env.OWNER_EMAIL)
+      expect(alert?.text).toContain(p.sessionId)
+      expect(alert?.text).toContain(text)
+      expect(alert?.text).toContain('failed.')
+    })
+
+    it('alerts even when the refund matches no purchase', async () => {
+      const res = await postWebhook(refundFailedEvent({ id: `re_${uid()}`, amount: 500, charge: `ch_${uid()}`, payment_intent: null }))
+      expect(res.status).toBe(200)
+      expect(stripe.emails.find((m) => m.to === env.OWNER_EMAIL)?.text).toContain('does not match any purchase')
     })
   })
 

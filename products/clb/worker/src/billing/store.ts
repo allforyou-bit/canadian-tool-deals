@@ -19,12 +19,17 @@ export interface PurchaseRow {
   payment_intent: string | null
   charge_id: string | null
   card_fingerprint: string | null
+  payment_method_type: string | null
   status: PurchaseStatus
+  /** cumulative amount Stripe reports as refunded (charge.amount_refunded); never decreases */
+  amount_refunded_cents: number
+  terms_version: string | null
   paid_at: string | null
 }
 
 const PURCHASE_COLUMNS =
-  'id, user_id, sku, amount_cents, currency, payment_intent, charge_id, card_fingerprint, status, paid_at'
+  'id, user_id, sku, amount_cents, currency, payment_intent, charge_id, card_fingerprint, payment_method_type, status, ' +
+  'amount_refunded_cents, terms_version, paid_at'
 
 /** Route paths recorded with server-side events (CONTRACT §6). */
 export const EVENT_PATHS = {
@@ -63,12 +68,12 @@ export function latestPaidPurchase(env: Env, userId: string): Promise<PurchaseRo
 
 export function insertPurchase(
   env: Env,
-  p: { id: string; userId: string; sku: Sku; amountCents: number; currency: string; now: Date },
+  p: { id: string; userId: string; sku: Sku; amountCents: number; currency: string; termsVersion: string | null; now: Date },
 ): D1PreparedStatement {
   return env.DB.prepare(
-    `INSERT INTO purchases (id, user_id, sku, amount_cents, currency, status, created_at)
-     VALUES (?1, ?2, ?3, ?4, ?5, 'pending', ?6)`,
-  ).bind(p.id, p.userId, p.sku, p.amountCents, p.currency, p.now.toISOString())
+    `INSERT INTO purchases (id, user_id, sku, amount_cents, currency, status, terms_version, created_at)
+     VALUES (?1, ?2, ?3, ?4, ?5, 'pending', ?6, ?7)`,
+  ).bind(p.id, p.userId, p.sku, p.amountCents, p.currency, p.termsVersion, p.now.toISOString())
 }
 
 /** Server-side funnel event (no personal data). */
@@ -88,17 +93,30 @@ export function eventStatement(
 
 export type RefundReason = 'self_serve' | 'region' | 'owner'
 
+/** Refunds this Worker issues itself; everything else Stripe reports is recorded as 'owner'. */
+export type OwnRefundReason = Exclude<RefundReason, 'owner'>
+
 /**
- * Refund rows use a deterministic id per purchase and reason, so a row can be written before Stripe is
- * called (it marks the refund as ours when the charge.refunded webhook arrives) and never twice.
+ * Our own refund rows use a deterministic id per purchase and reason, so a row can be written before
+ * Stripe is called (its amount counts as already recorded when the charge.refunded webhook arrives) and
+ * never twice.
  */
-export function refundRowId(reason: RefundReason, purchaseId: string): string {
+export function refundRowId(reason: OwnRefundReason, purchaseId: string): string {
   return `${reason}_${purchaseId}`
+}
+
+/**
+ * Owner refunds (Dashboard, including partial ones) are recorded per charge.refunded event as the amount
+ * not yet covered by any refunds row; the id carries the cumulative refunded amount, so each new total
+ * gets one row and a redelivery of the same total gets none.
+ */
+export function ownerRefundRowId(purchaseId: string, cumulativeCents: number): string {
+  return `owner_${purchaseId}_${cumulativeCents}`
 }
 
 export function insertRefund(
   env: Env,
-  r: { reason: RefundReason; purchase: PurchaseRow; amountCents: number; now: Date },
+  r: { reason: OwnRefundReason; purchase: PurchaseRow; amountCents: number; now: Date },
 ): D1PreparedStatement {
   return env.DB.prepare(
     `INSERT INTO refunds (id, purchase_id, user_id, amount_cents, reason, created_at)
@@ -106,7 +124,33 @@ export function insertRefund(
   ).bind(refundRowId(r.reason, r.purchase.id), r.purchase.id, r.purchase.user_id, r.amountCents, r.reason, r.now.toISOString())
 }
 
-export function deleteRefund(env: Env, reason: RefundReason, purchaseId: string): Promise<D1Result> {
+/**
+ * The owner refund row for a new cumulative refunded amount: the part of `cumulativeCents` not covered
+ * by the purchase's refunds rows so far (inserts nothing when it is all covered, or on a redelivery).
+ * Computed inside the INSERT, so concurrent charge.refunded events never count the same cents twice.
+ */
+export function insertOwnerRefund(env: Env, purchaseId: string, cumulativeCents: number, now: Date): D1PreparedStatement {
+  return env.DB.prepare(
+    `INSERT INTO refunds (id, purchase_id, user_id, amount_cents, reason, created_at)
+     SELECT ?1, p.id, p.user_id, ?2 - r.recorded, 'owner', ?3
+       FROM purchases p, (SELECT COALESCE(SUM(amount_cents), 0) AS recorded FROM refunds WHERE purchase_id = ?4) r
+      WHERE p.id = ?4 AND ?2 > r.recorded
+     ON CONFLICT (id) DO NOTHING`,
+  ).bind(ownerRefundRowId(purchaseId, cumulativeCents), cumulativeCents, now.toISOString(), purchaseId)
+}
+
+/**
+ * The 'refund' event for an owner refund row, written only when insertOwnerRefund inserted that row in
+ * the same batch (same id and timestamp); run it right after insertOwnerRefund with the same arguments.
+ */
+export function ownerRefundEvent(env: Env, purchaseId: string, cumulativeCents: number, now: Date): D1PreparedStatement {
+  return env.DB.prepare(
+    `INSERT INTO events (name, path, utm_json, day, created_at)
+     SELECT 'refund', ?1, NULL, ?2, ?3 WHERE EXISTS (SELECT 1 FROM refunds WHERE id = ?4 AND created_at = ?3)`,
+  ).bind(EVENT_PATHS.webhook, dayKey(now), now.toISOString(), ownerRefundRowId(purchaseId, cumulativeCents))
+}
+
+export function deleteRefund(env: Env, reason: OwnRefundReason, purchaseId: string): Promise<D1Result> {
   return env.DB.prepare('DELETE FROM refunds WHERE id = ?1').bind(refundRowId(reason, purchaseId)).run()
 }
 

@@ -1,22 +1,32 @@
 /// <reference types="vite/client" />
 // Content lint for the static product pages (memo B9): every exported string in content/** passes
 // findClaims() (ALLOWED_PHRASES excepted), doc pages carry lastReviewed, the formats pages cover all 10 task
-// ids, links point at real routes, and prices/limits come from shared/config.ts.
+// ids, links point at real routes, and prices/limits come from shared/config.ts. The "review round 1
+// promises" block pins what the pages say to what the code does (integrator decisions 2–7, 11–15).
 // Run: npx vitest run content
 import { describe, expect, it } from 'vitest'
-import { AI_DISCLOSURE, NOT_AFFILIATED, SKUS } from '../shared/config'
+import { AI_DISCLOSURE, CAPS, NOT_AFFILIATED, RETENTION_DAYS, SKUS, TERMS_VERSION } from '../shared/config'
 import { findClaims } from '../shared/content-rules'
 import { TASKS } from '../shared/tasks'
+import { MAX_TOP_ERRORS } from '../worker/src/grading/validate'
 import { FORMAT_TASK_IDS, FORMAT_TIPS, FORMATS_INDEX, FORMATS_SPEAKING, FORMATS_WRITING } from './formats'
-import { HELP_INDEX, HELP_PAGES } from './help'
+import { HELP_ACCOUNT, HELP_FEEDBACK, HELP_INDEX, HELP_PAGES, HELP_PASSES, HELP_PRIVACY, HELP_TROUBLESHOOTING } from './help'
 import { faqJsonLd, plainText, productJsonLd, serializeJsonLd, websiteJsonLd } from './jsonld'
 import { LANDING, LANDING_EN, LANDING_KO } from './landing'
-import { LEGAL_PAGES, PRIVACY } from './legal'
+import { AI_DISCLOSURE_PAGE, LEGAL_PAGES, PRIVACY, REFUNDS, TERMS } from './legal'
 import { PRICING_EN, PRICING_KO } from './pricing'
-import { CONTENT_ROUTES, FREE_WRITING_PATH, KNOWN_ROUTES } from './routes'
+import { CONTENT_ROUTES, FREE_WRITING_PATH, KNOWN_ROUTES, PRACTICE_ROUTES } from './routes'
 import { pageMetadata } from './seo'
-import { FACTS, LAST_REVIEWED, mailingAddressText } from './site'
-import type { DocPage } from './types'
+import {
+  FACTS,
+  FILTER_EN,
+  LAST_REVIEWED,
+  mailingAddressText,
+  NO_FEEDBACK_LIMIT,
+  PAUSE_EXTENSION,
+  QUEBEC_RULE,
+} from './site'
+import type { DocPage, DocSection } from './types'
 
 // Every content module, found by Vite's import.meta.glob so a new content file is linted automatically.
 const MODULES = import.meta.glob(['./**/*.ts', '!./**/*.test.ts'], { eager: true }) as Record<string, Record<string, unknown>>
@@ -134,7 +144,9 @@ describe('doc pages', () => {
   it('every doc page shows a lastReviewed date', () => {
     expect(LAST_REVIEWED).toMatch(/^\d{4}-\d{2}-\d{2}$/)
     for (const page of DOC_PAGES) {
-      expect(page.lastReviewed, page.path).toBe(LAST_REVIEWED)
+      // the terms and the refund policy show TERMS_VERSION, the version buyers accept at checkout
+      const expected = page === TERMS || page === REFUNDS ? TERMS_VERSION : LAST_REVIEWED
+      expect(page.lastReviewed, page.path).toBe(expected)
       expect(['Last reviewed', 'Last updated'], page.path).toContain(page.lastReviewedLabel)
       expect(page.description.length, page.path).toBeGreaterThan(40)
       expect(CONTENT_ROUTES, page.path).toContain(page.path)
@@ -224,9 +236,9 @@ describe('landing pages', () => {
 describe('pricing pages', () => {
   it('state the currency and the Quebec exclusion', () => {
     expect(PRICING_EN.facts).toContain('Prices in Canadian dollars.')
-    expect(PRICING_EN.facts).toContain('Not available in Quebec.')
+    expect(PRICING_EN.facts).toContain('Passes are not sold in Quebec.')
     expect(PRICING_KO.facts.join(' ')).toMatch(/캐나다 달러/)
-    expect(PRICING_KO.facts.join(' ')).toMatch(/퀘벡/)
+    expect(PRICING_KO.facts).toContain(QUEBEC_RULE.ko)
   })
 
   it('link the refund policy and describe the fair-use caps from config', () => {
@@ -267,5 +279,146 @@ describe('structured data and metadata', () => {
     const help = pageMetadata(HELP_INDEX)
     expect(String(help.alternates?.canonical)).toMatch(/^https:\/\/.+\/help\/$/)
     expect(help.alternates?.languages).toBeUndefined()
+  })
+})
+
+describe('review round 1 promises', () => {
+  const section = (page: DocPage, id: string): DocSection => {
+    const s = page.sections.find((x) => x.id === id)
+    if (!s) throw new Error(`${page.path} has no section #${id}`)
+    return s
+  }
+  const text = (value: unknown): string => {
+    const out: { path: string; text: string }[] = []
+    collectStrings(value, '', out)
+    return out.map((s) => s.text).join('\n')
+  }
+  const everything = () => allStrings().map((s) => s.text)
+
+  it('promise up to three errors, and the grader returns at most three (decision 4)', () => {
+    expect(MAX_TOP_ERRORS).toBe(3)
+    expect(text(LANDING_EN.feedback.includes)).toContain('(up to three)')
+    expect(text(LANDING_KO.feedback.includes)).toContain('최대 3개')
+    expect(text(section(HELP_FEEDBACK, 'contents'))).toContain('Up to three errors')
+    for (const t of everything()) expect(t).not.toMatch(/up to (four|five|[45])\b|최대 [45]개/i)
+  })
+
+  it('say that any pause extends active passes, in the same words everywhere (decision 12)', () => {
+    for (const s of [
+      section(TERMS, 'passes'),
+      section(REFUNDS, 'other'),
+      section(HELP_PASSES, 'how'),
+      section(HELP_TROUBLESHOOTING, 'paused'),
+      PRICING_EN.sections,
+    ]) {
+      expect(text(s)).toContain(PAUSE_EXTENSION.en)
+    }
+    expect(text(PRICING_KO.sections)).toContain(PAUSE_EXTENSION.ko)
+    for (const t of everything()) {
+      if (/length of the pause/.test(t)) expect(t).toContain(PAUSE_EXTENSION.en)
+      if (/멈춘 시간만큼/.test(t)) expect(t).toContain(PAUSE_EXTENSION.ko)
+      expect(t).not.toMatch(/instead of refunding|we extend active passes/)
+    }
+  })
+
+  it('say "Passes are not sold in Quebec." and never that the whole service is unavailable there (decision 15)', () => {
+    expect(QUEBEC_RULE.en).toBe('Passes are not sold in Quebec.')
+    expect(text(section(TERMS, 'eligibility'))).toContain(QUEBEC_RULE.en)
+    expect(LANDING_EN.pricing.note).toContain(QUEBEC_RULE.en)
+    expect(LANDING_KO.pricing.note).toContain(QUEBEC_RULE.ko)
+    expect(PRICING_KO.facts).toContain(QUEBEC_RULE.ko)
+    for (const t of everything()) {
+      expect(t).not.toMatch(/not available in Quebec/i)
+      expect(t).not.toMatch(/퀘벡에서는 이용할 수 없어요/)
+    }
+  })
+
+  it('count only graded tasks toward fair use and state the no-feedback cap from config (decision 2)', () => {
+    expect(NO_FEEDBACK_LIMIT.en).toContain(`${CAPS.noFeedbackPerDay} per account per day`)
+    expect(NO_FEEDBACK_LIMIT.ko).toContain(`하루 ${CAPS.noFeedbackPerDay}개`)
+    for (const s of [
+      section(TERMS, 'fair-use'),
+      section(HELP_PASSES, 'fair-use'),
+      section(HELP_TROUBLESHOOTING, 'limit'),
+      PRICING_EN.sections.find((x) => x.id === 'fair-use'),
+    ]) {
+      expect(text(s)).toContain(NO_FEEDBACK_LIMIT.en)
+    }
+    expect(text(PRICING_KO.sections.find((x) => x.id === 'fair-use'))).toContain(NO_FEEDBACK_LIMIT.ko)
+    expect(text(section(HELP_TROUBLESHOOTING, 'no-feedback'))).toContain(`up to ${CAPS.noFeedbackPerDay} requests without feedback`)
+    // the old unconditional wording
+    for (const t of everything()) expect(t).not.toMatch(/do not count toward these limits\.$|이민 관련 질문처럼 피드백을 드릴 수 없는 요청은 한도에 포함되지 않아요/)
+  })
+
+  it('describe the scope refusal as a fixed message (decision 3)', () => {
+    const feedback = text(section(AI_DISCLOSURE_PAGE, 'feedback'))
+    expect(feedback).toContain('fixed message that we wrote')
+    expect(feedback).toMatch(/licensed immigration consultant or a lawyer/)
+    expect(text(section(HELP_FEEDBACK, 'steps'))).toContain('fixed message that we wrote')
+    for (const t of everything()) expect(t).not.toMatch(/Claude replies with a short message/)
+  })
+
+  it('claim only what the claim filter does', () => {
+    expect(text(section(AI_DISCLOSURE_PAGE, 'feedback'))).toContain(FILTER_EN)
+    expect(text(section(HELP_FEEDBACK, 'steps'))).toContain(FILTER_EN)
+    for (const t of everything()) expect(t).not.toMatch(/looks like a test result or a prediction|exactly what to fix/i)
+    // the two kinds of sentence FILTER_EN says it removes are the ones findClaims (and so the filter) catches
+    expect(findClaims('This answer is about 9 out of 12.')).toContain('numeric_result')
+    expect(findClaims('This is band 9 writing.')).toContain('band')
+    expect(findClaims('Your score would be high.')).toContain('score')
+  })
+
+  it('describe deletion as removing answers and feedback while anonymous cost records stay (decision 5)', () => {
+    const rights = text(section(PRIVACY, 'your-rights'))
+    expect(rights).toMatch(/removes your email address, answers, transcripts, feedback, error types and support messages/)
+    expect(rights).toContain('without anything that links them to you')
+    const retention = text(section(PRIVACY, 'retention'))
+    expect(retention).toMatch(/Task and cost records/)
+    expect(retention).toMatch(/free speaking task is not given again/)
+    expect(text(PRIVACY.sections)).toContain('we do not store them with your answers')
+    expect(text(section(HELP_ACCOUNT, 'delete'))).toContain('without anything that links it to you')
+    expect(text(section(HELP_PRIVACY, 'after-delete'))).toMatch(/processing cost/)
+  })
+
+  it('say saved answers and feedback open from the account page for the retention period (decision 6)', () => {
+    expect(text(section(PRIVACY, 'your-rights'))).toContain(`open your saved answers and feedback from your account page for ${RETENTION_DAYS} days`)
+    expect(text(section(HELP_FEEDBACK, 'steps'))).toContain(`open them again from your [account page](/account/) for ${RETENTION_DAYS} days`)
+    for (const t of everything()) expect(t).not.toMatch(/your recent tasks and feedback are on your account page|saved to your history\./)
+  })
+
+  it('disclose where support messages go and how long mailbox copies are kept (decision 7)', () => {
+    const providers = PRIVACY.sections.find((s) => s.id === 'providers')
+    const google = text(providers).split('\n').find((t) => t.startsWith('Hosts our business email (Gmail)'))
+    expect(google).toMatch(/Support messages are forwarded there/)
+    expect(text(providers)).toMatch(/uses Claude as an assistant to draft replies to support messages.*reviews every reply and sends it/)
+    expect(text(section(PRIVACY, 'retention'))).toContain(`Copies in our business mailbox, including our replies, are deleted ${RETENTION_DAYS} days after you send the message`)
+    const summary = text(section(HELP_PRIVACY, 'summary'))
+    expect(summary).toMatch(/Gmail/)
+    expect(summary).toMatch(/Claude by Anthropic/)
+    expect(summary).toMatch(/owner reviews every reply/)
+    expect(text(AI_DISCLOSURE_PAGE.sections)).toMatch(/draft replies to messages sent through the support form/)
+  })
+
+  it('say every email carries the unsubscribe link (decision 11)', () => {
+    expect(text(section(PRIVACY, 'marketing'))).toContain('the unsubscribe link at the end of every email we send')
+    expect(text(section(HELP_ACCOUNT, 'marketing'))).toContain('the unsubscribe link at the end of every email we send')
+    for (const t of everything()) expect(t).not.toMatch(/unsubscribe link in any marketing email/)
+  })
+
+  it('keep /unsubscribe/ (noindex) out of the sitemap routes', () => {
+    expect([...CONTENT_ROUTES, ...PRACTICE_ROUTES]).not.toContain('/unsubscribe/')
+  })
+
+  it('show card-only payment and agreement at purchase, dated TERMS_VERSION (decision 13)', () => {
+    expect(TERMS.lastReviewed).toBe(TERMS_VERSION)
+    expect(REFUNDS.lastReviewed).toBe(TERMS_VERSION)
+    expect(text(TERMS.intro)).toMatch(/When you buy a pass, you agree to these terms and our refund policy, as shown next to the buy button/)
+    expect(text(REFUNDS.intro)).toMatch(/When you buy a pass, you agree to this policy/)
+    expect(text(section(TERMS, 'passes'))).toMatch(/You pay by card .* We do not accept other payment methods\./)
+    expect(text(section(TERMS, 'passes'))).toMatch(/or the payment was not made by card/)
+    expect(text(section(REFUNDS, 'other'))).toMatch(/unused days of a pass is a partial refund.*The pass ends when the refund is made/)
+    expect(text(PRICING_EN.sections)).toMatch(/Payment is by card only/)
+    expect(text(PRICING_KO.sections)).toMatch(/카드로만/)
+    expect(text(section(HELP_PASSES, 'buying'))).toMatch(/By buying, you agree to the \[terms of use\]/)
   })
 })

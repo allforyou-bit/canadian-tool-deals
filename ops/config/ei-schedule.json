@@ -1,0 +1,5 @@
+{
+  "anchorMonday": "2026-10-05",
+  "confirmedByOwner": false,
+  "notes": "a Monday on which the owner files the EI bi-weekly report; the books Routine writes the EI note on every Monday that is a whole number of 14-day periods from this date. 2026-10-05 is a placeholder (Day 8 of the memo plan): the owner replaces it with a real report Monday from Service Canada and sets confirmedByOwner to true"
+}

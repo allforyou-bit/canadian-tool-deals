@@ -1,5 +1,7 @@
-// Per-user usage counters (caps, memo B10) and free-sample availability (memo B5).
-// Refused requests (out-of-scope questions) do not count toward caps.
+// Per-user usage counters (caps, memo B10), the atomic cap reservation (decision 2) and free-sample
+// availability (memo B5). Rows without feedback (refused = 1: refusals, failures, no speech) never
+// count toward the fair-use caps; they have their own daily bound, CAPS.noFeedbackPerDay. A row
+// whose model call is still running (pending = 1) has refused = 0, so it holds its cap slot.
 import { CAPS, FREE } from '../../../shared/config'
 import type { Env, User } from '../env'
 import { addDays, dayKey, startOfUtcDay } from './time'
@@ -10,6 +12,7 @@ export interface Usage {
   graded30d: number
 }
 
+/** Graded tasks (including reserved, still-running ones) today and in the last 30 days. */
 export async function getUsage(env: Env, userId: string, now: Date): Promise<Usage> {
   const row = await env.DB.prepare(
     `SELECT
@@ -30,6 +33,86 @@ export function capReached(usage: Usage, kind: 'writing' | 'speaking'): 'daily' 
   if (kind === 'writing' && usage.writingToday >= CAPS.writingPerDay) return 'daily'
   if (kind === 'speaking' && usage.speakingToday >= CAPS.speakingPerDay) return 'daily'
   return null
+}
+
+/** Requests without feedback (refused = 1) this UTC day. */
+export async function noFeedbackToday(env: Env, userId: string, now: Date): Promise<number> {
+  const row = await env.DB.prepare('SELECT COUNT(*) AS n FROM grades WHERE user_id = ?1 AND refused = 1 AND created_at >= ?2')
+    .bind(userId, startOfUtcDay(now).toISOString())
+    .first<{ n: number }>()
+  return row?.n ?? 0
+}
+
+export type ReserveBlock = 'daily' | 'rolling30' | 'no_feedback'
+
+/** The pending grades row that holds a slot while the model call runs. */
+export interface GradeReservation {
+  id: string
+  /** null for the anonymous free sample */
+  userId: string | null
+  taskId: string
+  promptIndex: number
+  kind: 'writing' | 'speaking'
+  free: boolean
+  model: string
+  /** worst-case cost of the call; a call that never finishes keeps this estimate in the cost log */
+  costMicroUsd: number
+  createdAt: string
+}
+
+/**
+ * Reserve a slot before any model call (decision 2): one conditional INSERT … SELECT … WHERE of a
+ * grades row with pending = 1 and refused = 0 (device_hash is not written: decision 5). D1 runs each
+ * statement atomically, so parallel requests cannot all pass the check.
+ * - fairUse (pass holders): graded rows of this kind today < the daily cap, and graded rows in the
+ *   last 30 days < CAPS.gradedPer30Days; pending rows count, since they have refused = 0.
+ * - every signed-in user: rows without feedback today < CAPS.noFeedbackPerDay.
+ * - anonymous (free sample, already claimed atomically): inserted without conditions.
+ * Returns null when reserved, or the limit that blocked it.
+ */
+export async function reserveGrade(env: Env, r: GradeReservation, now: Date, opts: { fairUse: boolean }): Promise<ReserveBlock | null> {
+  const day = startOfUtcDay(now).toISOString()
+  const since30 = addDays(now, -30).toISOString()
+  const insert = () =>
+    env.DB.prepare(
+      `INSERT INTO grades (id, user_id, device_hash, task_id, prompt_index, kind, free, refused, pending, model, cost_micro_usd, created_at)
+       SELECT ?1, ?2, NULL, ?3, ?4, ?5, ?6, 0, 1, ?7, ?8, ?9
+        WHERE ?2 IS NULL OR (
+          (SELECT COUNT(*) FROM grades WHERE user_id = ?2 AND refused = 1 AND created_at >= ?10) < ?11
+          AND (?12 = 0 OR (
+            (SELECT COUNT(*) FROM grades WHERE user_id = ?2 AND refused = 0 AND kind = ?5 AND created_at >= ?10) < ?13
+            AND (SELECT COUNT(*) FROM grades WHERE user_id = ?2 AND refused = 0 AND created_at >= ?14) < ?15
+          ))
+        )`,
+    )
+      .bind(
+        r.id,
+        r.userId,
+        r.taskId,
+        r.promptIndex,
+        r.kind,
+        r.free ? 1 : 0,
+        r.model,
+        r.costMicroUsd,
+        r.createdAt,
+        day,
+        CAPS.noFeedbackPerDay,
+        opts.fairUse ? 1 : 0,
+        r.kind === 'writing' ? CAPS.writingPerDay : CAPS.speakingPerDay,
+        since30,
+        CAPS.gradedPer30Days,
+      )
+      .run()
+
+  for (let attempt = 0; attempt < 2; attempt++) {
+    if ((await insert()).meta.changes === 1) return null
+    if (r.userId === null) break
+    // name the limit for the message; if a parallel call freed its slot meanwhile, try once more
+    const cap = opts.fairUse ? capReached(await getUsage(env, r.userId, now), r.kind) : null
+    if (cap) return cap
+    if ((await noFeedbackToday(env, r.userId, now)) >= CAPS.noFeedbackPerDay) return 'no_feedback'
+  }
+  return 'no_feedback'
 }
 
 export interface FreeKeys {

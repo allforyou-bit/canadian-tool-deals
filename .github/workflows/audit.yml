@@ -1,5 +1,12 @@
-# Weekly dependency audit (memo §5.2): no high or critical advisories in either package.
+# Weekly dependency audit (memo §5.2): no high or critical advisories.
 # `npm audit` reads package-lock.json only; nothing is installed. Needs no secrets.
+#
+# products/clb (the practice coach, a live Worker): must pass; any high or critical advisory fails.
+# repo root (the home-services site): reported as a notice, never a failure (integrator decision 18).
+#   The root site is a static export (`output: 'export'`, served as files from out/); the root
+#   advisories target Next.js server features (middleware, image optimisation, server actions, …)
+#   that a static export does not run, and memo B16 requires the root out/ to stay byte-identical,
+#   so upgrading root Next is an owner decision (business/online/owner-setup.md records it).
 name: Dependency audit
 
 on:
@@ -11,16 +18,13 @@ permissions:
   contents: read
 
 jobs:
-  audit:
+  clb:
+    name: Practice coach (must pass)
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    strategy:
-      fail-fast: false
-      matrix:
-        package: ['.', 'products/clb']
     defaults:
       run:
-        working-directory: ${{ matrix.package }}
+        working-directory: products/clb
     steps:
       - name: Check out
         uses: actions/checkout@v7
@@ -34,3 +38,35 @@ jobs:
 
       - name: npm audit (high and critical)
         run: npm audit --audit-level=high
+
+  root:
+    name: Root site (reported only)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: npm audit (reported as a notice)
+        run: |
+          if npm audit --audit-level=high > "$RUNNER_TEMP/root-audit.txt" 2>&1; then
+            echo "Root audit: no high or critical advisories."
+            exit 0
+          fi
+          cat "$RUNNER_TEMP/root-audit.txt"
+          summary=$(grep -E '^[0-9]+ vulnerabilit' "$RUNNER_TEMP/root-audit.txt" | tail -n 1)
+          echo "::notice title=Root site audit (not a failure)::${summary:-npm audit reported advisories}. The root site is a static export (output: 'export'); these advisories target Next.js server features it does not run, and memo B16 keeps its out/ byte-identical. Upgrading root Next is an owner decision (business/online/owner-setup.md)."
+          {
+            echo "### Root site audit (reported only)"
+            echo ""
+            echo "${summary:-npm audit reported advisories}."
+            echo ""
+            echo "Not a failure: static export, server-feature advisories, memo B16 (integrator decision 18). The owner decides on an upgrade."
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -51,7 +51,41 @@ export const FACTS = {
   sessionDays: SESSION.days,
   freeWriting: FREE.anonymousWritingPerDevice,
   freeSpeaking: FREE.speakingAfterEmailVerification,
+  noFeedbackPerDay: CAPS.noFeedbackPerDay,
 } as const
+
+/*
+ * Sentences that several pages must state the same way (review decisions 2, 7, 12, 15 and the filter
+ * wording). content.test.ts checks that the pages use them and that no older variant is left.
+ */
+
+/** Any grading pause extends active passes; queued passes shift (worker/src/cron.ts, decision 12). */
+export const PAUSE_EXTENSION = {
+  en: 'If feedback is paused, active passes are extended by the length of the pause.',
+  ko: '피드백이 멈추면, 멈춘 시간만큼 이용 중인 이용권 기간이 늘어나요.',
+} as const
+
+/** The service can be used anywhere; only passes are restricted (decision 15). */
+export const QUEBEC_RULE = {
+  en: 'Passes are not sold in Quebec.',
+  ko: '퀘벡에서는 이용권을 판매하지 않아요.',
+} as const
+
+/**
+ * Fair use counts graded tasks only; requests without feedback (refusals, failures, no speech) have their
+ * own daily cap, and reaching it blocks further submissions until the reset (decision 2, CAPS.noFeedbackPerDay).
+ */
+export const NO_FEEDBACK_LIMIT = {
+  en: `Only tasks that get feedback count toward these limits. Requests that get no feedback, such as questions we cannot help with or attempts that fail, are limited separately to ${CAPS.noFeedbackPerDay} per account per day. After that, you can submit again when the daily limits reset.`,
+  ko: `피드백을 받은 과제만 한도에 포함돼요. 도와드릴 수 없는 질문이나 처리에 실패한 요청처럼 피드백 없이 끝난 요청은 따로 계정당 하루 ${CAPS.noFeedbackPerDay}개까지만 가능해요. 그 뒤에는 하루 한도가 초기화되면 다시 제출할 수 있어요.`,
+} as const
+
+/**
+ * What worker/src/grading/filter.ts really does: it drops sentences that match the FORBIDDEN_CLAIMS words
+ * and the "n out of 12" number pattern. It does not detect predictions, so the copy must not say it does.
+ */
+export const FILTER_EN =
+  'An automatic filter then removes sentences that use set words or number patterns that present a test result, such as a number out of 12. It can miss wording it does not look for, so ignore any comment that sounds like a test result or a prediction.'
 
 /** "30-day pass: C$39" style label for one SKU. */
 export const passLabel = (sku: Sku, lang: 'en' | 'ko'): string =>

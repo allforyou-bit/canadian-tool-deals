@@ -35,8 +35,15 @@ export function describeError(err: ApiClientError, lang: Lang, context: ErrorCon
       return { text: t(lang, 'err.grading_paused'), actions: [] }
     case 'rate_limited':
       if (context === 'login') return { text: t(lang, 'l.rateLimited'), actions: [] }
+      // the Worker answers rate_limited for the graded-task caps and for the daily cap on answers
+      // that got no feedback (refusals, failures); the message names all of them
       return {
-        text: t(lang, 'err.rate_limited', { w: CAPS.writingPerDay, s: CAPS.speakingPerDay, t: CAPS.gradedPer30Days }),
+        text: t(lang, 'err.rate_limited', {
+          w: CAPS.writingPerDay,
+          s: CAPS.speakingPerDay,
+          t: CAPS.gradedPer30Days,
+          n: CAPS.noFeedbackPerDay,
+        }),
         actions: [],
       }
     case 'turnstile_failed':
@@ -50,9 +57,13 @@ export function describeError(err: ApiClientError, lang: Lang, context: ErrorCon
     case 'region_not_supported':
       return { text: t(lang, context === 'checkout' ? 'b.region' : 'err.region_not_supported'), actions: [] }
     case 'checkout_unavailable':
-      return { text: t(lang, 'b.soon'), actions: [] }
+      return { text: t(lang, 'err.checkout_unavailable'), actions: [] }
     case 'bad_request':
       if (context === 'login') return { text: t(lang, 'l.badEmail'), actions: [] }
+      // speaking: the Worker's bad_request for a valid upload means the transcript was empty
+      if (context === 'speaking') return { text: t(lang, 's.noSpeech'), actions: [] }
+      // checkout: a stale page (e.g. terms version changed since it loaded)
+      if (context === 'checkout') return { text: t(lang, 'b.reload'), actions: [] }
       return { text: context === 'account' && err.message ? err.message : t(lang, 'err.bad_request'), actions: [] }
     case 'forbidden':
     case 'not_found':

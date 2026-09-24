@@ -1,8 +1,10 @@
 // POST /api/checkout (memo B6): signed-in buyers in Canada outside Quebec get a Stripe Checkout Session
-// (one-time payment, billing address required). The pass is granted later, by the webhook, only after
-// the billing address and card country are checked.
+// (one-time card payment, billing address required). The buy button shows "By buying you agree to the
+// Terms of use and Refund policy" and sends the TERMS_VERSION it showed; that version must be the current
+// one and is stored on the purchase and in the Stripe metadata. The pass is granted later, by the webhook,
+// only after the payment method, billing address and card country are checked.
 import type { CheckoutRequest, CheckoutResponse } from '../../../shared/api'
-import { BRAND, SKUS } from '../../../shared/config'
+import { BRAND, SKUS, TERMS_VERSION } from '../../../shared/config'
 import type { Ctx } from '../env'
 import { getFlags } from '../lib/flags'
 import { error, json, readJson } from '../lib/http'
@@ -22,17 +24,21 @@ export async function checkout(req: Request, ctx: Ctx): Promise<Response> {
   const lang = langOf(body.lang)
   if (body.residentAttestation !== true) return error('bad_request', pick(lang, ERRORS.attestation))
   if (!isSku(body.sku)) return error('bad_request', pick(lang, ERRORS.unknownSku))
+  if (body.termsVersion !== TERMS_VERSION) return error('bad_request', pick(lang, ERRORS.termsOutdated))
   // request.cf country/regionCode (set by the router); an unknown country is refused too
   if (!inSalesRegion(ctx.country, ctx.region)) return error('region_not_supported', pick(lang, ERRORS.region))
 
   const sku = SKUS[body.sku]
   const site = siteUrl(env)
-  const meta = { user_id: user.id, sku: sku.sku }
+  const meta = { user_id: user.id, sku: sku.sku, terms_version: TERMS_VERSION }
   let session: CheckoutSession
   try {
     session = await stripeFetch<CheckoutSession>(env, 'POST', '/v1/checkout/sessions', {
       params: {
         mode: 'payment',
+        // Cards only: the region rule needs the card's issuing country (Link, BNPL and bank payments have
+        // none). `payment_method_types` is the parameter in the pinned STRIPE_API_VERSION (see stripe.ts).
+        payment_method_types: ['card'],
         line_items: [
           {
             price_data: {
@@ -70,6 +76,7 @@ export async function checkout(req: Request, ctx: Ctx): Promise<Response> {
       sku: sku.sku,
       amountCents: sku.priceCents,
       currency: CURRENCY,
+      termsVersion: TERMS_VERSION,
       now,
     }),
     eventStatement(env, 'checkout_start', EVENT_PATHS.checkout, now),

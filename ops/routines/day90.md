@@ -24,7 +24,7 @@ Never query live services or read user text.
 
 | Trailing-30-day net | Memo rule |
 |---|---|
-| below C$0 | **wind down**: checkout, ads and Routines off, Claude Pro cancelled. The Worker and grading keep running until the last active pass expires, or pro-rata refunds are given |
+| below C$0 | **wind down**: checkout, ads and Routines off, Claude Pro cancelled. The Worker and grading keep running until the last active pass expires, or pro-rata refunds are given (each one a partial refund in Stripe with metadata `end_pass` = `true`, so the pass ends — owner-setup 2-4) |
 | C$0 to C$1,000 | **maintenance**: no ads |
 | C$1,000 or more | **continue** |
 
@@ -33,7 +33,9 @@ disputes (K7), total ad spend against the cap, the latest weekly verdicts, and h
 with the memo's January scenarios (§2.2). For a wind-down, list the owner's steps in order with the
 tool for each (for example `flags.yml` → `checkout_enabled` = false; end the campaign in Google Ads;
 disable the Routines; cancel Claude Pro) and the date the last active pass ends if the daily files
-allow an estimate (they do not list passes; say so if you cannot tell).
+allow an estimate (they do not list passes; say so if you cannot tell). Do not suggest turning
+`grading_enabled` off while passes are active: any grading pause extends every active pass by its
+length (memo §7.1 B10).
 
 ## Output
 

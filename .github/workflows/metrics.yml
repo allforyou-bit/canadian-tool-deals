@@ -2,12 +2,14 @@
 #
 # 1. Copies the newest `metrics_daily` rows (written by the Worker's 05:00 UTC cron) from D1 into
 #    ops/metrics/<day>.json, after a personal-data guard (no "@", no input_text / transcript / email /
-#    essay, no 16+ character token-like strings), and commits them as github-actions[bot].
+#    essay, no 16+ character token-like strings; every file under ops/metrics, recursively), and
+#    commits them as github-actions[bot].
 # 2. Checks ops/metrics/ads.json freshness: older than 48 h while ops/config/ad-cap.json says ads run
-#    → an issue asking the owner to pause the campaign (the Worker cannot pause Google Ads).
-# Outcome assertions, not job status: a missing snapshot or stale ads data opens an issue and fails the
-# run (GitHub's failed-run email is the second alert). Scheduled runs can start late — the memo notes
-# delays of up to 11.9 h — so the export takes the newest 3 rows and is idempotent.
+#    → an issue asking the owner to pause the campaign (the Worker cannot pause Google Ads). This check
+#    runs even when the D1 export failed (it needs no Cloudflare access).
+# Outcome assertions, not job status: a missing snapshot, a failed export or stale ads data opens an
+# issue and fails the run (GitHub's failed-run email is the second alert). Scheduled runs can start
+# late — the memo notes delays of up to 11.9 h — so the export takes the newest 3 rows and is idempotent.
 name: Daily metrics
 
 on:
@@ -71,10 +73,12 @@ jobs:
           if [ "$code" != 0 ] && [ "$code" != 3 ]; then exit "$code"; fi
 
       - name: Personal-data guard
+        id: guard
+        if: always() && steps.cfg.outcome == 'success'
         run: node scripts/run.mjs scripts/metrics.ts guard ../../ops/metrics
 
       - name: Commit new metrics files
-        if: steps.cfg.outputs.ready == 'true'
+        if: steps.cfg.outputs.ready == 'true' && steps.export.outcome == 'success' && steps.guard.outcome == 'success'
         working-directory: .
         run: |
           git add -A -- ops/metrics/
@@ -95,12 +99,16 @@ jobs:
 
       - name: Check ads data freshness and the spend cap
         id: ads
+        if: always() && steps.cfg.outcome == 'success'
         run: node scripts/run.mjs scripts/ads.ts check --ads ../../ops/metrics/ads.json --cap ../../ops/config/ad-cap.json
 
-      - name: Open an issue for a missing snapshot or stale ads data
-        if: always() && (steps.export.outputs.code == '3' || steps.ads.outputs.alert == 'true' || steps.ads.outputs.over_cap == 'true' || steps.ads.outcome == 'failure')
+      - name: Open an issue for a missing snapshot, a failed export or stale ads data
+        if: always() && (steps.export.outcome == 'failure' || steps.guard.outcome == 'failure' || steps.export.outputs.code == '3' || steps.ads.outputs.alert == 'true' || steps.ads.outputs.over_cap == 'true' || steps.ads.outcome == 'failure')
         uses: actions/github-script@v9
         env:
+          EXPORT_FAILED: ${{ steps.export.outcome == 'failure' }}
+          GUARD_FAILED: ${{ steps.guard.outcome == 'failure' }}
+          EXPORT_CODE: ${{ steps.export.outputs.code }}
           SNAPSHOT_STALE: ${{ steps.export.outputs.code == '3' }}
           ADS_ALERT: ${{ steps.ads.outputs.alert == 'true' || steps.ads.outputs.over_cap == 'true' }}
           ADS_CHECK_FAILED: ${{ steps.ads.outcome == 'failure' }}
@@ -109,6 +117,18 @@ jobs:
           script: |
             const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
             const wanted = []
+            if (process.env.EXPORT_FAILED === 'true') {
+              wanted.push({
+                title: 'Metrics export failed',
+                body: `The daily D1 export (\`scripts/metrics.ts export\`) failed${process.env.EXPORT_CODE ? ` with exit code ${process.env.EXPORT_CODE}` : ''}: a wrangler or Cloudflare API error (for example an expired CLOUDFLARE_API_TOKEN), an invalid metrics_daily row, or a personal-data guard hit. Nothing was committed for the failed rows. The ads check still ran.\n\nSee the run log (it names the rule and position only, never the data): ${run}`,
+              })
+            }
+            if (process.env.GUARD_FAILED === 'true') {
+              wanted.push({
+                title: 'Personal-data guard failed on ops/metrics',
+                body: `\`scripts/metrics.ts guard\` found a file under ops/metrics that is not allowed or may hold personal data (the log names the file, rule and position only). Nothing was committed by this run. Do not edit the file by hand to make the check pass: find out how the data got there (ops/metrics/README.md).\n\nRun: ${run}`,
+              })
+            }
             if (process.env.SNAPSHOT_STALE === 'true') {
               wanted.push({
                 title: 'Metrics snapshot missing',
@@ -132,7 +152,7 @@ jobs:
             }
 
       - name: Fail when an assertion failed
-        if: steps.export.outputs.code == '3' || steps.ads.outputs.alert == 'true' || steps.ads.outputs.over_cap == 'true'
+        if: always() && (steps.export.outputs.code == '3' || steps.ads.outputs.alert == 'true' || steps.ads.outputs.over_cap == 'true')
         run: |
           echo "::error::Metrics or ads assertion failed; see the issue opened by this run."
           exit 1

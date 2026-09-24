@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import adsCsv from '../../../ops/ads/google.csv?raw'
 import { AI_DISCLOSURE, NOT_AFFILIATED } from '../shared/config'
-import { decodeEntities, htmlToText, lintAdsCsv, lintHtml, lintText } from './content-lint'
+import { MAILING_ADDRESS_PLACEHOLDER } from '../content/site'
+import { addressPlaceholderFindings, ADDRESS_PLACEHOLDERS, decodeEntities, htmlToText, lintAdsCsv, lintHtml, lintText } from './content-lint'
 
 const page = (body: string, head = '<title>Practice</title>') =>
   `<!DOCTYPE html><html lang="en"><head>${head}</head><body>${body}<footer><p>${NOT_AFFILIATED.en}</p></footer></body></html>`
@@ -90,6 +91,26 @@ describe('lintHtml', () => {
   it('checks meta tags and JSON-LD, not only visible text', () => {
     const html = page('<p>Practice</p>', '<meta property="og:title" content="Guaranteed band 9">')
     expect(lintHtml(html).map((f) => f.rule)).toEqual(expect.arrayContaining(['guarantee', 'band']))
+  })
+})
+
+describe('addressPlaceholderFindings (--require-address, decision 16)', () => {
+  it('fails a page that still shows the mailing-address placeholder, even split by inline tags', () => {
+    const html = page(`<p>Mailing address: Maple Practice Coach, <span>${MAILING_ADDRESS_PLACEHOLDER}</span></p>`)
+    expect(addressPlaceholderFindings(html).map((f) => [f.rule, f.excerpt])).toEqual([['mailing_address_placeholder', MAILING_ADDRESS_PLACEHOLDER]])
+    const [first, ...rest] = MAILING_ADDRESS_PLACEHOLDER.split(' ')
+    expect(addressPlaceholderFindings(page(`<p><strong>${first}</strong> ${rest.join(' ')}</p>`))).toHaveLength(1)
+  })
+
+  it('fails the Worker placeholder and the old consent fallback wording, in text and attributes', () => {
+    expect(addressPlaceholderFindings(page('<p>Maple Practice Coach, SET-BEFORE-LAUNCH (CASL: owner mailing address)</p>'))).toHaveLength(1)
+    expect(addressPlaceholderFindings(page('<label>…from Maple Practice Coach, mailing address on our Privacy page, .</label>'))).toHaveLength(1)
+    expect(addressPlaceholderFindings(page('<input aria-label="개인정보 처리방침 페이지의 우편 주소">'))).toHaveLength(1)
+    expect(ADDRESS_PLACEHOLDERS).toContain(MAILING_ADDRESS_PLACEHOLDER)
+  })
+
+  it('passes a page with a real address', () => {
+    expect(addressPlaceholderFindings(page('<p>Mailing address: Maple Practice Coach, 1 Test St, Toronto ON M5V 0A1</p>'))).toEqual([])
   })
 })
 

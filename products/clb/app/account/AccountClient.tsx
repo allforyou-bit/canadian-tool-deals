@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useId, useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import { GradeResultView } from '../../components/GradeResultView'
 import { LangToggle } from '../../components/LangToggle'
 import { ErrorNotice, Notice } from '../../components/Notice'
 import { cls } from '../../components/ui'
@@ -11,10 +12,10 @@ import { consentText } from '../../lib/consent'
 import { PUBLIC_ENV } from '../../lib/env'
 import { useMe, useSiteUrl, useUiLang } from '../../lib/hooks'
 import { errorKindLabel, formatCad, formatDate, t } from '../../lib/i18n'
-import { activePass, refreshMe } from '../../lib/me'
+import { accessEndsAt, activePass, refreshMe } from '../../lib/me'
 import { loginHref } from '../../lib/url'
 import { useAction } from '../../lib/use-action'
-import type { HistoryResponse, Lang, MeResponse, RefundResponse } from '../../shared/api'
+import type { HistoryItem, HistoryItemResponse, HistoryResponse, Lang, MeResponse, RefundResponse } from '../../shared/api'
 import { CAPS, REFUND_POLICY, SKUS } from '../../shared/config'
 import { taskById } from '../../shared/tasks'
 
@@ -50,16 +51,29 @@ function UsageRow(props: { label: string; used: number; cap: number }) {
 
 function PassSection({ me, lang }: { me: MeResponse; lang: Lang }) {
   const pass = activePass(me)
+  // end of every pass bought, including passes queued after the current one
+  const endsAt = accessEndsAt(me)
+  const queued = pass !== null && endsAt !== null && new Date(endsAt).getTime() > new Date(pass.endsAt).getTime()
   return (
     <Section id="account-pass" title={t(lang, 'a.pass')}>
-      {pass ? (
-        <p className="text-slate-900" data-testid="pass-summary">
-          {t(lang, 'a.passActive', {
-            name: SKUS[pass.sku]?.[lang] ?? pass.sku,
-            start: formatDate(pass.startsAt, lang),
-            end: formatDate(pass.endsAt, lang),
-          })}
-        </p>
+      {pass || endsAt ? (
+        <div className="space-y-1">
+          {pass && (
+            <p className="text-slate-900" data-testid="pass-summary">
+              {t(lang, 'a.passActive', {
+                name: SKUS[pass.sku]?.[lang] ?? pass.sku,
+                start: formatDate(pass.startsAt, lang),
+                end: formatDate(pass.endsAt, lang),
+              })}
+            </p>
+          )}
+          {endsAt && (
+            <p className="font-semibold text-slate-900" data-testid="access-ends">
+              {t(lang, 'a.accessUntil', { date: formatDate(endsAt, lang) })}
+            </p>
+          )}
+          {queued && <p className={cls.muted}>{t(lang, 'a.queued')}</p>}
+        </div>
       ) : (
         <>
           <p className="text-slate-800">{t(lang, 'a.noPass')}</p>
@@ -85,6 +99,94 @@ function PassSection({ me, lang }: { me: MeResponse; lang: Lang }) {
         </p>
       </div>
     </Section>
+  )
+}
+
+type ItemState = { status: 'loading' } | { status: 'ready'; item: HistoryItemResponse } | { status: 'error'; error: ApiClientError }
+
+/** One saved task: title, date, error kinds, and a button that loads the saved answer and feedback. */
+function HistoryEntry({ item, lang }: { item: HistoryItem; lang: Lang }) {
+  const task = taskById(item.taskId)
+  const panelId = useId()
+  const [open, setOpen] = useState(false)
+  const [detail, setDetail] = useState<ItemState | null>(null)
+
+  function toggle() {
+    const next = !open
+    setOpen(next)
+    if (!next || (detail && detail.status !== 'error')) return
+    setDetail({ status: 'loading' })
+    api.historyItem(item.gradeId).then(
+      (res) => setDetail({ status: 'ready', item: res }),
+      (e: unknown) => setDetail({ status: 'error', error: e instanceof ApiClientError ? e : new ApiClientError('internal', 0, 'Network error') }),
+    )
+  }
+
+  let panel: ReactNode = null
+  if (open && detail) {
+    if (detail.status === 'loading') {
+      panel = <p role="status" className={cls.muted}>{t(lang, 'common.loading')}</p>
+    } else if (detail.status === 'error') {
+      // 404: purged after the retention period (or refused, which has no feedback to show)
+      panel =
+        detail.error.code === 'not_found' ? (
+          <Notice kind="info">{t(lang, 'a.historyGone')}</Notice>
+        ) : (
+          <ErrorNotice error={detail.error} lang={lang} context="account" returnTo="/account/" />
+        )
+    } else {
+      const saved = detail.item
+      const isSpeaking = saved.kind === 'speaking'
+      // speaking: the saved text is the transcript, which the feedback view shows itself
+      const result = isSpeaking && saved.result.transcript === undefined ? { ...saved.result, transcript: saved.text } : saved.result
+      panel = (
+        <div className="space-y-4">
+          {!isSpeaking && (
+            <div>
+              <h3 className="font-semibold text-slate-900">{t(lang, 'w.answer')}</h3>
+              <blockquote
+                lang="en"
+                className="mt-2 whitespace-pre-wrap rounded-md border-l-4 border-slate-300 bg-slate-50 p-3 font-serif text-slate-800"
+                data-testid="history-answer"
+              >
+                {saved.text}
+              </blockquote>
+            </div>
+          )}
+          <GradeResultView response={{ gradeId: saved.gradeId, result, free: false }} kind={saved.kind} headingLevel={3} />
+        </div>
+      )
+    }
+  }
+
+  return (
+    <li className="py-3">
+      <p className="font-medium text-slate-900">
+        {task ? (
+          <Link href={`/practice/${task.kind}/${task.id}/`} className={cls.link}>
+            {task.title[lang]}
+          </Link>
+        ) : (
+          item.taskId
+        )}
+        <span className="ml-2 text-sm font-normal text-slate-600">{formatDate(item.createdAt, lang)}</span>
+      </p>
+      {item.topErrorKinds.length > 0 && (
+        <p className="mt-1 text-sm text-slate-700">{item.topErrorKinds.map((k) => errorKindLabel(lang, k)).join(', ')}</p>
+      )}
+      <button
+        type="button"
+        className={`${cls.btn} ${cls.secondary} mt-2 min-h-9 px-3 py-1 text-sm`}
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={toggle}
+      >
+        {t(lang, open ? 'a.historyClose' : 'a.historyOpen')}
+      </button>
+      <div id={panelId} className={open ? 'mt-3' : 'hidden'}>
+        {panel}
+      </div>
+    </li>
   )
 }
 
@@ -122,83 +224,85 @@ function HistorySection({ lang }: { lang: Lang }) {
       {data && data.items.length === 0 && <p className="text-slate-800">{t(lang, 'a.noHistory')}</p>}
       {data && data.items.length > 0 && (
         <ul className="divide-y divide-slate-200">
-          {data.items.map((item) => {
-            const task = taskById(item.taskId)
-            return (
-              <li key={item.gradeId} className="py-3">
-                <p className="font-medium text-slate-900">
-                  {task ? (
-                    <Link href={`/practice/${task.kind}/${task.id}/`} className={cls.link}>
-                      {task.title[lang]}
-                    </Link>
-                  ) : (
-                    item.taskId
-                  )}
-                  <span className="ml-2 text-sm font-normal text-slate-600">{formatDate(item.createdAt, lang)}</span>
-                </p>
-                {item.topErrorKinds.length > 0 && (
-                  <p className="mt-1 text-sm text-slate-700">{item.topErrorKinds.map((k) => errorKindLabel(lang, k)).join(', ')}</p>
-                )}
-              </li>
-            )
-          })}
+          {data.items.map((item) => (
+            <HistoryEntry key={item.gradeId} item={item} lang={lang} />
+          ))}
         </ul>
       )}
     </Section>
   )
 }
 
-function MarketingSection({ lang }: { lang: Lang }) {
+function MarketingSection({ lang, optedIn }: { lang: Lang; optedIn: boolean }) {
   const id = useId()
   const siteUrl = useSiteUrl()
+  // null while the owner's mailing address is not configured: then we do not ask for consent at all
   const consent = consentText(lang, PUBLIC_ENV.mailingAddress, siteUrl)
   const [ticked, setTicked] = useState(false)
   const action = useAction<'in' | 'out'>()
+  const stateRef = useRef<HTMLParagraphElement>(null)
+  const shownOptIn = useRef(optedIn)
+
+  // the withdraw button or the opt-in form (whichever had focus) is swapped out when the state
+  // changes after the learner's own action: keep focus on the new state line
+  useEffect(() => {
+    if (shownOptIn.current !== optedIn && action.done) stateRef.current?.focus()
+    shownOptIn.current = optedIn
+  }, [optedIn, action.done])
 
   async function optIn(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    if (!ticked) return
-    await action.run(async () => {
+    if (!ticked || !consent) return
+    const done = await action.run(async () => {
       await api.setMarketing({ optIn: true, consentText: consent })
       return 'in'
     })
+    if (done) {
+      setTicked(false)
+      void refreshMe({ force: true })
+    }
+  }
+
+  async function optOut() {
+    const done = await action.run(async () => {
+      await api.setMarketing({ optIn: false })
+      return 'out'
+    })
+    if (done) void refreshMe({ force: true })
   }
 
   return (
     <Section id="account-marketing" title={t(lang, 'a.marketing')}>
       <p className="text-slate-800">{t(lang, 'a.marketingIntro')}</p>
-      <button
-        type="button"
-        className={`${cls.btn} ${cls.secondary}`}
-        disabled={action.pending}
-        onClick={() => {
-          setTicked(false)
-          void action.run(async () => {
-            await api.setMarketing({ optIn: false })
-            return 'out'
-          })
-        }}
-      >
-        {t(lang, 'a.marketingWithdraw')}
-      </button>
-      <form onSubmit={optIn} className="space-y-3 border-t border-slate-200 pt-4">
-        <div className="flex items-start gap-3">
-          <input
-            id={`${id}-optin`}
-            type="checkbox"
-            required
-            checked={ticked}
-            onChange={(e) => setTicked(e.target.checked)}
-            className={cls.checkbox}
-          />
-          <label htmlFor={`${id}-optin`} className="text-sm text-slate-800">
-            {consent}
-          </label>
-        </div>
-        <button type="submit" className={`${cls.btn} ${cls.secondary}`} disabled={action.pending}>
-          {t(lang, 'a.marketingOptIn')}
+      <p ref={stateRef} tabIndex={-1} className="font-semibold text-slate-900 focus:outline-none" data-testid="marketing-state">
+        {t(lang, optedIn ? 'a.marketingOn' : 'a.marketingOff')}
+      </p>
+      {optedIn ? (
+        <button type="button" className={`${cls.btn} ${cls.secondary}`} disabled={action.pending} onClick={() => void optOut()}>
+          {t(lang, 'a.marketingWithdraw')}
         </button>
-      </form>
+      ) : (
+        consent && (
+          <form onSubmit={optIn} className="space-y-3 border-t border-slate-200 pt-4">
+            <div className="flex items-start gap-3">
+              <input
+                id={`${id}-optin`}
+                type="checkbox"
+                required
+                checked={ticked}
+                onChange={(e) => setTicked(e.target.checked)}
+                className={cls.checkbox}
+              />
+              <label htmlFor={`${id}-optin`} className="text-sm text-slate-800" data-testid="account-consent-text">
+                {consent}
+              </label>
+            </div>
+            <button type="submit" className={`${cls.btn} ${cls.secondary}`} disabled={action.pending}>
+              {t(lang, 'a.marketingOptIn')}
+            </button>
+          </form>
+        )
+      )}
       {action.done && <Notice kind="success">{t(lang, action.done === 'in' ? 'a.marketingSaved' : 'a.marketingWithdrawn')}</Notice>}
       {action.error && <ErrorNotice error={action.error} lang={lang} context="account" returnTo="/account/" />}
     </Section>
@@ -206,8 +310,22 @@ function MarketingSection({ lang }: { lang: Lang }) {
 }
 
 /** Shown while a pass is active, and kept after a refund so the confirmation stays visible. */
-function RefundSection({ me, lang }: { me: MeResponse; lang: Lang }) {
+/** Opens a confirm box, focuses its confirm button, and returns focus to the trigger on cancel. */
+function useConfirmFocus() {
   const [confirming, setConfirming] = useState(false)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const confirmRef = useRef<HTMLButtonElement>(null)
+  const wasConfirming = useRef(false)
+  useEffect(() => {
+    if (confirming) confirmRef.current?.focus()
+    else if (wasConfirming.current) triggerRef.current?.focus()
+    wasConfirming.current = confirming
+  }, [confirming])
+  return { confirming, setConfirming, triggerRef, confirmRef }
+}
+
+function RefundSection({ me, lang }: { me: MeResponse; lang: Lang }) {
+  const { confirming, setConfirming, triggerRef, confirmRef } = useConfirmFocus()
   const action = useAction<RefundResponse>()
   if (!activePass(me) && !action.done) return null
 
@@ -223,13 +341,14 @@ function RefundSection({ me, lang }: { me: MeResponse; lang: Lang }) {
           <p className="text-amber-950">{t(lang, 'a.refundConfirm')}</p>
           <div className="flex flex-wrap gap-3">
             <button
+              ref={confirmRef}
               type="button"
               className={`${cls.btn} ${cls.danger}`}
               disabled={action.pending}
               onClick={async () => {
                 const res = await action.run(() => api.refundRequest({ lang }))
                 setConfirming(false)
-                if (res) void refreshMe()
+                if (res) void refreshMe({ force: true })
               }}
             >
               {t(lang, 'a.refundYes')}
@@ -240,7 +359,7 @@ function RefundSection({ me, lang }: { me: MeResponse; lang: Lang }) {
           </div>
         </div>
       ) : (
-        <button type="button" className={`${cls.btn} ${cls.secondary}`} onClick={() => setConfirming(true)}>
+        <button ref={triggerRef} type="button" className={`${cls.btn} ${cls.secondary}`} onClick={() => setConfirming(true)}>
           {t(lang, 'a.refundButton')}
         </button>
       )}
@@ -298,7 +417,7 @@ function SupportSection({ lang }: { lang: Lang }) {
 }
 
 function DeleteSection({ lang, onDeleted }: { lang: Lang; onDeleted: () => void }) {
-  const [confirming, setConfirming] = useState(false)
+  const { confirming, setConfirming, triggerRef, confirmRef } = useConfirmFocus()
   const action = useAction<true>()
 
   return (
@@ -309,6 +428,7 @@ function DeleteSection({ lang, onDeleted }: { lang: Lang; onDeleted: () => void 
           <p className="font-semibold text-red-950">{t(lang, 'a.deleteConfirm')}</p>
           <div className="flex flex-wrap gap-3">
             <button
+              ref={confirmRef}
               type="button"
               className={`${cls.btn} ${cls.primary}`}
               disabled={action.pending}
@@ -328,7 +448,7 @@ function DeleteSection({ lang, onDeleted }: { lang: Lang; onDeleted: () => void 
           </div>
         </div>
       ) : (
-        <button type="button" className={`${cls.btn} ${cls.danger}`} onClick={() => setConfirming(true)}>
+        <button ref={triggerRef} type="button" className={`${cls.btn} ${cls.danger}`} onClick={() => setConfirming(true)}>
           {t(lang, 'a.deleteButton')}
         </button>
       )}
@@ -354,7 +474,7 @@ export function AccountClient() {
     body = (
       <div className="space-y-3">
         <ErrorNotice error={meState.error} lang={lang} context="account" returnTo="/account/" />
-        <button type="button" className={`${cls.btn} ${cls.secondary}`} onClick={() => void refreshMe()}>
+        <button type="button" className={`${cls.btn} ${cls.secondary}`} onClick={() => void refreshMe({ force: true })}>
           {t(lang, 'common.tryAgain')}
         </button>
       </div>
@@ -384,7 +504,7 @@ export function AccountClient() {
                 return true
               })
               if (ok) {
-                await refreshMe()
+                await refreshMe({ force: true })
                 router.push('/')
               }
             }}
@@ -396,13 +516,13 @@ export function AccountClient() {
         <PassSection me={me} lang={lang} />
         <HistorySection lang={lang} />
         <RefundSection me={me} lang={lang} />
-        <MarketingSection lang={lang} />
+        <MarketingSection lang={lang} optedIn={me.marketingOptIn === true} />
         <SupportSection lang={lang} />
         <DeleteSection
           lang={lang}
           onDeleted={() => {
             setDeleted(true)
-            void refreshMe()
+            void refreshMe({ force: true })
           }}
         />
       </div>

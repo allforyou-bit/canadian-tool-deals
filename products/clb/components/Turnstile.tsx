@@ -57,6 +57,8 @@ function loadTurnstile(): Promise<TurnstileApi> {
 /**
  * Renders the widget and reports the current token (null when missing, expired or failed).
  * Tokens are single-use: bump `resetSignal` after each submission to get a fresh one.
+ * `data-turnstile-tokens` counts the tokens received; it is committed in the same render as the
+ * parent's token state, so end-to-end tests can wait for a fresh token instead of sleeping.
  */
 export function Turnstile(props: { lang: Lang; onToken: (token: string | null) => void; resetSignal?: number }) {
   const { lang, resetSignal } = props
@@ -64,6 +66,7 @@ export function Turnstile(props: { lang: Lang; onToken: (token: string | null) =
   const widgetRef = useRef<string | null>(null)
   const onTokenRef = useRef(props.onToken)
   const [failed, setFailed] = useState(false)
+  const [tokens, setTokens] = useState(0)
 
   useEffect(() => {
     onTokenRef.current = props.onToken
@@ -82,7 +85,10 @@ export function Turnstile(props: { lang: Lang; onToken: (token: string | null) =
             language: lang,
             size: 'flexible',
             theme: 'light',
-            callback: (token) => onTokenRef.current(token),
+            callback: (token) => {
+              setTokens((n) => n + 1)
+              onTokenRef.current(token)
+            },
             'expired-callback': clear,
             'timeout-callback': clear,
             'error-callback': clear,
@@ -106,7 +112,7 @@ export function Turnstile(props: { lang: Lang; onToken: (token: string | null) =
   }, [resetSignal])
 
   return (
-    <div>
+    <div data-turnstile-tokens={tokens}>
       <div id={containerId} className="min-h-[65px]" />
       {failed && <p className="mt-2 text-sm text-red-900">{t(lang, 'common.network')}</p>}
     </div>

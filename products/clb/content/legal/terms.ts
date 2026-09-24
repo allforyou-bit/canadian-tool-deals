@@ -5,10 +5,12 @@
 // members and members of the College of Immigration and Citizenship Consultants may represent or advise
 // for consideration. Consumer-protection rules for Ontario (CPA 2023) were NOT verified; the text avoids
 // relying on them and preserves any rights that cannot be waived. Must be reviewed before launch.
-import { BRAND, NOT_AFFILIATED } from '../../shared/config'
+// The page date is TERMS_VERSION (shared/config.ts): BuyPass sends it with every checkout and the Worker
+// stores it on the purchase, so any change to these terms or the refund policy must bump TERMS_VERSION.
+import { BRAND, NOT_AFFILIATED, TERMS_VERSION } from '../../shared/config'
 import { SPEAKING_TASKS, WRITING_TASKS } from '../../shared/tasks'
 import { PATHS } from '../routes'
-import { CONTACT_LINES_EN, DAILY_RESET_EN, FACTS, LAST_REVIEWED } from '../site'
+import { CONTACT_LINES_EN, DAILY_RESET_EN, FACTS, NO_FEEDBACK_LIMIT, PAUSE_EXTENSION, QUEBEC_RULE } from '../site'
 import type { LegalPage } from '../types'
 
 export const TERMS: LegalPage = {
@@ -16,12 +18,12 @@ export const TERMS: LegalPage = {
   lang: 'en',
   title: 'Terms of use',
   description: `The terms for using ${BRAND.en} and buying a pass: eligibility, passes, fair use, AI feedback, refunds and liability.`,
-  lastReviewed: LAST_REVIEWED,
+  lastReviewed: TERMS_VERSION,
   lastReviewedLabel: 'Last updated',
   draftComment:
-    'DRAFT terms of use. Must be reviewed (ideally by an Ontario lawyer) and approved by the owner before launch; see business/online/owner-setup.md. Ontario Consumer Protection Act, 2023 rules for online agreements were not verified; check the notice period for changes, the liability cap and the dispute clause against them.',
+    'DRAFT terms of use. Must be reviewed (ideally by an Ontario lawyer) and approved by the owner before launch; see business/online/owner-setup.md. Ontario Consumer Protection Act, 2023 rules for online agreements were not verified; check the notice period for changes, the liability cap and the dispute clause against them. The date at the top is TERMS_VERSION in shared/config.ts; bump it whenever these terms or the refund policy change.',
   intro: [
-    `These terms are an agreement between you and ${BRAND.en}, a business operated by a sole proprietor in Ontario, Canada ("we", "us"). They apply when you use the website, the free practice tasks or a pass you buy. Our [privacy policy](${PATHS.privacy}), [refund policy](${PATHS.refunds}) and [AI disclosure](${PATHS.aiDisclosure}) are part of these terms. By using the service you agree to these terms; if you do not agree, please do not use it.`,
+    `These terms are an agreement between you and ${BRAND.en}, a business operated by a sole proprietor in Ontario, Canada ("we", "us"). They apply when you use the website, the free practice tasks or a pass you buy. Our [privacy policy](${PATHS.privacy}), [refund policy](${PATHS.refunds}) and [AI disclosure](${PATHS.aiDisclosure}) are part of these terms. By using the service you agree to these terms; if you do not agree, please do not use it. When you buy a pass, you agree to these terms and our refund policy, as shown next to the buy button, and we record the version (the date at the top of this page) with your purchase.`,
   ],
   sections: [
     {
@@ -31,8 +33,8 @@ export const TERMS: LegalPage = {
         {
           ul: [
             'You must be at least 18 years old.',
-            'The service is designed for adults who live in Canada.',
-            'Passes are sold only to residents of Canada outside Quebec who pay with a card issued in Canada (see section 5).',
+            'The service is designed for adults who live in Canada. You can use the free tasks from anywhere.',
+            `Passes are sold only to residents of Canada outside Quebec who pay with a card issued in Canada (see section 5). ${QUEBEC_RULE.en}`,
           ],
         },
       ],
@@ -77,9 +79,9 @@ export const TERMS: LegalPage = {
           ul: [
             `A pass gives you feedback on practice tasks for ${FACTS.days.pass30} or ${FACTS.days.pass90} days, starting when your payment is confirmed. If you buy a pass while another is active, the new days are added after the current pass ends.`,
             `Prices are in Canadian dollars and are shown on the [pricing page](${PATHS.pricing}). You pay once. Passes are not subscriptions and do not renew automatically; we never charge your card again unless you buy another pass.`,
-            'Payments are processed by Stripe. We never receive or store your full card number.',
-            'When you buy, you confirm that you live in Canada outside Quebec. After payment we check the billing address and the country where your card was issued. If the billing address is outside Canada or in Quebec, or the card was issued outside Canada, we do not activate the pass and we refund the full payment automatically.',
-            'If we pause feedback for maintenance or to stop unusual activity, we extend active passes by the length of the pause.',
+            'You pay by card on the secure checkout page of our payment processor, Stripe. We do not accept other payment methods. We never receive or store your full card number.',
+            'When you buy, you confirm that you live in Canada outside Quebec. After payment we check the billing address and the country where your card was issued. If the billing address is outside Canada or in Quebec, the card was issued outside Canada, or the payment was not made by card, we do not activate the pass and we refund the full payment automatically.',
+            PAUSE_EXTENSION.en,
             'We may change prices for future purchases. A price change never affects a pass you have already bought.',
           ],
         },
@@ -89,7 +91,9 @@ export const TERMS: LegalPage = {
       id: 'fair-use',
       heading: '6. Fair use',
       blocks: [
-        `Each account can get feedback on up to ${FACTS.writingPerDay} writing tasks and ${FACTS.speakingPerDay} speaking tasks per day, and up to ${FACTS.gradedPer30Days} tasks in any 30 days. Daily limits reset at ${DAILY_RESET_EN}. Writing answers can be up to ${FACTS.maxEssayChars} characters; recordings can be up to ${FACTS.audioMinutes} minutes and ${FACTS.audioMb} MB.`,
+        `Each account can get feedback on up to ${FACTS.writingPerDay} writing tasks and ${FACTS.speakingPerDay} speaking tasks per day, and up to ${FACTS.gradedPer30Days} tasks in any 30 days. Daily limits reset at ${DAILY_RESET_EN}.`,
+        NO_FEEDBACK_LIMIT.en,
+        `Writing answers can be up to ${FACTS.maxEssayChars} characters; recordings can be up to ${FACTS.audioMinutes} minutes and ${FACTS.audioMb} MB.`,
         'These limits keep the service available and affordable for everyone. If we lower them while your pass is active, you may ask us for a refund of the unused days of your pass, calculated day by day.',
       ],
     },
@@ -129,7 +133,8 @@ export const TERMS: LegalPage = {
       id: 'refunds',
       heading: '10. Refunds',
       blocks: [
-        `You can request a refund within ${FACTS.refundDays} days of purchase if you have used ${FACTS.refundMaxTasks} or fewer tasks with feedback, once per person and once per card. The full rules, including automatic refunds and chargebacks, are in our [refund policy](${PATHS.refunds}).`,
+        `You can request a refund within ${FACTS.refundDays} days of purchase if you have used ${FACTS.refundMaxTasks} or fewer tasks with feedback, once per person and once per card. The full rules, including automatic refunds, refunds of unused days and chargebacks, are in our [refund policy](${PATHS.refunds}).`,
+        'When we refund the unused days of a pass (for example under sections 6, 11, 12 or 16), the refund is calculated day by day and the pass ends when the refund is made.',
       ],
     },
     {

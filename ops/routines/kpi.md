@@ -15,7 +15,7 @@ Write the weekly KPI and cost digest in English and Korean, evaluate every numer
 |---|---|
 | `ops/metrics/<YYYY-MM-DD>.json` (all days) | funnel, grades, API cost, purchases, refunds, disputes (format: `ops/metrics/README.md`) |
 | `ops/metrics/ads.json` | ad spend, clicks, conversions per day |
-| `ops/config/ad-cap.json`, `ops/config/anthropic-limit.json` | approved ad cap and dates; the Anthropic limit the owner set |
+| `ops/config/ad-cap.json`, `ops/config/anthropic-limit.json` | approved ad cap and dates; the Anthropic Console limits the owner set (production workspace and the separate eval workspace) |
 | `ops/owner/hours.json` (optional, owner-maintained: `[{"week": "2026-W44", "hours": 2.5}]` plus an optional `{"setupHours": 9.5}` entry) | K2 |
 | GitHub issues titled `Platform: …` (open and closed) | K9 |
 | Last week's digest issue `KPI digest <week>` and its comments | the owner's yes/no answers |
@@ -32,11 +32,16 @@ Never query D1, Stripe, Cloudflare or Google Ads; never read user text.
 | Fixed costs F | C$100 per month, counted as C$100 × days ÷ 30 from 2026-10-01 | memo §2.2 plan figure — ESTIMATE |
 | Plan first-sale net | C$27.7 | memo §3.2 — ESTIMATE |
 
+Eval and development API spend runs on a separate Anthropic workspace and key (owner-setup 2-1). It is not
+in the daily files' `costUsd`; it is part of the fixed-cost plan figure F (memo §3.3 allowance US$30 a
+month). Say so under the constants.
+
 ## Definitions
 
 For a window of days (inclusive, ending **yesterday** unless stated), from the daily files and `ads.json`:
 
 - `sales` = Σ `purchases.paid`; `gross` = Σ `purchases.grossCents` ÷ 100 (C$); `refundsCad` = Σ `refunds.cents` ÷ 100
+  (`refunds` includes the owner's partial refunds, such as refunds of unused days, counted on the day Stripe reports them)
 - `fees` = Σ over paid purchases of (2.9% × price + 0.30); use `gross × 0.029 + 0.30 × sales`
 - `apiCad` = Σ `costUsd` × 1.37; `ads` = Σ `spendCad`; `fixed` = 100 × (days in window on or after 2026-10-01) ÷ 30
 - `net` = gross − refundsCad − fees − apiCad − ads − fixed
@@ -51,7 +56,7 @@ For a window of days (inclusive, ending **yesterday** unless stated), from the d
 |---|---|---|---|
 | K1 schedule | from 2026-11-02 (PENDING before) | no daily file dated ≤ 2026-11-01 has `events.checkout_start ≥ 1` or `purchases.paid ≥ 1` | stop and return to the home-services plan |
 | K2 owner hours | every week | `ops/owner/hours.json` shows > 3 h in any two weeks, or `setupHours` > 12 (NEEDS-OWNER if the file is missing) | cut to the core: no ads, organic only |
-| K3 upper funnel | once all-time `ads ≥ 280` (PENDING before) | samples started from paid clicks < 10. If the daily files have `metrics.paidEvents.sample_start`, use its sum since the first ad day. Otherwise use Σ `sample_start` over days with `spendCad > 0` as an upper bound: < 10 is FIRED, ≥ 10 is INCONCLUSIVE (the files do not split samples by source) | ads off; one landing fix and one retest of at most C$140 within the cap are allowed |
+| K3 upper funnel | once all-time `ads ≥ 280` (PENDING before) | `paidSamples` < 10, summed over every day from the first day with `spendCad > 0` to yesterday. Per day: if the daily file **has a `metrics.paidEvents` object** (even an empty `{}`), that day counts `paidEvents.sample_start`, or **0 when the key is missing**. Only for a day whose file has **no `paidEvents` key at all** (files written before 2026-09-24), count that day's `events.sample_start` as an upper bound. Verdict: `paidSamples` < 10 → FIRED; ≥ 10 → PASS, except that when upper-bound days were used and the exact days alone sum to < 10, the verdict is INCONCLUSIVE. Report the exact and upper-bound parts separately | ads off; one landing fix and one retest of at most C$140 within the cap are allowed |
 | K4 CAC | when `ads > 0` in the last 14 days (N/A otherwise) | `cac14 > firstSaleNet` (with zero buyers: 14-day `ads > firstSaleNet`) | ads off |
 | K5 samples by Nov 15 | first run on or after 2026-11-15 (PENDING before; report progress) | all-time `samples` up to 2026-11-15 < 100; note "< 30 → niche review at Nov 30" separately | switch the keyword set within the cap (PR to `ops/ads/google.csv`) |
 | K6 November | first run on or after 2026-12-01 (PENDING before) | November `net` < C$500 **and** `net` of Nov 24–30 ≤ `net` of Nov 17–23 | all spend stops; maintenance mode; no second product |
@@ -69,8 +74,21 @@ For S rules, use FIRED to mean "the condition holds". Total ad spend to 2027-01-
 `capCad` in `ops/config/ad-cap.json` unless the owner merges a PR that raises it (memo scale rules).
 
 **Anthropic limit.** L = max(US$150, 0.3 × trailing-30-day gross in USD), where gross in USD is
-gross C$ × 0.7 (the Worker's conservative factor, `SPEND.cadToUsdConservative`). If L is above
-`monthlyLimitUsd` in `ops/config/anthropic-limit.json`, propose raising it.
+gross C$ × 0.7 (the Worker's conservative factor, `SPEND.cadToUsdConservative`). `mtdUsd` = Σ `costUsd`
+over the days of the current UTC calendar month up to yesterday (production grading only; the eval
+workspace is separate; the Console limit is assumed to run per calendar month [unverified]). Propose raising `monthlyLimitUsd` in `ops/config/anthropic-limit.json` when
+**either** L > `monthlyLimitUsd` **or** `mtdUsd` ≥ 0.95 × `monthlyLimitUsd` (the Worker's spend tiers use
+the smaller of L and the configured limit, so reaching 95% of the configured limit means free samples are
+already off and the Console limit is close — memo §3.4, B10). Report L, `mtdUsd` and the configured limit
+in the digest. When L > `monthlyLimitUsd`, open the raise PR with the new value L rounded up to whole
+dollars. When only the 95% condition holds (L is not above the configured limit), the memo gives no
+number: do not open a PR; put the proposal in the digest with the question "Month-to-date grading spend is
+US$<mtdUsd>, at least 95% of the US$<limit> limit. Raise the Console limit, and to what amount?" The raise
+PR body (and the digest proposal) lists the owner's steps in this order: (1) raise the limit of the
+**production** workspace in the Anthropic Console, (2) set the repository variable
+`MPC_ANTHROPIC_LIMIT_USD` to the same number, (3) merge the PR or change `monthlyLimitUsd` to that number,
+(4) run the **Deploy practice coach** workflow so the Worker reads the new value (owner-setup 2-1). If
+`confirmedByOwner` is `false`, say in the digest that the configured limit is not confirmed.
 
 ## Outputs
 

@@ -1,6 +1,14 @@
 import { env } from 'cloudflare:test'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { StripeError, describeError, formEncode, idOf, stripeFetch, verifyStripeSignature } from '../../src/billing/stripe'
+import {
+  STRIPE_API_VERSION,
+  StripeError,
+  describeError,
+  formEncode,
+  idOf,
+  stripeFetch,
+  verifyStripeSignature,
+} from '../../src/billing/stripe'
 import { hmacSha256Hex } from '../../src/lib/crypto'
 
 const SECRET = 'whsec_unit'
@@ -91,6 +99,7 @@ describe('stripeFetch', () => {
     expect(init?.method).toBe('GET')
     expect(init?.body).toBeUndefined()
     expect((init?.headers as Record<string, string>).Authorization).toBe(`Bearer ${env.STRIPE_SECRET_KEY}`)
+    expect((init?.headers as Record<string, string>)['Stripe-Version']).toBe(STRIPE_API_VERSION)
   })
 
   it('sends POST params as a form body with an Idempotency-Key', async () => {
@@ -102,6 +111,7 @@ describe('stripeFetch', () => {
     expect(init?.headers).toMatchObject({
       'Content-Type': 'application/x-www-form-urlencoded',
       'Idempotency-Key': 'self-cs_1',
+      'Stripe-Version': STRIPE_API_VERSION,
     })
   })
 

@@ -1,5 +1,5 @@
 // Fixed learner-facing text used when the grader's own wording cannot be shown. Every string here
-// must pass findClaims (tested in worker/test/grading/filter.test.ts).
+// must pass findClaims with GRADER_OUTPUT_RULES (tested in worker/test/grading/filter.test.ts).
 import type { Lang } from '../../../shared/api'
 
 type Bi = Record<Lang, string>

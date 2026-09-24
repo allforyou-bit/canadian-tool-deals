@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { reconcile, renderIssue, type D1Purchase, type StripeSession } from './reconcile-core'
+import { modeSqlCondition, reconcile, renderIssue, sessionIdMode, stripeKeyMode, type D1Purchase, type StripeSession } from './reconcile-core'
 import { listPaidWindowSessions } from './reconcile'
 
 const now = new Date('2026-10-30T08:00:00Z')
@@ -83,6 +83,39 @@ describe('reconcile', () => {
       now,
     })
     expect(withMargin.mismatches).toEqual([])
+  })
+
+  it('leaves out test purchases after the switch to live keys, and live ones on a test key (R62)', () => {
+    // owner-setup 2-10: live keys go in while test purchases of the last days are still in D1
+    const sessions = [session('cs_live_a1', '2026-10-29T10:00:00Z')]
+    const purchases = [
+      purchase('cs_live_a1', '2026-10-29T10:00:01.000Z'),
+      purchase('cs_test_b1', '2026-10-28T09:00:00.000Z'),
+      purchase('cs_test_b2', '2026-10-28T09:30:00.000Z', { status: 'refunded' }),
+    ]
+    const live = reconcile({ sessions, purchases, windowStart, now, mode: 'live' })
+    expect(live.mismatches).toEqual([])
+    expect(live).toMatchObject({ mode: 'live', d1Paid: 1, skippedOtherMode: 2 })
+    expect(renderIssue(live, true)).toContain('left out: 2 made with test keys')
+    // without a mode (unknown key prefix) every purchase is compared, as before
+    expect(reconcile({ sessions, purchases, windowStart, now }).mismatches.map((m) => m.id)).toEqual(['cs_test_b1', 'cs_test_b2'])
+    // a test key ignores live purchases
+    const test = reconcile({ sessions: [], purchases, windowStart, now, mode: 'test' })
+    expect(test).toMatchObject({ d1Paid: 2, skippedOtherMode: 1 })
+  })
+
+  it('reads the mode from key and session id prefixes', () => {
+    expect(stripeKeyMode('sk_live_abc')).toBe('live')
+    expect(stripeKeyMode('rk_live_abc')).toBe('live')
+    expect(stripeKeyMode('sk_test_abc')).toBe('test')
+    expect(stripeKeyMode('rk_test_abc')).toBe('test')
+    expect(stripeKeyMode('whatever')).toBeNull()
+    expect(sessionIdMode('cs_live_x')).toBe('live')
+    expect(sessionIdMode('cs_test_x')).toBe('test')
+    expect(sessionIdMode('cs_a')).toBeNull()
+    expect(modeSqlCondition('live')).toBe(" AND substr(id, 1, 8) = 'cs_live_'")
+    expect(modeSqlCondition('test')).toBe(" AND substr(id, 1, 8) = 'cs_test_'")
+    expect(modeSqlCondition(null)).toBe('')
   })
 
   it('renders an issue body with ids and counts only', () => {

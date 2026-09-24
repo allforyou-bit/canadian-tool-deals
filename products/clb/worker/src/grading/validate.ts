@@ -2,9 +2,11 @@
 // enums are strict (throws); counts are normalised (extra items are cut) so one surplus error or
 // rewrite does not cost the learner a whole grade.
 import { ERROR_KINDS, type CriterionFeedback, type ErrorItem, type ErrorKind, type GradeResult, type Lang } from '../../../shared/api'
+import { SCOPE_REFUSAL } from './copy'
 
 export const MAX_CRITERIA = 8
-export const MAX_TOP_ERRORS = 5
+/** the pages and memo §1.1 promise "up to three" errors */
+export const MAX_TOP_ERRORS = 3
 export const MAX_REWRITES = 2
 
 export class GradeValidationError extends Error {
@@ -49,11 +51,13 @@ function errorItem(v: unknown, i: number): ErrorItem {
   return { kind: v.kind, original: str(v, 'original', p), correction: str(v, 'correction', p), why: str(v, 'why', p) }
 }
 
-/** Validate parsed grader JSON and add the server-set fields. Throws GradeValidationError. */
+/**
+ * Validate parsed grader JSON and add the server-set fields. Throws GradeValidationError. A refused
+ * result always carries the fixed SCOPE_REFUSAL; any refusal text from the model is ignored (decision 3).
+ */
 export function validateGradeJson(value: unknown, explanationLang: Lang): GradeResult {
   if (!isObj(value)) throw new GradeValidationError('output must be a JSON object')
   if (typeof value.refused !== 'boolean') throw new GradeValidationError('refused must be a boolean')
-  const refusalMessage = value.refusalMessage === undefined ? '' : str(value, 'refusalMessage', 'root')
   const criteria = arr(value, 'criteria').map(criterion)
   const topErrors = arr(value, 'topErrors')
     .map(errorItem)
@@ -67,7 +71,7 @@ export function validateGradeJson(value: unknown, explanationLang: Lang): GradeR
   if (value.refused) {
     return {
       refused: true,
-      refusalMessage,
+      refusalMessage: SCOPE_REFUSAL[explanationLang],
       criteria: [],
       topErrors: [],
       rewrites: [],

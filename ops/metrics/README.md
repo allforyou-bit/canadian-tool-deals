@@ -11,15 +11,21 @@ writers put files here:
 
 ## Personal-data guard
 
-`products/clb/scripts/metrics.ts guard` runs on every `*.json` here, in `metrics.yml` before each
-commit and in `ci.yml` on every push. It fails on:
+`products/clb/scripts/metrics.ts guard` checks **every file in this folder, including subfolders**, in
+`metrics.yml` before each commit and in `ci.yml` on every push. Only three kinds of file may be here:
+this `README.md`, `ads.json` and `<YYYY-MM-DD>.json` (no subfolders, lower-case `.json`); anything else
+fails. Every file except this README is scanned, whatever its name, and fails on:
 
 - any `@` character;
 - the words `input_text`, `transcript`, `email` or `essay` anywhere (keys or values, any case);
 - any token-like string: 16 or more characters of `A–Z a–z 0–9 _ -` that mix letters and digits
   (API keys, Stripe ids, hashes, UUIDs). Model ids from `shared/config.ts` and dates are allowed.
 
-The guard reports line and column only, never the matched text. If it fails, do not "fix" the file
+Daily files and `ads.json` must also match their formats below exactly: an **allowlist** of keys at
+every level, whole numbers ≥ 0 for counts, and no other fields (so no free-text field can slip in).
+
+The guard reports the file, rule and position only, never the matched text. If it fails, `metrics.yml`
+opens the issue "Personal-data guard failed on ops/metrics" and commits nothing. Do not "fix" the file
 by hand: find out how the data got there.
 
 ## Daily metrics: `<YYYY-MM-DD>.json`
@@ -36,7 +42,9 @@ One file per UTC day. The `metrics` object is the Worker's `DailyMetrics` row
   "metrics": {
     "day": "2026-10-27",
     "events": { "landing": 55, "sample_start": 9, "sample_done": 7, "signup": 3, "checkout_start": 2, "purchase": 1 },
+    "paidEvents": { "landing": 20, "sample_start": 4, "sample_done": 3 },
     "grades": { "writing": 9, "speaking": 6, "free": 6, "refused": 1 },
+    "outcomes": { "graded": 15, "scope_refused": 1 },
     "costUsd": 0.3871,
     "purchases": { "paid": 1, "grossCents": 7900 },
     "refunds": { "count": 0, "cents": 0 },
@@ -49,16 +57,20 @@ One file per UTC day. The `metrics` object is the Worker's `DailyMetrics` row
 |---|---|
 | `day` | the UTC day the numbers cover |
 | `computedAt` | when the Worker wrote the row (`metrics_daily.created_at`) |
-| `metrics.events.<name>` | count of first-party events that day: `landing`, `sample_start`, `sample_done`, `signup`, `checkout_start`, `purchase`, `refund` (names with a zero count may be missing) |
-| `metrics.grades` | graded tasks that were not refused (`writing`, `speaking`, of which `free`), and out-of-scope refusals (`refused`) |
-| `metrics.costUsd` | Anthropic + Workers AI cost of every grade that day, in US dollars |
-| `metrics.purchases` | purchases paid that day that granted a pass (`paid`) and their total in Canadian cents (`grossCents`); region-rejected payments are excluded |
-| `metrics.refunds` | refunds issued that day (count and Canadian cents), dispute outcomes excluded |
+| `metrics.events.<name>` | count of first-party events that day: `landing`, `sample_start`, `sample_done`, `signup`, `checkout_start`, `purchase`, `refund` (names with a zero count are missing) |
+| `metrics.paidEvents.<name>` | the same counts for events whose stored campaign tags show a **paid click** (a Google click id, or `utm_medium=cpc`); the KPI Routine uses `paidEvents.sample_start` for K3. The object is always written from 2026-09-24 on and is `{}` on a day without paid events; **a missing name means 0**. Only files written before 2026-09-24 lack the key |
+| `metrics.grades` | tasks that got feedback (`writing`, `speaking`, of which `free`), and requests that got **no feedback** (`refused`: scope or safety refusals, failed model calls, no speech, and requests closed after 15 minutes still pending — memo §7.1 B10) |
+| `metrics.outcomes.<outcome>` | grade rows that day by outcome: `graded`, `scope_refused`, `safety_refused`, `failed`, `no_speech`, `too_long` (and `pending` or `unknown` for rows without an outcome). A missing name means 0; files written before this field existed lack the key. Optional detail for the daily Routine's A3 rule |
+| `metrics.costUsd` | Anthropic + Workers AI cost of every grade that day, in US dollars, including requests that gave no feedback. The eval workflow's spend is on a separate Anthropic workspace and is **not** included |
+| `metrics.purchases` | purchases paid that day that granted a pass (`paid`) and their total in Canadian cents (`grossCents`); region-rejected and non-card payments (refunded automatically) are excluded |
+| `metrics.refunds` | refunds issued that day (count and Canadian cents), including the owner's partial refunds (for example unused days) counted by the amount refunded; region and dispute refunds excluded |
 | `metrics.disputes` | Stripe `charge.dispute.created` events received that day |
 
 The export keeps the newest 3 rows and overwrites a day's file with the same content, so running it
 twice changes nothing. If the newest row is older than yesterday (UTC), the workflow opens the issue
-"Metrics snapshot missing" and fails.
+"Metrics snapshot missing" and fails; if the export itself fails (for example an expired Cloudflare
+token or a row that does not match the allowlist), it opens "Metrics export failed". The ads check below
+still runs in both cases.
 
 ## Ads spend: `ads.json`
 
@@ -84,9 +96,11 @@ No other fields are allowed (the parser rejects unknown keys). Validation and ma
 `products/clb/scripts/ads.ts` (tests: `scripts/ads.test.ts`).
 
 **Freshness.** While `ops/config/ad-cap.json` says ads run (`confirmedByOwner` is `true` and today is
-between `startDate` and `endDate`), the newest `date` must be at most two days before today (UTC).
-Otherwise `metrics.yml` opens "Ads alert: pause the campaign" — the Worker cannot pause Google Ads,
-so the owner pauses the campaign in the Google Ads app.
+between `startDate` and `endDate`), the newest `date` must be at most two days before today (UTC). Age
+is measured from the newest row or from the day before `startDate`, whichever is later, so the first
+48 hours of a campaign never alert (the first report arrives a day after the start). Otherwise
+`metrics.yml` opens "Ads alert: pause the campaign" — the Worker cannot pause Google Ads, so the owner
+pauses the campaign in the Google Ads app.
 
 **CAC.** `node scripts/run.mjs scripts/ads.ts cac --from D --to D` (from `products/clb`) prints spend,
 purchases (from the daily files), Google-reported conversions, the blended CAC (spend ÷ all

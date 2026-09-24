@@ -1,8 +1,9 @@
 import { env } from 'cloudflare:test'
 import { exports } from 'cloudflare:workers'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { HistoryResponse } from '../../../shared/api'
-import { apiMessage, createUser, ORIGIN, postWriting, SIMPLE_OUTPUT, stubGrader, writingBody, golden } from './helpers'
+import type { ApiError, GradeResponse, GradeResult, HistoryItemResponse, HistoryResponse } from '../../../shared/api'
+import { randomToken } from '../../src/lib/crypto'
+import { apiMessage, createUser, ORIGIN, postWriting, SIMPLE_OUTPUT, stubGrader, writingBody, golden, probes } from './helpers'
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -70,6 +71,18 @@ describe('GET /api/history', () => {
     expect([...counts].sort((a, b) => b - a)).toEqual(counts)
   })
 
+  it('leaves out rows whose model call is still running', async () => {
+    const { user, cookie } = await createUser()
+    await insert(user.id, [{ kinds: 'grammar', minutesAgo: 3 }])
+    await env.DB.prepare(
+      `INSERT INTO grades (id, user_id, task_id, prompt_index, kind, pending, model, created_at) VALUES (?1, ?2, 'email', 0, 'writing', 1, 'claude-opus-5', ?3)`,
+    )
+      .bind(`g_pending_${user.id}`, user.id, new Date().toISOString())
+      .run()
+    const body = (await (await getHistory(cookie)).json()) as HistoryResponse
+    expect(body.items.map((i) => i.gradeId)).toEqual([`g_h_${user.id}_0`])
+  })
+
   it('shows a grade made through the writing endpoint', async () => {
     const { cookie } = await createUser({ pass: true })
     stubGrader(apiMessage(SIMPLE_OUTPUT))
@@ -80,5 +93,108 @@ describe('GET /api/history', () => {
       { kind: 'grammar', count: 1 },
       { kind: 'spelling', count: 1 },
     ])
+  })
+})
+
+const getItem = (id: string | null, cookie?: string) =>
+  exports.default.fetch(`${ORIGIN}/api/history/item${id === null ? '' : `?id=${encodeURIComponent(id)}`}`, {
+    headers: cookie ? { cookie } : {},
+  })
+
+const RESULT: GradeResult = {
+  refused: false,
+  criteria: [{ name: 'Content and task completion', strengths: 'Clear.', improve: 'Add an example.' }],
+  topErrors: [{ kind: 'grammar', original: 'I goes', correction: 'I go', why: 'Base form after "I".' }],
+  rewrites: ['I go to work.'],
+  nextStep: 'Practise verb forms.',
+  explanationLang: 'en',
+  bandShown: false,
+  wordCount: 3,
+}
+
+async function insertSaved(
+  userId: string,
+  over: { text?: string | null; result?: string | null; refused?: number; pending?: number; kind?: string } = {},
+): Promise<string> {
+  const id = 'g_item_' + randomToken(8)
+  await env.DB.prepare(
+    `INSERT INTO grades (id, user_id, task_id, prompt_index, kind, input_text, result_json, refused, pending, outcome, model, created_at)
+     VALUES (?1, ?2, 'email', 0, ?3, ?4, ?5, ?6, ?7, 'graded', 'claude-opus-5', ?8)`,
+  )
+    .bind(
+      id,
+      userId,
+      over.kind ?? 'writing',
+      over.text === undefined ? 'I goes to work.' : over.text,
+      over.result === undefined ? JSON.stringify(RESULT) : over.result,
+      over.refused ?? 0,
+      over.pending ?? 0,
+      '2026-09-20T10:00:00.000Z',
+    )
+    .run()
+  return id
+}
+
+async function expectNotFound(res: Response) {
+  expect(res.status).toBe(404)
+  expect(((await res.json()) as ApiError).error).toBe('not_found')
+}
+
+describe('GET /api/history/item', () => {
+  it('requires sign-in', async () => {
+    const { user } = await createUser()
+    const id = await insertSaved(user.id)
+    expect((await getItem(id)).status).toBe(401)
+  })
+
+  it("returns the learner's own saved answer and feedback", async () => {
+    const { user, cookie } = await createUser()
+    const id = await insertSaved(user.id)
+    const res = await getItem(id, cookie)
+    expect(res.status).toBe(200)
+    expect(res.headers.get('cache-control')).toBe('no-store')
+    expect((await res.json()) as HistoryItemResponse).toEqual({
+      gradeId: id,
+      taskId: 'email',
+      kind: 'writing',
+      createdAt: '2026-09-20T10:00:00.000Z',
+      text: 'I goes to work.',
+      result: RESULT,
+    })
+  })
+
+  it("answers 404 for another learner's row, as for one that does not exist", async () => {
+    const owner = await createUser()
+    const other = await createUser()
+    const id = await insertSaved(owner.user.id)
+    await expectNotFound(await getItem(id, other.cookie))
+    await expectNotFound(await getItem('g_nope', other.cookie))
+  })
+
+  it('answers 404 once the text is purged, and for refused, pending or anonymous rows', async () => {
+    const { user, cookie } = await createUser()
+    await expectNotFound(await getItem(await insertSaved(user.id, { text: null, result: null }), cookie))
+    await expectNotFound(await getItem(await insertSaved(user.id, { result: null }), cookie))
+    await expectNotFound(await getItem(await insertSaved(user.id, { refused: 1 }), cookie))
+    await expectNotFound(await getItem(await insertSaved(user.id, { pending: 1 }), cookie))
+    await expectNotFound(await getItem(await insertSaved(user.id, { result: '{broken' }), cookie))
+  })
+
+  it('rejects a missing or oversized id', async () => {
+    const { cookie } = await createUser()
+    expect((await getItem(null, cookie)).status).toBe(400)
+    expect((await getItem('g_' + 'x'.repeat(80), cookie)).status).toBe(400)
+  })
+
+  it('opens a grade made through the writing endpoint, but not a refused one', async () => {
+    const { cookie } = await createUser({ pass: true })
+    stubGrader(apiMessage(SIMPLE_OUTPUT))
+    const graded = (await (await postWriting(writingBody(golden[0]), { cookie })).json()) as GradeResponse
+    const item = (await (await getItem(graded.gradeId, cookie)).json()) as HistoryItemResponse
+    expect(item).toMatchObject({ gradeId: graded.gradeId, kind: 'writing', text: golden[0].text.trim(), result: graded.result })
+
+    stubGrader(probes[0].apiResponse)
+    const refused = (await (await postWriting(writingBody(probes[0]), { cookie })).json()) as GradeResponse
+    await expectNotFound(await getItem(refused.gradeId, cookie))
   })
 })

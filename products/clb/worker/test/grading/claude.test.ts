@@ -1,12 +1,27 @@
 import { env } from 'cloudflare:test'
 import type Anthropic from '@anthropic-ai/sdk'
+import { APIConnectionTimeoutError } from '@anthropic-ai/sdk'
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { MODELS } from '../../../shared/config'
+import type { Env } from '../../src/env'
 import { tokenCostMicroUsd } from '../../src/lib/spend'
-import { callCost, callGrader, GraderOutputError, parseGraderMessage, SERVER_FALLBACK_BETA } from '../../src/grading/claude'
-import { SAFETY_REFUSAL } from '../../src/grading/copy'
+import {
+  callCost,
+  callGrader,
+  GraderApiError,
+  GraderOutputError,
+  graderSettings,
+  graderTimeoutMs,
+  MAX_TOKENS_MAX,
+  MAX_TOKENS_MIN,
+  parseGraderMessage,
+  SERVER_FALLBACK_BETA,
+  worstCaseCallCostMicroUsd,
+} from '../../src/grading/claude'
+import { SAFETY_REFUSAL, SCOPE_REFUSAL } from '../../src/grading/copy'
 import { SYSTEM_PROMPT } from '../../src/grading/prompt'
-import { validateGradeJson } from '../../src/grading/validate'
-import { apiMessage, type ApiMessage, jsonResponse, SIMPLE_OUTPUT, stubFetch, stubGrader, USAGE } from './helpers'
+import { MAX_TOP_ERRORS, validateGradeJson } from '../../src/grading/validate'
+import { abortError, apiError, apiMessage, type ApiMessage, jsonResponse, SIMPLE_OUTPUT, stubFetch, stubGrader, USAGE } from './helpers'
 
 type Message = Anthropic.Beta.Messages.BetaMessage
 const asMessage = (m: ApiMessage) => m as unknown as Message
@@ -27,6 +42,11 @@ describe('parseGraderMessage', () => {
   it('turns stop_reason "refusal" into a refused result, even with empty content', () => {
     const r = parseGraderMessage(asMessage(apiMessage('', { content: [], stop_reason: 'refusal' })), 'en')
     expect(r).toMatchObject({ refused: true, refusalMessage: SAFETY_REFUSAL.en, criteria: [], topErrors: [], rewrites: [] })
+  })
+
+  it('gives a scope refusal the fixed SCOPE_REFUSAL, never model text', () => {
+    const out = { ...SIMPLE_OUTPUT, refused: true, criteria: [], topErrors: [], rewrites: [], nextStep: '', refusalMessage: 'Your CRS score is too low.' }
+    expect(parseGraderMessage(asMessage(apiMessage(out)), 'ko')).toMatchObject({ refused: true, refusalMessage: SCOPE_REFUSAL.ko })
   })
 
   it('throws on max_tokens and on a context-window stop', () => {
@@ -61,20 +81,51 @@ describe('parseGraderMessage', () => {
 })
 
 describe('validateGradeJson', () => {
-  it('cuts surplus errors and rewrites, drops empty ones, and trims text', () => {
+  it('cuts surplus errors (the pages promise up to three) and rewrites, drops empty ones, and trims text', () => {
+    expect(MAX_TOP_ERRORS).toBe(3)
     const many = Array.from({ length: 7 }, (_, i) => ({ kind: 'grammar', original: ` word${i} `, correction: 'w', why: 'y' }))
     const r = validateGradeJson(
       { ...SIMPLE_OUTPUT, topErrors: [{ kind: 'grammar', original: '', correction: '', why: 'y' }, ...many], rewrites: ['a', ' ', 'b', 'c'] },
       'en',
     )
-    expect(r.topErrors).toHaveLength(5)
-    expect(r.topErrors[0].original).toBe('word0')
+    expect(r.topErrors).toHaveLength(3)
+    expect(r.topErrors.map((e) => e.original)).toEqual(['word0', 'word1', 'word2'])
     expect(r.rewrites).toEqual(['a', 'b'])
   })
 
-  it('empties feedback fields on a refused result', () => {
+  it('empties feedback fields on a refused result and uses the fixed refusal copy', () => {
     const r = validateGradeJson({ ...SIMPLE_OUTPUT, refused: true, refusalMessage: 'Please ask a lawyer.' }, 'en')
-    expect(r).toMatchObject({ refused: true, refusalMessage: 'Please ask a lawyer.', criteria: [], topErrors: [], rewrites: [], nextStep: '' })
+    expect(r).toMatchObject({ refused: true, refusalMessage: SCOPE_REFUSAL.en, criteria: [], topErrors: [], rewrites: [], nextStep: '' })
+  })
+})
+
+describe('graderSettings (GRADER_EFFORT, GRADER_MAX_TOKENS)', () => {
+  const settings = (e?: string, t?: string) => graderSettings({ GRADER_EFFORT: e, GRADER_MAX_TOKENS: t })
+
+  it('defaults to config', () => {
+    expect(settings()).toEqual({ effort: MODELS.graderEffort, maxTokens: MODELS.graderMaxTokens, timeoutMs: graderTimeoutMs(MODELS.graderMaxTokens) })
+  })
+
+  it('accepts every documented effort level, trimmed and in any case', () => {
+    for (const e of ['low', 'medium', 'high', 'xhigh', 'max']) expect(settings(` ${e.toUpperCase()} `).effort).toBe(e)
+  })
+
+  it('accepts integer max_tokens within bounds', () => {
+    expect(settings(undefined, '3500')).toMatchObject({ maxTokens: 3500, timeoutMs: graderTimeoutMs(3500) })
+    expect(settings(undefined, String(MAX_TOKENS_MIN)).maxTokens).toBe(MAX_TOKENS_MIN)
+    expect(settings(undefined, String(MAX_TOKENS_MAX)).maxTokens).toBe(MAX_TOKENS_MAX)
+  })
+
+  it('falls back to config for invalid values', () => {
+    for (const e of ['', 'extreme', 'hi gh', 'none']) expect(settings(e).effort).toBe(MODELS.graderEffort)
+    for (const t of ['', 'abc', '-5', '3000.5', '1e4', '0', String(MAX_TOKENS_MIN - 1), String(MAX_TOKENS_MAX + 1)]) {
+      expect(settings(undefined, t).maxTokens, t).toBe(MODELS.graderMaxTokens)
+    }
+  })
+
+  it('allows time for max_tokens of output (8,000 tokens: 255 s) within the SDK non-streaming limit', () => {
+    expect(graderTimeoutMs(8000)).toBe(255_000)
+    expect(graderTimeoutMs(MAX_TOKENS_MAX)).toBeLessThanOrEqual(30_000 + 10 * 60 * 1000)
   })
 })
 
@@ -99,7 +150,17 @@ describe('callGrader (stubbed fetch)', () => {
     expect(body.system).toEqual([{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }])
     expect(body.thinking).toEqual({ type: 'adaptive' })
     expect(body.output_config).toMatchObject({ effort: 'high', format: { type: 'json_schema' } })
+    expect(body.max_tokens).toBe(MODELS.graderMaxTokens)
     expect(body.stream).toBeUndefined()
+    expect(headers.get('x-stainless-timeout')).toBe(String(graderTimeoutMs(MODELS.graderMaxTokens) / 1000))
+    expect(out.lostAttemptsMicroUsd).toBe(0)
+  })
+
+  it('uses GRADER_EFFORT and GRADER_MAX_TOKENS from the environment', async () => {
+    const { calls } = stubGrader(apiMessage(SIMPLE_OUTPUT))
+    await callGrader({ ...(env as Env), GRADER_EFFORT: 'low', GRADER_MAX_TOKENS: '3000' }, input)
+    expect(calls[0].body).toMatchObject({ max_tokens: 3000, output_config: { effort: 'low' } })
+    expect(calls[0].headers.get('x-stainless-timeout')).toBe(String(Math.trunc(graderTimeoutMs(3000) / 1000)))
   })
 
   it('sends no fallbacks or beta header for other models', async () => {
@@ -118,17 +179,97 @@ describe('callGrader (stubbed fetch)', () => {
     expect((e as GraderOutputError).call.stopReason).toBe('max_tokens')
   })
 
-  it('lets API errors through without retrying a 400', async () => {
+  it('does not retry a 400, and bills nothing for it', async () => {
     const { calls } = stubFetch(() => jsonResponse({ type: 'error', error: { type: 'invalid_request_error', message: 'bad' } }, 400))
     const e = await callGrader(env, input).catch((x: unknown) => x)
-    expect(e).not.toBeInstanceOf(GraderOutputError)
-    expect((e as { status?: number }).status).toBe(400)
+    expect(e).toBeInstanceOf(GraderApiError)
+    expect(e).toMatchObject({ status: 400, billableAttempts: 0, costMicroUsd: 0 })
+    expect((e as GraderApiError).cause).toMatchObject({ status: 400 })
     expect(calls).toHaveLength(1)
+  })
+
+  const worst = worstCaseCallCostMicroUsd(input, MODELS.graderMaxTokens)
+
+  it('does not retry a timeout, and bills it at the worst case', async () => {
+    const { calls } = stubFetch(() => {
+      throw abortError()
+    })
+    const e = await callGrader(env, input).catch((x: unknown) => x)
+    expect(e).toMatchObject({ status: null, billableAttempts: 1, costMicroUsd: worst })
+    expect((e as GraderApiError).cause).toBeInstanceOf(APIConnectionTimeoutError)
+    expect(calls).toHaveLength(1)
+  })
+
+  it('retries a failed connection once; both attempts may have run', async () => {
+    const { calls } = stubFetch(() => {
+      throw new TypeError('network connection lost')
+    })
+    const e = await callGrader(env, input).catch((x: unknown) => x)
+    expect(e).toMatchObject({ billableAttempts: 2, costMicroUsd: 2 * worst })
+    expect(calls).toHaveLength(2)
+  })
+
+  it('retries 429 and 529 once without billing them', async () => {
+    for (const [status, type] of [
+      [429, 'rate_limit_error'],
+      [529, 'overloaded_error'],
+    ] as const) {
+      const { calls } = stubFetch(() => apiError(status, type))
+      const e = await callGrader(env, input).catch((x: unknown) => x)
+      expect(e).toMatchObject({ status, billableAttempts: 0, costMicroUsd: 0 })
+      expect(calls).toHaveLength(2)
+    }
+  })
+
+  it('succeeds on the retry after a 529, with nothing extra billed', async () => {
+    let n = 0
+    const { calls } = stubFetch(() => (++n === 1 ? apiError(529, 'overloaded_error') : jsonResponse(apiMessage(SIMPLE_OUTPUT))))
+    const out = await callGrader(env, input)
+    expect(calls).toHaveLength(2)
+    expect(out.lostAttemptsMicroUsd).toBe(0)
+    expect(callCost(out).costMicroUsd).toBe(tokenCostMicroUsd('claude-opus-5', USAGE))
+  })
+
+  it('adds the worst case of a lost 5xx attempt to a later response and to unusable output', async () => {
+    let n = 0
+    stubFetch(() => (++n === 1 ? apiError(500) : jsonResponse(apiMessage(SIMPLE_OUTPUT))))
+    const out = await callGrader(env, input)
+    expect(callCost(out).costMicroUsd).toBe(tokenCostMicroUsd('claude-opus-5', USAGE) + worst)
+
+    n = 0
+    stubFetch(() => (++n === 1 ? apiError(502) : jsonResponse(apiMessage('not json'))))
+    const e = (await callGrader(env, input).catch((x: unknown) => x)) as GraderOutputError
+    expect(e).toBeInstanceOf(GraderOutputError)
+    expect(callCost(e.call).costMicroUsd).toBe(tokenCostMicroUsd('claude-opus-5', USAGE) + worst)
+  })
+})
+
+describe('worstCaseCallCostMicroUsd', () => {
+  const input = { taskId: 'email', promptIndex: 0, text: 'Hello neighbour.', explanationLang: 'en' as const, model: 'claude-opus-5' }
+
+  it('prices the full max_tokens of output plus all input as a cache write', () => {
+    const w = worstCaseCallCostMicroUsd(input, 8000)
+    expect(w).toBeGreaterThan(8000 * 25 + (SYSTEM_PROMPT.length / 4) * 5)
+    expect(worstCaseCallCostMicroUsd(input, 4000)).toBe(w - 4000 * 25)
+  })
+
+  it('is several times the measured cost of a typical grade', () => {
+    expect(worstCaseCallCostMicroUsd(input, 8000)).toBeGreaterThan(4 * tokenCostMicroUsd('claude-opus-5', USAGE))
+  })
+
+  it('grows with the learner text and prices unknown models at the highest rate', () => {
+    expect(worstCaseCallCostMicroUsd({ ...input, text: 'x'.repeat(6000) }, 8000)).toBeGreaterThan(worstCaseCallCostMicroUsd(input, 8000))
+    expect(worstCaseCallCostMicroUsd({ ...input, model: 'claude-future-9' }, 8000)).toBe(worstCaseCallCostMicroUsd(input, 8000))
   })
 })
 
 describe('callCost', () => {
   const usage = (u: Record<string, unknown>) => u as unknown as Anthropic.Beta.Messages.BetaUsage
+
+  it('adds the worst-case cost of lost attempts to the cost, not to the token counts', () => {
+    const c = callCost({ model: 'claude-opus-5', usage: usage({ ...USAGE }), lostAttemptsMicroUsd: 1234 })
+    expect(c).toMatchObject({ inputTokens: 500, outputTokens: 1200, costMicroUsd: tokenCostMicroUsd('claude-opus-5', USAGE) + 1234 })
+  })
 
   it('prices the top-level usage when there are no iterations', () => {
     const c = callCost({ model: 'claude-opus-5', usage: usage({ ...USAGE, iterations: null }) })

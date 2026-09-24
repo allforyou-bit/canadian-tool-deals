@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import type { Ref } from 'react'
+import { useId, type Ref } from 'react'
 import type { GradeResponse, Lang } from '../shared/api'
 import { errorKindLabel, t } from '../lib/i18n'
 import { Notice } from './Notice'
@@ -11,24 +11,29 @@ import { cls } from './ui'
  * Feedback for one graded task. Labels follow the explanation language; the "not a score"
  * sentence (an exact ALLOWED_PHRASES entry) is always shown in English, and in Korean too when
  * the explanations are Korean. `ref` goes to the heading so focus can move here after grading.
+ * `headingLevel` 3 nests it under another h2 (the account history).
  */
 export function GradeResultView(props: {
   response: GradeResponse
   kind: 'writing' | 'speaking'
   onAgain?: () => void
   ref?: Ref<HTMLHeadingElement>
+  headingLevel?: 2 | 3
 }) {
   const { response, kind, onAgain, ref } = props
+  const titleId = useId()
+  const Title = props.headingLevel === 3 ? 'h3' : 'h2'
+  const Sub = props.headingLevel === 3 ? 'h4' : 'h3'
   const { result } = response
   const lang: Lang = result.explanationLang === 'ko' ? 'ko' : 'en'
   const pricingHref = lang === 'ko' ? '/ko/pricing/' : '/pricing/'
 
   return (
-    <section aria-labelledby="grade-result-title" className={`${cls.card} space-y-6`} lang={lang} data-testid="grade-result">
+    <section aria-labelledby={titleId} className={`${cls.card} space-y-6`} lang={lang} data-testid="grade-result">
       <div className="space-y-2">
-        <h2 id="grade-result-title" ref={ref} tabIndex={-1} className={`${cls.h2} focus:outline-none`}>
+        <Title id={titleId} ref={ref} tabIndex={-1} className={`${cls.h2} focus:outline-none`}>
           {t(lang, 'r.title')}
-        </h2>
+        </Title>
         <p className="text-sm font-medium text-slate-700" lang="en">
           {t('en', 'r.disclaimer')}
         </p>
@@ -37,7 +42,7 @@ export function GradeResultView(props: {
 
       {result.transcript !== undefined && (
         <div>
-          <h3 className="text-base font-semibold text-slate-900">{t(lang, 'r.transcript')}</h3>
+          <Sub className="text-base font-semibold text-slate-900">{t(lang, 'r.transcript')}</Sub>
           <blockquote
             lang="en"
             className="mt-2 whitespace-pre-wrap rounded-md border-l-4 border-slate-300 bg-slate-50 p-3 text-slate-800"
@@ -57,7 +62,7 @@ export function GradeResultView(props: {
             <div className="grid gap-4 sm:grid-cols-2">
               {result.criteria.map((c, i) => (
                 <article key={`${c.name}-${i}`} className="rounded-md border border-slate-200 p-4">
-                  <h3 className="font-semibold text-slate-950">{c.name}</h3>
+                  <Sub className="font-semibold text-slate-950">{c.name}</Sub>
                   <p className="mt-2 text-sm">
                     <span className="font-semibold text-emerald-800">{t(lang, 'r.strengths')}: </span>
                     {c.strengths}
@@ -73,7 +78,7 @@ export function GradeResultView(props: {
 
           {result.topErrors.length > 0 && (
             <div>
-              <h3 className="text-base font-semibold text-slate-900">{t(lang, 'r.topErrors')}</h3>
+              <Sub className="text-base font-semibold text-slate-900">{t(lang, 'r.topErrors')}</Sub>
               <ol className="mt-2 space-y-3">
                 {result.topErrors.map((e, i) => (
                   <li key={i} className="rounded-md border border-slate-200 p-3 text-sm">
@@ -104,7 +109,7 @@ export function GradeResultView(props: {
 
           {result.rewrites.length > 0 && (
             <div>
-              <h3 className="text-base font-semibold text-slate-900">{t(lang, 'r.rewrites')}</h3>
+              <Sub className="text-base font-semibold text-slate-900">{t(lang, 'r.rewrites')}</Sub>
               <ul className="mt-2 space-y-2">
                 {result.rewrites.map((r, i) => (
                   <li key={i}>
@@ -119,7 +124,7 @@ export function GradeResultView(props: {
 
           {result.nextStep && (
             <div>
-              <h3 className="text-base font-semibold text-slate-900">{t(lang, 'r.nextStep')}</h3>
+              <Sub className="text-base font-semibold text-slate-900">{t(lang, 'r.nextStep')}</Sub>
               <p className="mt-1 text-slate-800">{result.nextStep}</p>
             </div>
           )}

@@ -1,6 +1,21 @@
 # Routine: books
 
-**Cadence:** every second Monday (for the EI report) and on the 1st of each month (memo §5.2).
+**Cadence:** fire it **every Monday** and **on the 1st of each month** (memo §5.2: monthly and
+bi-weekly). Standard schedules cannot express "every second Monday", so each run decides from the date
+what to do:
+
+- **EI Monday:** today is a Monday and (today − `anchorMonday`) is a whole multiple of 14 days, where
+  `anchorMonday` comes from `ops/config/ei-schedule.json` (owner-maintained; EI report periods are set by
+  Service Canada). If `confirmedByOwner` is `false`, still write the EI note but start it with
+  "EI report dates not confirmed by the owner (ops/config/ei-schedule.json)."
+- **Month start:** today is the 1st.
+- Neither (an off-week Monday): write nothing and end with the run summary "nothing due today".
+
+Schedule for whoever creates the Routine: two schedules with this same prompt, Mondays (`0 12 * * 1`)
+and the 1st (`0 12 1 * *`), UTC. A single `0 12 1 * 1` means "the 1st **or** a Monday" only in classic
+cron semantics [unverified for the Routine scheduler], so prefer two schedules. A run on a day that
+matches both does both parts.
+
 **Runs as:** a fresh, stateless Claude Code session with this repository checked out. All dates are
 UTC. Start with `git pull`.
 
@@ -14,7 +29,8 @@ data; the owner declares and files.
 | `ops/metrics/<YYYY-MM-DD>.json` | sales (`purchases.paid`, `grossCents`), refunds, API cost per day |
 | `ops/metrics/ads.json` | ad spend per day |
 | `ops/books/payouts.json` (owner-maintained: `[{"date": "YYYY-MM-DD", "amountCad": 123.45}]`, from the Stripe Dashboard when the owner confirms a bank deposit) | reconciliation to Stripe payouts |
-| `ops/books/expenses.json` (optional, owner-maintained: `[{"date", "amountCad", "category", "note"}]`, e.g. Claude Pro, Workers Paid, domain, mailbox) | expenses that are not in the metrics |
+| `ops/books/expenses.json` (optional, owner-maintained: `[{"date", "amountCad", "category", "note"}]`, e.g. Claude Pro, Workers Paid, domain, mailbox, business-name registration, and the **eval Anthropic workspace** charges, which are not in the daily metrics) | expenses that are not in the metrics |
+| `ops/config/ei-schedule.json` (`anchorMonday`, `confirmedByOwner`) | which Mondays are EI report Mondays |
 | `business/online/decision-memo.md` §4.1 "Tax and GST/HST" | the thresholds below |
 
 Never query D1, Stripe or any live service, and never read user text.
@@ -45,7 +61,7 @@ Commit to `master` (`chore(books): <period>`); if the push is refused, open a PR
    - **GST/HST tracker:** taxable supplies (net sales) per calendar quarter and the sum of the last
      four quarters, against C$30,000. At 80% of the threshold, open or update the issue
      **"Books: GST/HST threshold at 80%"** (the owner must register within 30 days after crossing, memo §4.1).
-2. **Every second Monday:** `ops/books/ei/<YYYY-MM-DD>.md` (date of the Monday) with the net of each of
+2. **On an EI Monday** (see Cadence): `ops/books/ei/<YYYY-MM-DD>.md` (date of the Monday) with the net of each of
    the two previous Monday–Sunday weeks: gross − refunds − estimated fees − API − ads − expenses dated in
    the week. State plainly: "ESTIMATE for the owner's EI report. Check the week boundaries Service
    Canada uses [unverified: Monday–Sunday is assumed]." Also write a Korean version of the two numbers
@@ -61,4 +77,4 @@ Commit to `master` (`chore(books): <period>`); if the push is refused, open a PR
 
 The same period always produces the same file (overwrite it); issues are matched by exact title.
 
-ASSERT: on the 1st of the month ops/books/<previous YYYY-MM>.md exists with a payout-check line, and on a second Monday ops/books/ei/<that Monday>.md exists.
+ASSERT: on the 1st of the month ops/books/<previous YYYY-MM>.md exists with a payout-check line; on an EI Monday (today − anchorMonday in ops/config/ei-schedule.json is a multiple of 14 days) ops/books/ei/<today>.md exists; on any other day the run summary says "nothing due today".

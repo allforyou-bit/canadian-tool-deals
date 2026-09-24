@@ -2,7 +2,16 @@
 // shared/config.ts through content/site.ts.
 import { AI_DISCLOSURE, BRAND, FREE } from '../shared/config'
 import { PATHS } from './routes'
-import { CONTACT_LINES_EN, DAILY_RESET_EN, FACTS, LAST_REVIEWED } from './site'
+import {
+  CONTACT_LINES_EN,
+  DAILY_RESET_EN,
+  FACTS,
+  FILTER_EN,
+  LAST_REVIEWED,
+  NO_FEEDBACK_LIMIT,
+  PAUSE_EXTENSION,
+  QUEBEC_RULE,
+} from './site'
 import type { DocPage, DocSection } from './types'
 
 const contactSection = (id = 'contact', heading = 'Contact us'): DocSection => ({
@@ -34,9 +43,9 @@ export const HELP_FEEDBACK: DocPage = doc({
         {
           ol: [
             'For speaking tasks, your recording is first turned into text by Whisper, a speech-recognition model that runs on Cloudflare Workers AI. The recording is then discarded.',
-            'Claude reads your answer together with the task prompt and our instructions, and writes feedback on four criteria. If the text is a request we cannot help with, such as a question about an immigration application or the law, you get a short message instead of feedback, and it does not count toward your limits.',
-            'An automatic filter removes anything that looks like a test result or a prediction.',
-            'You see the feedback on the page. If you are signed in, your answer and the feedback are also saved to your history. For a free task done without an account, they are not stored.',
+            'Claude reads your answer together with the task prompt and our instructions, and writes feedback on four criteria. If Claude finds that the text is a request we cannot help with, such as a question about an immigration application or the law, you get a fixed message that we wrote instead of feedback. It points you to a licensed immigration consultant or a lawyer, and it does not count toward your fair-use limits.',
+            FILTER_EN,
+            `You see the feedback on the page. If you are signed in, your answer and the feedback are also saved, and you can open them again from your [account page](${PATHS.account}) for ${FACTS.retentionDays} days after your last activity. For a free task done without an account, they are not stored.`,
           ],
         },
       ],
@@ -185,7 +194,7 @@ export const HELP_RECORDING: DocPage = doc({
       id: 'privacy',
       heading: 'What happens to your recording',
       blocks: [
-        `Your recording is sent to Whisper, a speech-recognition model that runs on Cloudflare Workers AI, to make a transcript. The recording is then discarded: we never store audio. The transcript and your feedback are kept for ${FACTS.retentionDays} days after your last activity. [More about your data](${PATHS.helpPrivacy}).`,
+        `Your recording is sent to Whisper, a speech-recognition model that runs on Cloudflare Workers AI, to make a transcript. The recording is then discarded: we never store audio. The transcript and your feedback are saved to your account page and deleted ${FACTS.retentionDays} days after your last activity. [More about your data](${PATHS.helpPrivacy}).`,
       ],
     },
     {
@@ -249,7 +258,7 @@ export const HELP_ACCOUNT: DocPage = doc({
       id: 'marketing',
       heading: 'Marketing emails',
       blocks: [
-        `Marketing emails are optional, and we send them only if you agree. You can stop them at any time from your [account page](${PATHS.account}) or with the unsubscribe link in any marketing email. Sign-in links, receipts and messages about your pass are always sent.`,
+        `Marketing emails are optional, and we send them only if you agree. You can stop them at any time from your [account page](${PATHS.account}) or with the unsubscribe link at the end of every email we send, which works without signing in. Sign-in links, receipts and messages about your pass are always sent.`,
       ],
     },
     {
@@ -266,8 +275,8 @@ export const HELP_ACCOUNT: DocPage = doc({
       id: 'delete',
       heading: 'Deleting your account',
       blocks: [
-        'You can delete your account at any time from your account page. This removes your email address, answers, transcripts, feedback, history and support messages. It cannot be undone.',
-        'Payment records are kept because tax law requires it. If you have an active pass, it ends when you delete your account, so request a refund first if you qualify.',
+        'You can delete your account at any time from your account page. This removes your email address, answers, transcripts, feedback, error types and support messages. It cannot be undone.',
+        'Payment records are kept because tax law requires it. We also keep a record of each task’s type, date and processing cost for our cost accounting, without anything that links it to you. If you have an active pass, it ends when you delete your account, so request a refund first if you qualify.',
         `[Read the privacy policy](${PATHS.privacy}).`,
       ],
     },
@@ -298,7 +307,7 @@ export const HELP_PASSES: DocPage = doc({
             'A pass is a one-time payment, not a subscription. It never renews automatically.',
             'It starts as soon as your payment is confirmed. Your account page shows when it ends.',
             'If you buy another pass while one is active, the new days are added after your current pass ends.',
-            'If we pause feedback for maintenance or to stop unusual activity, we extend active passes by the length of the pause.',
+            PAUSE_EXTENSION.en,
           ],
         },
       ],
@@ -310,8 +319,8 @@ export const HELP_PASSES: DocPage = doc({
         {
           ol: [
             `[Sign in](${PATHS.login}) with your email.`,
-            `On the [pricing page](${PATHS.pricing}), tick "I live in Canada, outside Quebec" and choose a pass.`,
-            'Pay on the secure Stripe checkout page with a card issued in Canada.',
+            `On the [pricing page](${PATHS.pricing}), tick "I live in Canada, outside Quebec" and choose a pass. By buying, you agree to the [terms of use](${PATHS.terms}) and the [refund policy](${PATHS.refunds}).`,
+            'Pay on the secure Stripe checkout page with a card issued in Canada. Card is the only payment method.',
             'You come back to our site, and your pass is active as soon as the payment is confirmed.',
           ],
         },
@@ -321,7 +330,7 @@ export const HELP_PASSES: DocPage = doc({
       id: 'who-can-buy',
       heading: 'Who can buy',
       blocks: [
-        'Passes are for adults who live in Canada outside Quebec and pay with a card issued in Canada. After payment we check the billing address and the country where the card was issued. If they do not meet these conditions, we do not activate the pass and we refund the full payment automatically.',
+        `Passes are for adults who live in Canada outside Quebec and pay with a card issued in Canada. ${QUEBEC_RULE.en} The free tasks can be used from anywhere. After payment we check the billing address and the country where the card was issued. If they do not meet these conditions, we do not activate the pass and we refund the full payment automatically.`,
         'We also check the location of your internet connection before checkout. If you use a VPN, turn it off before you buy.',
       ],
     },
@@ -330,6 +339,7 @@ export const HELP_PASSES: DocPage = doc({
       heading: 'Fair-use limits',
       blocks: [
         `Each account can get feedback on up to ${FACTS.writingPerDay} writing tasks and ${FACTS.speakingPerDay} speaking tasks per day, and up to ${FACTS.gradedPer30Days} tasks in any 30 days. Daily limits reset at ${DAILY_RESET_EN}. Your account page shows how many you have used.`,
+        NO_FEEDBACK_LIMIT.en,
       ],
     },
     {
@@ -376,8 +386,9 @@ export const HELP_PRIVACY: DocPage = doc({
         {
           ul: [
             '**Audio is never stored.** Your recording is used only to make a transcript, and then it is discarded.',
-            `**Text is deleted after ${FACTS.retentionDays} days.** When you are signed in, the text of your answers, your transcripts and your feedback are kept for your history and deleted ${FACTS.retentionDays} days after your last activity. For a free task done without an account, they are not stored at all.`,
-            '**You can delete your account at any time.** This removes your email address, answers, transcripts, feedback, history and support messages.',
+            `**Text is deleted after ${FACTS.retentionDays} days.** When you are signed in, the text of your answers, your transcripts and your feedback are saved so you can open them again from your account page, and deleted ${FACTS.retentionDays} days after your last activity. For a free task done without an account, they are not stored at all.`,
+            '**You can delete your account at any time.** This removes your email address, answers, transcripts, feedback, error types and support messages.',
+            `**Support messages go to our business email.** Messages from the support form (you need to be signed in) are forwarded, with your email address, to our business mailbox at Google (Gmail). An AI assistant (Claude by Anthropic) may draft a reply, and the owner reviews every reply before sending it. Copies, including our replies, are deleted ${FACTS.retentionDays} days after you send the message, and when you delete your account.`,
             '**No raw IP addresses.** We keep only salted hashes (one-way codes) of part of your IP address and of a random device id, to limit free tasks and prevent abuse.',
             "**We never see your full card number.** Stripe handles payments. We keep only what we need for the refund and region rules, such as your billing country and province, the card's country and a card fingerprint.",
             '**We do not sell your data**, and we do not use your answers to train AI models.',
@@ -395,12 +406,17 @@ export const HELP_PRIVACY: DocPage = doc({
               term: 'Cloudflare',
               detail: 'Hosts the site and database, turns recordings into text, runs the security check on forms, and provides privacy-focused site analytics.',
             },
-            { term: 'Anthropic', detail: 'Its AI model, Claude, writes feedback from your answer or transcript.' },
+            {
+              term: 'Anthropic',
+              detail:
+                'Its AI model, Claude, writes feedback from your answer or transcript. The owner also uses Claude to draft replies to support messages.',
+            },
             { term: 'Stripe', detail: 'Processes payments and refunds.' },
             { term: 'Resend', detail: 'Sends sign-in links and other emails.' },
             {
               term: 'Google',
-              detail: 'When turned on, a Google Ads tag on the purchase confirmation page tells us whether an ad led to a purchase.',
+              detail:
+                'Hosts our business email (Gmail), where support messages arrive. When turned on, a Google Ads tag on the purchase confirmation page tells us whether an ad led to a purchase.',
             },
           ],
         },
@@ -411,7 +427,8 @@ export const HELP_PRIVACY: DocPage = doc({
       id: 'after-delete',
       heading: 'What we keep after you delete your account',
       blocks: [
-        'Payment records, which tax law requires us to keep, and a salted hash of your email address, so the once-per-person refund rule still works if you sign up again.',
+        'Payment records, which tax law requires us to keep, and a salted hash of your email address, so that if you sign up again with the same email, the once-per-person refund rule still applies and the free speaking task is not given again.',
+        'A record of each task’s type, date and processing cost, for our cost accounting. After deletion it has nothing that links it to you.',
       ],
     },
     contactSection('requests', 'Questions or requests about your data'),
@@ -470,20 +487,21 @@ export const HELP_TROUBLESHOOTING: DocPage = doc({
       heading: 'I reached my limit',
       blocks: [
         `Each account can get feedback on up to ${FACTS.writingPerDay} writing tasks and ${FACTS.speakingPerDay} speaking tasks per day, and up to ${FACTS.gradedPer30Days} tasks in any 30 days. Daily limits reset at ${DAILY_RESET_EN}. Your account page shows how many you have used.`,
+        NO_FEEDBACK_LIMIT.en,
       ],
     },
     {
       id: 'paused',
       heading: 'Feedback is paused',
       blocks: [
-        'Sometimes we pause feedback for maintenance or to stop unusual activity. A notice appears at the top of the page while this lasts. Active passes are extended by the length of the pause.',
+        `Sometimes we pause feedback, for example for maintenance or to stop unusual activity. A notice appears at the top of the page while this lasts. ${PAUSE_EXTENSION.en}`,
       ],
     },
     {
       id: 'no-feedback',
       heading: 'I got a message instead of feedback',
       blocks: [
-        'We do not give feedback on requests that are not practice answers, such as questions about immigration applications or the law. Write your text as an answer to the task prompt and submit it again. These requests do not count toward your limits.',
+        `We do not give feedback on requests that are not practice answers, such as questions about immigration applications or the law. Write your text as an answer to the task prompt and submit it again. These requests do not count toward your fair-use limits, but each account can have up to ${FACTS.noFeedbackPerDay} requests without feedback per day.`,
       ],
     },
     {

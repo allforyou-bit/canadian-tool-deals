@@ -1,10 +1,18 @@
 import { env } from 'cloudflare:test'
 import { exports } from 'cloudflare:workers'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { TERMS_VERSION } from '../../../shared/config'
 import { checkout } from '../../src/billing'
+import { STRIPE_API_VERSION } from '../../src/billing/stripe'
 import { FakeStripe, ORIGIN, createUser, eventCount, jsonRequest, makeCtx, purchaseRow, setCheckoutEnabled } from './helpers'
 
-const body = (over: Record<string, unknown> = {}) => ({ sku: 'pass30', residentAttestation: true, lang: 'en', ...over })
+const body = (over: Record<string, unknown> = {}) => ({
+  sku: 'pass30',
+  residentAttestation: true,
+  termsVersion: TERMS_VERSION,
+  lang: 'en',
+  ...over,
+})
 
 describe('POST /api/checkout', () => {
   let stripe: FakeStripe
@@ -61,6 +69,18 @@ describe('POST /api/checkout', () => {
   })
 
   it.each([
+    ['missing', { termsVersion: undefined }, 'en', 'reload the page'],
+    ['an older version', { termsVersion: '2020-01-01' }, 'en', 'reload the page'],
+    ['not a string', { termsVersion: 20260924 }, 'ko', '새로고침'],
+  ])('requires the current terms version (%s)', async (_label, over, lang, text) => {
+    const { user } = await createUser()
+    const res = await checkout(jsonRequest('/api/checkout', body({ ...over, lang })), makeCtx(user))
+    expect(res.status).toBe(400)
+    expect(await res.json()).toMatchObject({ error: 'bad_request', message: expect.stringContaining(text) })
+    expect(stripe.calls).toHaveLength(0)
+  })
+
+  it.each([
     ['outside Canada', 'US', 'NY'],
     ['in Quebec', 'CA', 'QC'],
     ['with an unknown country', null, null],
@@ -86,10 +106,11 @@ describe('POST /api/checkout', () => {
     const [call] = stripe.stripeCalls('POST /v1/checkout/sessions')
     expect(call.headers.get('authorization')).toBe(`Bearer ${env.STRIPE_SECRET_KEY}`)
     expect(call.headers.get('content-type')).toBe('application/x-www-form-urlencoded')
-    expect(call.headers.get('stripe-version')).toBeNull()
+    expect(call.headers.get('stripe-version')).toBe(STRIPE_API_VERSION)
     expect(call.body).toContain('line_items[0][price_data][currency]=cad')
     expect(Object.fromEntries(new URLSearchParams(call.body))).toEqual({
       mode: 'payment',
+      'payment_method_types[0]': 'card',
       'line_items[0][price_data][currency]': 'cad',
       'line_items[0][price_data][unit_amount]': '7900',
       'line_items[0][price_data][product_data][name]': 'Maple Practice Coach — 90-day pass',
@@ -99,8 +120,10 @@ describe('POST /api/checkout', () => {
       client_reference_id: user.id,
       'metadata[user_id]': user.id,
       'metadata[sku]': 'pass90',
+      'metadata[terms_version]': TERMS_VERSION,
       'payment_intent_data[metadata][user_id]': user.id,
       'payment_intent_data[metadata][sku]': 'pass90',
+      'payment_intent_data[metadata][terms_version]': TERMS_VERSION,
       locale: 'en',
       success_url: `${ORIGIN}/checkout/success/?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${ORIGIN}/checkout/cancel/`,
@@ -113,9 +136,18 @@ describe('POST /api/checkout', () => {
       amount_cents: 7900,
       currency: 'cad',
       status: 'pending',
+      terms_version: TERMS_VERSION,
+      amount_refunded_cents: 0,
       paid_at: null,
     })
     expect(await eventCount('checkout_start', '/api/checkout')).toBe(eventsBefore + 1)
+  })
+
+  it('pins the Stripe API version whose card-only parameter it uses', () => {
+    // Verified against stripe/openapi tag v2516 (spec3.json 2026-08-26.dahlia): POST /v1/checkout/sessions
+    // takes payment_method_types. 2026-09-30.endive renames it allowed_payment_method_types, so moving the
+    // pin means changing checkout.ts too; this test fails first as a reminder.
+    expect(STRIPE_API_VERSION).toBe('2026-08-26.dahlia')
   })
 
   it('uses the Korean Checkout locale for Korean buyers', async () => {

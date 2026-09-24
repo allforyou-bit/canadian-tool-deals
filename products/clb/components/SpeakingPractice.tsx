@@ -61,6 +61,12 @@ export function SpeakingPractice(props: { task: TaskType }) {
   const stoppedAtRef = useRef(0)
   const urlRef = useRef<string | null>(null)
   const resultRef = useRef<HTMLHeadingElement>(null)
+  // the control to focus after each phase change (the previous one is unmounted or disabled)
+  const startRef = useRef<HTMLButtonElement>(null)
+  const skipPrepRef = useRef<HTMLButtonElement>(null)
+  const stopRef = useRef<HTMLButtonElement>(null)
+  const submitRef = useRef<HTMLButtonElement>(null)
+  const prevPhaseRef = useRef<Phase>('idle')
 
   const me = meState.status === 'ready' ? meState.me : null
   const pass = me ? activePass(me) : null
@@ -171,6 +177,19 @@ export function SpeakingPractice(props: { task: TaskType }) {
     if (result) resultRef.current?.focus()
   }, [result])
 
+  // Keep keyboard and screen-reader users on the next primary control when a phase ends
+  // (recording can also start and stop by itself when a countdown ends).
+  useEffect(() => {
+    const prev = prevPhaseRef.current
+    prevPhaseRef.current = phase
+    if (prev === phase) return
+    if (phase === 'prep') skipPrepRef.current?.focus()
+    else if (phase === 'recording') stopRef.current?.focus()
+    else if (phase === 'review') submitRef.current?.focus()
+    // back to the start (mic blocked, recording too short); after feedback the result heading takes focus
+    else if (phase === 'idle' && prev !== 'submitting') startRef.current?.focus()
+  }, [phase])
+
   async function start() {
     setNotice(null)
     setError(null)
@@ -208,7 +227,7 @@ export function SpeakingPractice(props: { task: TaskType }) {
       })
       setResult(res)
       if (res.free) track('sample_done')
-      void refreshMe()
+      void refreshMe({ force: true })
       setPhase('idle')
       replaceUrl(null)
       setRecording(null)
@@ -223,9 +242,21 @@ export function SpeakingPractice(props: { task: TaskType }) {
     setError(null)
     setNotice(null)
     window.scrollTo({ top: 0 })
+    // the "Practise again" button is about to disappear; the start button is already on the page
+    startRef.current?.focus({ preventScroll: true })
   }
 
   const busy = phase !== 'idle' && phase !== 'review'
+
+  // Assertive: prep and recording start on a timer, so the learner must hear when to speak.
+  const announcement =
+    phase === 'prep'
+      ? t(lang, 's.announcePrep')
+      : phase === 'recording'
+        ? t(lang, 's.announceRecording')
+        : (phase === 'review' || phase === 'submitting') && recording
+          ? t(lang, 's.announceStopped')
+          : ''
 
   let recorder: ReactNode
   if (meState.status === 'loading' || mimeType === undefined) {
@@ -267,7 +298,13 @@ export function SpeakingPractice(props: { task: TaskType }) {
         <p className="text-slate-800">{t(lang, 's.timing', { prep: prepSeconds, speak: limit })}</p>
 
         {(phase === 'idle' || phase === 'requesting') && (
-          <button type="button" className={`${cls.btn} ${cls.primary}`} onClick={() => void start()} disabled={phase === 'requesting'}>
+          <button
+            ref={startRef}
+            type="button"
+            className={`${cls.btn} ${cls.primary}`}
+            onClick={() => void start()}
+            disabled={phase === 'requesting'}
+          >
             {t(lang, 's.start')}
           </button>
         )}
@@ -278,7 +315,7 @@ export function SpeakingPractice(props: { task: TaskType }) {
             <span role="timer" aria-live="off" className="font-mono text-3xl tabular-nums">
               {formatClock(secondsLeft)}
             </span>
-            <button type="button" className={`${cls.btn} ${cls.primary}`} onClick={beginRecording}>
+            <button ref={skipPrepRef} type="button" className={`${cls.btn} ${cls.primary}`} onClick={beginRecording}>
               {t(lang, 's.skipPrep')}
             </button>
           </div>
@@ -293,7 +330,7 @@ export function SpeakingPractice(props: { task: TaskType }) {
             <span role="timer" aria-live="off" className="font-mono text-3xl tabular-nums text-red-950">
               {formatClock(secondsLeft)}
             </span>
-            <button type="button" className={`${cls.btn} ${cls.danger}`} onClick={stopRecording}>
+            <button ref={stopRef} type="button" className={`${cls.btn} ${cls.danger}`} onClick={stopRecording}>
               {t(lang, 's.stop')}
             </button>
           </div>
@@ -305,7 +342,13 @@ export function SpeakingPractice(props: { task: TaskType }) {
             <audio controls src={recording.url} className="w-full" aria-label={t(lang, 's.review')} />
             <p className={cls.muted}>{t(lang, 's.duration', { n: recording.seconds })}</p>
             <div className="flex flex-wrap gap-3">
-              <button type="button" className={`${cls.btn} ${cls.primary}`} onClick={() => void submit()} disabled={phase === 'submitting'}>
+              <button
+                ref={submitRef}
+                type="button"
+                className={`${cls.btn} ${cls.primary}`}
+                onClick={() => void submit()}
+                disabled={phase === 'submitting'}
+              >
                 {t(lang, 'p.submit')}
               </button>
               <button type="button" className={`${cls.btn} ${cls.secondary}`} onClick={reRecord} disabled={phase === 'submitting'}>
@@ -336,6 +379,9 @@ export function SpeakingPractice(props: { task: TaskType }) {
       <ExplanationLangSelect lang={lang} disabled={busy} />
       <PromptPicker prompts={task.prompts} value={promptIndex} onChange={setPromptIndex} lang={lang} disabled={busy} />
       {recorder}
+      <p className="sr-only" aria-live="assertive" data-testid="recorder-live">
+        {announcement}
+      </p>
       <div aria-live="polite" className="space-y-3">
         {notice && <Notice kind="error">{t(lang, notice, { mb: CAPS.maxAudioBytes / 1024 / 1024 })}</Notice>}
         {error && <ErrorNotice error={error} lang={lang} context="speaking" returnTo={returnTo} />}

@@ -52,6 +52,13 @@ describe('parseAdsJson', () => {
     expect(err).toContain('row 2: unknown field(s) email')
     expect(err).toContain('row 3: duplicate date 2026-10-26')
   })
+
+  it('never quotes the input in its errors (the personal-data guard prints them)', () => {
+    expect(() => parseAdsJson('{"note": "my landlord in Toronto')).toThrow(/^ads\.json is not valid JSON$/)
+    const long = [{ date: '2026-10-26', spendCad: 1, clicks: 1, impressions: 3, conversions: 0, 'my landlord refused to fix the heating': 1 }]
+    expect(() => parseAdsJson(JSON.stringify(long))).toThrow(/unknown field\(s\) <\d+ chars>/)
+    expect(() => parseAdsJson(JSON.stringify(long))).not.toThrow(/landlord/)
+  })
 })
 
 describe('funnel (memo B8)', () => {
@@ -121,6 +128,18 @@ describe('cap and freshness', () => {
     expect(adsFreshness(rows, '2026-10-30')).toEqual({ latest: '2026-10-28', ageDays: 2, stale: false })
     expect(adsFreshness(rows, '2026-10-31').stale).toBe(true)
     expect(adsFreshness([], '2026-10-27')).toEqual({ latest: null, ageDays: null, stale: true })
+  })
+
+  it('does not alert in the first 48 hours of a campaign: age counts from startDate − 1 day (R59)', () => {
+    // no report can exist before the day after the start day
+    expect(adsFreshness([], '2026-10-26', '2026-10-26')).toEqual({ latest: null, ageDays: 1, stale: false })
+    expect(adsFreshness([], '2026-10-27', '2026-10-26')).toEqual({ latest: null, ageDays: 2, stale: false })
+    expect(adsFreshness([], '2026-10-28', '2026-10-26')).toEqual({ latest: null, ageDays: 3, stale: true })
+    // rows from an earlier campaign do not make a new campaign stale on its first days
+    expect(adsFreshness(rows, '2026-11-11', '2026-11-10')).toMatchObject({ latest: '2026-10-28', ageDays: 2, stale: false })
+    // once rows arrive, age is measured from the newest row
+    expect(adsFreshness(rows, '2026-10-30', '2026-10-26')).toMatchObject({ ageDays: 2, stale: false })
+    expect(adsFreshness(rows, '2026-10-31', '2026-10-26').stale).toBe(true)
   })
 
   it('tracks spend against the cap', () => {

@@ -7,7 +7,10 @@
 //
 // npm packages stay external (resolved from products/clb/node_modules at run time); the bundle
 // is written to products/clb/.cache/ (gitignored).
-import { spawnSync } from 'node:child_process'
+//
+// SIGINT/SIGTERM (a cancelled Actions run, Ctrl-C) are passed on to the script, so a script that
+// handles them (the eval scripts cancel their Message Batch) gets the chance to clean up.
+import { spawn, spawnSync } from 'node:child_process'
 import { existsSync, mkdirSync } from 'node:fs'
 import { basename, dirname, join, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -56,5 +59,14 @@ if (build.status !== 0) {
   process.exit(build.status ?? 1)
 }
 
-const run = spawnSync(process.execPath, ['--enable-source-maps', outfile, ...args], { stdio: 'inherit' })
-process.exit(run.status ?? 1)
+const child = spawn(process.execPath, ['--enable-source-maps', outfile, ...args], { stdio: 'inherit' })
+for (const sig of ['SIGINT', 'SIGTERM']) {
+  process.on(sig, () => {
+    if (child.exitCode === null) child.kill(sig)
+  })
+}
+child.on('exit', (code, signal) => process.exit(code ?? (signal ? 128 + (signal === 'SIGINT' ? 2 : 15) : 1)))
+child.on('error', (e) => {
+  console.error(`run.mjs: could not start the script: ${e.message}`)
+  process.exit(1)
+})

@@ -1,11 +1,26 @@
-# Grading eval (memo B12). Offline harness tests always run. The live eval runs only when the
-# ANTHROPIC_API_KEY secret is available (it is not for pull requests from forks):
+# Grading eval (memo B12). Offline harness tests always run. The live eval runs only when an Anthropic
+# key is available (never for pull requests from forks):
 #   synthetic set (claude-opus-5, Message Batches) → cached by generator version, never committed
 #   → grade every sample 3× with the production grader request (Batches) → thresholds + a >5-point
-#   regression check against the last accepted scheduled run (kept in the Actions cache).
-# Results are uploaded as an artifact (14 days) and never committed. Cost control: the repository
-# variable MPC_EVAL_LIMIT (or the manual input) caps the number of practice samples graded; every
-# probe and benign item is always included. The run prints an estimated cost (ESTIMATE).
+#   regression check against the last accepted run on master with the same limit (Actions cache).
+# Results are uploaded as an artifact (14 days) and never committed.
+#
+# Key: secrets.ANTHROPIC_EVAL_API_KEY — a key from a separate Anthropic workspace with its own monthly
+#   limit, so eval spend cannot use up the production Console limit (the Worker's spend tiers cannot
+#   see it). Without it the production ANTHROPIC_API_KEY is used and the run shows a warning.
+# Grader: vars.MPC_GRADER_MODEL / MPC_GRADER_EFFORT / MPC_GRADER_MAX_TOKENS, the same variables the
+#   deploy passes to the Worker (unset → the Worker's defaults).
+# Cost control (all ESTIMATEs; worst case = every request uses all of max_tokens, batch prices):
+#   - limit: scheduled and manual runs grade MPC_EVAL_LIMIT practice samples (unset or 0 = all 120;
+#     worst case about US$52 on claude-opus-5, typical far lower); pull requests grade
+#     MPC_EVAL_PR_LIMIT (default 20; worst case about US$17). Every probe and benign item is always in.
+#   - budget: before any batch is created, the worst case must be ≤ MPC_EVAL_BUDGET_USD (default 60,
+#     US$ per script run); otherwise nothing is sent and the run fails.
+#   - cancelling: a superseded or cancelled run cancels its batch (SIGTERM handler + the last step);
+#     a batch still running after the wait limit is cancelled too.
+# Baselines are kept per limit (cache key eval-baseline-<limit>-…). A passing run on master becomes
+# the baseline for its limit; a full scheduled run also stores the metrics of its PR-limit subset, so
+# pull requests are compared with the same samples.
 name: Grading eval
 
 on:
@@ -14,13 +29,17 @@ on:
   workflow_dispatch:
     inputs:
       limit:
-        description: Grade at most this many practice samples (0 = all 120)
+        description: Grade at most this many practice samples (0 = all 120; empty = the MPC_EVAL_LIMIT variable)
         required: false
-        default: '0'
+        default: ''
   pull_request:
     paths:
       - 'products/clb/worker/src/grading/**'
       - 'products/clb/scripts/eval/**'
+      # the grader request and filter also read tasks, the result schema, model/config and claim rules
+      - 'products/clb/shared/*.ts'
+      - '!products/clb/shared/*.test.ts'
+      - '.github/workflows/eval.yml'
 
 permissions:
   contents: read
@@ -37,9 +56,14 @@ jobs:
       run:
         working-directory: products/clb
     env:
+      ANTHROPIC_EVAL_API_KEY: ${{ secrets.ANTHROPIC_EVAL_API_KEY }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       GRADER_MODEL: ${{ vars.MPC_GRADER_MODEL }}
-      EVAL_LIMIT: ${{ inputs.limit || vars.MPC_EVAL_LIMIT || '0' }}
+      GRADER_EFFORT: ${{ vars.MPC_GRADER_EFFORT }}
+      GRADER_MAX_TOKENS: ${{ vars.MPC_GRADER_MAX_TOKENS }}
+      EVAL_BUDGET_USD: ${{ vars.MPC_EVAL_BUDGET_USD || '60' }}
+      PR_LIMIT: ${{ vars.MPC_EVAL_PR_LIMIT || '20' }}
+      EVAL_LIMIT: ${{ github.event_name == 'pull_request' && (vars.MPC_EVAL_PR_LIMIT || '20') || (inputs.limit || vars.MPC_EVAL_LIMIT || '0') }}
     steps:
       - name: Check out
         uses: actions/checkout@v7
@@ -59,16 +83,23 @@ jobs:
       - name: Offline harness tests (5 hand-written fixtures)
         run: npx vitest run scripts/eval
 
-      - name: Check secrets
+      - name: Check secrets and settings
         id: cfg
         run: |
-          if [ -z "$ANTHROPIC_API_KEY" ]; then
-            echo "::notice::Live eval skipped: the ANTHROPIC_API_KEY secret is not available to this run."
-            echo "ready=false" >> "$GITHUB_OUTPUT"
+          for v in "$EVAL_LIMIT" "$PR_LIMIT"; do
+            case "$v" in ''|*[!0-9]*) echo "::error::MPC_EVAL_LIMIT, MPC_EVAL_PR_LIMIT and the limit input must be whole numbers (got '$v')"; exit 1 ;; esac
+          done
+          if [ -n "$ANTHROPIC_EVAL_API_KEY" ]; then
+            echo "Live eval uses ANTHROPIC_EVAL_API_KEY (the eval workspace)."
+          elif [ -n "$ANTHROPIC_API_KEY" ]; then
+            echo "::warning title=Eval uses the production API key::ANTHROPIC_EVAL_API_KEY is not set, so the eval spends against the production Anthropic Console limit, which the Worker's spend tiers cannot see. Add ANTHROPIC_EVAL_API_KEY from a separate workspace (business/online/owner-setup.md)."
           else
-            echo "ready=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Live eval skipped: neither ANTHROPIC_EVAL_API_KEY nor ANTHROPIC_API_KEY is available to this run."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
-          case "$EVAL_LIMIT" in ''|*[!0-9]*) echo "::error::limit must be a whole number"; exit 1 ;; esac
+          echo "Limit: ${EVAL_LIMIT} (0 = all) · PR limit: ${PR_LIMIT} · budget per script run: US\$${EVAL_BUDGET_USD}"
+          echo "ready=true" >> "$GITHUB_OUTPUT"
 
       - name: Restore the synthetic set
         id: synth
@@ -78,9 +109,11 @@ jobs:
           path: products/clb/.eval/synthetic
           key: eval-synthetic-${{ hashFiles('products/clb/scripts/eval/synthetic-plan.ts', 'products/clb/scripts/eval/gen-synthetic.ts', 'products/clb/shared/tasks.ts') }}
 
+      # `exec` makes node the step's process, so the SIGINT/SIGTERM of a cancelled run reaches the
+      # script (scripts/run.mjs forwards it), which cancels its batch.
       - name: Generate the synthetic set
         if: steps.cfg.outputs.ready == 'true' && steps.synth.outputs.cache-hit != 'true'
-        run: node scripts/run.mjs scripts/eval/gen-synthetic.ts --out .eval/synthetic
+        run: exec node scripts/run.mjs scripts/eval/gen-synthetic.ts --out .eval/synthetic
 
       - name: Save the synthetic set
         if: steps.cfg.outputs.ready == 'true' && steps.synth.outputs.cache-hit != 'true'
@@ -89,25 +122,26 @@ jobs:
           path: products/clb/.eval/synthetic
           key: ${{ steps.synth.outputs.cache-primary-key }}
 
-      - name: Restore the baseline
+      - name: Restore the baseline for this limit
         if: steps.cfg.outputs.ready == 'true'
         uses: actions/cache/restore@v6
         with:
-          path: products/clb/.eval/baseline
-          key: eval-baseline-${{ github.run_id }}
-          restore-keys: eval-baseline-
+          path: products/clb/.eval/baseline/limit-${{ env.EVAL_LIMIT }}
+          key: eval-baseline-${{ env.EVAL_LIMIT }}-${{ github.run_id }}
+          restore-keys: eval-baseline-${{ env.EVAL_LIMIT }}-
 
       - name: Grade (3 runs per sample, Message Batches)
         id: live
         if: steps.cfg.outputs.ready == 'true'
         continue-on-error: true
         run: >-
-          node scripts/run.mjs scripts/eval/run-live.ts
+          exec node scripts/run.mjs scripts/eval/run-live.ts
           --in .eval/synthetic/samples.json
           --out .eval/results
-          --baseline .eval/baseline/metrics.json
+          --baseline ".eval/baseline/limit-$EVAL_LIMIT/metrics.json"
           --runs 3
           --limit "$EVAL_LIMIT"
+          --subset-metrics "$PR_LIMIT"
 
       - name: Upload results
         if: always() && steps.cfg.outputs.ready == 'true'
@@ -121,23 +155,42 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
-      # Only a full, passing scheduled or manual run on master becomes the new baseline.
+      # A passing scheduled or manual run on master becomes the baseline for its limit; a larger run
+      # also becomes the baseline for the PR limit (metrics of that subset of its results).
       - name: Promote to baseline
         id: promote
-        if: steps.live.outcome == 'success' && github.ref == 'refs/heads/master' && github.event_name != 'pull_request' && env.EVAL_LIMIT == '0'
+        if: steps.live.outcome == 'success' && github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
         run: |
-          mkdir -p .eval/baseline
-          cp .eval/results/metrics.json .eval/baseline/metrics.json
+          mkdir -p ".eval/baseline/limit-$EVAL_LIMIT"
+          cp .eval/results/metrics.json ".eval/baseline/limit-$EVAL_LIMIT/metrics.json"
+          if [ -f ".eval/results/metrics-limit-$PR_LIMIT.json" ]; then
+            mkdir -p ".eval/baseline/limit-$PR_LIMIT"
+            cp ".eval/results/metrics-limit-$PR_LIMIT.json" ".eval/baseline/limit-$PR_LIMIT/metrics.json"
+            echo "subset=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Save the baseline
         if: steps.promote.outcome == 'success'
         uses: actions/cache/save@v6
         with:
-          path: products/clb/.eval/baseline
-          key: eval-baseline-${{ github.run_id }}
+          path: products/clb/.eval/baseline/limit-${{ env.EVAL_LIMIT }}
+          key: eval-baseline-${{ env.EVAL_LIMIT }}-${{ github.run_id }}
+
+      - name: Save the PR-limit baseline
+        if: steps.promote.outcome == 'success' && steps.promote.outputs.subset == 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: products/clb/.eval/baseline/limit-${{ env.PR_LIMIT }}
+          key: eval-baseline-${{ env.PR_LIMIT }}-${{ github.run_id }}
 
       - name: Fail when thresholds failed
         if: steps.live.outcome == 'failure'
         run: |
-          echo "::error::Grading eval failed its thresholds (or could not run). See the job summary and the eval-results artifact."
+          echo "::error::Grading eval failed its thresholds (or could not run, or its worst-case cost was above MPC_EVAL_BUDGET_USD). See the log, the job summary and the eval-results artifact."
           exit 1
+
+      # Runs after a cancel, a timeout or a failure too: a batch whose id file is still there may still
+      # be running and billing. The scripts delete the file once their batch has ended.
+      - name: Cancel batches left running
+        if: always() && steps.cfg.outputs.ready == 'true'
+        run: node scripts/run.mjs scripts/eval/cancel-batch.ts .eval/results/batch-id.txt .eval/synthetic/gen-batch-id.txt

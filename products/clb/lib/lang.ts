@@ -1,5 +1,6 @@
 // Remembered UI language (a per-viewer convenience in localStorage; the page works without it).
-// `?lang=ko` in the URL wins so Korean pages can link to /login/?lang=ko.
+// `?lang=ko` in the URL and the Korean pages (/ko/…) set it: components/UiLangSync.tsx calls
+// setUiLang after every navigation, so the choice also survives the magic-link tab.
 import type { Lang } from '../shared/api'
 
 const STORAGE_KEY = 'mpc_lang'
@@ -10,6 +11,15 @@ export const isLang = (v: unknown): v is Lang => v === 'en' || v === 'ko'
 export function langFromSearch(search: string): Lang | null {
   const v = new URLSearchParams(search).get('lang')
   return isLang(v) ? v : null
+}
+
+/**
+ * The language a location asks for: the Korean pages (/ko/…) mean Korean, otherwise an explicit
+ * ?lang= wins. null means "keep the remembered choice".
+ */
+export function langForLocation(pathname: string, search: string): Lang | null {
+  if (pathname === '/ko' || pathname.startsWith('/ko/')) return 'ko'
+  return langFromSearch(search)
 }
 
 let current: Lang | null = null
@@ -25,7 +35,7 @@ function readStored(): Lang | null {
 }
 
 export function getUiLang(): Lang {
-  if (current === null) current = langFromSearch(window.location.search) ?? readStored() ?? 'en'
+  if (current === null) current = langForLocation(window.location.pathname, window.location.search) ?? readStored() ?? 'en'
   return current
 }
 

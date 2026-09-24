@@ -4,11 +4,22 @@
 //   src/stripe.core.ts (host api.stripe.com), src/Webhooks.ts + src/crypto/SubtleCryptoProvider.ts
 //   (Stripe-Signature: `t=<unix>,v1=<hex HMAC-SHA256 of "<t>.<raw body>">`, default tolerance 300 s);
 // - stripe/openapi openapi/spec3.json (endpoint paths, parameter names and object fields used below).
-// No Stripe-Version header is sent, so the account's default API version applies.
+// Every request pins Stripe-Version (STRIPE_API_VERSION), so parameter names and response shapes do not
+// depend on the account's default API version.
 import type { Env } from '../env'
 import { hmacSha256Hex, timingSafeEqualHex } from '../lib/crypto'
 
 export const STRIPE_API = 'https://api.stripe.com'
+
+/**
+ * API version sent as `Stripe-Version` on every request (header name from stripe-node src/utils.ts and
+ * src/RequestSender.ts). Verified 2026-09-24 against stripe/openapi tag v2516 (openapi/spec3.json,
+ * info.version "2026-08-26.dahlia", the last spec of this version) and stripe-node 22.6.0, which pins it.
+ * In this version Checkout restricts payment methods with `payment_method_types`; the next version
+ * (2026-09-30.endive, tag v2517) replaces it with `allowed_payment_method_types`, so re-check checkout.ts
+ * before moving the pin. Set the webhook endpoint to the same version so event payloads match.
+ */
+export const STRIPE_API_VERSION = '2026-08-26.dahlia'
 
 /** Stripe-node's Webhook.DEFAULT_TOLERANCE (seconds). */
 export const SIGNATURE_TOLERANCE_SECONDS = 300
@@ -44,9 +55,15 @@ export interface Charge {
   id: string
   payment_intent?: Expandable<{ id: string }>
   billing_details?: { address?: Address | null } | null
-  payment_method_details?: { card?: { country?: string | null; fingerprint?: string | null } | null } | null
+  /** `type` names the payment method (`card`, `link`, `klarna`…); a hash of that name holds its details */
+  payment_method_details?: {
+    type?: string | null
+    card?: { country?: string | null; fingerprint?: string | null } | null
+  } | null
+  /** true only once the charge is fully refunded; a partial refund leaves it false */
   refunded?: boolean
   disputed?: boolean
+  /** cumulative amount refunded so far (partial refunds included) */
   amount_refunded?: number
 }
 
@@ -59,7 +76,18 @@ export interface PaymentIntent {
 export interface Refund {
   id: string
   amount: number
+  charge?: Expandable<{ id: string }>
+  payment_intent?: Expandable<{ id: string }>
   status?: 'pending' | 'requires_action' | 'succeeded' | 'failed' | 'canceled' | null
+  /** e.g. lost_or_stolen_card, expired_or_canceled_card, declined (set when status is failed) */
+  failure_reason?: string | null
+  metadata?: Record<string, string> | null
+}
+
+/** A page of a Stripe list endpoint. */
+export interface StripeList<T> {
+  data: T[]
+  has_more?: boolean
 }
 
 export interface Dispute {
@@ -139,7 +167,10 @@ export async function stripeFetch<T>(
   opts: StripeRequestOptions = {},
 ): Promise<T> {
   const encoded = formEncode(opts.params ?? {})
-  const headers: Record<string, string> = { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}` }
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
+    'Stripe-Version': STRIPE_API_VERSION,
+  }
   if (opts.idempotencyKey) headers['Idempotency-Key'] = opts.idempotencyKey
   let url = STRIPE_API + path
   const init: RequestInit = { method, headers }

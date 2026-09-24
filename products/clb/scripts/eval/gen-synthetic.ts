@@ -3,43 +3,23 @@
 // immigration-themed answers (plan: scripts/eval/synthetic-plan.ts). Synthetic only — never user
 // data. Output goes to .eval/ (gitignored) and, in CI, to an Actions artifact/cache; never to git.
 //
-//   ANTHROPIC_API_KEY=… node scripts/run.mjs scripts/eval/gen-synthetic.ts [--out .eval/synthetic]
-//       [--model claude-opus-5] [--limit N] [--batch-id ID] [--dry-run]
+//   ANTHROPIC_EVAL_API_KEY=… node scripts/run.mjs scripts/eval/gen-synthetic.ts [--out .eval/synthetic]
+//       [--model claude-opus-5] [--limit N] [--batch-id ID] [--max-wait-minutes 240] [--budget-usd N] [--dry-run]
 //
-// --dry-run writes the plan (plan.json) without calling the API. Exit 1 when too few items came back.
-import Anthropic from '@anthropic-ai/sdk'
-import { batchSafeParams, messageText, runBatch, type BatchRequest } from './batch'
+// --dry-run writes the plan (plan.json) without calling the API. Exit 1 when too few items came back,
+// 2 on a usage/API error or when the worst-case cost is above --budget-usd / EVAL_BUDGET_USD.
+// Key, budget and cancelling work as in run-live.ts (scripts/eval/client.ts, batch.ts); the batch id
+// is kept in <out>/gen-batch-id.txt while the batch runs.
+import { batchSafeParams, checkBudget, maxBatchCostUsd, messageText, runBatch, type BatchRequest } from './batch'
+import { abortOnSignals, argValue, createEvalClient } from './client'
 import type { EvalSample } from './harness'
-import { buildPlan, GENERATOR_SYSTEM, selectSubset } from './synthetic-plan'
+import { buildPlan, GENERATOR_SYSTEM, selectSubset, type PlanItem } from './synthetic-plan'
 
 export const GENERATOR_MODEL = 'claude-opus-5'
 const MAX_TOKENS = 4000
 
-function argValue(args: string[], name: string): string | undefined {
-  const i = args.indexOf(name)
-  return i >= 0 ? args[i + 1] : undefined
-}
-
-export async function main(args: string[]): Promise<number> {
-  const { mkdir, writeFile } = await import('node:fs/promises')
-  const { join } = await import('node:path')
-  const outDir = argValue(args, '--out') ?? '.eval/synthetic'
-  const model = argValue(args, '--model') ?? GENERATOR_MODEL
-  const limit = Number(argValue(args, '--limit') ?? 0)
-  const plan = selectSubset(buildPlan(), limit)
-  await mkdir(outDir, { recursive: true })
-  await writeFile(join(outDir, 'plan.json'), `${JSON.stringify(plan, null, 2)}\n`)
-
-  if (args.includes('--dry-run')) {
-    console.log(`gen-synthetic: dry run — wrote ${plan.length} plan item(s) to ${join(outDir, 'plan.json')}`)
-    return 0
-  }
-  if (!process.env.ANTHROPIC_API_KEY) {
-    console.error('gen-synthetic: ANTHROPIC_API_KEY is not set')
-    return 2
-  }
-
-  const requests: BatchRequest[] = plan.map((p) => ({
+export function buildGeneratorRequests(plan: PlanItem[], model: string): BatchRequest[] {
+  return plan.map((p) => ({
     custom_id: `gen-${p.id}`,
     params: batchSafeParams({
       model,
@@ -50,12 +30,51 @@ export async function main(args: string[]): Promise<number> {
       messages: [{ role: 'user', content: p.brief }],
     }),
   }))
+}
 
-  const client = new Anthropic()
-  const { batchId, results } = await runBatch(client, requests, {
-    batchId: argValue(args, '--batch-id'),
-    maxWaitMinutes: Number(argValue(args, '--max-wait-minutes') ?? 240),
-  })
+export async function main(args: string[]): Promise<number> {
+  const { mkdir, rm, writeFile } = await import('node:fs/promises')
+  const { join } = await import('node:path')
+  const outDir = argValue(args, '--out') ?? '.eval/synthetic'
+  const model = argValue(args, '--model')?.trim() || GENERATOR_MODEL
+  const limit = Number(argValue(args, '--limit') ?? 0)
+  const plan = selectSubset(buildPlan(), limit)
+  await mkdir(outDir, { recursive: true })
+  await writeFile(join(outDir, 'plan.json'), `${JSON.stringify(plan, null, 2)}\n`)
+
+  if (args.includes('--dry-run')) {
+    console.log(`gen-synthetic: dry run — wrote ${plan.length} plan item(s) to ${join(outDir, 'plan.json')}`)
+    return 0
+  }
+  const requests = buildGeneratorRequests(plan, model)
+  const bound = maxBatchCostUsd(requests)
+  console.log(`gen-synthetic: ${requests.length} request(s) on ${model}; worst case US$${bound.usd} (ESTIMATE: every request at max_tokens, batch prices)`)
+  const overBudget = checkBudget(bound, argValue(args, '--budget-usd') ?? process.env.EVAL_BUDGET_USD)
+  if (overBudget) {
+    console.error(`gen-synthetic: not started — ${overBudget}`)
+    return 2
+  }
+  const client = createEvalClient(process.env, 'gen-synthetic')
+  if (!client) return 2
+
+  const idFile = join(outDir, 'gen-batch-id.txt')
+  const stop = abortOnSignals()
+  let batch
+  try {
+    batch = await runBatch(client, requests, {
+      batchId: argValue(args, '--batch-id'),
+      maxWaitMinutes: Number(argValue(args, '--max-wait-minutes') ?? 240),
+      onBatchId: (id) => writeFile(idFile, `${id}\n`),
+      signal: stop.signal,
+    })
+  } catch (e) {
+    console.error(`gen-synthetic: ${e instanceof Error ? e.message : 'batch failed'}`)
+    return 2
+  } finally {
+    stop.dispose()
+  }
+  await rm(idFile, { force: true })
+  const { batchId, results } = batch
 
   const samples: EvalSample[] = []
   const problems: Record<string, number> = {}

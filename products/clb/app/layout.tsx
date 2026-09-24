@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from 'next'
-import type { ReactNode } from 'react'
+import { Suspense, type ReactNode } from 'react'
 import { LandingTracker } from '../components/LandingTracker'
 import { SiteBanner } from '../components/SiteBanner'
 import { SiteFooter } from '../components/SiteFooter'
 import { SiteHeader } from '../components/SiteHeader'
+import { UiLangSync } from '../components/UiLangSync'
 import { PUBLIC_ENV } from '../lib/env'
 import { t } from '../lib/i18n'
 import { BRAND } from '../shared/config'
@@ -41,6 +42,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </main>
         <SiteFooter />
         <LandingTracker />
+        <Suspense fallback={null}>
+          <UiLangSync />
+        </Suspense>
         {beaconToken && (
           // Cloudflare Web Analytics manual snippet (cloudflare-docs web-analytics/faq.mdx)
           <script

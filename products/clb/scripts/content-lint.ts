@@ -6,9 +6,14 @@
 //                            alt/title attributes and JSON-LD, plus the trademark-notice rule
 //   lintAdsCsv(csv)        → findings for ops/ads/google.csv (claims, lengths, structure)
 //
-// CLI (from products/clb):  node scripts/run.mjs scripts/content-lint.ts [--out out] [--ads ../../ops/ads/google.csv]
+// CLI (from products/clb):  node scripts/run.mjs scripts/content-lint.ts [--out out] [--ads ../../ops/ads/google.csv] [--require-address]
 //                            node scripts/run.mjs scripts/content-lint.ts --text "banner text"   (flags.yml)
 // Exits 1 on any finding and prints "file: rule-id — excerpt". Missing inputs are skipped with a notice.
+// --require-address (deploy.yml, integrator decision 16): also fails when any exported page still shows
+// the mailing-address placeholder, i.e. the site was built without NEXT_PUBLIC_MAILING_ADDRESS (CASL
+// requires the sender's mailing address on the consent request and in every message). With
+// --require-address, a missing out/ directory is an error instead of a skip.
+import { MAILING_ADDRESS_PLACEHOLDER } from '../content/site'
 import { NOT_AFFILIATED } from '../shared/config'
 import { AD_ONLY_FORBIDDEN, ALLOWED_PHRASES, FORBIDDEN_CLAIMS, findClaims, type ClaimRule } from '../shared/content-rules'
 import { parseCsvRecords } from './lib/csv'
@@ -172,6 +177,27 @@ export function lintHtml(html: string): Finding[] {
   return findings
 }
 
+// ---------- mailing address (integrator decision 16) ----------
+
+/**
+ * Text that shows only while the owner's mailing address is not configured: the privacy/contact
+ * placeholder (content/site.ts), the Worker's wrangler.jsonc placeholder prefix, and the older consent
+ * fallback wording. Any of them in an exported page means the build had no NEXT_PUBLIC_MAILING_ADDRESS.
+ */
+export const ADDRESS_PLACEHOLDERS: readonly string[] = [
+  MAILING_ADDRESS_PLACEHOLDER,
+  'SET-BEFORE-LAUNCH',
+  'mailing address on our Privacy page',
+  '개인정보 처리방침 페이지의 우편 주소',
+]
+
+/** Findings for placeholder address text in one exported page (visible text, meta tags, attributes). */
+export function addressPlaceholderFindings(html: string): Finding[] {
+  const { body, extra } = htmlToText(html)
+  const all = `${body} ${extra}`
+  return ADDRESS_PLACEHOLDERS.filter((p) => all.includes(normalizeWhitespace(p))).map((p) => ({ rule: 'mailing_address_placeholder', where: 'text', excerpt: p }))
+}
+
 // ---------- ads CSV (layout documented in ops/ads/README.md) ----------
 
 export const ADS_HEADER = ['type', 'ad_group', 'match_type', 'text'] as const
@@ -272,6 +298,7 @@ export async function main(args: string[]): Promise<number> {
   const { readFile } = await import('node:fs/promises')
   const outDir = argValue(args, '--out', 'out')
   const adsCsv = argValue(args, '--ads', '../../ops/ads/google.csv')
+  const requireAddress = args.includes('--require-address')
   const report: string[] = []
   let checked = 0
 
@@ -279,9 +306,14 @@ export async function main(args: string[]): Promise<number> {
     const files = await listHtml(outDir)
     for (const file of files) {
       checked++
-      for (const f of lintHtml(await readFile(file, 'utf8'))) report.push(`${file}: ${f.rule} (${f.where}) — ${f.excerpt}`)
+      const html = await readFile(file, 'utf8')
+      const findings = [...lintHtml(html), ...(requireAddress ? addressPlaceholderFindings(html) : [])]
+      for (const f of findings) report.push(`${file}: ${f.rule} (${f.where}) — ${f.excerpt}`)
     }
-    console.log(`content-lint: ${files.length} HTML page(s) in ${outDir}`)
+    console.log(`content-lint: ${files.length} HTML page(s) in ${outDir}${requireAddress ? ' (mailing address required)' : ''}`)
+    if (requireAddress && files.length === 0) report.push(`${outDir}: no HTML pages to check for the mailing address`)
+  } else if (requireAddress) {
+    report.push(`${outDir}: not found — --require-address needs the built site`)
   } else {
     console.log(`content-lint: skipped pages — ${outDir} not found (run the site build first)`)
   }
@@ -297,6 +329,9 @@ export async function main(args: string[]): Promise<number> {
   if (report.length) {
     console.error(`content-lint: ${report.length} finding(s)`)
     for (const line of report) console.error(`  ${line}`)
+    if (report.some((l) => l.includes('mailing_address_placeholder'))) {
+      console.error('content-lint: the site was built without the owner mailing address — set the MPC_MAILING_ADDRESS repository variable (business/online/owner-setup.md)')
+    }
     return 1
   }
   console.log(`content-lint: OK (${checked} file(s), no findings)`)

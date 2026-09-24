@@ -1,5 +1,6 @@
 {
   "monthlyLimitUsd": 150,
+  "evalMonthlyLimitUsd": 30,
   "confirmedByOwner": false,
-  "notes": "the monthly spend limit the owner set in the Anthropic Console; the KPI Routine proposes raises as PRs (memo §3.4), the owner changes the Console and merges"
+  "notes": "monthlyLimitUsd: the monthly spend limit the owner set on the PRODUCTION Anthropic Console workspace (key ANTHROPIC_API_KEY); keep the repository variable MPC_ANTHROPIC_LIMIT_USD equal to it and redeploy after a change, because the Worker's spend tiers use min(memo formula L, that variable). evalMonthlyLimitUsd: the limit on the separate EVAL workspace (key ANTHROPIC_EVAL_API_KEY; memo §3.3 dev and eval allowance). The KPI Routine proposes raises as PRs (memo §3.4); the owner changes the Console, the variable and merges (business/online/owner-setup.md 2-1)"
 }

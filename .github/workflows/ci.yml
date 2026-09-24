@@ -3,12 +3,17 @@
 # root: the home-services site (repo root). Lint, test, build, and on pull requests prove that the
 #       exported site did not change: the out/ file list of the PR must equal the base commit's
 #       (the build id directory is normalised, it is random per build).
-# clb:  the practice coach (products/clb). Typecheck, vitest (billing coverage ≥ 80% lines), site
-#       build, Worker dry-run deploy, content lint, personal-data guard, Playwright e2e.
+# clb:  the practice coach (products/clb). Typecheck, vitest with the coverage thresholds from
+#       vitest.config.mts (≥ 80% of lines in worker/src/billing and worker/src/lib/{usage,spend}.ts, memo
+#       B15), site build, Worker dry-run deploy, content lint, personal-data guard, Playwright e2e.
+#
+# Triggers: pull requests, and pushes to master only. A push to a PR branch therefore runs CI once
+# (as the pull_request event), not twice.
 name: CI
 
 on:
   push:
+    branches: [master]
   pull_request:
 
 permissions:
@@ -71,13 +76,14 @@ jobs:
       - name: Compare out/ file lists (memo B16)
         if: github.event_name == 'pull_request'
         run: |
-          # Lists every exported file; the random build-id directory is replaced by BUILD_ID.
+          # Lists every exported file; the random build-id directory is replaced by BUILD_ID *before*
+          # sorting, so where the random id sorts relative to chunks/ and media/ cannot move lines.
           list_out() {
             local dir="$1" bid
             bid=$(find "$dir/_next/static" -mindepth 2 -maxdepth 2 -name _buildManifest.js -printf '%h\n' 2>/dev/null | head -n 1)
             bid=${bid##*/}
             if [ -n "$bid" ]; then
-              (cd "$dir" && find . -type f | LC_ALL=C sort | sed "s#^\./_next/static/$bid/#./_next/static/BUILD_ID/#")
+              (cd "$dir" && find . -type f | sed "s#^\./_next/static/$bid/#./_next/static/BUILD_ID/#" | LC_ALL=C sort)
             else
               (cd "$dir" && find . -type f | LC_ALL=C sort)
             fi
@@ -121,13 +127,9 @@ jobs:
       - name: Typecheck ops scripts
         run: npx tsc -p scripts/tsconfig.json
 
-      - name: Tests (billing coverage ≥ 80% of lines)
-        run: >-
-          npx vitest run
-          --coverage.enabled
-          --coverage.include='worker/src/billing/**'
-          --coverage.thresholds.lines=80
-          --coverage.reporter=text-summary
+      # Thresholds (per glob) live in vitest.config.mts; vitest exits non-zero when one is missed.
+      - name: Tests (coverage thresholds from vitest.config.mts)
+        run: npx vitest run --coverage.enabled --coverage.reporter=text-summary
 
       - name: Build site
         run: npm run build

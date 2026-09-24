@@ -1,6 +1,7 @@
 // Shared helpers for the core tests: a recording fetch stub for Resend/Turnstile and small API wrappers.
 import { env, exports } from 'cloudflare:workers'
 import { vi } from 'vitest'
+import { MARKETING_CONSENT } from '../../../shared/config'
 import { saltedHash } from '../../src/lib/crypto'
 
 export const ORIGIN = 'https://coach.test'
@@ -51,14 +52,19 @@ export function uniqueEmail(tag = 'user'): string {
   return `${tag}.${Date.now().toString(36)}.${seq}@example.com`
 }
 
-/** Calls the Worker with the site origin, a fixed device cookie and an optional session cookie. */
+/**
+ * Calls the Worker with the site origin, a fixed device cookie (`device: null` sends none, like a client
+ * that drops it) and an optional session cookie and client IP (cf-connecting-ip).
+ */
 export function api(
   path: string,
-  init: { method?: 'GET' | 'POST'; body?: unknown; session?: string; device?: string } = {},
+  init: { method?: 'GET' | 'POST'; body?: unknown; session?: string; device?: string | null; ip?: string } = {},
 ): Promise<Response> {
-  const cookies = [`mpc_device=${init.device ?? DEVICE}`]
+  const cookies = init.device === null ? [] : [`mpc_device=${init.device ?? DEVICE}`]
   if (init.session) cookies.push(`mpc_session=${init.session}`)
-  const headers: Record<string, string> = { origin: ORIGIN, cookie: cookies.join('; ') }
+  const headers: Record<string, string> = { origin: ORIGIN }
+  if (cookies.length > 0) headers.cookie = cookies.join('; ')
+  if (init.ip) headers['cf-connecting-ip'] = init.ip
   if (init.body !== undefined) headers['content-type'] = 'application/json'
   return exports.default.fetch(`${ORIGIN}${path}`, {
     method: init.method ?? (init.body !== undefined ? 'POST' : 'GET'),
@@ -66,6 +72,10 @@ export function api(
     body: init.body === undefined ? undefined : JSON.stringify(init.body),
   })
 }
+
+/** The consent sentence the Worker builds from the test bindings (MAILING_ADDRESS, SITE_URL). */
+export const CONSENT_EN = MARKETING_CONSENT.en('1 Test St, Toronto ON M5V 0A1', 'https://coach.test')
+export const CONSENT_KO = MARKETING_CONSENT.ko('1 Test St, Toronto ON M5V 0A1', 'https://coach.test')
 
 export function magicLinkBody(email: string, extra: Record<string, unknown> = {}): Record<string, unknown> {
   return { email, lang: 'en', turnstileToken: 'tok', marketingOptIn: false, marketingConsentText: '', adult: true, ...extra }
@@ -85,18 +95,25 @@ export function sessionFromSetCookie(res: Response): string | null {
   return m?.[1] ? decodeURIComponent(m[1]) : null
 }
 
-/** Requests a link, verifies it and returns the new session cookie value (stubs fetch as a side effect). */
+/**
+ * Requests a link, verifies it and returns the new session cookie value (stubs fetch as a side effect).
+ * `verifyDevice` opens the link on another device than the one that asked for it.
+ */
 export async function signIn(
   email: string,
-  opts: { extra?: Record<string, unknown>; session?: string } = {},
-): Promise<{ session: string; res: Response }> {
+  opts: { extra?: Record<string, unknown>; session?: string; verifyDevice?: string } = {},
+): Promise<{ session: string; res: Response; stub: FetchStub }> {
   const stub = stubFetch()
   const link = await api('/api/auth/magic-link', { body: magicLinkBody(email, opts.extra) })
   if (link.status !== 200) throw new Error(`magic-link failed: ${link.status}`)
-  const res = await api('/api/auth/verify', { body: { token: lastToken(stub) }, session: opts.session })
+  const res = await api('/api/auth/verify', {
+    body: { token: lastToken(stub) },
+    session: opts.session,
+    device: opts.verifyDevice,
+  })
   const session = sessionFromSetCookie(res)
   if (res.status !== 200 || !session) throw new Error(`verify failed: ${res.status}`)
-  return { session, res }
+  return { session, res, stub }
 }
 
 export function sessionHash(raw: string): Promise<string> {
@@ -114,9 +131,16 @@ export async function userByEmail(email: string) {
     marketing_consent_text: string | null
     marketing_consent_at: string | null
     marketing_withdrawn_at: string | null
+    marketing_consent_version: string | null
+    free_speaking_used: number
+    self_refund_used: number
     last_active_at: string
     deleted_at: string | null
   }>()
+}
+
+export function emailHashOf(email: string): Promise<string> {
+  return saltedHash(env.HASH_SALT, `email:${email.toLowerCase()}`)
 }
 
 export async function count(sql: string, ...params: unknown[]): Promise<number> {

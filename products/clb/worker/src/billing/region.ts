@@ -1,5 +1,6 @@
 // Sales region rules (memo §1.1, B6): Canada only, excluding Quebec. Used before checkout (request.cf)
-// and after payment (billing address + card country).
+// and after payment (billing address + card country). Checkout is card-only, so any other payment method
+// has no card country to check and fails the rule.
 import { SALES_REGION } from '../../../shared/config'
 
 /**
@@ -37,13 +38,22 @@ export function inSalesRegion(country: string | null | undefined, region: string
 /** Payment evidence taken from the charge and stored on the purchase. */
 export interface PaymentEvidence {
   chargeId: string
+  /** charge.payment_method_details.type, e.g. "card" or "link" */
+  paymentMethodType: string | null
   billingCountry: string | null
   billingRegion: string | null
   cardCountry: string | null
   cardFingerprint: string | null
 }
 
-/** Grant only if billing country is CA, billing province is not QC and the card was issued in CA. */
+/**
+ * Grant only if the payment is a card payment, the billing country is CA, the billing province is not QC
+ * and the card was issued in CA.
+ */
 export function evidenceAllowed(e: PaymentEvidence): boolean {
-  return inSalesRegion(e.billingCountry, e.billingRegion) && normalizeCountry(e.cardCountry) === SALES_REGION.country
+  return (
+    e.paymentMethodType === 'card' &&
+    inSalesRegion(e.billingCountry, e.billingRegion) &&
+    normalizeCountry(e.cardCountry) === SALES_REGION.country
+  )
 }

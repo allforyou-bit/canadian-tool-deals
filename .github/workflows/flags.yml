@@ -3,8 +3,14 @@
 # namespace (worker/src/lib/flags.ts). band_enabled is not offered: it stays false through
 # Jan 31 2027 and the Worker ignores it anyway.
 #
+# Owner markers (integrator decision 12): setting free_enabled or grading_enabled also writes
+# `owner:<flag>` = the same value. The Worker's spend monitor never turns a switch back on while its
+# owner marker is 'false'. Turning grading_enabled off also records `pause:started_at` (ISO time, only
+# if absent) so the pause is measured from this moment; when grading is back on, the cron extends
+# active passes by the length of the pause and clears the marker (worker/src/cron.ts).
+#
 # Wrangler 4.137.0 flags checked with --help: kv key put <key> [value] --binding --remote,
-# kv key get <key> --binding --remote --text, kv key delete <key> --binding --remote.
+# kv key get <key> --binding --remote --text, kv key delete <key> --binding --remote, -e/--env.
 name: Set a kill switch
 
 on:
@@ -24,6 +30,14 @@ on:
         required: false
         type: string
         default: ''
+      target:
+        description: Which Worker (staging needs the env.staging ids in worker/wrangler.jsonc)
+        required: false
+        type: choice
+        default: production
+        options:
+          - production
+          - staging
 
 permissions:
   contents: read
@@ -42,6 +56,7 @@ jobs:
     env:
       FLAG: ${{ inputs.flag }}
       RAW_VALUE: ${{ inputs.value }}
+      TARGET: ${{ inputs.target }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       WRANGLER_SEND_METRICS: 'false'
@@ -111,21 +126,44 @@ jobs:
         env:
           VALUE: ${{ steps.input.outputs.value }}
         run: |
+          kv=(--binding FLAGS --remote -c worker/wrangler.jsonc)
+          if [ "$TARGET" = staging ]; then kv+=(--env staging); fi
           key="flag:$FLAG"
           if [ "$FLAG" = banner ] && [ -z "$VALUE" ]; then
-            npx wrangler kv key delete "$key" --binding FLAGS --remote -c worker/wrangler.jsonc
-            echo "Removed the banner." | tee -a "$GITHUB_STEP_SUMMARY"
+            npx wrangler kv key delete "$key" "${kv[@]}"
+            echo "Removed the banner ($TARGET)." | tee -a "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          npx wrangler kv key put "$key" "$VALUE" --binding FLAGS --remote -c worker/wrangler.jsonc
-          got=$(npx wrangler kv key get "$key" --binding FLAGS --remote --text -c worker/wrangler.jsonc 2>/dev/null | tail -n 1)
+          case "$FLAG" in
+            free_enabled|grading_enabled)
+              # the owner marker goes first: if the flag write then fails, nothing is re-enabled by mistake
+              npx wrangler kv key put "owner:$FLAG" "$VALUE" "${kv[@]}"
+              ;;
+          esac
+          if [ "$FLAG" = grading_enabled ] && [ "$VALUE" = false ]; then
+            started=$(npx wrangler kv key get pause:started_at --text "${kv[@]}" 2>/dev/null | tail -n 1 || true)
+            if printf '%s' "$started" | grep -Eq '^[0-9]{4}-[0-9]{2}-[0-9]{2}T'; then
+              echo "A pause is already recorded (pause:started_at is set); keeping its start time."
+            else
+              npx wrangler kv key put pause:started_at "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" "${kv[@]}"
+            fi
+          fi
+          npx wrangler kv key put "$key" "$VALUE" "${kv[@]}"
+          got=$(npx wrangler kv key get "$key" --text "${kv[@]}" 2>/dev/null | tail -n 1)
           if [ "$got" != "$VALUE" ]; then
             echo "::error::Read-back of $key did not match the value just written."
             exit 1
           fi
           {
-            echo "Set \`$key\` to \`$VALUE\` at $(date -u +%Y-%m-%dT%H:%MZ)."
+            echo "Set \`$key\` to \`$VALUE\` on the $TARGET Worker at $(date -u +%Y-%m-%dT%H:%MZ)."
             echo ""
             echo "- Workers KV is eventually consistent, so other locations can take a short while to see the change [unverified: typical delay not measured here]."
-            echo "- While a spend tier is exceeded, the Worker's 15-minute spend monitor turns free_enabled or grading_enabled off again; it only turns back on what it turned off itself (worker/src/cron.ts)."
+            case "$FLAG" in
+              free_enabled|grading_enabled)
+                echo "- Also set the owner marker \`owner:$FLAG\` to \`$VALUE\`. While it is \`false\`, the Worker's 15-minute spend monitor never turns $FLAG back on; while it is \`true\`, the monitor may still turn $FLAG off when a spend tier is exceeded (worker/src/cron.ts)."
+                ;;
+            esac
+            if [ "$FLAG" = grading_enabled ]; then
+              echo "- Active passes are extended by the length of the pause: the cron measures it from \`pause:started_at\` and applies it after grading_enabled is true again."
+            fi
           } >> "$GITHUB_STEP_SUMMARY"

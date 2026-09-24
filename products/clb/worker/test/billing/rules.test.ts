@@ -28,8 +28,19 @@ describe('sales region', () => {
   })
 
   it('needs a Canadian card as well as a Canadian address outside Quebec', () => {
-    const base = { chargeId: 'ch_1', billingCountry: 'CA', billingRegion: 'AB', cardCountry: 'CA', cardFingerprint: null }
+    const base = {
+      chargeId: 'ch_1',
+      paymentMethodType: 'card',
+      billingCountry: 'CA',
+      billingRegion: 'AB',
+      cardCountry: 'CA',
+      cardFingerprint: null,
+    }
     expect(evidenceAllowed(base)).toBe(true)
+    // Link, BNPL and bank payments fail even with a Canadian address (Checkout is card-only)
+    expect(evidenceAllowed({ ...base, paymentMethodType: 'link' })).toBe(false)
+    expect(evidenceAllowed({ ...base, paymentMethodType: 'klarna', cardCountry: null })).toBe(false)
+    expect(evidenceAllowed({ ...base, paymentMethodType: null })).toBe(false)
     expect(evidenceAllowed({ ...base, cardCountry: 'US' })).toBe(false)
     expect(evidenceAllowed({ ...base, cardCountry: null })).toBe(false)
     expect(evidenceAllowed({ ...base, billingRegion: 'QC' })).toBe(false)

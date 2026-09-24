@@ -1,61 +1,60 @@
-// D1 writes for grading: one `grades` row per model call (cost accounting and the history log),
-// and giving back a free sample when a call produced no feedback.
+// D1 writes for grading: finishing the pending `grades` row reserved before the model call
+// (lib/usage.ts reserveGrade; one row per request, for cost accounting and the history log), and
+// giving back a free sample when a call produced no feedback.
 import type { Env } from '../env'
 import type { FreeKeys } from '../lib/usage'
 import { dayKey } from '../lib/time'
 
-export interface GradeRow {
-  id: string
-  userId: string | null
-  deviceHash: string
-  taskId: string
-  promptIndex: number
-  kind: 'writing' | 'speaking'
-  /** essay or transcript; null for anonymous samples */
+/** grades.outcome (worker/migrations/0001_init.sql); every outcome except 'graded' is refused = 1. */
+export type GradeOutcome = 'graded' | 'scope_refused' | 'safety_refused' | 'failed' | 'no_speech' | 'too_long'
+
+export interface GradeFinish {
+  outcome: GradeOutcome
+  /** false when the free sample was given back and no tokens were spent on it */
+  free: boolean
+  model: string
+  /** essay or transcript; null for anonymous samples and every outcome but 'graded' */
   inputText: string | null
-  /** GradeResult JSON; null for anonymous samples and failed calls */
+  /** GradeResult JSON; same rule as inputText */
   resultJson: string | null
   errorKinds: string | null
-  free: boolean
-  /** true for every row that produced no feedback (scope or safety refusal, failed call, no speech) */
-  refused: boolean
-  model: string
   inputTokens: number
   outputTokens: number
   cacheReadTokens: number
   cacheWriteTokens: number
   audioSeconds: number
   costMicroUsd: number
-  createdAt: string
 }
 
-export async function insertGrade(env: Env, r: GradeRow): Promise<void> {
+/**
+ * Close a reserved row: pending = 0 with its outcome, tokens and cost. Text is written only while the
+ * row still has a user, so an account deleted mid-call (rows de-identified, decision 5) never gets
+ * the essay back.
+ */
+export async function finishGrade(env: Env, id: string, f: GradeFinish): Promise<void> {
   await env.DB.prepare(
-    `INSERT INTO grades (id, user_id, device_hash, task_id, prompt_index, kind, input_text, result_json, error_kinds,
-                         free, refused, model, input_tokens, output_tokens, cache_read_tokens, cache_write_tokens,
-                         audio_seconds, cost_micro_usd, created_at)
-     VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19)`,
+    `UPDATE grades SET pending = 0, outcome = ?2, refused = ?3, free = ?4, model = ?5,
+            input_text = CASE WHEN user_id IS NULL THEN NULL ELSE ?6 END,
+            result_json = CASE WHEN user_id IS NULL THEN NULL ELSE ?7 END,
+            error_kinds = ?8, input_tokens = ?9, output_tokens = ?10, cache_read_tokens = ?11,
+            cache_write_tokens = ?12, audio_seconds = ?13, cost_micro_usd = ?14
+      WHERE id = ?1`,
   )
     .bind(
-      r.id,
-      r.userId,
-      r.deviceHash,
-      r.taskId,
-      r.promptIndex,
-      r.kind,
-      r.inputText,
-      r.resultJson,
-      r.errorKinds,
-      r.free ? 1 : 0,
-      r.refused ? 1 : 0,
-      r.model,
-      r.inputTokens,
-      r.outputTokens,
-      r.cacheReadTokens,
-      r.cacheWriteTokens,
-      r.audioSeconds,
-      r.costMicroUsd,
-      r.createdAt,
+      id,
+      f.outcome,
+      f.outcome === 'graded' ? 0 : 1,
+      f.free ? 1 : 0,
+      f.model,
+      f.inputText,
+      f.resultJson,
+      f.errorKinds,
+      f.inputTokens,
+      f.outputTokens,
+      f.cacheReadTokens,
+      f.cacheWriteTokens,
+      f.audioSeconds,
+      f.costMicroUsd,
     )
     .run()
 }

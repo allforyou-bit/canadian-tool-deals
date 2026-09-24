@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useId, useState, type FormEvent } from 'react'
+import { useCallback, useEffect, useId, useRef, useState, type FormEvent } from 'react'
 import { LangToggle } from '../../components/LangToggle'
 import { ErrorNotice, Notice } from '../../components/Notice'
 import { Turnstile } from '../../components/Turnstile'
@@ -15,7 +15,8 @@ import { safeNextPath } from '../../lib/url'
 
 /**
  * Magic-link sign-in: email, required 18+ confirmation, an OPTIONAL marketing box that starts
- * unticked (CASL), and Turnstile. The consent sentence sent is exactly the one displayed.
+ * unticked (CASL), and Turnstile. The consent sentence sent is exactly the one displayed. Without a
+ * configured mailing address the marketing box is not shown at all (lib/consent.ts).
  */
 export function LoginForm() {
   const lang = useUiLang()
@@ -31,8 +32,10 @@ export function LoginForm() {
   const [error, setError] = useState<ApiClientError | null>(null)
   const [needToken, setNeedToken] = useState(false)
   const [next, setNext] = useState<string | null>(null)
+  const sentRef = useRef<HTMLHeadingElement>(null)
 
   const consent = consentText(lang, PUBLIC_ENV.mailingAddress, siteUrl)
+  const askMarketing = consent !== null
   const onToken = useCallback((v: string | null) => {
     setToken(v)
     if (v) setNeedToken(false)
@@ -41,6 +44,11 @@ export function LoginForm() {
   useEffect(() => {
     setNext(safeNextPath(new URLSearchParams(window.location.search).get('next'), window.location.origin))
   }, [])
+
+  // the form (and the focused submit button) is replaced by the confirmation: move focus there
+  useEffect(() => {
+    if (sentTo) sentRef.current?.focus()
+  }, [sentTo])
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -57,8 +65,8 @@ export function LoginForm() {
         email: address,
         lang,
         turnstileToken: token,
-        marketingOptIn: marketing,
-        marketingConsentText: consent,
+        marketingOptIn: askMarketing && marketing,
+        marketingConsentText: askMarketing && marketing ? consent : '',
         adult,
       })
       rememberReturnPath(next)
@@ -74,7 +82,7 @@ export function LoginForm() {
   if (sentTo) {
     return (
       <section className={`${cls.card} space-y-4`} aria-labelledby={`${id}-sent`} lang={lang}>
-        <h1 id={`${id}-sent`} className={cls.h1}>
+        <h1 id={`${id}-sent`} ref={sentRef} tabIndex={-1} className={`${cls.h1} focus:outline-none`}>
           {t(lang, 'l.sentTitle')}
         </h1>
         <Notice kind="success">{t(lang, 'l.sentBody', { email: sentTo })}</Notice>
@@ -135,20 +143,22 @@ export function LoginForm() {
           </label>
         </div>
 
-        <div className="flex items-start gap-3 rounded-md border border-slate-200 bg-slate-50 p-3">
-          <input
-            id={`${id}-marketing`}
-            type="checkbox"
-            name="marketing"
-            checked={marketing}
-            onChange={(e) => setMarketing(e.target.checked)}
-            className={cls.checkbox}
-          />
-          <label htmlFor={`${id}-marketing`} className="text-sm text-slate-800">
-            <span className="font-semibold">{t(lang, 'l.optional')} </span>
-            <span data-testid="consent-text">{consent}</span>
-          </label>
-        </div>
+        {askMarketing && (
+          <div className="flex items-start gap-3 rounded-md border border-slate-200 bg-slate-50 p-3">
+            <input
+              id={`${id}-marketing`}
+              type="checkbox"
+              name="marketing"
+              checked={marketing}
+              onChange={(e) => setMarketing(e.target.checked)}
+              className={cls.checkbox}
+            />
+            <label htmlFor={`${id}-marketing`} className="text-sm text-slate-800">
+              <span className="font-semibold">{t(lang, 'l.optional')} </span>
+              <span data-testid="consent-text">{consent}</span>
+            </label>
+          </div>
+        )}
 
         <div className="space-y-2">
           <Turnstile lang={lang} onToken={onToken} resetSignal={resetSignal} />

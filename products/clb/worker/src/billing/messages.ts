@@ -1,5 +1,5 @@
 // User-facing text for billing: API error messages and transactional emails, in English and Korean.
-// Every string must pass shared/content-rules.ts findClaims (tested in worker/test/billing/messages.test.ts).
+// Every string must pass shared/content-rules.ts findClaims (tested in worker/test/billing/rules.test.ts).
 import type { Lang } from '../../../shared/api'
 import { BRAND, REFUND_POLICY, SKUS, type Sku } from '../../../shared/config'
 
@@ -37,6 +37,11 @@ export const ERRORS = {
     ko: '퀘벡을 제외한 캐나다 지역에 거주하고 있음을 확인해 주세요.',
   },
   unknownSku: { en: 'Unknown pass.', ko: '알 수 없는 이용권입니다.' },
+  /** the buy button sent no TERMS_VERSION, or an older one (a page loaded before the terms changed) */
+  termsOutdated: {
+    en: 'This page is out of date. Please reload the page and try again.',
+    ko: '페이지 정보가 최신이 아닙니다. 페이지를 새로고침한 뒤 다시 시도해 주세요.',
+  },
   region: {
     en: 'Passes are available only in Canada, outside Quebec.',
     ko: '이용권은 퀘벡을 제외한 캐나다 지역에서만 구매할 수 있습니다.',
@@ -119,7 +124,7 @@ export function regionRefundEmail(lang: Lang, amountCents: number, site: string)
       subject: `${BRAND.ko}: 결제가 환불되었습니다`,
       text: [
         '이용권은 퀘벡을 제외한 캐나다 지역에 거주하며 캐나다에서 발급된 카드로 결제하는 분만 구매할 수 있습니다.',
-        `결제 정보(청구지 주소 또는 카드 발급 국가)가 이 조건에 맞지 않아 결제 금액 ${amount}을 전액 환불했습니다. 계정에 이용권은 추가되지 않았습니다.`,
+        `결제 정보(청구지 주소, 결제 수단 또는 카드 발급 국가)가 이 조건에 맞지 않아 결제 금액 ${amount}을 전액 환불했습니다. 계정에 이용권은 추가되지 않았습니다.`,
         BANK_DELAY.ko,
         `착오라고 생각되면 도움말 페이지에서 문의해 주세요: ${site}/help/`,
       ].join('\n\n'),
@@ -129,7 +134,7 @@ export function regionRefundEmail(lang: Lang, amountCents: number, site: string)
     subject: `${BRAND.en}: your payment was refunded`,
     text: [
       'Passes are available only to residents of Canada outside Quebec who pay with a card issued in Canada.',
-      `Your payment did not meet these conditions (billing address or card country), so we refunded it in full: ${amount}. No pass was added to your account.`,
+      `Your payment did not meet these conditions (billing address, payment method or card country), so we refunded it in full: ${amount}. No pass was added to your account.`,
       BANK_DELAY.en,
       `If you think this is a mistake, contact us from the help page: ${site}/help/`,
     ].join('\n\n'),

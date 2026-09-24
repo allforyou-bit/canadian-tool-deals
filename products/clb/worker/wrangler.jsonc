@@ -48,5 +48,44 @@
     "FROM_EMAIL": "Maple Practice Coach <coach@example.com>",
     "MAILING_ADDRESS": "SET-BEFORE-LAUNCH (CASL: owner mailing address)",
     "OWNER_EMAIL": "owner@example.com"
+  },
+
+  // Staging Worker: `wrangler … --env staging` (deploy.yml on same-repo pull requests when the
+  // repository variable MPC_STAGING is 'true', or a manual run with target=staging). It has its own
+  // D1 database and KV namespace (owner-setup: `npx wrangler d1 create mpc-staging` and
+  // `npx wrangler kv namespace create FLAGS --env staging`, paste both ids below). Per
+  // config-schema.json, vars, d1_databases, kv_namespaces and ai are NOT inherited from the top level,
+  // so they are repeated here; main, assets, compatibility settings and observability are inherited.
+  // deploy.yml overrides SITE_URL, APP_VERSION and the owner vars with --var, like production.
+  "env": {
+    "staging": {
+      "name": "maple-practice-coach-staging",
+      "workers_dev": true,
+      "preview_urls": false,
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "mpc-staging",
+          // "database_id": "<paste from `npx wrangler d1 create mpc-staging`>",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "kv_namespaces": [
+        {
+          "binding": "FLAGS"
+          // "id": "<paste from `npx wrangler kv namespace create FLAGS --env staging`>"
+        }
+      ],
+      "ai": { "binding": "AI" },
+      // the same schedules as production, so the spend monitor and the daily job run on staging too
+      "triggers": { "crons": ["*/15 * * * *", "0 5 * * *"] },
+      "vars": {
+        "SITE_URL": "https://maple-practice-coach-staging.example.workers.dev",
+        "APP_VERSION": "0.1.0-staging",
+        "FROM_EMAIL": "Maple Practice Coach (staging) <coach@example.com>",
+        "MAILING_ADDRESS": "SET-BEFORE-LAUNCH (CASL: owner mailing address)",
+        "OWNER_EMAIL": "owner@example.com"
+      }
+    }
   }
 }

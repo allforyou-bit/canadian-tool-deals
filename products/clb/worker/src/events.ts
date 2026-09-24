@@ -15,6 +15,8 @@ const MAX_PATH_CHARS = 200
 /** location.pathname is percent-encoded, so a real path is printable ASCII without spaces. */
 const PATH_RE = /^\/[\x21-\x7e]*$/
 const MAX_EVENTS_PER_DEVICE_PER_DAY = 200
+/** The device cookie is client-controlled (dropping it gives a fresh one), so the IP prefix caps too (decision 8). */
+const MAX_EVENTS_PER_IP_PER_DAY = 300
 const TWO_DAYS_SECONDS = 2 * 86_400
 
 function isClientEvent(v: unknown): v is EventName {
@@ -49,18 +51,21 @@ export async function track(req: Request, ctx: Ctx): Promise<Response> {
   if (!path) return error('bad_request', 'Invalid path')
   const utm = cleanUtm(body.utm)
 
-  // Per-device daily budget. Over the limit the event is dropped quietly (the client has nothing to fix).
-  // KV allows one write per second per key [cloudflare-docs kv/platform/limits.mdx, 2026-09-24], so a
-  // failed counter write must not lose the event.
+  // Daily budgets per device and per IP prefix. Over either limit the event is dropped quietly (the
+  // client has nothing to fix). KV allows one write per second per key [cloudflare-docs
+  // kv/platform/limits.mdx, 2026-09-24], so a failed counter write must not lose the event.
   const day = dayKey(now)
-  const key = `ev:${ctx.deviceHash}:${day}`
-  const n = Number(await env.FLAGS.get(key)) || 0
-  if (n >= MAX_EVENTS_PER_DEVICE_PER_DAY) return json({ ok: true })
-  try {
-    await env.FLAGS.put(key, String(n + 1), { expirationTtl: TWO_DAYS_SECONDS })
-  } catch {
-    console.warn('event counter write failed')
-  }
+  const deviceKey = `ev:${ctx.deviceHash}:${day}`
+  const ipKey = `ev:ip:${ctx.ipHash}:${day}`
+  const [deviceRaw, ipRaw] = await Promise.all([env.FLAGS.get(deviceKey), env.FLAGS.get(ipKey)])
+  const deviceN = Number(deviceRaw) || 0
+  const ipN = Number(ipRaw) || 0
+  if (deviceN >= MAX_EVENTS_PER_DEVICE_PER_DAY || ipN >= MAX_EVENTS_PER_IP_PER_DAY) return json({ ok: true })
+  const writes = await Promise.allSettled([
+    env.FLAGS.put(deviceKey, String(deviceN + 1), { expirationTtl: TWO_DAYS_SECONDS }),
+    env.FLAGS.put(ipKey, String(ipN + 1), { expirationTtl: TWO_DAYS_SECONDS }),
+  ])
+  if (writes.some((w) => w.status === 'rejected')) console.warn('event counter write failed')
 
   await env.DB.prepare('INSERT INTO events (name, path, utm_json, day, created_at) VALUES (?1, ?2, ?3, ?4, ?5)')
     .bind(body.name, path, utm ? JSON.stringify(utm) : null, day, now.toISOString())

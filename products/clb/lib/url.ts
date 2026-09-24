@@ -49,3 +49,16 @@ export function tokenFromHash(hash: string): string | null {
   }
   return /^[A-Za-z0-9_-]{16,}$/.test(raw) ? raw : null
 }
+
+/**
+ * Read the unsubscribe link fragment "#h=<email hash>&s=<signature>" (both hex, from the Worker's
+ * unsubscribeUrl). null when either part is missing or malformed; the Worker checks the signature.
+ */
+export function unsubscribeFromHash(hash: string): { h: string; s: string } | null {
+  const raw = hash.startsWith('#') ? hash.slice(1) : hash
+  const params = new URLSearchParams(raw)
+  const h = params.get('h') ?? ''
+  const s = params.get('s') ?? ''
+  const hex = /^[0-9a-fA-F]{16,128}$/
+  return hex.test(h) && hex.test(s) ? { h, s } : null
+}

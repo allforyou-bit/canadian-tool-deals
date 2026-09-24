@@ -2,18 +2,43 @@
 
 // Buy button for one pass (CONTRACT §6). Used by /pricing/ and /ko/pricing/.
 import Link from 'next/link'
-import { useId, useState, type FormEvent, type JSX } from 'react'
+import { Fragment, useId, useState, type FormEvent, type JSX, type ReactNode } from 'react'
 import type { Lang } from '../shared/api'
-import { SKUS, type Sku } from '../shared/config'
+import { SKUS, TERMS_VERSION, type Sku } from '../shared/config'
 import { api, ApiClientError } from '../lib/api'
 import { useMe } from '../lib/hooks'
 import { formatCad, formatDate, t } from '../lib/i18n'
-import { activePass, refreshMe } from '../lib/me'
+import { accessEndsAt, refreshMe } from '../lib/me'
 import { isSafeCheckoutUrl, loginHref } from '../lib/url'
 import { ErrorNotice, Notice } from './Notice'
 import { cls } from './ui'
 
 type Phase = 'idle' | 'submitting' | 'redirecting'
+
+/** "By buying you agree to the {terms} and {refunds}." with both placeholders as links. */
+function TermsLine(props: { lang: Lang }) {
+  const { lang } = props
+  const links: Record<string, ReactNode> = {
+    terms: (
+      <Link href="/legal/terms/" className={cls.link}>
+        {t(lang, 'b.termsLink')}
+      </Link>
+    ),
+    refunds: (
+      <Link href="/legal/refunds/" className={cls.link}>
+        {t(lang, 'b.refundsLink')}
+      </Link>
+    ),
+  }
+  const parts = t(lang, 'b.terms').split(/(\{terms\}|\{refunds\})/)
+  return (
+    <p className="text-sm text-slate-800" data-testid="buy-terms">
+      {parts.map((part, i) => (
+        <Fragment key={i}>{part === '{terms}' ? links.terms : part === '{refunds}' ? links.refunds : part}</Fragment>
+      ))}
+    </p>
+  )
+}
 
 export function BuyPass(props: { sku: Sku; lang: Lang }): JSX.Element {
   const { sku, lang } = props
@@ -32,7 +57,8 @@ export function BuyPass(props: { sku: Sku; lang: Lang }): JSX.Element {
     setPhase('submitting')
     setError(null)
     try {
-      const { url } = await api.checkout({ sku, residentAttestation: true, lang })
+      // termsVersion: the Worker refuses a checkout for terms other than the ones shown here
+      const { url } = await api.checkout({ sku, termsVersion: TERMS_VERSION, residentAttestation: true, lang })
       if (!isSafeCheckoutUrl(url)) throw new ApiClientError('internal', 200, 'Invalid checkout URL')
       setPhase('redirecting')
       window.location.assign(url)
@@ -53,13 +79,14 @@ export function BuyPass(props: { sku: Sku; lang: Lang }): JSX.Element {
     body = (
       <div className="space-y-3">
         <ErrorNotice error={meState.error} lang={lang} context="checkout" />
-        <button type="button" className={`${cls.btn} ${cls.secondary} w-full`} onClick={() => void refreshMe()}>
+        <button type="button" className={`${cls.btn} ${cls.secondary} w-full`} onClick={() => void refreshMe({ force: true })}>
           {t(lang, 'common.tryAgain')}
         </button>
       </div>
     )
   } else if (!meState.me.flags.checkoutEnabled || error?.code === 'checkout_unavailable') {
-    body = <Notice kind="info">{t(lang, 'b.soon')}</Notice>
+    // neutral: checkout can be off for a pause or for good, so never promise that it opens soon
+    body = <Notice kind="info">{t(lang, 'err.checkout_unavailable')}</Notice>
   } else if (!meState.me.signedIn || error?.code === 'unauthorized') {
     body = (
       <Link href={loginHref(pricingPath, lang)} className={`${cls.btn} ${cls.primary} w-full`}>
@@ -67,10 +94,10 @@ export function BuyPass(props: { sku: Sku; lang: Lang }): JSX.Element {
       </Link>
     )
   } else {
-    const pass = activePass(meState.me)
+    const endsAt = accessEndsAt(meState.me)
     body = (
       <form onSubmit={onSubmit} className="space-y-3" aria-describedby={`${id}-where`}>
-        {pass && <p className={cls.muted}>{t(lang, 'b.hasPass', { date: formatDate(pass.endsAt, lang) })}</p>}
+        {endsAt && <p className={cls.muted}>{t(lang, 'b.hasPass', { date: formatDate(endsAt, lang) })}</p>}
         <div className="flex items-start gap-3">
           <input
             id={`${id}-attest`}
@@ -84,6 +111,7 @@ export function BuyPass(props: { sku: Sku; lang: Lang }): JSX.Element {
             {t(lang, 'b.attest')}
           </label>
         </div>
+        <TermsLine lang={lang} />
         <button
           type="submit"
           className={`${cls.btn} ${cls.primary} w-full`}

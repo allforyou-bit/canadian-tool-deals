@@ -4,7 +4,8 @@ import { env } from 'cloudflare:test'
 import { exports } from 'cloudflare:workers'
 import { vi } from 'vitest'
 import type { GradeResult, Lang } from '../../../shared/api'
-import { findClaims } from '../../../shared/content-rules'
+import { findClaims, GRADER_OUTPUT_RULES } from '../../../shared/content-rules'
+import { MAX_TOP_ERRORS } from '../../src/grading/validate'
 import type { Ctx, Env, User } from '../../src/env'
 import { randomToken, saltedHash } from '../../src/lib/crypto'
 import { addDays } from '../../src/lib/time'
@@ -63,7 +64,6 @@ export function apiMessage(output: unknown, over: Partial<ApiMessage> = {}): Api
 
 export const SIMPLE_OUTPUT = {
   refused: false,
-  refusalMessage: '',
   criteria: [
     { name: 'Content and task completion', strengths: 'You answer the prompt.', improve: 'Add one example.' },
     { name: 'Organisation and coherence', strengths: 'The order is clear.', improve: 'Use paragraphs.' },
@@ -210,6 +210,8 @@ export interface GradeRowDb {
   error_kinds: string | null
   free: number
   refused: number
+  pending: number
+  outcome: string | null
   model: string
   input_tokens: number
   output_tokens: number
@@ -227,8 +229,15 @@ export async function gradeRowsFor(userId: string): Promise<GradeRowDb[]> {
   return results
 }
 
-export const rowsByDevice = async (deviceHash: string) =>
-  (await env.DB.prepare('SELECT * FROM grades WHERE device_hash = ?1').bind(deviceHash).all<GradeRowDb>()).results
+/** The most recently inserted anonymous row (grades rows carry no device id: decision 5). Tests in a file run one at a time. */
+export const latestAnonymousRow = () =>
+  env.DB.prepare('SELECT * FROM grades WHERE user_id IS NULL ORDER BY rowid DESC LIMIT 1').first<GradeRowDb>()
+
+/** A Messages API error body with the given HTTP status. */
+export const apiError = (status: number, type = 'api_error') => jsonResponse({ type: 'error', error: { type, message: 'x' } }, status)
+
+/** What fetch throws when the SDK's timeout aborts the request (the SDK then raises APIConnectionTimeoutError). */
+export const abortError = () => new DOMException('The operation was aborted.', 'AbortError')
 
 /** Structural check of a GradeResult as the site receives it (independent of validate.ts). */
 export function assertGradeResult(r: GradeResult, lang: Lang): string[] {
@@ -238,12 +247,12 @@ export function assertGradeResult(r: GradeResult, lang: Lang): string[] {
   if (r.bandShown !== false) problems.push('bandShown')
   if (r.explanationLang !== lang) problems.push('explanationLang')
   if (!Array.isArray(r.criteria) || !r.criteria.every((c) => isStr(c.name) && isStr(c.strengths) && isStr(c.improve))) problems.push('criteria')
-  if (!Array.isArray(r.topErrors) || r.topErrors.length > 5) problems.push('topErrors')
+  if (!Array.isArray(r.topErrors) || r.topErrors.length > MAX_TOP_ERRORS) problems.push('topErrors')
   if (!Array.isArray(r.rewrites) || r.rewrites.length > 2 || !r.rewrites.every(isStr)) problems.push('rewrites')
   if (!isStr(r.nextStep)) problems.push('nextStep')
   if (r.refused && !(isStr(r.refusalMessage) && r.refusalMessage !== '')) problems.push('refusalMessage')
   if (!r.refused && r.criteria.length === 0) problems.push('criteria empty')
   const explanations = [r.refusalMessage ?? '', r.nextStep, ...r.criteria.flatMap((c) => [c.name, c.strengths, c.improve]), ...r.topErrors.map((e) => e.why)]
-  for (const t of explanations) if (findClaims(t).length > 0) problems.push('claim: ' + t)
+  for (const t of explanations) if (findClaims(t, GRADER_OUTPUT_RULES).length > 0) problems.push('claim: ' + t)
   return problems
 }

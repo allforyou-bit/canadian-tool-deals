@@ -26,10 +26,12 @@ export function WritingPractice(props: { task: TaskType }) {
   const meState = useMe()
   const answerId = useId()
   const resultRef = useRef<HTMLHeadingElement>(null)
+  const answerRef = useRef<HTMLTextAreaElement>(null)
 
   const [promptIndex, setPromptIndex] = useState(0)
   const [text, setText] = useState('')
   const [token, setToken] = useState<string | null>(null)
+  const [adult, setAdult] = useState(false)
   const [resetSignal, setResetSignal] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [result, setResult] = useState<GradeResponse | null>(null)
@@ -44,6 +46,8 @@ export function WritingPractice(props: { task: TaskType }) {
   // While /api/me loads we wait; if it failed we assume the free path (the server decides anyway).
   const usesFreeSample = meState.status === 'loading' ? false : !pass
   const freeUsed = me !== null && !pass && !me.free.writing
+  // Signed-out visitors confirm they are 18+ here (signed-in learners did so at sign-in; terms require 18+).
+  const needsAdult = usesFreeSample && !(me?.signedIn ?? false)
   const paused = me !== null && !me.flags.gradingEnabled
   const returnTo = `/practice/writing/${task.id}/`
 
@@ -71,6 +75,7 @@ export function WritingPractice(props: { task: TaskType }) {
     setError(null)
     if (words === 0) return setLocalError('w.empty')
     if (text.length > CAPS.maxEssayChars) return setLocalError('w.tooLong')
+    if (needsAdult && !adult) return setLocalError('w.adultNeeded')
     if (usesFreeSample && !token) return setLocalError('p.securityNeeded')
     setLocalError(null)
     setSubmitting(true)
@@ -84,7 +89,7 @@ export function WritingPractice(props: { task: TaskType }) {
       })
       setResult(res)
       if (res.free) track('sample_done')
-      void refreshMe()
+      void refreshMe({ force: true })
     } catch (err) {
       setError(toClientError(err))
     } finally {
@@ -99,7 +104,12 @@ export function WritingPractice(props: { task: TaskType }) {
     setText('')
     setError(null)
     window.scrollTo({ top: 0 })
+    // the "Practise again" button is about to disappear; continue in the answer box
+    answerRef.current?.focus({ preventScroll: true })
   }
+
+  // Announced (politely) only when the range state changes, not on every word.
+  const rangeAnnouncement = status.state === 'in' ? t(lang, 'w.inRange') : status.state === 'over' ? t(lang, 'w.overRange') : ''
 
   const countText =
     status.state === 'under'
@@ -122,6 +132,7 @@ export function WritingPractice(props: { task: TaskType }) {
             {t(lang, 'w.answer')}
           </label>
           <textarea
+            ref={answerRef}
             id={answerId}
             name="answer"
             rows={14}
@@ -136,12 +147,15 @@ export function WritingPractice(props: { task: TaskType }) {
             className={`${cls.input} min-h-72 font-serif leading-relaxed`}
             disabled={submitting}
           />
-          <p id={`${answerId}-count`} className="flex flex-wrap gap-x-3 text-sm text-slate-700" aria-live="polite">
+          <p id={`${answerId}-count`} className="flex flex-wrap gap-x-3 text-sm text-slate-700">
             <span className="font-semibold tabular-nums">{t(lang, 'w.words', { n: words })}</span>
             {task.target.minWords !== undefined && task.target.maxWords !== undefined && (
               <span>{t(lang, 'w.target', { min: task.target.minWords, max: task.target.maxWords })}</span>
             )}
             <span className={status.state === 'in' ? 'text-emerald-800' : ''}>{countText}</span>
+          </p>
+          <p className="sr-only" aria-live="polite" data-testid="word-range-live">
+            {rangeAnnouncement}
           </p>
         </div>
 
@@ -152,6 +166,24 @@ export function WritingPractice(props: { task: TaskType }) {
         {usesFreeSample && (
           <div className="space-y-2">
             {!freeUsed && <p className={cls.muted}>{t(lang, 'p.freeWriting')}</p>}
+            {needsAdult && (
+              <div className="flex items-start gap-3">
+                <input
+                  id={`${answerId}-adult`}
+                  type="checkbox"
+                  required
+                  checked={adult}
+                  onChange={(e) => {
+                    setAdult(e.target.checked)
+                    if (e.target.checked && localError === 'w.adultNeeded') setLocalError(null)
+                  }}
+                  className={cls.checkbox}
+                />
+                <label htmlFor={`${answerId}-adult`} className="text-base text-slate-900">
+                  {t(lang, 'l.adult')}
+                </label>
+              </div>
+            )}
             <p className={cls.label}>{t(lang, 'p.securityCheck')}</p>
             <Turnstile lang={lang} onToken={onToken} resetSignal={resetSignal} />
           </div>

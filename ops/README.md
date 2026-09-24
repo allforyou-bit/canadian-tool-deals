@@ -12,31 +12,39 @@ policy without an owner merge or approval (memo §1.4).
 |---|---|
 | `ads/google.csv`, `ads/README.md` | phase-1 Search ads (keywords, headlines, descriptions, negatives) and the settings to enter by hand |
 | `config/ad-cap.json` | the owner-approved ad cap (C$1,200 to Jan 31), daily budget and campaign dates; changed only by an owner-merged PR |
-| `config/anthropic-limit.json` | the monthly limit the owner set in the Anthropic Console; the KPI Routine proposes raises as PRs |
+| `config/anthropic-limit.json` | the monthly limits the owner set in the Anthropic Console (production workspace, and the separate eval workspace); the KPI Routine proposes raises as PRs. The Worker reads the production limit from the repository variable `MPC_ANTHROPIC_LIMIT_USD`, which the owner keeps equal to this file |
+| `config/ei-schedule.json` | a Monday on which the owner files the EI bi-weekly report; the books Routine counts 14-day periods from it |
 | `metrics/` | daily aggregate metrics and `ads.json` (formats and the personal-data guard: `metrics/README.md`) |
 | `routines/*.md` | the Routine prompts: `daily`, `kpi`, `eval`, `books`, `nov30`, `day90` |
 | `reports/`, `books/` | written by the Routines (aggregate numbers only) |
+
+Routines never read essays or transcripts. One exception to "never read user text" is allowed: the
+daily Routine reads support emails **inside Gmail only** to draft replies for the owner (memo §7.1 B14;
+the privacy page discloses it). Nothing from a ticket leaves Gmail.
 
 ## GitHub Actions (`.github/workflows/`)
 
 | Workflow | Trigger | Asserts | Needs |
 |---|---|---|---|
-| `ci.yml` | every push and PR | root lint/test/build; on PRs the root `out/` file list equals the base's; practice coach typecheck, tests (billing ≥ 80% lines), build, dry-run deploy, content lint, personal-data guard, e2e on Chromium and WebKit | nothing |
-| `deploy.yml` | push to `master` touching `products/clb/**`, or manual | `/api/health` returns this commit's version and `/` returns 200; otherwise rollback | `MPC_DEPLOY=true`, Cloudflare secrets |
-| `flags.yml` | manual (works from the GitHub mobile app) | the KV flag reads back as written | Cloudflare secrets |
-| `metrics.yml` | daily 07:17 UTC (can start late) and manual | a snapshot for yesterday exists; `ads.json` is fresh while ads run | Cloudflare secrets (the ads check runs without) |
-| `reconcile.yml` | daily 08:43 UTC and manual | every paid Stripe Checkout Session of the last 3 days matches D1, and back | Cloudflare secrets, `STRIPE_SECRET_KEY` |
-| `eval.yml` | Mondays, manual, and PRs touching grading | eval thresholds and no regression > 5 points | `ANTHROPIC_API_KEY` (offline tests run without) |
-| `audit.yml` | Wednesdays and manual | no high or critical npm advisories in either package | nothing |
+| `ci.yml` | pull requests, and pushes to `master` | root lint/test/build; on PRs the root `out/` file list equals the base's; practice coach typecheck, tests with the coverage thresholds in `vitest.config.mts` (≥ 80% lines in `worker/src/billing` and `worker/src/lib/{usage,spend}.ts`), build, dry-run deploy, content lint, personal-data guard, e2e on Chromium and WebKit | nothing |
+| `deploy.yml` | push to `master` touching `products/clb/**`, or manual | the configuration is complete (including `MPC_MAILING_ADDRESS`); `/api/health` returns this commit's version and `/` returns 200; otherwise rollback | `MPC_DEPLOY=true`, Cloudflare secrets |
+| `flags.yml` | manual (works from the GitHub mobile app); `target` production or staging | the KV flag reads back as written; for `free_enabled`/`grading_enabled` it also writes the owner marker `owner:<flag>` (the Worker never turns a switch back on while its marker is `false`), and turning grading off records `pause:started_at` so passes are extended by the pause | Cloudflare secrets |
+| `metrics.yml` | daily 07:17 UTC (can start late) and manual | a snapshot for yesterday exists and passes the personal-data guard; `ads.json` is fresh while ads run (checked even when the export fails) | Cloudflare secrets (the ads check runs without) |
+| `reconcile.yml` | daily 08:43 UTC and manual | every paid Stripe Checkout Session of the last 3 days matches D1, and back; only purchases of the key's mode (live or test) are compared | Cloudflare secrets, `STRIPE_SECRET_KEY` |
+| `eval.yml` | Mondays, manual, and PRs touching grading, `shared/*.ts` or the workflow | eval thresholds and no regression > 5 points against the baseline for the same sample limit; nothing is sent when the worst-case cost is above `MPC_EVAL_BUDGET_USD`; cancelled runs cancel their batches | `ANTHROPIC_EVAL_API_KEY` (a separate Anthropic workspace; without it the production key is used with a warning; offline tests run without either) |
+| `audit.yml` | Wednesdays and manual | practice coach: no high or critical npm advisories (fails otherwise). Root site: advisories reported as a notice only — a static export, and upgrading root Next is an owner decision (owner-setup §6, memo §7.1 B0) | nothing |
 
 Every workflow stops with a notice, not an error, when its secrets are missing.
 
 ## Repository secrets and variables (names only)
 
-Secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `ANTHROPIC_API_KEY`, `STRIPE_SECRET_KEY`,
-`STRIPE_WEBHOOK_SECRET`, `RESEND_API_KEY`, `TURNSTILE_SECRET`, `HASH_SALT`.
+Secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`, `ANTHROPIC_API_KEY`, `ANTHROPIC_EVAL_API_KEY`,
+`STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_TEST_SECRET_KEY`, `STRIPE_TEST_WEBHOOK_SECRET`,
+`RESEND_API_KEY`, `TURNSTILE_SECRET`, `HASH_SALT`.
 
-Variables: `MPC_DEPLOY`, `MPC_SITE_URL`, `MPC_MAILING_ADDRESS`, `MPC_FROM_EMAIL`, `MPC_OWNER_EMAIL`,
-`MPC_GRADER_MODEL`, `MPC_TURNSTILE_SITE_KEY`, `MPC_CF_BEACON_TOKEN`, `MPC_GADS_SEND_TO`, `MPC_EVAL_LIMIT`.
+Variables: `MPC_DEPLOY`, `MPC_SITE_URL`, `MPC_MAILING_ADDRESS` (required for deploys), `MPC_FROM_EMAIL`,
+`MPC_OWNER_EMAIL`, `MPC_SUPPORT_EMAIL`, `MPC_GRADER_MODEL`, `MPC_GRADER_EFFORT`, `MPC_GRADER_MAX_TOKENS`,
+`MPC_ANTHROPIC_LIMIT_USD`, `MPC_TURNSTILE_SITE_KEY`, `MPC_CF_BEACON_TOKEN`, `MPC_GADS_SEND_TO`,
+`MPC_EVAL_LIMIT`, `MPC_EVAL_PR_LIMIT`, `MPC_EVAL_BUDGET_USD`, `MPC_STAGING`, `MPC_STAGING_SITE_URL`.
 
 Setup steps for the owner, in Korean: `business/online/owner-setup.md`.

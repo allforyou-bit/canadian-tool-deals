@@ -1,5 +1,5 @@
 // One shared GET /api/me per page load. Header, banner, BuyPass and pages all read this store, and
-// sign-in, sign-out and checkout call refreshMe() so every subscriber updates together.
+// sign-in, sign-out and checkout call refreshMe({ force: true }) so every subscriber updates together.
 import type { MeResponse } from '../shared/api'
 import { api, ApiClientError } from './api'
 
@@ -12,7 +12,9 @@ const LOADING: MeState = { status: 'loading' }
 
 let state: MeState = LOADING
 let started = false
-let inflight: Promise<MeResponse | null> | null = null
+/** Bumped by every request that is actually sent; only the newest request may write the store. */
+let generation = 0
+let inflight: { gen: number; promise: Promise<MeResponse | null> } | null = null
 const listeners = new Set<() => void>()
 
 function setState(next: MeState): void {
@@ -24,26 +26,45 @@ function toClientError(e: unknown): ApiClientError {
   return e instanceof ApiClientError ? e : new ApiClientError('internal', 0, 'Network error')
 }
 
+/** What a superseded request resolves to: the newer request's answer (or the store, once it has landed). */
+function latest(): Promise<MeResponse | null> {
+  if (inflight) return inflight.promise
+  return Promise.resolve(state.status === 'ready' ? state.me : null)
+}
+
+export interface RefreshOptions {
+  /**
+   * Send a new request even if one is already in flight. Use it after anything that changes the
+   * answer (sign-in, sign-out, deletion, purchase): a request that started earlier may have left
+   * without the new session cookie, and its late answer must not overwrite the new one.
+   */
+  force?: boolean
+}
+
 /** Fetch /api/me again. Never rejects: failures land in the store as { status: 'error' }. */
-export function refreshMe(): Promise<MeResponse | null> {
+export function refreshMe(opts: RefreshOptions = {}): Promise<MeResponse | null> {
   started = true
-  if (inflight) return inflight
-  inflight = api
+  if (inflight && !opts.force) return inflight.promise
+  const gen = ++generation
+  const promise = api
     .me()
     .then(
-      (me) => {
+      (me): MeResponse | null | Promise<MeResponse | null> => {
+        if (gen !== generation) return latest()
         setState({ status: 'ready', me })
         return me
       },
-      (e: unknown) => {
+      (e: unknown): MeResponse | null | Promise<MeResponse | null> => {
+        if (gen !== generation) return latest()
         setState({ status: 'error', error: toClientError(e) })
         return null
       },
     )
     .finally(() => {
-      inflight = null
+      if (inflight?.gen === gen) inflight = null
     })
-  return inflight
+  inflight = { gen, promise }
+  return promise
 }
 
 export function subscribeMe(fn: () => void): () => void {
@@ -63,3 +84,16 @@ export function activePass(me: MeResponse, now = new Date()) {
   if (!pass) return null
   return new Date(pass.endsAt).getTime() > now.getTime() ? pass : null
 }
+
+/**
+ * When the learner's access ends: the end of the chain of passes (queued passes included), falling
+ * back to the active pass. null when nothing runs past `now`.
+ */
+export function accessEndsAt(me: MeResponse, now = new Date()): string | null {
+  const candidates = [me.accessEndsAt, activePass(me, now)?.endsAt].filter(
+    (v): v is string => typeof v === 'string' && new Date(v).getTime() > now.getTime(),
+  )
+  if (candidates.length === 0) return null
+  return candidates.reduce((a, b) => (new Date(b).getTime() > new Date(a).getTime() ? b : a))
+}
+

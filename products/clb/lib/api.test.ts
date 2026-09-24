@@ -85,14 +85,14 @@ describe('requests', () => {
   it('sends JSON POSTs with same-origin credentials', async () => {
     const fetchMock = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) => jsonResponse({ url: 'https://checkout.stripe.com/x' }))
     vi.stubGlobal('fetch', fetchMock)
-    const res = await api.checkout({ sku: 'pass30', residentAttestation: true, lang: 'ko' })
+    const res = await api.checkout({ sku: 'pass30', termsVersion: '2026-09-24', residentAttestation: true, lang: 'ko' })
     expect(res.url).toBe('https://checkout.stripe.com/x')
     const [input, init] = fetchMock.mock.calls[0]
     expect(input).toBe('/api/checkout')
     expect(init?.method).toBe('POST')
     expect(init?.credentials).toBe('same-origin')
     expect((init?.headers as Record<string, string>)['content-type']).toBe('application/json')
-    expect(JSON.parse(String(init?.body))).toEqual({ sku: 'pass30', residentAttestation: true, lang: 'ko' })
+    expect(JSON.parse(String(init?.body))).toEqual({ sku: 'pass30', termsVersion: '2026-09-24', residentAttestation: true, lang: 'ko' })
   })
 
   it('uses GET for reads', async () => {
@@ -104,6 +104,26 @@ describe('requests', () => {
     expect(fetchMock.mock.calls[0][0]).toBe('/api/history')
     expect(fetchMock.mock.calls[0][1]?.method).toBe('GET')
     expect(fetchMock.mock.calls[0][1]?.body).toBeUndefined()
+  })
+
+  it('reads one saved history item by grade id (escaped into the query)', async () => {
+    const fetchMock = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) =>
+      jsonResponse({ gradeId: 'g/1', taskId: 'email', kind: 'writing', createdAt: '2026-09-21T10:00:00.000Z', text: 'Hi', result: {} }),
+    )
+    vi.stubGlobal('fetch', fetchMock)
+    const item = await api.historyItem('g/1&x=2')
+    expect(item.taskId).toBe('email')
+    expect(fetchMock.mock.calls[0][0]).toBe('/api/history/item?id=g%2F1%26x%3D2')
+    expect(fetchMock.mock.calls[0][1]?.method).toBe('GET')
+  })
+
+  it('posts the unsubscribe hash and signature without a session', async () => {
+    const fetchMock = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) => jsonResponse({ ok: true }))
+    vi.stubGlobal('fetch', fetchMock)
+    await api.unsubscribe({ h: 'abc', s: 'def' })
+    expect(fetchMock.mock.calls[0][0]).toBe('/api/unsubscribe')
+    expect(fetchMock.mock.calls[0][1]?.method).toBe('POST')
+    expect(JSON.parse(String(fetchMock.mock.calls[0][1]?.body))).toEqual({ h: 'abc', s: 'def' })
   })
 
   it('builds the multipart speaking request', async () => {

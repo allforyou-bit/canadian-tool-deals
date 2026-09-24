@@ -30,20 +30,21 @@ const en = {
   'common.seePricing': 'See pricing',
   'common.cancel': 'Cancel',
   'common.language': 'Language',
+  'common.goToAccount': 'Go to your account',
 
   // API error codes (practice context)
   'err.payment_required': 'You have used your free sample. Get a pass to keep practising with feedback.',
   'err.free_unavailable': 'Free samples are not available right now. Sign in or get a pass to continue.',
   'err.grading_paused':
-    'Feedback is paused for maintenance. Please try again later. Active passes are extended by the length of the pause.',
+    'Feedback is paused right now. Please try again later. If feedback is paused, active passes are extended by the length of the pause.',
   'err.rate_limited':
-    'You have reached the fair-use limit for now ({w} writing and {s} speaking tasks a day, {t} in 30 days). Please try again later.',
+    'You have reached a fair-use limit for now: {w} writing and {s} speaking tasks a day, {t} tasks in 30 days, and up to {n} answers a day that could not get feedback. Please try again later.',
   'err.turnstile_failed': 'The security check did not pass. Please complete it again and resubmit.',
   'err.unauthorized': 'Please sign in to continue.',
   'err.too_large': 'Your answer is too long. Please shorten it and try again.',
   'err.bad_request': 'The request was not accepted. Please check your answer and try again.',
   'err.region_not_supported': 'Passes are sold only to people who live in Canada outside Quebec.',
-  'err.checkout_unavailable': 'Purchases open soon.',
+  'err.checkout_unavailable': 'Passes are not available to buy right now.',
 
   // practice index
   'practice.title': 'Practice tasks',
@@ -67,7 +68,8 @@ const en = {
   'p.freeWriting': 'Free sample: one writing task without an account. The security check below helps us stop abuse.',
   'p.freeUsed': 'You have used your free writing sample. Get a pass to receive more feedback.',
   'p.passActive': 'Pass active until {date}.',
-  'p.paused': 'Feedback is paused for maintenance right now. You can still practise with the timer.',
+  'p.paused':
+    'Feedback is paused right now. You can still practise with the timer. If feedback is paused, active passes are extended by the length of the pause.',
 
   // writing
   'w.answer': 'Your answer',
@@ -78,6 +80,8 @@ const en = {
   'w.inRange': 'Within the target range.',
   'w.empty': 'Write your answer before asking for feedback.',
   'w.tooLong': 'Your answer is longer than {max} characters. Please shorten it.',
+  'w.overRange': 'Over the target range.',
+  'w.adultNeeded': 'Please confirm that you are 18 or older.',
 
   // timer
   't.label': 'Practice timer',
@@ -112,6 +116,10 @@ const en = {
   's.tooShort': 'The recording is too short. Please record again.',
   's.freeSpeaking': 'Your free speaking sample is available.',
   's.noFreeSpeaking': 'You have used your free speaking sample. Get a pass to receive more feedback.',
+  's.noSpeech': 'We could not hear any speech. Check your microphone and record again.',
+  's.announcePrep': 'Preparation time started. Recording starts by itself when it ends.',
+  's.announceRecording': 'Recording started. Speak now.',
+  's.announceStopped': 'Recording stopped. Listen to your answer before you send it.',
 
   // result
   'r.title': 'Your feedback',
@@ -146,16 +154,19 @@ const en = {
   // buy pass
   'b.days': '{n} days of practice feedback',
   'b.oneTime': 'One-time payment in Canadian dollars. No subscription and no auto-renewal.',
-  'b.notQuebec': 'Not available in Quebec',
+  'b.notQuebec': 'Passes are not sold in Quebec.',
   'b.attest': 'I live in Canada, outside Quebec',
   'b.buy': 'Buy the {name}',
   'b.signInToBuy': 'Sign in to buy',
-  'b.soon': 'Purchases open soon',
   'b.region':
     'Passes are sold only in Canada outside Quebec. Your connection does not appear to come from that area, so we cannot sell a pass right now.',
   'b.redirecting': 'Opening secure checkout…',
-  'b.hasPass': 'Your pass is active until {date}. Buying another pass adds its days to your current pass.',
+  'b.hasPass': 'You have access until {date}. Buying another pass adds its days after that date.',
   'b.stripe': 'Payment is handled by Stripe.',
+  'b.terms': 'By buying you agree to the {terms} and {refunds}.',
+  'b.termsLink': 'Terms of use',
+  'b.refundsLink': 'Refund policy',
+  'b.reload': 'Please reload the page and try again.',
 
   // login
   'l.title': 'Sign in',
@@ -186,6 +197,8 @@ const en = {
   'a.signInPrompt': 'Sign in to see your pass, history and settings.',
   'a.pass': 'Your pass',
   'a.passActive': '{name}: from {start} to {end}',
+  'a.accessUntil': 'With the passes you bought, you can practise with feedback until {date}.',
+  'a.queued': 'Your next pass starts when the current one ends.',
   'a.noPass': 'You do not have an active pass.',
   'a.usage': 'Fair-use limits',
   'a.writingToday': 'Writing tasks today',
@@ -201,14 +214,18 @@ const en = {
   'a.noHistory': 'No practice tasks with feedback yet.',
   'a.recurring': 'Recurring error types',
   'a.recurringCount': '{n} times',
+  'a.historyOpen': 'Show answer and feedback',
+  'a.historyClose': 'Hide answer and feedback',
+  'a.historyGone': 'This answer and its feedback are no longer stored.',
   'a.marketing': 'Email preferences',
   'a.marketingIntro':
     'We only send marketing emails if you agree. Sign-in links and receipts are always sent.',
+  'a.marketingOn': 'You receive marketing emails from us.',
+  'a.marketingOff': 'You do not receive marketing emails.',
   'a.marketingWithdraw': 'Stop marketing emails',
   'a.marketingOptIn': 'Save my choice',
   'a.marketingWithdrawn': 'Done. You will not receive marketing emails.',
   'a.marketingSaved': 'Thanks. Your consent has been saved.',
-  'a.marketingTick': 'Tick the box to agree, or use the button above to stop marketing emails.',
   'a.refund': 'Refund',
   'a.refundPolicy':
     'You can request a refund within {days} days of purchase if you have used {max} or fewer tasks with feedback. Self-serve refunds are available once per person and per card.',
@@ -223,7 +240,7 @@ const en = {
   'a.supportSent': 'Thanks. We will reply by email.',
   'a.delete': 'Delete account',
   'a.deleteInfo':
-    'This removes your essays, transcripts, history and profile. Records of payments are kept for tax and accounting purposes.',
+    'This deletes your answers, transcripts, feedback, history and profile, and any active pass ends. Records of payments are kept for tax and accounting purposes, and anonymous usage and cost records that do not identify you are kept.',
   'a.deleteButton': 'Delete my account',
   'a.deleteConfirm': 'This cannot be undone. Delete your account now?',
   'a.deleteYes': 'Yes, delete permanently',
@@ -233,7 +250,11 @@ const en = {
   // checkout
   'c.successTitle': 'Thank you',
   'c.waiting': 'Confirming your payment…',
-  'c.active': 'Your {name} is active until {date}.',
+  'c.active': 'Your {name} is confirmed. You can practise with feedback until {date}.',
+  'c.rejected':
+    'Passes are sold only to residents of Canada outside Quebec who pay with a card issued in Canada, so we refunded this payment. The refund can take 5–10 business days to reach your card.',
+  'c.refunded': 'This payment has been refunded.',
+  'c.problem': 'There is a problem with this payment. Please contact support from your account page.',
   'c.start': 'Start practising',
   'c.slow':
     'Your payment is still being confirmed. This page will update if you refresh it in a minute. If your pass does not appear, contact support from your account page.',
@@ -253,6 +274,13 @@ const en = {
   'st.off': 'Paused',
   'st.notice': 'Notice',
   'st.checked': 'Checked at {time}',
+
+  // unsubscribe (link in every email; no sign-in)
+  'u.title': 'Unsubscribe',
+  'u.working': 'Updating your email preferences…',
+  'u.done': 'You are unsubscribed. We will not send you marketing emails. Sign-in links and receipts are still sent.',
+  'u.invalid':
+    'This unsubscribe link is incomplete or has been changed. You can also sign in and stop marketing emails on your account page.',
 } as const
 
 export type UiKey = keyof typeof en
@@ -283,18 +311,19 @@ const ko: Record<UiKey, string> = {
   'common.seePricing': '요금 보기',
   'common.cancel': '취소',
   'common.language': '언어',
+  'common.goToAccount': '내 계정으로 가기',
 
   'err.payment_required': '무료 체험을 이미 사용했어요. 피드백을 계속 받으려면 이용권을 구매해 주세요.',
   'err.free_unavailable': '지금은 무료 체험을 이용할 수 없어요. 로그인하거나 이용권을 구매해 주세요.',
-  'err.grading_paused': '점검 중이라 피드백이 잠시 멈췄어요. 나중에 다시 시도해 주세요. 멈춘 시간만큼 이용권 기간이 늘어나요.',
+  'err.grading_paused': '지금은 피드백이 잠시 멈춰 있어요. 나중에 다시 시도해 주세요. 피드백이 멈추면 사용 중인 이용권 기간이 멈춘 시간만큼 늘어나요.',
   'err.rate_limited':
-    '지금은 공정 사용 한도에 도달했어요(하루 쓰기 {w}개, 말하기 {s}개, 30일 동안 {t}개). 나중에 다시 시도해 주세요.',
+    '지금은 공정 사용 한도에 도달했어요. 하루 쓰기 {w}개와 말하기 {s}개, 30일 동안 {t}개, 피드백을 받지 못한 답안은 하루 {n}개까지예요. 나중에 다시 시도해 주세요.',
   'err.turnstile_failed': '보안 확인을 통과하지 못했어요. 다시 확인한 뒤 제출해 주세요.',
   'err.unauthorized': '계속하려면 로그인해 주세요.',
   'err.too_large': '답안이 너무 길어요. 줄여서 다시 시도해 주세요.',
   'err.bad_request': '요청을 처리하지 못했어요. 답안을 확인하고 다시 시도해 주세요.',
   'err.region_not_supported': '이용권은 퀘벡을 제외한 캐나다에 사는 분께만 판매해요.',
-  'err.checkout_unavailable': '곧 구매할 수 있어요.',
+  'err.checkout_unavailable': '지금은 이용권을 구매할 수 없어요.',
 
   'practice.title': '연습 과제',
   'practice.intro': '시간을 재며 연습하고 내용, 구성, 어휘, 문법에 대한 피드백을 받아요. 첫 쓰기 과제는 계정 없이 무료예요.',
@@ -315,7 +344,7 @@ const ko: Record<UiKey, string> = {
   'p.freeWriting': '무료 체험: 계정 없이 쓰기 과제 1개를 해 볼 수 있어요. 아래 보안 확인은 악용을 막기 위한 거예요.',
   'p.freeUsed': '무료 쓰기 체험을 이미 사용했어요. 피드백을 더 받으려면 이용권을 구매해 주세요.',
   'p.passActive': '{date}까지 이용권을 쓸 수 있어요.',
-  'p.paused': '지금은 점검 중이라 피드백을 받을 수 없어요. 타이머로 연습은 계속할 수 있어요.',
+  'p.paused': '지금은 피드백이 잠시 멈춰 있어요. 타이머로 연습은 계속할 수 있어요. 피드백이 멈추면 사용 중인 이용권 기간이 멈춘 시간만큼 늘어나요.',
 
   'w.answer': '내 답안',
   'w.words': '{n}단어',
@@ -325,6 +354,8 @@ const ko: Record<UiKey, string> = {
   'w.inRange': '목표 범위 안에 있어요.',
   'w.empty': '피드백을 받기 전에 답안을 써 주세요.',
   'w.tooLong': '답안이 {max}자보다 길어요. 줄여 주세요.',
+  'w.overRange': '목표 범위를 넘었어요.',
+  'w.adultNeeded': '만 18세 이상인지 확인해 주세요.',
 
   't.label': '연습 타이머',
   't.start': '타이머 시작',
@@ -355,6 +386,10 @@ const ko: Record<UiKey, string> = {
   's.tooShort': '녹음이 너무 짧아요. 다시 녹음해 주세요.',
   's.freeSpeaking': '무료 말하기 체험을 이용할 수 있어요.',
   's.noFreeSpeaking': '무료 말하기 체험을 이미 사용했어요. 피드백을 더 받으려면 이용권을 구매해 주세요.',
+  's.noSpeech': '말소리가 들리지 않았어요. 마이크를 확인하고 다시 녹음해 주세요.',
+  's.announcePrep': '준비 시간이 시작됐어요. 준비 시간이 끝나면 녹음이 저절로 시작돼요.',
+  's.announceRecording': '녹음이 시작됐어요. 지금 말해 주세요.',
+  's.announceStopped': '녹음이 끝났어요. 보내기 전에 답변을 들어 보세요.',
 
   'r.title': '피드백',
   'r.disclaimer': '피드백은 점수가 아니며 시험 결과를 예측하지 않습니다.',
@@ -386,16 +421,19 @@ const ko: Record<UiKey, string> = {
 
   'b.days': '{n}일 동안 연습 피드백',
   'b.oneTime': '캐나다 달러로 한 번만 결제해요. 구독이나 자동 갱신은 없어요.',
-  'b.notQuebec': '퀘벡에서는 이용할 수 없어요',
+  'b.notQuebec': '퀘벡에서는 이용권을 판매하지 않아요.',
   'b.attest': '퀘벡을 제외한 캐나다에 살고 있어요',
   'b.buy': '{name} 구매하기',
   'b.signInToBuy': '로그인하고 구매하기',
-  'b.soon': '곧 구매할 수 있어요',
   'b.region':
     '이용권은 퀘벡을 제외한 캐나다에서만 판매해요. 지금 접속한 위치가 이 지역이 아닌 것으로 보여 이용권을 판매할 수 없어요.',
   'b.redirecting': '안전한 결제 페이지로 이동하는 중이에요…',
-  'b.hasPass': '{date}까지 이용권이 있어요. 이용권을 더 사면 남은 기간에 일수가 더해져요.',
+  'b.hasPass': '{date}까지 이용할 수 있어요. 이용권을 더 사면 그 날짜 뒤로 일수가 더해져요.',
   'b.stripe': '결제는 Stripe가 처리해요.',
+  'b.terms': '구매하면 {terms} 및 {refunds}에 동의하게 돼요.',
+  'b.termsLink': '이용약관',
+  'b.refundsLink': '환불 정책',
+  'b.reload': '페이지를 새로 고친 뒤 다시 시도해 주세요.',
 
   'l.title': '로그인',
   'l.intro': '로그인 링크를 이메일로 보내 드려요. 비밀번호는 필요 없어요.',
@@ -422,6 +460,8 @@ const ko: Record<UiKey, string> = {
   'a.signInPrompt': '이용권, 기록, 설정을 보려면 로그인해 주세요.',
   'a.pass': '이용권',
   'a.passActive': '{name}: {start}부터 {end}까지',
+  'a.accessUntil': '구매한 이용권으로 {date}까지 피드백을 받으며 연습할 수 있어요.',
+  'a.queued': '다음 이용권은 지금 이용권이 끝나면 시작돼요.',
   'a.noPass': '사용 중인 이용권이 없어요.',
   'a.usage': '공정 사용 한도',
   'a.writingToday': '오늘 쓰기 과제',
@@ -437,13 +477,17 @@ const ko: Record<UiKey, string> = {
   'a.noHistory': '아직 피드백을 받은 연습 과제가 없어요.',
   'a.recurring': '자주 나오는 오류 유형',
   'a.recurringCount': '{n}번',
+  'a.historyOpen': '답안과 피드백 보기',
+  'a.historyClose': '답안과 피드백 숨기기',
+  'a.historyGone': '이 답안과 피드백은 더 이상 보관되어 있지 않아요.',
   'a.marketing': '이메일 수신 설정',
   'a.marketingIntro': '동의한 경우에만 마케팅 이메일을 보내요. 로그인 링크와 영수증은 항상 보내요.',
+  'a.marketingOn': '마케팅 이메일을 받고 있어요.',
+  'a.marketingOff': '마케팅 이메일을 받지 않아요.',
   'a.marketingWithdraw': '마케팅 이메일 그만 받기',
   'a.marketingOptIn': '선택 저장하기',
   'a.marketingWithdrawn': '완료했어요. 마케팅 이메일을 보내지 않을게요.',
   'a.marketingSaved': '고마워요. 동의가 저장됐어요.',
-  'a.marketingTick': '동의하려면 상자를 체크하고, 그만 받으려면 위 버튼을 눌러 주세요.',
   'a.refund': '환불',
   'a.refundPolicy':
     '구매 후 {days}일 안에, 피드백을 받은 과제가 {max}개 이하라면 환불을 요청할 수 있어요. 직접 환불은 한 사람과 한 카드당 한 번만 가능해요.',
@@ -457,7 +501,8 @@ const ko: Record<UiKey, string> = {
   'a.supportSend': '보내기',
   'a.supportSent': '고마워요. 이메일로 답변드릴게요.',
   'a.delete': '계정 삭제',
-  'a.deleteInfo': '에세이, 받아쓴 내용, 기록, 프로필이 삭제돼요. 결제 기록은 세금과 회계 목적으로 보관해요.',
+  'a.deleteInfo':
+    '답안, 받아쓴 내용, 피드백, 기록, 프로필이 삭제되고 사용 중인 이용권도 끝나요. 결제 기록은 세금과 회계 목적으로 보관하고, 나를 알아볼 수 없는 익명 사용량·비용 기록은 남겨요.',
   'a.deleteButton': '계정 삭제하기',
   'a.deleteConfirm': '되돌릴 수 없어요. 지금 계정을 삭제할까요?',
   'a.deleteYes': '네, 영구 삭제할게요',
@@ -466,7 +511,11 @@ const ko: Record<UiKey, string> = {
 
   'c.successTitle': '고마워요',
   'c.waiting': '결제를 확인하는 중이에요…',
-  'c.active': '{name}을(를) {date}까지 쓸 수 있어요.',
+  'c.active': '{name} 결제가 확인됐어요. {date}까지 피드백을 받으며 연습할 수 있어요.',
+  'c.rejected':
+    '이용권은 퀘벡을 제외한 캐나다에 살면서 캐나다에서 발급된 카드로 결제하는 분께만 판매해서, 이 결제는 환불했어요. 카드에 반영되기까지 영업일 기준 5–10일이 걸릴 수 있어요.',
+  'c.refunded': '이 결제는 환불됐어요.',
+  'c.problem': '이 결제에 문제가 있어요. 계정 페이지에서 문의해 주세요.',
   'c.start': '연습 시작하기',
   'c.slow':
     '결제를 아직 확인하는 중이에요. 1분 뒤에 새로 고치면 업데이트돼요. 이용권이 보이지 않으면 계정 페이지에서 문의해 주세요.',
@@ -485,6 +534,11 @@ const ko: Record<UiKey, string> = {
   'st.off': '일시 중지',
   'st.notice': '공지',
   'st.checked': '{time} 확인',
+
+  'u.title': '수신 거부',
+  'u.working': '이메일 수신 설정을 바꾸는 중이에요…',
+  'u.done': '수신 거부가 완료됐어요. 마케팅 이메일을 보내지 않을게요. 로그인 링크와 영수증은 계속 보내요.',
+  'u.invalid': '수신 거부 링크가 완전하지 않거나 바뀌었어요. 로그인한 뒤 계정 페이지에서 마케팅 이메일을 끌 수도 있어요.',
 }
 
 export const UI: Record<Lang, Record<UiKey, string>> = { en, ko }

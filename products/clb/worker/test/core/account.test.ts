@@ -2,10 +2,25 @@ import { env } from 'cloudflare:workers'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { MeResponse } from '../../../shared/api'
 import { MARKETING_CONSENT } from '../../../shared/config'
-import { addDays } from '../../src/lib/time'
-import { api, count, sessionHash, signIn, stubFetch, uniqueEmail, userByEmail } from './helpers'
-
-const CONSENT = MARKETING_CONSENT.en('1 Test St, Toronto ON M5V 0A1', 'https://coach.test')
+import { accessEnd, setMarketing, SUPPORT_FORWARDS_PER_DAY } from '../../src/account'
+import { unsubscribeSignature, unsubscribeUrl } from '../../src/email'
+import type { Ctx, Env } from '../../src/env'
+import { getUser } from '../../src/lib/session'
+import { spendSnapshot } from '../../src/lib/spend'
+import { addDays, startOfUtcDay } from '../../src/lib/time'
+import {
+  api,
+  CONSENT_EN as CONSENT,
+  CONSENT_KO,
+  count,
+  emailHashOf,
+  ORIGIN,
+  sessionHash,
+  signIn,
+  stubFetch,
+  uniqueEmail,
+  userByEmail,
+} from './helpers'
 
 // no test may reach the network: every outbound call hits a stub (tests re-stub when they need to)
 beforeEach(() => {
@@ -16,13 +31,68 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-async function insertGrade(userId: string | null, id: string, createdAt = new Date().toISOString()): Promise<void> {
+async function insertGrade(
+  userId: string | null,
+  id: string,
+  createdAt = new Date().toISOString(),
+  opts: { costMicro?: number; free?: boolean } = {},
+): Promise<void> {
   await env.DB.prepare(
-    `INSERT INTO grades (id, user_id, task_id, prompt_index, kind, input_text, result_json, model, cost_micro_usd, created_at)
-     VALUES (?1, ?2, 'w1', 0, 'writing', 'essay text', '{}', 'claude-opus-5', 1000, ?3)`,
+    `INSERT INTO grades (id, user_id, device_hash, task_id, prompt_index, kind, input_text, result_json, error_kinds,
+                         free, outcome, model, cost_micro_usd, created_at)
+     VALUES (?1, ?2, 'devhash', 'w1', 0, 'writing', 'essay text', '{}', 'grammar', ?3, 'graded', 'claude-opus-5', ?4, ?5)`,
   )
-    .bind(id, userId, createdAt)
+    .bind(id, userId, opts.free ? 1 : 0, opts.costMicro ?? 1000, createdAt)
     .run()
+}
+
+async function insertPass(
+  userId: string,
+  tag: string,
+  startsAt: Date,
+  endsAt: Date,
+  opts: { sku?: 'pass30' | 'pass90'; revoked?: boolean; createdAt?: Date; status?: string } = {},
+): Promise<void> {
+  const created = (opts.createdAt ?? new Date()).toISOString()
+  await env.DB.batch([
+    env.DB.prepare(
+      `INSERT INTO purchases (id, user_id, sku, amount_cents, currency, status, created_at, paid_at)
+       VALUES (?1, ?2, ?3, 3900, 'cad', ?4, ?5, ?5)`,
+    ).bind(`cs_${tag}`, userId, opts.sku ?? 'pass30', opts.status ?? 'paid', created),
+    env.DB.prepare(
+      `INSERT INTO passes (id, user_id, sku, starts_at, ends_at, purchase_id, revoked_at) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)`,
+    ).bind(
+      `p_${tag}`,
+      userId,
+      opts.sku ?? 'pass30',
+      startsAt.toISOString(),
+      endsAt.toISOString(),
+      `cs_${tag}`,
+      opts.revoked ? created : null,
+    ),
+  ])
+}
+
+/** Calls a handler directly with a hand-built Ctx (for env overrides). */
+function directCtx(overrides: Partial<Env>, user: Ctx['user']): Ctx {
+  return {
+    env: Object.create(env, Object.fromEntries(Object.entries(overrides).map(([k, v]) => [k, { value: v }]))) as Env,
+    exec: { waitUntil: () => {}, passThroughOnException: () => {} } as unknown as ExecutionContext,
+    user,
+    ipHash: 'ip-test',
+    deviceHash: 'device-test',
+    country: null,
+    region: null,
+    now: new Date(),
+  }
+}
+
+function post(path: string, body: unknown): Request {
+  return new Request(`${ORIGIN}${path}`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', origin: ORIGIN },
+    body: JSON.stringify(body),
+  })
 }
 
 async function insertPurchaseAndPass(userId: string, tag: string, now = new Date()): Promise<void> {
@@ -79,7 +149,51 @@ describe('GET /api/me', () => {
     const body = (await (await api('/api/me', { session })).json()) as MeResponse
     await env.FLAGS.delete('flag:free_enabled')
     expect(body.pass).toBeNull()
+    expect(body.accessEndsAt).toBeNull()
+    expect(body.latestPurchase).toBeNull()
     expect(body.free).toEqual({ writing: false, speaking: false })
+  })
+
+  it('accessEndsAt covers queued passes; latestPurchase is the newest purchase', async () => {
+    const email = uniqueEmail('chain')
+    const { session } = await signIn(email)
+    const uid = (await userByEmail(email))!.id
+    const now = new Date()
+    const aEnd = addDays(now, 29)
+    const bEnd = addDays(aEnd, 90)
+    await insertPass(uid, `a_${uid}`, addDays(now, -1), aEnd, { createdAt: addDays(now, -1) })
+    // bought a second pass: queued to start when the first ends
+    await insertPass(uid, `b_${uid}`, aEnd, bEnd, { sku: 'pass90', createdAt: now })
+    // a revoked pass right after would extend the chain if it counted
+    await insertPass(uid, `r_${uid}`, bEnd, addDays(bEnd, 30), { revoked: true, createdAt: addDays(now, -2), status: 'refunded' })
+
+    let body = (await (await api('/api/me', { session })).json()) as MeResponse
+    expect(body.pass).toEqual({ sku: 'pass30', startsAt: addDays(now, -1).toISOString(), endsAt: aEnd.toISOString() })
+    expect(body.accessEndsAt).toBe(bEnd.toISOString())
+    expect(body.latestPurchase).toEqual({ id: `cs_b_${uid}`, sku: 'pass90', status: 'paid' })
+
+    // a checkout that is still pending is the latest purchase (the success page waits for it)
+    await env.DB.prepare(
+      "INSERT INTO purchases (id, user_id, sku, amount_cents, currency, status, created_at) VALUES (?1, ?2, 'pass30', 3900, 'cad', 'pending', ?3)",
+    )
+      .bind(`cs_pending_${uid}`, uid, addDays(now, 0.001).toISOString())
+      .run()
+    body = (await (await api('/api/me', { session })).json()) as MeResponse
+    expect(body.latestPurchase).toEqual({ id: `cs_pending_${uid}`, sku: 'pass30', status: 'pending' })
+    expect(body.accessEndsAt).toBe(bEnd.toISOString())
+  })
+
+  it('accessEnd: follows only a contiguous chain that starts with a running pass', () => {
+    const now = new Date('2026-10-01T00:00:00.000Z')
+    const p = (s: string, e: string) => ({ starts_at: `2026-${s}T00:00:00.000Z`, ends_at: `2026-${e}T00:00:00.000Z` })
+    expect(accessEnd([], now)).toBeNull()
+    // only a future pass: nothing running
+    expect(accessEnd([p('10-05', '11-04')], now)).toBeNull()
+    expect(accessEnd([p('09-20', '10-20'), p('10-20', '11-19'), p('11-19', '12-19')], now)).toBe('2026-12-19T00:00:00.000Z')
+    // a gap ends the chain
+    expect(accessEnd([p('09-20', '10-20'), p('10-21', '11-20')], now)).toBe('2026-10-20T00:00:00.000Z')
+    // overlapping running passes: the later end wins, and the queue continues from it
+    expect(accessEnd([p('09-01', '10-10'), p('09-20', '10-20'), p('10-20', '11-19')], now)).toBe('2026-11-19T00:00:00.000Z')
   })
 })
 
@@ -89,7 +203,7 @@ describe('POST /api/account/delete', () => {
     expect(res.status).toBe(401)
   })
 
-  it("removes the user's grades, sessions, tickets and profile but keeps payment records", async () => {
+  it("removes the user's answers, feedback, sessions, tickets and profile; keeps payment records and anonymous cost rows", async () => {
     const email = uniqueEmail('delete')
     const { session } = await signIn(email)
     const other = await signIn(uniqueEmail('bystander'))
@@ -98,27 +212,69 @@ describe('POST /api/account/delete', () => {
       .bind(await sessionHash(other.session))
       .first<{ user_id: string }>())!.user_id
     await insertPurchaseAndPass(user.id, `del_${user.id}`)
-    for (let i = 0; i < 3; i++) await insertGrade(user.id, `g_del_${user.id}_${i}`)
+    for (let i = 0; i < 3; i++) await insertGrade(user.id, `g_del_${user.id}_${i}`, undefined, { costMicro: 500_000, free: i === 0 })
     await insertGrade(bystander, `g_keep_${bystander}`)
     await env.DB.prepare("INSERT INTO support_tickets (id, user_id, message, lang, created_at) VALUES (?1, ?2, 'help me please', 'en', ?3)")
       .bind(`t_del_${user.id}`, user.id, new Date().toISOString())
       .run()
+    await env.DB.prepare(
+      "INSERT INTO support_tickets (id, user_id, message, lang, created_at, forwarded) VALUES (?1, ?2, 'forwarded question', 'en', ?3, 1)",
+    )
+      .bind(`t_fwd_${user.id}`, user.id, new Date().toISOString())
+      .run()
     await env.DB.prepare('UPDATE users SET marketing_opt_in = 1, marketing_consent_text = ?2, marketing_consent_at = ?3 WHERE id = ?1')
       .bind(user.id, CONSENT, new Date().toISOString())
       .run()
+    const spendBefore = await spendSnapshot(env, new Date())
 
+    const stub = stubFetch()
     const res = await api('/api/account/delete', { body: {}, session })
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ ok: true })
     expect(res.headers.get('set-cookie')).toMatch(/mpc_session=; Path=\/; Max-Age=0/)
 
+    // memo B7: none of the user's grades rows remain; decision 5: they stay as anonymous cost rows
     expect(await count('SELECT COUNT(*) AS n FROM grades WHERE user_id = ?1', user.id)).toBe(0)
+    const { results: ledger } = await env.DB.prepare(
+      'SELECT user_id, device_hash, input_text, result_json, error_kinds, cost_micro_usd, model, kind FROM grades WHERE id LIKE ?1 ORDER BY id',
+    )
+      .bind(`g_del_${user.id}_%`)
+      .all<Record<string, unknown>>()
+    expect(ledger).toHaveLength(3)
+    for (const row of ledger) {
+      expect(row).toEqual({
+        user_id: null,
+        device_hash: null,
+        input_text: null,
+        result_json: null,
+        error_kinds: null,
+        cost_micro_usd: 500_000,
+        model: 'claude-opus-5',
+        kind: 'writing',
+      })
+    }
+    // the spend tiers and the free budget still see the cost
+    const spendAfter = await spendSnapshot(env, new Date())
+    expect(spendAfter.monthToDateUsd).toBe(spendBefore.monthToDateUsd)
+    expect(spendAfter.freeTodayUsd).toBe(spendBefore.freeTodayUsd)
+
     expect(await count('SELECT COUNT(*) AS n FROM sessions WHERE user_id = ?1', user.id)).toBe(0)
     expect(await count('SELECT COUNT(*) AS n FROM support_tickets WHERE user_id = ?1', user.id)).toBe(0)
     expect(await count('SELECT COUNT(*) AS n FROM magic_links WHERE email = ?1', email)).toBe(0)
     expect(await count('SELECT COUNT(*) AS n FROM purchases WHERE user_id = ?1', user.id)).toBe(1)
     expect(await count('SELECT COUNT(*) AS n FROM passes WHERE user_id = ?1', user.id)).toBe(1)
     expect(await count('SELECT COUNT(*) AS n FROM grades WHERE user_id = ?1', bystander)).toBe(1)
+    expect(
+      await count("SELECT COUNT(*) AS n FROM grades WHERE user_id = ?1 AND input_text = 'essay text' AND device_hash = 'devhash'", bystander),
+    ).toBe(1)
+
+    // the owner is told which forwarded tickets to delete from the mailbox (ids only, no address)
+    const alerts = stub.emails().filter((e) => e.to[0] === 'owner@coach.test')
+    expect(alerts).toHaveLength(1)
+    expect(alerts[0]?.subject).toContain('Account deleted')
+    expect(alerts[0]?.text).toContain(`t_fwd_${user.id}`)
+    expect(alerts[0]?.text).not.toContain(`t_del_${user.id}`)
+    expect(alerts[0]?.text).not.toContain(email)
 
     const tomb = await env.DB.prepare('SELECT * FROM users WHERE id = ?1').bind(user.id).first<Record<string, unknown>>()
     expect(tomb).toMatchObject({
@@ -139,10 +295,38 @@ describe('POST /api/account/delete', () => {
     expect(again?.id).not.toBe(user.id)
     expect(again?.email_hash).toBe(user.email_hash)
   })
+
+  it('sends no owner alert when the user had no forwarded tickets', async () => {
+    const { session } = await signIn(uniqueEmail('delquiet'))
+    const stub = stubFetch()
+    expect((await api('/api/account/delete', { body: {}, session })).status).toBe(200)
+    expect(stub.emails()).toHaveLength(0)
+  })
+
+  it('a re-signup with the same email keeps the used free speaking sample and self-refund (decision 9)', async () => {
+    const email = uniqueEmail('resignup')
+    const { session } = await signIn(email)
+    const first = (await userByEmail(email))!
+    expect(first).toMatchObject({ free_speaking_used: 0, self_refund_used: 0 })
+    await env.DB.prepare('UPDATE users SET free_speaking_used = 1, self_refund_used = 1 WHERE id = ?1').bind(first.id).run()
+    expect((await api('/api/account/delete', { body: {}, session })).status).toBe(200)
+
+    const { session: again } = await signIn(email)
+    const second = (await userByEmail(email))!
+    expect(second.id).not.toBe(first.id)
+    expect(second).toMatchObject({ free_speaking_used: 1, self_refund_used: 1 })
+    const me = (await (await api('/api/me', { session: again })).json()) as MeResponse
+    expect(me.free.speaking).toBe(false)
+
+    // another address starts fresh
+    const fresh = uniqueEmail('resignup-other')
+    await signIn(fresh)
+    expect(await userByEmail(fresh)).toMatchObject({ free_speaking_used: 0, self_refund_used: 0 })
+  })
 })
 
 describe('POST /api/account/marketing', () => {
-  it('withdraws and re-gives consent', async () => {
+  it('withdraws and re-gives consent with the exact server sentence (either language)', async () => {
     const email = uniqueEmail('mkt')
     const { session } = await signIn(email, { extra: { marketingOptIn: true, marketingConsentText: CONSENT } })
     expect((await userByEmail(email))?.marketing_opt_in).toBe(1)
@@ -155,14 +339,86 @@ describe('POST /api/account/marketing', () => {
 
     expect((await api('/api/account/marketing', { body: { optIn: true }, session })).status).toBe(400)
     expect((await api('/api/account/marketing', { body: { optIn: 'yes' }, session })).status).toBe(400)
+    for (const consentText of ['anything at all', ` ${CONSENT}`, CONSENT.replace('1 Test St', '2 Other St')]) {
+      const bad = await api('/api/account/marketing', { body: { optIn: true, consentText }, session })
+      expect(bad.status).toBe(400)
+      expect(await bad.json()).toMatchObject({ error: 'bad_request', message: expect.stringContaining('reload') })
+    }
+    expect((await userByEmail(email))?.marketing_opt_in).toBe(0)
+
     const on = await api('/api/account/marketing', { body: { optIn: true, consentText: CONSENT }, session })
     expect(on.status).toBe(200)
     const u2 = await userByEmail(email)
-    expect(u2).toMatchObject({ marketing_opt_in: 1, marketing_consent_text: CONSENT, marketing_withdrawn_at: null })
+    expect(u2).toMatchObject({
+      marketing_opt_in: 1,
+      marketing_consent_text: CONSENT,
+      marketing_consent_version: MARKETING_CONSENT.version,
+      marketing_withdrawn_at: null,
+    })
+
+    expect((await api('/api/account/marketing', { body: { optIn: true, consentText: CONSENT_KO }, session })).status).toBe(200)
+    expect((await userByEmail(email))?.marketing_consent_text).toBe(CONSENT_KO)
+  })
+
+  it('refuses an opt-in while MAILING_ADDRESS is the placeholder (withdrawal still works)', async () => {
+    const email = uniqueEmail('mktplaceholder')
+    const { session } = await signIn(email)
+    const req = new Request(`${ORIGIN}/api/me`, { headers: { cookie: `mpc_session=${session}` } })
+    const user = await getUser(req, env)
+    const ctx = directCtx({ MAILING_ADDRESS: 'SET-BEFORE-LAUNCH (CASL: owner mailing address)' }, user)
+    const consentText = MARKETING_CONSENT.en('SET-BEFORE-LAUNCH (CASL: owner mailing address)', 'https://coach.test')
+    const res = await setMarketing(post('/api/account/marketing', { optIn: true, consentText }), ctx)
+    expect(res.status).toBe(400)
+    expect((await userByEmail(email))?.marketing_opt_in).toBe(0)
+    expect((await setMarketing(post('/api/account/marketing', { optIn: false }), ctx)).status).toBe(200)
   })
 
   it('requires sign-in', async () => {
     expect((await api('/api/account/marketing', { body: { optIn: false } })).status).toBe(401)
+  })
+})
+
+describe('POST /api/unsubscribe', () => {
+  it('withdraws consent from the link in a learner email, without sign-in', async () => {
+    const email = uniqueEmail('unsub')
+    const { stub } = await signIn(email, { extra: { marketingOptIn: true, marketingConsentText: CONSENT } })
+    expect((await userByEmail(email))?.marketing_opt_in).toBe(1)
+    const m = /https:\/\/coach\.test\/unsubscribe\/#h=([0-9a-f]{64})&s=([0-9a-f]{64})/.exec(stub.emails()[0]?.text ?? '')
+    expect(m?.[1]).toBe(await emailHashOf(email))
+
+    const res = await api('/api/unsubscribe', { body: { h: m![1], s: m![2] }, device: null })
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ ok: true })
+    const u = await userByEmail(email)
+    expect(u?.marketing_opt_in).toBe(0)
+    expect(u?.marketing_withdrawn_at).toBeTruthy()
+    // the link keeps working (a second click is a harmless no-op)
+    expect((await api('/api/unsubscribe', { body: { h: m![1], s: m![2].toUpperCase() } })).status).toBe(200)
+  })
+
+  it('rejects a wrong or malformed signature and changes nothing', async () => {
+    const email = uniqueEmail('unsubbad')
+    await signIn(email, { extra: { marketingOptIn: true, marketingConsentText: CONSENT } })
+    const h = await emailHashOf(email)
+    const s = await unsubscribeSignature(env, h)
+    const wrong = `${s.slice(0, -1)}${s.endsWith('0') ? '1' : '0'}`
+    for (const body of [{ h, s: wrong }, { h, s: s.slice(0, 63) }, { h: 'x'.repeat(64), s }, { h }, { h, s: 5 }, [h, s], 'nope']) {
+      const res = await api('/api/unsubscribe', { body })
+      expect(res.status).toBe(400)
+      expect(await res.json()).toMatchObject({ error: 'bad_request' })
+    }
+    // a signature for another address does not work for this one
+    const otherH = await emailHashOf(uniqueEmail('someone-else'))
+    expect((await api('/api/unsubscribe', { body: { h, s: await unsubscribeSignature(env, otherH) } })).status).toBe(400)
+    expect((await userByEmail(email))?.marketing_opt_in).toBe(1)
+  })
+
+  it('answers ok for a valid link whose address has no account', async () => {
+    const url = await unsubscribeUrl(env, uniqueEmail('nobody'))
+    const [, h, s] = /#h=([0-9a-f]{64})&s=([0-9a-f]{64})$/.exec(url)!
+    const res = await api('/api/unsubscribe', { body: { h, s } })
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ ok: true })
   })
 })
 
@@ -187,11 +443,24 @@ describe('POST /api/support', () => {
     expect(ticket).toMatchObject({ message: 'My recording did not upload.', lang: 'ko', forwarded: 1 })
   })
 
+  it('requires sign-in, with or without a device cookie, and sends nothing', async () => {
+    const stub = stubFetch()
+    for (const device of [undefined, null, `dev-support-${uniqueEmail('x')}`]) {
+      const res = await api('/api/support', { body: { message: 'anonymous question here', lang: 'en' }, device })
+      expect(res.status).toBe(401)
+      expect(await res.json()).toMatchObject({ error: 'unauthorized' })
+    }
+    expect(stub.emails()).toHaveLength(0)
+    expect(await count("SELECT COUNT(*) AS n FROM support_tickets WHERE message = 'anonymous question here'")).toBe(0)
+  })
+
   it('validates length and language', async () => {
+    const { session } = await signIn(uniqueEmail('supval'))
     stubFetch()
-    expect((await api('/api/support', { body: { message: 'too short', lang: 'en' } })).status).toBe(400)
-    expect((await api('/api/support', { body: { message: 'x'.repeat(4001), lang: 'en' } })).status).toBe(400)
-    expect((await api('/api/support', { body: { message: 'long enough message', lang: 'fr' } })).status).toBe(400)
+    expect((await api('/api/support', { body: { message: 'too short', lang: 'en' }, session })).status).toBe(400)
+    expect((await api('/api/support', { body: { message: 'x'.repeat(4001), lang: 'en' }, session })).status).toBe(400)
+    expect((await api('/api/support', { body: { message: 'long enough message', lang: 'fr' }, session })).status).toBe(400)
+    expect((await api('/api/support', { body: ['long enough message'], session })).status).toBe(400)
   })
 
   it('limits signed-in users to 5 tickets per UTC day', async () => {
@@ -205,23 +474,59 @@ describe('POST /api/support', () => {
     expect(await sixth.json()).toMatchObject({ error: 'rate_limited' })
   })
 
-  it('limits signed-out visitors to 5 tickets per device per day; alerts say they are signed out', async () => {
-    const stub = stubFetch()
-    const device = `dev-support-${uniqueEmail('x')}`
-    for (let i = 0; i < 5; i++) {
-      expect((await api('/api/support', { body: { message: `anonymous question ${i}`, lang: 'en' }, device })).status).toBe(200)
-    }
-    expect((await api('/api/support', { body: { message: 'anonymous question 6', lang: 'en' }, device })).status).toBe(429)
-    expect((await api('/api/support', { body: { message: 'other device question', lang: 'en' }, device: `${device}-2` })).status).toBe(200)
-    expect(stub.emails()).toHaveLength(6)
-    expect(stub.emails()[0]?.text).toContain('signed-out visitor')
-  })
-
   it('keeps the ticket unforwarded when the alert email fails', async () => {
+    const { session } = await signIn(uniqueEmail('supfail'))
     stubFetch({ resendOk: false })
-    const device = `dev-support-fail-${uniqueEmail('x')}`
-    const res = await api('/api/support', { body: { message: 'please call me back', lang: 'en' }, device })
+    const res = await api('/api/support', { body: { message: 'please call me back', lang: 'en' }, session })
     expect(res.status).toBe(200)
     expect(await count("SELECT COUNT(*) AS n FROM support_tickets WHERE message = 'please call me back' AND forwarded = 0")).toBe(1)
+  })
+
+  it(`forwards at most ${SUPPORT_FORWARDS_PER_DAY} tickets per UTC day, then stores them and sends one digest`, async () => {
+    const dayStart = startOfUtcDay(new Date()).toISOString()
+    const already = await count('SELECT COUNT(*) AS n FROM support_tickets WHERE forwarded = 1 AND created_at >= ?1', dayStart)
+    const fill = SUPPORT_FORWARDS_PER_DAY - already - 1
+    expect(fill).toBeGreaterThan(0)
+    const nowIso = new Date().toISOString()
+    await env.DB.batch(
+      Array.from({ length: fill }, (_, i) =>
+        env.DB.prepare(
+          "INSERT INTO support_tickets (id, user_id, message, lang, created_at, forwarded) VALUES (?1, NULL, 'filler', 'en', ?2, 1)",
+        ).bind(`t_fill_${i}`, nowIso),
+      ),
+    )
+    const users: string[] = []
+    for (const i of [1, 2, 3]) users.push((await signIn(uniqueEmail(`supcap${i}`))).session)
+    const digestId = `support-digest:${dayStart.slice(0, 10)}`
+
+    try {
+      // the last slot of the day is still forwarded
+      let stub = stubFetch()
+      expect((await api('/api/support', { body: { message: 'the last forwarded one', lang: 'en' }, session: users[0] })).status).toBe(200)
+      expect(stub.emails().map((e) => e.subject)).toEqual([expect.stringMatching(/Support ticket t_/)])
+
+      // over the ceiling: stored unforwarded; a digest whose send fails is retried by the next ticket
+      stub = stubFetch({ resendOk: false })
+      expect((await api('/api/support', { body: { message: 'over the ceiling 1', lang: 'en' }, session: users[1] })).status).toBe(200)
+      expect(await count('SELECT COUNT(*) AS n FROM webhook_events WHERE id = ?1', digestId)).toBe(0)
+
+      stub = stubFetch()
+      expect((await api('/api/support', { body: { message: 'over the ceiling 2', lang: 'en' }, session: users[1] })).status).toBe(200)
+      expect((await api('/api/support', { body: { message: 'over the ceiling 3', lang: 'en' }, session: users[2] })).status).toBe(200)
+      const sent = stub.emails()
+      expect(sent).toHaveLength(1)
+      expect(sent[0]?.subject).toContain('Support forwarding limit reached')
+      expect(sent[0]?.text).toContain(`${SUPPORT_FORWARDS_PER_DAY} support tickets`)
+      expect(sent[0]?.text).not.toContain('over the ceiling')
+      expect(await count("SELECT COUNT(*) AS n FROM support_tickets WHERE message LIKE 'over the ceiling %' AND forwarded = 0")).toBe(3)
+      expect(await count('SELECT COUNT(*) AS n FROM support_tickets WHERE forwarded = 1 AND created_at >= ?1', dayStart)).toBe(
+        SUPPORT_FORWARDS_PER_DAY,
+      )
+    } finally {
+      await env.DB.batch([
+        env.DB.prepare("DELETE FROM support_tickets WHERE id LIKE 't_fill_%'"),
+        env.DB.prepare('DELETE FROM webhook_events WHERE id = ?1').bind(digestId),
+      ])
+    }
   })
 })

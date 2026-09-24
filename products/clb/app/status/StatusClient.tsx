@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { cls } from '../../components/ui'
 import { api } from '../../lib/api'
 import { useMe, useUiLang } from '../../lib/hooks'
 import { t } from '../../lib/i18n'
+import { refreshMe } from '../../lib/me'
 import type { HealthResponse } from '../../shared/api'
 
 type Health = { kind: 'loading' } | { kind: 'ok'; data: HealthResponse } | { kind: 'down' }
@@ -29,6 +30,8 @@ export function StatusClient() {
   const [health, setHealth] = useState<Health>({ kind: 'loading' })
   const [checkedAt, setCheckedAt] = useState<Date | null>(null)
 
+  const [attempt, setAttempt] = useState(0)
+
   useEffect(() => {
     let cancelled = false
     api.health().then(
@@ -46,10 +49,26 @@ export function StatusClient() {
     return () => {
       cancelled = true
     }
+  }, [attempt])
+
+  const retry = useCallback(() => {
+    setHealth({ kind: 'loading' })
+    setAttempt((n) => n + 1)
+    void refreshMe({ force: true })
   }, [])
 
   const loading = t(lang, 'common.loading')
   const flags = meState.status === 'ready' ? meState.me.flags : null
+  // /api/me failed: the flags are unknown, so say so instead of "Loading…" forever
+  const meDown = meState.status === 'error'
+  const flagRow = (on: boolean | undefined) =>
+    flags && on !== undefined
+      ? { good: on, value: t(lang, on ? 'st.on' : 'st.off') }
+      : meDown
+        ? { good: false, value: t(lang, 'st.down') }
+        : { good: null, value: loading }
+  const grading = flagRow(flags?.gradingEnabled)
+  const checkout = flagRow(flags?.checkoutEnabled)
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
@@ -67,17 +86,14 @@ export function StatusClient() {
                 : t(lang, 'st.down')
           }
         />
-        <Row
-          label={t(lang, 'st.grading')}
-          good={flags ? flags.gradingEnabled : null}
-          value={flags ? t(lang, flags.gradingEnabled ? 'st.on' : 'st.off') : loading}
-        />
-        <Row
-          label={t(lang, 'st.checkout')}
-          good={flags ? flags.checkoutEnabled : null}
-          value={flags ? t(lang, flags.checkoutEnabled ? 'st.on' : 'st.off') : loading}
-        />
+        <Row label={t(lang, 'st.grading')} testId="status-grading" good={grading.good} value={grading.value} />
+        <Row label={t(lang, 'st.checkout')} testId="status-checkout" good={checkout.good} value={checkout.value} />
       </dl>
+      {(meDown || health.kind === 'down') && (
+        <button type="button" className={`${cls.btn} ${cls.secondary}`} onClick={retry}>
+          {t(lang, 'common.tryAgain')}
+        </button>
+      )}
       {flags?.banner.trim() && (
         <section aria-labelledby="status-notice" className="rounded-md border border-amber-300 bg-amber-50 p-4">
           <h2 id="status-notice" className="font-semibold text-amber-950">

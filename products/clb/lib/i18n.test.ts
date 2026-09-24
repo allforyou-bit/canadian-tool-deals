@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { ERROR_KINDS } from '../shared/api'
+import { CAPS } from '../shared/config'
 import { ALLOWED_PHRASES, findClaims } from '../shared/content-rules'
 import { ApiClientError } from './api'
 import { describeError } from './errors'
@@ -12,6 +13,18 @@ describe('UI strings', () => {
         expect({ key, claims: findClaims(text) }).toEqual({ key, claims: [] })
       }
     }
+  })
+
+  it('never promise that purchases open soon (checkout can be off for good)', () => {
+    for (const lang of ['en', 'ko'] as const) {
+      for (const text of Object.values(UI[lang])) {
+        expect(text).not.toMatch(/open soon|곧 구매/)
+      }
+    }
+  })
+
+  it('say "Passes are not sold in Quebec." on the buy card', () => {
+    expect(t('en', 'b.notQuebec')).toBe('Passes are not sold in Quebec.')
   })
 
   it('use the exact allowed disclaimer sentence', () => {
@@ -67,9 +80,26 @@ describe('describeError', () => {
     )
   })
 
-  it('explains the fair-use caps with the configured numbers', () => {
-    expect(describeError(err('rate_limited', 429), 'en', 'writing').text).toContain('15 writing and 30 speaking')
+  it('explains the fair-use caps with the configured numbers, including the no-feedback cap', () => {
+    const text = describeError(err('rate_limited', 429), 'en', 'writing').text
+    expect(text).toContain(`${CAPS.writingPerDay} writing and ${CAPS.speakingPerDay} speaking`)
+    expect(text).toContain(`${CAPS.gradedPer30Days} tasks in 30 days`)
+    expect(text).toContain(`up to ${CAPS.noFeedbackPerDay} answers a day that could not get feedback`)
+    expect(describeError(err('rate_limited', 429), 'ko', 'speaking').text).toContain(`하루 ${CAPS.noFeedbackPerDay}개`)
     expect(describeError(err('rate_limited', 429), 'en', 'login').text).toContain('wait an hour')
+  })
+
+  it('explains an empty speaking transcript instead of a generic bad request', () => {
+    const noSpeech = err('bad_request', 400, 'No speech detected. Please check your microphone and try again.')
+    expect(describeError(noSpeech, 'en', 'speaking').text).toBe(t('en', 's.noSpeech'))
+    expect(describeError(noSpeech, 'ko', 'speaking').text).toBe(t('ko', 's.noSpeech'))
+    expect(describeError(noSpeech, 'en', 'writing').text).toBe(t('en', 'err.bad_request'))
+  })
+
+  it('uses neutral wording when purchases are off, and asks for a reload on a stale checkout request', () => {
+    expect(describeError(err('checkout_unavailable', 503), 'en', 'checkout').text).toBe('Passes are not available to buy right now.')
+    expect(describeError(err('checkout_unavailable', 503), 'ko', 'checkout').text).toBe('지금은 이용권을 구매할 수 없어요.')
+    expect(describeError(err('bad_request', 400, 'Please reload the page'), 'en', 'checkout').text).toBe(t('en', 'b.reload'))
   })
 
   it('shows the server wording for account policy answers only', () => {

@@ -1,7 +1,16 @@
 # Routine: Nov 30 go/pivot memo
 
-**Cadence:** once, on or after Mon 2026-11-30 (memo §5.2, §6 W10). **Runs as:** a fresh, stateless
-Claude Code session with this repository checked out. All dates are UTC. Start with `git pull`.
+**Cadence:** once, on or after **Tue 2026-12-01 12:00 UTC** (memo §5.2, §6 W10). November 30's numbers
+exist only after the Worker's 05:00 UTC snapshot on Dec 1 and the `metrics.yml` export after it (07:17 UTC,
+which GitHub can start hours late). **Runs as:** a fresh, stateless Claude Code session with this
+repository checked out. All dates are UTC. Start with `git pull`.
+
+**Before anything else:**
+1. If now is before 2026-12-01 12:00 UTC, write nothing and end with the run summary "too early".
+2. If `ops/metrics/2026-11-30.json` does not exist, or any day from 2026-11-01 to 2026-11-30 has no file,
+   write nothing, open or update the issue **"Nov 30 memo: data incomplete"** listing the missing dates
+   (dates only), and stop. The owner (or the next run) re-runs this Routine once the files exist; K6 is
+   never decided on missing days.
 
 ## Purpose
 
@@ -47,6 +56,8 @@ update the issue **"Nov 30 go/pivot memo"** linking to the file so the owner is 
 
 ## Idempotency
 
-A second run overwrites `ops/reports/nov30.md` with the same content and edits the same issue.
+A second run overwrites `ops/reports/nov30.md` with the same content and edits the same issue. When the
+memo is written, comment "data complete, memo written" on the issue "Nov 30 memo: data incomplete" if it
+is open (do not close it; the owner does).
 
-ASSERT: ops/reports/nov30.md exists and contains one "DECISION INPUT: K6=" line.
+ASSERT: ops/reports/nov30.md exists and contains one "DECISION INPUT: K6=" line, or the run summary says "too early", or the issue "Nov 30 memo: data incomplete" was opened or updated in this run.

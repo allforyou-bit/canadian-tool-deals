@@ -2,12 +2,20 @@ import { env } from 'cloudflare:workers'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { MARKETING_CONSENT } from '../../../shared/config'
 import { findClaims } from '../../../shared/content-rules'
+import { acceptedConsentText, AUTH_KV, expectedConsentText, mailingAddressMissing, requestMagicLink, signInEmail } from '../../src/auth'
+import type { Ctx, Env } from '../../src/env'
+import { saltedHash } from '../../src/lib/crypto'
 import { isDisposableEmail } from '../../src/lib/disposable'
 import {
   api,
+  CONSENT_EN as CONSENT,
+  CONSENT_KO,
   count,
+  DEVICE,
+  emailHashOf,
   lastToken,
   magicLinkBody,
+  ORIGIN,
   sessionFromSetCookie,
   sessionHash,
   signIn,
@@ -16,7 +24,7 @@ import {
   userByEmail,
 } from './helpers'
 
-const CONSENT = MARKETING_CONSENT.en('1 Test St, Toronto ON M5V 0A1', 'https://coach.test')
+const PLACEHOLDER = 'SET-BEFORE-LAUNCH (CASL: owner mailing address)'
 
 // no test may reach the network: every outbound call hits a stub (tests re-stub when they need to)
 beforeEach(() => {
@@ -64,8 +72,6 @@ describe('POST /api/auth/magic-link', () => {
       magicLinkBody('a@b'),
       magicLinkBody(`${'a'.repeat(250)}@example.com`),
       magicLinkBody(uniqueEmail(), { lang: 'fr' }),
-      magicLinkBody(uniqueEmail(), { marketingOptIn: true, marketingConsentText: '' }),
-      magicLinkBody(uniqueEmail(), { marketingOptIn: true, marketingConsentText: 'x'.repeat(1501) }),
     ]) {
       const res = await api('/api/auth/magic-link', { body })
       expect(res.status).toBe(400)
@@ -120,6 +126,151 @@ describe('POST /api/auth/magic-link', () => {
     const res = await api('/api/auth/magic-link', { body: magicLinkBody(email) })
     expect(res.status).toBe(500)
     expect(await count('SELECT COUNT(*) AS n FROM magic_links WHERE email = ?1', email)).toBe(0)
+    expect(await env.FLAGS.get(AUTH_KV.magicLinks(await emailHashOf(email)))).toBeNull()
+  })
+
+  it('keeps the hourly limit in a KV window keyed by the email hash (no D1 rows needed)', async () => {
+    const email = uniqueEmail('kvwindow')
+    const key = AUTH_KV.magicLinks(await emailHashOf(email))
+    const nowSec = Math.floor(Date.now() / 1000)
+
+    await env.FLAGS.put(key, JSON.stringify({ n: 3, until: nowSec + 1800 }))
+    const blocked = await api('/api/auth/magic-link', { body: magicLinkBody(email) })
+    expect(blocked.status).toBe(429)
+
+    // an elapsed window starts a new one
+    await env.FLAGS.put(key, JSON.stringify({ n: 3, until: nowSec - 1 }))
+    expect((await api('/api/auth/magic-link', { body: magicLinkBody(email) })).status).toBe(200)
+    const w = JSON.parse((await env.FLAGS.get(key))!) as { n: number; until: number }
+    expect(w.n).toBe(1)
+    expect(w.until - nowSec).toBeGreaterThanOrEqual(3599)
+    expect(w.until - nowSec).toBeLessThanOrEqual(3601)
+    await env.FLAGS.put(key, 'not json')
+    expect((await api('/api/auth/magic-link', { body: magicLinkBody(email) })).status).toBe(200)
+  })
+
+  it('the hourly limit survives account deletion (decision 9)', async () => {
+    const email = uniqueEmail('delrate')
+    const { session } = await signIn(email)
+    stubFetch()
+    for (let i = 0; i < 2; i++) expect((await api('/api/auth/magic-link', { body: magicLinkBody(email) })).status).toBe(200)
+    expect((await api('/api/account/delete', { body: {}, session })).status).toBe(200)
+    expect(await count('SELECT COUNT(*) AS n FROM magic_links WHERE email = ?1', email)).toBe(0)
+    const again = await api('/api/auth/magic-link', { body: magicLinkBody(email) })
+    expect(again.status).toBe(429)
+  })
+})
+
+describe('CASL marketing consent (decision 10)', () => {
+  const baseEnv = { SITE_URL: 'https://coach.test', MAILING_ADDRESS: '1 Test St, Toronto ON M5V 0A1' } as Env
+
+  it('builds the sentence from the Worker settings and accepts only an exact match', () => {
+    expect(expectedConsentText(baseEnv, 'en')).toBe(CONSENT)
+    expect(expectedConsentText({ ...baseEnv, SITE_URL: 'https://coach.test/' }, 'ko')).toBe(CONSENT_KO)
+    expect(acceptedConsentText(baseEnv, CONSENT, 'en')).toBe(CONSENT)
+    expect(acceptedConsentText(baseEnv, CONSENT_KO)).toBe(CONSENT_KO)
+    expect(acceptedConsentText(baseEnv, CONSENT_KO, 'en')).toBeNull()
+    expect(acceptedConsentText(baseEnv, ` ${CONSENT}`, 'en')).toBeNull()
+    expect(acceptedConsentText(baseEnv, CONSENT.replace('occasional', 'daily'), 'en')).toBeNull()
+    expect(acceptedConsentText(baseEnv, 42, 'en')).toBeNull()
+  })
+
+  it('treats the placeholder or an empty mailing address as missing', () => {
+    expect(mailingAddressMissing(baseEnv)).toBe(false)
+    expect(mailingAddressMissing({ ...baseEnv, MAILING_ADDRESS: PLACEHOLDER })).toBe(true)
+    expect(mailingAddressMissing({ ...baseEnv, MAILING_ADDRESS: '  ' })).toBe(true)
+    const placeholderEnv = { ...baseEnv, MAILING_ADDRESS: PLACEHOLDER }
+    expect(acceptedConsentText(placeholderEnv, expectedConsentText(placeholderEnv, 'en'), 'en')).toBeNull()
+  })
+
+  it('signs in without an opt-in when the sentence is not the server one', async () => {
+    for (const marketingConsentText of ['anything at all', ` ${CONSENT} `, CONSENT_KO, '', 'x'.repeat(1501), 7]) {
+      const email = uniqueEmail('badconsent')
+      const { stub } = await signIn(email, { extra: { marketingOptIn: true, marketingConsentText } })
+      expect(stub.emails()[0]?.text).not.toContain('occasional emails')
+      const u = await userByEmail(email)
+      expect(u).toMatchObject({ marketing_opt_in: 0, marketing_consent_text: null, marketing_consent_at: null })
+      const pending = await env.DB.prepare('SELECT pending_json FROM magic_links WHERE email = ?1')
+        .bind(email)
+        .first<{ pending_json: string }>()
+      expect(JSON.parse(pending!.pending_json)).toMatchObject({ marketingOptIn: false })
+      expect(pending!.pending_json).not.toContain('anything at all')
+    }
+  })
+
+  it('ignores the opt-in while MAILING_ADDRESS is the placeholder, but still sends the link', async () => {
+    const stub = stubFetch()
+    const email = uniqueEmail('placeholder')
+    const testEnv = Object.create(env, { MAILING_ADDRESS: { value: PLACEHOLDER } }) as Env
+    const ctx: Ctx = {
+      env: testEnv,
+      exec: { waitUntil: () => {}, passThroughOnException: () => {} } as unknown as ExecutionContext,
+      user: null,
+      ipHash: 'ip-test',
+      deviceHash: 'device-test',
+      country: null,
+      region: null,
+      now: new Date(),
+    }
+    const body = magicLinkBody(email, { marketingOptIn: true, marketingConsentText: expectedConsentText(testEnv, 'en') })
+    const res = await requestMagicLink(
+      new Request(`${ORIGIN}/api/auth/magic-link`, { method: 'POST', body: JSON.stringify(body), headers: { 'content-type': 'application/json' } }),
+      ctx,
+    )
+    expect(res.status).toBe(200)
+    expect(stub.emails()).toHaveLength(1)
+    expect(stub.emails()[0]?.text).not.toContain('occasional emails')
+    const pending = await env.DB.prepare('SELECT pending_json FROM magic_links WHERE email = ?1').bind(email).first<{ pending_json: string }>()
+    expect(JSON.parse(pending!.pending_json)).toMatchObject({ marketingOptIn: false })
+  })
+
+  it('records the opt-in only when the link is opened on the requesting device', async () => {
+    const email = uniqueEmail('otherdevice')
+    await signIn(email, { extra: { marketingOptIn: true, marketingConsentText: CONSENT }, verifyDevice: 'some-other-device' })
+    const u = await userByEmail(email)
+    expect(u).toMatchObject({ marketing_opt_in: 0, marketing_consent_text: null })
+
+    // the same request opened on the requesting device records it
+    const same = uniqueEmail('samedevice')
+    await signIn(same, { extra: { marketingOptIn: true, marketingConsentText: CONSENT } })
+    expect(await userByEmail(same)).toMatchObject({ marketing_opt_in: 1, marketing_consent_text: CONSENT })
+  })
+
+  it('the sign-in email says the opt-in was requested and that it needs the same device', async () => {
+    const { stub } = await signIn(uniqueEmail('mailwording'), { extra: { marketingOptIn: true, marketingConsentText: CONSENT } })
+    const text = stub.emails()[0]?.text ?? ''
+    expect(text).toContain('occasional emails about new practice tasks and offers')
+    expect(text).toContain('same device and browser')
+    expect(findClaims(text)).toEqual([])
+
+    const { stub: ko } = await signIn(uniqueEmail('mailwordingko'), {
+      extra: { marketingOptIn: true, marketingConsentText: CONSENT_KO, lang: 'ko' },
+    })
+    const koText = ko.emails()[0]?.text ?? ''
+    expect(koText).toContain('로그인을 요청한 기기와 브라우저')
+    expect(findClaims(koText)).toEqual([])
+    for (const lang of ['en', 'ko'] as const) {
+      const m = signInEmail(lang, 'https://coach.test/auth/verify/#token=x', true)
+      expect(findClaims(`${m.subject}\n${m.text}`)).toEqual([])
+    }
+  })
+
+  it('an unsubscribe after the request blocks the pending opt-in', async () => {
+    const stub = stubFetch()
+    const email = uniqueEmail('unsubfirst')
+    await api('/api/auth/magic-link', { body: magicLinkBody(email, { marketingOptIn: true, marketingConsentText: CONSENT }) })
+    const token = lastToken(stub)
+    // the sign-in email itself carries the unsubscribe link
+    const m = /\/unsubscribe\/#h=([0-9a-f]{64})&s=([0-9a-f]{64})/.exec(stub.emails()[0]?.text ?? '')
+    expect(m).not.toBeNull()
+    expect((await api('/api/unsubscribe', { body: { h: m![1], s: m![2] } })).status).toBe(200)
+
+    expect((await api('/api/auth/verify', { body: { token } })).status).toBe(200)
+    expect(await userByEmail(email)).toMatchObject({ marketing_opt_in: 0, marketing_consent_text: null })
+
+    // a new request after the unsubscribe is a new, valid consent
+    await signIn(email, { extra: { marketingOptIn: true, marketingConsentText: CONSENT } })
+    expect(await userByEmail(email)).toMatchObject({ marketing_opt_in: 1, marketing_consent_text: CONSENT })
   })
 })
 
@@ -167,10 +318,11 @@ describe('POST /api/auth/verify', () => {
     expect(u1?.marketing_consent_at).toBeNull()
 
     const ticked = uniqueEmail('mkt')
-    await signIn(ticked, { extra: { marketingOptIn: true, marketingConsentText: `  ${CONSENT}  `, lang: 'ko' } })
+    await signIn(ticked, { extra: { marketingOptIn: true, marketingConsentText: CONSENT_KO, lang: 'ko' } })
     const u2 = await userByEmail(ticked)
     expect(u2?.marketing_opt_in).toBe(1)
-    expect(u2?.marketing_consent_text).toBe(CONSENT)
+    expect(u2?.marketing_consent_text).toBe(CONSENT_KO)
+    expect(u2?.marketing_consent_version).toBe(MARKETING_CONSENT.version)
     expect(u2?.marketing_consent_at).toBeTruthy()
     expect(u2?.lang).toBe('ko')
     expect(u2?.adult_confirmed_at).toBeTruthy()
@@ -182,7 +334,8 @@ describe('POST /api/auth/verify', () => {
       lang: 'ko',
       adult: true,
       marketingOptIn: true,
-      marketingConsentText: CONSENT,
+      marketingConsentText: CONSENT_KO,
+      deviceHash: await saltedHash(env.HASH_SALT, `device:${DEVICE}`),
       consentVersion: MARKETING_CONSENT.version,
     })
 
@@ -190,7 +343,7 @@ describe('POST /api/auth/verify', () => {
     await signIn(ticked)
     const u3 = await userByEmail(ticked)
     expect(u3?.marketing_opt_in).toBe(1)
-    expect(u3?.marketing_consent_text).toBe(CONSENT)
+    expect(u3?.marketing_consent_text).toBe(CONSENT_KO)
     expect(u3?.lang).toBe('en')
   })
 

@@ -4,7 +4,7 @@ import type { Lang } from '../shared/api'
 import { BRAND } from '../shared/config'
 import { SPEAKING_TASKS, TASKS, WRITING_TASKS } from '../shared/tasks'
 import { PATHS } from './routes'
-import { DAILY_RESET_EN, DAILY_RESET_KO, FACTS } from './site'
+import { DAILY_RESET_EN, DAILY_RESET_KO, FACTS, NO_FEEDBACK_LIMIT, PAUSE_EXTENSION, QUEBEC_RULE } from './site'
 import type { DocSection } from './types'
 
 export interface PricingCopy {
@@ -34,7 +34,7 @@ export const PRICING_EN: PricingCopy = {
     'Try it free first. When you want more practice with feedback, buy a pass. You pay once, and a pass never renews on its own.',
   facts: [
     'Prices in Canadian dollars.',
-    'Not available in Quebec.',
+    QUEBEC_RULE.en,
     // Owner is a small supplier and not registered for GST/HST (shared/config.ts, memo §4.1 "Tax and GST/HST").
     'No GST/HST is charged at this time.',
   ],
@@ -54,7 +54,7 @@ export const PRICING_EN: PricingCopy = {
       blocks: [
         'You pay once. A pass is not a subscription: it does not renew automatically, and we never charge your card again unless you buy another pass.',
         'Your pass starts as soon as your payment is confirmed. If you buy a pass while another one is active, the new days are added to the end of your current pass.',
-        'If we pause feedback for maintenance or to stop unusual activity, we extend active passes by the length of the pause.',
+        PAUSE_EXTENSION.en,
       ],
     },
     {
@@ -65,7 +65,7 @@ export const PRICING_EN: PricingCopy = {
           ul: [
             `Feedback on all ${TASKS.length} practice task types: ${WRITING_TASKS.length} writing and ${SPEAKING_TASKS.length} speaking.`,
             'Explanations in English or Korean.',
-            'Your practice history and a record of the error types that keep coming back.',
+            `Your saved answers and feedback, which you can open from your account page for ${FACTS.retentionDays} days after your last activity, and a record of the error types that keep coming back.`,
             'Access from any device where you sign in with your email.',
           ],
         },
@@ -76,17 +76,17 @@ export const PRICING_EN: PricingCopy = {
       heading: 'Fair-use limits',
       blocks: [
         `Each account can get feedback on up to ${FACTS.writingPerDay} writing tasks and ${FACTS.speakingPerDay} speaking tasks per day, and up to ${FACTS.gradedPer30Days} tasks in any 30 days. Daily limits reset at ${DAILY_RESET_EN}.`,
+        NO_FEEDBACK_LIMIT.en,
         `Writing answers can be up to ${FACTS.maxEssayChars} characters. Recordings can be up to ${FACTS.audioMinutes} minutes long and ${FACTS.audioMb} MB in size.`,
-        'Requests we cannot give feedback on, such as questions about immigration, do not count toward these limits.',
       ],
     },
     {
       id: 'who-can-buy',
       heading: 'Who can buy a pass',
       blocks: [
-        'Passes are for adults (18 or older) who live in Canada outside Quebec and pay with a card issued in Canada. When you buy, you tick a box to confirm that you live in Canada outside Quebec.',
+        `Passes are for adults (18 or older) who live in Canada outside Quebec and pay with a card issued in Canada. When you buy, you tick a box to confirm that you live in Canada outside Quebec, and by buying you agree to the [terms of use](${PATHS.terms}) and the [refund policy](${PATHS.refunds}).`,
         'After payment we check your billing address and the country where your card was issued. If either one is outside Canada, or your billing address is in Quebec, we do not activate the pass and we refund the full payment automatically.',
-        'Payment is handled by Stripe. We never see or store your full card number.',
+        'Payment is by card only, on the secure Stripe checkout page. We never see or store your full card number.',
       ],
     },
     {
@@ -115,7 +115,7 @@ export const PRICING_KO: PricingCopy = {
   },
   title: '요금',
   intro: '먼저 무료로 해 보고, 피드백을 받으며 더 연습하고 싶을 때 이용권을 사세요. 한 번만 결제하고, 이용권은 자동으로 갱신되지 않아요.',
-  facts: ['가격은 캐나다 달러 기준이에요.', '퀘벡에서는 이용할 수 없어요.', '현재 GST/HST는 붙지 않아요.'],
+  facts: ['가격은 캐나다 달러 기준이에요.', QUEBEC_RULE.ko, '현재 GST/HST는 붙지 않아요.'],
   passesHeading: '이용권',
   free: {
     heading: '무료로 해 보기',
@@ -132,7 +132,7 @@ export const PRICING_KO: PricingCopy = {
       blocks: [
         '한 번만 결제해요. 이용권은 구독이 아니라서 자동으로 갱신되지 않고, 이용권을 새로 사지 않는 한 카드로 다시 청구하지 않아요.',
         '결제가 확인되면 바로 이용권이 시작돼요. 이용권이 남아 있을 때 새로 사면, 지금 이용권이 끝나는 날 뒤로 일수가 더해져요.',
-        '점검이나 비정상적인 사용을 막기 위해 피드백을 멈추면, 멈춘 시간만큼 이용권 기간을 늘려 드려요.',
+        PAUSE_EXTENSION.ko,
       ],
     },
     {
@@ -143,7 +143,7 @@ export const PRICING_KO: PricingCopy = {
           ul: [
             `연습 과제 ${TASKS.length}가지 전부(쓰기 ${WRITING_TASKS.length}가지, 말하기 ${SPEAKING_TASKS.length}가지)에 대한 피드백`,
             '한국어 또는 영어 설명',
-            '연습 기록과 자주 반복되는 오류 유형 모아 보기',
+            `저장된 답안과 피드백 다시 보기(마지막 활동 후 ${FACTS.retentionDays}일 동안 계정 페이지에서), 자주 반복되는 오류 유형 모아 보기`,
             '이메일로 로그인한 어느 기기에서나 이용',
           ],
         },
@@ -154,17 +154,17 @@ export const PRICING_KO: PricingCopy = {
       heading: '공정 사용 한도',
       blocks: [
         `계정 하나당 하루에 쓰기 ${FACTS.writingPerDay}개, 말하기 ${FACTS.speakingPerDay}개까지, 30일 동안 모두 ${FACTS.gradedPer30Days}개까지 피드백을 받을 수 있어요. 하루 한도는 ${DAILY_RESET_KO}에 초기화돼요.`,
+        NO_FEEDBACK_LIMIT.ko,
         `쓰기 답안은 ${FACTS.maxEssayChars}자까지, 녹음은 ${FACTS.audioMinutes}분, ${FACTS.audioMb}MB까지 가능해요.`,
-        '이민 관련 질문처럼 피드백을 드릴 수 없는 요청은 한도에 포함되지 않아요.',
       ],
     },
     {
       id: 'who-can-buy',
       heading: '구매할 수 있는 분',
       blocks: [
-        '만 18세 이상이고, 퀘벡을 제외한 캐나다에 살며, 캐나다에서 발급된 카드로 결제하는 분만 살 수 있어요. 구매할 때 퀘벡을 제외한 캐나다에 산다는 것을 체크 상자로 확인해 주세요.',
+        `만 18세 이상이고, 퀘벡을 제외한 캐나다에 살며, 캐나다에서 발급된 카드로 결제하는 분만 살 수 있어요. 구매할 때 퀘벡을 제외한 캐나다에 산다는 것을 체크 상자로 확인해 주세요. 구매하면 [이용약관(영어)](${PATHS.terms})과 [환불 정책(영어)](${PATHS.refunds})에 동의하는 것이에요.`,
         '결제 후 청구지 주소와 카드 발급 국가를 확인해요. 둘 중 하나라도 캐나다 밖이거나 청구지 주소가 퀘벡이면, 이용권을 활성화하지 않고 자동으로 전액 환불해 드려요.',
-        '결제는 Stripe가 처리해요. 저희는 카드 번호 전체를 보거나 저장하지 않아요.',
+        '결제는 Stripe의 안전한 결제 페이지에서 카드로만 할 수 있어요. 저희는 카드 번호 전체를 보거나 저장하지 않아요.',
       ],
     },
     {
