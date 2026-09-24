@@ -67,6 +67,11 @@ on:
         options:
           - production
           - staging
+      rollback_drill:
+        description: 'Staging only: after deploying, fail the smoke test on purpose so the rollback path runs (level-B check for B11)'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -88,6 +93,7 @@ jobs:
         working-directory: products/clb
     env:
       TARGET: ${{ (github.event_name == 'pull_request' || inputs.target == 'staging') && 'staging' || 'production' }}
+      DRILL: ${{ github.event_name == 'workflow_dispatch' && inputs.rollback_drill && 'true' || 'false' }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       MPC_SITE_URL: ${{ vars.MPC_SITE_URL }}
@@ -106,6 +112,12 @@ jobs:
         uses: actions/checkout@v7
         with:
           persist-credentials: false
+
+      - name: Refuse a rollback drill outside staging
+        if: env.DRILL == 'true' && env.TARGET != 'staging'
+        run: |
+          echo "::error::The rollback drill only runs on staging (choose target=staging)."
+          exit 1
 
       - name: Check secrets and select the target
         id: secrets
@@ -353,10 +365,18 @@ jobs:
       - name: Smoke test
         id: smoke
         if: ${{ !cancelled() && steps.secrets.outputs.ready == 'true' && steps.deploy.outputs.attempted == 'true' }}
+        # in a rollback drill the smoke test is expected to fail; the rollback step then decides the result
+        continue-on-error: ${{ env.DRILL == 'true' }}
         env:
           APP_VERSION: ${{ steps.deploy.outputs.app_version }}
-        # the new version can take a little while to reach every location
-        run: node scripts/run.mjs scripts/smoke.ts --base "$SITE_URL" --version "$APP_VERSION" --wait-seconds 120
+        # the new version can take a little while to reach every location; a drill asks for a version
+        # that cannot exist, so the check fails after the new version is live
+        run: |
+          if [ "$DRILL" = true ]; then
+            node scripts/run.mjs scripts/smoke.ts --base "$SITE_URL" --version "$APP_VERSION-drill" --wait-seconds 30
+          else
+            node scripts/run.mjs scripts/smoke.ts --base "$SITE_URL" --version "$APP_VERSION" --wait-seconds 120
+          fi
 
       - name: Roll back if the deploy or the smoke test failed
         if: ${{ !cancelled() && steps.secrets.outputs.ready == 'true' && (steps.deploy.outcome == 'failure' || steps.smoke.outcome == 'failure') }}
@@ -380,6 +400,10 @@ jobs:
             exit 1
           fi
           if [ "$live" = "$PREV_VERSION" ]; then
+            if [ "$DRILL" = true ]; then
+              echo "::error::Rollback drill inconclusive: the new version never went live (live is still $PREV_VERSION), so the rollback path was not exercised. Deploy a change and run the drill again."
+              exit 1
+            fi
             echo "::error::Failed step: $failed. The live $TARGET Worker is still version $PREV_VERSION (the new version never went live), so nothing was rolled back."
             echo "Failed step: $failed. $TARGET still serves $PREV_VERSION; no rollback needed." >> "$GITHUB_STEP_SUMMARY"
             exit 1
@@ -390,6 +414,15 @@ jobs:
             exit 1
           fi
           after=$(live_version) || after=""
+          if [ "$DRILL" = true ]; then
+            if [ "$DEPLOY_OUTCOME" = success ] && [ "$after" = "$PREV_VERSION" ]; then
+              echo "Rollback drill passed: the smoke test failed on purpose and $TARGET was rolled back to $PREV_VERSION (live version re-read after the rollback)." >> "$GITHUB_STEP_SUMMARY"
+              echo "::notice::Rollback drill passed: $TARGET rolled back to $PREV_VERSION."
+              exit 0
+            fi
+            echo "::error::Rollback drill failed: deploy outcome $DEPLOY_OUTCOME, live version after the rollback '${after:-unknown}', expected $PREV_VERSION."
+            exit 1
+          fi
           if [ "$after" != "$PREV_VERSION" ]; then
             echo "::warning::After the rollback the live version reads as '${after:-unknown}', not $PREV_VERSION; check the Worker's Deployments page."
           fi

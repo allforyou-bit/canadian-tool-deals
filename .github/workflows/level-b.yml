@@ -14,8 +14,8 @@
 #                emulation and simulated throttling), performance only, 3 runs; the MEDIAN performance
 #                score must be at least 85 — scripts/lighthouse-check.ts. Chrome is the runner image's
 #                Google Chrome. The JSON and HTML reports are kept as a run artifact for 14 days.
-# Automated elsewhere: B16 root out/ diff (ci.yml), B0 staging deploy + smoke and B11 rollback
-# (deploy.yml), B8 Stripe ↔ D1 reconciliation (reconcile.yml), B11 missing-metrics alert (metrics.yml),
+# Automated elsewhere: B16 root out/ diff (ci.yml), B0 staging deploy + smoke and the B11 rollback drill
+# (deploy.yml, manual run with target=staging and rollback_drill ticked), B8 Stripe ↔ D1 reconciliation (reconcile.yml), B11 missing-metrics alert (metrics.yml),
 # B12 eval (eval.yml).
 # MANUAL owner checks (memo §7.1 B11 / level B; steps and pass criteria in business/online/owner-setup.md
 # 2-7a): B6 test-mode purchase, self-refund and dispute on staging; B4 60-second speaking clips graded

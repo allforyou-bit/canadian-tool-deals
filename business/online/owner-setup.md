@@ -289,7 +289,7 @@ GitHub 웹에서 파일을 고쳐 `master`에 커밋해도 돼요. 테이블은 
 
 ### 2-7a. B단계 점검 (Day-21 관문, 10월 18일까지)
 
-메모 §6 W3은 21일차까지 "모든 B단계 점검이 초록색"일 것을 요구해요. 아래는 메모 §7 표의 **B단계 기준 칸(`B:`) 전부**와 각각을 어떻게 확인하는지예요. 통합 담당의 결정(메모 §7.1 "B11 / level B")으로 B6·B4·B15는 **오너가 스테이징에서 직접 하는 수동 점검**이고, 나머지는 워크플로가 자동으로 확인해요. B2·B5·B7·B9·B10·B14는 메모에 B단계 기준이 없어요(A단계 테스트로 끝났어요). 워크플로 목록은 `ops/README.md`에도 있어요.
+메모 §6 W3은 21일차까지 "모든 B단계 점검이 초록색"일 것을 요구해요. 아래는 메모 §7 표의 **B단계 기준 칸(`B:`) 전부**와 각각을 어떻게 확인하는지예요. 통합 담당의 결정(메모 §7.1 "B11 / level B")으로 B6·B4·B15와 B11의 롤백 훈련은 **오너가 스테이징에서 직접 실행하는 점검**이고, 나머지는 워크플로가 자동으로 확인해요. B2·B5·B7·B9·B10·B14는 메모에 B단계 기준이 없어요(A단계 테스트로 끝났어요). 워크플로 목록은 `ops/README.md`에도 있어요.
 
 **자동 점검** (Actions 탭에서 최근 실행이 초록색이면 통과)
 
@@ -300,7 +300,7 @@ GitHub 웹에서 파일을 고쳐 `master`에 커밋해도 돼요. 테이블은 
 | B1 | 모바일 Lighthouse 성능 85 이상 (`/`) | `Level-B checks` (`level-b.yml`) → `lighthouse` 작업 | 3회 실행의 중앙값이 85 이상. 보고서는 실행의 Artifacts에 14일 보관돼요 |
 | B3 | 두 번째 채점 호출에서 프롬프트 캐시 읽기 > 0 | `Level-B checks` → `checks` 작업의 프롬프트 캐시 확인 | 초록색. 유료 호출 2회(Opus 5에서 약 US$0.05–0.15, **추정**) |
 | B8 | Stripe와 D1 대조 | `Reconcile payments` (`reconcile.yml`, 매일) | 최근 실행이 실패가 아니면 통과. 출시 전에는 대조할 실제 구매가 없어서, 진짜 확인은 2-10의 5번(출시 다음 날 불일치 0건)이에요 |
-| B11 | 점검 실패 시 롤백, 지표 파일이 없으면 알림 | `Deploy practice coach`(검증과 롤백 단계), `Daily metrics` (`metrics.yml`, 이슈 + 실패 알림) | 두 워크플로의 최근 실행이 초록색. 그리고 한 번: GitHub가 실패한 워크플로를 이메일로 알려 주는지 알림 설정을 확인해요(Settings → Notifications → Actions [미확인: 메뉴 이름]). 롤백 단계는 배포나 점검이 실제로 실패할 때만 돌아요 |
+| B11 | 점검 실패 시 롤백, 지표 파일이 없으면 알림 | **롤백 훈련(스테이징):** Actions → `Deploy practice coach` → Run workflow에서 target=`staging`, `rollback_drill` 체크. 스테이징에 **이전 배포가 한 번 이상 있어야** 해요. 워크플로가 새 버전을 올린 뒤 점검을 일부러 실패시키고 이전 버전으로 되돌려요. `Daily metrics` (`metrics.yml`, 이슈 + 실패 알림) | 훈련 실행이 **초록색**이고 요약에 "Rollback drill passed … rolled back to <버전>"이 보이면 통과. 스테이징 `/api/health`의 버전도 이전 값이어야 해요. 지표 쪽은 최근 실행이 초록색. 그리고 한 번: GitHub가 실패한 워크플로를 이메일로 알려 주는지 알림 설정을 확인해요(Settings → Notifications → Actions [미확인: 메뉴 이름]). 실제 Cloudflare로 롤백을 돌려 본 적은 아직 없어요(이 훈련이 첫 실행이에요) |
 | B12 | 주간 평가, 프롬프트 PR에서 5점 넘게 떨어지면 실패 | `Grading eval` (`eval.yml`) | 21일차 전에 초록색 실행이 한 번 이상. 비용은 2-1 참고(`MPC_EVAL_LIMIT`로 줄일 수 있어요) |
 
 **`Level-B checks` 실행 방법:** **Actions** → **Level-B checks** → **Run workflow** → `target`=`staging`(프롬프트 캐시 확인은 기본으로 켜져 있어요). `checks`와 `lighthouse` 작업이 모두 초록색이어야 해요.

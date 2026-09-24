@@ -562,11 +562,14 @@ These replace the matching parts of the table above. Each came from a build or r
 - **B11 / level B.** Automated level-B checks: staging deploy + smoke test, the prompt-cache check (B3) and a
   Lighthouse mobile check on `/` (B1) in the "Level-B checks" workflow. Still **manual owner checks** before Day 21
   (listed with pass criteria in owner-setup.md): the test-mode purchase / refund / dispute on staging (B6), speaking
-  latency with 60-second clips on a real phone and desktop (B4), and a signed-in walkthrough of staging (B15). Staging is
+  latency with 60-second clips on a real phone and desktop (B4), a signed-in walkthrough of staging (B15), and the B11
+  rollback **drill** on staging (a manual `deploy.yml` run with `rollback_drill`, which fails the smoke test on purpose
+  and must end rolled back; the rollback path has never run against Cloudflare before this drill). Staging is
   locked to the owner's email (`STAGING_ALLOWED_EMAILS`: sign-in links only to listed addresses, no anonymous grading),
   never receives the production Anthropic key, and is capped at the eval workspace limit.
 - **B12 / B15 review loop.** Two review rounds (6 lenses, then 3) found 70 and 9 issues (1 critical, a spend bypass
-  through refused requests); all were fixed with tests. No live service (Stripe, Anthropic, Cloudflare, Resend) was
+  through refused requests); all were fixed with tests. A third, regression-only round on the round-2 changes found one
+  more (the rollback path was never exercised), fixed with the drill above. No live service (Stripe, Anthropic, Cloudflare, Resend) was
   called from this session.
 - **B14.** Routines never read essays or transcripts. The daily Routine may read support emails **inside Gmail** to draft
   replies for the owner to review; the privacy page discloses this.

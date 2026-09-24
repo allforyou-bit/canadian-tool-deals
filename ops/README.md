@@ -52,7 +52,7 @@ decision (memo §7.1 B11 / level B); their exact steps and pass criteria are in
 | B4 | 60-second webm and mp4 clips each graded in < 20 s | **manual**: timed on staging on a desktop browser (webm) and a real iPhone (mp4) |
 | B6 | purchase, refund and dispute cases with Stripe test keys | **manual**: test-mode purchase, self-refund and dispute on staging (replaces the memo's Stripe CLI events) |
 | B8 | live reconciliation against Stripe | automated: `reconcile.yml` (daily, production D1 against the key's mode) |
-| B11 | a failed smoke test rolls back; a missing metrics file alerts | automated: `deploy.yml` (verification + rollback), `metrics.yml` (issue + failed run); the owner confirms once that GitHub emails failed runs |
+| B11 | a failed smoke test rolls back; a missing metrics file alerts | rollback: **drill on staging** — run `deploy.yml` by hand with target=staging and `rollback_drill` ticked (after at least one earlier staging deploy); pass = the run is green and its summary says "Rollback drill passed … rolled back to <version>". Missing metrics: automated `metrics.yml` (issue + failed run); the owner confirms once that GitHub emails failed runs |
 | B12 | weekly eval; a prompt PR that drops a metric by > 5 points fails | automated: `eval.yml` |
 | B13 | Google Ads import succeeds | **manual** (owner, task 15; only when ads run) |
 | B15 | E2E green against staging | **manual**: signed-in walkthrough of staging (`ci.yml` runs the Playwright e2e against a mocked `/api`) |
