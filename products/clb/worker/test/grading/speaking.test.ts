@@ -273,7 +273,7 @@ describe('free speaking sample', () => {
     expect(await gradeRow(body.gradeId)).toMatchObject({ free: 1, refused: 1, outcome: 'safety_refused', input_text: null })
   })
 
-  it('is off while the free budget is used up', async () => {
+  it('is paused, not used, while the free budget is used up', async () => {
     const { user } = await createUser()
     const id = 'g_budget_' + user.id
     await env.DB.prepare(
@@ -281,11 +281,38 @@ describe('free speaking sample', () => {
     )
       .bind(id, new Date().toISOString())
       .run()
+    const ai = fakeAi({ text: TRANSCRIPT })
     try {
-      await expectError(await call(user, fakeAi({ text: TRANSCRIPT })), 402, 'payment_required')
+      const err = await expectError(await call(user, ai), 429, 'free_unavailable')
+      expect(err.message).toBe('Free samples are paused right now. Please try again later, or get a pass to keep practising.')
+      // a learner who already used theirs is told so
+      await expectError(await call({ ...user, freeSpeakingUsed: true }, ai), 402, 'payment_required')
     } finally {
       await env.DB.prepare('DELETE FROM grades WHERE id = ?1').bind(id).run()
     }
+    expect(ai.run).not.toHaveBeenCalled()
+    expect(await freeSpeakingUsed(user.id)).toBe(0)
+    expect(await gradeRowsFor(user.id)).toEqual([])
+  })
+
+  it('is paused, not used, while the free_enabled flag is false; pass holders are still graded', async () => {
+    const { user } = await createUser()
+    const holder = await createUser({ pass: true })
+    stubGrader(apiMessage(SIMPLE_OUTPUT))
+    const ai = fakeAi({ text: TRANSCRIPT, transcription_info: { duration: 30 } })
+    await env.FLAGS.put('flag:free_enabled', 'false')
+    try {
+      const err = await expectError(await call(user, ai), 429, 'free_unavailable')
+      expect(err.message).toContain('paused')
+      await expectError(await call({ ...user, freeSpeakingUsed: true }, ai), 402, 'payment_required')
+      expect(await freeSpeakingUsed(user.id)).toBe(0)
+      expect((await call(holder.user, ai)).status).toBe(200)
+    } finally {
+      await env.FLAGS.delete('flag:free_enabled')
+    }
+    // back on: the sample is still there
+    const body = (await (await call(user, ai)).json()) as GradeResponse
+    expect(body.free).toBe(true)
   })
 })
 

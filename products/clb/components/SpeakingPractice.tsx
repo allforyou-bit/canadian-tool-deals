@@ -8,12 +8,12 @@ import type { TaskType } from '../shared/tasks'
 import { api, ApiClientError } from '../lib/api'
 import { useMe, useUiLang } from '../lib/hooks'
 import { formatClock, formatDate, t, type UiKey } from '../lib/i18n'
-import { activePass, refreshMe } from '../lib/me'
+import { activePass, freeSample, refreshMe } from '../lib/me'
 import { checkRecording, durationSeconds, fileExtension, pickMimeType, recordingLimitSeconds } from '../lib/recorder'
 import { track } from '../lib/track'
 import { loginHref } from '../lib/url'
 import { GradeResultView } from './GradeResultView'
-import { ErrorNotice, Notice } from './Notice'
+import { ErrorNotice, Notice, PricingNotice } from './Notice'
 import { ExplanationLangSelect, PromptPicker } from './PracticeControls'
 import { cls } from './ui'
 
@@ -70,6 +70,8 @@ export function SpeakingPractice(props: { task: TaskType }) {
 
   const me = meState.status === 'ready' ? meState.me : null
   const pass = me ? activePass(me) : null
+  // without a pass: is the free sample available, already used, or switched off for everyone?
+  const free = me !== null && !pass ? freeSample(me, 'speaking') : null
 
   useEffect(() => {
     const canRecord =
@@ -201,7 +203,7 @@ export function SpeakingPractice(props: { task: TaskType }) {
       setPhase('idle')
       return
     }
-    if (!pass && me?.free.speaking) track('sample_start')
+    if (free === 'available') track('sample_start')
     setPhase('prep')
   }
 
@@ -232,8 +234,11 @@ export function SpeakingPractice(props: { task: TaskType }) {
       replaceUrl(null)
       setRecording(null)
     } catch (err) {
-      setError(toClientError(err))
+      const clientError = toClientError(err)
+      setError(clientError)
       setPhase('review')
+      // the free sample may have been used or switched off since /api/me loaded: update the notice
+      if (clientError.code === 'free_unavailable' || clientError.code === 'payment_required') void refreshMe({ force: true })
     }
   }
 
@@ -266,7 +271,7 @@ export function SpeakingPractice(props: { task: TaskType }) {
   } else if (!meState.me.signedIn) {
     recorder = (
       <Notice kind="info">
-        <p>{t(lang, 's.signIn')}</p>
+        <p>{t(lang, free === 'off' ? 's.signInFreeOff' : 's.signIn')}</p>
         <p className="mt-2">
           <Link href={loginHref(returnTo, lang)} className={cls.link}>
             {t(lang, 'common.signIn')}
@@ -281,17 +286,10 @@ export function SpeakingPractice(props: { task: TaskType }) {
       <div className="space-y-4">
         {pass ? (
           <p className={cls.muted}>{t(lang, 'p.passActive', { date: formatDate(pass.endsAt, lang) })}</p>
-        ) : meState.me.free.speaking ? (
+        ) : free === 'available' ? (
           <Notice kind="info">{t(lang, 's.freeSpeaking')}</Notice>
         ) : (
-          <Notice kind="info">
-            <p>{t(lang, 's.noFreeSpeaking')}</p>
-            <p className="mt-2">
-              <Link href={lang === 'ko' ? '/ko/pricing/' : '/pricing/'} className={cls.link}>
-                {t(lang, 'common.seePricing')}
-              </Link>
-            </p>
-          </Notice>
+          <PricingNotice text={t(lang, free === 'off' ? 'p.freeOff' : 's.noFreeSpeaking')} lang={lang} />
         )}
         {!meState.me.flags.gradingEnabled && <Notice kind="warn">{t(lang, 'p.paused')}</Notice>}
 
@@ -384,7 +382,15 @@ export function SpeakingPractice(props: { task: TaskType }) {
       </p>
       <div aria-live="polite" className="space-y-3">
         {notice && <Notice kind="error">{t(lang, notice, { mb: CAPS.maxAudioBytes / 1024 / 1024 })}</Notice>}
-        {error && <ErrorNotice error={error} lang={lang} context="speaking" returnTo={returnTo} />}
+        {error && (
+          <ErrorNotice
+            error={error}
+            lang={lang}
+            context="speaking"
+            returnTo={returnTo}
+            hints={{ signedIn: me?.signedIn, freeOff: free === 'off' }}
+          />
+        )}
       </div>
       {result && <GradeResultView ref={resultRef} response={result} kind="speaking" onAgain={again} />}
     </div>

@@ -2,12 +2,20 @@ import { env } from 'cloudflare:workers'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { MeResponse } from '../../../shared/api'
 import { MARKETING_CONSENT } from '../../../shared/config'
-import { accessEnd, setMarketing, SUPPORT_FORWARDS_PER_DAY } from '../../src/account'
+import {
+  accessEnd,
+  DELETED_TICKET_MESSAGE,
+  setMarketing,
+  SUPPORT_FORWARDS_PER_DAY,
+  SUPPORT_KV,
+  SUPPORT_PER_DAY,
+  supportEmailsToday,
+} from '../../src/account'
 import { unsubscribeSignature, unsubscribeUrl } from '../../src/email'
 import type { Ctx, Env } from '../../src/env'
 import { getUser } from '../../src/lib/session'
 import { spendSnapshot } from '../../src/lib/spend'
-import { addDays, startOfUtcDay } from '../../src/lib/time'
+import { addDays, dayKey, startOfUtcDay } from '../../src/lib/time'
 import {
   api,
   CONSENT_EN as CONSENT,
@@ -117,7 +125,7 @@ describe('GET /api/me', () => {
       pass: null,
       free: { writing: true, speaking: false },
       usage: { writingToday: 0, speakingToday: 0, graded30d: 0 },
-      flags: { checkoutEnabled: false, gradingEnabled: true, banner: '' },
+      flags: { checkoutEnabled: false, gradingEnabled: true, freeEnabled: true, banner: '' },
     })
   })
 
@@ -152,6 +160,31 @@ describe('GET /api/me', () => {
     expect(body.accessEndsAt).toBeNull()
     expect(body.latestPurchase).toBeNull()
     expect(body.free).toEqual({ writing: false, speaking: false })
+    expect(body.flags.freeEnabled).toBe(false)
+  })
+
+  it('freeEnabled is false while the spend tiers switch free samples off (the KV flag still on)', async () => {
+    const { session } = await signIn(uniqueEmail('freeoff'))
+    const device = `dev-${uniqueEmail('freeoff')}`
+    let body = (await (await api('/api/me', { session, device })).json()) as MeResponse
+    expect(body.flags.freeEnabled).toBe(true)
+    expect(body.free).toEqual({ writing: true, speaking: true })
+
+    // the free budget (US$2 a day) is used up: the grade handlers refuse free samples from now on
+    const id = `g_freeoff_${uniqueEmail('row')}`
+    await insertGrade(null, id, undefined, { costMicro: 2_010_000, free: true })
+    try {
+      expect(await env.FLAGS.get('flag:free_enabled')).toBeNull()
+      for (const s of [session, undefined]) {
+        body = (await (await api('/api/me', { session: s, device })).json()) as MeResponse
+        expect(body.flags.freeEnabled).toBe(false)
+        expect(body.free).toEqual({ writing: false, speaking: false })
+      }
+    } finally {
+      await env.DB.prepare('DELETE FROM grades WHERE id = ?1').bind(id).run()
+    }
+    body = (await (await api('/api/me', { session, device })).json()) as MeResponse
+    expect(body.flags.freeEnabled).toBe(true)
   })
 
   it('accessEndsAt covers queued passes; latestPurchase is the newest purchase', async () => {
@@ -203,7 +236,7 @@ describe('POST /api/account/delete', () => {
     expect(res.status).toBe(401)
   })
 
-  it("removes the user's answers, feedback, sessions, tickets and profile; keeps payment records and anonymous cost rows", async () => {
+  it("removes the user's answers, feedback, sessions, support messages and profile; keeps payment records and anonymous cost rows", async () => {
     const email = uniqueEmail('delete')
     const { session } = await signIn(email)
     const other = await signIn(uniqueEmail('bystander'))
@@ -259,7 +292,21 @@ describe('POST /api/account/delete', () => {
     expect(spendAfter.freeTodayUsd).toBe(spendBefore.freeTodayUsd)
 
     expect(await count('SELECT COUNT(*) AS n FROM sessions WHERE user_id = ?1', user.id)).toBe(0)
+    // support tickets lose the user id and the message; forwarded and created_at stay, so the rows still
+    // count against the owner-email ceiling (decision 7)
     expect(await count('SELECT COUNT(*) AS n FROM support_tickets WHERE user_id = ?1', user.id)).toBe(0)
+    expect(
+      await count("SELECT COUNT(*) AS n FROM support_tickets WHERE message IN ('help me please', 'forwarded question')"),
+    ).toBe(0)
+    const { results: tickets } = await env.DB.prepare(
+      'SELECT id, user_id, message, lang, forwarded FROM support_tickets WHERE id IN (?1, ?2) ORDER BY id',
+    )
+      .bind(`t_del_${user.id}`, `t_fwd_${user.id}`)
+      .all<Record<string, unknown>>()
+    expect(tickets).toEqual([
+      { id: `t_del_${user.id}`, user_id: null, message: DELETED_TICKET_MESSAGE, lang: 'en', forwarded: 0 },
+      { id: `t_fwd_${user.id}`, user_id: null, message: DELETED_TICKET_MESSAGE, lang: 'en', forwarded: 1 },
+    ])
     expect(await count('SELECT COUNT(*) AS n FROM magic_links WHERE email = ?1', email)).toBe(0)
     expect(await count('SELECT COUNT(*) AS n FROM purchases WHERE user_id = ?1', user.id)).toBe(1)
     expect(await count('SELECT COUNT(*) AS n FROM passes WHERE user_id = ?1', user.id)).toBe(1)
@@ -484,7 +531,8 @@ describe('POST /api/support', () => {
 
   it(`forwards at most ${SUPPORT_FORWARDS_PER_DAY} tickets per UTC day, then stores them and sends one digest`, async () => {
     const dayStart = startOfUtcDay(new Date()).toISOString()
-    const already = await count('SELECT COUNT(*) AS n FROM support_tickets WHERE forwarded = 1 AND created_at >= ?1', dayStart)
+    // forwarded tickets and account-deletion notices from earlier tests
+    const already = await supportEmailsToday(env, new Date())
     const fill = SUPPORT_FORWARDS_PER_DAY - already - 1
     expect(fill).toBeGreaterThan(0)
     const nowIso = new Date().toISOString()
@@ -516,15 +564,138 @@ describe('POST /api/support', () => {
       const sent = stub.emails()
       expect(sent).toHaveLength(1)
       expect(sent[0]?.subject).toContain('Support forwarding limit reached')
-      expect(sent[0]?.text).toContain(`${SUPPORT_FORWARDS_PER_DAY} support tickets`)
+      expect(sent[0]?.text).toContain(`${SUPPORT_FORWARDS_PER_DAY} support emails`)
+      expect(sent[0]?.text).toContain(`WHERE forwarded = 0 AND created_at >= '${dayStart.slice(0, 10)}'`)
       expect(sent[0]?.text).not.toContain('over the ceiling')
       expect(await count("SELECT COUNT(*) AS n FROM support_tickets WHERE message LIKE 'over the ceiling %' AND forwarded = 0")).toBe(3)
-      expect(await count('SELECT COUNT(*) AS n FROM support_tickets WHERE forwarded = 1 AND created_at >= ?1', dayStart)).toBe(
-        SUPPORT_FORWARDS_PER_DAY,
-      )
+      expect(await supportEmailsToday(env, new Date())).toBe(SUPPORT_FORWARDS_PER_DAY)
     } finally {
       await env.DB.batch([
         env.DB.prepare("DELETE FROM support_tickets WHERE id LIKE 't_fill_%'"),
+        env.DB.prepare('DELETE FROM webhook_events WHERE id = ?1').bind(digestId),
+      ])
+    }
+  })
+
+  it(`limits each address to ${SUPPORT_PER_DAY} tickets per UTC day, across account deletion and re-signup`, async () => {
+    const email = uniqueEmail('supresign')
+    let { session } = await signIn(email)
+    stubFetch()
+    for (let i = 0; i < 3; i++) {
+      expect((await api('/api/support', { body: { message: `before deletion ${i}`, lang: 'en' }, session })).status).toBe(200)
+    }
+    expect((await api('/api/account/delete', { body: {}, session })).status).toBe(200)
+    // the deleted rows have no user id; KV carries today's count for the address
+    expect(await env.FLAGS.get(SUPPORT_KV.deletedTickets(dayKey(new Date()), await emailHashOf(email)))).toBe('3')
+
+    ;({ session } = await signIn(email))
+    stubFetch()
+    for (let i = 0; i < SUPPORT_PER_DAY - 3; i++) {
+      expect((await api('/api/support', { body: { message: `after re-signup ${i}`, lang: 'en' }, session })).status).toBe(200)
+    }
+    const over = await api('/api/support', { body: { message: 'one too many today', lang: 'en' }, session })
+    expect(over.status).toBe(429)
+    expect(await over.json()).toMatchObject({ error: 'rate_limited' })
+    expect(await count("SELECT COUNT(*) AS n FROM support_tickets WHERE message = 'one too many today'")).toBe(0)
+
+    // deleting again adds to the carry-over instead of resetting it
+    expect((await api('/api/account/delete', { body: {}, session })).status).toBe(200)
+    expect(await env.FLAGS.get(SUPPORT_KV.deletedTickets(dayKey(new Date()), await emailHashOf(email)))).toBe(String(SUPPORT_PER_DAY))
+    ;({ session } = await signIn(email))
+    stubFetch()
+    expect((await api('/api/support', { body: { message: 'third account today', lang: 'en' }, session })).status).toBe(429)
+
+    // another address is not affected
+    const other = (await signIn(uniqueEmail('supresign-other'))).session
+    stubFetch()
+    expect((await api('/api/support', { body: { message: 'a different person asks', lang: 'en' }, session: other })).status).toBe(200)
+  })
+
+  it('an account-deletion notice holds a slot under the daily ceiling; an undelivered one gives it back', async () => {
+    const [a, b] = [uniqueEmail('supnotice-a'), uniqueEmail('supnotice-b')]
+    const sessions = [(await signIn(a)).session, (await signIn(b)).session]
+    stubFetch()
+    for (const session of sessions) {
+      expect((await api('/api/support', { body: { message: 'please delete my data later', lang: 'en' }, session })).status).toBe(200)
+    }
+    const before = await supportEmailsToday(env, new Date())
+
+    stubFetch({ resendOk: false })
+    expect((await api('/api/account/delete', { body: {}, session: sessions[0] })).status).toBe(200)
+    expect(await supportEmailsToday(env, new Date())).toBe(before)
+
+    const stub = stubFetch()
+    expect((await api('/api/account/delete', { body: {}, session: sessions[1] })).status).toBe(200)
+    expect(await supportEmailsToday(env, new Date())).toBe(before + 1)
+    const [notice] = stub.emails()
+    expect(stub.emails()).toHaveLength(1)
+    expect(notice?.subject).toContain('Account deleted')
+    expect(notice?.text).not.toContain(b)
+  })
+
+  it('deleting accounts frees no slot; with none left, deletion notices go into the one daily digest', async () => {
+    const dayStart = startOfUtcDay(new Date()).toISOString()
+    const digestId = `support-digest:${dayStart.slice(0, 10)}`
+    const emails = [uniqueEmail('supdel-a'), uniqueEmail('supdel-b')]
+    const sessions = [(await signIn(emails[0]!)).session, (await signIn(emails[1]!)).session]
+    const later = (await signIn(uniqueEmail('supdel-later'))).session
+    const fill = SUPPORT_FORWARDS_PER_DAY - (await supportEmailsToday(env, new Date())) - sessions.length
+    expect(fill).toBeGreaterThan(0)
+    const nowIso = new Date().toISOString()
+    await env.DB.batch(
+      Array.from({ length: fill }, (_, i) =>
+        env.DB.prepare(
+          "INSERT INTO support_tickets (id, user_id, message, lang, created_at, forwarded) VALUES (?1, NULL, 'filler', 'en', ?2, 1)",
+        ).bind(`t_dfill_${i}`, nowIso),
+      ),
+    )
+
+    try {
+      // the last two slots of the day: both tickets are emailed to the owner
+      let stub = stubFetch()
+      for (const [i, session] of sessions.entries()) {
+        expect((await api('/api/support', { body: { message: `from a soon-deleted account ${i}`, lang: 'en' }, session })).status).toBe(200)
+      }
+      expect(stub.emails()).toHaveLength(2)
+      expect(await supportEmailsToday(env, new Date())).toBe(SUPPORT_FORWARDS_PER_DAY)
+      const ids = (
+        await env.DB.prepare("SELECT id FROM support_tickets WHERE message LIKE 'from a soon-deleted account %' ORDER BY message").all<{
+          id: string
+        }>()
+      ).results.map((r) => r.id)
+      expect(ids).toHaveLength(2)
+
+      // no slot left for a separate notice: the day's digest names the ticket instead
+      stub = stubFetch()
+      expect((await api('/api/account/delete', { body: {}, session: sessions[0] })).status).toBe(200)
+      const sent = stub.emails()
+      expect(sent.map((e) => e.subject)).toEqual([expect.stringContaining('Support forwarding limit reached')])
+      expect(sent[0]?.text).toContain(ids[0])
+      expect(sent[0]?.text).toContain(`message = '${DELETED_TICKET_MESSAGE}'`)
+      expect(sent[0]?.text).not.toContain(emails[0])
+
+      // the digest was already sent today: nothing more is emailed (its query lists this ticket)
+      stub = stubFetch()
+      expect((await api('/api/account/delete', { body: {}, session: sessions[1] })).status).toBe(200)
+      expect(stub.emails()).toHaveLength(0)
+
+      // the deleted accounts' tickets still fill the ceiling
+      expect(await supportEmailsToday(env, new Date())).toBe(SUPPORT_FORWARDS_PER_DAY)
+      stub = stubFetch()
+      expect((await api('/api/support', { body: { message: 'asked after the deletions', lang: 'en' }, session: later })).status).toBe(200)
+      expect(stub.emails()).toHaveLength(0)
+      expect(await count("SELECT COUNT(*) AS n FROM support_tickets WHERE message = 'asked after the deletions' AND forwarded = 0")).toBe(1)
+
+      const { results: rows } = await env.DB.prepare('SELECT user_id, message, forwarded FROM support_tickets WHERE id IN (?1, ?2)')
+        .bind(ids[0], ids[1])
+        .all<Record<string, unknown>>()
+      expect(rows).toEqual([
+        { user_id: null, message: DELETED_TICKET_MESSAGE, forwarded: 1 },
+        { user_id: null, message: DELETED_TICKET_MESSAGE, forwarded: 1 },
+      ])
+    } finally {
+      await env.DB.batch([
+        env.DB.prepare("DELETE FROM support_tickets WHERE id LIKE 't_dfill_%'"),
         env.DB.prepare('DELETE FROM webhook_events WHERE id = ?1').bind(digestId),
       ])
     }

@@ -7,11 +7,11 @@ import type { TaskType } from '../shared/tasks'
 import { api, ApiClientError } from '../lib/api'
 import { useMe, useUiLang } from '../lib/hooks'
 import { formatDate, t, type UiKey } from '../lib/i18n'
-import { activePass, refreshMe } from '../lib/me'
+import { activePass, freeSample, refreshMe } from '../lib/me'
 import { track } from '../lib/track'
 import { countWords, wordStatus } from '../lib/words'
 import { GradeResultView } from './GradeResultView'
-import { ErrorNotice, Notice } from './Notice'
+import { ErrorNotice, Notice, PricingNotice } from './Notice'
 import { ExplanationLangSelect, PromptPicker } from './PracticeControls'
 import { PracticeTimer } from './PracticeTimer'
 import { Turnstile } from './Turnstile'
@@ -45,7 +45,10 @@ export function WritingPractice(props: { task: TaskType }) {
   // Signed out, or signed in without a pass: this is the free sample and needs the security check.
   // While /api/me loads we wait; if it failed we assume the free path (the server decides anyway).
   const usesFreeSample = meState.status === 'loading' ? false : !pass
-  const freeUsed = me !== null && !pass && !me.free.writing
+  // without a pass: is the free sample available, already used, or switched off for everyone?
+  const free = me !== null && !pass ? freeSample(me, 'writing') : null
+  const freeUsed = free === 'used'
+  const freeOff = free === 'off'
   // Signed-out visitors confirm they are 18+ here (signed-in learners did so at sign-in; terms require 18+).
   const needsAdult = usesFreeSample && !(me?.signedIn ?? false)
   const paused = me !== null && !me.flags.gradingEnabled
@@ -59,7 +62,7 @@ export function WritingPractice(props: { task: TaskType }) {
     setText(value)
     setLocalError(null)
     // sample_start: first keystroke of an available free sample
-    if (!startedRef.current && me && !pass && me.free.writing && value.trim()) {
+    if (!startedRef.current && free === 'available' && value.trim()) {
       startedRef.current = true
       track('sample_start')
     }
@@ -91,7 +94,10 @@ export function WritingPractice(props: { task: TaskType }) {
       if (res.free) track('sample_done')
       void refreshMe({ force: true })
     } catch (err) {
-      setError(toClientError(err))
+      const clientError = toClientError(err)
+      setError(clientError)
+      // the free sample may have been used or switched off since /api/me loaded: update the notice
+      if (clientError.code === 'free_unavailable' || clientError.code === 'payment_required') void refreshMe({ force: true })
     } finally {
       setSubmitting(false)
       // Turnstile tokens are single-use
@@ -162,10 +168,11 @@ export function WritingPractice(props: { task: TaskType }) {
         {pass && <p className={cls.muted}>{t(lang, 'p.passActive', { date: formatDate(pass.endsAt, lang) })}</p>}
         {paused && <Notice kind="warn">{t(lang, 'p.paused')}</Notice>}
         {freeUsed && <Notice kind="info">{t(lang, 'p.freeUsed')}</Notice>}
+        {freeOff && <PricingNotice text={t(lang, 'p.freeOff')} lang={lang} />}
 
         {usesFreeSample && (
           <div className="space-y-2">
-            {!freeUsed && <p className={cls.muted}>{t(lang, 'p.freeWriting')}</p>}
+            {!freeUsed && !freeOff && <p className={cls.muted}>{t(lang, 'p.freeWriting')}</p>}
             {needsAdult && (
               <div className="flex items-start gap-3">
                 <input
@@ -190,7 +197,9 @@ export function WritingPractice(props: { task: TaskType }) {
         )}
 
         {localError && <Notice kind="error">{t(lang, localError, { max: CAPS.maxEssayChars })}</Notice>}
-        {error && <ErrorNotice error={error} lang={lang} context="writing" returnTo={returnTo} />}
+        {error && (
+          <ErrorNotice error={error} lang={lang} context="writing" returnTo={returnTo} hints={{ signedIn: me?.signedIn, freeOff }} />
+        )}
 
         <div className="flex flex-wrap items-center gap-3">
           <button type="submit" className={`${cls.btn} ${cls.primary}`} disabled={submitting}>

@@ -185,7 +185,9 @@ export const api = {
   deleteAccount: () => post<DeleteAccountResponse>('/api/account/delete'),
   setMarketing: (body: MarketingRequest) => post<OkResponse>('/api/account/marketing', body),
   support: (body: SupportRequest) => post<OkResponse>('/api/support', body),
-  history: () => apiRequest<HistoryResponse>('/api/history'),
+  /** newest first; pass the previous page's nextBefore for the next (older) page */
+  history: (before?: string | null) =>
+    apiRequest<HistoryResponse>(before ? `/api/history?before=${encodeURIComponent(before)}` : '/api/history'),
   historyItem: (gradeId: string) => apiRequest<HistoryItemResponse>(`/api/history/item?id=${encodeURIComponent(gradeId)}`),
   unsubscribe: (body: UnsubscribeRequest) => post<OkResponse>('/api/unsubscribe', body),
   gradeWriting: (body: WritingGradeRequest) => post<GradeResponse>('/api/grade/writing', body),

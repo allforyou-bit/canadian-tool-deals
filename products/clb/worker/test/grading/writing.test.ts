@@ -262,10 +262,35 @@ describe('anonymous free sample', () => {
     await env.FLAGS.put('flag:free_enabled', 'false')
     try {
       stubGrader(apiMessage(SIMPLE_OUTPUT))
-      await expectError(await postWriting(writingBody(SAMPLE, 'good-token')), 429, 'free_unavailable')
+      const err = await expectError(await postWriting(writingBody(SAMPLE, 'good-token')), 429, 'free_unavailable')
+      expect(err.message).toContain('paused')
     } finally {
       await env.FLAGS.delete('flag:free_enabled')
     }
+  })
+
+  it('while free samples are off, an unused sample is reported as paused and a used one as used', async () => {
+    const unused = await createUser()
+    const used = await createUser()
+    const { calls, turnstileTokens } = stubGrader(apiMessage(SIMPLE_OUTPUT))
+    const first = await postWriting(writingBody(SAMPLE, 'good-token'), { cookie: used.cookie })
+    await readGrade(first)
+    const usedCookie = `${used.cookie}; ${deviceCookie(first)}`
+    await env.FLAGS.put('flag:free_enabled', 'false')
+    try {
+      const paused = await expectError(await postWriting(writingBody(SAMPLE, 'good-token'), { cookie: unused.cookie }), 429, 'free_unavailable')
+      expect(paused.message).toBe('Free samples are paused right now. Please try again later, or get a pass to keep practising.')
+      const gone = await expectError(await postWriting(writingBody(SAMPLE, 'good-token'), { cookie: usedCookie }), 402, 'payment_required')
+      expect(gone.message).toContain('has been used')
+      // neither answer checked Turnstile, called the model or wrote a row
+      expect(turnstileTokens).toEqual(['good-token'])
+      expect(calls).toHaveLength(1)
+      expect(await gradeRowsFor(unused.user.id)).toEqual([])
+    } finally {
+      await env.FLAGS.delete('flag:free_enabled')
+    }
+    // back on: the paused learner still has the sample
+    expect((await readGrade(await postWriting(writingBody(SAMPLE, 'good-token'), { cookie: unused.cookie }))).free).toBe(true)
   })
 })
 
@@ -274,7 +299,12 @@ describe('spend tiers and kill switches', () => {
     const ids = [await insertRow({ free: 1, cost: 2_010_000 })]
     try {
       const { turnstileTokens } = stubGrader(apiMessage(SIMPLE_OUTPUT))
-      await expectError(await postWriting(writingBody(SAMPLE, 'good-token')), 429, 'free_unavailable')
+      const anonymous = await expectError(await postWriting(writingBody(SAMPLE, 'good-token')), 429, 'free_unavailable')
+      expect(anonymous.message).toContain('paused')
+      // a signed-in learner with an unused sample hears the same, not "used"
+      const learner = await createUser()
+      const signedIn = await expectError(await postWriting(writingBody(SAMPLE, 'good-token'), { cookie: learner.cookie }), 429, 'free_unavailable')
+      expect(signedIn.message).toContain('paused')
       expect(turnstileTokens).toEqual([])
       const { cookie } = await createUser({ pass: true })
       await readGrade(await postWriting(writingBody(SAMPLE), { cookie }))
@@ -598,21 +628,36 @@ describe('in-flight limit (round 2)', () => {
     let open!: () => void
     const gate = new Promise<void>((resolve) => (open = resolve))
     const failsafe = setTimeout(() => open(), 3000)
+    const total = 14
     let active = 0
     let maxActive = 0
+    let answered = 0
+    // hold every model call until each request is either in a call or already answered, so no slot
+    // frees up while requests are still arriving (under load they can arrive late)
+    const settle = () => {
+      if (active + answered >= total) open()
+    }
     const stub = stubFetch(async () => {
       active++
       maxActive = Math.max(maxActive, active)
-      if (active >= CAPS.noFeedbackPerDay) open()
+      settle()
       await gate
       active--
       return jsonResponse(apiMessage(SIMPLE_OUTPUT))
     })
-    const results = await Promise.all(Array.from({ length: 14 }, () => postWriting(writingBody(SAMPLE), { cookie })))
+    const results = await Promise.all(
+      Array.from({ length: total }, () =>
+        postWriting(writingBody(SAMPLE), { cookie }).then((r) => {
+          if (r.status !== 200) answered++
+          settle()
+          return r
+        }),
+      ),
+    )
     clearTimeout(failsafe)
     // every in-flight call may still end without feedback, so it counts against the 10-a-day limit while it runs
     expect(maxActive).toBe(CAPS.noFeedbackPerDay)
-    expect(results.filter((r) => r.status === 429).length).toBeGreaterThan(0)
+    expect(results.filter((r) => r.status === 429).length).toBe(total - CAPS.noFeedbackPerDay)
     expect(stub.calls.length).toBe(results.filter((r) => r.status === 200).length)
   })
 })

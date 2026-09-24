@@ -3,29 +3,46 @@
 # production: pushes to master (and manual runs) when the repository variable MPC_DEPLOY is 'true'.
 # staging:    same-repo pull requests (and manual runs with target=staging) when MPC_STAGING is 'true'.
 #             The env.staging Worker in worker/wrangler.jsonc (own D1 and KV), at MPC_STAGING_SITE_URL,
-#             with Stripe TEST keys (secrets STRIPE_TEST_SECRET_KEY, STRIPE_TEST_WEBHOOK_SECRET; a live
-#             key is refused), Cloudflare's always-pass Turnstile test keys, the eval Anthropic key when
-#             present, no analytics or ads tag, a robots.txt that disallows crawling, and a random
-#             HASH_SALT on its first deploy. Pull requests from forks never deploy (no secrets).
+#             on a public workers.dev host, so it is LOCKED (memo §7.1 B11 / level B):
+#             - STAGING_ALLOWED_EMAILS = MPC_STAGING_ALLOWED_EMAILS, else MPC_OWNER_EMAIL (the deploy is
+#               refused when both are empty): sign-in links go only to those addresses and anonymous
+#               grading is off (worker/src/auth.ts stagingAllows). Never set for production.
+#             - the Anthropic key is ANTHROPIC_EVAL_API_KEY only, never the production key; without it a
+#               placeholder key is sent and every staging grade fails (a warning says so).
+#             - ANTHROPIC_MONTHLY_LIMIT_USD = evalMonthlyLimitUsd (ops/config/anthropic-limit.json).
+#             - FROM_EMAIL is MPC_FROM_EMAIL with a "STAGING - " prefix; it reuses RESEND_API_KEY, which
+#               is safe because only allowlisted addresses (and the owner's alerts) receive mail.
+#             - Stripe TEST keys only (secrets STRIPE_TEST_SECRET_KEY, STRIPE_TEST_WEBHOOK_SECRET; a live
+#               key is refused), Cloudflare's Turnstile TEST keys (safe only behind the allowlist, see
+#               the Deploy step), no analytics or ads tag, a robots.txt that disallows crawling, and a
+#               random HASH_SALT on its first deploy. Pull requests from forks never deploy (no secrets).
 #
 # Steps: secrets present? → install → configuration check (scripts/deploy-config.ts: production
-# refuses to run without MPC_MAILING_ADDRESS) → tests (production) → site build (public env from
+# refuses to run without MPC_MAILING_ADDRESS or without a real Turnstile site key + TURNSTILE_SECRET;
+# staging refuses without an allowlist) → tests (production) → site build (public env from
 # repository variables) → content lint (production: --require-address fails on the address
 # placeholder) → IndexNow key file (production) → note the live Worker version → D1 migrations →
-# deploy with secrets, vars and the custom domain → smoke test (scripts/smoke.ts: /api/health with
-# this commit's version, key pages, /api/me shape) → on smoke failure `wrangler rollback` to the noted
-# version and fail → production: IndexNow ping (never fails the deploy). D1 migrations are never
-# rolled back.
+# deploy with secrets, vars and the custom domain → verification that does not depend on the Deploy
+# step's exit code (wrangler makes the new version live BEFORE it attaches routes, custom domains and
+# crons, so a failed Deploy step can leave new code serving):
+#   - smoke test (scripts/smoke.ts: /api/health with this commit's version, key pages, /api/me shape)
+#     whenever `wrangler deploy` was started, whether the Deploy step succeeded or failed;
+#   - when the Deploy step or the smoke test failed: read the live version again and, if it is not the
+#     one noted before the deploy, `wrangler rollback` to that one; the job fails naming the failed step.
+# → production: IndexNow ping (never fails the deploy). D1 migrations are never rolled back.
 #
 # Worker vars from repository variables: SITE_URL, FROM_EMAIL, MAILING_ADDRESS, OWNER_EMAIL,
-# GRADER_MODEL, GRADER_EFFORT, GRADER_MAX_TOKENS (MPC_*), and ANTHROPIC_MONTHLY_LIMIT_USD from
-# ops/config/anthropic-limit.json (the limit set in the Anthropic Console; a merged raise redeploys).
+# GRADER_MODEL, GRADER_EFFORT, GRADER_MAX_TOKENS (MPC_*), STAGING_ALLOWED_EMAILS (staging only), and
+# ANTHROPIC_MONTHLY_LIMIT_USD from ops/config/anthropic-limit.json (production: monthlyLimitUsd, the
+# limit set in the Anthropic Console; staging: evalMonthlyLimitUsd; a merged change redeploys).
 # Custom domain: when the site URL is not *.workers.dev, `--domain <host>` attaches it (the API token
 # needs the permissions listed in business/online/owner-setup.md).
 #
 # Wrangler 4.137.0 flags checked with --help: deploy --secrets-file --var KEY:VALUE --message
 # --domain/--domains; -e/--env (global; --env= selects the top level); deployments status --json;
-# d1 migrations apply <db> --remote; rollback [version-id] -y --message.
+# d1 migrations apply <db> --remote; rollback [version-id] -y/--yes -m/--message. `--var` values are
+# merged over the config's vars (wrangler-dist/cli.js: cliVars override getBindings(config)), and
+# without --keep-vars every var not in the config or on the command line is removed.
 name: Deploy practice coach
 
 on:
@@ -78,6 +95,7 @@ jobs:
       MPC_MAILING_ADDRESS: ${{ vars.MPC_MAILING_ADDRESS }}
       MPC_FROM_EMAIL: ${{ vars.MPC_FROM_EMAIL }}
       MPC_OWNER_EMAIL: ${{ vars.MPC_OWNER_EMAIL }}
+      MPC_STAGING_ALLOWED_EMAILS: ${{ vars.MPC_STAGING_ALLOWED_EMAILS }}
       MPC_GRADER_MODEL: ${{ vars.MPC_GRADER_MODEL }}
       MPC_GRADER_EFFORT: ${{ vars.MPC_GRADER_EFFORT }}
       MPC_GRADER_MAX_TOKENS: ${{ vars.MPC_GRADER_MAX_TOKENS }}
@@ -92,8 +110,11 @@ jobs:
       - name: Check secrets and select the target
         id: secrets
         run: |
-          # Contact details are repository variables, not secrets: mask them so logs never show them.
-          for v in "$MPC_OWNER_EMAIL" "$MPC_FROM_EMAIL" "$MPC_MAILING_ADDRESS"; do
+          # Contact details are repository variables, not secrets: mask them so logs never show them
+          # (each staging allowlist entry on its own, since the Worker gets them as one list).
+          IFS=',' read -r -a allowlist <<< "$MPC_STAGING_ALLOWED_EMAILS"
+          for v in "$MPC_OWNER_EMAIL" "$MPC_FROM_EMAIL" "$MPC_MAILING_ADDRESS" "$MPC_STAGING_ALLOWED_EMAILS" "${allowlist[@]}"; do
+            v="${v#"${v%%[![:space:]]*}"}"; v="${v%"${v##*[![:space:]]}"}"
             if [ -n "$v" ]; then echo "::add-mask::$v"; fi
           done
           if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
@@ -134,9 +155,12 @@ jobs:
           GRADER_EFFORT: ${{ vars.MPC_GRADER_EFFORT }}
           GRADER_MAX_TOKENS: ${{ vars.MPC_GRADER_MAX_TOKENS }}
           TURNSTILE_SITE_KEY: ${{ vars.MPC_TURNSTILE_SITE_KEY }}
+          FROM_EMAIL: ${{ vars.MPC_FROM_EMAIL }}
+          OWNER_EMAIL: ${{ vars.MPC_OWNER_EMAIL }}
           STRIPE_TEST_SECRET_KEY: ${{ secrets.STRIPE_TEST_SECRET_KEY }}
+          TURNSTILE_SECRET: ${{ secrets.TURNSTILE_SECRET }}
         run: |
-          # only the key's prefix is inspected; the key itself is never printed
+          # only the secrets' shape is inspected; the values themselves are never printed
           STRIPE_KEY_MODE=""
           if [ "$TARGET" = staging ]; then
             case "$STRIPE_TEST_SECRET_KEY" in
@@ -144,8 +168,14 @@ jobs:
               sk_test_*|rk_test_*) STRIPE_KEY_MODE='test' ;;
             esac
           fi
-          export STRIPE_KEY_MODE
-          unset STRIPE_TEST_SECRET_KEY
+          # Cloudflare's documented test secrets (turnstile/troubleshooting/testing.mdx) are refused in production
+          case "$TURNSTILE_SECRET" in
+            '') TURNSTILE_SECRET_MODE='' ;;
+            [123]x0000000000000000000000000000000AA) TURNSTILE_SECRET_MODE='test' ;;
+            *) TURNSTILE_SECRET_MODE='set' ;;
+          esac
+          export STRIPE_KEY_MODE TURNSTILE_SECRET_MODE
+          unset STRIPE_TEST_SECRET_KEY TURNSTILE_SECRET
           node scripts/run.mjs scripts/deploy-config.ts check --target "$TARGET"
 
       - name: Typecheck and test
@@ -199,17 +229,10 @@ jobs:
         id: prev
         if: steps.secrets.outputs.ready == 'true'
         run: |
+          # the version serving 100% of traffic ('' on a first deploy); parsing: scripts/deploy-config.ts
           prev=""
           if out=$(npx wrangler deployments status --json -c worker/wrangler.jsonc "$WRANGLER_ENV_FLAG" 2>/dev/null); then
-            prev=$(printf '%s' "$out" | node -e '
-              let s = ""
-              process.stdin.on("data", (d) => (s += d)).on("end", () => {
-                try {
-                  const j = JSON.parse(s.slice(s.search(/[{[]/)))
-                  const v = (j.versions || []).find((x) => x.percentage === 100)
-                  console.log(v ? v.version_id : "")
-                } catch { console.log("") }
-              })')
+            prev=$(printf '%s' "$out" | node scripts/run.mjs scripts/deploy-config.ts live-version)
           fi
           echo "version=$prev" >> "$GITHUB_OUTPUT"
           echo "Live $TARGET version before deploy: ${prev:-none (first deploy)}"
@@ -225,14 +248,17 @@ jobs:
           PREV_VERSION: ${{ steps.prev.outputs.version }}
           DOMAIN: ${{ steps.cfg.outputs.domain }}
           ANTHROPIC_LIMIT_USD: ${{ steps.cfg.outputs.anthropic_limit_usd }}
-          SECRET_ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          SECRET_ANTHROPIC_EVAL_API_KEY: ${{ secrets.ANTHROPIC_EVAL_API_KEY }}
-          SECRET_STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-          SECRET_STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-          SECRET_STRIPE_TEST_SECRET_KEY: ${{ secrets.STRIPE_TEST_SECRET_KEY }}
-          SECRET_STRIPE_TEST_WEBHOOK_SECRET: ${{ secrets.STRIPE_TEST_WEBHOOK_SECRET }}
+          STAGING_ALLOWED_EMAILS: ${{ steps.cfg.outputs.staging_allowed_emails }}
+          STAGING_FROM_EMAIL: ${{ steps.cfg.outputs.from_email }}
+          # production-only and staging-only secrets are not even handed to the other target's step
+          SECRET_ANTHROPIC_API_KEY: ${{ env.TARGET == 'production' && secrets.ANTHROPIC_API_KEY || '' }}
+          SECRET_ANTHROPIC_EVAL_API_KEY: ${{ env.TARGET == 'staging' && secrets.ANTHROPIC_EVAL_API_KEY || '' }}
+          SECRET_STRIPE_SECRET_KEY: ${{ env.TARGET == 'production' && secrets.STRIPE_SECRET_KEY || '' }}
+          SECRET_STRIPE_WEBHOOK_SECRET: ${{ env.TARGET == 'production' && secrets.STRIPE_WEBHOOK_SECRET || '' }}
+          SECRET_STRIPE_TEST_SECRET_KEY: ${{ env.TARGET == 'staging' && secrets.STRIPE_TEST_SECRET_KEY || '' }}
+          SECRET_STRIPE_TEST_WEBHOOK_SECRET: ${{ env.TARGET == 'staging' && secrets.STRIPE_TEST_WEBHOOK_SECRET || '' }}
           SECRET_RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          SECRET_TURNSTILE_SECRET: ${{ secrets.TURNSTILE_SECRET }}
+          SECRET_TURNSTILE_SECRET: ${{ env.TARGET == 'production' && secrets.TURNSTILE_SECRET || '' }}
           SECRET_HASH_SALT: ${{ secrets.HASH_SALT }}
         run: |
           suffix=""
@@ -255,11 +281,20 @@ jobs:
             const staging = process.env.TARGET === "staging"
             const e = (n) => process.env["SECRET_" + n] || ""
             const pick = {
-              ANTHROPIC_API_KEY: staging ? e("ANTHROPIC_EVAL_API_KEY") || e("ANTHROPIC_API_KEY") : e("ANTHROPIC_API_KEY"),
+              // Staging NEVER gets the production key: the eval workspace key, or a placeholder that the
+              // Anthropic API rejects (it also replaces any older value, as --secrets-file is additive).
+              ANTHROPIC_API_KEY: staging ? e("ANTHROPIC_EVAL_API_KEY") || "staging-without-ANTHROPIC_EVAL_API_KEY" : e("ANTHROPIC_API_KEY"),
               STRIPE_SECRET_KEY: staging ? e("STRIPE_TEST_SECRET_KEY") : e("STRIPE_SECRET_KEY"),
               STRIPE_WEBHOOK_SECRET: staging ? e("STRIPE_TEST_WEBHOOK_SECRET") : e("STRIPE_WEBHOOK_SECRET"),
+              // staging reuses the production Resend key: STAGING_ALLOWED_EMAILS limits its mail to the
+              // owner addresses (sign-in links) and OWNER_EMAIL (alerts)
               RESEND_API_KEY: e("RESEND_API_KEY"),
-              // Cloudflare documented always-pass test secret (turnstile/troubleshooting/testing.mdx)
+              // Staging: the Cloudflare always-pass TEST secret (turnstile/troubleshooting/testing.mdx), which
+              // accepts the public dummy token XXXX.DUMMY.TOKEN.XXXX, so Turnstile stops nobody there. That is
+              // acceptable only because staging is always deployed with STAGING_ALLOWED_EMAILS (below): sign-in
+              // links go to the owner addresses only and anonymous grading is off, so getting past Turnstile
+              // cannot send mail to strangers or spend model credit. The site is built with the test site key.
+              // Production: the real secret (deploy-config.ts refuses production without it).
               TURNSTILE_SECRET: staging ? "1x0000000000000000000000000000000AA" : e("TURNSTILE_SECRET"),
               // staging keeps the salt of its first deploy; production takes the HASH_SALT secret
               HASH_SALT: staging ? (process.env.PREV_VERSION ? "" : e("HASH_SALT")) : e("HASH_SALT"),
@@ -277,7 +312,7 @@ jobs:
             require("fs").writeFileSync(process.argv[1], JSON.stringify(out), { mode: 0o600 })
             console.log("Worker secrets sent with this deploy: " + (Object.keys(out).join(", ") || "none"))
             if (missing.length) console.log("::warning::Not in GitHub secrets (the Worker keeps any value it already has): " + missing.join(", "))
-            if (staging && !e("ANTHROPIC_EVAL_API_KEY") && e("ANTHROPIC_API_KEY")) console.log("::warning::Staging grades with the production ANTHROPIC_API_KEY; add ANTHROPIC_EVAL_API_KEY so staging spend stays out of the production Console limit.")
+            if (staging && !e("ANTHROPIC_EVAL_API_KEY")) console.log("::warning::Staging is deployed with a PLACEHOLDER Anthropic key, so every grade on staging will fail. Add the ANTHROPIC_EVAL_API_KEY secret (eval workspace) and deploy staging again; staging never uses the production ANTHROPIC_API_KEY.")
           ' "$secrets_file"
           if [ -z "$SECRET_HASH_SALT" ] && [ -z "$PREV_VERSION" ]; then
             echo "::error::First deploy needs the HASH_SALT secret (sessions and hashed ids depend on it)."
@@ -289,7 +324,18 @@ jobs:
             args+=(--secrets-file "$secrets_file")
           fi
           args+=(--var "SITE_URL:$SITE_URL")
-          if [ -n "$MPC_FROM_EMAIL" ]; then args+=(--var "FROM_EMAIL:$MPC_FROM_EMAIL"); fi
+          if [ "$TARGET" = staging ]; then
+            # the staging lock (see the header); deploy-config.ts already refused an empty list
+            if [ -z "$STAGING_ALLOWED_EMAILS" ]; then
+              echo "::error::Staging is never deployed without STAGING_ALLOWED_EMAILS (set MPC_STAGING_ALLOWED_EMAILS or MPC_OWNER_EMAIL)."
+              exit 1
+            fi
+            args+=(--var "STAGING_ALLOWED_EMAILS:$STAGING_ALLOWED_EMAILS")
+            from="$STAGING_FROM_EMAIL"
+          else
+            from="$MPC_FROM_EMAIL"
+          fi
+          if [ -n "$from" ]; then args+=(--var "FROM_EMAIL:$from"); fi
           if [ -n "$MPC_MAILING_ADDRESS" ]; then args+=(--var "MAILING_ADDRESS:$MPC_MAILING_ADDRESS"); fi
           if [ -n "$MPC_OWNER_EMAIL" ]; then args+=(--var "OWNER_EMAIL:$MPC_OWNER_EMAIL"); fi
           if [ -n "$MPC_GRADER_MODEL" ]; then args+=(--var "GRADER_MODEL:$MPC_GRADER_MODEL"); fi
@@ -297,28 +343,58 @@ jobs:
           if [ -n "$MPC_GRADER_MAX_TOKENS" ]; then args+=(--var "GRADER_MAX_TOKENS:$MPC_GRADER_MAX_TOKENS"); fi
           if [ -n "$ANTHROPIC_LIMIT_USD" ]; then args+=(--var "ANTHROPIC_MONTHLY_LIMIT_USD:$ANTHROPIC_LIMIT_USD"); fi
           if [ -n "$DOMAIN" ]; then args+=(--domain "$DOMAIN"); fi
+          # From here on Cloudflare may change: the smoke test and the rollback check run even if this fails.
+          echo "attempted=true" >> "$GITHUB_OUTPUT"
           npx wrangler deploy "${args[@]}"
 
+      # Runs whenever `wrangler deploy` was started, also when the Deploy step failed: wrangler makes the
+      # new version live before it attaches routes, custom domains and crons, so a failure there can leave
+      # new code serving.
       - name: Smoke test
         id: smoke
-        if: steps.secrets.outputs.ready == 'true'
+        if: ${{ !cancelled() && steps.secrets.outputs.ready == 'true' && steps.deploy.outputs.attempted == 'true' }}
         env:
           APP_VERSION: ${{ steps.deploy.outputs.app_version }}
         # the new version can take a little while to reach every location
         run: node scripts/run.mjs scripts/smoke.ts --base "$SITE_URL" --version "$APP_VERSION" --wait-seconds 120
 
-      - name: Roll back after a failed smoke test
-        if: failure() && steps.smoke.outcome == 'failure'
+      - name: Roll back if the deploy or the smoke test failed
+        if: ${{ !cancelled() && steps.secrets.outputs.ready == 'true' && (steps.deploy.outcome == 'failure' || steps.smoke.outcome == 'failure') }}
         env:
           PREV_VERSION: ${{ steps.prev.outputs.version }}
+          DEPLOY_OUTCOME: ${{ steps.deploy.outcome }}
+          SMOKE_OUTCOME: ${{ steps.smoke.outcome }}
         run: |
+          failed=""
+          if [ "$DEPLOY_OUTCOME" = failure ]; then failed="Deploy"; fi
+          if [ "$SMOKE_OUTCOME" = failure ]; then failed="${failed:+$failed + }Smoke test"; fi
+          live_version() {
+            local out
+            out=$(npx wrangler deployments status --json -c worker/wrangler.jsonc "$WRANGLER_ENV_FLAG" 2>/dev/null) || return 0
+            printf '%s' "$out" | node scripts/run.mjs scripts/deploy-config.ts live-version
+          }
+          live=$(live_version) || live=""
+          echo "Failed step(s): $failed. Live $TARGET version now: ${live:-unknown}; before the deploy: ${PREV_VERSION:-none}"
           if [ -z "$PREV_VERSION" ]; then
-            echo "::error::Smoke test failed on the first $TARGET deploy; there is no earlier Worker version to roll back to."
+            echo "::error::Failed step: $failed, on the first $TARGET deploy. There is no earlier Worker version to roll back to; fix the cause and deploy again."
             exit 1
           fi
-          npx wrangler rollback "$PREV_VERSION" -y --message "Smoke test failed for ${GITHUB_SHA::7}" -c worker/wrangler.jsonc "$WRANGLER_ENV_FLAG"
-          echo "::error::Smoke test failed. Rolled back the $TARGET Worker to version $PREV_VERSION. D1 migrations are not rolled back."
-          echo "Rolled back $TARGET to $PREV_VERSION after a failed smoke test (D1 migrations stay applied)." >> "$GITHUB_STEP_SUMMARY"
+          if [ "$live" = "$PREV_VERSION" ]; then
+            echo "::error::Failed step: $failed. The live $TARGET Worker is still version $PREV_VERSION (the new version never went live), so nothing was rolled back."
+            echo "Failed step: $failed. $TARGET still serves $PREV_VERSION; no rollback needed." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          # the live version is new, or could not be read: go back to the version noted before the deploy
+          if ! npx wrangler rollback "$PREV_VERSION" -y --message "$failed failed for ${GITHUB_SHA::7}" -c worker/wrangler.jsonc "$WRANGLER_ENV_FLAG"; then
+            echo "::error::Failed step: $failed, and the rollback to $PREV_VERSION failed too. Roll back by hand: Cloudflare dashboard, Workers, the $TARGET Worker, Deployments; or npx wrangler rollback $PREV_VERSION (with --env staging for staging)."
+            exit 1
+          fi
+          after=$(live_version) || after=""
+          if [ "$after" != "$PREV_VERSION" ]; then
+            echo "::warning::After the rollback the live version reads as '${after:-unknown}', not $PREV_VERSION; check the Worker's Deployments page."
+          fi
+          echo "::error::Failed step: $failed. Rolled back the $TARGET Worker to version $PREV_VERSION. D1 migrations are not rolled back."
+          echo "Failed step: $failed. Rolled back $TARGET to $PREV_VERSION (D1 migrations stay applied)." >> "$GITHUB_STEP_SUMMARY"
           exit 1
 
       - name: IndexNow ping (never fails the deploy)

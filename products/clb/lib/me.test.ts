@@ -10,7 +10,7 @@ function meBody(signedIn: boolean): MeResponse {
     pass: null,
     free: { writing: true, speaking: false },
     usage: { writingToday: 0, speakingToday: 0, graded30d: 0 },
-    flags: { checkoutEnabled: true, gradingEnabled: true, banner: '' },
+    flags: { checkoutEnabled: true, gradingEnabled: true, freeEnabled: true, banner: '' },
   }
 }
 
@@ -102,6 +102,32 @@ describe('refreshMe', () => {
     expect(await store.refreshMe()).toBeNull()
     const state = store.getMeState()
     expect(state.status).toBe('error')
+  })
+})
+
+describe('freeSample', () => {
+  const meWith = (free: MeResponse['free'], freeEnabled: boolean): MeResponse => ({
+    ...meBody(false),
+    free,
+    flags: { ...meBody(false).flags, freeEnabled },
+  })
+
+  it('reports an unused sample as available and a used one as used', () => {
+    expect(store.freeSample(meWith({ writing: true, speaking: false }, true), 'writing')).toBe('available')
+    expect(store.freeSample(meWith({ writing: true, speaking: false }, true), 'speaking')).toBe('used')
+  })
+
+  it('says "off", never "used", while free samples are switched off (a new visitor has used nothing)', () => {
+    // /api/me reports every sample as unavailable while free_enabled is false
+    expect(store.freeSample(meWith({ writing: false, speaking: false }, false), 'writing')).toBe('off')
+    expect(store.freeSample(meWith({ writing: false, speaking: false }, false), 'speaking')).toBe('off')
+    expect(store.freeSample(meWith({ writing: true, speaking: true }, false), 'writing')).toBe('off')
+  })
+
+  it('treats a missing flag (an older Worker) as on', () => {
+    const me = meBody(false)
+    const legacy = { ...me, flags: { checkoutEnabled: true, gradingEnabled: true, banner: '' } } as unknown as MeResponse
+    expect(store.freeSample(legacy, 'writing')).toBe('available')
   })
 })
 

@@ -13,6 +13,13 @@ export interface ErrorView {
   actions: { href: string; label: string }[]
 }
 
+/** What the page knows from /api/me, so the wording fits this visitor. */
+export interface ErrorHints {
+  signedIn?: boolean
+  /** free samples are switched off for everyone right now (MeResponse.flags.freeEnabled === false) */
+  freeOff?: boolean
+}
+
 function pricingHref(lang: Lang): string {
   return lang === 'ko' ? '/ko/pricing/' : '/pricing/'
 }
@@ -21,7 +28,13 @@ function pricingHref(lang: Lang): string {
  * `returnTo` is where sign-in should come back to (usually the current page). Server messages are
  * shown only for codes whose wording depends on server-side policy (refunds, bad input).
  */
-export function describeError(err: ApiClientError, lang: Lang, context: ErrorContext, returnTo?: string): ErrorView {
+export function describeError(
+  err: ApiClientError,
+  lang: Lang,
+  context: ErrorContext,
+  returnTo?: string,
+  hints: ErrorHints = {},
+): ErrorView {
   if (err.isNetwork) return { text: t(lang, 'common.network'), actions: [] }
   const signIn = { href: loginHref(returnTo, lang), label: t(lang, 'common.signIn') }
   const pricing = { href: pricingHref(lang), label: t(lang, 'common.seePricing') }
@@ -30,6 +43,10 @@ export function describeError(err: ApiClientError, lang: Lang, context: ErrorCon
     case 'payment_required':
       return { text: t(lang, 'err.payment_required'), actions: [pricing] }
     case 'free_unavailable':
+      // Free samples are switched off (the practice page says so too; a signed-in learner gets this
+      // code only then): signing in does not help, only a pass does. Signed out, it can also mean
+      // this device already used its sample, and signing in unlocks the speaking sample.
+      if (hints.freeOff || hints.signedIn) return { text: t(lang, 'p.freeOff'), actions: [pricing] }
       return { text: t(lang, 'err.free_unavailable'), actions: context === 'writing' ? [signIn, pricing] : [pricing] }
     case 'grading_paused':
       return { text: t(lang, 'err.grading_paused'), actions: [] }

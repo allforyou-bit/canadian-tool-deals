@@ -85,6 +85,19 @@ export function activePass(me: MeResponse, now = new Date()) {
   return new Date(pass.endsAt).getTime() > now.getTime() ? pass : null
 }
 
+/** A free sample: still available, already used, or switched off for everyone right now. */
+export type FreeSample = 'available' | 'used' | 'off'
+
+/**
+ * The state of this visitor's free sample of `kind`. 'off' wins over 'used': while free samples are
+ * switched off (by the owner or the spend monitor) /api/me reports every sample as unavailable, and
+ * a new visitor must not be told they already used theirs. A missing flag (an older Worker) is on.
+ */
+export function freeSample(me: MeResponse, kind: 'writing' | 'speaking'): FreeSample {
+  if (me.flags.freeEnabled === false) return 'off'
+  return me.free[kind] ? 'available' : 'used'
+}
+
 /**
  * When the learner's access ends: the end of the chain of passes (queued passes included), falling
  * back to the active pass. null when nothing runs past `now`.

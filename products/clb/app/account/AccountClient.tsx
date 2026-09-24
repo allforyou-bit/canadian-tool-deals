@@ -11,8 +11,9 @@ import { api, ApiClientError } from '../../lib/api'
 import { consentText } from '../../lib/consent'
 import { PUBLIC_ENV } from '../../lib/env'
 import { useMe, useSiteUrl, useUiLang } from '../../lib/hooks'
-import { errorKindLabel, formatCad, formatDate, t } from '../../lib/i18n'
-import { accessEndsAt, activePass, refreshMe } from '../../lib/me'
+import { errorKindLabel, formatCad, formatDate, t, type UiKey } from '../../lib/i18n'
+import { appendHistoryPage } from '../../lib/history'
+import { accessEndsAt, activePass, freeSample, refreshMe, type FreeSample } from '../../lib/me'
 import { loginHref } from '../../lib/url'
 import { useAction } from '../../lib/use-action'
 import type { HistoryItem, HistoryItemResponse, HistoryResponse, Lang, MeResponse, RefundResponse } from '../../shared/api'
@@ -20,6 +21,10 @@ import { CAPS, REFUND_POLICY, SKUS } from '../../shared/config'
 import { taskById } from '../../shared/tasks'
 
 const SUPPORT_MAX_CHARS = 4000
+
+const FREE_LABEL = { available: 'a.available', used: 'a.used', off: 'a.freeOff' } as const satisfies Record<FreeSample, UiKey>
+
+const toClientError = (e: unknown) => (e instanceof ApiClientError ? e : new ApiClientError('internal', 0, 'Network error'))
 
 function Section(props: { title: string; children: ReactNode; id: string }) {
   return (
@@ -92,10 +97,10 @@ function PassSection({ me, lang }: { me: MeResponse; lang: Lang }) {
       <div className="space-y-1 border-t border-slate-200 pt-4">
         <h3 className="font-semibold text-slate-900">{t(lang, 'a.free')}</h3>
         <p className="text-sm">
-          {t(lang, 'a.freeWriting')}: {t(lang, me.free.writing ? 'a.available' : 'a.used')}
+          {t(lang, 'a.freeWriting')}: {t(lang, FREE_LABEL[freeSample(me, 'writing')])}
         </p>
         <p className="text-sm">
-          {t(lang, 'a.freeSpeaking')}: {t(lang, me.free.speaking ? 'a.available' : 'a.used')}
+          {t(lang, 'a.freeSpeaking')}: {t(lang, FREE_LABEL[freeSample(me, 'speaking')])}
         </p>
       </div>
     </Section>
@@ -118,7 +123,7 @@ function HistoryEntry({ item, lang }: { item: HistoryItem; lang: Lang }) {
     setDetail({ status: 'loading' })
     api.historyItem(item.gradeId).then(
       (res) => setDetail({ status: 'ready', item: res }),
-      (e: unknown) => setDetail({ status: 'error', error: e instanceof ApiClientError ? e : new ApiClientError('internal', 0, 'Network error') }),
+      (e: unknown) => setDetail({ status: 'error', error: toClientError(e) }),
     )
   }
 
@@ -160,7 +165,8 @@ function HistoryEntry({ item, lang }: { item: HistoryItem; lang: Lang }) {
   }
 
   return (
-    <li className="py-3">
+    // focusable (not tabbable) so "Show older tasks" can move focus to the first item it added
+    <li className="py-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700" tabIndex={-1}>
       <p className="font-medium text-slate-900">
         {task ? (
           <Link href={`/practice/${task.kind}/${task.id}/`} className={cls.link}>
@@ -193,17 +199,48 @@ function HistoryEntry({ item, lang }: { item: HistoryItem; lang: Lang }) {
 function HistorySection({ lang }: { lang: Lang }) {
   const [data, setData] = useState<HistoryResponse | null>(null)
   const [error, setError] = useState<ApiClientError | null>(null)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [moreError, setMoreError] = useState<ApiClientError | null>(null)
+  const listRef = useRef<HTMLUListElement>(null)
+  /** index of the first item added by "Show older tasks", focused once it has rendered */
+  const focusFrom = useRef<number | null>(null)
 
   useEffect(() => {
     let cancelled = false
     api.history().then(
       (res) => !cancelled && setData(res),
-      (e: unknown) => !cancelled && setError(e instanceof ApiClientError ? e : new ApiClientError('internal', 0, 'Network error')),
+      (e: unknown) => !cancelled && setError(toClientError(e)),
     )
     return () => {
       cancelled = true
     }
   }, [])
+
+  // the button may disappear (no older page) and sits below the new items: move focus to the first one
+  useEffect(() => {
+    if (focusFrom.current === null || !data) return
+    const first = listRef.current?.children[focusFrom.current]
+    focusFrom.current = null
+    if (first instanceof HTMLElement) first.focus()
+  }, [data])
+
+  async function showOlder() {
+    const before = data?.nextBefore
+    // aria-disabled rather than disabled while loading, so the focused button keeps focus
+    if (!data || !before || loadingMore) return
+    setLoadingMore(true)
+    setMoreError(null)
+    try {
+      const older = await api.history(before)
+      const next = appendHistoryPage(data, older)
+      if (next.items.length > data.items.length) focusFrom.current = data.items.length
+      setData(next)
+    } catch (e) {
+      setMoreError(toClientError(e))
+    } finally {
+      setLoadingMore(false)
+    }
+  }
 
   return (
     <Section id="account-history" title={t(lang, 'a.history')}>
@@ -223,11 +260,29 @@ function HistorySection({ lang }: { lang: Lang }) {
       )}
       {data && data.items.length === 0 && <p className="text-slate-800">{t(lang, 'a.noHistory')}</p>}
       {data && data.items.length > 0 && (
-        <ul className="divide-y divide-slate-200">
+        <ul ref={listRef} className="divide-y divide-slate-200" data-testid="history-list">
           {data.items.map((item) => (
             <HistoryEntry key={item.gradeId} item={item} lang={lang} />
           ))}
         </ul>
+      )}
+      {moreError && <ErrorNotice error={moreError} lang={lang} context="account" returnTo="/account/" />}
+      {data?.nextBefore && (
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            className={`${cls.btn} ${cls.secondary} aria-disabled:cursor-wait aria-disabled:opacity-60`}
+            aria-disabled={loadingMore}
+            onClick={() => void showOlder()}
+          >
+            {t(lang, 'a.historyMore')}
+          </button>
+          {loadingMore && (
+            <p role="status" className={cls.muted}>
+              {t(lang, 'common.loading')}
+            </p>
+          )}
+        </div>
       )}
     </Section>
   )

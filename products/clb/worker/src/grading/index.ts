@@ -14,6 +14,7 @@ import type {
 } from '../../../shared/api'
 import { CAPS, MODELS } from '../../../shared/config'
 import { taskById, type TaskKind, type TaskType } from '../../../shared/tasks'
+import { stagingAllows } from '../auth'
 import { recordPauseStart } from '../cron'
 import type { Ctx, Env } from '../env'
 import { randomId } from '../lib/crypto'
@@ -50,8 +51,11 @@ const MAX_FORM_BYTES = CAPS.maxAudioBytes + 64 * 1024
 const AUDIO_TYPES = ['audio/webm', 'audio/mp4', 'audio/mpeg', 'audio/ogg', 'audio/wav']
 /** recorders stop a little after the timer; allow this much over CAPS.maxAudioSeconds */
 const AUDIO_SLACK_SECONDS = 2
-const HISTORY_LIMIT = 50
+/** history page size; older rows are fetched with ?before=<nextBefore> */
+export const HISTORY_PAGE_SIZE = 50
 const RECURRING_LIMIT = 5
+/** history cursor: `<created_at>|<id>` of the last row of the previous page (ISO-8601 UTC, then a grades id) */
+const HISTORY_CURSOR = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?Z)\|([A-Za-z0-9_-]{1,64})$/
 /** KV key the cron reads to extend passes by the length of a pause (decision 12) */
 export const PAUSE_STARTED_KEY = 'pause:started_at'
 
@@ -61,6 +65,8 @@ const MSG = {
   graderUnreachable: 'The feedback service is busy. Please try again in a minute.',
   audioTooLarge: `Recordings can be up to ${CAPS.maxAudioSeconds} seconds and ${CAPS.maxAudioBytes / (1024 * 1024)} MB.`,
   noFeedback: `You have reached today's limit of ${CAPS.noFeedbackPerDay} requests that got no feedback. It resets at midnight UTC.`,
+  /** the learner's sample is unused, but free samples are off (owner switch or spend tiers) */
+  freePaused: 'Free samples are paused right now. Please try again later, or get a pass to keep practising.',
 }
 
 export function graderModel(env: Env): string {
@@ -170,18 +176,27 @@ async function reserveSlot(
   return { gradeId, free: entitlement.free, releaseFree: entitlement.releaseFree }
 }
 
-/** Pass holders reserve against the caps; everyone else may use the free writing sample. */
+/** Free samples are on: the owner's KV flag and the live spend tiers both allow them. */
+const freeOn = (flags: Flags, tiers: TierDecision): boolean => flags.free_enabled && !tiers.freeOff
+
+/**
+ * Pass holders reserve against the caps; everyone else may use the free writing sample. A used sample
+ * is reported as used even while free samples are off; an unused one as paused (free_unavailable).
+ */
 async function writingSlot(ctx: Ctx, flags: Flags, tiers: TierDecision, turnstileToken: unknown, spec: SlotSpec): Promise<Slot | Response> {
   const { env, user, now } = ctx
   if (user && (await getActivePass(env, user.id, now))) {
     return reserveSlot(ctx, spec, { free: false, fairUse: true, releaseFree: noop })
   }
+  // staging (STAGING_ALLOWED_EMAILS set): no anonymous grading on a public test host
+  if (!user && !stagingAllows(env, null)) return error('unauthorized', 'Sign in to use this test site.')
   const keys: FreeKeys = { user, deviceHash: ctx.deviceHash, ipHash: ctx.ipHash }
   const unavailable = () =>
     user
       ? error('payment_required', 'Your free writing sample has been used. A pass unlocks more feedback.')
       : error('free_unavailable', 'The free writing sample is not available right now. Sign in to continue practising.')
-  if (!(await freeAvailability(env, keys, now, flags.free_enabled && !tiers.freeOff)).writing) return unavailable()
+  if (!(await freeAvailability(env, keys, now, true)).writing) return unavailable()
+  if (!freeOn(flags, tiers)) return error('free_unavailable', MSG.freePaused)
   if (!(await verifyTurnstile(env, typeof turnstileToken === 'string' ? turnstileToken : null))) {
     return error('turnstile_failed', 'Please complete the check and try again.')
   }
@@ -360,13 +375,19 @@ export async function gradeSpeaking(req: Request, ctx: Ctx): Promise<Response> {
     estimateMicroUsd:
       whisperCostMicroUsd(CAPS.maxAudioSeconds + AUDIO_SLACK_SECONDS) + worstCaseCallCostMicroUsd(longest, graderSettings(env).maxTokens),
   }
+  const usedMessage = 'Your free speaking sample has been used. A pass unlocks more feedback.'
   let slot: Slot | Response
   if (await getActivePass(env, user.id, now)) {
     slot = await reserveSlot(ctx, spec, { free: false, fairUse: true, releaseFree: noop })
-  } else if (flags.free_enabled && !tiers.freeOff && !user.freeSpeakingUsed && (await recordFreeSpeaking(env, user.id))) {
+  } else if (user.freeSpeakingUsed) {
+    return error('payment_required', usedMessage)
+  } else if (!freeOn(flags, tiers)) {
+    // unused, but free samples are off right now: not "used" (the learner keeps the sample)
+    return error('free_unavailable', MSG.freePaused)
+  } else if (await recordFreeSpeaking(env, user.id)) {
     slot = await reserveSlot(ctx, spec, { free: true, fairUse: false, releaseFree: () => releaseFreeSpeaking(env, user.id) })
   } else {
-    return error('payment_required', 'Your free speaking sample has been used. A pass unlocks more feedback.')
+    return error('payment_required', usedMessage)
   }
   if (slot instanceof Response) return slot
   const { gradeId } = slot
@@ -404,29 +425,48 @@ export async function gradeSpeaking(req: Request, ctx: Ctx): Promise<Response> {
   })
 }
 
-export async function history(_req: Request, ctx: Ctx): Promise<Response> {
+/** The cursor that asks for the rows after this one (older, or same time with a smaller id). */
+export function historyCursor(createdAt: string, id: string): string {
+  return `${createdAt}|${id}`
+}
+
+/**
+ * GET /api/history[?before=<cursor>] — the learner's graded answers, newest first (ties broken by id),
+ * HISTORY_PAGE_SIZE per page, so every saved answer stays reachable until the retention purge.
+ * nextBefore is the cursor for the next (older) page, or null on the last page. `recurring` is
+ * computed from the newest page only and is empty on later pages.
+ */
+export async function history(req: Request, ctx: Ctx): Promise<Response> {
   if (!ctx.user) return error('unauthorized', 'Please sign in to see your history.')
+  const before = new URL(req.url).searchParams.get('before')
+  const cursor = before === null ? null : HISTORY_CURSOR.exec(before)
+  if (before !== null && !cursor) return error('bad_request', 'Invalid history cursor')
+  // one extra row tells whether an older page exists
   const { results } = await ctx.env.DB.prepare(
     `SELECT id, task_id, created_at, error_kinds FROM grades
       WHERE user_id = ?1 AND refused = 0 AND pending = 0
-      ORDER BY created_at DESC, id DESC LIMIT ?2`,
+        AND (?2 IS NULL OR created_at < ?2 OR (created_at = ?2 AND id < ?3))
+      ORDER BY created_at DESC, id DESC LIMIT ?4`,
   )
-    .bind(ctx.user.id, HISTORY_LIMIT)
+    .bind(ctx.user.id, cursor?.[1] ?? null, cursor?.[2] ?? null, HISTORY_PAGE_SIZE + 1)
     .all<{ id: string; task_id: string; created_at: string; error_kinds: string | null }>()
+  const page = results.slice(0, HISTORY_PAGE_SIZE)
+  const last = page.at(-1)
+  const nextBefore = results.length > HISTORY_PAGE_SIZE && last ? historyCursor(last.created_at, last.id) : null
 
-  const items: HistoryItem[] = results.map((r) => ({
+  const items: HistoryItem[] = page.map((r) => ({
     gradeId: r.id,
     taskId: r.task_id,
     createdAt: r.created_at,
     topErrorKinds: (r.error_kinds ?? '').split(',').filter((k) => k !== ''),
   }))
   const counts = new Map<string, number>()
-  for (const item of items) for (const k of new Set(item.topErrorKinds)) counts.set(k, (counts.get(k) ?? 0) + 1)
+  if (cursor === null) for (const item of items) for (const k of new Set(item.topErrorKinds)) counts.set(k, (counts.get(k) ?? 0) + 1)
   const recurring = [...counts]
     .map(([kind, count]) => ({ kind, count }))
     .sort((a, b) => b.count - a.count || a.kind.localeCompare(b.kind))
     .slice(0, RECURRING_LIMIT)
-  return json({ items, recurring } satisfies HistoryResponse)
+  return json({ items, recurring, nextBefore } satisfies HistoryResponse)
 }
 
 /**

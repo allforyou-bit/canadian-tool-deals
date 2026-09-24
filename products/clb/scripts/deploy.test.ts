@@ -3,7 +3,17 @@
 import { describe, expect, it, vi } from 'vitest'
 import anthropicLimitText from '../../../ops/config/anthropic-limit.json?raw'
 import wranglerText from '../worker/wrangler.jsonc?raw'
-import { checkDeployConfig, checkWranglerIds, customDomainFor, parseAnthropicLimit, parseJsonc, wranglerSection } from './deploy-config'
+import {
+  checkDeployConfig,
+  checkWranglerIds,
+  customDomainFor,
+  liveVersionFrom,
+  parseAnthropicLimit,
+  parseEmailList,
+  parseJsonc,
+  stagingFromEmail,
+  wranglerSection,
+} from './deploy-config'
 import { buildIndexNowBodies, INDEXNOW_ENDPOINT, pingIndexNow, sitemapUrls, validIndexNowKey } from './indexnow'
 import { checkHealth, checkMeShape, KEY_FILES, KEY_PAGES, runSmoke } from './smoke'
 
@@ -28,7 +38,10 @@ describe('parseJsonc and the committed wrangler.jsonc', () => {
     expect(staging.name).not.toBe(config.name)
     // config-schema.json: vars, d1_databases, kv_namespaces and ai are not inherited
     for (const key of ['vars', 'd1_databases', 'kv_namespaces', 'ai']) expect(staging).toHaveProperty(key)
-    expect(Object.keys(staging.vars as object).sort()).toEqual(Object.keys(config.vars as object).sort())
+    // staging has every production var plus the allowlist that locks it; production never has the allowlist
+    expect(Object.keys(staging.vars as object).sort()).toEqual([...Object.keys(config.vars as object), 'STAGING_ALLOWED_EMAILS'].sort())
+    expect(config.vars).not.toHaveProperty('STAGING_ALLOWED_EMAILS')
+    expect((staging.vars as Record<string, string>).FROM_EMAIL).toMatch(/^STAGING - /)
     expect((staging.d1_databases as { database_name: string }[])[0].database_name).not.toBe((config.d1_databases as { database_name: string }[])[0].database_name)
   })
 
@@ -37,6 +50,18 @@ describe('parseJsonc and the committed wrangler.jsonc', () => {
     expect(checkWranglerIds(parseJsonc(wranglerText), 'staging').join(' ')).toMatch(/env\.staging has no D1 database_id/)
     expect(checkWranglerIds(parseJsonc(filled), 'production')).toEqual([])
     expect(checkWranglerIds(parseJsonc(filled), 'staging')).toEqual([])
+  })
+
+  it('keeps the staging allowlist out of production and in staging (round 2)', () => {
+    const config = parseJsonc(filled) as { vars: Record<string, string>; env: { staging: { vars: Record<string, string> } } }
+    const prodLocked = structuredClone(config)
+    prodLocked.vars.STAGING_ALLOWED_EMAILS = 'owner@example.com'
+    expect(checkWranglerIds(prodLocked, 'production').join(' ')).toMatch(/must not define STAGING_ALLOWED_EMAILS/)
+    const stagingOpen = structuredClone(config)
+    delete stagingOpen.env.staging.vars.STAGING_ALLOWED_EMAILS
+    expect(checkWranglerIds(stagingOpen, 'staging').join(' ')).toMatch(/must define STAGING_ALLOWED_EMAILS/)
+    stagingOpen.env.staging.vars.STAGING_ALLOWED_EMAILS = '  '
+    expect(checkWranglerIds(stagingOpen, 'staging').join(' ')).toMatch(/must define STAGING_ALLOWED_EMAILS/)
   })
 })
 
@@ -56,14 +81,29 @@ describe('customDomainFor (R56)', () => {
 })
 
 describe('checkDeployConfig', () => {
-  const env = { SITE_URL: 'https://maplepractice.ca/', MAILING_ADDRESS: ADDRESS, TURNSTILE_SITE_KEY: '0x4AAA' }
+  const env = {
+    SITE_URL: 'https://maplepractice.ca/',
+    MAILING_ADDRESS: ADDRESS,
+    TURNSTILE_SITE_KEY: '0x4AAAAAAAB1234567890abc',
+    TURNSTILE_SECRET_MODE: 'set',
+    FROM_EMAIL: 'Maple Practice Coach <coach@maplepractice.ca>',
+    OWNER_EMAIL: 'owner@maplepractice.ca',
+  }
   const run = (over: Record<string, string | undefined>, target: 'production' | 'staging' = 'production', limit: string | null = anthropicLimitText) =>
     checkDeployConfig({ target, env: { ...env, ...over }, wranglerText: filled, anthropicLimitText: limit })
 
   it('passes a complete production configuration and hands the workflow its values', () => {
     const r = run({})
     expect(r.errors).toEqual([])
-    expect(r.outputs).toEqual({ site_url: 'https://maplepractice.ca', domain: 'maplepractice.ca', anthropic_limit_usd: String(parseAnthropicLimit(anthropicLimitText).usd) })
+    expect(r.outputs).toEqual({
+      site_url: 'https://maplepractice.ca',
+      domain: 'maplepractice.ca',
+      anthropic_limit_usd: String(parseAnthropicLimit(anthropicLimitText).usd),
+      // staging-only outputs stay empty: production is never locked and keeps its sender as is
+      staging_allowed_emails: '',
+      from_email: '',
+    })
+    expect(run({ MPC_STAGING_ALLOWED_EMAILS: 'a@b.ca' }).outputs.staging_allowed_emails).toBe('')
   })
 
   it('refuses production without the mailing address or with the placeholder (decision 16)', () => {
@@ -83,7 +123,18 @@ describe('checkDeployConfig', () => {
     expect(run({}, 'production', '{"monthlyLimitUsd": 0}').errors.join(' ')).toMatch(/positive number/)
     expect(run({}, 'production', '{"monthlyLimitUsd": 300, "confirmedByOwner": true}').warnings.join(' ')).not.toMatch(/confirmedByOwner/)
     expect(run({}, 'production', '{"monthlyLimitUsd": 300}').warnings.join(' ')).toMatch(/not confirmedByOwner/)
-    expect(run({ STRIPE_KEY_MODE: 'test' }, 'staging').outputs.anthropic_limit_usd).toBe('')
+  })
+
+  it('caps staging at the eval workspace limit, never the production one (round 2)', () => {
+    const { usd, evalUsd } = parseAnthropicLimit(anthropicLimitText)
+    expect(evalUsd).not.toBeNull()
+    expect(evalUsd).not.toBe(usd)
+    expect(run({ STRIPE_KEY_MODE: 'test' }, 'staging').outputs.anthropic_limit_usd).toBe(String(evalUsd))
+    expect(run({ STRIPE_KEY_MODE: 'test' }, 'staging', '{"monthlyLimitUsd": 150}').errors.join(' ')).toMatch(/evalMonthlyLimitUsd must be a positive number/)
+    expect(run({ STRIPE_KEY_MODE: 'test' }, 'staging', '{"monthlyLimitUsd": 150, "evalMonthlyLimitUsd": -1}').errors.join(' ')).toMatch(/evalMonthlyLimitUsd/)
+    expect(run({ STRIPE_KEY_MODE: 'test' }, 'staging', null).errors.join(' ')).toMatch(/anthropic-limit\.json is missing/)
+    // production does not need the eval limit
+    expect(run({}, 'production', '{"monthlyLimitUsd": 150, "confirmedByOwner": true}').errors).toEqual([])
   })
 
   it('validates the grader variables the Worker would otherwise ignore silently', () => {
@@ -101,10 +152,67 @@ describe('checkDeployConfig', () => {
     expect(run({ SITE_URL: 'https://mpc.owner.workers.dev' }).outputs.domain).toBe('')
   })
 
+  it('refuses production without a real Turnstile site key and secret; staging only warns (round 2)', () => {
+    expect(run({ TURNSTILE_SITE_KEY: '' }).errors.join(' ')).toMatch(/MPC_TURNSTILE_SITE_KEY is not set.*sign-in/)
+    for (const key of ['1x00000000000000000000AA', '2x00000000000000000000AB', '1x00000000000000000000BB', '3x00000000000000000000FF']) {
+      expect(run({ TURNSTILE_SITE_KEY: key }).errors.join(' ')).toMatch(/test site keys/)
+    }
+    expect(run({ TURNSTILE_SECRET_MODE: '' }).errors.join(' ')).toMatch(/TURNSTILE_SECRET secret is not set/)
+    expect(run({ TURNSTILE_SECRET_MODE: 'test' }).errors.join(' ')).toMatch(/test secret keys/)
+    const staging = run({ TURNSTILE_SITE_KEY: '', TURNSTILE_SECRET_MODE: '', STRIPE_KEY_MODE: 'test' }, 'staging')
+    expect(staging.errors).toEqual([])
+    expect(staging.warnings.join(' ')).toMatch(/MPC_TURNSTILE_SITE_KEY is not set\. Staging does not need it/)
+  })
+
+  it('locks staging to MPC_STAGING_ALLOWED_EMAILS, else MPC_OWNER_EMAIL, and refuses it without either (round 2)', () => {
+    const stg = (over: Record<string, string | undefined>) => run({ STRIPE_KEY_MODE: 'test', ...over }, 'staging')
+    expect(stg({}).outputs.staging_allowed_emails).toBe('owner@maplepractice.ca')
+    expect(stg({ MPC_STAGING_ALLOWED_EMAILS: ' me@x.ca , , Second@Y.ca ' }).outputs.staging_allowed_emails).toBe('me@x.ca,Second@Y.ca')
+    const none = stg({ MPC_STAGING_ALLOWED_EMAILS: '', OWNER_EMAIL: '' })
+    expect(none.errors.join(' ')).toMatch(/not deployed without an email allowlist/)
+    expect(none.outputs.staging_allowed_emails).toBe('')
+    const bad = stg({ MPC_STAGING_ALLOWED_EMAILS: 'me@x.ca, not an email; secret-value' })
+    expect(bad.errors.join(' ')).toMatch(/MPC_STAGING_ALLOWED_EMAILS: 1 of 2 entries/)
+    expect(JSON.stringify(bad)).not.toContain('secret-value')
+    expect(bad.outputs.staging_allowed_emails).toBe('')
+    expect(parseEmailList(' a@b.c,,  d@e.f ')).toEqual(['a@b.c', 'd@e.f'])
+  })
+
+  it('marks the staging sender visibly and refuses a sender it cannot mark (round 2)', () => {
+    expect(run({ STRIPE_KEY_MODE: 'test' }, 'staging').outputs.from_email).toBe('STAGING - Maple Practice Coach <coach@maplepractice.ca>')
+    expect(run({ STRIPE_KEY_MODE: 'test', FROM_EMAIL: 'Coach <c@x' }, 'staging').errors.join(' ')).toMatch(/MPC_FROM_EMAIL must be/)
+    const unset = run({ STRIPE_KEY_MODE: 'test', FROM_EMAIL: '' }, 'staging')
+    expect(unset.errors).toEqual([])
+    expect(unset.warnings.join(' ')).toMatch(/MPC_FROM_EMAIL is not set/)
+    expect(stagingFromEmail('coach@maplepractice.ca')).toBe('STAGING - Maple Practice Coach <coach@maplepractice.ca>')
+    expect(stagingFromEmail('<coach@maplepractice.ca>')).toBe('STAGING - Maple Practice Coach <coach@maplepractice.ca>')
+    expect(stagingFromEmail('"Maple, Coach" <c@x.ca>')).toBe('"STAGING - Maple, Coach" <c@x.ca>')
+    expect(stagingFromEmail('STAGING - Coach <c@x.ca>')).toBe('STAGING - Coach <c@x.ca>')
+    expect(stagingFromEmail(undefined)).toBe('')
+    expect(stagingFromEmail('not an address')).toBeNull()
+  })
+
   it('never lets staging use a live Stripe key', () => {
     expect(run({ STRIPE_KEY_MODE: 'live' }, 'staging').errors.join(' ')).toMatch(/live key/)
     expect(run({ STRIPE_KEY_MODE: '' }, 'staging').warnings.join(' ')).toMatch(/checkout on staging will not work/)
     expect(run({ STRIPE_KEY_MODE: 'test' }, 'staging').errors).toEqual([])
+  })
+})
+
+describe('liveVersionFrom (deploy.yml before the deploy and before a rollback)', () => {
+  const status = { id: 'd1', versions: [{ version_id: 'v-new', percentage: 100 }] }
+
+  it('returns the version at 100% and ignores text before the JSON', () => {
+    expect(liveVersionFrom(JSON.stringify(status, null, 2))).toBe('v-new')
+    expect(liveVersionFrom(`▲ [WARNING] Proxy environment variables detected.\n${JSON.stringify(status)}`)).toBe('v-new')
+  })
+
+  it('returns an empty string for a gradual deployment or anything else', () => {
+    expect(liveVersionFrom(JSON.stringify({ versions: [{ version_id: 'a', percentage: 50 }, { version_id: 'b', percentage: 50 }] }))).toBe('')
+    expect(liveVersionFrom('')).toBe('')
+    expect(liveVersionFrom('✘ [ERROR] The Worker has no deployments.')).toBe('')
+    expect(liveVersionFrom('{ not json')).toBe('')
+    expect(liveVersionFrom(JSON.stringify({ versions: [{ version_id: 7, percentage: 100 }] }))).toBe('')
   })
 })
 

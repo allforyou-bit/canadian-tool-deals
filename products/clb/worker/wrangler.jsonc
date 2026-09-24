@@ -56,7 +56,12 @@
   // `npx wrangler kv namespace create FLAGS --env staging`, paste both ids below). Per
   // config-schema.json, vars, d1_databases, kv_namespaces and ai are NOT inherited from the top level,
   // so they are repeated here; main, assets, compatibility settings and observability are inherited.
-  // deploy.yml overrides SITE_URL, APP_VERSION and the owner vars with --var, like production.
+  // deploy.yml overrides SITE_URL, APP_VERSION and the owner vars with --var, like production, and adds
+  // ANTHROPIC_MONTHLY_LIMIT_USD (the eval workspace limit). STAGING_ALLOWED_EMAILS locks staging: sign-in
+  // links go only to those addresses and anonymous grading is off (worker/src/auth.ts stagingAllows).
+  // deploy.yml always replaces the placeholder below with MPC_STAGING_ALLOWED_EMAILS (or MPC_OWNER_EMAIL)
+  // and refuses to deploy staging without one; the placeholder keeps any other staging deploy locked.
+  // Production must never define it (scripts/deploy-config.ts checks both).
   "env": {
     "staging": {
       "name": "maple-practice-coach-staging",
@@ -82,9 +87,10 @@
       "vars": {
         "SITE_URL": "https://maple-practice-coach-staging.example.workers.dev",
         "APP_VERSION": "0.1.0-staging",
-        "FROM_EMAIL": "Maple Practice Coach (staging) <coach@example.com>",
+        "FROM_EMAIL": "STAGING - Maple Practice Coach <coach@example.com>",
         "MAILING_ADDRESS": "SET-BEFORE-LAUNCH (CASL: owner mailing address)",
-        "OWNER_EMAIL": "owner@example.com"
+        "OWNER_EMAIL": "owner@example.com",
+        "STAGING_ALLOWED_EMAILS": "owner@example.com"
       }
     }
   }

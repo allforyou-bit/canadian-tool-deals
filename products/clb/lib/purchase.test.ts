@@ -13,7 +13,7 @@ function me(extra: Partial<MeResponse> = {}): MeResponse {
     pass: null,
     free: { writing: false, speaking: false },
     usage: { writingToday: 0, speakingToday: 0, graded30d: 0 },
-    flags: { checkoutEnabled: true, gradingEnabled: true, banner: '' },
+    flags: { checkoutEnabled: true, gradingEnabled: true, freeEnabled: true, banner: '' },
     ...extra,
   }
 }

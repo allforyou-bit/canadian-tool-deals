@@ -67,6 +67,7 @@ const en = {
   'p.securityNeeded': 'Please complete the security check first.',
   'p.freeWriting': 'Free sample: one writing task without an account. The security check below helps us stop abuse.',
   'p.freeUsed': 'You have used your free writing sample. Get a pass to receive more feedback.',
+  'p.freeOff': 'Free samples are not available right now. Get a pass to receive feedback.',
   'p.passActive': 'Pass active until {date}.',
   'p.paused':
     'Feedback is paused right now. You can still practise with the timer. If feedback is paused, active passes are extended by the length of the pause.',
@@ -94,6 +95,7 @@ const en = {
 
   // speaking
   's.signIn': 'Sign in to practise speaking. Your first speaking task is free after you verify your email.',
+  's.signInFreeOff': 'Sign in to practise speaking. Free samples are not available right now, so feedback needs a pass.',
   's.notice':
     'Pronunciation and fluency are not assessed: the feedback is based on a transcript of your recording.',
   's.privacy': 'Your recording is used only to make a transcript and is never stored.',
@@ -210,6 +212,7 @@ const en = {
   'a.freeSpeaking': 'Speaking sample',
   'a.available': 'Available',
   'a.used': 'Used or unavailable',
+  'a.freeOff': 'Not available right now',
   'a.history': 'Your practice history',
   'a.noHistory': 'No practice tasks with feedback yet.',
   'a.recurring': 'Recurring error types',
@@ -217,6 +220,7 @@ const en = {
   'a.historyOpen': 'Show answer and feedback',
   'a.historyClose': 'Hide answer and feedback',
   'a.historyGone': 'This answer and its feedback are no longer stored.',
+  'a.historyMore': 'Show older tasks',
   'a.marketing': 'Email preferences',
   'a.marketingIntro':
     'We only send marketing emails if you agree. Sign-in links and receipts are always sent.',
@@ -343,6 +347,7 @@ const ko: Record<UiKey, string> = {
   'p.securityNeeded': '먼저 보안 확인을 완료해 주세요.',
   'p.freeWriting': '무료 체험: 계정 없이 쓰기 과제 1개를 해 볼 수 있어요. 아래 보안 확인은 악용을 막기 위한 거예요.',
   'p.freeUsed': '무료 쓰기 체험을 이미 사용했어요. 피드백을 더 받으려면 이용권을 구매해 주세요.',
+  'p.freeOff': '지금은 무료 체험을 이용할 수 없어요. 피드백을 받으려면 이용권을 구매해 주세요.',
   'p.passActive': '{date}까지 이용권을 쓸 수 있어요.',
   'p.paused': '지금은 피드백이 잠시 멈춰 있어요. 타이머로 연습은 계속할 수 있어요. 피드백이 멈추면 사용 중인 이용권 기간이 멈춘 시간만큼 늘어나요.',
 
@@ -366,6 +371,7 @@ const ko: Record<UiKey, string> = {
   't.note': '타이머는 연습용이라 제출을 막지 않아요.',
 
   's.signIn': '말하기 연습은 로그인 후 이용할 수 있어요. 이메일 인증 후 첫 말하기 과제는 무료예요.',
+  's.signInFreeOff': '말하기 연습은 로그인 후 이용할 수 있어요. 지금은 무료 체험을 이용할 수 없어서 피드백을 받으려면 이용권이 필요해요.',
   's.notice': '발음과 유창성은 평가하지 않아요. 피드백은 녹음을 받아쓴 내용을 바탕으로 해요.',
   's.privacy': '녹음은 받아쓰기에만 쓰이고 저장되지 않아요.',
   's.unsupported': '이 브라우저에서는 녹음할 수 없어요. 최신 Chrome, Edge, Firefox, Safari를 사용해 주세요.',
@@ -473,6 +479,7 @@ const ko: Record<UiKey, string> = {
   'a.freeSpeaking': '말하기 체험',
   'a.available': '이용 가능',
   'a.used': '사용했거나 이용 불가',
+  'a.freeOff': '지금은 이용 불가',
   'a.history': '연습 기록',
   'a.noHistory': '아직 피드백을 받은 연습 과제가 없어요.',
   'a.recurring': '자주 나오는 오류 유형',
@@ -480,6 +487,7 @@ const ko: Record<UiKey, string> = {
   'a.historyOpen': '답안과 피드백 보기',
   'a.historyClose': '답안과 피드백 숨기기',
   'a.historyGone': '이 답안과 피드백은 더 이상 보관되어 있지 않아요.',
+  'a.historyMore': '이전 과제 더 보기',
   'a.marketing': '이메일 수신 설정',
   'a.marketingIntro': '동의한 경우에만 마케팅 이메일을 보내요. 로그인 링크와 영수증은 항상 보내요.',
   'a.marketingOn': '마케팅 이메일을 받고 있어요.',

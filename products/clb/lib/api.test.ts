@@ -97,13 +97,25 @@ describe('requests', () => {
 
   it('uses GET for reads', async () => {
     const fetchMock = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) =>
-      jsonResponse({ items: [], recurring: [] }),
+      jsonResponse({ items: [], recurring: [], nextBefore: null }),
     )
     vi.stubGlobal('fetch', fetchMock)
     await api.history()
     expect(fetchMock.mock.calls[0][0]).toBe('/api/history')
     expect(fetchMock.mock.calls[0][1]?.method).toBe('GET')
     expect(fetchMock.mock.calls[0][1]?.body).toBeUndefined()
+  })
+
+  it('asks for an older history page with the escaped cursor, and for the first page without one', async () => {
+    const fetchMock = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) =>
+      jsonResponse({ items: [], recurring: [], nextBefore: null }),
+    )
+    vi.stubGlobal('fetch', fetchMock)
+    await api.history('2026-06-01T10:00:00.000Z|g 2&x=1')
+    await api.history(null)
+    expect(fetchMock.mock.calls[0][0]).toBe('/api/history?before=2026-06-01T10%3A00%3A00.000Z%7Cg%202%26x%3D1')
+    expect(fetchMock.mock.calls[0][1]?.method).toBe('GET')
+    expect(fetchMock.mock.calls[1][0]).toBe('/api/history')
   })
 
   it('reads one saved history item by grade id (escaped into the query)', async () => {

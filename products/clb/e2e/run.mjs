@@ -159,6 +159,10 @@ const HISTORY_ITEMS = {
   g1: { gradeId: 'g1', taskId: 'email', kind: 'writing', createdAt: '2026-09-21T10:00:00.000Z', text: SAVED_ESSAY, result: WRITING_RESULT },
 }
 
+/** GET /api/history pages: the first page's cursor (createdAt|id of its last row) and the older page. */
+const HISTORY_CURSOR = '2026-06-01T10:00:00.000Z|g2'
+const OLDER_HISTORY = [{ gradeId: 'g3', taskId: 'survey', createdAt: '2026-05-20T10:00:00.000Z', topErrorKinds: ['vocabulary'] }]
+
 /** A valid unsubscribe link fragment (the mock plays the Worker's signature check). */
 const UNSUB = { h: 'ab'.repeat(32), s: 'cd'.repeat(32) }
 
@@ -173,7 +177,9 @@ function defaultState() {
     marketingOptIn: false,
     free: { writing: true, speaking: false },
     usage: { writingToday: 0, speakingToday: 0, graded30d: 0 },
-    flags: { checkoutEnabled: true, gradingEnabled: true, banner: '' },
+    flags: { checkoutEnabled: true, gradingEnabled: true, freeEnabled: true, banner: '' },
+    /** GET /api/history: the first page says there is an older page (nextBefore) */
+    olderHistory: false,
     /** next response per endpoint, e.g. { 'POST /api/grade/writing': { status: 402, body: {...} } } */
     overrides: {},
     /**
@@ -231,24 +237,33 @@ function apiHandler(s, method, path, body, query) {
     case 'POST /api/auth/logout':
       s.signedIn = false
       return ok({ ok: true })
-    case 'GET /api/history':
+    case 'GET /api/history': {
       if (!s.signedIn) return err(401, 'unauthorized')
+      const before = query.get('before')
+      // older pages carry no recurring block (it describes recent work, first page only)
+      if (before === HISTORY_CURSOR) return ok({ items: OLDER_HISTORY, recurring: [], nextBefore: null })
+      if (before !== null) return err(400, 'bad_request', 'Invalid cursor')
       return ok({
         items: [
           { gradeId: 'g1', taskId: 'email', createdAt: '2026-09-21T10:00:00.000Z', topErrorKinds: ['grammar', 'spelling'] },
           { gradeId: 'g2', taskId: 'advice', createdAt: '2026-06-01T10:00:00.000Z', topErrorKinds: ['fluency'] },
         ],
         recurring: [{ kind: 'grammar', count: 3 }],
+        nextBefore: s.olderHistory ? HISTORY_CURSOR : null,
       })
+    }
     case 'GET /api/history/item': {
       if (!s.signedIn) return err(401, 'unauthorized')
       const item = HISTORY_ITEMS[query.get('id') ?? '']
       return item ? ok(item) : err(404, 'not_found', 'Not found')
     }
     case 'POST /api/grade/writing':
+      // like the Worker: without a pass, nothing is graded while free samples are switched off
+      if (!s.pass && !s.flags.freeEnabled) return err(429, 'free_unavailable', 'The free writing sample is not available right now.')
       return ok({ gradeId: 'g-w', result: { ...WRITING_RESULT, explanationLang: body?.explanationLang ?? 'en' }, free: !s.pass })
     case 'POST /api/grade/speaking':
       if (!s.signedIn) return err(401, 'unauthorized')
+      if (!s.pass && !s.flags.freeEnabled) return err(429, 'free_unavailable', 'The free speaking sample is not available right now.')
       return ok({ gradeId: 'g-s', result: SPEAKING_RESULT, free: !s.pass })
     case 'POST /api/checkout':
       if (!s.signedIn) return err(401, 'unauthorized')
@@ -477,6 +492,52 @@ test('writing error codes show the right guidance', async ({ page, base, state }
     await page.getByRole('alert').filter({ hasText: expected }).waitFor()
   }
   assert.equal(callsTo(state, '/api/grade/writing').length, cases.length, 'every case reached the server')
+})
+
+test('free samples switched off: a new visitor is told they are not available, never that they used theirs', async ({ page, base, state }) => {
+  // /api/me reports every sample as unavailable while free_enabled is off
+  state.flags.freeEnabled = false
+  state.free = { writing: false, speaking: false }
+  await page.goto(`${base}/practice/writing/email/`)
+  const off = page.getByRole('status').filter({ hasText: 'Free samples are not available right now. Get a pass to receive feedback.' })
+  await off.waitFor()
+  assert.equal(await off.getByRole('link', { name: 'See pricing' }).getAttribute('href'), '/pricing/')
+  assert.equal(await page.getByText('You have used your free writing sample').count(), 0, 'no "used" wording')
+  assert.equal(await page.getByText('Free sample: one writing task without an account.').count(), 0, 'no free-sample offer')
+
+  // a submission anyway (e.g. the page was open before the switch) gets the same wording, without a sign-in link
+  await freshToken(page)
+  await page.getByLabel('Your answer').fill(ESSAY)
+  await page.getByRole('checkbox', { name: 'I am 18 or older.' }).check()
+  await page.getByRole('button', { name: 'Get feedback' }).click()
+  const alert = page.getByRole('alert').filter({ hasText: 'Free samples are not available right now. Get a pass to receive feedback.' })
+  await alert.waitFor()
+  assert.deepEqual(
+    await alert.getByRole('link').evaluateAll((links) => links.map((a) => a.getAttribute('href'))),
+    ['/pricing/'],
+  )
+  assert.equal(callsTo(state, '/api/events').filter((c) => c.body?.name === 'sample_start').length, 0, 'no sample_start')
+
+  // Korean wording
+  await page.goto(`${base}/practice/writing/email/?lang=ko`)
+  await page.getByText('지금은 무료 체험을 이용할 수 없어요. 피드백을 받으려면 이용권을 구매해 주세요.').waitFor()
+  assert.equal(await page.getByText('무료 쓰기 체험을 이미 사용했어요').count(), 0)
+
+  // speaking: signed out, the sign-in note does not promise a free task
+  await page.goto(`${base}/practice/speaking/opinions/?lang=en`)
+  await page.getByText('Sign in to practise speaking. Free samples are not available right now, so feedback needs a pass.').waitFor()
+  assert.equal(await page.getByText('Your first speaking task is free').count(), 0)
+
+  // speaking: signed in without a pass (never used the sample)
+  state.signedIn = true
+  await page.reload()
+  await page.getByRole('status').filter({ hasText: 'Free samples are not available right now. Get a pass to receive feedback.' }).waitFor()
+  assert.equal(await page.getByText('You have used your free speaking sample').count(), 0)
+
+  // the account page says the same
+  await page.goto(`${base}/account/`)
+  await page.getByText('Writing sample: Not available right now').waitFor()
+  await page.getByText('Speaking sample: Not available right now').waitFor()
 })
 
 test('speaking: keyboard flow with focus and announcements, no-speech message, transcript feedback', async ({ page, base, state, browserName }) => {
@@ -802,6 +863,38 @@ test('account: history opens the saved answer and feedback; purged items say so'
 
   await page.getByRole('button', { name: 'Show answer and feedback' }).click() // the second (purged) item
   await page.getByText('This answer and its feedback are no longer stored.').waitFor()
+})
+
+test('account: history "Show older tasks" loads the next page and keeps the recurring block', async ({ page, base, state }) => {
+  state.signedIn = true
+  state.olderHistory = true
+  await page.goto(`${base}/account/`)
+  const list = page.getByTestId('history-list')
+  await list.getByRole('listitem').nth(1).waitFor()
+  assert.equal(await list.getByRole('listitem').count(), 2)
+  await page.getByText('Grammar · 3 times').waitFor()
+
+  const more = page.getByRole('button', { name: 'Show older tasks' })
+  await more.focus()
+  await page.keyboard.press('Enter')
+  await list.getByRole('listitem').filter({ hasText: 'Responding to survey questions' }).waitFor()
+  assert.equal(await list.getByRole('listitem').count(), 3, 'the older page is appended')
+  // the recurring block comes from the first page and stays
+  await page.getByText('Grammar · 3 times').waitFor()
+  // the last page: no button; focus moved to the first item it added
+  assert.equal(await more.count(), 0)
+  await page.waitForFunction(
+    () => document.activeElement?.tagName === 'LI' && document.activeElement.textContent?.includes('Responding to survey questions'),
+  )
+  assert.deepEqual(
+    callsTo(state, '/api/history').map((c) => c.query),
+    ['', '?before=2026-06-01T10%3A00%3A00.000Z%7Cg2'],
+  )
+  // the default state has no older page: the button is not shown
+  state.olderHistory = false
+  await page.reload()
+  await list.getByRole('listitem').nth(1).waitFor()
+  assert.equal(await page.getByRole('button', { name: 'Show older tasks' }).count(), 0)
 })
 
 test('account: delete with a confirm step (focus moves in and back)', async ({ page, base, state }) => {

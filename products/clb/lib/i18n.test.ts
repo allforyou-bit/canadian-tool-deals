@@ -74,6 +74,21 @@ describe('describeError', () => {
     ])
   })
 
+  it('says free samples are off (no sign-in link) when the page knows they are, or the learner is signed in', () => {
+    const off = describeError(err('free_unavailable', 429), 'en', 'writing', '/practice/writing/email/', { freeOff: true })
+    expect(off.text).toBe('Free samples are not available right now. Get a pass to receive feedback.')
+    expect(off.text).toBe(t('en', 'p.freeOff'))
+    expect(off.actions.map((a) => a.href)).toEqual(['/pricing/'])
+    const signedIn = describeError(err('free_unavailable', 429), 'ko', 'speaking', '/practice/speaking/advice/', { signedIn: true })
+    expect(signedIn.text).toBe('지금은 무료 체험을 이용할 수 없어요. 피드백을 받으려면 이용권을 구매해 주세요.')
+    expect(signedIn.actions.map((a) => a.href)).toEqual(['/ko/pricing/'])
+    // the practice pages never tell a visitor with no sample (free off) that they used it
+    for (const lang of ['en', 'ko'] as const) {
+      expect(t(lang, 'p.freeOff')).not.toBe(t(lang, 'p.freeUsed'))
+      expect(t(lang, 's.signInFreeOff')).not.toMatch(/free after|무료예요/)
+    }
+  })
+
   it('offers sign-in for unauthorized', () => {
     expect(describeError(err('unauthorized', 401), 'en', 'speaking', '/practice/speaking/advice/').actions[0].href).toBe(
       '/login/?next=/practice/speaking/advice/',
