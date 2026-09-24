@@ -82,7 +82,7 @@ describe('pre-flight cost bound (R53)', () => {
     const small = maxBatchCostUsd(buildRequests(selectSubset(samples, 10), 3, 'claude-opus-5', { maxTokens: 8000 }))
     expect(full.requests).toBe(450)
     expect(small.requests).toBe(60)
-    expect(checkBudget(full, '20')).toMatch(/worst case for this run is US\$\d+(\.\d+)? \(450 requests/)
+    expect(checkBudget(full, '20')).toMatch(/worst case for this batch is US\$\d+(\.\d+)? \(450 requests/)
     expect(checkBudget(small, '20')).toBeNull()
     expect(checkBudget(full, undefined)).toBeNull()
     expect(checkBudget(full, '')).toBeNull()
@@ -118,7 +118,7 @@ describe('pre-flight cost bound (R53)', () => {
     expect(checkBudget(b, '5', 0)).toBeNull()
     expect(checkBudget(b, '5', 1.16)).toBeNull()
     const over = checkBudget(b, '5', 1.17)
-    expect(over).toMatch(/worst case for this run is US\$3\.84 \(33 requests, up to 264000 output tokens\), above the US\$3\.83 left of the budget US\$5 \(earlier batches of this run cost US\$1\.17\)/)
+    expect(over).toMatch(/worst case for this batch is US\$3\.84 \(33 requests, up to 264000 output tokens\), above the US\$3\.83 left of the budget US\$5 \(earlier batches of this run cost US\$1\.17\)/)
     expect(checkBudget(b, '5', 9)).toMatch(/above the US\$0 left/)
     expect(checkBudget(b, undefined, 9)).toBeNull()
   })
@@ -150,6 +150,24 @@ describe('spend ledger (one budget per workflow run, Z6)', () => {
   it('does nothing without a ledger path (local runs)', async () => {
     expect(await readLedger(undefined)).toEqual([])
     await expect(recordSpend(undefined, { what: 'x', usd: 1, basis: 'results' })).resolves.toBeUndefined()
+  })
+
+  it('adds each batch of a run to the same file, which a later batch reads back', async () => {
+    const { mkdtemp, writeFile } = await import('node:fs/promises')
+    const { tmpdir } = await import('node:os')
+    const file = `${await mkdtemp(`${tmpdir()}/eval-ledger-`)}/sub/ledger.json`
+    expect(await readLedger(file)).toEqual([])
+    await recordSpend(file, { what: 'gen-synthetic claude-opus-5', usd: 0.123, basis: 'results' })
+    await recordSpend(file, { what: 'run-live claude-opus-5', usd: 3.84, basis: 'worst_case' })
+    const entries = await readLedger(file)
+    // amounts are rounded up to the cent when recorded
+    expect(entries).toEqual([
+      { what: 'gen-synthetic claude-opus-5', usd: 0.13, basis: 'results' },
+      { what: 'run-live claude-opus-5', usd: 3.84, basis: 'worst_case' },
+    ])
+    expect(ledgerSpentUsd(entries)).toBe(3.97)
+    await writeFile(file, '{broken')
+    await expect(readLedger(file)).rejects.toThrow(/not valid JSON/)
   })
 })
 

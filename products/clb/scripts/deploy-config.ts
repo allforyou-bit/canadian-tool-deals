@@ -412,7 +412,7 @@ export function checkDeployConfig({ target, env, wranglerText, anthropicLimitTex
           outputs.prepaid_usd = String(limit.prepaid.usd)
           outputs.prepaid_since = limit.prepaid.since
         } else {
-          warnings.push(`ops/config/anthropic-limit.json: ${limit.prepaidProblem}, so the Worker's prepaid-credit ledger is off (free samples stop at 70% of the credits, grading pauses at 97%). After buying credits, record the amount and the day there (memo §7.2 Z6).`)
+          warnings.push(`ops/config/anthropic-limit.json: ${limit.prepaidProblem}, so the Worker's prepaid-credit ledger is off (with it, free samples stop at 70% of the credits and grading pauses at 97%; without it only the monthly limit applies). After buying credits, record the amount and the day there (memo §7.2 Z6).`)
         }
       } else if (limit.evalUsd === null) {
         errors.push('ops/config/anthropic-limit.json: evalMonthlyLimitUsd must be a positive number; staging grades with the eval workspace key and is capped at that limit.')

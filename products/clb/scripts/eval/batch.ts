@@ -74,7 +74,7 @@ export function checkBudget(bound: CostBound, budgetRaw: string | undefined, spe
   const left = Math.round((budget - spentUsd) * 100) / 100
   if (bound.usd > left) {
     const against = spentUsd > 0 ? `above the US$${Math.max(0, left)} left of the budget US$${budget} (earlier batches of this run cost US$${spentUsd})` : `above the budget US$${budget}`
-    return `the worst case for this run is US$${bound.usd} (${bound.requests} requests, up to ${bound.outputTokens} output tokens), ${against}. Grade fewer samples (--limit / MPC_EVAL_LIMIT), lower GRADER_MAX_TOKENS, or raise MPC_EVAL_BUDGET_USD.`
+    return `the worst case for this batch is US$${bound.usd} (${bound.requests} requests, up to ${bound.outputTokens} output tokens), ${against}. Grade fewer samples (--limit / MPC_EVAL_LIMIT), lower GRADER_MAX_TOKENS, or raise MPC_EVAL_BUDGET_USD.`
   }
   return null
 }

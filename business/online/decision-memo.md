@@ -612,8 +612,8 @@ billing, Anthropic billing and AUP, growth, compliance), read 2026-09-24 from of
 - **Root site.** Its Next.js is patched to the fixed 16.x release (security advisory), so its output changes once.
 
 **Revised kill rules.** K1 (checkout live by Nov 1), K2 (owner hours), K5 (fewer than **10** free samples by Nov 15 →
-review channels), K6, K7, K8 and K9 stay. **K10:** cumulative cash out (Anthropic credits plus any paid plan) above
-**C$100** → stop. **K11:** wind down only if trailing-30-day net is below **−C$20** or owner support time exceeds
+review channels), K6, K7, K8 and K9 stay (K9 now covers notices from Stripe, Anthropic, Google, Cloudflare, Resend and GitHub). **K10:** cumulative cash out (Anthropic credits plus any paid plan) minus net sales income above
+**C$100** → stop (with no sales this is simply cash out above C$100; credits paid from revenue do not trip it). **K11:** wind down only if trailing-30-day net is below **−C$20** or owner support time exceeds
 **1 h/week**; otherwise keep the site running as a slow organic asset (its fixed cost is about C$0).
 
 **Revised expectations (ESTIMATE, organic only, memo §2.2 inputs, fixed cost ≈ C$0 plus API cost inside the net per sale).**
