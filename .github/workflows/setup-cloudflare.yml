@@ -1,0 +1,113 @@
+# One-time Cloudflare setup for the practice coach. It replaces the owner's local
+# `npx wrangler d1 create …` / `npx wrangler kv namespace create …` steps: the owner runs it once from the
+# Actions tab in a browser (Actions → "Set up Cloudflare (one time)" → Run workflow), after adding the
+# CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID repository secrets.
+#
+# For each target (input `target`: production, staging or both; default both) scripts/cloudflare-setup.ts
+#   1. finds or creates the D1 database named in worker/wrangler.jsonc (production "mpc", staging "mpc-staging")
+#      and the KV namespace for the FLAGS binding ("maple-practice-coach-flags", "maple-practice-coach-staging-flags";
+#      a namespace from the earlier manual guide, FLAGS or FLAGS_STAGING, is reused instead of making a second one);
+#      an id already in worker/wrangler.jsonc is reused when it exists in the account;
+#   2. applies the D1 migrations (worker/migrations) to exactly that database (`d1 migrations apply --remote`);
+#   3. writes the ids to the job summary: a block that starts with "클라우드플레어 설정 결과야", which the owner
+#      copies and sends to Claude in the chat, and the d1_databases / kv_namespaces entries for worker/wrangler.jsonc.
+# It changes no file in the repository: Claude (or whoever edits the repository) adds the ids to
+# worker/wrangler.jsonc, and deploy.yml refuses to deploy a target until they are there (scripts/deploy-config.ts).
+#
+# Safe to run again: existing resources are reused and a second database or namespace is never created (D1 names
+# and KV titles are unique per account, and a create refused because the name exists is resolved by listing
+# again); already-applied migrations are skipped. Missing secrets stop it with a notice, not an error.
+# Resource ids are not secrets; the API token is never printed, and the account id is redacted from wrangler output.
+#
+# API token permissions (cloudflare-docs fundamentals/api/reference/permissions.mdx, dashboard names): Account →
+# D1 → Edit and Account → Workers KV Storage → Edit. The "Edit Cloudflare Workers" template has Workers KV Storage
+# but not D1 (fundamentals/api/reference/template.mdx), so D1 Edit is added to it.
+#
+# Wrangler 4.137.0 commands checked with --help and wrangler-dist/cli.js: d1 list --json; d1 create <name>
+# --location; kv namespace list (always JSON, no --json flag); kv namespace create <namespace>;
+# d1 migrations apply <database> --remote -c <config> (no prompt when not interactive).
+name: Set up Cloudflare (one time)
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Which Cloudflare resources to set up (both = production and staging)
+        required: false
+        type: choice
+        default: both
+        options:
+          - production
+          - staging
+          - both
+
+permissions:
+  contents: read
+
+# never two setups at once; a deploy running at the same time is harmless (both apply only migrations that are
+# not applied yet)
+concurrency:
+  group: setup-cloudflare
+  cancel-in-progress: false
+
+jobs:
+  setup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: products/clb
+    env:
+      TARGET: ${{ inputs.target || 'both' }}
+      WRANGLER_SEND_METRICS: 'false'
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # The Cloudflare secrets are given only to the steps that need them (not to npm ci).
+      - name: Check the Cloudflare secrets
+        id: secrets
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          missing=()
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then missing+=(CLOUDFLARE_API_TOKEN); fi
+          if [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then missing+=(CLOUDFLARE_ACCOUNT_ID); fi
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "::notice::Nothing was set up: add the repository secret(s) ${missing[*]} first (business/online/owner-setup.md), then run \"Set up Cloudflare (one time)\" again."
+            {
+              echo "## Set up Cloudflare (one time): 시작하지 못했어요"
+              echo
+              echo "GitHub 저장소의 비밀(Settings → Secrets and variables → Actions)에 **${missing[*]}** 이(가) 없어서 아무것도 만들지 않았어요. 넣은 뒤 이 워크플로를 다시 실행해요."
+              echo
+              echo "Nothing was set up: the repository secret(s) ${missing[*]} are missing."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "Target: $TARGET"
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node
+        if: steps.secrets.outputs.ready == 'true'
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: products/clb/package-lock.json
+
+      - name: Install
+        if: steps.secrets.outputs.ready == 'true'
+        run: npm ci
+
+      # Finds or creates, applies the migrations and writes the job summary; fails when any target failed
+      # (the summary then says why, in the same block the owner sends to Claude).
+      - name: Find or create the D1 databases and KV namespaces, apply the D1 migrations
+        if: steps.secrets.outputs.ready == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/run.mjs scripts/cloudflare-setup.ts --target "$TARGET"

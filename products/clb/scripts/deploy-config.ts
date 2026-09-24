@@ -41,7 +41,9 @@
 //     so it is refused together with MAGIC_LINK=all or LEARNER_EMAIL=on
 //   - production refuses to deploy without a real Turnstile site key and secret: Cloudflare's test site
 //     key only yields a dummy token that a real secret rejects, so sign-in and the free sample would fail
-//   - the target's D1 database_id and KV namespace id must be filled in worker/wrangler.jsonc
+//   - the target's D1 database_id and KV namespace id must be filled in worker/wrangler.jsonc; when they are not,
+//     the error (and the job summary) points to the one-time workflow "Set up Cloudflare (one time)"
+//     (setup-cloudflare.yml, scripts/cloudflare-setup.ts), and nothing reaches Cloudflare
 //   - GRADER_EFFORT / GRADER_MAX_TOKENS must be valid when set (the Worker would silently use the defaults)
 //   - staging must never get a live Stripe key
 //   - staging is locked to an email allowlist (STAGING_ALLOWED_EMAILS: sign-in links only to those
@@ -88,25 +90,38 @@ export function wranglerSection(config: unknown, target: Target): Obj | null {
 }
 
 /** A pasted resource id: not empty, no spaces, not a `<paste …>` placeholder. */
-const looksLikeId = (v: unknown): boolean => typeof v === 'string' && /^[A-Za-z0-9-]{8,64}$/.test(v)
+export const looksLikeId = (v: unknown): boolean => typeof v === 'string' && /^[A-Za-z0-9-]{8,64}$/.test(v)
 
 /** The Worker var that locks staging to the owner's addresses (worker/src/auth.ts stagingAllows). */
 export const STAGING_ALLOWLIST_VAR = 'STAGING_ALLOWED_EMAILS'
 
-/** Problems with the target's D1 and KV ids (the owner pastes them after creating the resources) and vars. */
+/**
+ * The `name:` of .github/workflows/setup-cloudflare.yml, the one-time workflow that finds or creates each target's
+ * D1 database and FLAGS KV namespace (scripts/cloudflare-setup.ts). Messages name it so the owner can find it in
+ * the Actions tab; cloudflare-setup.test.ts checks it against the workflow file.
+ */
+export const SETUP_WORKFLOW_NAME = 'Set up Cloudflare (one time)'
+
+/** What a deploy with missing Cloudflare ids tells the owner to do instead (never wrangler's auto-provisioning). */
+export function setupHint(target: Target): string {
+  return `Cloudflare is not set up for ${target} yet: run the Actions workflow "${SETUP_WORKFLOW_NAME}" (target ${target} or both), send the block from its summary to Claude in the chat so the ids are added to worker/wrangler.jsonc, then deploy again`
+}
+
+/** Problems with the target's D1 and KV ids (added after the setup workflow created the resources) and vars. */
 export function checkWranglerIds(config: unknown, target: Target): string[] {
   const s = wranglerSection(config, target)
   const where = target === 'production' ? 'worker/wrangler.jsonc' : 'worker/wrangler.jsonc env.staging'
   if (!s) return [`${where} is missing`]
   const p: string[] = []
   const d1 = Array.isArray(s.d1_databases) ? s.d1_databases.find((d) => isObj(d) && d.binding === 'DB') : undefined
-  if (!isObj(d1) || !looksLikeId(d1.database_id)) {
-    p.push(`${where} has no D1 database_id for DB yet (owner-setup: \`npx wrangler d1 create ${isObj(d1) && typeof d1.database_name === 'string' ? d1.database_name : 'mpc'}\`, paste the id)`)
-  }
   const kv = Array.isArray(s.kv_namespaces) ? s.kv_namespaces.find((k) => isObj(k) && k.binding === 'FLAGS') : undefined
-  if (!isObj(kv) || !looksLikeId(kv.id)) {
-    p.push(`${where} has no KV namespace id for FLAGS yet (owner-setup: \`npx wrangler kv namespace create FLAGS${target === 'staging' ? ' --env staging' : ''}\`, paste the id)`)
-  }
+  const missing = [
+    !isObj(d1) || !looksLikeId(d1.database_id) ? `no D1 database_id for DB ("${isObj(d1) && typeof d1.database_name === 'string' ? d1.database_name : '?'}")` : '',
+    !isObj(kv) || !looksLikeId(kv.id) ? 'no KV namespace id for FLAGS' : '',
+  ].filter(Boolean)
+  // One message per target: the deploy stops here, before `wrangler d1 migrations apply` and `wrangler deploy`,
+  // whose hidden auto-provisioning (wrangler 4.137 --x-provision, on by default) would otherwise create resources.
+  if (missing.length) p.push(`${where} has ${missing.join(' and ')} yet. ${setupHint(target)}.`)
   if (target === 'staging' && s.name === (config as Obj).name) p.push(`${where}: name must differ from the production Worker's name`)
   const vars = isObj(s.vars) ? s.vars : {}
   // production must never be locked to an allowlist (nobody else could sign in); staging keeps a placeholder
@@ -459,6 +474,18 @@ export function checkDeployConfig({ target, env, wranglerText, anthropicLimitTex
   return { errors, warnings, notices, outputs }
 }
 
+/** Job-summary text (Korean for the owner, then English) for a deploy stopped by missing Cloudflare ids. */
+export function setupNeededSummary(target: Target): string {
+  return [
+    `## Cloudflare 설정이 아직 안 됐어요 (${target})`,
+    '',
+    `배포를 멈췄어요. Cloudflare에 데이터베이스(D1)와 스위치 저장소(KV)가 아직 연결되지 않았어요. **Actions** → **${SETUP_WORKFLOW_NAME}** → **Run workflow**를 한 번 실행하고, 그 실행 결과 요약에 나오는 상자를 복사해 Claude에게 채팅으로 보내요. Claude가 ID를 넣은 뒤 이 배포를 다시 실행해요.`,
+    '',
+    `The deploy stopped before touching Cloudflare: ${setupHint(target)}.`,
+    '',
+  ].join('\n')
+}
+
 /**
  * The version serving 100% of traffic in `wrangler deployments status --json` output ('' when there is
  * none, e.g. a gradual deployment, or the text is not that JSON). Text before the JSON is ignored.
@@ -508,6 +535,9 @@ export async function main(args: string[]): Promise<number> {
   for (const n of r.notices) console.log(`::notice::${n}`)
   for (const w of r.warnings) console.log(`::warning::${w}`)
   for (const e of r.errors) console.log(`::error::${e}`)
+  if (process.env.GITHUB_STEP_SUMMARY && r.errors.some((e) => e.includes(SETUP_WORKFLOW_NAME))) {
+    await appendFile(process.env.GITHUB_STEP_SUMMARY, setupNeededSummary(target))
+  }
   if (process.env.GITHUB_OUTPUT) {
     await appendFile(process.env.GITHUB_OUTPUT, Object.entries(r.outputs).map(([k, v]) => `${k}=${v.replace(/[\r\n]+/g, ' ')}\n`).join(''))
   }

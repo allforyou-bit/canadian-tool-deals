@@ -14,29 +14,21 @@
 # Triggers: pull requests, and pushes to master only. A push to a PR branch therefore runs CI once
 # (as the pull_request event), not twice. GitHub Free gives a private repo 2,000 Actions minutes a month
 # (memo §7.2 Z7), so changes that cannot affect either job do not start it (paths-ignore):
-#   business/online/**  owner documents; the root site's Tailwind scan excludes them (app/globals.css
-#                       @source not "../business/online") and neither package reads them. The rest of
-#                       business/** is NOT ignored: the root Tailwind scan reads it, so it can change the
-#                       root site's CSS and with it the out/ file list.
 #   ops/metrics/**      daily aggregate numbers; the root scan excludes ops/. Their personal-data guard
 #                       runs in metrics-guard.yml whenever they change, and in the clb job below.
-#   ops/routines/**, ops/README.md  Routine prompts and the ops index; nothing builds or tests them.
+# business/online/**, ops/routines/** and ops/README.md are NOT ignored: products/clb/scripts/ops-docs.test.ts
+# and owner-setup.test.ts read them (the claim guard on the community-post drafts, routine rules vs memo
+# §7.2, variable names vs the workflows), so an edit there must run the tests.
 name: CI
 
 on:
   push:
     branches: [master]
     paths-ignore:
-      - 'business/online/**'
       - 'ops/metrics/**'
-      - 'ops/routines/**'
-      - 'ops/README.md'
   pull_request:
     paths-ignore:
-      - 'business/online/**'
       - 'ops/metrics/**'
-      - 'ops/routines/**'
-      - 'ops/README.md'
 
 permissions:
   contents: read

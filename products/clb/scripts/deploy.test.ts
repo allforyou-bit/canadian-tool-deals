@@ -14,6 +14,9 @@ import {
   parseEmailList,
   parseJsonc,
   senderAddress,
+  SETUP_WORKFLOW_NAME,
+  setupHint,
+  setupNeededSummary,
   stagingFromEmail,
   validDay,
   wranglerSection,
@@ -22,12 +25,36 @@ import { buildIndexNowBodies, derivedIndexNowKey, INDEXNOW_ENDPOINT, pingIndexNo
 import { checkHealth, checkMeShape, KEY_FILES, KEY_PAGES, runSmoke } from './smoke'
 
 const ADDRESS = '1 Test St, Toronto ON M5V 0A1'
-// wrangler.jsonc with ids pasted in, as the owner does after creating the resources
-const filled = wranglerText
-  .replace('// "database_id": "<paste from `npx wrangler d1 create mpc`>",', '"database_id": "0f2c8e0a-1111-4222-8333-944455556666",')
-  .replace('"binding": "FLAGS"\n      // "id": "<paste from `npx wrangler kv namespace create FLAGS`>"', '"binding": "FLAGS", "id": "0123456789abcdef0123456789abcdef"')
-  .replace('// "database_id": "<paste from `npx wrangler d1 create mpc-staging`>",', '"database_id": "1f2c8e0a-1111-4222-8333-944455556666",')
-  .replace('"binding": "FLAGS"\n          // "id": "<paste from `npx wrangler kv namespace create FLAGS --env staging`>"', '"binding": "FLAGS", "id": "fedcba9876543210fedcba9876543210"')
+type Entry = Record<string, unknown>
+type Section = { d1_databases: Entry[]; kv_namespaces: Entry[] }
+/**
+ * The committed wrangler.jsonc with each target's D1 database_id and FLAGS id set, or removed when a target is
+ * not given. Built from the parsed config, so it does not depend on the file's comments or on whether the ids
+ * are already filled in.
+ */
+function withIds(ids: Partial<Record<'production' | 'staging', [d1: string, kv: string]>>): Section & { env: { staging: Section } } {
+  const c = parseJsonc(wranglerText) as Section & { env: { staging: Section } }
+  for (const [section, v] of [
+    [c, ids.production],
+    [c.env.staging, ids.staging],
+  ] as const) {
+    const d1 = section.d1_databases.find((d) => d.binding === 'DB')!
+    const kv = section.kv_namespaces.find((k) => k.binding === 'FLAGS')!
+    if (v) [d1.database_id, kv.id] = v
+    else {
+      delete d1.database_id
+      delete kv.id
+    }
+  }
+  return c
+}
+// wrangler.jsonc with the ids that the setup workflow (setup-cloudflare.yml) reports, as Claude adds them
+const filled = JSON.stringify(
+  withIds({
+    production: ['0f2c8e0a-1111-4222-8333-944455556666', '0123456789abcdef0123456789abcdef'],
+    staging: ['1f2c8e0a-1111-4222-8333-944455556666', 'fedcba9876543210fedcba9876543210'],
+  }),
+)
 
 describe('parseJsonc and the committed wrangler.jsonc', () => {
   it('keeps // inside strings and drops comments and trailing commas', () => {
@@ -49,11 +76,29 @@ describe('parseJsonc and the committed wrangler.jsonc', () => {
     expect((staging.d1_databases as { database_name: string }[])[0].database_name).not.toBe((config.d1_databases as { database_name: string }[])[0].database_name)
   })
 
-  it('reports ids that are still commented out, per target', () => {
-    expect(checkWranglerIds(parseJsonc(wranglerText), 'production')).toHaveLength(2)
-    expect(checkWranglerIds(parseJsonc(wranglerText), 'staging').join(' ')).toMatch(/env\.staging has no D1 database_id/)
+  it('reports missing ids per target, pointing to the one-time setup workflow (never wrangler auto-provisioning)', () => {
+    const unfilled = withIds({})
+    const prod = checkWranglerIds(unfilled, 'production')
+    expect(prod).toHaveLength(1)
+    expect(prod[0]).toMatch(/^worker\/wrangler\.jsonc has no D1 database_id for DB \("mpc"\) and no KV namespace id for FLAGS yet\./)
+    expect(prod[0]).toContain(`run the Actions workflow "${SETUP_WORKFLOW_NAME}" (target production or both)`)
+    expect(prod[0]).toContain('Claude')
+    expect(prod[0]).not.toMatch(/npx wrangler|d1 create|namespace create/)
+    const staging = checkWranglerIds(unfilled, 'staging').join(' ')
+    expect(staging).toMatch(/env\.staging has no D1 database_id for DB \("mpc-staging"\)/)
+    expect(staging).toContain('(target staging or both)')
+    // only one of the two missing
+    const kvOnly = withIds({ production: ['0f2c8e0a-1111-4222-8333-944455556666', 'x'] })
+    expect(checkWranglerIds(kvOnly, 'production')).toEqual([expect.stringMatching(/has no KV namespace id for FLAGS yet\. Cloudflare is not set up for production yet/)])
     expect(checkWranglerIds(parseJsonc(filled), 'production')).toEqual([])
     expect(checkWranglerIds(parseJsonc(filled), 'staging')).toEqual([])
+  })
+
+  it('the deploy summary for missing ids names the setup workflow, in Korean and English', () => {
+    const text = setupNeededSummary('staging')
+    expect(text).toContain(`**Actions** → **${SETUP_WORKFLOW_NAME}** → **Run workflow**`)
+    expect(text).toContain('Claude')
+    expect(text).toContain(setupHint('staging'))
   })
 
   it('keeps the staging allowlist out of production and in staging (round 2)', () => {
