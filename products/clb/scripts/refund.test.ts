@@ -420,7 +420,8 @@ describe('runRefund: missing secret, bad key, bad inputs', () => {
 
   it('a key that is not a Stripe secret or restricted key is refused without printing it', async () => {
     const s = fakeStripe()
-    for (const key of ['pk_live_51AbCdEfGh', 'whsec_51AbCdEfGh', 'not a key']) {
+    // assembled at run time, like KEY above, so no literal looks like a real key to secret scanners
+    for (const key of [['pk', 'live', 'FAKE000000'].join('_'), ['whsec', 'FAKE000000'].join('_'), 'not a key']) {
       const o = await runRefund({ env: env({ STRIPE_SECRET_KEY: key }), fetchImpl: s.fetchImpl })
       expect(o.code).toBe(2)
       expect(shown(o)).not.toContain(key)

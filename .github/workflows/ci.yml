@@ -192,6 +192,25 @@ jobs:
       - name: Personal-data guard (ops/metrics)
         run: node scripts/run.mjs scripts/metrics.ts guard ../../ops/metrics
 
+      # The unit tests run these scripts inside workerd; the owner's workflows run them with plain Node.
+      # Without secrets each must start, refuse cleanly and change nothing (a Worker-only import would
+      # break the Node bundle here instead of in the owner's first real run).
+      - name: Owner scripts start under Node (no secrets)
+        env:
+          GITHUB_STEP_SUMMARY: /dev/null
+        run: |
+          set +e
+          out=$(env -u STRIPE_SECRET_KEY node scripts/run.mjs scripts/refund.ts 2>&1); code=$?
+          echo "$out"
+          if [ "$code" -ne 2 ] || ! grep -q 'STRIPE_SECRET_KEY is not set' <<<"$out"; then
+            echo "::error::scripts/refund.ts did not start under Node (exit $code)"; exit 1
+          fi
+          out=$(env -u CLOUDFLARE_API_TOKEN -u CLOUDFLARE_ACCOUNT_ID node scripts/run.mjs scripts/cloudflare-setup.ts --target both 2>&1); code=$?
+          echo "$out"
+          if [ "$code" -ne 1 ] || ! grep -q 'nothing was changed' <<<"$out"; then
+            echo "::error::scripts/cloudflare-setup.ts did not start under Node (exit $code)"; exit 1
+          fi
+
       # Playwright is installed in CI only. The version matches the one the e2e script was written
       # against (playwright 1.56.1); browsers go to Playwright's default cache on the runner.
       - name: Install Playwright browsers
