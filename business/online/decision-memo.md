@@ -13,6 +13,9 @@
 
 ## 0. Bottom line
 
+> **Revised 2026-09-24:** the owner chose a zero-capital launch (no ads, no extra capital). Section 7.2 replaces the ad
+> plan, the cost lines and kill rules K3/K4/K10/K11 below where they conflict.
+
 1. **Build one product only if the gates pass.** The product is a web tool that gives feedback on writing and speaking practice. It is for adults in Canada preparing for an English test for immigration or citizenship.
    - Tasks follow the *formats* of Canadian test tasks. Feedback covers descriptive criteria. The product is **not calibrated against official scores** and **never predicts a score or level**.
    - It is sold only to **residents of Canada, excluding Quebec**, as **one-time passes**: C$39 for 30 days and C$79 for 90 days.
@@ -573,6 +576,59 @@ These replace the matching parts of the table above. Each came from a build or r
   called from this session.
 - **B14.** Routines never read essays or transcripts. The daily Routine may read support emails **inside Gmail** to draft
   replies for the owner to review; the privacy page discloses this.
+
+### 7.2 Zero-capital launch (owner instruction, 2026-09-24)
+
+The owner asked to launch with **no ad budget and no other extra capital**. This replaces the ad plan and the cost lines
+above wherever they conflict. Sources: the zero-budget research files (Cloudflare limits and pricing, Resend, GitHub
+billing, Anthropic billing and AUP, growth, compliance), read 2026-09-24 from official documentation on GitHub.
+
+**What changes**
+- **No Google Ads.** Gate C, owner task 15, the ads files and the conversion tag are removed. Kill rules K3, K4 and the
+  scale rules S0–S2 no longer apply. Acquisition is organic only: the product pages, the sitemap (in robots.txt) and
+  IndexNow on every deploy, a free practice mode without AI (below), and a few one-time community posts the owner makes
+  from drafts in `business/online/launch-kit-ko.md`.
+- **Hosting at C$0.** Cloudflare Workers Free on the free `workers.dev` address (VERIFIED limits: 100,000 requests/day,
+  10 ms CPU per request, D1 5M rows read and 100,000 written per day, KV 1,000 writes/day, Workers AI 10,000 neurons/day).
+  The speaking path was changed so it stays under 10 ms CPU (audio streamed to Whisper, 32 kbps recording, 1 MB cap), KV
+  counters moved to D1, and speaking closes for the day at 200 audio minutes (the free Workers AI allocation is about 214).
+  Cloudflare's docs describe workers.dev as meant for projects that aren't business-critical; running on it is an
+  accepted risk, not a documented prohibition.
+- **Sign-in without a domain.** Without a domain, email to learners is impossible at C$0 (Resend's free sandbox sender
+  only reaches the account owner). Learners sign in with **Google**; the email link stays for the owner only. The product
+  sends **no email to learners**: pass status and Stripe's receipt link are on the account page. Owner alerts use
+  Resend's free sandbox. No marketing consent is collected.
+- **Seller identity.** The owner's legal name is shown as the seller. Registering "Maple Practice Coach" is not built in
+  as mandatory; the owner asks ServiceOntario (free) whether it is needed [미확인]. The mailing address is optional
+  because no learner email or consent request is sent.
+- **Anthropic cash.** The API is prepaid. The only unavoidable outlay is the smallest credit purchase (reported minimum
+  about US$5; suggested US$10 ≈ C$13.70 [미확인]). Auto-reload stays off. The Worker tracks spend against the credits:
+  free samples stop at 70%, the owner is alerted at 50% and 80%, grading pauses at 97%. Free-sample budget: US$0.50/day,
+  US$5/month. The weekly eval is off; small manual evals only (about US$1–4 per run, ESTIMATE).
+- **GitHub.** The repo goes private on GitHub Free (2,000 Actions minutes/month; without a payment method GitHub charges
+  nothing and Actions simply stop). Workflows were trimmed to fit.
+- **Model.** The default grader stays `claude-opus-5` (Claude API guidance). The owner may switch to `claude-sonnet-5`
+  with one variable; per-grade ESTIMATES: Opus 5 ≈ US$0.043–0.054, Sonnet 5 ≈ US$0.017–0.022 (fixture-based).
+- **Root site.** Its Next.js is patched to the fixed 16.x release (security advisory), so its output changes once.
+
+**Revised kill rules.** K1 (checkout live by Nov 1), K2 (owner hours), K5 (fewer than **10** free samples by Nov 15 →
+review channels), K6, K7, K8 and K9 stay. **K10:** cumulative cash out (Anthropic credits plus any paid plan) above
+**C$100** → stop. **K11:** wind down only if trailing-30-day net is below **−C$20** or owner support time exceeds
+**1 h/week**; otherwise keep the site running as a slow organic asset (its fixed cost is about C$0).
+
+**Revised expectations (ESTIMATE, organic only, memo §2.2 inputs, fixed cost ≈ C$0 plus API cost inside the net per sale).**
+
+| Case | Visits Oct/Nov/Dec/Jan | Sales by month | 4-month net |
+|---|---|---|---|
+| Conservative | 0 / 30 / 60 / 100 | 0 / 0.05 / 0.09 / 0.15 | ≈ +C$8 (≈ 75% chance of zero sales) |
+| Base | 20 / 60 / 100 / 150 | 0.14 / 0.43 / 0.72 / 1.08 | ≈ +C$66 (≈ 1 sale in January) |
+| Upside (top-decile luck) | 50 / 300 / 600 / 1,000 | 1.3 / 8.0 / 16.1 / 26.8 | ≈ +C$1,820 |
+
+Minus the one-time Anthropic credit purchase (≈ C$7–14). Dropping ads **improves** the conservative and base cases
+(ads lost money there) and costs about C$200 in the upside case. C$5,000/month would need about 180 sales a month, i.e.
+roughly 25,000 visits a month at base conversion; nothing in the research shows a path to that by January. The chance
+of averaging C$5,000/month stays **well below 1%** (judgement). What improves is the downside: cash at risk falls from
+about C$1,500 to about C$15–100.
 
 ## 8. Risks, mitigations and unknowns
 
