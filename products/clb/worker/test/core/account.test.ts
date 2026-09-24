@@ -339,6 +339,7 @@ describe('POST /api/account/delete', () => {
     const spendBefore = await spendSnapshot(env, new Date())
 
     const stub = stubFetch()
+    await env.DB.prepare('UPDATE purchases SET receipt_url = ?2 WHERE user_id = ?1').bind(user.id, 'https://pay.stripe.com/receipts/payment/x').run()
     const res = await api('/api/account/delete', { body: {}, session })
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ ok: true })
@@ -387,6 +388,8 @@ describe('POST /api/account/delete', () => {
     ])
     expect(await count('SELECT COUNT(*) AS n FROM magic_links WHERE email = ?1', email)).toBe(0)
     expect(await count('SELECT COUNT(*) AS n FROM purchases WHERE user_id = ?1', user.id)).toBe(1)
+    // the payment record stays, but its sign-in-free receipt link is dropped
+    expect(await count('SELECT COUNT(*) AS n FROM purchases WHERE user_id = ?1 AND receipt_url IS NOT NULL', user.id)).toBe(0)
     expect(await count('SELECT COUNT(*) AS n FROM passes WHERE user_id = ?1', user.id)).toBe(1)
     expect(await count('SELECT COUNT(*) AS n FROM grades WHERE user_id = ?1', bystander)).toBe(1)
     expect(

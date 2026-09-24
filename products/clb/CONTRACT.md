@@ -117,7 +117,7 @@ Identifier hashing conventions (must match across modules):
 
 - **Events.** Server-side only: `signup` (core, when `auth.verify` or the Google callback creates a new user), `checkout_start`,
   `purchase`, `refund` (billing). Client-side via `POST /api/events`: `landing`, `sample_start`,
-  `sample_done`; `events.track` rejects the server-only names. Server code inserts directly:
+  `sample_done`, `practice_start`, `practice_done` (free practice mode, no content); `events.track` rejects the server-only names. Server code inserts directly:
   `INSERT INTO events (name, path, utm_json, day, created_at) VALUES (?1, ?2, NULL, ?3, ?4)`.
 - **Grader API for the eval harness** (grading owns, ops consumes) in `worker/src/grading/claude.ts`:
   `buildGraderParams(input: GraderInput, opts?: { batch?: boolean; effort?; maxTokens? })` → params for `client.beta.messages.create`
@@ -136,10 +136,10 @@ Identifier hashing conventions (must match across modules):
 - **Site chrome**: `app/layout.tsx` (frontend-app) renders header, footer with `NOT_AFFILIATED`, and the
   `/api/me` banner for every page; content pages render only their body.
 - **Public build-time env for the site** (all optional; safe defaults): `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
-  (default Cloudflare test key `1x00000000000000000000AA`), `NEXT_PUBLIC_MAILING_ADDRESS`,
-  `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CF_BEACON_TOKEN` (Web Analytics), `NEXT_PUBLIC_GADS_SEND_TO`
-  (conversion tag on `/checkout/success/` only), `NEXT_PUBLIC_SUPPORT_EMAIL` (public support address on legal/help
-  pages; unset → account-page support form + mailing address).
+  (default Cloudflare test key `1x00000000000000000000AA`), `NEXT_PUBLIC_LEGAL_NAME` (seller line in the footer and legal
+  pages), `NEXT_PUBLIC_MAILING_ADDRESS` (shown only when set), `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CF_BEACON_TOKEN` (Web
+  Analytics), `NEXT_PUBLIC_SUPPORT_EMAIL` (public support address on legal/help pages; unset → account-page support form).
+  No advertising tag exists (memo §7.2).
 
 ## 7. Zero-capital launch (memo §7.2)
 
@@ -149,3 +149,4 @@ revised kill rules; a free practice mode without AI; an organic launch kit; the 
 New env: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, MAGIC_LINK ('owner'|'all'|'off'), LEARNER_EMAIL ('off'|'on'),
 LEGAL_NAME, ANTHROPIC_PREPAID_USD, ANTHROPIC_PREPAID_SINCE. New error code `at_capacity` (503). New client events
 `practice_start`, `practice_done`.
+- **Receipts.** Only billing writes `purchases.receipt_url` (https only); `/api/me` reads it; account deletion clears it.

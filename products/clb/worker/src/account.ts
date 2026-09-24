@@ -193,6 +193,8 @@ export async function deleteAccount(_req: Request, ctx: Ctx): Promise<Response> 
         WHERE user_id = ?1`,
     ).bind(user.id),
     env.DB.prepare('DELETE FROM sessions WHERE user_id = ?1').bind(user.id),
+    // the payment record stays (tax); its receipt link opens without sign-in, so drop it (the owner keeps every receipt in Stripe)
+    env.DB.prepare('UPDATE purchases SET receipt_url = NULL WHERE user_id = ?1').bind(user.id),
     env.DB.prepare('UPDATE support_tickets SET user_id = NULL, message = ?2 WHERE user_id = ?1').bind(user.id, DELETED_TICKET_MESSAGE),
     // unused sign-in links still hold the address and consent choices
     env.DB.prepare('DELETE FROM magic_links WHERE email = ?1').bind(user.email),

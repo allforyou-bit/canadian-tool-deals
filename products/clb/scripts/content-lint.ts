@@ -10,8 +10,9 @@
 //                            node scripts/run.mjs scripts/content-lint.ts --text "banner text"   (flags.yml)
 // Exits 1 on any finding and prints "file: rule-id — excerpt". A missing out/ is skipped with a notice.
 // --require-address (deploy.yml, only when MPC_MAILING_ADDRESS is set; memo §7.2 Z5): also fails when any
-// exported page still shows the mailing-address placeholder, i.e. the address did not reach the build
-// (NEXT_PUBLIC_MAILING_ADDRESS).
+// exported page still shows the mailing-address placeholder, or when the privacy page does not show the
+// address from the environment variable MAILING_ADDRESS, i.e. the address did not reach the build
+// (NEXT_PUBLIC_MAILING_ADDRESS). The address is never printed.
 // --require-legal-name (deploy.yml; production always, Z5): fails when the terms or privacy page does not
 // show the seller's legal name from the environment variable LEGAL_NAME (NEXT_PUBLIC_LEGAL_NAME did not
 // reach the build). The name is never printed.
@@ -198,6 +199,20 @@ export function addressPlaceholderFindings(html: string): Finding[] {
   return ADDRESS_PLACEHOLDERS.filter((p) => all.includes(normalizeWhitespace(p))).map((p) => ({ rule: 'mailing_address_placeholder', where: 'text', excerpt: p }))
 }
 
+/** The page that shows the mailing address once it is set (privacy policy, "who we are"). */
+export const ADDRESS_PAGE = 'legal/privacy/index.html'
+
+/**
+ * Finding when the privacy page (`html`, null when missing) does not show `address` in its visible text
+ * (whitespace collapsed on both sides). The excerpt never contains the address.
+ */
+export function addressShownFindings(html: string | null, address: string): Finding[] {
+  const a = normalizeWhitespace(address)
+  if (!a) return []
+  if (html === null) return [{ rule: 'mailing_address_page_missing', where: ADDRESS_PAGE, excerpt: 'page not in the export' }]
+  return htmlToText(html).body.includes(a) ? [] : [{ rule: 'mailing_address_missing', where: ADDRESS_PAGE, excerpt: 'the mailing address is not on this page (was the site built with NEXT_PUBLIC_MAILING_ADDRESS?)' }]
+}
+
 // ---------- seller's legal name (memo §7.2 Z5) ----------
 
 /** Exported pages that must name the seller ("… is sold by <legal name>, a sole proprietor in Ontario"). */
@@ -263,13 +278,16 @@ export async function main(args: string[]): Promise<number> {
       checked++
       const html = await readFile(file, 'utf8')
       const rel = relative(outDir, file).split(sep).join('/')
-      if (LEGAL_NAME_PAGES.includes(rel)) pages[rel] = html
+      if (LEGAL_NAME_PAGES.includes(rel) || rel === ADDRESS_PAGE) pages[rel] = html
       const findings = [...lintHtml(html), ...(requireAddress ? addressPlaceholderFindings(html) : [])]
       for (const f of findings) report.push(`${file}: ${f.rule} (${f.where}) — ${f.excerpt}`)
     }
     const required = [requireAddress ? 'mailing address' : '', requireLegalName ? 'legal name' : ''].filter(Boolean).join(' and ')
     console.log(`content-lint: ${files.length} HTML page(s) in ${outDir}${required ? ` (${required} required)` : ''}`)
     if (requireAddress && files.length === 0) report.push(`${outDir}: no HTML pages to check for the mailing address`)
+    if (requireAddress) {
+      for (const f of addressShownFindings(pages[ADDRESS_PAGE] ?? null, process.env.MAILING_ADDRESS ?? '')) report.push(`${join(outDir, f.where)}: ${f.rule} — ${f.excerpt}`)
+    }
     if (requireLegalName) {
       for (const f of legalNameFindings(pages, process.env.LEGAL_NAME ?? '')) report.push(`${join(outDir, f.where)}: ${f.rule} — ${f.excerpt}`)
     }
@@ -282,7 +300,7 @@ export async function main(args: string[]): Promise<number> {
   if (report.length) {
     console.error(`content-lint: ${report.length} finding(s)`)
     for (const line of report) console.error(`  ${line}`)
-    if (report.some((l) => l.includes('mailing_address_placeholder'))) {
+    if (report.some((l) => l.includes('mailing_address_'))) {
       console.error('content-lint: the mailing address did not reach the site build — check the MPC_MAILING_ADDRESS repository variable (business/online/owner-setup.md)')
     }
     if (report.some((l) => l.includes('legal_name_'))) {

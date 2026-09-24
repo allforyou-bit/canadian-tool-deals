@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { AI_DISCLOSURE, NOT_AFFILIATED } from '../shared/config'
 import { MAILING_ADDRESS_PLACEHOLDER } from '../content/site'
-import { addressPlaceholderFindings, ADDRESS_PLACEHOLDERS, decodeEntities, htmlToText, LEGAL_NAME_PAGES, legalNameFindings, lintHtml, lintText } from './content-lint'
+import { ADDRESS_PAGE, addressPlaceholderFindings, ADDRESS_PLACEHOLDERS, addressShownFindings, decodeEntities, htmlToText, LEGAL_NAME_PAGES, legalNameFindings, lintHtml, lintText } from './content-lint'
 
 const page = (body: string, head = '<title>Practice</title>') =>
   `<!DOCTYPE html><html lang="en"><head>${head}</head><body>${body}<footer><p>${NOT_AFFILIATED.en}</p></footer></body></html>`
@@ -108,6 +108,19 @@ describe('addressPlaceholderFindings (--require-address, decision 16)', () => {
 
   it('passes a page with a real address', () => {
     expect(addressPlaceholderFindings(page('<p>Mailing address: Maple Practice Coach, 1 Test St, Toronto ON M5V 0A1</p>'))).toEqual([])
+  })
+
+  it('requires the set address on the privacy page, never printing it (Z5)', () => {
+    const address = '1 Test St,\n  Toronto ON  M5V 0A1'
+    const shown = page('<p>Mailing address: Jiwoo Kim (Maple Practice Coach), 1 Test St, Toronto ON M5V 0A1</p>')
+    expect(ADDRESS_PAGE).toBe('legal/privacy/index.html')
+    expect(addressShownFindings(shown, address)).toEqual([])
+    const missing = addressShownFindings(page('<p>Use the support form on your account page.</p>'), address)
+    expect(missing.map((f) => f.rule)).toEqual(['mailing_address_missing'])
+    expect(JSON.stringify(missing)).not.toContain('Test St')
+    expect(addressShownFindings(null, address).map((f) => f.rule)).toEqual(['mailing_address_page_missing'])
+    // no address set: nothing to require
+    expect(addressShownFindings(null, '  ')).toEqual([])
   })
 })
 

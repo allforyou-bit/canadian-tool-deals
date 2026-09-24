@@ -238,12 +238,13 @@ jobs:
         if: steps.secrets.outputs.ready == 'true'
         env:
           LEGAL_NAME: ${{ steps.cfg.outputs.legal_name }}
+          MAILING_ADDRESS: ${{ vars.MPC_MAILING_ADDRESS }}
           REQUIRE_ADDRESS: ${{ steps.cfg.outputs.require_address }}
         run: |
           args=(--out out)
           # memo §7.2 Z5: the seller's legal name must be on the terms and privacy pages (production always
-          # has one; deploy-config.ts refused it otherwise), and a mailing address, when one is set, must
-          # have reached the pages instead of the placeholder
+          # has one; deploy-config.ts refused it otherwise), and a mailing address, when one is set, must be
+          # on the privacy page with no placeholder left anywhere
           if [ -n "$LEGAL_NAME" ]; then args+=(--require-legal-name); fi
           if [ "$REQUIRE_ADDRESS" = true ]; then args+=(--require-address); fi
           node scripts/run.mjs scripts/content-lint.ts "${args[@]}"
