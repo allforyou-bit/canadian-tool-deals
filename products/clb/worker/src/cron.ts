@@ -187,6 +187,8 @@ async function resumeGrading(env: Env, pausedAt: string, now: Date): Promise<voi
 export interface DailyMetrics {
   day: string
   events: Record<string, number>
+  /** events whose stored utm shows a paid click (gclid or utm_medium=cpc); K3 counts paid sample starts. Optional: files written before 2026-09-24 lack it */
+  paidEvents?: Record<string, number>
   /** writing/speaking/free count graded (non-refused) tasks; refused counts out-of-scope refusals */
   grades: { writing: number; speaking: number; free: number; refused: number }
   /** Anthropic + Workers AI cost of every grade row that day (including refusals) */
@@ -204,8 +206,16 @@ export async function dailyMetrics(env: Env, dayStart: Date): Promise<DailyMetri
   const from = dayStart.toISOString()
   const to = addDays(dayStart, 1).toISOString()
   const day = dayKey(dayStart)
-  const [events, grades, purchases, refunds, disputes] = await Promise.all([
+  const [events, paidEvents, grades, purchases, refunds, disputes] = await Promise.all([
     env.DB.prepare('SELECT name, COUNT(*) AS n FROM events WHERE day = ?1 GROUP BY name ORDER BY name')
+      .bind(day)
+      .all<{ name: string; n: number }>(),
+    env.DB.prepare(
+      `SELECT name, COUNT(*) AS n FROM events
+        WHERE day = ?1 AND utm_json IS NOT NULL
+          AND (json_extract(utm_json, '$.gclid') IS NOT NULL OR json_extract(utm_json, '$.utm_medium') = 'cpc')
+        GROUP BY name ORDER BY name`,
+    )
       .bind(day)
       .all<{ name: string; n: number }>(),
     env.DB.prepare(
@@ -241,6 +251,7 @@ export async function dailyMetrics(env: Env, dayStart: Date): Promise<DailyMetri
   return {
     day,
     events: Object.fromEntries(events.results.map((r) => [r.name, r.n])),
+    paidEvents: Object.fromEntries(paidEvents.results.map((r) => [r.name, r.n])),
     grades: {
       writing: grades?.writing ?? 0,
       speaking: grades?.speaking ?? 0,

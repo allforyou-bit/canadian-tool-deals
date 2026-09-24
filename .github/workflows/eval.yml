@@ -1,0 +1,143 @@
+# Grading eval (memo B12). Offline harness tests always run. The live eval runs only when the
+# ANTHROPIC_API_KEY secret is available (it is not for pull requests from forks):
+#   synthetic set (claude-opus-5, Message Batches) → cached by generator version, never committed
+#   → grade every sample 3× with the production grader request (Batches) → thresholds + a >5-point
+#   regression check against the last accepted scheduled run (kept in the Actions cache).
+# Results are uploaded as an artifact (14 days) and never committed. Cost control: the repository
+# variable MPC_EVAL_LIMIT (or the manual input) caps the number of practice samples graded; every
+# probe and benign item is always included. The run prints an estimated cost (ESTIMATE).
+name: Grading eval
+
+on:
+  schedule:
+    - cron: '29 10 * * 1'
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: Grade at most this many practice samples (0 = all 120)
+        required: false
+        default: '0'
+  pull_request:
+    paths:
+      - 'products/clb/worker/src/grading/**'
+      - 'products/clb/scripts/eval/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: eval-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    defaults:
+      run:
+        working-directory: products/clb
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GRADER_MODEL: ${{ vars.MPC_GRADER_MODEL }}
+      EVAL_LIMIT: ${{ inputs.limit || vars.MPC_EVAL_LIMIT || '0' }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: products/clb/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Offline harness tests (5 hand-written fixtures)
+        run: npx vitest run scripts/eval
+
+      - name: Check secrets
+        id: cfg
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "::notice::Live eval skipped: the ANTHROPIC_API_KEY secret is not available to this run."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+          case "$EVAL_LIMIT" in ''|*[!0-9]*) echo "::error::limit must be a whole number"; exit 1 ;; esac
+
+      - name: Restore the synthetic set
+        id: synth
+        if: steps.cfg.outputs.ready == 'true'
+        uses: actions/cache/restore@v6
+        with:
+          path: products/clb/.eval/synthetic
+          key: eval-synthetic-${{ hashFiles('products/clb/scripts/eval/synthetic-plan.ts', 'products/clb/scripts/eval/gen-synthetic.ts', 'products/clb/shared/tasks.ts') }}
+
+      - name: Generate the synthetic set
+        if: steps.cfg.outputs.ready == 'true' && steps.synth.outputs.cache-hit != 'true'
+        run: node scripts/run.mjs scripts/eval/gen-synthetic.ts --out .eval/synthetic
+
+      - name: Save the synthetic set
+        if: steps.cfg.outputs.ready == 'true' && steps.synth.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: products/clb/.eval/synthetic
+          key: ${{ steps.synth.outputs.cache-primary-key }}
+
+      - name: Restore the baseline
+        if: steps.cfg.outputs.ready == 'true'
+        uses: actions/cache/restore@v6
+        with:
+          path: products/clb/.eval/baseline
+          key: eval-baseline-${{ github.run_id }}
+          restore-keys: eval-baseline-
+
+      - name: Grade (3 runs per sample, Message Batches)
+        id: live
+        if: steps.cfg.outputs.ready == 'true'
+        continue-on-error: true
+        run: >-
+          node scripts/run.mjs scripts/eval/run-live.ts
+          --in .eval/synthetic/samples.json
+          --out .eval/results
+          --baseline .eval/baseline/metrics.json
+          --runs 3
+          --limit "$EVAL_LIMIT"
+
+      - name: Upload results
+        if: always() && steps.cfg.outputs.ready == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: eval-results-${{ github.run_id }}
+          path: |
+            products/clb/.eval/results
+            products/clb/.eval/synthetic/gen-report.json
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 14
+
+      # Only a full, passing scheduled or manual run on master becomes the new baseline.
+      - name: Promote to baseline
+        id: promote
+        if: steps.live.outcome == 'success' && github.ref == 'refs/heads/master' && github.event_name != 'pull_request' && env.EVAL_LIMIT == '0'
+        run: |
+          mkdir -p .eval/baseline
+          cp .eval/results/metrics.json .eval/baseline/metrics.json
+
+      - name: Save the baseline
+        if: steps.promote.outcome == 'success'
+        uses: actions/cache/save@v6
+        with:
+          path: products/clb/.eval/baseline
+          key: eval-baseline-${{ github.run_id }}
+
+      - name: Fail when thresholds failed
+        if: steps.live.outcome == 'failure'
+        run: |
+          echo "::error::Grading eval failed its thresholds (or could not run). See the job summary and the eval-results artifact."
+          exit 1

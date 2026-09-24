@@ -1,5 +1,5 @@
 // Claim rules shared by the grader's output filter (worker/src/grading), the page/ads content lint
-// (scripts/content-lint.mjs) and the eval harness. Source: memo §1.4, B3, B9, B13 (Competition Act
+// (scripts/content-lint.ts) and the eval harness. Source: memo §1.4, B3, B9, B13 (Competition Act
 // s.74.01 risk: no official/guarantee/score claims; trademarks only descriptively).
 import { AI_DISCLOSURE, NOT_AFFILIATED } from './config'
 

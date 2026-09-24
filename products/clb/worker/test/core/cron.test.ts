@@ -280,18 +280,19 @@ describe('daily job (0 5 * * *)', () => {
   it("writes yesterday's aggregate metrics row (and replaces it on a re-run)", async () => {
     const day = '2027-08-01'
     const uid = await insertUser('2027-08-01T00:00:00.000Z')
-    const ev = (name: string, d = day) =>
-      env.DB.prepare('INSERT INTO events (name, path, utm_json, day, created_at) VALUES (?1, ?2, NULL, ?3, ?4)').bind(
+    const ev = (name: string, d = day, utm: string | null = null) =>
+      env.DB.prepare('INSERT INTO events (name, path, utm_json, day, created_at) VALUES (?1, ?2, ?3, ?4, ?5)').bind(
         name,
         '/',
+        utm,
         d,
         `${d}T12:00:00.000Z`,
       )
     await env.DB.batch([
+      ev('landing', day, '{"gclid":"abc"}'),
+      ev('landing', day, '{"utm_source":"newsletter","utm_medium":"email"}'),
       ev('landing'),
-      ev('landing'),
-      ev('landing'),
-      ev('sample_start'),
+      ev('sample_start', day, '{"utm_medium":"cpc"}'),
       ev('sample_start'),
       ev('signup'),
       ev('landing', '2027-08-02'),
@@ -341,6 +342,7 @@ describe('daily job (0 5 * * *)', () => {
     expect(JSON.parse(row!.json)).toEqual({
       day,
       events: { landing: 3, sample_start: 2, signup: 1 },
+      paidEvents: { landing: 1, sample_start: 1 },
       grades: { writing: 2, speaking: 1, free: 1, refused: 1 },
       costUsd: 0.061,
       purchases: { paid: 2, grossCents: 11800 },

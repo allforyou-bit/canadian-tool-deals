@@ -1,0 +1,5 @@
+{
+  "monthlyLimitUsd": 150,
+  "confirmedByOwner": false,
+  "notes": "the monthly spend limit the owner set in the Anthropic Console; the KPI Routine proposes raises as PRs (memo §3.4), the owner changes the Console and merges"
+}

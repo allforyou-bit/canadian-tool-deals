@@ -120,4 +120,5 @@ Identifier hashing conventions (must match across modules):
 - **Public build-time env for the site** (all optional; safe defaults): `NEXT_PUBLIC_TURNSTILE_SITE_KEY`
   (default Cloudflare test key `1x00000000000000000000AA`), `NEXT_PUBLIC_MAILING_ADDRESS`,
   `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_CF_BEACON_TOKEN` (Web Analytics), `NEXT_PUBLIC_GADS_SEND_TO`
-  (conversion tag on `/checkout/success/` only).
+  (conversion tag on `/checkout/success/` only), `NEXT_PUBLIC_SUPPORT_EMAIL` (public support address on legal/help
+  pages; unset → account-page support form + mailing address).

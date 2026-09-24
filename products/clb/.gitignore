@@ -1,0 +1,7 @@
+# ops scripts (owned by ops; see scripts/README.md)
+# synthetic eval data and eval results: generated at run time, never committed (memo B12)
+/.eval/
+# esbuild bundles written by scripts/run.mjs
+/.cache/
+# vitest coverage reports
+/coverage/

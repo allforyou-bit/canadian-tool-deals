@@ -86,9 +86,9 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "chore(metrics): daily aggregate export $(date -u +%F)"
           for attempt in 1 2 3; do
-            if git push; then exit 0; fi
+            if git push origin "HEAD:$GITHUB_REF_NAME"; then exit 0; fi
             echo "push rejected (attempt $attempt); rebasing on the remote branch"
-            git pull --rebase
+            git pull --rebase origin "$GITHUB_REF_NAME"
           done
           echo "::error::Could not push the metrics commit."
           exit 1

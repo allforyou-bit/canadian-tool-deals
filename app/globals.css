@@ -1,4 +1,10 @@
 @import "tailwindcss";
+/* Tailwind scans every non-ignored file for class names. Keep the practice-coach app (own build), its ops
+   files and the online-business docs out of this site's CSS so the home-services output stays unchanged. */
+@source not "../products";
+@source not "../ops";
+@source not "../.github";
+@source not "../business/online";
 
 :root {
   --background: #ffffff;

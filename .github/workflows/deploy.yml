@@ -108,9 +108,10 @@ jobs:
           NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.MPC_TURNSTILE_SITE_KEY }}
           NEXT_PUBLIC_CF_BEACON_TOKEN: ${{ vars.MPC_CF_BEACON_TOKEN }}
           NEXT_PUBLIC_GADS_SEND_TO: ${{ vars.MPC_GADS_SEND_TO }}
+          NEXT_PUBLIC_SUPPORT_EMAIL: ${{ vars.MPC_SUPPORT_EMAIL }}
         run: |
           # unset variables arrive as empty strings; drop them so the site's safe defaults apply
-          for v in NEXT_PUBLIC_SITE_URL NEXT_PUBLIC_MAILING_ADDRESS NEXT_PUBLIC_TURNSTILE_SITE_KEY NEXT_PUBLIC_CF_BEACON_TOKEN NEXT_PUBLIC_GADS_SEND_TO; do
+          for v in NEXT_PUBLIC_SITE_URL NEXT_PUBLIC_MAILING_ADDRESS NEXT_PUBLIC_TURNSTILE_SITE_KEY NEXT_PUBLIC_CF_BEACON_TOKEN NEXT_PUBLIC_GADS_SEND_TO NEXT_PUBLIC_SUPPORT_EMAIL; do
             if [ -z "${!v}" ]; then unset "$v"; fi
           done
           npm run build

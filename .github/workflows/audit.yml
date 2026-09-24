@@ -1,0 +1,36 @@
+# Weekly dependency audit (memo §5.2): no high or critical advisories in either package.
+# `npm audit` reads package-lock.json only; nothing is installed. Needs no secrets.
+name: Dependency audit
+
+on:
+  schedule:
+    - cron: '11 9 * * 3'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ['.', 'products/clb']
+    defaults:
+      run:
+        working-directory: ${{ matrix.package }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: npm audit (high and critical)
+        run: npm audit --audit-level=high
