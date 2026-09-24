@@ -370,7 +370,7 @@ export async function dailyMetrics(env: Env, dayStart: Date): Promise<DailyMetri
       .bind(from, to)
       .first<{ n: number; cents: number }>(),
     env.DB.prepare(
-      `SELECT COUNT(*) AS n, COALESCE(SUM(amount_cents), 0) AS cents FROM refunds
+      `SELECT COUNT(DISTINCT purchase_id) AS n, COALESCE(SUM(amount_cents), 0) AS cents FROM refunds
         WHERE created_at >= ?1 AND created_at < ?2 AND reason NOT IN ('region', 'dispute')`,
     )
       .bind(from, to)

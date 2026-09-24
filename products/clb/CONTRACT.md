@@ -59,7 +59,9 @@ same-origin check on POSTs (webhook exempt), device cookie, `ctx.user`, salted `
 - `lib/crypto.ts`: `sha256Hex`, `saltedHash(salt, value)`, `randomToken(bytes)`, `randomId(prefix)`, `hmacSha256Hex`, `timingSafeEqualHex`.
 - `lib/session.ts`: `getUser(req, env, now)`, `getActivePass(env, userId, now)`.
 - `lib/flags.ts`: `getFlags(env)`, `setFlag(env, name, value)`.
-- `lib/usage.ts`: `getUsage`, `capReached`, `freeAvailability`, `recordFreeWriting`, `recordFreeSpeaking`.
+- `lib/usage.ts`: `getUsage`, `capReached`, `freeAvailability`, `recordFreeWriting`, `recordFreeSpeaking` (atomic claims →
+  boolean), `reserveGrade(env, reservation, now, {fairUse})` → `'daily' | 'rolling30' | 'no_feedback' | null` (inserts the
+  pending grades row in one conditional statement), `noFeedbackToday`.
 - `lib/spend.ts`: `tokenCostMicroUsd(model, usage)`, `whisperCostMicroUsd(seconds)`, `spendSnapshot(env, now)` (L capped by
   `ANTHROPIC_MONTHLY_LIMIT_USD` when set), `evaluateTiers(snapshot)`.
 - `lib/time.ts`: `dayKey`, `startOfUtcDay`, `startOfUtcMonth`, `addDays` (all UTC).
@@ -67,7 +69,10 @@ same-origin check on POSTs (webhook exempt), device cookie, `ctx.user`, salted `
   non-alert email gets the CASL unsubscribe link), `alertOwner(env, subject, text)`, `unsubscribeUrl(env, email)`,
   `unsubscribeSignature(env, emailHash)`.
 - `turnstile.ts`: `verifyTurnstile(env, token)` → `boolean`.
-- `shared/content-rules.ts`: `FORBIDDEN_CLAIMS`, `AD_ONLY_FORBIDDEN`, `ALLOWED_PHRASES`, `findClaims(text, rules?)`.
+- `shared/content-rules.ts`: `FORBIDDEN_CLAIMS` (pages, emails), `AD_ONLY_FORBIDDEN`, `GRADER_OUTPUT_RULES` (grader
+  explanation fields), `GRADER_LEARNER_TEXT_RULES` (quotes and rewrites: claim-shaped only), `ALLOWED_PHRASES`,
+  `findClaims(text, rules?)`.
+- `cron.ts`: `recordPauseStart(env, now)` (KV `pause:started_at`, only if absent; never throws).
 
 Identifier hashing conventions (must match across modules):
 - session cookie → `saltedHash(HASH_SALT, 'session:' + raw)` (see `lib/session.ts`)
@@ -109,10 +114,11 @@ Identifier hashing conventions (must match across modules):
   `sample_done`; `events.track` rejects the server-only names. Server code inserts directly:
   `INSERT INTO events (name, path, utm_json, day, created_at) VALUES (?1, ?2, NULL, ?3, ?4)`.
 - **Grader API for the eval harness** (grading owns, ops consumes) in `worker/src/grading/claude.ts`:
-  `buildGraderParams(input: GraderInput, opts?: { batch?: boolean })` → params for `client.beta.messages.create`
+  `buildGraderParams(input: GraderInput, opts?: { batch?: boolean; effort?; maxTokens? })` → params for `client.beta.messages.create`
   (`batch: true` omits `betas`/`fallbacks`, which the Batches API rejects), `parseGraderMessage(message,
   explanationLang?: Lang): GradeResult` (throws on invalid output), `callGrader(env, input)`, `GraderOutputError`
-  (carries model, usage, stop reason) and `callCost(call)` (sums every fallback attempt in `usage.iterations`); in
+  (carries model, usage, stop reason), `GraderApiError` (status, billable attempts, worst-case cost), `graderSettings(env)`,
+  `worstCaseCallCostMicroUsd` and `callCost(call)` (sums every fallback attempt in `usage.iterations`); in
   `worker/src/grading/filter.ts`:
   `filterResult(result: GradeResult): { result: GradeResult; removed: number }`, where
   `GraderInput = { taskId: string; promptIndex: number; text: string; explanationLang: Lang; model: string }`

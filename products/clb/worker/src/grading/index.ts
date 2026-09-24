@@ -14,6 +14,7 @@ import type {
 } from '../../../shared/api'
 import { CAPS, MODELS } from '../../../shared/config'
 import { taskById, type TaskKind, type TaskType } from '../../../shared/tasks'
+import { recordPauseStart } from '../cron'
 import type { Ctx, Env } from '../env'
 import { randomId } from '../lib/crypto'
 import { getFlags, type Flags } from '../lib/flags'
@@ -55,7 +56,7 @@ const RECURRING_LIMIT = 5
 export const PAUSE_STARTED_KEY = 'pause:started_at'
 
 const MSG = {
-  paused: 'Feedback is paused for maintenance. Please try again later.',
+  paused: 'Feedback is paused right now. Active passes are extended by the length of the pause. Please try again later.',
   graderFailed: 'We could not produce feedback this time. Please try again.',
   graderUnreachable: 'The feedback service is busy. Please try again in a minute.',
   audioTooLarge: `Recordings can be up to ${CAPS.maxAudioSeconds} seconds and ${CAPS.maxAudioBytes / (1024 * 1024)} MB.`,
@@ -104,7 +105,7 @@ function errorName(e: unknown): string {
 async function liveTiers(ctx: Ctx): Promise<TierDecision | Response> {
   const tiers = evaluateTiers(await spendSnapshot(ctx.env, ctx.now))
   if (!tiers.pauseGrading) return tiers
-  if ((await ctx.env.FLAGS.get(PAUSE_STARTED_KEY)) === null) await ctx.env.FLAGS.put(PAUSE_STARTED_KEY, ctx.now.toISOString())
+  await recordPauseStart(ctx.env, ctx.now)
   return error('grading_paused', MSG.paused)
 }
 

@@ -2,7 +2,8 @@
 // offline test (5 hand-written fixtures, scripts/eval/harness.test.ts) and the weekly live run on
 // synthetic data (scripts/eval/run-live.ts). No network, no file access here.
 import { ERROR_KINDS, type GradeResult, type Lang } from '../../shared/api'
-import { FORBIDDEN_CLAIMS, findClaims } from '../../shared/content-rules'
+import { GRADER_OUTPUT_RULES, findClaims } from '../../shared/content-rules'
+import { MAX_TOP_ERRORS } from '../../worker/src/grading/validate'
 
 /** sample = ordinary practice answer; probe = immigration-advice request (must be refused);
  *  benign = practice answer with an immigration theme (must NOT be refused). */
@@ -77,7 +78,7 @@ export function validateGradeResult(value: unknown, lang: Lang): string[] {
   criteria.forEach((c, i) => {
     if (!isObj(c) || !isStr(c.name) || !isStr(c.strengths) || !isStr(c.improve)) p.push(`criteria[${i}] needs name, strengths, improve`)
   })
-  if (topErrors.length > 5) p.push('topErrors must have at most 5 items')
+  if (topErrors.length > MAX_TOP_ERRORS) p.push(`topErrors must have at most ${MAX_TOP_ERRORS} items`)
   topErrors.forEach((e, i) => {
     if (!isObj(e) || !(ERROR_KINDS as readonly unknown[]).includes(e.kind)) p.push(`topErrors[${i}].kind is not a known error kind`)
     else if (!isStr(e.original) || !isStr(e.correction) || !isStr(e.why)) p.push(`topErrors[${i}] needs original, correction, why`)
@@ -107,7 +108,7 @@ export function explanationTexts(r: GradeResult): string[] {
 }
 
 export function forbiddenClaimsIn(r: GradeResult): string[] {
-  return [...new Set(explanationTexts(r).flatMap((t) => findClaims(t, FORBIDDEN_CLAIMS)))]
+  return [...new Set(explanationTexts(r).flatMap((t) => findClaims(t, GRADER_OUTPUT_RULES)))]
 }
 
 // ---------- metrics ----------
