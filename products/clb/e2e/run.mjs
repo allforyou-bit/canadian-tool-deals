@@ -1296,6 +1296,41 @@ test('free practice (speaking): a blocked microphone still leaves the timers', a
   assert.deepEqual(otherApiCalls(state), [])
 })
 
+/** Feedback mode with the fake microphone: record a short take and wait until it can be played back. */
+async function recordTake(page) {
+  await page.getByRole('button', { name: 'Start: preparation time' }).click()
+  await page.getByRole('button', { name: 'Start speaking now' }).click()
+  await page.waitForTimeout(1200)
+  await page.getByRole('button', { name: 'Stop recording' }).click()
+  await page.locator('audio').waitFor()
+}
+
+/**
+ * A take is waiting and /api/me already says paused or closed, but its answer after the refused upload arrives
+ * late, so the learner starts a new take first. That attempt keeps its panel with its controls: the notice
+ * (`hidden`) must not replace it while the prep countdown and the microphone keep running. When it ends, neither
+ * sending nor another take is offered, and the take can still be played.
+ */
+async function newTakeBeforePauseOrClosureLands(page, state, { alert, notice, hidden }) {
+  state.delays['GET /api/me'] = [2000]
+  await page.getByRole('button', { name: 'Get feedback' }).click()
+  await page.getByRole('alert').filter({ hasText: alert }).waitFor()
+  await page.getByRole('button', { name: 'Record again' }).click()
+  const skip = page.getByRole('button', { name: 'Start speaking now' })
+  await skip.waitFor()
+  // /api/me has landed: the notice is shown inside the recorder, not instead of it
+  await page.getByRole('status').filter({ hasText: notice }).waitFor()
+  assert.equal(await page.getByTestId(hidden).count(), 0, 'the running attempt is not hidden behind the notice')
+  assert.ok(await skip.isVisible(), 'the preparation panel stays')
+  assert.equal(await page.getByTestId('recorder-live').textContent(), 'Preparation time started. Recording starts by itself when it ends.')
+  await skip.click()
+  await page.waitForTimeout(1200)
+  await page.getByRole('button', { name: 'Stop recording' }).click()
+  await page.locator('audio').waitFor()
+  assert.equal(await page.getByRole('button', { name: 'Get feedback' }).isDisabled(), true)
+  assert.equal(await page.getByRole('button', { name: 'Record again' }).isDisabled(), true, 'no new take that could never be sent')
+}
+
 test('speaking closed for today (at_capacity): said before recording, after a refused upload, and on the status page', async ({ page, base, state, browserName }) => {
   state.signedIn = true
   state.pass = ACTIVE_PASS
@@ -1323,11 +1358,7 @@ test('speaking closed for today (at_capacity): said before recording, after a re
   // open when the page loaded, closed by the time the answer is sent: the Worker answers at_capacity (503)
   state.flags.speakingAvailable = true
   await page.goto(`${base}/practice/speaking/advice/`)
-  await page.getByRole('button', { name: 'Start: preparation time' }).click()
-  await page.getByRole('button', { name: 'Start speaking now' }).click()
-  await page.waitForTimeout(1200)
-  await page.getByRole('button', { name: 'Stop recording' }).click()
-  await page.locator('audio').waitFor()
+  await recordTake(page)
   state.flags.speakingAvailable = false
   await page.getByRole('button', { name: 'Get feedback' }).click()
   await page.getByRole('alert').filter({ hasText: 'Speaking feedback is closed for today' }).waitFor()
@@ -1336,7 +1367,21 @@ test('speaking closed for today (at_capacity): said before recording, after a re
     () => [...document.querySelectorAll('button')].find((b) => b.textContent?.trim() === 'Get feedback')?.disabled === true,
   )
   await page.locator('audio').waitFor()
+  // no new take either: it could never be sent (it used to run a hidden prep countdown and recording behind the notice)
+  assert.equal(await page.getByRole('button', { name: 'Record again' }).isDisabled(), true, 'no new take while closed')
+  assert.equal(await page.getByTestId('speaking-closed').count(), 0, 'the take stays on screen')
   assert.equal(callsTo(state, '/api/grade/speaking').length, 1)
+
+  state.flags.speakingAvailable = true
+  await page.goto(`${base}/practice/speaking/advice/`)
+  await recordTake(page)
+  state.flags.speakingAvailable = false
+  await newTakeBeforePauseOrClosureLands(page, state, {
+    alert: 'Speaking feedback is closed for today',
+    notice: 'Speaking feedback is closed for today',
+    hidden: 'speaking-closed',
+  })
+  assert.equal(callsTo(state, '/api/grade/speaking').length, 2)
 })
 
 test('speaking during a grading pause: the pause notice (passes extended), never "closed for today"', async ({ page, base, state, browserName }) => {
@@ -1375,11 +1420,7 @@ test('speaking during a grading pause: the pause notice (passes extended), never
   state.flags.gradingEnabled = true
   state.flags.speakingAvailable = true
   await page.goto(`${base}/practice/speaking/advice/`)
-  await page.getByRole('button', { name: 'Start: preparation time' }).click()
-  await page.getByRole('button', { name: 'Start speaking now' }).click()
-  await page.waitForTimeout(1200)
-  await page.getByRole('button', { name: 'Stop recording' }).click()
-  await page.locator('audio').waitFor()
+  await recordTake(page)
   state.flags.gradingEnabled = false
   state.flags.speakingAvailable = false
   await page.getByRole('button', { name: 'Get feedback' }).click()
@@ -1391,7 +1432,24 @@ test('speaking during a grading pause: the pause notice (passes extended), never
   )
   await page.locator('audio').waitFor()
   assert.ok(!(await page.locator('main').innerText()).includes('closed for today'))
+  // no new take either: it could never be sent (it used to run a hidden prep countdown and recording behind the notice)
+  assert.equal(await page.getByRole('button', { name: 'Record again' }).isDisabled(), true, 'no new take during a pause')
+  assert.equal(await page.getByTestId('speaking-paused').count(), 0, 'the take stays on screen')
   assert.equal(callsTo(state, '/api/grade/speaking').length, 1)
+
+  state.flags.gradingEnabled = true
+  state.flags.speakingAvailable = true
+  await page.goto(`${base}/practice/speaking/advice/`)
+  await recordTake(page)
+  state.flags.gradingEnabled = false
+  state.flags.speakingAvailable = false
+  await newTakeBeforePauseOrClosureLands(page, state, {
+    alert: 'active passes are extended by the length of the pause',
+    notice: 'You can still practise with the timer.',
+    hidden: 'speaking-paused',
+  })
+  assert.ok(!(await page.locator('main').innerText()).includes('closed for today'))
+  assert.equal(callsTo(state, '/api/grade/speaking').length, 2)
 })
 
 /** KakaoTalk's in-app browser on an iPhone (the shape of its user agent; version numbers are examples). */

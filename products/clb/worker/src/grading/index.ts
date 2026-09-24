@@ -275,7 +275,8 @@ async function runGrade(ctx: Ctx, job: GradeJob): Promise<Response> {
     if (isCreditExhausted(e)) {
       // Anthropic cannot bill the call (credits used up or a Console usage limit): a pause, not a failure. The
       // refusal itself costs nothing (estimate is 0 unless an earlier attempt may have run). Grading is switched
-      // off until a top-up or the owner's switch (cron.ts), passes are extended, and the owner is alerted.
+      // off until a top-up or the owner's switch (cron.ts), passes are extended, and the owner is alerted. On
+      // staging only this request is refused and the owner gets a staging alert (no pause; cron.ts).
       console.warn('grader call refused: Anthropic credits used up', errorName(e))
       await pauseGradingForCredits(env, ctx.now)
       return error('grading_paused', MSG.paused)

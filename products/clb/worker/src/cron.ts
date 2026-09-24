@@ -7,7 +7,7 @@
 // can never make the owner's alert repeat every 15 minutes.
 // Logs carry counts only — never emails, essays or ids.
 import { PREPAID, RETENTION_DAYS, SPEND } from '../../shared/config'
-import { MAGIC_LINK_USAGE_KIND } from './auth'
+import { MAGIC_LINK_USAGE_KIND, stagingAllows } from './auth'
 import { alertOwner } from './email'
 import type { Env } from './env'
 import { EVENT_USAGE_KINDS } from './events'
@@ -58,6 +58,8 @@ export const ALERT_GUARDS = {
   prepaidPause: (day: string) => `alert:prepaid-pause:${day}`,
   /** grading paused because Anthropic refused a call for lack of credit: once per UTC day while it lasts */
   creditsOut: (day: string) => `alert:credits-out:${day}`,
+  /** staging only: Anthropic refused a staging grading call for lack of credit (no pause): once per UTC day */
+  stagingRefused: (day: string) => `alert:staging-refused:${day}`,
   /** month spend at SPEND.alertAt of L: once per month */
   tier95: (month: string) => `alert:tier95:${month}`,
   /** a PREPAID.alertAt level of one top-up (amount and date): once per level and top-up */
@@ -222,15 +224,45 @@ async function alertCreditsOut(env: Env, now: Date, snapshot?: SpendSnapshot): P
   await alertOnce(env, guardId, now, CREDITS_OUT_SUBJECT, creditsOutText(s))
 }
 
+/** A staging Worker (STAGING_ALLOWED_EMAILS set), detected the way grading/index.ts refuses anonymous samples there. */
+const isStagingWorker = (env: Env): boolean => !stagingAllows(env, null)
+
+/**
+ * Subject of the staging Worker's alert when Anthropic refuses one of its grading calls for lack of credit. It says
+ * STAGING and contains neither "credit" nor "prepaid", so the daily Routine (ops/routines/daily.md §2 matches those
+ * words) does not file it under the top-up issue: production is not paused by it, and buying credits does not help.
+ */
+export const STAGING_REFUSED_SUBJECT = 'STAGING: Anthropic refused a grading call (eval workspace limit or balance)'
+
+const STAGING_REFUSED_TEXT = [
+  'This is the STAGING Worker (the test site), not production. Anthropic refused one of its grading calls because',
+  'the eval workspace it grades with (key ANTHROPIC_EVAL_API_KEY) reached its monthly usage limit, or the Anthropic',
+  'balance ran out. The production site is not affected by this alert, and nothing was switched off: that staging',
+  'check answered "Feedback is paused", any free sample was given back, and the next staging check tries again.',
+  '\n\nWhat to do: nothing for production. To use staging again this month, raise the eval workspace limit in the',
+  'Anthropic Console (and evalMonthlyLimitUsd in ops/config/anthropic-limit.json), or wait for the next month, when',
+  'the workspace limit resets. If the Anthropic balance itself is used up, the production Worker pauses at its own',
+  'next refused call and sends its own alert.',
+].join(' ')
+
 /**
  * Pauses grading because Anthropic refused a call for lack of credit (grading/index.ts, isCreditExhausted). The
  * same steps as the spend monitor's own pause — the marker first, then the switch — with the credits marker
  * (KV.creditsOut), which runSpendMonitor lifts only after a deployed top-up or the owner's switch; then the pause
  * start (passes are extended by the pause) and the owner alert, once per UTC day. Never throws: KV writes are
  * caught (Workers Free quota) and anything else is logged, so the handler can still answer grading_paused.
+ *
+ * On a staging Worker nothing is paused: it grades with the eval workspace key, whose monthly limit eval runs use
+ * up, and no top-up is ever deployed there (the prepaid ledger is production's), so a pause would never lift by
+ * itself. The handler still answers grading_paused for that request, and the owner gets STAGING_REFUSED_SUBJECT at
+ * most once per UTC day; staging grades again as soon as Anthropic accepts its calls.
  */
 export async function pauseGradingForCredits(env: Env, now: Date): Promise<void> {
   try {
+    if (isStagingWorker(env)) {
+      await alertOnce(env, ALERT_GUARDS.stagingRefused(dayKey(now)), now, STAGING_REFUSED_SUBJECT, STAGING_REFUSED_TEXT)
+      return
+    }
     if ((await env.FLAGS.get(KV.creditsOut)) === null) {
       const marker: CreditsOutMarker = { at: now.toISOString(), ledger: prepaidLedgerKey(env) }
       await kvWrite('credits_out', () => env.FLAGS.put(KV.creditsOut, JSON.stringify(marker)))
@@ -265,7 +297,9 @@ export async function pauseGradingForCredits(env: Env, now: Date): Promise<void>
  * never lifted on the Worker's own spend figures, which cannot see eval or staging spend: grading comes back on
  * only when the prepaid amount or date differs from the one recorded with the pause (a top-up was deployed;
  * handed to `auto:grading_off` if a spend tier still pauses) or when the owner has switched grading on. While it
- * holds, `auto:grading_off` never switches grading on, and the owner gets one reminder per UTC day.
+ * holds, `auto:grading_off` never switches grading on, and the owner gets one reminder per UTC day. A staging
+ * Worker never holds one (pauseGradingForCredits), so a marker found there, left by an older version, is lifted
+ * the same way as after a top-up.
  */
 export async function runSpendMonitor(env: Env, now: Date): Promise<void> {
   await sweepStalePending(env, now, addDays(now, -2))
@@ -317,8 +351,9 @@ export async function runSpendMonitor(env: Env, now: Date): Promise<void> {
     const marker = parseCreditsMarker(creditsOutRaw, env)
     const markedMs = Date.parse(marker.at)
     const settled = !Number.isFinite(markedMs) || now.getTime() - markedMs >= CREDITS_SETTLE_MINUTES * 60_000
-    if (marker.ledger !== prepaidLedgerKey(env)) {
-      // a top-up was deployed: switch grading back on (or hand it to the spend pause), unless the owner said off
+    if (marker.ledger !== prepaidLedgerKey(env) || isStagingWorker(env)) {
+      // a top-up was deployed (or staging, which never keeps a credits pause): switch grading back on (or hand it
+      // to the spend pause), unless the owner said off
       let handed = true
       if (!gradingOn && ownerGrading !== 'false') {
         if (t.pauseGrading) {

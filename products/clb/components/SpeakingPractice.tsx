@@ -147,15 +147,25 @@ function SpeakingPaused(props: { lang: Lang; onPractise: () => void }) {
   )
 }
 
-/** Speaking closed for today (site-wide budget used up, grading on): say when it opens, and offer the practice mode. */
-function SpeakingClosed(props: { lang: Lang; onPractise: () => void }) {
+/** "Closed for today" and when it opens again, in the learner's time. */
+function ClosedToday(props: { lang: Lang }) {
   const { lang } = props
   const opensAt = formatTime(nextUtcMidnight().toISOString(), lang)
   return (
+    <>
+      <p>{t(lang, 's.closedToday')}</p>
+      <p className="mt-1">{t(lang, 's.opensAt', { time: opensAt })}</p>
+    </>
+  )
+}
+
+/** Speaking closed for today (site-wide budget used up, grading on): say when it opens, and offer the practice mode. */
+function SpeakingClosed(props: { lang: Lang; onPractise: () => void }) {
+  const { lang } = props
+  return (
     <Notice kind="warn">
       <div data-testid="speaking-closed">
-        <p>{t(lang, 's.closedToday')}</p>
-        <p className="mt-1">{t(lang, 's.opensAt', { time: opensAt })}</p>
+        <ClosedToday lang={lang} />
         <button type="button" className={`${cls.btn} ${cls.secondary} mt-3`} onClick={props.onPractise}>
           {t(lang, 'pm.practice')}
         </button>
@@ -268,10 +278,12 @@ function SpeakingFeedback(props: ModeProps) {
     recorder = <p className={cls.muted}>{t(lang, 'common.loading')}</p>
   } else if (meState.status === 'error') {
     recorder = <ErrorNotice error={meState.error} lang={lang} context="speaking" returnTo={returnTo} />
-  } else if (status === 'paused' && !rec.recording) {
-    // a pause is not a capacity closure: never "closed for today … 00:00 UTC" (passes are extended instead)
+  } else if (status === 'paused' && rec.phase === 'idle') {
+    // Only while nothing is in progress: an attempt that started before the pause (or closure) was known keeps its
+    // panel with its Stop button (the hook's timers and microphone run whatever is rendered), and a take can still
+    // be played. A pause is not a capacity closure: never "closed for today … 00:00 UTC" (passes are extended instead).
     recorder = <SpeakingPaused lang={lang} onPractise={props.onSwitch} />
-  } else if (status === 'closed' && !rec.recording) {
+  } else if (status === 'closed' && rec.phase === 'idle') {
     recorder = <SpeakingClosed lang={lang} onPractise={props.onSwitch} />
   } else if (!meState.me.signedIn) {
     recorder = (
@@ -300,7 +312,13 @@ function SpeakingFeedback(props: ModeProps) {
         ) : (
           <PricingNotice text={t(lang, free === 'off' ? 'p.freeOff' : 's.noFreeSpeaking')} lang={lang} />
         )}
-        {!meState.me.flags.gradingEnabled && <Notice kind="warn">{t(lang, 'p.paused')}</Notice>}
+        {/* paused or closed while an attempt runs or a take waits: say why sending (and a new take) is off */}
+        {status === 'paused' && <Notice kind="warn">{t(lang, 'p.paused')}</Notice>}
+        {status === 'closed' && (
+          <Notice kind="warn">
+            <ClosedToday lang={lang} />
+          </Notice>
+        )}
 
         <p className="text-slate-800">{t(lang, 's.timing', { prep: prepSeconds, speak: limit })}</p>
 
@@ -328,7 +346,8 @@ function SpeakingFeedback(props: ModeProps) {
               >
                 {t(lang, 'p.submit')}
               </button>
-              <button type="button" className={`${cls.btn} ${cls.secondary}`} onClick={() => void start()} disabled={submitting}>
+              {/* no new take while feedback is paused or closed: it could never be sent */}
+              <button type="button" className={`${cls.btn} ${cls.secondary}`} onClick={() => void start()} disabled={submitting || !open}>
                 {t(lang, 's.reRecord')}
               </button>
             </div>

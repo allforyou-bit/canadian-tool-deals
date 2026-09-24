@@ -156,4 +156,6 @@ LEGAL_NAME, ANTHROPIC_PREPAID_USD, ANTHROPIC_PREPAID_SINCE. New error code `at_c
   `cron.ts` `pauseGradingForCredits()`: KV marker `KV.creditsOut` (`auto:grading_off_credits`, with the prepaid ledger
   key `prepaidLedgerKey()` in force), `flag:grading_enabled` off, `recordPauseStart`, and one owner alert a day
   (`ALERT_GUARDS.creditsOut`, subject `CREDITS_OUT_SUBJECT`). The spend monitor lifts it only when a different prepaid
-  amount or date is deployed, or when the owner switches grading on.
+  amount or date is deployed, or when the owner switches grading on. On staging (`STAGING_ALLOWED_EMAILS` set) there
+  is no marker, switch-off or pause start: only that request answers `grading_paused`, and the owner gets at most one
+  alert a UTC day (`ALERT_GUARDS.stagingRefused`, subject `STAGING_REFUSED_SUBJECT`, without "credit" or "prepaid").

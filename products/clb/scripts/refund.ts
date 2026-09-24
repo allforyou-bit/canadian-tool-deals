@@ -17,6 +17,19 @@
 // mpc-refund-<payment_intent>-<cents>, so a second run with the same values never refunds twice. The Worker's
 // charge.refunded webhook then ends the pass.
 //
+// Replays: Stripe keeps the first answer to an Idempotency-Key for at least 24 hours and sends it again, errors
+// included, marked with the response header Idempotent-Replayed: true [unverified: the header is in Stripe's
+// idempotency docs, not in the OpenAPI spec]. So a rerun after a refund that later failed would get back the old
+// refund with its old status (e.g. pending). A POST answer is treated as a replay when that header is true or when
+// the refund's id is already in the list read before the POST; the summary then says nothing new was refunded and
+// shows the refund's current status (from that list, or GET /v1/refunds/{id}), exit 1 when it failed or was canceled.
+//
+// Days left are counted from the pass's end date, not the payment date: a second purchase is queued behind the
+// buyer's current pass (worker/src/billing/entitlement.ts grantPass), and a pause of the AI feedback (credits used up,
+// worker/src/cron.ts) moves end dates later.
+// The script cannot see the passes (no database access), so the preview shows the payment date only as the earliest
+// possible start and points the owner to the D1 query in guide section 9-8.
+//
 // Requests follow worker/src/billing/stripe.ts: same host, same form encoding (formEncode), Stripe-Version pinned to
 // STRIPE_API_VERSION. Parameter and field names (payment_intent status/currency/metadata/latest_charge; charge
 // amount/amount_refunded/disputed/refunded; refund status/metadata; POST /v1/refunds payment_intent/amount/reason/
@@ -27,9 +40,9 @@
 // The pass length comes from the PaymentIntent's metadata.sku, which checkout.ts sets (payment_intent_data.metadata)
 // and shared/config.ts SKUS describes; without a known sku the pro-rated table is left out.
 //
-// Output: ids, amounts, statuses and the sku only. Nothing about the buyer (email, name, card, address) is kept from
-// Stripe's responses, and the key never appears: every line is passed through redact(), which also removes anything
-// shaped like a Stripe key or an email address from Stripe's error messages.
+// Output: ids, amounts, statuses, the sku and the payment date only. Nothing about the buyer (email, name, card,
+// address) is kept from Stripe's responses, and the key never appears: every line is passed through redact(), which
+// also removes anything shaped like a Stripe key or an email address from Stripe's error messages.
 // Exit codes: 0 preview shown or refund created; 1 refused, Stripe error or failed refund; 2 missing key or bad input.
 import { SKUS, type Sku } from '../shared/config'
 import { formatCad } from '../worker/src/billing/messages'
@@ -145,12 +158,15 @@ export class StripeCallError extends Error {
   }
 }
 
-/** Calls the Stripe REST API the way worker/src/billing/stripe.ts stripeFetch does, keeping Stripe's error text. */
+/**
+ * Calls the Stripe REST API the way worker/src/billing/stripe.ts stripeFetch does, keeping Stripe's error text.
+ * onHeaders sees the response headers of every answer, errors included (for Idempotent-Replayed).
+ */
 export async function stripeCall<T>(
   key: string,
   method: 'GET' | 'POST',
   path: string,
-  opts: { params?: FormParams; idempotencyKey?: string },
+  opts: { params?: FormParams; idempotencyKey?: string; onHeaders?: (headers: Headers) => void },
   fetchImpl: typeof fetch,
 ): Promise<T> {
   const encoded = formEncode(opts.params ?? {})
@@ -170,6 +186,7 @@ export async function stripeCall<T>(
   } catch (e) {
     throw new StripeCallError(null, `could not reach Stripe (${e instanceof Error ? e.message : 'network error'})`)
   }
+  opts.onHeaders?.(res.headers)
   let data: unknown = null
   try {
     data = (await res.json()) as unknown
@@ -195,14 +212,18 @@ export interface StripePaymentIntent extends PaymentIntent {
   currency?: string | null
   metadata?: Record<string, string> | null
   latest_charge?: string | StripeCharge | null
+  /** seconds since the Unix epoch */
+  created?: number | null
 }
 
-/** What the script keeps from the PaymentIntent and its charge: ids, amounts, statuses and the sku. */
+/** What the script keeps from the PaymentIntent and its charge: ids, amounts, statuses, the sku and the date. */
 export interface PaymentFacts {
   paymentIntent: string
   status: string | null
   currency: string | null
   sku: Sku | null
+  /** the PaymentIntent's creation date, YYYY-MM-DD in UTC (Checkout creates it when the buyer pays) */
+  paymentDate: string | null
   chargeId: string | null
   /** cents; the charge's amount (the PaymentIntent's when the charge has none) */
   amountPaid: number
@@ -214,6 +235,13 @@ export interface PaymentFacts {
 
 const isSku = (v: unknown): v is Sku => typeof v === 'string' && Object.hasOwn(SKUS, v)
 
+/** 1756684800 → "2025-09-01" (UTC); null for anything that is not a positive number of seconds. */
+export function utcDate(unixSeconds: unknown): string | null {
+  // (8.64e12 s is the largest time a Date can hold; NaN fails both comparisons)
+  if (typeof unixSeconds !== 'number' || !(unixSeconds > 0 && unixSeconds < 8.64e12)) return null
+  return new Date(unixSeconds * 1000).toISOString().slice(0, 10)
+}
+
 export function paymentFacts(pi: StripePaymentIntent): PaymentFacts {
   const charge = pi.latest_charge && typeof pi.latest_charge === 'object' ? pi.latest_charge : null
   const sku = pi.metadata?.sku
@@ -222,6 +250,7 @@ export function paymentFacts(pi: StripePaymentIntent): PaymentFacts {
     status: typeof pi.status === 'string' ? pi.status : null,
     currency: typeof pi.currency === 'string' ? pi.currency.toLowerCase() : null,
     sku: isSku(sku) ? sku : null,
+    paymentDate: utcDate(pi.created),
     chargeId: charge?.id ?? null,
     amountPaid: charge?.amount ?? pi.amount ?? 0,
     amountRefunded: charge?.amount_refunded ?? 0,
@@ -348,6 +377,7 @@ function factsTable(a: Assessment, mode: StripeMode): string[] {
     `| 키 모드 / Key mode | ${keyModeText(mode)} |`,
     `| 결제 ID / Payment | \`${f.paymentIntent}\` |`,
     `| 이용권 / Pass | ${pass} |`,
+    `| 결제일 / Payment date | ${f.paymentDate ? `${f.paymentDate} (UTC)` : '알 수 없음 / unknown'} |`,
     `| 결제한 금액 / Amount paid | ${formatCad(f.amountPaid)} |`,
     `| 이미 환불된 금액 / Already refunded | ${formatCad(f.amountRefunded)} |`,
     `| 환불할 수 있는 최대 금액 / Refundable | ${formatCad(a.refundable)} |`,
@@ -372,6 +402,21 @@ function proRataSection(a: Assessment): string[] {
   }
   out.push('', `환불할 수 있는 최대 금액 / Max refundable: **${formatCad(a.refundable)}**`)
   return out
+}
+
+/** The preview's reminder of where days left come from (the pass dates are in D1, which the script cannot read). */
+function daysLeftSection(a: Assessment): string[] {
+  const f = a.facts
+  const days = f.sku ? SKUS[f.sku].days : null
+  const date = f.paymentDate ? `(\`${f.paymentDate}\`)` : ''
+  return [
+    '',
+    '### 남은 일수는 끝나는 날로 세요 / Count days left from the end date',
+    '',
+    `- 결제일${date}은 이용권이 **가장 일찍** 시작할 수 있는 날일 뿐이에요. 구매자가 이용권을 두 번 이상 샀으면 뒤의 이용권은 앞의 것이 끝난 뒤에 시작해요: **아직 시작하지 않은 이용권은 전액** 환불해요. AI 피드백이 멈췄던 적이 있으면 이용권이 멈춘 시간만큼 늘어나서 끝나는 날이 뒤로 밀려 있어요.`,
+    `- 금액을 정하기 전에 안내서 9-8의 D1 조회로 이 결제의 이용권 날짜(\`starts_at\`, \`ends_at\`)를 확인해요. 남은 일수 = \`ends_at\` − 오늘${days ? `, 많아야 ${days}일` : ''}.`,
+    `- The payment date is only the earliest the pass could start: a later purchase starts when the buyer's earlier pass ends (a pass that has not started is refunded in full), and a pause of the AI feedback moves end dates later. Check the pass dates with the D1 query in guide section 9-8: days left = ends_at − today${days ? `, at most ${days}` : ''}.`,
+  ]
 }
 
 function logFacts(a: Assessment, mode: StripeMode, runMode: Mode): string {
@@ -444,11 +489,14 @@ export async function runRefund({ env, fetchImpl }: RunOptions): Promise<Outcome
 
   // ---- read (both modes) ----
   let a: Assessment
+  // the charge's refunds as read before any POST (a POST answer whose id is here is a replay of an earlier run's)
+  let earlierRefunds: Refund[] = []
   try {
     const pi = await stripeCall<StripePaymentIntent>(key, 'GET', `/v1/payment_intents/${encodeURIComponent(paymentIntent)}`, { params: { expand: ['latest_charge'] } }, f)
     const facts = paymentFacts(pi)
     // One page of up to 100 refunds, as the webhook reads it (has_more is refused in assess)
     const refunds = facts.chargeId ? await stripeCall<StripeList<Refund>>(key, 'GET', '/v1/refunds', { params: { charge: facts.chargeId, limit: 100 } }, f) : null
+    earlierRefunds = refunds?.data ?? []
     a = assess(facts, refunds, cents)
   } catch (e) {
     const message = e instanceof Error ? e.message : 'unknown error'
@@ -513,6 +561,7 @@ export async function runRefund({ env, fetchImpl }: RunOptions): Promise<Outcome
           `- ${formatCad(a.requested)}을 구매자의 카드로 돌려주고, **이용권이 끝나요**(환불에 \`${END_PASS_METADATA_KEY}\` = \`true\`를 붙여요).`,
           `- Refunds ${formatCad(a.requested)} to the buyer's card and ends the pass (the refund gets metadata ${END_PASS_METADATA_KEY}=true).`,
           ...prorata,
+          ...daysLeftSection(a),
           '',
           '### 다음 단계 / Next step',
           '',
@@ -528,6 +577,7 @@ export async function runRefund({ env, fetchImpl }: RunOptions): Promise<Outcome
 
   // ---- refund ----
   const idempotencyKey = `mpc-refund-${paymentIntent}-${cents}`
+  const answer = { replayed: false }
   let refund: Refund
   try {
     refund = await stripeCall<Refund>(
@@ -537,6 +587,9 @@ export async function runRefund({ env, fetchImpl }: RunOptions): Promise<Outcome
       {
         params: { payment_intent: paymentIntent, amount: cents, reason: 'requested_by_customer', metadata: { [END_PASS_METADATA_KEY]: 'true' } },
         idempotencyKey,
+        onHeaders: (h) => {
+          answer.replayed = h.get('Idempotent-Replayed')?.trim().toLowerCase() === 'true'
+        },
       },
       f,
     )
@@ -550,12 +603,104 @@ export async function runRefund({ env, fetchImpl }: RunOptions): Promise<Outcome
           '',
           `Stripe가 환불을 받지 않았어요. Stripe did not accept the refund: ${message}`,
           '',
-          '환불이 됐는지 확실하지 않으면 **같은 값으로 다시 실행**해요. 같은 값이면 두 번 환불되지 않아요: 이미 됐으면 "이용권은 이미 끝났어요"라고 나와요.',
-          'If unsure whether it went through, run again with the same values: it never refunds twice.',
+          // a replayed error comes back the same on a rerun, so the rerun advice is only for a first answer
+          ...(answer.replayed
+            ? [
+                '이 답은 Stripe가 **전에 같은 값의 요청에 준 답을 다시 보여 준 것**이에요(`Idempotent-Replayed`). 이번 실행은 새로 환불을 시도하지 않았어요.',
+                'Stripe replayed its earlier answer to the same values (Idempotent-Replayed): this run did not try a new refund.',
+                '',
+              ]
+            : [
+                '환불이 됐는지 확실하지 않으면 **같은 값으로 다시 실행**해요. 같은 값이면 두 번 환불되지 않아요: 이미 됐으면 "이용권은 이미 끝났어요"라고 나와요.',
+                'If unsure whether it went through, run again with the same values: it never refunds twice.',
+                '',
+              ]),
+          '**같은 오류가 또 나오면 계속 다시 실행하지 않아요.** Stripe는 같은 값의 요청에 적어도 24시간 동안 처음 준 답(오류도)을 그대로 다시 보여 줘요. 24시간 뒤에 하거나 Claude에게 물어요.',
+          'If the same error comes back, stop rerunning: Stripe replays its first answer to the same values (errors included) for at least 24 hours. Try again after 24 hours or ask Claude.',
           '',
           ...table,
         ].join('\n'),
-        log: [logFacts(a, keyMode, runMode), `::error::refund: Stripe refused the refund: ${message}`],
+        log: [logFacts(a, keyMode, runMode), `::error::refund: Stripe refused the refund${answer.replayed ? ' (a replayed earlier answer)' : ''}: ${message}`],
+      },
+      key,
+    )
+  }
+
+  // A replay: Stripe sent back the refund an earlier run made with this key. Its status in the replayed body is the
+  // status it had then, so the current one is taken from the list read before the POST, or read again.
+  const listed = earlierRefunds.find((r) => r.id === refund.id)
+  if (answer.replayed || listed) {
+    let current: Refund | null = listed ?? null
+    let readError = ''
+    if (!current) {
+      try {
+        current = await stripeCall<Refund>(key, 'GET', `/v1/refunds/${encodeURIComponent(refund.id)}`, {}, f)
+      } catch (e) {
+        readError = e instanceof Error ? e.message : 'unknown error'
+      }
+    }
+    const replayKo = `Stripe가 **전에 만든 환불**(\`${refund.id}\`)을 다시 보여 줬어요(같은 값의 요청에는 적어도 24시간 동안 같은 답을 줘요). **새로 환불하지 않았어요.**`
+    const replayEn = `Stripe replayed the refund ${refund.id} that an earlier run made with the same values: nothing new was refunded.`
+    const now = current?.status ?? null
+    const rows = [`| 환불 ID / Refund | \`${refund.id}\` |`, `| 환불 금액 / Refunded | ${formatCad(refund.amount)} |`, `| 지금 상태 / Status now | \`${now ?? 'unknown'}\` |`]
+    const logFirst = logFacts(a, keyMode, runMode)
+    if (!current) {
+      return finish(
+        {
+          code: 1,
+          summary: [
+            title(TITLES.stripeError),
+            '',
+            replayKo,
+            `그 환불의 지금 상태를 읽지 못했어요: ${readError}. Stripe 대시보드의 그 결제 화면에서 환불 상태를 보거나 Claude에게 물어요.`,
+            `${replayEn} Its current status could not be read: ${readError}.`,
+            '',
+            ...table,
+            ...rows,
+          ].join('\n'),
+          log: [logFirst, `::error::refund: Stripe replayed refund ${refund.id}; nothing new was refunded, and its current status could not be read: ${readError}`],
+        },
+        key,
+      )
+    }
+    if (now === 'succeeded' || now === 'pending') {
+      return finish(
+        {
+          code: 0,
+          summary: [
+            title(TITLES.refunded),
+            '',
+            replayKo,
+            `그 환불(${formatCad(refund.amount)})은 지금 \`${now}\` 상태예요: 돈은 한 번만 돌아가고, 사이트가 Stripe의 알림을 받으면 **이용권이 끝나요**(자동이에요).`,
+            `${replayEn} That refund is ${now}: the buyer is refunded once, and the site ends the pass when Stripe tells it.`,
+            '',
+            ...table,
+            ...rows,
+            '',
+            '### 다음 단계 / Next step',
+            '',
+            '이 워크플로를 다시 실행하지 않아요. 구매자에게 아직 알리지 않았으면 환불했다고 알려요.',
+            'Do not run this workflow again for this payment; tell the buyer if you have not yet.',
+          ].join('\n'),
+          log: [logFirst, `::notice::Stripe replayed refund ${refund.id} from an earlier run (now ${now}); nothing new was refunded.`],
+        },
+        key,
+      )
+    }
+    return finish(
+      {
+        code: 1,
+        summary: [
+          title(TITLES.failed),
+          '',
+          replayKo,
+          `그 환불의 지금 상태는 \`${now ?? 'unknown'}\`예요: 돈이 돌아가지 않았어요. 구매자와 다른 환불 방법을 정하거나, 24시간 뒤에 Claude에게 물어요.`,
+          `${replayEn} That refund is ${now ?? 'unknown'}: the buyer has not received the money. Arrange another way to refund with the buyer, or ask Claude after 24 hours.`,
+          '',
+          ...table,
+          ...rows,
+        ].join('\n'),
+        log: [logFirst, `::error::refund: Stripe replayed refund ${refund.id} from an earlier run, now ${now ?? 'unknown'}; nothing new was refunded.`],
       },
       key,
     )

@@ -14,7 +14,9 @@
 # preview refunds nothing and writes the amounts, the pro-rated table and the next step to the job summary. refund
 # creates the refund (reason requested_by_customer, metadata end_pass=true) with the idempotency key
 # mpc-refund-<payment_intent>-<cents>, so a second run with the same values never refunds twice; the Worker's
-# charge.refunded webhook then ends the pass. Only ids and amounts are printed: never the key, never the buyer.
+# charge.refunded webhook then ends the pass. When Stripe answers with the refund an earlier run made (a replay of
+# that key), the summary says nothing new was refunded and shows that refund's current status (red when it failed).
+# Only ids, amounts and the payment date are printed: never the key, never the buyer.
 #
 # The inputs reach the script through environment variables only (never pasted into a shell script). The Stripe
 # key is given only to the two steps that need it, not to npm ci. STRIPE_SECRET_KEY is the live restricted key the
@@ -22,7 +24,8 @@
 # so this refunds real money; with a test key (rk_test_…) the summary says "test". Missing key: a notice, not an error.
 name: Refund unused days
 
-run-name: Refund unused days (${{ inputs.mode }})
+# the payment ID in the title tells the runs in the Actions list apart (a pi_ ID is not a secret: guide section 9-8)
+run-name: Refund unused days (${{ inputs.mode }}, ${{ inputs.payment_intent }})
 
 on:
   workflow_dispatch:
@@ -47,13 +50,31 @@ on:
 permissions:
   contents: read
 
-# one refund at a time; a second click waits for the first run and is then refused (the pass has already ended)
-concurrency:
-  group: refund
-  cancel-in-progress: false
-
 jobs:
+  # The payment ID with spaces and anything else outside A-Z, a-z, 0-9 and _ removed, so " pi_123 " and "pi_123"
+  # share the refund job's concurrency group (the script trims the ID the same way). No checkout, no secret.
+  payment:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    outputs:
+      id: ${{ steps.id.outputs.id }}
+    steps:
+      - name: Read the payment ID
+        id: id
+        env:
+          PAYMENT_INTENT: ${{ inputs.payment_intent }}
+        run: echo "id=$(printf '%s' "$PAYMENT_INTENT" | tr -cd 'A-Za-z0-9_' | cut -c1-80)" >> "$GITHUB_OUTPUT"
+
   refund:
+    needs: payment
+    # One run per payment at a time: a second click for the same payment waits for the first and is then refused
+    # (the pass has already ended). Runs for different payments do not wait for or cancel each other (refunds on
+    # different charges are independent), so the owner can refund several buyers one after another. GitHub keeps
+    # one waiting run per group: a third click for the same payment while the second waits cancels the second
+    # (grey "Cancelled", nothing refunded).
+    concurrency:
+      group: refund-${{ needs.payment.outputs.id }}
+      cancel-in-progress: false
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     defaults:

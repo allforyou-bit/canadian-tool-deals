@@ -78,6 +78,8 @@ prepaid amount (`PREPAID` in `shared/config.ts`): free samples off at 70%, an ow
 80% (once each per top-up), and grading paused at 97% so that no call fails half-way. The exact alert
 subjects are the Worker's; treat any `[MPC] …` alert whose subject mentions **credit** or **prepaid**
 (any case) as a prepaid-credit alert.
+`[MPC] STAGING: Anthropic refused a grading call …` is not one: it is staging only and production is not
+paused, so list it under A6 only (the fix is raising the eval workspace limit or waiting for the next month).
 
 The Worker counts only its own grading. **Eval runs (`Grading eval`), staging checks (`Deploy practice coach`
 with target staging) and `Level-B checks` runs draw on the same Anthropic credits**, so the real balance can run

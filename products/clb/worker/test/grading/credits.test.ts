@@ -14,6 +14,7 @@ import {
   ownerMarker,
   pauseGradingForCredits,
   runSpendMonitor,
+  STAGING_REFUSED_SUBJECT,
   type CreditsOutMarker,
 } from '../../src/cron'
 import type { Env } from '../../src/env'
@@ -333,5 +334,75 @@ describe('spend monitor during a credits pause', () => {
     await runSpendMonitor(prepaidEnv('20', '2027-06-16'), new Date('2027-06-16T09:15:00.000Z'))
     expect((await getFlags(env)).grading_enabled).toBe(false)
     expect(await marker()).toBeNull()
+  })
+})
+
+// Staging grades with the eval workspace key, whose monthly limit eval runs use up, and never gets a prepaid ledger:
+// a credits pause there would never lift by itself and would send the production alert every day (round 2).
+describe('on a staging Worker (STAGING_ALLOWED_EMAILS set)', () => {
+  const stagingEnv = (): Env => ({ ...(env as Env), STAGING_ALLOWED_EMAILS: 'owner@coach.test' })
+  const stagingAlerts = (emails: SentEmail[]) => emails.filter((e) => e.subject === `[MPC] ${STAGING_REFUSED_SUBJECT}`)
+
+  it('refuses only that request (grading_paused, the free sample back) with no pause, and sends a staging-only alert', async () => {
+    const senv = stagingEnv()
+    const { user } = await createUser()
+    const { calls, emails } = stubFetch(() => jsonResponse(USAGE_LIMIT, 400))
+    const ai = { run: vi.fn(async () => ({ text: 'I would call the settlement office first.', transcription_info: { duration: 20 } })) }
+    const now = new Date()
+    const res = await gradeSpeaking(await speakingRequest(), makeCtx({ env: { ...senv, AI: ai as unknown as Ai }, user, now }))
+    expect((await expectError(res, 503, 'grading_paused')).message).toBe(PAUSED)
+    const row = await env.DB.prepare('SELECT free_speaking_used FROM users WHERE id = ?1').bind(user.id).first<{ free_speaking_used: number }>()
+    expect(row?.free_speaking_used).toBe(0)
+
+    // nothing to lift later: no credits marker, grading still on, no pause start
+    expect(await marker()).toBeNull()
+    expect((await getFlags(env)).grading_enabled).toBe(true)
+    expect(await env.FLAGS.get(KV.pauseStartedAt)).toBeNull()
+
+    expect(creditAlerts(emails)).toHaveLength(0)
+    const alerts = stagingAlerts(emails)
+    expect(alerts).toHaveLength(1)
+    expect(alerts[0].to).toEqual(['owner@coach.test'])
+    // the daily Routine files [MPC] subjects that mention credit or prepaid under "Anthropic credits: top up"
+    expect(alerts[0].subject).toContain('STAGING')
+    expect(alerts[0].subject).not.toMatch(/credit|prepaid/i)
+    expect(alerts[0].text).toContain('The production site is not affected')
+    expect(alerts[0].text).toContain('raise the eval workspace limit')
+    expect(alerts[0].text).toContain('wait for the next month')
+    expect(alerts[0].text).not.toContain('"Anthropic credits: top up"')
+
+    // the next staging check asks Anthropic again (grading was not switched off), and today's alert is not repeated
+    const other = await createUser({ pass: true })
+    await expectError(await gradeWriting(writingRequest(), makeCtx({ env: senv, user: other.user, now })), 503, 'grading_paused')
+    expect(calls).toHaveLength(2)
+    expect(stagingAlerts(emails)).toHaveLength(1)
+  })
+
+  it('alerts at most once per UTC day, and the spend monitor has no pause to hold or repeat', async () => {
+    const senv = stagingEnv()
+    const { emails } = stubFetch(() => jsonResponse(CREDIT_BALANCE, 400))
+    await pauseGradingForCredits(senv, new Date('2027-06-15T10:00:00.000Z'))
+    await pauseGradingForCredits(senv, new Date('2027-06-15T23:00:00.000Z'))
+    expect(stagingAlerts(emails)).toHaveLength(1)
+    for (const t of ['2027-06-16T00:15:00.000Z', '2027-06-17T00:15:00.000Z', '2027-07-01T00:15:00.000Z']) {
+      await runSpendMonitor(senv, new Date(t))
+      expect((await getFlags(env)).grading_enabled, t).toBe(true)
+    }
+    expect(stagingAlerts(emails)).toHaveLength(1)
+    expect(creditAlerts(emails)).toHaveLength(0)
+    expect(await marker()).toBeNull()
+    // a refusal on a later day alerts again
+    await pauseGradingForCredits(senv, new Date('2027-06-16T01:00:00.000Z'))
+    expect(stagingAlerts(emails)).toHaveLength(2)
+  })
+
+  it('lifts a credits pause an older version left on staging, without a credits alert', async () => {
+    const { emails } = stubFetch(() => jsonResponse(CREDIT_BALANCE, 400))
+    await env.FLAGS.put(KV.creditsOut, JSON.stringify({ at: '2027-06-15T12:00:00.000Z', ledger: 'none' }))
+    await env.FLAGS.put('flag:grading_enabled', 'false')
+    await runSpendMonitor(stagingEnv(), new Date('2027-06-16T00:15:00.000Z'))
+    expect((await getFlags(env)).grading_enabled).toBe(true)
+    expect(await marker()).toBeNull()
+    expect(creditAlerts(emails)).toHaveLength(0)
   })
 })

@@ -1,9 +1,13 @@
 // Tests for scripts/refund.ts ("Refund unused days", .github/workflows/refund.yml). Stripe is a mocked fetch:
-// nothing reaches the network. Also checks the workflow file and the owner guide's section 9-8 against the script.
+// nothing reaches the network. Also checks the workflow file and the owner guide's section 9-8 against the script,
+// and runs the guide's D1 query (days left) on the test database with the real schema.
+import { env as workerEnv } from 'cloudflare:workers'
 import { describe, expect, it, vi } from 'vitest'
 import refundYml from '../../../.github/workflows/refund.yml?raw'
 import guide from '../../../business/online/owner-setup.md?raw'
 import { SKUS } from '../shared/config'
+import type { Env } from '../worker/src/env'
+import { grantPass } from '../worker/src/billing/entitlement'
 import { STRIPE_API_VERSION, type Refund } from '../worker/src/billing/stripe'
 import { END_PASS_METADATA_KEY } from '../worker/src/billing/webhook'
 import {
@@ -20,6 +24,7 @@ import {
   proRataCents,
   redact,
   runRefund,
+  utcDate,
   type Outcome,
   type StripePaymentIntent,
 } from './refund'
@@ -29,6 +34,8 @@ const KEY = ['rk', 'live', 'FAKE0000000000000000000000'].join('_')
 const TEST_KEY = ['sk', 'test', 'FAKE0000000000000000000000'].join('_')
 const PI = 'pi_3PqRsTuVwXyZ0123'
 const CHARGE = 'ch_3PqRsTuVwXyZ0123'
+/** the PaymentIntent's `created`: 2026-09-01 15:30 UTC */
+const CREATED = Date.UTC(2026, 8, 1, 15, 30) / 1000
 
 // What Stripe sends back includes the buyer's details; none of it may reach the output.
 const BUYER = { email: 'jane.buyer@example.com', name: 'Jane Q Buyer', line1: '77 Hidden Lane', postal: 'M5V 3L9', last4: '4242', fingerprint: 'fpAbC123xYz789' }
@@ -56,6 +63,7 @@ function paymentIntent(over: Record<string, unknown> = {}, chargeOver: Record<st
     amount: 3900,
     currency: 'cad',
     status: 'succeeded',
+    created: CREATED,
     receipt_email: BUYER.email,
     metadata: { user_id: 'usr_internal_1', sku: 'pass30', terms_version: '2026-09-24' },
     latest_charge: charge(chargeOver),
@@ -82,9 +90,10 @@ interface Call {
   body: string | null
 }
 
-const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json' } })
+const json = (body: unknown, status = 200, headers: Record<string, string> = {}) =>
+  new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', ...headers } })
 
-/** A fake Stripe: the PaymentIntent, one page of refunds and the POST /v1/refunds answer. */
+/** A fake Stripe: the PaymentIntent, one page of refunds, the POST /v1/refunds answer and GET /v1/refunds/{id}. */
 function fakeStripe(
   opts: {
     pi?: Record<string, unknown>
@@ -93,6 +102,9 @@ function fakeStripe(
     hasMore?: boolean
     post?: { status: number; body: unknown }
     postThrows?: boolean
+    /** response headers of the POST answer, e.g. Idempotent-Replayed: true */
+    postHeaders?: Record<string, string>
+    refundGet?: { status: number; body: unknown }
   } = {},
 ) {
   const calls: Call[] = []
@@ -109,7 +121,10 @@ function fakeStripe(
     if (method === 'POST' && url === 'https://api.stripe.com/v1/refunds') {
       if (opts.postThrows) throw new TypeError('fetch failed')
       const p = opts.post ?? { status: 200, body: refundObj({ metadata: { end_pass: 'true' } }) }
-      return json(p.body, p.status)
+      return json(p.body, p.status, opts.postHeaders)
+    }
+    if (method === 'GET' && url.startsWith('https://api.stripe.com/v1/refunds/') && opts.refundGet) {
+      return json(opts.refundGet.body, opts.refundGet.status)
     }
     return json({ error: { message: 'unexpected request', type: 'invalid_request_error' } }, 404)
   })
@@ -190,6 +205,7 @@ describe('assess', () => {
       status: 'succeeded',
       currency: 'cad',
       sku: 'pass30',
+      paymentDate: '2026-09-01',
       chargeId: CHARGE,
       amountPaid: 3900,
       amountRefunded: 500,
@@ -198,6 +214,13 @@ describe('assess', () => {
     })
     expect(facts(paymentIntent({ metadata: { sku: 'pass999' } })).sku).toBeNull()
     expect(facts(paymentIntent({ metadata: null })).sku).toBeNull()
+    expect(facts(paymentIntent({ created: null })).paymentDate).toBeNull()
+  })
+
+  it('utcDate turns Stripe’s seconds into a UTC date, and anything else into null', () => {
+    expect(utcDate(CREATED)).toBe('2026-09-01')
+    expect(utcDate(Date.UTC(2026, 8, 1, 23, 59, 59) / 1000)).toBe('2026-09-01')
+    for (const bad of [null, undefined, 0, -1, Number.NaN, Number.POSITIVE_INFINITY, 1e15, '1756684800']) expect(utcDate(bad), String(bad)).toBeNull()
   })
 
   it('refundable = charge amount − amount already refunded; the requested amount may equal it', () => {
@@ -293,6 +316,14 @@ describe('runRefund: preview', () => {
     expect(s).toContain('| 10 | 39 × 10 ÷ 30 | C$13.00 |')
     expect(s).toContain('| 29 | 39 × 29 ÷ 30 | C$37.70 (최대 금액보다 커요 / above the refundable amount) |')
     expect(s).toContain('Max refundable: **C$34.00**')
+    // the payment date, and where days left really come from: the pass's end date (guide 9-8's D1 query)
+    expect(s).toContain('| 결제일 / Payment date | 2026-09-01 (UTC) |')
+    expect(s).toContain('결제일(`2026-09-01`)은 이용권이 **가장 일찍** 시작할 수 있는 날일 뿐이에요')
+    expect(s).toContain('**아직 시작하지 않은 이용권은 전액** 환불해요')
+    expect(s).toContain('안내서 9-8의 D1 조회')
+    expect(s).toContain('남은 일수 = `ends_at` − 오늘, 많아야 30일.')
+    expect(s).toContain('days left = ends_at − today, at most 30.')
+    expect(s.indexOf('남은 일수는 끝나는 날로 세요')).toBeLessThan(s.indexOf(NEXT_STEP_KO))
   })
 
   it('reports a test key as test mode, and leaves the pro-rated table out without a sku', async () => {
@@ -301,6 +332,11 @@ describe('runRefund: preview', () => {
     expect(o.summary).toContain('**test (시험)**')
     expect(o.summary).toContain('알 수 없음')
     expect(o.summary).not.toContain('남은 날짜 계산')
+    // the days-left reminder stays, without a pass length it does not know
+    expect(o.summary).toContain('남은 일수 = `ends_at` − 오늘.')
+    const noDate = await runRefund({ env: env(), fetchImpl: fakeStripe({ pi: paymentIntent({ created: null }) }).fetchImpl })
+    expect(noDate.summary).toContain('| 결제일 / Payment date | 알 수 없음 / unknown |')
+    expect(noDate.summary).toContain('- 결제일은 이용권이 **가장 일찍**')
   })
 })
 
@@ -345,6 +381,89 @@ describe('runRefund: refund', () => {
     const failed = await runRefund({ env: env({ MODE: 'refund' }), fetchImpl: fakeStripe({ post: { status: 200, body: refundObj({ status: 'failed' }) } }).fetchImpl })
     expect(failed.code).toBe(1)
     expect(failed.summary).toContain(TITLES.failed.ko)
+  })
+
+  it('a rerun after the refund failed gets the old refund replayed: failed, not a new refund (found in the refund list)', async () => {
+    // an earlier run made re_1AAA (pending) which then failed; the pre-check lets the rerun through (a failed refund
+    // does not end the pass) and Stripe replays the stored answer to the same Idempotency-Key: re_1AAA, pending
+    const s = fakeStripe({
+      refunds: [refundObj({ status: 'failed', metadata: { end_pass: 'true' } })],
+      post: { status: 200, body: refundObj({ status: 'pending', metadata: { end_pass: 'true' } }) },
+    })
+    const o = await runRefund({ env: env({ MODE: 'refund' }), fetchImpl: s.fetchImpl })
+    expect(o.code).toBe(1)
+    expect(o.summary).toContain(`## ${REFUND_WORKFLOW_NAME}: ${TITLES.failed.ko} (${TITLES.failed.en})`)
+    expect(o.summary).not.toContain(TITLES.refunded.ko)
+    expect(o.summary).toContain('Stripe가 **전에 만든 환불**(`re_1AAA`)을 다시 보여 줬어요')
+    expect(o.summary).toContain('**새로 환불하지 않았어요.**')
+    expect(o.summary).toContain('| 지금 상태 / Status now | `failed` |')
+    expect(o.summary).toContain('구매자와 다른 환불 방법을 정하거나, 24시간 뒤에 Claude에게 물어요')
+    expect(o.summary).not.toContain('`pending`')
+    expect(o.log.join('\n')).toContain('::error::refund: Stripe replayed refund re_1AAA from an earlier run, now failed; nothing new was refunded.')
+    // the list read just before the POST has the current status: no extra read
+    expect(s.calls.map((c) => c.method)).toEqual(['GET', 'GET', 'POST'])
+  })
+
+  it('an answer marked Idempotent-Replayed is read again and reported with its current status', async () => {
+    const replayedPost = { status: 200, body: refundObj({ id: 're_9ZZZ', status: 'pending', metadata: { end_pass: 'true' } }) }
+    const now = (status: NonNullable<Refund['status']>) => ({ status: 200, body: refundObj({ id: 're_9ZZZ', status, metadata: { end_pass: 'true' } }) })
+    const canceled = fakeStripe({ post: replayedPost, postHeaders: { 'Idempotent-Replayed': 'true' }, refundGet: now('canceled') })
+    const c = await runRefund({ env: env({ MODE: 'refund' }), fetchImpl: canceled.fetchImpl })
+    expect(c.code).toBe(1)
+    expect(c.summary).toContain(`## ${REFUND_WORKFLOW_NAME}: ${TITLES.failed.ko}`)
+    expect(c.summary).toContain('**새로 환불하지 않았어요.**')
+    expect(c.summary).toContain('| 지금 상태 / Status now | `canceled` |')
+    expect(canceled.calls.map((x) => `${x.method} ${x.url.split('?')[0]}`)).toEqual([
+      `GET https://api.stripe.com/v1/payment_intents/${PI}`,
+      'GET https://api.stripe.com/v1/refunds',
+      'POST https://api.stripe.com/v1/refunds',
+      'GET https://api.stripe.com/v1/refunds/re_9ZZZ',
+    ])
+    expect(canceled.calls[3].headers['Stripe-Version']).toBe(STRIPE_API_VERSION)
+    expect(canceled.calls[3].headers['Idempotency-Key']).toBeUndefined()
+
+    // still live (e.g. another run made it a moment earlier): refunded once, exit 0, and the replay is said out loud
+    const live = await runRefund({ env: env({ MODE: 'refund' }), fetchImpl: fakeStripe({ post: replayedPost, postHeaders: { 'Idempotent-Replayed': 'True' }, refundGet: now('succeeded') }).fetchImpl })
+    expect(live.code).toBe(0)
+    expect(live.summary).toContain(`## ${REFUND_WORKFLOW_NAME}: ${TITLES.refunded.ko}`)
+    expect(live.summary).toContain('**새로 환불하지 않았어요.**')
+    expect(live.summary).toContain('| 지금 상태 / Status now | `succeeded` |')
+    expect(live.summary).toContain('이 워크플로를 다시 실행하지 않아요')
+
+    // the current status cannot be read: a Stripe error that still says nothing new was refunded
+    const unread = await runRefund({
+      env: env({ MODE: 'refund' }),
+      fetchImpl: fakeStripe({ post: replayedPost, postHeaders: { 'Idempotent-Replayed': 'true' }, refundGet: { status: 500, body: { error: { type: 'api_error', message: 'boom' } } } }).fetchImpl,
+    })
+    expect(unread.code).toBe(1)
+    expect(unread.summary).toContain(`## ${REFUND_WORKFLOW_NAME}: ${TITLES.stripeError.ko}`)
+    expect(unread.summary).toContain('**새로 환불하지 않았어요.**')
+    expect(unread.summary).toContain('지금 상태를 읽지 못했어요: HTTP 500 (api_error): boom')
+    expect(unread.summary).toContain('| 지금 상태 / Status now | `unknown` |')
+
+    // without the header and with an id the list did not have, it is a new refund (the normal success)
+    const fresh = await runRefund({ env: env({ MODE: 'refund' }), fetchImpl: fakeStripe({ post: replayedPost, postHeaders: { 'Idempotent-Replayed': 'false' } }).fetchImpl })
+    expect(fresh.code).toBe(0)
+    expect(fresh.summary).not.toContain('새로 환불하지 않았어요')
+  })
+
+  it('a replayed Stripe error says so, and every Stripe error on the refund says not to keep rerunning for 24 hours', async () => {
+    const err = { status: 500, body: { error: { type: 'api_error', message: 'An unknown error occurred' } } }
+    const replayed = await runRefund({ env: env({ MODE: 'refund' }), fetchImpl: fakeStripe({ post: err, postHeaders: { 'Idempotent-Replayed': 'true' } }).fetchImpl })
+    expect(replayed.code).toBe(1)
+    expect(replayed.summary).toContain(`## ${REFUND_WORKFLOW_NAME}: ${TITLES.stripeError.ko}`)
+    expect(replayed.summary).toContain('**전에 같은 값의 요청에 준 답을 다시 보여 준 것**이에요(`Idempotent-Replayed`)')
+    expect(replayed.log.join('\n')).toContain('Stripe refused the refund (a replayed earlier answer): HTTP 500 (api_error)')
+    // a rerun would get the same replayed error, so it is not suggested
+    expect(replayed.summary).not.toContain('같은 값으로 다시 실행')
+    const first = await runRefund({ env: env({ MODE: 'refund' }), fetchImpl: fakeStripe({ post: err }).fetchImpl })
+    expect(first.summary).not.toContain('Idempotent-Replayed')
+    expect(first.summary).toContain('같은 값으로 다시 실행')
+    for (const o of [replayed, first]) {
+      expect(o.summary).toContain('**같은 오류가 또 나오면 계속 다시 실행하지 않아요.**')
+      expect(o.summary).toContain('적어도 24시간')
+      expect(o.summary).toContain('for at least 24 hours')
+    }
   })
 
   it('exits non-zero with Stripe’s error message, with the key and any email removed', async () => {
@@ -450,8 +569,13 @@ describe('runRefund: output never carries the key or the buyer’s details', () 
       await runRefund({ env: env(), fetchImpl: fakeStripe({ piError: { status: 401, body: leaky } }).fetchImpl }),
       await runRefund({ env: env({ AMOUNT_CAD: '99' }), fetchImpl: fakeStripe().fetchImpl }),
       await runRefund({ env: env({ STRIPE_SECRET_KEY: TEST_KEY, MODE: 'refund' }), fetchImpl: fakeStripe().fetchImpl }),
+      await runRefund({
+        env: env({ MODE: 'refund' }),
+        fetchImpl: fakeStripe({ post: { status: 200, body: refundObj({ id: 're_9ZZZ' }) }, postHeaders: { 'Idempotent-Replayed': 'true' }, refundGet: { status: 401, body: leaky } }).fetchImpl,
+      }),
+      await runRefund({ env: env({ MODE: 'refund' }), fetchImpl: fakeStripe({ post: { status: 500, body: leaky }, postHeaders: { 'Idempotent-Replayed': 'true' } }).fetchImpl }),
     ]
-    expect(runs.map((o) => o.code)).toEqual([0, 0, 1, 1, 1, 0])
+    expect(runs.map((o) => o.code)).toEqual([0, 0, 1, 1, 1, 0, 1, 1])
     for (const o of runs) {
       const text = shown(o)
       expect(text).not.toContain(KEY)
@@ -477,15 +601,53 @@ describe('refund.yml and the owner guide (section 9-8) follow the script', () =>
     expect(inputs).toEqual(['payment_intent', 'amount_cad', 'mode'])
     expect(on).toMatch(/mode:[\s\S]*type: choice[\s\S]*default: preview[\s\S]*- preview\n\s+- refund/)
     expect(refundYml).toMatch(/permissions:\n {2}contents: read\n\n/)
-    expect(refundYml).toMatch(/concurrency:\n {2}group: refund\n {2}cancel-in-progress: false/)
     expect(refundYml).toContain('run: node scripts/run.mjs scripts/refund.ts')
+  })
+
+  it('runs one refund per payment at a time, grouped by the payment ID as the script reads it', () => {
+    // no single group for every payment: GitHub keeps one waiting run per group, so a third run would cancel
+    // another buyer's waiting run
+    expect(refundYml).not.toMatch(/^concurrency:/m)
+    expect(refundYml).toMatch(/\n {2}refund:\n {4}needs: payment\n(?: {4}#[^\n]*\n)* {4}concurrency:\n {6}group: refund-\$\{\{ needs\.payment\.outputs\.id \}\}\n {6}cancel-in-progress: false\n/)
+    expect(refundYml).toMatch(/\n {2}payment:\n(?: {4}[^\n]*\n)*? {4}outputs:\n {6}id: \$\{\{ steps\.id\.outputs\.id \}\}\n/)
+    // the payment job keeps these characters (tr -cd) and at most this many (cut -c1-N) ...
+    const m = /\n {8}id: id\n {8}env:\n {10}PAYMENT_INTENT: \$\{\{ inputs\.payment_intent \}\}\n {8}run: echo "id=\$\(printf '%s' "\$PAYMENT_INTENT" \| tr -cd '([A-Za-z0-9_-]+)' \| cut -c1-(\d+)\)" >> "\$GITHUB_OUTPUT"\n/.exec(refundYml)
+    expect(m, 'the payment job step').not.toBeNull()
+    const [, kept = '', max = '0'] = m ?? []
+    expect(kept).toBe('A-Za-z0-9_')
+    const group = (raw: string) => raw.replace(new RegExp(`[^${kept}]`, 'g'), '').slice(0, Number(max))
+    // ... so every ID the script accepts is grouped under the ID it refunds, whatever spaces came with a paste
+    const longest = `pi_${'a'.repeat(64)}`
+    for (const raw of [PI, ` ${PI}`, `${PI} `, `\t${PI}\n`, longest, ` ${longest} `]) {
+      const parsed = parseInputs({ paymentIntent: raw, amountCad: '15.60', mode: 'refund' })
+      expect(parsed.ok, raw).toBe(true)
+      if (parsed.ok) expect(group(raw), JSON.stringify(raw)).toBe(parsed.inputs.paymentIntent)
+    }
+    // and each run's title in the Actions list names its payment (a pi_ ID is not a secret)
+    expect(refundYml).toContain('\nrun-name: Refund unused days (${{ inputs.mode }}, ${{ inputs.payment_intent }})\n')
   })
 
   it('passes inputs through env only, and gives the Stripe key only to the steps that need it (not npm ci)', () => {
     for (const l of lines.filter((x) => x.includes('inputs.'))) expect(l, l).toMatch(/^\s*(?:[A-Z_]+|run-name): .*\$\{\{ inputs\.[a-z_]+ \}\}/)
-    const keyLines = lines.map((l, i) => [l, i] as const).filter(([l]) => l.includes('secrets.STRIPE_SECRET_KEY'))
-    expect(keyLines).toHaveLength(2)
-    for (const [, i] of keyLines) expect(lines[i - 1].trim()).toBe('env:')
+    // the only secret is the Stripe key, on two lines
+    const keyLines = lines.map((l, i) => [l, i] as const).filter(([l]) => /\$\{\{[^}]*\bsecrets\b/.test(l))
+    expect(keyLines.map(([l]) => l.trim())).toEqual(Array(2).fill('STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}'))
+    // each sits in a step's env (8 spaces), not the job's env (4) or the workflow's (0), which would hand it to
+    // every step, npm ci included; and the step is one of the two that need it
+    const indent = (l: string) => l.length - l.trimStart().length
+    for (const [line, i] of keyLines) {
+      let parent = i - 1
+      while (parent >= 0 && (lines[parent].trim() === '' || lines[parent].trim().startsWith('#') || indent(lines[parent]) >= indent(line))) parent--
+      expect(lines[parent], `the block holding line ${i + 1}`).toBe('        env:')
+      let step = parent
+      while (step >= 0 && !/^ {6}- name: /.test(lines[step])) step--
+      expect(lines[step] ?? '', `the step holding line ${i + 1}`).toMatch(/^ {6}- name: (?:Check the Stripe secret|Check the payment and refund the unused days)$/)
+    }
+    expect(refundYml).not.toMatch(/^env:/m)
+    const jobEnvAt = refundYml.indexOf('\n    env:\n')
+    const jobEnv = refundYml.slice(jobEnvAt, refundYml.indexOf('\n    steps:', jobEnvAt))
+    expect(jobEnv).toContain('PAYMENT_INTENT: ${{ inputs.payment_intent }}')
+    expect(jobEnv).not.toContain('secrets')
     expect(refundYml).toMatch(/- name: Install\n\s+if: [^\n]+\n\s+run: npm ci\n/)
     expect(refundYml).toContain('persist-credentials: false')
   })
@@ -500,7 +662,61 @@ describe('refund.yml and the owner guide (section 9-8) follow the script', () =>
     expect(section.indexOf('`mode`: `preview`')).toBeLessThan(section.indexOf('`mode`만 `refund`'))
     // the summary titles it tells the owner to look for are the script's
     expect(section).toContain(`"${REFUND_WORKFLOW_NAME}: ${TITLES.preview.ko} (${TITLES.preview.en})"`)
-    for (const t of [TITLES.refunded, TITLES.stopped]) expect(section, t.ko).toContain(`"${t.ko}"`)
+    for (const t of [TITLES.refunded, TITLES.stopped, TITLES.stripeError]) expect(section, t.ko).toContain(`"${t.ko}"`)
     expect(section).toContain('"이용권이 끝나요"')
+    // a replay (the script's words) and a cancelled waiting run are explained
+    expect(section).toContain('"새로 환불하지 않았어요"')
+    expect(section).toContain('"지금 상태"')
+    expect(section).toContain('"Cancelled"')
+    // days left come from the pass's end date, not the payment date
+    expect(section).toContain('남은 일수 = `ends_at` 날짜 − 오늘 날짜')
+    expect(section).toContain('아직 시작하지 않은 이용권')
+  })
+
+  it('the guide’s D1 query gives the days left from the pass dates, a queued pass its full length, and no personal data', async () => {
+    const start = guide.indexOf('### 9-8.')
+    const section = guide.slice(start, guide.indexOf('\n### ', start + 1))
+    const queries = [...section.matchAll(/`(SELECT [^`]+)`/g)].map((m) => m[1] ?? '')
+    expect(queries).toHaveLength(1)
+    const [query = ''] = queries
+    expect(query.match(/'pi_…'/g)).toHaveLength(1)
+    for (const [sku, s] of Object.entries(SKUS)) expect(query).toContain(`WHEN '${sku}' THEN ${s.days}`)
+    expect(query).not.toMatch(/users|email|card|billing|receipt|user_id/)
+
+    // real schema (worker/migrations) and the Worker's own queueing (grantPass)
+    const db = (workerEnv as unknown as { DB: D1Database }).DB
+    const day = 86_400_000
+    const now = Date.now()
+    await db.prepare(`INSERT INTO users (id, email, email_hash, created_at, last_active_at) VALUES ('u_refundq', 'q@coach.test', 'h', ?1, ?1)`).bind(new Date(now).toISOString()).run()
+    const buys = [
+      ['pu_q1', 'pi_q1AAAAAAAA', 'pass30', now - 10 * day], // running: paid 10 days ago
+      ['pu_q2', 'pi_q2AAAAAAAA', 'pass30', now - day], // paid yesterday, queued behind the first
+      ['pu_q3', 'pi_q3AAAAAAAA', 'pass90', now - day / 2], // queued behind the second
+    ] as const
+    for (const [id, pi, sku, at] of buys) {
+      await db
+        .prepare(`INSERT INTO purchases (id, user_id, sku, amount_cents, currency, payment_intent, status, created_at, paid_at) VALUES (?1, 'u_refundq', ?2, ?3, 'cad', ?4, 'paid', ?5, ?5)`)
+        .bind(id, sku, SKUS[sku].priceCents, pi, new Date(at).toISOString())
+        .run()
+      await grantPass({ DB: db } as unknown as Env, { userId: 'u_refundq', sku, purchaseId: id, now: new Date(at) })
+    }
+    const today = (await db.prepare(`SELECT date('now') AS d`).first<{ d: string }>())?.d ?? ''
+    const rowFor = async (pi: string) => {
+      const { results } = await db.prepare(query.replace('pi_…', pi)).all<Record<string, unknown>>()
+      expect(results, pi).toHaveLength(1)
+      return results[0] ?? {}
+    }
+
+    const running = await rowFor('pi_q1AAAAAAAA')
+    expect(Object.keys(running)).toEqual(['sku', 'starts_at', 'ends_at', 'revoked_at', 'days_left'])
+    expect(running.revoked_at).toBeNull()
+    // days left = the end date − today (20 here, 19 if the UTC day turned during the test)
+    expect(running.days_left).toBe(Math.round((Date.parse(String(running.ends_at).slice(0, 10)) - Date.parse(today)) / day))
+    expect([19, 20]).toContain(running.days_left)
+    // not started yet: its whole length, so a full refund (counting from its payment date would give 29)
+    const queued = await rowFor('pi_q2AAAAAAAA')
+    expect(Date.parse(String(queued.starts_at))).toBeGreaterThan(now)
+    expect(queued.days_left).toBe(30)
+    expect((await rowFor('pi_q3AAAAAAAA')).days_left).toBe(90)
   })
 })

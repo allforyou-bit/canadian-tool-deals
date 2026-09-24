@@ -10,10 +10,12 @@
 //     customer emails off, ServiceOntario) exist, and old section numbers cited elsewhere are mapped.
 import { describe, expect, it } from 'vitest'
 import anthropicLimitText from '../../../ops/config/anthropic-limit.json?raw'
+import dailyRoutine from '../../../ops/routines/daily.md?raw'
+import memo from '../../../business/online/decision-memo.md?raw'
 import guide from '../../../business/online/owner-setup.md?raw'
 import siteText from '../content/site.ts?raw'
 import i18nText from '../lib/i18n.ts?raw'
-import { AI_DISCLOSURE, SKUS } from '../shared/config'
+import { AI_DISCLOSURE, REFUND_POLICY, SKUS } from '../shared/config'
 import { STRIPE_API_VERSION } from '../worker/src/billing/stripe'
 import accountText from '../worker/src/account.ts?raw'
 import webhookText from '../worker/src/billing/webhook.ts?raw'
@@ -82,6 +84,26 @@ function section(re: RegExp): string {
   }
   return lines.slice(start, end).join('\n')
 }
+
+/** The numbered steps of `text` in order: each `N. …` line with the indented lines under it. */
+function numberedSteps(text: string): string[] {
+  const out: string[] = []
+  let open = false
+  for (const line of text.split('\n')) {
+    if (/^\d+\. /.test(line)) {
+      out.push(line)
+      open = true
+    } else if (open && /^\s+\S/.test(line)) out[out.length - 1] += `\n${line}`
+    else if (line.trim() !== '') open = false
+  }
+  return out
+}
+
+/** The position of the first numbered step of `text` that matches every regex, or -1. */
+const stepIndex = (text: string, ...res: RegExp[]): number => numberedSteps(text).findIndex((s) => res.every((re) => re.test(s)))
+
+/** Memo §7.2 (zero-capital launch), which the guide's honest expectations quote. */
+const MEMO_72 = memo.slice(memo.indexOf('### 7.2 '), memo.indexOf('\n## 8. '))
 
 /** Upper-case identifiers with an underscore written in backticks, e.g. `STRIPE_SECRET_KEY`. */
 const backtickedNames = (text: string): string[] => [...new Set([...text.matchAll(/`([A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+)`/g)].map((m) => m[1]))]
@@ -289,11 +311,78 @@ describe('owner-setup.md: zero capital, no terminal, no secrets in chat', () => 
     expect(top.split('\n').filter((l) => /^\d\. /.test(l))).toHaveLength(3)
   })
 
+  it('gives the expected results as memo §7.2 does: before the one-time credit purchase, a loss with no sales', () => {
+    const top = section(/솔직한 기대치/)
+    // every C$ figure at the top is one memo §7.2 prints: no figures of the guide's own
+    const figures = [...new Set([...top.matchAll(/[+−-]?C\$[\d,.]+(?:–[\d,.]+)?/g)].map((m) => m[0].replace(/[,.]+$/, '')))]
+    expect(figures.length).toBeGreaterThan(4)
+    for (const f of figures) expect(MEMO_72, `${f} is not a memo §7.2 figure`).toContain(f)
+    // the memo's table leaves the credit purchase out and subtracts it right under the table; with zero sales
+    // (the likeliest case) the owner is down by that purchase, not up by the table's +C$8
+    const credit = /Minus the one-time Anthropic credit purchase \(≈ (C\$[\d.]+–[\d.]+)\)/.exec(MEMO_72)?.[1]
+    expect(credit, 'memo §7.2 no longer names the credit purchase under its table').toBeDefined()
+    const outcome = top.split('\n').find((l) => l.includes('+C$8')) ?? ''
+    expect(outcome).toContain(String(credit))
+    expect(outcome).toMatch(/빼기 전/)
+    expect(outcome).toMatch(/0건이면[^.]*손해/)
+    expect(outcome).toMatch(/\(추정\)/)
+  })
+
   it('every step has a time estimate and the guide gives a total', () => {
     for (const re of [/^## 0\./, /^## 1\./, /^## 2\./, /^## 5\./, /^## 6\./, /^## 7\./, /^## 8\./, /^## 10\./, /^## 12\./]) {
       expect(section(re), String(re)).toMatch(/시간: /)
     }
     expect(section(/0-3\./)).toMatch(/\| \*\*합계\*\* \|/)
+  })
+})
+
+describe('owner-setup.md: steps that must happen in a safe order', () => {
+  it('7-3 and 8-6 do the iPhone speaking test while the pass is active: before the self-refund, within the refund rule', () => {
+    for (const re of [/7-3\./, /8-6\./]) {
+      const s = section(re)
+      const speaking = stepIndex(s, /iPhone/, /Safari/)
+      const refund = stepIndex(s, /"Request a refund"/)
+      expect(speaking, `${re}: no iPhone speaking step`).toBeGreaterThanOrEqual(0)
+      expect(refund, `${re}: no self-refund step`).toBeGreaterThanOrEqual(0)
+      // speaking feedback needs a pass (else the one free sample, which may be used or switched off) and a
+      // self-refund ends the pass, so a speaking test after the refund can fail for a reason that is not iOS
+      expect(speaking, `${re}: the iPhone speaking step comes after the self-refund`).toBeLessThan(refund)
+      expect(s, String(re)).toContain('말하기 피드백에는 이용권이 필요하고, 셀프 환불은 이용권을 끝내요')
+    }
+    expect(section(/8-6\./)).toContain(`AI 피드백 ${REFUND_POLICY.maxGradedTasksUsed}회 이하`)
+  })
+
+  it('re-records the Console balance after the step-7 spend, before the first production deploy (4-5, 8-2, 8-3, 9-3)', () => {
+    // the production Worker counts only its own spend since prepaidSince (deploy.yml passes the prepaid pair to
+    // production only), so step 7's staging, eval and level-B runs leave it believing the first purchase is intact
+    const deployYml = workflow('deploy.yml') ?? ''
+    expect(deployYml).toMatch(/ANTHROPIC_PREPAID_USD:\$PREPAID_USD/)
+    expect(deployYml).toContain("- 'ops/config/anthropic-limit.json'")
+    const firstDeploy = section(/8-2\./)
+    const rerecord = stepIndex(firstDeploy, /Console/, /잔액/, /산 게 없어도/, /`prepaidUsd`/, /`prepaidSince`/, /직접 병합/)
+    expect(rerecord, '8-2 has no step that re-records the Console balance').toBeGreaterThanOrEqual(0)
+    // merged before MPC_DEPLOY is set (so the merge itself deploys nothing) and before the first production run
+    expect(stepIndex(firstDeploy, /`MPC_DEPLOY`/)).toBeGreaterThan(rerecord)
+    expect(stepIndex(firstDeploy, /"Deploy practice coach"/, /`production`/)).toBeGreaterThan(rerecord)
+    // 4-5 ⑤ and the 8-3 checklist point to that step by its number
+    const n = /^(\d+)\. /.exec(numberedSteps(firstDeploy)[rerecord] ?? '')?.[1]
+    expect(section(/4-5\. Anthropic/)).toContain(`(8-2 ${n}번)`)
+    const checklist = section(/8-3\./).split('\n').filter((l) => l.startsWith('- [ ] '))
+    expect(checklist.some((l) => /Console 잔액/.test(l) && /다시 적/.test(l) && l.includes(`(8-2 ${n}번)`)), '8-3 has no re-record checkbox').toBe(true)
+    // 9-3: after eval, staging or level-B runs, re-record even with no purchase, in the form the daily Routine reads
+    const topUp = section(/9-3\./)
+    const start = topUp.indexOf('산 게 없어도')
+    const end = topUp.indexOf('**순서가 중요해요:**')
+    expect(start, '9-3 does not say to re-record the balance after runs that spend credits').toBeGreaterThan(-1)
+    expect(end).toBeGreaterThan(start)
+    const block = topUp.slice(start, end)
+    for (const s of ['"Grading eval"', '"Level-B checks"', '`staging`', 'Console', '`prepaidUsd`', '`prepaidSince`', '직접 병합']) expect(block, s).toContain(s)
+    const title = /\*\*"(Anthropic credits: top up)"\*\*/.exec(block)?.[1]
+    expect(title, '9-3 does not name the top-up issue').toBeDefined()
+    expect(dailyRoutine).toContain(`**"${title}"**`)
+    expect(block).toMatch(/`잔액 US\$[\d.]+`/)
+    expect(dailyRoutine).toMatch(/`잔액 US\$[\d.]+`/)
+    expect(dailyRoutine).toMatch(/even if you bought nothing/)
   })
 })
 
