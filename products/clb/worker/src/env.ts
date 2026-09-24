@@ -21,6 +21,12 @@ export interface Env {
   GRADER_MAX_TOKENS?: string
   /** optional: the monthly spend limit actually set in the Anthropic Console (USD); tiers use min(formula, this) */
   ANTHROPIC_MONTHLY_LIMIT_USD?: string
+  /**
+   * Staging only: comma-separated email addresses. When set, sign-in links are sent only to these
+   * addresses and anonymous grading is off, so a public staging host cannot be used to send email or
+   * spend model credit. Never set in production.
+   */
+  STAGING_ALLOWED_EMAILS?: string
   FROM_EMAIL: string
   /** CASL: every commercial email must include the sender's mailing address */
   MAILING_ADDRESS: string

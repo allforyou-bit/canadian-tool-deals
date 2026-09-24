@@ -180,6 +180,7 @@ export async function requestMagicLink(req: Request, ctx: Ctx): Promise<Response
   if (!isLang(body.lang)) return error('bad_request', 'Unsupported language')
   if (body.adult !== true) return error('bad_request', 'You must confirm that you are 18 or older')
   if (isDisposableEmail(email)) return error('bad_request', 'Please use a permanent email address')
+  if (!stagingAllows(env, email)) return error('forbidden', 'This test site only accepts the owner’s email address')
   // CASL: only an explicit tick with the exact sentence the Worker would show counts as a request for
   // consent. Anything else signs in without it (the client cannot fix a server-side wording mismatch).
   const consentText = body.marketingOptIn === true ? acceptedConsentText(env, body.marketingConsentText, body.lang) : null
@@ -410,4 +411,13 @@ export async function logout(req: Request, ctx: Ctx): Promise<Response> {
     await ctx.env.DB.prepare('DELETE FROM sessions WHERE id_hash = ?1').bind(await sessionIdHash(ctx.env, raw)).run()
   }
   return json({ ok: true }, { headers: { 'set-cookie': clearSessionCookie() } })
+}
+
+/** Staging allowlist (env.STAGING_ALLOWED_EMAILS); always true when the variable is unset (production). */
+export function stagingAllows(env: Env, email: string | null): boolean {
+  const list = (env.STAGING_ALLOWED_EMAILS ?? '').trim()
+  if (!list) return true
+  if (!email) return false
+  const wanted = email.trim().toLowerCase()
+  return list.split(',').some((e) => e.trim().toLowerCase() === wanted)
 }
