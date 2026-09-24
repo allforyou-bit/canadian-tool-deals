@@ -1,13 +1,40 @@
 import { SESSION } from '../../../shared/config'
 import type { Env, User } from '../env'
-import { saltedHash } from './crypto'
-import { getCookie } from './http'
+import { randomToken, saltedHash } from './crypto'
+import { getCookie, setCookie } from './http'
+
+/** sessions.id_hash for a raw cookie value (CONTRACT §3: saltedHash(HASH_SALT, 'session:' + raw)). */
+export function sessionIdHash(env: Env, raw: string): Promise<string> {
+  return saltedHash(env.HASH_SALT, `session:${raw}`)
+}
+
+/**
+ * Starts a fresh session for `userId` after any sign-in (email link or Google): the session the request
+ * carried, if any, is deleted in the same batch, so a sign-in always rotates the cookie. Returns the
+ * Set-Cookie value (HttpOnly, Secure, SameSite=Lax, SESSION.days).
+ */
+export async function createSession(req: Request, env: Env, userId: string, now: Date): Promise<string> {
+  const old = getCookie(req, SESSION.cookieName)
+  const raw = randomToken(32)
+  const stmts: D1PreparedStatement[] = []
+  if (old) stmts.push(env.DB.prepare('DELETE FROM sessions WHERE id_hash = ?1').bind(await sessionIdHash(env, old)))
+  stmts.push(
+    env.DB.prepare('INSERT INTO sessions (id_hash, user_id, created_at, expires_at) VALUES (?1, ?2, ?3, ?4)').bind(
+      await sessionIdHash(env, raw),
+      userId,
+      now.toISOString(),
+      new Date(now.getTime() + SESSION.days * 86_400_000).toISOString(),
+    ),
+  )
+  await env.DB.batch(stmts)
+  return setCookie(SESSION.cookieName, raw, { maxAgeSeconds: SESSION.days * 86_400 })
+}
 
 /** Resolve the signed-in user from the session cookie, or null. */
 export async function getUser(req: Request, env: Env, now = new Date()): Promise<User | null> {
   const raw = getCookie(req, SESSION.cookieName)
   if (!raw) return null
-  const idHash = await saltedHash(env.HASH_SALT, `session:${raw}`)
+  const idHash = await sessionIdHash(env, raw)
   const row = await env.DB.prepare(
     `SELECT u.id, u.email, u.lang, u.free_speaking_used, u.self_refund_used
        FROM sessions s JOIN users u ON u.id = s.user_id

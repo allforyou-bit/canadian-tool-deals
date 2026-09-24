@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import adsCsv from '../../../ops/ads/google.csv?raw'
 import { AI_DISCLOSURE, NOT_AFFILIATED } from '../shared/config'
 import { MAILING_ADDRESS_PLACEHOLDER } from '../content/site'
-import { addressPlaceholderFindings, ADDRESS_PLACEHOLDERS, decodeEntities, htmlToText, lintAdsCsv, lintHtml, lintText } from './content-lint'
+import { addressPlaceholderFindings, ADDRESS_PLACEHOLDERS, decodeEntities, htmlToText, LEGAL_NAME_PAGES, legalNameFindings, lintHtml, lintText } from './content-lint'
 
 const page = (body: string, head = '<title>Practice</title>') =>
   `<!DOCTYPE html><html lang="en"><head>${head}</head><body>${body}<footer><p>${NOT_AFFILIATED.en}</p></footer></body></html>`
@@ -26,10 +25,8 @@ describe('lintText', () => {
     expect(lintText('Write 150 to 200 words.')).toEqual([])
   })
 
-  it('applies the trademark rules to ads only', () => {
+  it('allows naming a test in page copy (the not-affiliated notice is checked per page)', () => {
     expect(lintText('CELPIP writing practice')).toEqual([])
-    expect(lintText('CELPIP writing practice', { ads: true })).toEqual(['celpip'])
-    expect(lintText('IELTS tips', { ads: true })).toEqual(['ielts'])
   })
 
   it('checks Korean terms', () => {
@@ -114,37 +111,25 @@ describe('addressPlaceholderFindings (--require-address, decision 16)', () => {
   })
 })
 
-describe('lintAdsCsv', () => {
-  const header = 'type,ad_group,match_type,text\n'
-  const group = (name: string) =>
-    [
-      `keyword,${name},phrase,english writing practice test canada`,
-      `headline,${name},,Timed Writing Practice`,
-      `headline,${name},,Feedback on Every Sentence`,
-      `headline,${name},,Practise Emails in English`,
-      `description,${name},,Write under a timer and get feedback on content and grammar.`,
-      `description,${name},,Explanations in English or Korean. One-time passes.`,
-      `final_url,${name},,https://coach.example/practice/writing/email/`,
-    ].join('\n')
+describe('legalNameFindings (--require-legal-name, memo §7.2 Z5)', () => {
+  const name = 'Jiwoo O\u2019Brien-Kim'
+  const sold = (n: string) => page(`<p>Maple Practice Coach is sold by <strong>${n}</strong>, a sole proprietor in Ontario.</p>`)
 
-  it('passes a complete, clean ad group', () => {
-    expect(lintAdsCsv(`${header}${group('Writing email')}\nnegative,,phrase,free\n`)).toEqual([])
+  it('passes when the terms and privacy pages both name the seller, entities and inline tags included', () => {
+    const html = sold('Jiwoo O&rsquo;Brien-Kim')
+    expect(legalNameFindings({ 'legal/terms/index.html': html, 'legal/privacy/index.html': html }, name)).toEqual([])
+    expect(legalNameFindings({ 'legal/terms/index.html': html, 'legal/privacy/index.html': html }, `  ${name}\n`)).toEqual([])
+    expect(LEGAL_NAME_PAGES).toEqual(['legal/terms/index.html', 'legal/privacy/index.html'])
   })
 
-  it('fails claims, trademarks, lengths and structure', () => {
-    const csv = `${header}${group('G')}\nheadline,G,,Official CLB Score Guaranteed\nheadline,G,,This headline is far too long to fit\ndescription,G,,${'x'.repeat(91)}\nnegative,,phrase,celpip answers\nkeyword,G,broad,english test\nfoo,G,,bar\n`
-    const rules = lintAdsCsv(csv).map((f) => f.rule)
-    expect(rules).toEqual(
-      expect.arrayContaining(['official', 'clb', 'score', 'guarantee', 'headline_too_long', 'description_too_long', 'celpip', 'match_type', 'unknown_type']),
-    )
-  })
-
-  it('reports incomplete ad groups and a wrong header', () => {
-    expect(lintAdsCsv(`${header}keyword,Solo,exact,english speaking practice\n`).map((f) => f.rule)).toEqual(['ad_group_incomplete'])
-    expect(lintAdsCsv('kind,text\nheadline,x\n').map((f) => f.rule)).toEqual(['csv_header'])
-  })
-
-  it('passes the committed ops/ads/google.csv', () => {
-    expect(lintAdsCsv(adsCsv)).toEqual([])
+  it('fails a page without the name, a missing page and an empty name, never printing the name', () => {
+    const found = legalNameFindings({ 'legal/terms/index.html': sold(name), 'legal/privacy/index.html': page('<p>Privacy</p>') }, name)
+    expect(found.map((f) => [f.rule, f.where])).toEqual([['legal_name_missing', 'legal/privacy/index.html']])
+    expect(JSON.stringify(found)).not.toContain('Jiwoo')
+    // text only in an attribute or a script does not count as shown
+    const hidden = page(`<p title="${name}">Terms</p><script>var n="${name}"</script>`)
+    expect(legalNameFindings({ 'legal/terms/index.html': hidden, 'legal/privacy/index.html': sold(name) }, name).map((f) => f.where)).toEqual(['legal/terms/index.html'])
+    expect(legalNameFindings({ 'legal/terms/index.html': sold(name) }, name).map((f) => f.rule)).toEqual(['legal_name_page_missing'])
+    expect(legalNameFindings({}, '  ').map((f) => f.rule)).toEqual(['legal_name_missing'])
   })
 })

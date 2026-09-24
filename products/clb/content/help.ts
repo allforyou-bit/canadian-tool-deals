@@ -1,16 +1,22 @@
 // /help/ pages: product documentation (memo B1/B9). Plain English, no articles or guides. Numbers come from
-// shared/config.ts through content/site.ts.
+// shared/config.ts through content/site.ts. Zero-capital launch (memo §7.2): sign-in with Google (Z3), no email
+// to learners (Z4), speaking feedback can close for the day at the shared capacity (Z2), and every practice page
+// offers practice without feedback (Z9).
 import { AI_DISCLOSURE, BRAND, FREE } from '../shared/config'
-import { PATHS } from './routes'
+import { FREE_WRITING_PATH, PATHS } from './routes'
 import {
   CONTACT_LINES_EN,
   DAILY_RESET_EN,
   FACTS,
   FILTER_EN,
+  GOOGLE_SIGN_IN,
   LAST_REVIEWED,
   NO_FEEDBACK_LIMIT,
+  NO_LEARNER_EMAIL,
   PAUSE_EXTENSION,
+  PRACTICE_MODE,
   QUEBEC_RULE,
+  SPEAKING_CAPACITY,
 } from './site'
 import type { DocPage, DocSection } from './types'
 
@@ -32,7 +38,8 @@ export const HELP_FEEDBACK: DocPage = doc({
   title: 'How the feedback works',
   description: 'What happens when you submit a practice task, what the feedback includes, and what it cannot do.',
   intro: [
-    'Every answer you submit gets written feedback from Claude, an AI model made by Anthropic. This page explains what happens to your answer and what the feedback contains.',
+    'Every answer you submit for feedback gets written feedback from Claude, an AI model made by Anthropic. This page explains what happens to your answer and what the feedback contains.',
+    `You can also practise any task without feedback, free and without signing in. See [practising without feedback](${PATHS.helpFeedback}#practice-mode).`,
     { note: AI_DISCLOSURE.en },
   ],
   sections: [
@@ -103,6 +110,21 @@ export const HELP_FEEDBACK: DocPage = doc({
       ],
     },
     {
+      id: 'practice-mode',
+      heading: 'Practising without feedback',
+      blocks: [
+        `Every practice page also offers "${PRACTICE_MODE.label.en}". It is free, needs no account and uses no AI, so you get no feedback and nothing is saved to your account.`,
+        {
+          ul: [
+            '**Writing**: the task prompt, a practice timer, a word counter and a short self-check list to review your own answer.',
+            '**Speaking**: the preparation and speaking timers, then you record yourself and play the recording back.',
+          ],
+        },
+        `${PRACTICE_MODE.audio.en} What you type in this mode is not sent to us either.`,
+        `When you want feedback, submit the task for feedback instead. Your [first writing task with feedback](${FREE_WRITING_PATH}) is free, and [passes](${PATHS.pricing}) cover the rest.`,
+      ],
+    },
+    {
       id: 'tips',
       heading: 'Getting the most out of it',
       blocks: [
@@ -128,7 +150,8 @@ export const HELP_RECORDING: DocPage = doc({
   title: 'Recording your speaking answers',
   description: 'Browser and microphone requirements, recording limits, and tips for a clear recording.',
   intro: [
-    `Speaking tasks record your voice in the browser. You need to be signed in: your first speaking task is free after you verify your email.`,
+    'Speaking tasks record your voice in the browser. To get feedback on a recording, you need to sign in with a Google account; your first speaking task with feedback is free.',
+    `To practise without feedback, you do not need to sign in, and your recording never leaves your device. See [recording without feedback](${PATHS.helpRecording}#practice-mode).`,
   ],
   sections: [
     {
@@ -141,7 +164,7 @@ export const HELP_RECORDING: DocPage = doc({
             'A recent version of Chrome, Edge, Firefox or Safari. On iPhone and iPad, you need iOS 14 or later.',
             'A working microphone. A headset microphone often gives a clearer recording than a built-in laptop microphone.',
             'Permission for this site to use your microphone.',
-            'An internet connection that can upload your recording.',
+            'For feedback, an internet connection that can upload your recording.',
           ],
         },
       ],
@@ -165,6 +188,19 @@ export const HELP_RECORDING: DocPage = doc({
             'Recordings that are too short cannot get feedback. If this happens, record again.',
           ],
         },
+      ],
+    },
+    {
+      id: 'capacity',
+      heading: 'When speaking feedback is closed for the day',
+      blocks: [SPEAKING_CAPACITY.en, 'While it is closed, you can still record and play back your answers without feedback.'],
+    },
+    {
+      id: 'practice-mode',
+      heading: 'Recording without feedback',
+      blocks: [
+        `Choose "${PRACTICE_MODE.label.en}" on any speaking task. You get the same preparation and speaking timers, then you can play your recording back to hear how you sound. You do not need to sign in.`,
+        PRACTICE_MODE.audio.en,
       ],
     },
     {
@@ -194,7 +230,7 @@ export const HELP_RECORDING: DocPage = doc({
       id: 'privacy',
       heading: 'What happens to your recording',
       blocks: [
-        `Your recording is sent to Whisper, a speech-recognition model that runs on Cloudflare Workers AI, to make a transcript. The recording is then discarded: we never store audio. The transcript and your feedback are saved to your account page and deleted ${FACTS.retentionDays} days after your last activity. [More about your data](${PATHS.helpPrivacy}).`,
+        `When you ask for feedback, your recording is sent to Whisper, a speech-recognition model that runs on Cloudflare Workers AI, to make a transcript. The recording is then discarded: we never store audio. The transcript and your feedback are saved to your account page and deleted ${FACTS.retentionDays} days after your last activity. [More about your data](${PATHS.helpPrivacy}).`,
       ],
     },
     {
@@ -215,9 +251,10 @@ export const HELP_RECORDING: DocPage = doc({
 export const HELP_ACCOUNT: DocPage = doc({
   path: PATHS.helpAccount,
   title: 'Account and sign-in',
-  description: 'How email sign-in links work, what to do if the email does not arrive, and how to delete your account.',
+  description: 'How sign-in with Google works, what we receive from Google, what to do if sign-in fails, and how to delete your account.',
   intro: [
-    'You do not need an account for your first free writing task. Sign in to do the free speaking task, buy a pass and see your practice history. There is no password: we email you a sign-in link.',
+    'You do not need an account for your first free writing task or to practise without feedback. Sign in to do the free speaking task, buy a pass and see your practice history.',
+    `**You need a Google account to sign in.** There is no separate password for this site. ${GOOGLE_SIGN_IN.en}`,
   ],
   sections: [
     {
@@ -226,25 +263,45 @@ export const HELP_ACCOUNT: DocPage = doc({
       blocks: [
         {
           ol: [
-            `Go to [Sign in](${PATHS.login}) and enter your email address.`,
-            'Confirm that you are 18 or older. You can also choose to receive marketing emails; that box stays unticked unless you tick it.',
-            `We email you a sign-in link. It works once and expires after ${FACTS.linkMinutes} minutes.`,
-            'Open the link in the browser where you want to be signed in.',
+            `Go to [Sign in](${PATHS.login}).`,
+            'Confirm that you are 18 or older.',
+            'Choose "Continue with Google". Google opens its own sign-in page.',
+            "Choose the Google account you want to use, and follow the steps on Google's page.",
+            'Google sends you back to our site, signed in.',
             `You stay signed in on that browser for up to ${FACTS.sessionDays} days, or until you sign out.`,
           ],
         },
       ],
     },
     {
-      id: 'no-email',
-      heading: 'If the email does not arrive',
+      id: 'no-google-account',
+      heading: 'If you do not have a Google account',
+      blocks: [
+        // [unverified] Creating a Google account is free and can use an existing non-Gmail address: prior
+        // knowledge (research: sign-in and owner-alert email, frontend notes), not checked on Google's own pages.
+        "You can create a Google account free of charge on Google's website, and you can use an email address you already have for it. Then come back and sign in.",
+        'You do not need a Google account to practise without feedback or for your first free writing task.',
+      ],
+    },
+    {
+      id: 'what-google-shares',
+      heading: 'What Google shares with us',
+      blocks: [
+        'We ask Google only for your email address. With it, Google sends your Google account id, a code that identifies your Google account. We use the id to recognise you when you sign in again, and the email address for your purchases, the once-per-person refund rule and our replies to your support messages.',
+        'We do not receive your name, photo, contacts or password, and we keep no Google access codes. We do not send Google anything about your practice.',
+        `[Read the privacy policy](${PATHS.privacy}).`,
+      ],
+    },
+    {
+      id: 'trouble',
+      heading: 'If sign-in does not work',
       blocks: [
         {
           ul: [
-            'Wait a minute or two, then check your spam or junk folder.',
-            'Check that you typed your email address correctly.',
-            `Request a new link. You can request up to ${FACTS.linksPerHour} links per hour for the same address.`,
-            `Links expire after ${FACTS.linkMinutes} minutes. If yours has expired, request a new one.`,
+            `If you closed Google's page or chose Cancel, start again from the [sign-in page](${PATHS.login}).`,
+            'If the sign-in page says your email address is not verified, verify it in your Google account, then try again.',
+            'Start and finish signing in in the same browser, and allow cookies for this site: a short-lived cookie links the two steps.',
+            'If it still does not work, wait a few minutes and try again.',
           ],
         },
       ],
@@ -255,27 +312,30 @@ export const HELP_ACCOUNT: DocPage = doc({
       blocks: [`${BRAND.en} is for adults 18 and older.`],
     },
     {
-      id: 'marketing',
-      heading: 'Marketing emails',
+      id: 'emails',
+      heading: 'Emails from us',
       blocks: [
-        `Marketing emails are optional, and we send them only if you agree. You can stop them at any time from your [account page](${PATHS.account}) or with the unsubscribe link at the end of every email we send, which works without signing in. Sign-in links, receipts and messages about your pass are always sent.`,
+        `We do not send marketing email. ${NO_LEARNER_EMAIL.en} If you write to us through the support form, we reply by email.`,
+        'If we ever start sending marketing email, we will ask for your permission first, and every marketing email will end with an unsubscribe link that works without signing in.',
       ],
     },
     {
       id: 'sign-out',
       heading: 'Signing out',
-      blocks: ['Use Sign out on your account page. This ends your session on that browser.'],
+      blocks: ['Use Sign out on your account page. This ends your session on that browser. It does not sign you out of Google.'],
     },
     {
-      id: 'change-email',
-      heading: 'Changing your email address',
-      blocks: ['To move your account to a different email address, contact us through the support form on your account page.'],
+      id: 'change-account',
+      heading: 'Using a different Google account',
+      blocks: [
+        'Your account here is linked to the Google account you signed in with. To move your pass or history to a different Google account, contact us through the support form on your account page.',
+      ],
     },
     {
       id: 'delete',
       heading: 'Deleting your account',
       blocks: [
-        'You can delete your account at any time from your account page. This removes your email address, answers, transcripts, feedback, error types and support messages. It cannot be undone.',
+        'You can delete your account at any time from your account page. This removes your email address, the link to your Google account, and your answers, transcripts, feedback, error types and support messages. It cannot be undone. Your Google account itself is not affected.',
         'Payment records are kept because tax law requires it. We also keep a record of each task’s type, date and processing cost for our cost accounting, without anything that links it to you. If you have an active pass, it ends when you delete your account, so request a refund first if you qualify.',
         `[Read the privacy policy](${PATHS.privacy}).`,
       ],
@@ -308,6 +368,7 @@ export const HELP_PASSES: DocPage = doc({
             'It starts as soon as your payment is confirmed. Your account page shows when it ends.',
             'If you buy another pass while one is active, the new days are added after your current pass ends.',
             PAUSE_EXTENSION.en,
+            NO_LEARNER_EMAIL.en,
           ],
         },
       ],
@@ -318,10 +379,10 @@ export const HELP_PASSES: DocPage = doc({
       blocks: [
         {
           ol: [
-            `[Sign in](${PATHS.login}) with your email.`,
+            `[Sign in](${PATHS.login}) with your Google account.`,
             `On the [pricing page](${PATHS.pricing}), tick "I live in Canada, outside Quebec" and choose a pass. By buying, you agree to the [terms of use](${PATHS.terms}) and the [refund policy](${PATHS.refunds}).`,
             'Pay on the secure Stripe checkout page with a card issued in Canada. Card is the only payment method.',
-            'You come back to our site, and your pass is active as soon as the payment is confirmed.',
+            'You come back to our site, and your pass is active as soon as the payment is confirmed. The confirmation page and your account page show it.',
           ],
         },
       ],
@@ -340,6 +401,7 @@ export const HELP_PASSES: DocPage = doc({
       blocks: [
         `Each account can get feedback on up to ${FACTS.writingPerDay} writing tasks and ${FACTS.speakingPerDay} speaking tasks per day, and up to ${FACTS.gradedPer30Days} tasks in any 30 days. Daily limits reset at ${DAILY_RESET_EN}. Your account page shows how many you have used.`,
         NO_FEEDBACK_LIMIT.en,
+        SPEAKING_CAPACITY.en,
       ],
     },
     {
@@ -350,7 +412,7 @@ export const HELP_PASSES: DocPage = doc({
           ul: [
             REFUND_RULE,
             'Self-serve refunds are available once per person and once per card.',
-            'The refund goes back to the card you paid with, and your pass ends as soon as the refund is made.',
+            'The refund goes back to the card you paid with, and your pass ends as soon as the refund is made. Your account page shows the refund.',
             'How long the money takes to reach your account depends on your bank.',
           ],
         },
@@ -361,7 +423,7 @@ export const HELP_PASSES: DocPage = doc({
       id: 'problems',
       heading: 'Payment problems',
       blocks: [
-        'If you paid but your pass does not appear after a few minutes, refresh your account page and check that you are signed in with the email you used at checkout. If it still does not appear, contact us through the support form on your account page. Please do not pay again.',
+        'If you paid but your pass does not appear after a few minutes, refresh your account page and check that you are signed in with the Google account you used to buy the pass. If it still does not appear, contact us through the support form on your account page. Please do not pay again.',
         'If you think a charge is wrong, please contact us before you dispute it with your bank.',
       ],
     },
@@ -385,12 +447,15 @@ export const HELP_PRIVACY: DocPage = doc({
       blocks: [
         {
           ul: [
-            '**Audio is never stored.** Your recording is used only to make a transcript, and then it is discarded.',
+            '**Audio is never stored.** When you ask for feedback, your recording is used only to make a transcript, and then it is discarded.',
+            `**Practice without feedback stays on your device.** ${PRACTICE_MODE.audio.en} What you type in that mode is not sent to us either.`,
+            `**You sign in with Google.** ${GOOGLE_SIGN_IN.en}`,
             `**Text is deleted after ${FACTS.retentionDays} days.** When you are signed in, the text of your answers, your transcripts and your feedback are saved so you can open them again from your account page, and deleted ${FACTS.retentionDays} days after your last activity. For a free task done without an account, they are not stored at all.`,
-            '**You can delete your account at any time.** This removes your email address, answers, transcripts, feedback, error types and support messages.',
+            '**You can delete your account at any time.** This removes your email address, the link to your Google account, and your answers, transcripts, feedback, error types and support messages.',
             `**Support messages go to our business email.** Messages from the support form (you need to be signed in) are forwarded, with your email address, to our business mailbox at Google (Gmail). An AI assistant (Claude by Anthropic) may draft a reply, and the owner reviews every reply before sending it. Copies, including our replies, are deleted ${FACTS.retentionDays} days after you send the message, and when you delete your account.`,
             '**No raw IP addresses.** We keep only salted hashes (one-way codes) of part of your IP address and of a random device id, to limit free tasks and prevent abuse.',
             "**We never see your full card number.** Stripe handles payments. We keep only what we need for the refund and region rules, such as your billing country and province, the card's country and a card fingerprint.",
+            `**No automatic emails.** We do not send marketing email. ${NO_LEARNER_EMAIL.en} We email you only to reply when you write to us, or when the law requires it.`,
             '**We do not sell your data**, and we do not use your answers to train AI models.',
           ],
         },
@@ -412,11 +477,13 @@ export const HELP_PRIVACY: DocPage = doc({
                 'Its AI model, Claude, writes feedback from your answer or transcript. The owner also uses Claude to draft replies to support messages.',
             },
             { term: 'Stripe', detail: 'Processes payments and refunds.' },
-            { term: 'Resend', detail: 'Sends sign-in links and other emails.' },
+            {
+              term: 'Resend',
+              detail: "Delivers the site's email alerts to the owner, including the support messages you send us, with your email address. We do not use it to email you.",
+            },
             {
               term: 'Google',
-              detail:
-                'Hosts our business email (Gmail), where support messages arrive. When turned on, a Google Ads tag on the purchase confirmation page tells us whether an ad led to a purchase.',
+              detail: 'Signs you in (Google sends us your email address and Google account id) and hosts our business email (Gmail), where support messages arrive.',
             },
           ],
         },
@@ -451,6 +518,7 @@ export const HELP_TROUBLESHOOTING: DocPage = doc({
       blocks: [
         `The free writing task is limited to ${FACTS.freeWriting} per device and ${FREE.anonymousWritingPerIpPerDay} per internet connection per day. If you have used it, sign in and buy a pass to continue.`,
         `Free tasks can also be paused at busy times. Try again later, or check the [service status](${PATHS.status}).`,
+        `You can still practise any task without feedback ("${PRACTICE_MODE.label.en}"), free and without signing in.`,
       ],
     },
     {
@@ -474,6 +542,11 @@ export const HELP_TROUBLESHOOTING: DocPage = doc({
       blocks: [
         `Recordings can be up to ${FACTS.audioMinutes} minutes long and ${FACTS.audioMb} MB in size. Record a shorter answer. Recordings that are too short are also rejected.`,
       ],
+    },
+    {
+      id: 'speaking-closed',
+      heading: 'Speaking feedback is closed for today',
+      blocks: [SPEAKING_CAPACITY.en, `Meanwhile, you can practise speaking without feedback, or check the [service status](${PATHS.status}).`],
     },
     {
       id: 'transcript',
@@ -506,9 +579,16 @@ export const HELP_TROUBLESHOOTING: DocPage = doc({
     },
     {
       id: 'sign-in',
-      heading: 'My sign-in link does not work',
+      heading: 'I cannot sign in with Google',
       blocks: [
-        `Each link works once and expires after ${FACTS.linkMinutes} minutes. Request a new link from the [sign-in page](${PATHS.login}), and open it in the browser where you want to be signed in.`,
+        {
+          ul: [
+            `You need a Google account. See [account and sign-in](${PATHS.helpAccount}) if you do not have one.`,
+            `If you closed Google's page or chose Cancel, start again from the [sign-in page](${PATHS.login}).`,
+            'If the sign-in page says your email address is not verified, verify it in your Google account, then try again.',
+            'Start and finish signing in in the same browser, and allow cookies for this site.',
+          ],
+        },
       ],
     },
     {
@@ -522,7 +602,7 @@ export const HELP_TROUBLESHOOTING: DocPage = doc({
       id: 'pass-missing',
       heading: 'I paid but do not see my pass',
       blocks: [
-        'Wait a minute and refresh your account page. Make sure you are signed in with the email you used at checkout. If the pass still does not appear, contact us through the support form on your account page. Please do not pay again.',
+        'Wait a minute and refresh your account page. Make sure you are signed in with the Google account you used to buy the pass. If the pass still does not appear, contact us through the support form on your account page. Please do not pay again.',
       ],
     },
     {
@@ -553,7 +633,7 @@ export const HELP_PAGES: DocPage[] = [
 export const HELP_INDEX: DocPage = doc({
   path: PATHS.help,
   title: 'Help centre',
-  description: `Answers about feedback, recording, signing in, passes, refunds and your data in ${BRAND.en}.`,
+  description: `Answers about feedback, practising without feedback, recording, signing in with Google, passes, refunds and your data in ${BRAND.en}.`,
   intro: ['Short guides to using the service. If you cannot find an answer, contact us (see the end of this page).'],
   sections: [
     {

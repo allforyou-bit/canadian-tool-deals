@@ -14,7 +14,7 @@ import {
 import { unsubscribeSignature, unsubscribeUrl } from '../../src/email'
 import type { Ctx, Env } from '../../src/env'
 import { getUser } from '../../src/lib/session'
-import { spendSnapshot } from '../../src/lib/spend'
+import { clearSpendCache, spendSnapshot } from '../../src/lib/spend'
 import { addDays, dayKey, startOfUtcDay } from '../../src/lib/time'
 import {
   api,
@@ -24,11 +24,15 @@ import {
   emailHashOf,
   ORIGIN,
   sessionHash,
+  setEnv,
   signIn,
   stubFetch,
   uniqueEmail,
+  useEmailSignInForEveryone,
   userByEmail,
 } from './helpers'
+
+useEmailSignInForEveryone()
 
 // no test may reach the network: every outbound call hits a stub (tests re-stub when they need to)
 beforeEach(() => {
@@ -125,8 +129,50 @@ describe('GET /api/me', () => {
       pass: null,
       free: { writing: true, speaking: false },
       usage: { writingToday: 0, speakingToday: 0, graded30d: 0 },
-      flags: { checkoutEnabled: false, gradingEnabled: true, freeEnabled: true, banner: '' },
+      flags: { checkoutEnabled: false, gradingEnabled: true, freeEnabled: true, banner: '', speakingAvailable: true },
+      auth: { google: false, magicLink: 'all' },
     })
+  })
+
+  it('auth: Google only with both the client id and the secret; the email-link mode, owner by default', async () => {
+    const me = async () => ((await (await api('/api/me')).json()) as MeResponse).auth
+    let restore = setEnv({ MAGIC_LINK: undefined, GOOGLE_CLIENT_ID: 'cid.apps.googleusercontent.com' })
+    try {
+      expect(await me()).toEqual({ google: false, magicLink: 'owner' })
+    } finally {
+      restore()
+    }
+    restore = setEnv({ MAGIC_LINK: 'off', GOOGLE_CLIENT_ID: 'cid.apps.googleusercontent.com', GOOGLE_CLIENT_SECRET: 'secret' })
+    try {
+      expect(await me()).toEqual({ google: true, magicLink: 'off' })
+    } finally {
+      restore()
+    }
+  })
+
+  it('flags.speakingAvailable: off once today\'s shared speaking minutes are used up, and while grading is off', async () => {
+    const speaking = async () => ((await (await api('/api/me')).json()) as MeResponse).flags.speakingAvailable
+    expect(await speaking()).toBe(true)
+    const id = `g_minutes_${uniqueEmail('row')}`
+    // 200 audio minutes transcribed today, all users together
+    await env.DB.prepare(
+      `INSERT INTO grades (id, user_id, task_id, prompt_index, kind, model, audio_seconds, created_at)
+       VALUES (?1, NULL, 's1', 0, 'speaking', 'claude-opus-5', 12000, ?2)`,
+    )
+      .bind(id, new Date().toISOString())
+      .run()
+    try {
+      expect(await speaking()).toBe(false)
+    } finally {
+      await env.DB.prepare('DELETE FROM grades WHERE id = ?1').bind(id).run()
+    }
+    expect(await speaking()).toBe(true)
+    await env.FLAGS.put('flag:grading_enabled', 'false')
+    try {
+      expect(await speaking()).toBe(false)
+    } finally {
+      await env.FLAGS.delete('flag:grading_enabled')
+    }
   })
 
   it('signed in: email, active pass, usage, free speaking; refreshes last_active_at', async () => {
@@ -170,9 +216,11 @@ describe('GET /api/me', () => {
     expect(body.flags.freeEnabled).toBe(true)
     expect(body.free).toEqual({ writing: true, speaking: true })
 
-    // the free budget (US$2 a day) is used up: the grade handlers refuse free samples from now on
+    // the free budget (US$0.50 a day) is used up: the grade handlers refuse free samples from now on
     const id = `g_freeoff_${uniqueEmail('row')}`
     await insertGrade(null, id, undefined, { costMicro: 2_010_000, free: true })
+    // /api/me reuses a spend snapshot for up to a minute (memo §7.2 Z2); start from a fresh one
+    clearSpendCache()
     try {
       expect(await env.FLAGS.get('flag:free_enabled')).toBeNull()
       for (const s of [session, undefined]) {
@@ -183,8 +231,26 @@ describe('GET /api/me', () => {
     } finally {
       await env.DB.prepare('DELETE FROM grades WHERE id = ?1').bind(id).run()
     }
+    clearSpendCache()
     body = (await (await api('/api/me', { session, device })).json()) as MeResponse
     expect(body.flags.freeEnabled).toBe(true)
+  })
+
+  it('reads the spend snapshot from the per-isolate cache, not from D1 on every call', async () => {
+    clearSpendCache()
+    const device = `dev-${uniqueEmail('cache')}`
+    expect(((await (await api('/api/me', { device })).json()) as MeResponse).flags.freeEnabled).toBe(true)
+    const id = `g_cache_${uniqueEmail('row')}`
+    await insertGrade(null, id, undefined, { costMicro: 2_010_000, free: true })
+    try {
+      // within the minute the cached snapshot (free budget not used up) still answers
+      expect(((await (await api('/api/me', { device })).json()) as MeResponse).flags.freeEnabled).toBe(true)
+      clearSpendCache()
+      expect(((await (await api('/api/me', { device })).json()) as MeResponse).flags.freeEnabled).toBe(false)
+    } finally {
+      await env.DB.prepare('DELETE FROM grades WHERE id = ?1').bind(id).run()
+      clearSpendCache()
+    }
   })
 
   it('accessEndsAt covers queued passes; latestPurchase is the newest purchase', async () => {
@@ -203,7 +269,17 @@ describe('GET /api/me', () => {
     let body = (await (await api('/api/me', { session })).json()) as MeResponse
     expect(body.pass).toEqual({ sku: 'pass30', startsAt: addDays(now, -1).toISOString(), endsAt: aEnd.toISOString() })
     expect(body.accessEndsAt).toBe(bEnd.toISOString())
-    expect(body.latestPurchase).toEqual({ id: `cs_b_${uid}`, sku: 'pass90', status: 'paid' })
+    expect(body.latestPurchase).toEqual({ id: `cs_b_${uid}`, sku: 'pass90', status: 'paid', receiptUrl: null })
+
+    // Stripe's receipt link (memo §7.2 Z4: shown on the site instead of a receipt email); only https passes
+    await env.DB.prepare('UPDATE purchases SET receipt_url = ?1 WHERE id = ?2')
+      .bind('https://pay.stripe.com/receipts/payment/abc', `cs_b_${uid}`)
+      .run()
+    body = (await (await api('/api/me', { session })).json()) as MeResponse
+    expect(body.latestPurchase?.receiptUrl).toBe('https://pay.stripe.com/receipts/payment/abc')
+    await env.DB.prepare('UPDATE purchases SET receipt_url = ?1 WHERE id = ?2').bind('javascript:alert(1)', `cs_b_${uid}`).run()
+    body = (await (await api('/api/me', { session })).json()) as MeResponse
+    expect(body.latestPurchase?.receiptUrl).toBeNull()
 
     // a checkout that is still pending is the latest purchase (the success page waits for it)
     await env.DB.prepare(
@@ -212,7 +288,7 @@ describe('GET /api/me', () => {
       .bind(`cs_pending_${uid}`, uid, addDays(now, 0.001).toISOString())
       .run()
     body = (await (await api('/api/me', { session })).json()) as MeResponse
-    expect(body.latestPurchase).toEqual({ id: `cs_pending_${uid}`, sku: 'pass30', status: 'pending' })
+    expect(body.latestPurchase).toEqual({ id: `cs_pending_${uid}`, sku: 'pass30', status: 'pending', receiptUrl: null })
     expect(body.accessEndsAt).toBe(bEnd.toISOString())
   })
 
@@ -255,8 +331,10 @@ describe('POST /api/account/delete', () => {
     )
       .bind(`t_fwd_${user.id}`, user.id, new Date().toISOString())
       .run()
-    await env.DB.prepare('UPDATE users SET marketing_opt_in = 1, marketing_consent_text = ?2, marketing_consent_at = ?3 WHERE id = ?1')
-      .bind(user.id, CONSENT, new Date().toISOString())
+    await env.DB.prepare(
+      'UPDATE users SET marketing_opt_in = 1, marketing_consent_text = ?2, marketing_consent_at = ?3, google_sub = ?4 WHERE id = ?1',
+    )
+      .bind(user.id, CONSENT, new Date().toISOString(), `sub-${user.id}`)
       .run()
     const spendBefore = await spendSnapshot(env, new Date())
 
@@ -327,6 +405,8 @@ describe('POST /api/account/delete', () => {
     expect(tomb).toMatchObject({
       email: `deleted:${user.id}`,
       email_hash: user.email_hash,
+      // the Google account id is personal information: it goes with the profile
+      google_sub: null,
       marketing_opt_in: 0,
       marketing_consent_text: null,
       marketing_consent_at: null,

@@ -2,7 +2,7 @@ import { env } from 'cloudflare:test'
 import { exports } from 'cloudflare:workers'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { refundRequest } from '../../src/billing'
-import type { User } from '../../src/env'
+import type { Env, User } from '../../src/env'
 import { addDays } from '../../src/lib/time'
 import {
   FakeStripe,
@@ -13,15 +13,18 @@ import {
   deleteAccount,
   eventCount,
   jsonRequest,
+  learnerEmailOn,
   makeCtx,
   passesOf,
   postWebhook,
   purchaseRow,
+  receiptUrlFor,
   refundsOf,
   seedPaidPurchase,
 } from './helpers'
 
-const ask = (user: User, lang: 'en' | 'ko' = 'en') => refundRequest(jsonRequest('/api/refund-request', { lang }), makeCtx(user))
+const ask = (user: User, lang: 'en' | 'ko' = 'en', env?: Env) =>
+  refundRequest(jsonRequest('/api/refund-request', { lang }), makeCtx(user, env ? { env } : {}))
 
 async function refused(res: Response, text: string): Promise<void> {
   expect(res.status).toBe(403)
@@ -87,15 +90,49 @@ describe('POST /api/refund-request', () => {
     const flag = await env.DB.prepare('SELECT self_refund_used FROM users WHERE id = ?1').bind(user.id).first<{ self_refund_used: number }>()
     expect(flag?.self_refund_used).toBe(1)
     expect(await eventCount('refund', '/api/refund-request')).toBe(refundsBefore + 1)
-    const mail = stripe.emails.find((m) => m.to === user.email)
-    expect(mail?.text).toContain('We refunded C$39.00')
-    expect(mail?.idempotencyKey).toBe(`self-refund-${p.id}`)
+    // the receipt link stays on the purchase for the account page (Stripe keeps it current after refunds)
+    expect(row?.receipt_url).toBe(receiptUrlFor(p.chargeId))
 
     // Stripe's charge.refunded for this refund does not add a second event or an owner refund row
     const allRefundEvents = await eventCount('refund')
     await postWebhook(chargeRefundedEvent({ chargeId: p.chargeId, paymentIntentId: p.paymentIntentId }))
     expect(await eventCount('refund')).toBe(allRefundEvents)
     expect(await refundsOf(p.id)).toHaveLength(1)
+  })
+
+  it('emails the buyer the amount and the receipt link when learner email is on', async () => {
+    const { user } = await createUser({ lang: 'ko' })
+    const p = await seedPaidPurchase(user.id)
+    const res = await ask(user, 'ko', learnerEmailOn())
+    expect(await res.json()).toEqual({ ok: true, refundedCents: 3900 })
+    const mail = stripe.emails.find((m) => m.to === user.email)
+    expect(mail?.text).toContain('C$39.00을 카드로 환불했으며')
+    expect(mail?.text).toContain(`영수증(Stripe): ${receiptUrlFor(p.chargeId)}`)
+    expect(mail?.idempotencyKey).toBe(`self-refund-${p.id}`)
+  })
+
+  it('leaves the receipt line out when the purchase has no receipt link', async () => {
+    const { user } = await createUser()
+    await seedPaidPurchase(user.id, { receiptUrl: null })
+    expect((await ask(user, 'en', learnerEmailOn())).status).toBe(200)
+    const mail = stripe.emails.find((m) => m.to === user.email)
+    expect(mail?.text).toContain('We refunded C$39.00')
+    expect(mail?.text).not.toContain('Receipt')
+  })
+
+  it.each([
+    ['Resend refuses the address (sandbox)', 'status'],
+    ['the connection to Resend drops', 'throw'],
+  ] as const)('reports a completed refund when %s', async (_label, mode) => {
+    const { user } = await createUser()
+    const p = await seedPaidPurchase(user.id)
+    stripe.resendFailure = mode
+    const res = await ask(user, 'en', learnerEmailOn())
+    expect(res.status).toBe(200)
+    expect(await res.json()).toEqual({ ok: true, refundedCents: 3900 })
+    expect(stripe.emailAttempts).toBe(1)
+    expect(await purchaseRow(p.id)).toMatchObject({ status: 'refunded' })
+    expect((await passesOf(user.id))[0].revoked_at).not.toBeNull()
   })
 
   it('does not double-count when the charge.refunded webhook wins the race', async () => {

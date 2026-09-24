@@ -1,0 +1,51 @@
+# Personal-data guard for ops/metrics (memo B8, R61) on every change there. ci.yml skips changes that touch
+# only ops/metrics (paths-ignore, to save Actions minutes, memo §7.2 Z7), so this small workflow keeps the
+# guard on them: every file under ops/metrics, recursively, must be README.md or an allowlisted
+# <YYYY-MM-DD>.json with aggregate numbers only (products/clb/scripts/metrics.ts guard).
+# The daily export (metrics.yml) runs the same guard before it commits; its commits use GITHUB_TOKEN and
+# start no workflows, so this runs for pull requests and other pushes only. Needs no secrets.
+name: Metrics guard
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'ops/metrics/**'
+  pull_request:
+    paths:
+      - 'ops/metrics/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: metrics-guard-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  guard:
+    name: Personal-data guard (ops/metrics)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: products/clb
+    steps:
+      - name: Check out
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: products/clb/package-lock.json
+
+      # for scripts/run.mjs (esbuild) only
+      - name: Install
+        run: npm ci
+
+      - name: Personal-data guard
+        run: node scripts/run.mjs scripts/metrics.ts guard ../../ops/metrics

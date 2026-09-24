@@ -9,5 +9,6 @@ export const PUBLIC_ENV = {
   mailingAddress: process.env.NEXT_PUBLIC_MAILING_ADDRESS || '',
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL || '',
   cfBeaconToken: process.env.NEXT_PUBLIC_CF_BEACON_TOKEN || '',
-  gadsSendTo: process.env.NEXT_PUBLIC_GADS_SEND_TO || '',
+  /** the owner's legal name, shown as the seller (memo §7.2 Z5); deploy sets it from MPC_LEGAL_NAME */
+  legalName: process.env.NEXT_PUBLIC_LEGAL_NAME || '',
 } as const

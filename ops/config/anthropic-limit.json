@@ -1,6 +1,8 @@
 {
-  "monthlyLimitUsd": 150,
-  "evalMonthlyLimitUsd": 30,
+  "monthlyLimitUsd": 10,
+  "evalMonthlyLimitUsd": 5,
+  "prepaidUsd": 10,
+  "prepaidSince": null,
   "confirmedByOwner": false,
-  "notes": "monthlyLimitUsd: the monthly spend limit the owner set on the PRODUCTION Anthropic Console workspace (key ANTHROPIC_API_KEY). deploy.yml passes it to the Worker as ANTHROPIC_MONTHLY_LIMIT_USD (spend tiers use min(memo formula L, this)), and a change to this file on master redeploys. Raise the Console limit first, then this file. evalMonthlyLimitUsd: the limit on the separate EVAL workspace (key ANTHROPIC_EVAL_API_KEY; memo §3.3 dev and eval allowance). deploy.yml also passes it to the STAGING Worker as ANTHROPIC_MONTHLY_LIMIT_USD, so staging's spend tiers stop at the eval workspace limit. The KPI Routine proposes raises as PRs (memo §3.4); the owner changes the Console and merges (business/online/owner-setup.md 2-1)"
+  "notes": "Zero-capital launch (memo §7.2 Z6): the API is paid with prepaid credits, suggested US$10, auto-reload OFF. prepaidUsd: the credit balance in US$ on the day in prepaidSince (YYYY-MM-DD, UTC; null until the owner has bought credits). deploy.yml passes both to the PRODUCTION Worker as ANTHROPIC_PREPAID_USD / ANTHROPIC_PREPAID_SINCE only when both are valid; the Worker counts its own spend since that day: free samples off at 70%, owner alerts at 50% and 80%, grading paused at 97%. After a top-up, set prepaidUsd to the balance the Console shows right after buying and prepaidSince to that day. The eval and staging spend from the same credits, which the production Worker cannot see. monthlyLimitUsd: the monthly spend limit on the PRODUCTION Anthropic Console workspace (key ANTHROPIC_API_KEY), passed as ANTHROPIC_MONTHLY_LIMIT_USD (spend tiers use min(memo formula L, this)); a change to this file on master redeploys. Raise the Console limit first, then this file. evalMonthlyLimitUsd: the limit on the separate EVAL workspace (key ANTHROPIC_EVAL_API_KEY), also passed to the STAGING Worker as ANTHROPIC_MONTHLY_LIMIT_USD. The owner changes the Console and merges (business/online/owner-setup.md)"
 }

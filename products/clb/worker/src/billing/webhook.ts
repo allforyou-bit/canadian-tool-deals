@@ -1,14 +1,17 @@
 // POST /api/stripe/webhook (memo B6). Verifies Stripe-Signature on the raw body, de-duplicates on the
 // event id, then grants a pass, refunds an out-of-region or non-card payment, records refunds (partial
 // ones too), revokes on a full refund, an end_pass refund or a dispute, and alerts the owner about
-// failed refunds. If processing fails, the webhook_events row is removed and 500 is returned so Stripe
-// retries. Payloads are never logged.
+// failed refunds. The charge's Stripe receipt link is stored on the purchase (and refreshed from
+// charge.refunded) because the site, not an email, shows it to the buyer (memo §7.2 Z4). If processing
+// fails, the webhook_events row is removed and 500 is returned so Stripe retries. Payloads are never logged.
+import type { Lang } from '../../../shared/api'
 import { SKUS } from '../../../shared/config'
-import { alertOwner, sendEmail } from '../email'
+import { alertOwner } from '../email'
 import type { Ctx, Env } from '../env'
 import { error, json, readTextLimited } from '../lib/http'
 import { grantPass, revokePasses } from './entitlement'
 import { formatCad, passActiveEmail, regionRefundEmail } from './messages'
+import { emailBuyerOf } from './notify'
 import { evidenceAllowed, type PaymentEvidence } from './region'
 import {
   CURRENCY,
@@ -17,13 +20,13 @@ import {
   deleteRefund,
   eventStatement,
   findPurchaseByCharge,
-  getContact,
   getPurchase,
   insertPurchase,
   insertOwnerRefund,
   insertRefund,
   isSku,
   ownerRefundEvent,
+  setReceiptUrl,
   siteUrl,
 } from './store'
 import {
@@ -37,6 +40,7 @@ import {
   type StripeList,
   describeError,
   idOf,
+  receiptUrlOf,
   stripeFetch,
   verifyStripeSignature,
 } from './stripe'
@@ -141,10 +145,12 @@ async function onCheckoutPaid(session: CheckoutSession, eventId: string, ctx: Ct
   if (!charge || typeof charge === 'string') throw new Error('payment intent has no expanded latest_charge')
 
   const evidence = chargeEvidence(charge)
+  // the receipt is stored whatever happens next (pass, region refund or nothing): the buyer sees it on the site
+  const receiptUrl = receiptUrlOf(charge)
   await env.DB.prepare(
     `UPDATE purchases SET payment_intent = ?1, charge_id = ?2, card_fingerprint = ?3, card_country = ?4,
             billing_country = ?5, billing_region = ?6, payment_method_type = ?7,
-            amount_refunded_cents = MAX(amount_refunded_cents, ?8)
+            amount_refunded_cents = MAX(amount_refunded_cents, ?8), receipt_url = COALESCE(?10, receipt_url)
       WHERE id = ?9`,
   )
     .bind(
@@ -157,6 +163,7 @@ async function onCheckoutPaid(session: CheckoutSession, eventId: string, ctx: Ct
       evidence.paymentMethodType,
       charge.amount_refunded ?? 0,
       purchase.id,
+      receiptUrl,
     )
     .run()
 
@@ -176,7 +183,7 @@ async function onCheckoutPaid(session: CheckoutSession, eventId: string, ctx: Ct
   }
 
   if (!evidenceAllowed(evidence)) {
-    await rejectForRegion(purchase, paymentIntentId, eventId, ctx)
+    await rejectForRegion(purchase, paymentIntentId, eventId, receiptUrl, ctx)
     // Checkout asks for cards only, so another payment method means the Stripe settings let one through.
     if (evidence.paymentMethodType !== 'card') {
       await alertOwner(
@@ -203,11 +210,9 @@ async function onCheckoutPaid(session: CheckoutSession, eventId: string, ctx: Ct
       ? [insertOwnerRefund(env, purchase.id, refundedBefore, now), ownerRefundEvent(env, purchase.id, refundedBefore, now)]
       : []),
   ])
-  const contact = await getContact(env, purchase.user_id)
-  if (contact) {
-    const mail = passActiveEmail(contact.lang, purchase.sku, pass.endsAt, siteUrl(env))
-    await sendEmail(env, { to: contact.email, ...mail, kind: 'transactional', idempotencyKey: eventId })
-  }
+  // /checkout/success/ and /account/ show the pass and the receipt; this email is extra and may be skipped
+  const compose = (lang: Lang) => passActiveEmail(lang, purchase.sku, pass.endsAt, siteUrl(env), receiptUrl)
+  await emailBuyerOf(env, purchase.user_id, compose, eventId)
 }
 
 /** Fallback when the pending row is missing: rebuild it from client_reference_id and metadata. */
@@ -248,7 +253,13 @@ function paymentMethodType(type: string | null | undefined): string | null {
 }
 
 /** Refunds a payment from outside the sales region (or not paid by card); no pass is granted. */
-async function rejectForRegion(purchase: PurchaseRow, paymentIntent: string, eventId: string, ctx: Ctx): Promise<void> {
+async function rejectForRegion(
+  purchase: PurchaseRow,
+  paymentIntent: string,
+  eventId: string,
+  receiptUrl: string | null,
+  ctx: Ctx,
+): Promise<void> {
   const { env, now } = ctx
   // The refunds row goes in first so a charge.refunded webhook racing this one sees the refund as ours.
   await insertRefund(env, { reason: 'region', purchase, amountCents: purchase.amount_cents, now }).run()
@@ -278,11 +289,9 @@ async function rejectForRegion(purchase: PurchaseRow, paymentIntent: string, eve
     )
     return
   }
-  const contact = await getContact(env, purchase.user_id)
-  if (contact) {
-    const mail = regionRefundEmail(contact.lang, refund?.amount ?? purchase.amount_cents, siteUrl(env))
-    await sendEmail(env, { to: contact.email, ...mail, kind: 'transactional', idempotencyKey: eventId })
-  }
+  // the account page shows the refunded status and the receipt; this email is extra and may be skipped
+  const amount = refund?.amount ?? purchase.amount_cents
+  await emailBuyerOf(env, purchase.user_id, (lang) => regionRefundEmail(lang, amount, siteUrl(env), receiptUrl), eventId)
 }
 
 // ---------- charge.refunded ----------
@@ -300,7 +309,8 @@ async function onChargeRefunded(charge: Charge, ctx: Ctx): Promise<void> {
  * - the part of it not yet covered by a refunds row (our self-serve and region rows are written before
  *   Stripe is called) becomes an 'owner' row plus a 'refund' event, once per cumulative amount;
  * - the pass ends only when the charge is fully refunded or a refund carries metadata end_pass=true
- *   (a pro-rated refund of unused days); other partial refunds keep it.
+ *   (a pro-rated refund of unused days); other partial refunds keep it;
+ * - the event carries the charge, so its receipt link (which now shows the refund) is stored again.
  * Everything is written in one D1 batch, so a failed attempt leaves nothing behind for Stripe's retry.
  */
 async function applyChargeRefund(purchase: PurchaseRow, charge: Charge, ctx: Ctx): Promise<void> {
@@ -316,6 +326,7 @@ async function applyChargeRefund(purchase: PurchaseRow, charge: Charge, ctx: Ctx
       total,
       purchase.id,
     ),
+    setReceiptUrl(env, purchase.id, charge.id, receiptUrlOf(charge)),
   ]
   if (!endsPass) {
     await env.DB.batch(statements)

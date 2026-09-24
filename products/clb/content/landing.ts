@@ -1,12 +1,14 @@
 // Landing page copy: / (English) and /ko/ (Korean, 해요체). Rendered by components/content/Landing.tsx.
 // Rules: every string passes findClaims(); the test is named only descriptively; the two disclaimer
-// sentences are the exact ALLOWED_PHRASES / AI_DISCLOSURE text.
+// sentences are the exact ALLOWED_PHRASES / AI_DISCLOSURE text. Zero-capital launch (memo §7.2): the pages
+// lead with free practice without feedback (Z9: no AI, no sign-in, audio stays on the device), the free speaking
+// task needs Google sign-in (Z3), and there is no advertising tag (Z1).
 import type { Lang } from '../shared/api'
 import { AI_DISCLOSURE, BRAND } from '../shared/config'
 import { SPEAKING_TASKS, TASKS, WRITING_TASKS, type TaskType } from '../shared/tasks'
 import { FREE_WRITING_PATH, PATHS, practicePath } from './routes'
-import { FACTS, passLabel, QUEBEC_RULE } from './site'
-import type { FaqItem } from './types'
+import { FACTS, GOOGLE_SIGN_IN, passLabel, PRACTICE_MODE, QUEBEC_RULE } from './site'
+import type { FaqItem, Rich } from './types'
 
 export interface TaskLine {
   id: string
@@ -26,9 +28,20 @@ export interface LandingCopy {
     lead: string
     cta: { label: string; href: string }
     secondary: { label: string; href: string }
-    note: string
+    /** rich text (links allowed) */
+    note: Rich
   }
   disclosure: { heading: string; text: string }
+  /** free practice without feedback (Z9) */
+  practice: {
+    heading: string
+    intro: string
+    /** rich text */
+    items: Rich[]
+    cta: { label: string; href: string }
+    /** rich text: the way on to the free AI sample and the passes */
+    next: Rich
+  }
   steps: { heading: string; items: { title: string; body: string }[] }
   korean: { heading: string; paragraphs: string[] }
   tasks: {
@@ -87,7 +100,7 @@ export const LANDING_EN: LandingCopy = {
   lang: 'en',
   meta: {
     title: `${BRAND.en}: feedback on English writing and speaking practice`,
-    description: `Timed English writing and speaking practice tasks with AI feedback, for adults in Canada. Your first writing task is free, no account needed. Explanations in English or Korean.`,
+    description: `Timed English writing and speaking practice tasks with AI feedback, for adults in Canada. Practise free without feedback, and get feedback on your first writing task free, no account needed. Explanations in English or Korean.`,
   },
   hero: {
     eyebrow: 'English practice for adults in Canada',
@@ -95,9 +108,21 @@ export const LANDING_EN: LandingCopy = {
     lead: `${BRAND.en} gives AI feedback on timed practice tasks modelled on the format of the CELPIP-General test. See what worked, fix your most important errors, and read improved versions of your own sentences. Explanations are available in English or Korean.`,
     cta: { label: 'Try a free writing task', href: FREE_WRITING_PATH },
     secondary: { label: 'See pricing', href: PATHS.pricing },
-    note: 'Your first writing task is free, with no account needed.',
+    note: `Your first writing task with feedback is free, with no account needed. Or [practise without feedback](${PATHS.practice}), free and without signing in.`,
   },
   disclosure: { heading: 'About the feedback', text: AI_DISCLOSURE.en },
+  practice: {
+    heading: 'Practise without feedback, free',
+    intro:
+      'Every practice task can also be done without AI feedback. It is free, you do not need to sign in, and nothing you write or say is sent to us.',
+    items: [
+      '**Writing**: the task prompt, a practice timer, a word counter and a short self-check list to review your own answer.',
+      '**Speaking**: preparation and speaking timers, then record yourself and play it back.',
+      PRACTICE_MODE.audio.en,
+    ],
+    cta: { label: PRACTICE_MODE.label.en, href: PATHS.practice },
+    next: `When you want feedback, your [first writing task with feedback](${FREE_WRITING_PATH}) is free, and [passes](${PATHS.pricing}) cover the rest.`,
+  },
   steps: {
     heading: 'How it works',
     items: [
@@ -154,8 +179,9 @@ export const LANDING_EN: LandingCopy = {
   pricing: {
     heading: 'Start free, then choose a pass',
     items: [
-      `${FACTS.freeWriting} free writing task, no account needed.`,
-      `${FACTS.freeSpeaking} free speaking task after you sign in with your email.`,
+      'Practice without feedback: free, no account needed.',
+      `${FACTS.freeWriting} free writing task with feedback, no account needed.`,
+      `${FACTS.freeSpeaking} free speaking task with feedback after you sign in with Google.`,
       `${passLabel('pass30', 'en')}. ${passLabel('pass90', 'en')}.`,
       'One-time payment in Canadian dollars. No subscription and no automatic renewal.',
     ],
@@ -178,8 +204,12 @@ export const LANDING_EN: LandingCopy = {
         a: `Claude, an AI model made by Anthropic. No person reviews your answer before you see the feedback, and AI feedback can be wrong. Use it as one input to your own study. [Read our AI disclosure](${PATHS.aiDisclosure}).`,
       },
       {
+        q: 'Do I need an account?',
+        a: `Not to start. You can practise without feedback and get feedback on your first writing task without an account. To get the free speaking task with feedback or to buy a pass, sign in with a Google account. ${GOOGLE_SIGN_IN.en}`,
+      },
+      {
         q: 'Do you keep my recordings?',
-        a: `No. Your recording is used only to make a transcript, and we never store audio. If you are signed in, we keep the text of your answers and your feedback so you can open them again from your account page, and delete them ${FACTS.retentionDays} days after your last activity. You can delete your account at any time. [See how we handle your data](${PATHS.helpPrivacy}).`,
+        a: `No. When you ask for feedback, your recording is used only to make a transcript, and we never store audio. ${PRACTICE_MODE.audio.en} If you are signed in, we keep the text of your answers and your feedback so you can open them again from your account page, and delete them ${FACTS.retentionDays} days after your last activity. You can delete your account at any time. [See how we handle your data](${PATHS.helpPrivacy}).`,
       },
       {
         q: 'Can I get explanations in Korean?',
@@ -206,7 +236,7 @@ export const LANDING_KO: LandingCopy = {
   meta: {
     title: `${BRAND.ko}: 한국어 설명으로 배우는 영어 쓰기·말하기 연습`,
     description:
-      '캐나다에 사는 성인을 위한 영어 쓰기·말하기 연습 과제와 AI 피드백이에요. 틀린 이유를 한국어로 설명받을 수 있어요. 첫 쓰기 과제는 계정 없이 무료예요.',
+      '캐나다에 사는 성인을 위한 영어 쓰기·말하기 연습 과제와 AI 피드백이에요. 틀린 이유를 한국어로 설명받을 수 있어요. 피드백 없는 연습은 로그인 없이 무료이고, 첫 쓰기 과제 피드백도 계정 없이 무료예요.',
   },
   hero: {
     eyebrow: '캐나다에 사는 한국어 사용자를 위한 영어 연습',
@@ -214,9 +244,20 @@ export const LANDING_KO: LandingCopy = {
     lead: 'CELPIP-General 시험 형식을 본뜬 연습 과제에 답하면, AI가 잘한 점과 가장 중요한 오류, 고친 문장, 다음에 연습할 점을 알려 드려요. 교정 문장은 영어로, 왜 틀렸는지는 한국어로 읽을 수 있어요.',
     cta: { label: '무료 쓰기 과제 해 보기', href: `${FREE_WRITING_PATH}?lang=ko` },
     secondary: { label: '요금 보기', href: PATHS.pricingKo },
-    note: '첫 쓰기 과제는 계정 없이 무료예요.',
+    note: `첫 쓰기 과제 피드백은 계정 없이 무료예요. [피드백 없이 연습하기](${PATHS.practice}?lang=ko)도 로그인 없이 무료로 할 수 있어요.`,
   },
   disclosure: { heading: '피드백 안내', text: AI_DISCLOSURE.ko },
+  practice: {
+    heading: '피드백 없이 무료로 연습하기',
+    intro: '모든 연습 과제는 AI 피드백 없이도 할 수 있어요. 무료이고 로그인이 필요 없으며, 쓰거나 말한 내용은 저희에게 전송되지 않아요.',
+    items: [
+      '**쓰기**: 문제, 연습 타이머, 단어 수 세기, 내 답안을 스스로 확인해 볼 짧은 체크리스트',
+      '**말하기**: 준비 시간과 말하기 시간 타이머, 녹음한 뒤 바로 다시 듣기',
+      PRACTICE_MODE.audio.ko,
+    ],
+    cta: { label: PRACTICE_MODE.label.ko, href: `${PATHS.practice}?lang=ko` },
+    next: `피드백을 받고 싶을 때는 [첫 쓰기 과제 피드백](${FREE_WRITING_PATH}?lang=ko)이 무료이고, 그다음은 [이용권](${PATHS.pricingKo})으로 이어서 받을 수 있어요.`,
+  },
   steps: {
     heading: '이용 방법',
     items: [
@@ -274,8 +315,9 @@ export const LANDING_KO: LandingCopy = {
   pricing: {
     heading: '무료로 시작하고, 필요할 때 이용권을 고르세요',
     items: [
-      `쓰기 과제 ${FACTS.freeWriting}개: 계정 없이 무료`,
-      `말하기 과제 ${FACTS.freeSpeaking}개: 이메일로 로그인한 뒤 무료`,
+      '피드백 없이 연습하기: 계정 없이 무료',
+      `피드백을 받는 쓰기 과제 ${FACTS.freeWriting}개: 계정 없이 무료`,
+      `피드백을 받는 말하기 과제 ${FACTS.freeSpeaking}개: Google 계정으로 로그인한 뒤 무료`,
       `${passLabel('pass30', 'ko')}, ${passLabel('pass90', 'ko')}`,
       '캐나다 달러로 한 번만 결제해요. 구독이나 자동 갱신은 없어요.',
     ],
@@ -298,8 +340,12 @@ export const LANDING_KO: LandingCopy = {
         a: `Anthropic이 만든 AI인 Claude가 써요. 피드백을 보여 드리기 전에 사람이 답안을 검토하지 않고, AI 피드백은 틀릴 수 있어요. 공부할 때 참고 자료 중 하나로 활용해 주세요. [AI 안내(영어)](${PATHS.aiDisclosure})`,
       },
       {
+        q: '계정이 있어야 하나요?',
+        a: `처음에는 없어도 돼요. 피드백 없는 연습과 첫 쓰기 과제 피드백은 계정 없이 할 수 있어요. 무료 말하기 과제 피드백을 받거나 이용권을 사려면 Google 계정으로 로그인해 주세요. ${GOOGLE_SIGN_IN.ko}`,
+      },
+      {
         q: '녹음 파일을 저장하나요?',
-        a: `아니요. 녹음은 받아쓰기에만 쓰고 저장하지 않아요. 로그인한 경우 답안과 피드백 글은 저장되어 계정 페이지에서 다시 볼 수 있고, 마지막 활동 후 ${FACTS.retentionDays}일이 지나면 삭제해요. 계정 페이지에서 언제든지 계정을 삭제할 수도 있어요.`,
+        a: `아니요. 피드백을 요청하면 녹음은 받아쓰기에만 쓰고 저장하지 않아요. ${PRACTICE_MODE.audio.ko} 로그인한 경우 답안과 피드백 글은 저장되어 계정 페이지에서 다시 볼 수 있고, 마지막 활동 후 ${FACTS.retentionDays}일이 지나면 삭제해요. 계정 페이지에서 언제든지 계정을 삭제할 수도 있어요.`,
       },
       {
         q: '설명은 모두 한국어로 나오나요?',

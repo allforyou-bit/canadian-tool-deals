@@ -2,29 +2,57 @@
 // Content lint for the static product pages (memo B9): every exported string in content/** passes
 // findClaims() (ALLOWED_PHRASES excepted), doc pages carry lastReviewed, the formats pages cover all 10 task
 // ids, links point at real routes, and prices/limits come from shared/config.ts. The "review round 1
-// promises" block pins what the pages say to what the code does (integrator decisions 2–7, 11–15).
+// promises" block pins what the pages say to what the code does (integrator decisions 2–7, 11–15); the
+// "zero-capital launch" block does the same for memo §7.2 Z1, Z2, Z3, Z4, Z5 and Z9.
 // Run: npx vitest run content
 import { describe, expect, it } from 'vitest'
-import { AI_DISCLOSURE, CAPS, NOT_AFFILIATED, RETENTION_DAYS, SKUS, TERMS_VERSION } from '../shared/config'
+import { AI_DISCLOSURE, BRAND, CAPS, NOT_AFFILIATED, RETENTION_DAYS, SKUS, TERMS_VERSION } from '../shared/config'
 import { findClaims } from '../shared/content-rules'
 import { TASKS } from '../shared/tasks'
 import { MAX_TOP_ERRORS } from '../worker/src/grading/validate'
 import { FORMAT_TASK_IDS, FORMAT_TIPS, FORMATS_INDEX, FORMATS_SPEAKING, FORMATS_WRITING } from './formats'
-import { HELP_ACCOUNT, HELP_FEEDBACK, HELP_INDEX, HELP_PAGES, HELP_PASSES, HELP_PRIVACY, HELP_TROUBLESHOOTING } from './help'
+import {
+  HELP_ACCOUNT,
+  HELP_FEEDBACK,
+  HELP_INDEX,
+  HELP_PAGES,
+  HELP_PASSES,
+  HELP_PRIVACY,
+  HELP_RECORDING,
+  HELP_TROUBLESHOOTING,
+} from './help'
 import { faqJsonLd, plainText, productJsonLd, serializeJsonLd, websiteJsonLd } from './jsonld'
 import { LANDING, LANDING_EN, LANDING_KO } from './landing'
-import { AI_DISCLOSURE_PAGE, LEGAL_PAGES, PRIVACY, REFUNDS, TERMS } from './legal'
+import { AI_DISCLOSURE_PAGE, LEGAL_PAGES, NOT_AFFILIATED_PAGE, PRIVACY, REFUNDS, TERMS } from './legal'
+import { whoWeAreBlocks } from './legal/privacy'
+import { NOT_FOUND } from './not-found'
 import { PRICING_EN, PRICING_KO } from './pricing'
-import { CONTENT_ROUTES, FREE_WRITING_PATH, KNOWN_ROUTES, PRACTICE_ROUTES } from './routes'
+import { CONTENT_ROUTES, FREE_WRITING_PATH, KNOWN_ROUTES, PATHS, PRACTICE_ROUTES } from './routes'
 import { pageMetadata } from './seo'
 import {
+  buildContactLines,
+  CONTACT_LINES_EN,
+  DAILY_RESET_EN,
+  DAILY_RESET_KO,
   FACTS,
   FILTER_EN,
+  GOOGLE_SIGN_IN,
   LAST_REVIEWED,
-  mailingAddressText,
+  LEGAL_NAME,
+  LEGAL_NAME_PLACEHOLDER,
+  legalNameOrPlaceholder,
+  legalNameText,
+  MAILING_ADDRESS,
+  MAILING_ADDRESS_PLACEHOLDER,
   NO_FEEDBACK_LIMIT,
+  NO_LEARNER_EMAIL,
   PAUSE_EXTENSION,
+  PRACTICE_MODE,
   QUEBEC_RULE,
+  SELLER,
+  sellerLine,
+  SPEAKING_CAPACITY,
+  SUPPORT_FORM_LINE,
 } from './site'
 import type { DocPage, DocSection } from './types'
 
@@ -167,10 +195,12 @@ describe('doc pages', () => {
     }
   })
 
-  it('the privacy policy shows the mailing address or a visible placeholder', () => {
-    const who = PRIVACY.sections.find((s) => s.id === 'who-we-are')
-    expect(JSON.stringify(who)).toContain(mailingAddressText)
-    expect(mailingAddressText.length).toBeGreaterThan(5)
+  it('the privacy policy names the seller and shows the mailing address only when it is set (Z5)', () => {
+    const who = JSON.stringify(PRIVACY.sections.find((s) => s.id === 'who-we-are'))
+    expect(who).toContain(SELLER.en)
+    expect(who).toContain(legalNameText)
+    if (MAILING_ADDRESS) expect(who).toContain(`Mailing address: ${legalNameText} (${BRAND.en}), ${MAILING_ADDRESS}`)
+    else expect(who).not.toContain('Mailing address')
   })
 })
 
@@ -388,7 +418,7 @@ describe('review round 1 promises', () => {
 
   it('disclose where support messages go and how long mailbox copies are kept (decision 7)', () => {
     const providers = PRIVACY.sections.find((s) => s.id === 'providers')
-    const google = text(providers).split('\n').find((t) => t.startsWith('Hosts our business email (Gmail)'))
+    const google = text(providers).split('\n').find((t) => t.includes('hosts our business email (Gmail)'))
     expect(google).toMatch(/Support messages are forwarded there/)
     expect(text(providers)).toMatch(/uses Claude as an assistant to draft replies to support messages.*reviews every reply and sends it/)
     expect(text(section(PRIVACY, 'retention'))).toContain(`Copies in our business mailbox, including our replies, are deleted ${RETENTION_DAYS} days after you send the message`)
@@ -399,10 +429,18 @@ describe('review round 1 promises', () => {
     expect(text(AI_DISCLOSURE_PAGE.sections)).toMatch(/draft replies to messages sent through the support form/)
   })
 
-  it('say every email carries the unsubscribe link (decision 11)', () => {
-    expect(text(section(PRIVACY, 'marketing'))).toContain('the unsubscribe link at the end of every email we send')
-    expect(text(section(HELP_ACCOUNT, 'marketing'))).toContain('the unsubscribe link at the end of every email we send')
-    for (const t of everything()) expect(t).not.toMatch(/unsubscribe link in any marketing email/)
+  it('describe the unsubscribe link accurately while no marketing email is sent (decision 11, Z4)', () => {
+    const privacy = text(section(PRIVACY, 'marketing'))
+    expect(privacy).toContain('We do not send marketing email')
+    expect(privacy).toMatch(/every marketing email will end with an unsubscribe link.*stops marketing emails without signing in/s)
+    expect(privacy).toContain('within 10 business days')
+    const help = text(section(HELP_ACCOUNT, 'emails'))
+    expect(help).toContain('We do not send marketing email')
+    expect(help).toContain('unsubscribe link that works without signing in')
+    for (const t of everything()) {
+      // no longer true: learners get no email from the site (Z4)
+      expect(t).not.toMatch(/the unsubscribe link at the end of every email we send|unsubscribe link in any marketing email/)
+    }
   })
 
   it('keep /unsubscribe/ (noindex) out of the sitemap routes', () => {
@@ -420,5 +458,181 @@ describe('review round 1 promises', () => {
     expect(text(PRICING_EN.sections)).toMatch(/Payment is by card only/)
     expect(text(PRICING_KO.sections)).toMatch(/카드로만/)
     expect(text(section(HELP_PASSES, 'buying'))).toMatch(/By buying, you agree to the \[terms of use\]/)
+  })
+})
+
+describe('zero-capital launch promises (memo §7.2)', () => {
+  const section = (page: DocPage, id: string): DocSection => {
+    const s = page.sections.find((x) => x.id === id)
+    if (!s) throw new Error(`${page.path} has no section #${id}`)
+    return s
+  }
+  const text = (value: unknown): string => {
+    const out: { path: string; text: string }[] = []
+    collectStrings(value, '', out)
+    return out.map((s) => s.text).join('\n')
+  }
+  const everything = () => allStrings().map((s) => s.text)
+
+  it('mention no advertising tag anywhere (Z1)', () => {
+    for (const t of everything()) {
+      expect(t).not.toMatch(/Google Ads|conversion (tag|measurement)|gclid|click id|arrive from an ad|an ad led to/i)
+    }
+    expect(text(section(PRIVACY, 'cookies'))).toContain('We do not use advertising cookies or advertising tags anywhere on the site.')
+    expect(text(section(PRIVACY, 'what-we-collect'))).not.toMatch(/advertising campaign/)
+  })
+
+  it('name the owner as the seller, with a visible placeholder until NEXT_PUBLIC_LEGAL_NAME is set (Z5)', () => {
+    expect(sellerLine('Jane Q. Doe').en).toBe('Maple Practice Coach is sold by Jane Q. Doe, a sole proprietor in Ontario.')
+    expect(sellerLine('Jane Q. Doe').ko).toContain('Jane Q. Doe')
+    expect(sellerLine(null).en).toBe(`Maple Practice Coach is sold by ${LEGAL_NAME_PLACEHOLDER}, a sole proprietor in Ontario.`)
+    expect(legalNameOrPlaceholder(null)).toBe(LEGAL_NAME_PLACEHOLDER)
+    expect(LEGAL_NAME_PLACEHOLDER).toMatch(/not set/)
+    expect(SELLER).toEqual(sellerLine(LEGAL_NAME))
+    expect(legalNameText).toBe(LEGAL_NAME ?? LEGAL_NAME_PLACEHOLDER)
+    // terms, privacy and the not-affiliated notice all identify the seller the same way
+    expect(text(TERMS.intro)).toContain(SELLER.en)
+    expect(text(TERMS.intro)).toContain(`an agreement between you and ${legalNameText} ("we", "us")`)
+    expect(text(section(PRIVACY, 'who-we-are'))).toContain(SELLER.en)
+    expect(text(section(NOT_AFFILIATED_PAGE, 'independent'))).toContain(SELLER.en)
+    for (const t of everything()) expect(t).not.toMatch(/operated by a sole proprietor|is run by a sole proprietor/)
+  })
+
+  it('show the mailing address only when it is set, otherwise the signed-in support form (Z5)', () => {
+    const withAddress = text(whoWeAreBlocks({ legalName: 'Jane Doe', mailingAddress: '1 Main St, Toronto ON' }))
+    expect(withAddress).toContain('Mailing address: Jane Doe (Maple Practice Coach), 1 Main St, Toronto ON')
+    expect(withAddress).toContain('Jane Doe, the owner of the business, is the person accountable')
+    const without = text(whoWeAreBlocks({ legalName: 'Jane Doe', mailingAddress: null }))
+    expect(without).not.toContain('Mailing address')
+    expect(without).toContain('use the support form on your [account page](/account/) (you need to be signed in)')
+    expect(text(whoWeAreBlocks({ legalName: null, mailingAddress: null }))).toContain(LEGAL_NAME_PLACEHOLDER)
+
+    expect(buildContactLines({ supportEmail: null, mailingAddress: null, legalName: 'Jane Doe' })).toEqual([SUPPORT_FORM_LINE])
+    expect(buildContactLines({ supportEmail: 'help@example.ca', mailingAddress: '1 Main St', legalName: 'Jane Doe' })).toEqual([
+      SUPPORT_FORM_LINE,
+      'Email us at [help@example.ca](mailto:help@example.ca).',
+      'Write to us by mail: Jane Doe (Maple Practice Coach), 1 Main St',
+    ])
+    expect(CONTACT_LINES_EN[0]).toBe(SUPPORT_FORM_LINE)
+    // the bracketed placeholder must never be read as a [label](href) link by components/content/Rich.tsx
+    for (const line of [
+      ...buildContactLines({ supportEmail: null, mailingAddress: '1 Main St', legalName: null }).slice(1),
+      ...(whoWeAreBlocks({ legalName: null, mailingAddress: '1 Main St' }) as string[]),
+      sellerLine(null).en,
+      sellerLine(null).ko,
+    ]) {
+      expect(line).toContain(LEGAL_NAME_PLACEHOLDER)
+      expect(plainText(line)).toContain(LEGAL_NAME_PLACEHOLDER)
+    }
+    // the old address placeholder is never shown on a page any more
+    for (const t of everything()) if (t !== MAILING_ADDRESS_PLACEHOLDER) expect(t).not.toContain(MAILING_ADDRESS_PLACEHOLDER)
+  })
+
+  it('describe sign-in with Google: what we receive, and that a Google account is needed (Z3)', () => {
+    expect(GOOGLE_SIGN_IN.en).toContain('We receive only your email address and your Google account id from Google.')
+    expect(text(HELP_ACCOUNT.intro)).toContain('You need a Google account to sign in.')
+    expect(text(section(HELP_ACCOUNT, 'how'))).toContain('Continue with Google')
+    expect(text(section(HELP_ACCOUNT, 'no-google-account'))).toMatch(/create a Google account/)
+    expect(text(section(HELP_ACCOUNT, 'what-google-shares'))).toMatch(/only for your email address/)
+    const providers = text(section(PRIVACY, 'providers'))
+    expect(providers).toContain(GOOGLE_SIGN_IN.en)
+    expect(providers).toMatch(/Sign-in: when you choose to continue with Google/)
+    expect(text(section(PRIVACY, 'what-we-collect'))).toMatch(/Google account id/)
+    expect(text(section(PRIVACY, 'cookies'))).toMatch(/Google sign-in cookie/)
+    expect(text(section(TERMS, 'accounts'))).toMatch(/You sign in with your Google account/)
+    expect(text(section(HELP_TROUBLESHOOTING, 'sign-in'))).toMatch(/You need a Google account/)
+    expect(LANDING_EN.pricing.items.join(' ')).toMatch(/after you sign in with Google/)
+    expect(LANDING_KO.pricing.items.join(' ')).toMatch(/Google 계정으로 로그인/)
+    expect(PRICING_EN.free.items.join(' ')).toMatch(/after you sign in with Google/)
+    expect(PRICING_KO.free.items.join(' ')).toMatch(/Google 계정으로 로그인/)
+    // the learner email link is gone from every page
+    for (const t of everything()) {
+      expect(t).not.toMatch(/sign-in links?\b|link we email|we email you a|sign in with your email|verify your email|email does not arrive|이메일로 로그인/i)
+    }
+  })
+
+  it('promise no email to learners: pass, refunds and the Stripe receipt link are on the account page (Z4)', () => {
+    expect(NO_LEARNER_EMAIL.en).toMatch(/We do not send you emails about your account or your pass/)
+    expect(NO_LEARNER_EMAIL.en).toMatch(/link to the Stripe receipt/)
+    for (const s of [section(HELP_PASSES, 'how'), section(TERMS, 'passes'), section(PRIVACY, 'marketing'), section(HELP_ACCOUNT, 'emails')]) {
+      expect(text(s)).toContain(NO_LEARNER_EMAIL.en)
+    }
+    expect(text(PRICING_EN.sections.find((x) => x.id === 'one-time'))).toContain(NO_LEARNER_EMAIL.en)
+    expect(text(PRICING_KO.sections.find((x) => x.id === 'one-time'))).toContain(NO_LEARNER_EMAIL.ko)
+    expect(text(section(REFUNDS, 'how'))).toMatch(/Your account page shows the refund.*We do not send a confirmation by email\./)
+    expect(text(section(REFUNDS, 'automatic'))).toMatch(/Your account page shows that the payment was refunded; we do not send an email\./)
+    expect(text(section(PRIVACY, 'what-we-collect'))).toMatch(/link to Stripe's receipt/)
+    expect(text(section(PRIVACY, 'changes'))).toMatch(/notice on the site and on your account page/)
+    expect(text(section(TERMS, 'changes'))).toMatch(/with a notice on the site and on your account page/)
+    for (const t of everything()) {
+      expect(t).not.toMatch(/email you a confirmation|we email you to let you know|we will email you|tell account holders by email|Sends our emails|send sign-in links/i)
+    }
+  })
+
+  it('list Resend as the owner-alert processor, including forwarded support messages (Z4)', () => {
+    const resend = text(section(PRIVACY, 'providers')).split('\n').find((t) => t.startsWith("Delivers the site's email alerts"))
+    expect(resend).toMatch(/owner's mailbox.*support messages you send us, with your email address.*We do not use Resend to email you/s)
+    expect(text(section(HELP_PRIVACY, 'providers'))).toMatch(/Delivers the site's email alerts to the owner, including the support messages/)
+  })
+
+  it('say that speaking feedback can close for the day at the shared capacity, without calling it a pause (Z2)', () => {
+    expect(SPEAKING_CAPACITY.en).toContain(DAILY_RESET_EN)
+    expect(SPEAKING_CAPACITY.ko).toContain(DAILY_RESET_KO)
+    expect(SPEAKING_CAPACITY.en).not.toMatch(/extend|paused/)
+    for (const s of [
+      section(HELP_TROUBLESHOOTING, 'speaking-closed'),
+      section(HELP_RECORDING, 'capacity'),
+      section(HELP_PASSES, 'fair-use'),
+      section(TERMS, 'fair-use'),
+      PRICING_EN.sections.find((x) => x.id === 'fair-use'),
+    ]) {
+      expect(text(s)).toContain(SPEAKING_CAPACITY.en)
+    }
+    expect(text(PRICING_KO.sections.find((x) => x.id === 'fair-use'))).toContain(SPEAKING_CAPACITY.ko)
+  })
+
+  it('offer free practice without feedback: what it is, audio stays on the device, no sign-in (Z9)', () => {
+    expect(PRACTICE_MODE.label.en).toBe('Practise without feedback')
+    expect(PRACTICE_MODE.audio.en).toMatch(/stay in your browser on your device\. They are never uploaded/)
+    for (const copy of [LANDING_EN, LANDING_KO]) {
+      expect(copy.practice.cta.label).toBe(PRACTICE_MODE.label[copy.lang])
+      expect(copy.practice.items).toContain(PRACTICE_MODE.audio[copy.lang])
+      expect(copy.practice.items.join(' ')).toMatch(/\*\*(Writing|쓰기)\*\*/)
+      expect(copy.practice.items.join(' ')).toMatch(/\*\*(Speaking|말하기)\*\*/)
+      expect(copy.practice.next).toContain(FREE_WRITING_PATH)
+    }
+    expect(LANDING_EN.practice.cta.href).toBe(PATHS.practice)
+    expect(LANDING_KO.practice.cta.href).toBe(`${PATHS.practice}?lang=ko`)
+    expect(LANDING_EN.practice.intro).toMatch(/free, you do not need to sign in, and nothing you write or say is sent to us/)
+    expect(LANDING_KO.practice.intro).toMatch(/로그인이 필요 없으며/)
+    expect(LANDING_EN.hero.note).toContain(`[practise without feedback](${PATHS.practice})`)
+    expect(LANDING_EN.pricing.items[0]).toMatch(/^Practice without feedback: free/)
+    expect(PRICING_EN.free.items.join(' ')).toContain(`[Start practising](${PATHS.practice})`)
+    expect(text(LANDING_EN.faq.items)).toContain(PRACTICE_MODE.audio.en)
+    expect(text(LANDING_KO.faq.items)).toContain(PRACTICE_MODE.audio.ko)
+
+    const formats = text(section(FORMATS_INDEX, 'practice-mode'))
+    expect(formats).toContain(PRACTICE_MODE.label.en)
+    expect(formats).toContain(PRACTICE_MODE.audio.en)
+    expect(text(FORMATS_WRITING.page.intro)).toMatch(/Practise without feedback.*self-check list, free and without signing in/)
+    expect(text(FORMATS_SPEAKING.page.intro)).toContain(PRACTICE_MODE.audio.en)
+
+    const help = text(section(HELP_FEEDBACK, 'practice-mode'))
+    expect(help).toMatch(/free, needs no account and uses no AI/)
+    expect(help).toContain(PRACTICE_MODE.audio.en)
+    expect(help).toContain(`(${FREE_WRITING_PATH})`)
+    expect(text(section(HELP_RECORDING, 'practice-mode'))).toContain(PRACTICE_MODE.audio.en)
+    expect(text(section(HELP_PRIVACY, 'summary'))).toContain(PRACTICE_MODE.audio.en)
+    expect(text(section(PRIVACY, 'what-we-collect'))).toContain(PRACTICE_MODE.audio.en)
+    expect(text(section(AI_DISCLOSURE_PAGE, 'practice-mode'))).toMatch(/no AI is involved/)
+    expect(text(section(TERMS, 'free'))).toContain(PRACTICE_MODE.audio.en)
+    expect(NOT_FOUND.en.links.map((l) => l.href)).toContain(PATHS.practice)
+  })
+
+  it('keep the legal DRAFT notes pointing at the owner decisions still open (Z5)', () => {
+    expect(PRIVACY.draftComment).toMatch(/MPC_LEGAL_NAME/)
+    expect(PRIVACY.draftComment).toMatch(/\[미확인\].*4\.8\.2\(a\)/)
+    expect(TERMS.draftComment).toMatch(/\[미확인\] Ontario Business Names Act/)
+    expect(TERMS.draftComment).toMatch(/ServiceOntario/)
   })
 })

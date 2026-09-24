@@ -1,5 +1,5 @@
 # Level-B checks on demand (memo W3 "all level-B checks green" by Day 21; memo §7 "B:" acceptance cells),
-# against staging or production. Run from the Actions tab (also the GitHub mobile app):
+# against staging or production. Run from the Actions tab (on a phone: the web browser at github.com):
 # "Level-B checks" → Run workflow.
 #
 # Automated here:
@@ -15,12 +15,13 @@
 #                score must be at least 85 — scripts/lighthouse-check.ts. Chrome is the runner image's
 #                Google Chrome. The JSON and HTML reports are kept as a run artifact for 14 days.
 # Automated elsewhere: B16 root out/ diff (ci.yml), B0 staging deploy + smoke and the B11 rollback drill
-# (deploy.yml, manual run with target=staging and rollback_drill ticked), B8 Stripe ↔ D1 reconciliation (reconcile.yml), B11 missing-metrics alert (metrics.yml),
-# B12 eval (eval.yml).
+# (deploy.yml, manual run with target=staging and rollback_drill ticked), B8 Stripe ↔ D1 reconciliation
+# (reconcile.yml), B11 missing-metrics alert (metrics.yml), B12 eval (eval.yml, manual; "compare" for the
+# Opus 5 / Sonnet 5 choice).
 # MANUAL owner checks (memo §7.1 B11 / level B; steps and pass criteria in business/online/owner-setup.md
 # 2-7a): B6 test-mode purchase, self-refund and dispute on staging; B4 60-second speaking clips graded
 # in under 20 s on a real phone (mp4) and a desktop browser (webm); B15 a signed-in walkthrough of
-# staging; B13 the Google Ads import. The full list is in ops/README.md.
+# staging (Google sign-in). There are no ads to import (memo §7.2 Z1). The full list is in ops/README.md.
 #
 # Lighthouse CLI flags checked against the Lighthouse README (GoogleChrome/lighthouse readme.md, "CLI
 # options", fetched 2026-09-24; the same flags in `npx lighthouse@13.5.0 --help`): --only-categories, --form-factor (mobile|desktop), --output (json, html;
@@ -63,7 +64,7 @@ concurrency:
 
 jobs:
   site:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 5
     outputs:
       url: ${{ steps.site.outputs.url }}
@@ -88,7 +89,7 @@ jobs:
 
   checks:
     needs: site
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     defaults:
       run:
@@ -127,7 +128,7 @@ jobs:
 
   lighthouse:
     needs: site
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     defaults:
       run:

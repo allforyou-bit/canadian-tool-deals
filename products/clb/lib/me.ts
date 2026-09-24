@@ -110,3 +110,11 @@ export function accessEndsAt(me: MeResponse, now = new Date()): string | null {
   return candidates.reduce((a, b) => (new Date(b).getTime() > new Date(a).getTime() ? b : a))
 }
 
+
+/**
+ * Speaking feedback is open today: the site-wide daily budget for transcription is not used up (memo
+ * §7.2 Z2, SPEAKING_DAILY_AUDIO_MINUTES; resets at 00:00 UTC). A missing flag (an older Worker) is open.
+ */
+export function speakingOpen(me: MeResponse): boolean {
+  return me.flags.speakingAvailable !== false
+}

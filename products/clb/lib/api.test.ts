@@ -40,6 +40,7 @@ describe('error mapping', () => {
     ['too_large', 413],
     ['region_not_supported', 403],
     ['checkout_unavailable', 503],
+    ['at_capacity', 503],
   ] as const)('maps %s', async (code, status) => {
     vi.stubGlobal('fetch', vi.fn(async () => jsonResponse({ error: code, message: 'x' }, status)))
     const err = await caught(api.me())
@@ -127,6 +128,18 @@ describe('requests', () => {
     expect(item.taskId).toBe('email')
     expect(fetchMock.mock.calls[0][0]).toBe('/api/history/item?id=g%2F1%26x%3D2')
     expect(fetchMock.mock.calls[0][1]?.method).toBe('GET')
+  })
+
+  it('starts Google sign-in with the 18+ confirmation, the security token and the return path', async () => {
+    const url = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=x&state=y'
+    const fetchMock = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) => jsonResponse({ url }))
+    vi.stubGlobal('fetch', fetchMock)
+    const res = await api.googleStart({ lang: 'ko', adult: true, turnstileToken: 'tok', next: '/account/' })
+    expect(res.url).toBe(url)
+    expect(fetchMock.mock.calls[0][0]).toBe('/api/auth/google/start')
+    expect(fetchMock.mock.calls[0][1]?.method).toBe('POST')
+    expect(fetchMock.mock.calls[0][1]?.credentials).toBe('same-origin')
+    expect(JSON.parse(String(fetchMock.mock.calls[0][1]?.body))).toEqual({ lang: 'ko', adult: true, turnstileToken: 'tok', next: '/account/' })
   })
 
   it('posts the unsubscribe hash and signature without a session', async () => {

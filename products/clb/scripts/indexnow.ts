@@ -1,12 +1,15 @@
 // IndexNow (memo B9: "IndexNow ping from Actions"). Two commands, both run by deploy.yml:
 //
-//   node scripts/run.mjs scripts/indexnow.ts write-key --out out            (after the site build)
+//   node scripts/run.mjs scripts/indexnow.ts write-key --out out --site https://…   (after the site build)
 //   node scripts/run.mjs scripts/indexnow.ts ping --site https://… --sitemap out/sitemap.xml [--dry-run]
 //
-// The key comes from the environment variable INDEXNOW_KEY (the repository variable MPC_INDEXNOW_KEY).
-// It is not a secret — search engines fetch it from the site — so it is never committed either: the
-// key file `<key>.txt` (content: the key) is written into the static export at build time and served
-// from the site root. No key → both commands skip with a notice.
+// The key is the environment variable INDEXNOW_KEY (the repository variable MPC_INDEXNOW_KEY) when it is
+// set and valid; otherwise it is derived from the site's origin (memo §7.2 Z10: the first 32 hex characters
+// of its SHA-256), so the owner has nothing to set up and every deploy of the same site writes the same key.
+// It is not a secret — search engines fetch it from the site — so it is never committed either: the key file
+// `<key>.txt` (content: the key) is written into the static export at build time and served from the site
+// root. --site defaults to the SITE_URL environment variable; without a key and without a site both
+// commands skip with a notice.
 //
 // ping POSTs every sitemap URL on the site's host to https://api.indexnow.org/indexnow. It never fails
 // the deploy: HTTP or network errors print a warning and exit 0 (the step is also continue-on-error).
@@ -22,6 +25,37 @@ export const MAX_URLS = 10_000
 
 export function validIndexNowKey(key: string): boolean {
   return /^[A-Za-z0-9-]{8,128}$/.test(key)
+}
+
+/** The key for a site without MPC_INDEXNOW_KEY: the first 32 hex characters of SHA-256 of its origin. */
+export async function derivedIndexNowKey(siteUrl: string): Promise<string> {
+  const origin = new URL(siteUrl).origin
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(origin))
+  return [...new Uint8Array(digest)]
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('')
+    .slice(0, 32)
+}
+
+export type KeyChoice = { key: string; source: 'variable' | 'derived'; warning?: string } | { key: null; reason: string }
+
+/**
+ * The key to use: MPC_INDEXNOW_KEY when set and valid, else the key derived from the site (with a warning
+ * when the variable was set but invalid). Null only when there is neither a key nor a usable site URL.
+ */
+export async function resolveIndexNowKey(variable: string | undefined, siteUrl: string | undefined): Promise<KeyChoice> {
+  const v = (variable ?? '').trim()
+  if (v && validIndexNowKey(v)) return { key: v, source: 'variable' }
+  const warning = v ? 'MPC_INDEXNOW_KEY must be 8–128 characters of a–z, A–Z, 0–9 or "-"; using the key derived from the site instead' : undefined
+  let origin: string
+  try {
+    const u = new URL((siteUrl ?? '').trim())
+    if (u.protocol !== 'https:') throw new Error('not https')
+    origin = u.origin
+  } catch {
+    return { key: null, reason: `${warning ? `${warning}, but ` : ''}no https:// site URL (--site or SITE_URL) to derive a key from` }
+  }
+  return { key: await derivedIndexNowKey(origin), source: 'derived', ...(warning ? { warning } : {}) }
 }
 
 /** <loc> URLs from a sitemap whose host equals the site's host (duplicates removed, order kept). */
@@ -89,21 +123,20 @@ function argValue(args: string[], name: string): string | undefined {
 
 export async function main(args: string[]): Promise<number> {
   const [command, ...rest] = args
-  const key = (process.env.INDEXNOW_KEY ?? '').trim()
   const actions = process.env.GITHUB_ACTIONS === 'true'
   const warn = (text: string) => console.log(actions ? `::warning title=IndexNow::${text}` : `warning: ${text}`)
   if (command !== 'write-key' && command !== 'ping') {
-    console.error('usage: indexnow.ts write-key --out DIR | ping --site URL --sitemap FILE [--dry-run]')
+    console.error('usage: indexnow.ts write-key --out DIR [--site URL] | ping --site URL --sitemap FILE [--dry-run]')
     return 2
   }
-  if (!key) {
-    console.log('IndexNow: skipped — set the MPC_INDEXNOW_KEY repository variable (8–128 letters, digits or dashes) to enable it')
+  const site = (argValue(rest, '--site') ?? process.env.SITE_URL ?? '').trim().replace(/\/+$/, '')
+  const choice = await resolveIndexNowKey(process.env.INDEXNOW_KEY, site)
+  if (choice.key === null) {
+    console.log(`IndexNow: skipped — ${choice.reason}`)
     return 0
   }
-  if (!validIndexNowKey(key)) {
-    warn('MPC_INDEXNOW_KEY must be 8–128 characters of a–z, A–Z, 0–9 or "-"; IndexNow skipped')
-    return 0
-  }
+  if (choice.warning) warn(choice.warning)
+  const key = choice.key
   const { readFile, writeFile } = await import('node:fs/promises')
   const { existsSync } = await import('node:fs')
   const { join } = await import('node:path')
@@ -115,11 +148,10 @@ export async function main(args: string[]): Promise<number> {
       return 1
     }
     await writeFile(join(out, `${key}.txt`), key)
-    console.log(`IndexNow: wrote the key file to ${out}/ (served at /<key>.txt)`)
+    console.log(`IndexNow: wrote the key file to ${out}/ (served at /<key>.txt; key ${choice.source === 'variable' ? 'from MPC_INDEXNOW_KEY' : 'derived from the site URL'})`)
     return 0
   }
 
-  const site = argValue(rest, '--site') ?? ''
   const sitemap = argValue(rest, '--sitemap') ?? 'out/sitemap.xml'
   let urls: string[]
   try {

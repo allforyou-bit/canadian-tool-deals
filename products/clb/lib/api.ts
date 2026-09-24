@@ -6,6 +6,8 @@ import type {
   CheckoutResponse,
   DeleteAccountResponse,
   EventRequest,
+  GoogleStartRequest,
+  GoogleStartResponse,
   GradeResponse,
   HealthResponse,
   HistoryItemResponse,
@@ -59,6 +61,7 @@ const KNOWN_CODES: Record<ApiErrorCode, true> = {
   region_not_supported: true,
   grading_paused: true,
   checkout_unavailable: true,
+  at_capacity: true,
   free_unavailable: true,
   turnstile_failed: true,
   too_large: true,
@@ -179,6 +182,9 @@ export function speakingFormData(input: SpeakingGradeInput): FormData {
 export const api = {
   me: (signal?: AbortSignal) => apiRequest<MeResponse>('/api/me', { signal }),
   health: () => apiRequest<HealthResponse>('/api/health'),
+  /** Google sign-in: checks the 18+ box and Turnstile, then returns the Google URL to open (CONTRACT §2, memo §7.2 Z3) */
+  googleStart: (body: GoogleStartRequest) => post<GoogleStartResponse>('/api/auth/google/start', body),
+  /** email sign-in link: only the owner's address while MAGIC_LINK is 'owner' (MeResponse.auth.magicLink) */
   requestMagicLink: (body: MagicLinkRequest) => post<MagicLinkResponse>('/api/auth/magic-link', body),
   verify: (body: VerifyRequest) => post<VerifyResponse>('/api/auth/verify', body),
   logout: () => post<OkResponse>('/api/auth/logout'),

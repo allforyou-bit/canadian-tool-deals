@@ -3,12 +3,13 @@
 // were used, once per email (surviving account deletion through users.email_hash) and once per card.
 import type { RefundRequest, RefundResponse } from '../../../shared/api'
 import { REFUND_POLICY } from '../../../shared/config'
-import { alertOwner, sendEmail } from '../email'
+import { alertOwner } from '../email'
 import type { Ctx, Env } from '../env'
 import { error, json, readJson } from '../lib/http'
 import { addDays } from '../lib/time'
 import { revokePasses } from './entitlement'
 import { ERRORS, langOf, pick, selfRefundEmail } from './messages'
+import { emailBuyer } from './notify'
 import { EVENT_PATHS, deleteRefund, eventStatement, insertRefund, latestPaidPurchase, refundRowId } from './store'
 import { type Refund, describeError, stripeFetch } from './stripe'
 
@@ -63,10 +64,10 @@ export async function refundRequest(req: Request, ctx: Ctx): Promise<Response> {
     env.DB.prepare('UPDATE users SET self_refund_used = 1 WHERE id = ?1').bind(user.id),
     eventStatement(env, 'refund', EVENT_PATHS.refund, now),
   ])
-  await sendEmail(env, {
+  // The refund is done: the response says so whether or not this (optional) email goes out.
+  await emailBuyer(env, {
     to: user.email,
-    ...selfRefundEmail(lang, refundedCents),
-    kind: 'transactional',
+    ...selfRefundEmail(lang, refundedCents, purchase.receipt_url),
     idempotencyKey: `self-refund-${purchase.id}`,
   })
   return json({ ok: true, refundedCents } satisfies RefundResponse)

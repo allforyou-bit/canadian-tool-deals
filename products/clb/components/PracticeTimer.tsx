@@ -7,9 +7,9 @@ import { cls } from './ui'
 
 type TimerState = { running: false; remainingMs: number } | { running: true; endsAt: number }
 
-/** Optional countdown for writing practice. It never blocks submission. */
-export function PracticeTimer(props: { seconds: number; lang: Lang }) {
-  const { seconds, lang } = props
+/** Optional countdown for writing practice. It never blocks submission. `onStart` runs when it is started. */
+export function PracticeTimer(props: { seconds: number; lang: Lang; onStart?: () => void }) {
+  const { seconds, lang, onStart } = props
   const [state, setState] = useState<TimerState>({ running: false, remainingMs: seconds * 1000 })
   const [now, setNow] = useState(() => Date.now())
 
@@ -30,6 +30,7 @@ export function PracticeTimer(props: { seconds: number; lang: Lang }) {
   const toggle = () => {
     const at = Date.now()
     setNow(at)
+    if (!state.running) onStart?.()
     setState((s) => (s.running ? { running: false, remainingMs: Math.max(0, s.endsAt - at) } : { running: true, endsAt: at + s.remainingMs }))
   }
 

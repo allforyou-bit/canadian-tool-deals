@@ -1,18 +1,19 @@
-// First-party funnel events (CONTRACT §6). The browser may send only landing, sample_start and
-// sample_done; signup/checkout_start/purchase/refund are recorded by the Worker. No personal data:
-// only the path (no query string) and whitelisted campaign parameters.
+// First-party funnel events (CONTRACT §6). The browser may send only landing, sample_start,
+// sample_done, practice_start and practice_done (the free practice mode without AI, memo §7.2 Z9);
+// signup/checkout_start/purchase/refund are recorded by the Worker. No personal data and no answer
+// content: only the event name, the path (no query string) and whitelisted campaign parameters.
 import type { EventName, EventRequest } from '../shared/api'
 import { api } from './api'
 
-export type ClientEventName = Extract<EventName, 'landing' | 'sample_start' | 'sample_done'>
+export type ClientEventName = Extract<EventName, 'landing' | 'sample_start' | 'sample_done' | 'practice_start' | 'practice_done'>
 
-const CLIENT_EVENTS: readonly ClientEventName[] = ['landing', 'sample_start', 'sample_done']
+const CLIENT_EVENTS: readonly ClientEventName[] = ['landing', 'sample_start', 'sample_done', 'practice_start', 'practice_done']
 
 export const isClientEvent = (name: string): name is ClientEventName =>
   (CLIENT_EVENTS as readonly string[]).includes(name)
 
-/** Campaign parameters we keep from the landing URL. */
-export const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid'] as const
+/** Campaign parameters we keep from the landing URL (no ad click ids: the launch runs no ads, memo §7.2 Z1). */
+export const UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'] as const
 
 const MAX_VALUE_LENGTH = 100
 /** Same character set the Worker accepts (worker/src/events.ts): no "@", "/", "?", "=" or "%". */
@@ -61,7 +62,7 @@ function storedUtm(storage: KeyValueStore | null): Record<string, string> | unde
 // Fallback de-duplication for the life of this page when sessionStorage is unavailable.
 const sentInMemory = new Set<string>()
 
-/** landing: once per session; sample events: once per session per task page. */
+/** landing: once per session; sample and practice events: once per session per task page. */
 export function dedupeKey(name: ClientEventName, path: string): string {
   return name === 'landing' ? SENT_PREFIX + name : `${SENT_PREFIX}${name}:${path}`
 }

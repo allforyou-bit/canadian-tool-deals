@@ -71,12 +71,27 @@ export async function readJson<T>(req: Request, maxBytes = 64 * 1024): Promise<T
   }
 }
 
-/** Parse multipart/form-data with a byte limit; 'too_large' when over it, null when not valid form data. */
-export async function readFormDataLimited(req: Request, maxBytes: number): Promise<FormData | 'too_large' | null> {
-  const bytes = await readBodyLimited(req, maxBytes)
-  if (!bytes) return 'too_large'
+/** A Content-Length header as a byte count; null when missing or not a plain non-negative integer. */
+export function declaredLength(req: Request): number | null {
+  const raw = req.headers.get('content-length')?.trim() ?? ''
+  if (!/^\d{1,15}$/.test(raw)) return null
+  return Number(raw)
+}
+
+/**
+ * Parse multipart/form-data with a byte limit (memo §7.2 Z2). The body must declare its size: a missing
+ * or malformed Content-Length is 'length_required' and one over the limit is 'too_large', both answered
+ * before a byte is read. The body is then parsed by the runtime's own req.formData(), which costs far
+ * less CPU than streaming and copying it in JavaScript (Workers Free allows 10 ms per request). The HTTP
+ * layer frames an incoming body by its Content-Length; callers still check the size of each part.
+ * Browsers always send Content-Length with a FormData body. null when the body is not valid form data.
+ */
+export async function readFormDataLimited(req: Request, maxBytes: number): Promise<FormData | 'too_large' | 'length_required' | null> {
+  const declared = declaredLength(req)
+  if (declared === null) return 'length_required'
+  if (declared > maxBytes) return 'too_large'
   try {
-    return await new Response(bytes, { headers: { 'content-type': req.headers.get('content-type') ?? '' } }).formData()
+    return await req.formData()
   } catch {
     return null
   }

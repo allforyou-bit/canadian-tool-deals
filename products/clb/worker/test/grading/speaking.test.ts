@@ -1,14 +1,30 @@
 import { env } from 'cloudflare:test'
 import { exports } from 'cloudflare:workers'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { ApiError, GradeResponse } from '../../../shared/api'
-import { CAPS } from '../../../shared/config'
+import { CAPS, SPEAKING_DAILY_AUDIO_MINUTES } from '../../../shared/config'
 import type { Env, User } from '../../src/env'
 import { gradeSpeaking } from '../../src/grading'
 import { SAFETY_REFUSAL } from '../../src/grading/copy'
-import { toBase64, WHISPER_MODEL } from '../../src/grading/transcribe'
+import { audioInputMode, resetAudioInputMode, toBase64, WHISPER_MODEL } from '../../src/grading/transcribe'
 import { tokenCostMicroUsd, whisperCostMicroUsd } from '../../src/lib/spend'
-import { apiMessage, createUser, gradeRow, gradeRowsFor, makeCtx, ORIGIN, SIMPLE_OUTPUT, stubGrader, USAGE } from './helpers'
+import {
+  apiMessage,
+  createUser,
+  gradeRow,
+  gradeRowsFor,
+  makeCtx,
+  multipartRequest,
+  ORIGIN,
+  SIMPLE_OUTPUT,
+  stubGrader,
+  USAGE,
+} from './helpers'
+
+beforeEach(() => {
+  // each test starts as a fresh isolate that has not yet tried the stream form
+  resetAudioInputMode()
+})
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -30,7 +46,7 @@ interface FormFields {
   durationSeconds?: string
 }
 
-function speakingRequest(f: FormFields = {}): Request {
+function speakingForm(f: FormFields = {}): FormData {
   const form = new FormData()
   form.set('taskId', f.taskId ?? 'advice')
   form.set('promptIndex', f.promptIndex ?? '0')
@@ -38,23 +54,47 @@ function speakingRequest(f: FormFields = {}): Request {
   const audio = f.audio === undefined ? audioFile() : f.audio
   if (audio) form.set('audio', audio)
   if (f.durationSeconds !== undefined) form.set('durationSeconds', f.durationSeconds)
-  return new Request(`${ORIGIN}/api/grade/speaking`, { method: 'POST', body: form })
+  return form
 }
+
+/** The upload as a browser sends it: multipart with Content-Length. */
+const speakingRequest = (f: FormFields = {}): Promise<Request> => multipartRequest(`${ORIGIN}/api/grade/speaking`, speakingForm(f))
 
 type AiResult = { text?: string; transcription_info?: { duration?: number } }
+/** What the fake Workers AI received: the raw stream ({body, contentType}) or a base64 string. */
+interface AudioInput {
+  form: 'stream' | 'base64'
+  bytes: Uint8Array
+  contentType?: string
+}
+type AiAnswer = AiResult | Error
 
-function fakeAi(result: AiResult | Error) {
-  return {
-    run: vi.fn(async (_model: string, _inputs: Record<string, unknown>) => {
-      if (result instanceof Error) throw result
-      return result
-    }),
-  }
+const fromBase64 = (b64: string) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0))
+
+/** A fake env.AI: one answer for every call, or separate answers for the stream and base64 forms. */
+function fakeAi(answer: AiAnswer | { stream: AiAnswer; base64: AiAnswer }) {
+  const inputs: AudioInput[] = []
+  const run = vi.fn(async (_model: string, params: Record<string, unknown>) => {
+    const audio = params.audio
+    const input: AudioInput =
+      typeof audio === 'string'
+        ? { form: 'base64', bytes: fromBase64(audio) }
+        : {
+            form: 'stream',
+            bytes: new Uint8Array(await new Response((audio as { body: ReadableStream }).body).arrayBuffer()),
+            contentType: (audio as { contentType: string }).contentType,
+          }
+    inputs.push(input)
+    const a = answer instanceof Error || !('stream' in answer) ? answer : answer[input.form]
+    if (a instanceof Error) throw a
+    return a
+  })
+  return { run, inputs }
 }
 
-function call(user: User, ai: ReturnType<typeof fakeAi>, fields: FormFields = {}): Promise<Response> {
+async function call(user: User, ai: ReturnType<typeof fakeAi>, fields: FormFields = {}): Promise<Response> {
   const testEnv = { ...(env as Env), AI: ai as unknown as Ai }
-  return gradeSpeaking(speakingRequest(fields), makeCtx({ env: testEnv, user }))
+  return gradeSpeaking(await speakingRequest(fields), makeCtx({ env: testEnv, user }))
 }
 
 async function expectError(res: Response, status: number, code: ApiError['error']): Promise<ApiError> {
@@ -84,9 +124,17 @@ describe('POST /api/grade/speaking', () => {
     expect(res.status).toBe(200)
     const body = (await res.json()) as GradeResponse
 
-    const audioB64 = toBase64(new Uint8Array(await audio.arrayBuffer()))
+    // the audio goes to Workers AI as a raw stream, with no base64 in the Worker (memo §7.2 Z2)
+    const audioBytes = new Uint8Array(await audio.arrayBuffer())
+    const audioB64 = toBase64(audioBytes)
     expect(ai.run).toHaveBeenCalledTimes(1)
-    expect(ai.run).toHaveBeenCalledWith(WHISPER_MODEL, { audio: audioB64, task: 'transcribe', language: 'en' })
+    expect(ai.run).toHaveBeenCalledWith(WHISPER_MODEL, {
+      audio: { body: expect.any(ReadableStream), contentType: 'audio/webm;codecs=opus' },
+      task: 'transcribe',
+      language: 'en',
+    })
+    expect(ai.inputs).toEqual([{ form: 'stream', bytes: audioBytes, contentType: 'audio/webm;codecs=opus' }])
+    expect(audioInputMode()).toBe('stream')
 
     expect(body.free).toBe(false)
     expect(body.result.transcript).toBe(TRANSCRIPT)
@@ -136,35 +184,85 @@ describe('POST /api/grade/speaking', () => {
     })
   }
 
-  it('rejects a chunked upload over the byte limit without buffering or transcribing it', async () => {
-    const { user } = await createUser({ pass: true })
-    const ai = fakeAi({ text: TRANSCRIPT })
+  /** A 4 MB chunked multipart body that counts how many chunks were read. */
+  function countingBody() {
     const chunk = new Uint8Array(256 * 1024)
-    let sent = 0
+    const state = { sent: 0 }
     const body = new ReadableStream<Uint8Array>({
       pull(controller) {
-        // 4 MB in total, more than CAPS.maxAudioBytes plus the multipart allowance; no Content-Length
-        if (sent >= 16) return controller.close()
-        sent++
+        if (state.sent >= 16) return controller.close()
+        state.sent++
         controller.enqueue(chunk)
       },
     })
+    return { body, state }
+  }
+
+  it('refuses an upload without Content-Length before reading it (length required)', async () => {
+    const { user } = await createUser()
+    const ai = fakeAi({ text: TRANSCRIPT })
+    const { body, state } = countingBody()
     const req = new Request(`${ORIGIN}/api/grade/speaking`, {
       method: 'POST',
       headers: { 'content-type': 'multipart/form-data; boundary=x' },
       body,
     })
     expect(req.headers.get('content-length')).toBeNull()
-    const res = await gradeSpeaking(req, makeCtx({ env: { ...(env as Env), AI: ai as unknown as Ai }, user }))
-    await expectError(res, 413, 'too_large')
+    const err = await expectError(await gradeSpeaking(req, makeCtx({ env: { ...(env as Env), AI: ai as unknown as Ai }, user })), 400, 'bad_request')
+    expect(err.message).toBe('Length required: the upload did not say its size. Please try again.')
+    expect(req.bodyUsed).toBe(false)
+    // at most the stream's initial pull; nothing parsed, transcribed or claimed
+    expect(state.sent).toBeLessThanOrEqual(1)
     expect(ai.run).not.toHaveBeenCalled()
-    expect(sent).toBeLessThan(16)
+    expect(await freeSpeakingUsed(user.id)).toBe(0)
+    expect(await gradeRowsFor(user.id)).toEqual([])
+  })
+
+  for (const length of ['abc', '-1', '1e3', '12.5', ' ']) {
+    it(`treats Content-Length "${length}" as missing`, async () => {
+      const { user } = await createUser({ pass: true })
+      const ai = fakeAi({ text: TRANSCRIPT })
+      const req = await multipartRequest(`${ORIGIN}/api/grade/speaking`, speakingForm(), { 'content-length': length })
+      const err = await expectError(await gradeSpeaking(req, makeCtx({ env: { ...(env as Env), AI: ai as unknown as Ai }, user })), 400, 'bad_request')
+      expect(err.message).toContain('Length required')
+      expect(ai.run).not.toHaveBeenCalled()
+    })
+  }
+
+  it('refuses a declared Content-Length over the limit without reading the body', async () => {
+    const { user } = await createUser({ pass: true })
+    const ai = fakeAi({ text: TRANSCRIPT })
+    const { body, state } = countingBody()
+    const req = new Request(`${ORIGIN}/api/grade/speaking`, {
+      method: 'POST',
+      headers: { 'content-type': 'multipart/form-data; boundary=x', 'content-length': String(16 * 256 * 1024) },
+      body,
+    })
+    const err = await expectError(await gradeSpeaking(req, makeCtx({ env: { ...(env as Env), AI: ai as unknown as Ai }, user })), 413, 'too_large')
+    expect(err.message).toBe(`Recordings can be up to ${CAPS.maxAudioSeconds} seconds and 1 MB.`)
+    expect(req.bodyUsed).toBe(false)
+    expect(state.sent).toBeLessThanOrEqual(1)
+    expect(ai.run).not.toHaveBeenCalled()
+  })
+
+  it('accepts a body just under the form limit (1 MB of audio plus the multipart allowance)', async () => {
+    const { user } = await createUser({ pass: true })
+    stubGrader(apiMessage(SIMPLE_OUTPUT))
+    const ai = fakeAi({ text: TRANSCRIPT, transcription_info: { duration: 100 } })
+    const res = await call(user, ai, { audio: audioFile(CAPS.maxAudioBytes) })
+    expect(res.status).toBe(200)
+    expect(ai.inputs[0].bytes.byteLength).toBe(CAPS.maxAudioBytes)
   })
 
   it('rejects a body that is not multipart form data', async () => {
     const { user } = await createUser({ pass: true })
-    const req = new Request(`${ORIGIN}/api/grade/speaking`, { method: 'POST', headers: { 'content-type': 'text/plain' }, body: 'hello' })
-    await expectError(await gradeSpeaking(req, makeCtx({ user })), 400, 'bad_request')
+    const req = new Request(`${ORIGIN}/api/grade/speaking`, {
+      method: 'POST',
+      headers: { 'content-type': 'text/plain', 'content-length': '5' },
+      body: 'hello',
+    })
+    const err = await expectError(await gradeSpeaking(req, makeCtx({ user })), 400, 'bad_request')
+    expect(err.message).toBe('Expected multipart form data')
   })
 
   it('rejects audio over the size cap', async () => {
@@ -365,5 +463,100 @@ describe('speaking caps', () => {
     expect(ai.run).not.toHaveBeenCalled()
     // the free sample claimed for the request is given back
     expect(await freeSpeakingUsed(user.id)).toBe(0)
+  })
+})
+
+describe('speech-to-text input form (memo §7.2 Z2)', () => {
+  it('falls back to base64 when Workers AI rejects the stream form, then keeps using base64', async () => {
+    const { user } = await createUser({ pass: true })
+    stubGrader(apiMessage(SIMPLE_OUTPUT))
+    const ai = fakeAi({ stream: new Error('5006: could not parse input'), base64: { text: TRANSCRIPT, transcription_info: { duration: 30 } } })
+    const audio = audioFile(5000)
+    const res = await call(user, ai, { audio })
+    expect(res.status).toBe(200)
+    const body = (await res.json()) as GradeResponse
+    expect(body.result.transcript).toBe(TRANSCRIPT)
+    const bytes = new Uint8Array(await audio.arrayBuffer())
+    expect(ai.inputs.map((i) => i.form)).toEqual(['stream', 'base64'])
+    expect(ai.inputs[1].bytes).toEqual(bytes)
+    expect(ai.run).toHaveBeenLastCalledWith(WHISPER_MODEL, { audio: toBase64(bytes), task: 'transcribe', language: 'en' })
+    expect(audioInputMode()).toBe('base64')
+    // one row, one speech-to-text cost: the rejected stream call is not billed as audio
+    expect(await gradeRow(body.gradeId)).toMatchObject({ outcome: 'graded', audio_seconds: 30 })
+
+    // the next request in this isolate goes straight to base64
+    expect((await call(user, ai)).status).toBe(200)
+    expect(ai.inputs.map((i) => i.form)).toEqual(['stream', 'base64', 'base64'])
+  })
+
+  it('does not retry once the stream form has worked in this isolate', async () => {
+    const { user } = await createUser({ pass: true })
+    stubGrader(apiMessage(SIMPLE_OUTPUT))
+    let fail = false
+    const ai = fakeAi({ text: TRANSCRIPT, transcription_info: { duration: 20 } })
+    const run = ai.run.getMockImplementation()!
+    ai.run.mockImplementation(async (model, params) => {
+      const out = await run(model, params)
+      if (fail) throw new Error('4006: daily free allocation used up')
+      return out
+    })
+    expect((await call(user, ai)).status).toBe(200)
+    expect(audioInputMode()).toBe('stream')
+    fail = true
+    await expectError(await call(user, ai), 500, 'internal')
+    expect(ai.inputs.map((i) => i.form)).toEqual(['stream', 'stream'])
+  })
+})
+
+describe('shared daily speaking allowance (memo §7.2 Z2)', () => {
+  /** Finished speaking rows today that use up the whole allowance; removed by the returned cleanup. */
+  async function fillAllowance(): Promise<() => Promise<void>> {
+    const id = 'g_allowance_' + Date.now()
+    await env.DB.prepare(
+      `INSERT INTO grades (id, task_id, prompt_index, kind, model, audio_seconds, created_at) VALUES (?1, 'advice', 0, 'speaking', ?2, ?3, ?4)`,
+    )
+      .bind(id, WHISPER_MODEL, SPEAKING_DAILY_AUDIO_MINUTES * 60, new Date().toISOString())
+      .run()
+    return async () => {
+      await env.DB.prepare('DELETE FROM grades WHERE id = ?1').bind(id).run()
+    }
+  }
+
+  it('answers at_capacity before the upload is read, claiming and spending nothing', async () => {
+    const { user } = await createUser()
+    const holder = await createUser({ pass: true })
+    const ai = fakeAi({ text: TRANSCRIPT, transcription_info: { duration: 30 } })
+    const { calls } = stubGrader(apiMessage(SIMPLE_OUTPUT))
+    const cleanup = await fillAllowance()
+    try {
+      for (const u of [user, holder.user]) {
+        const req = await speakingRequest()
+        const res = await gradeSpeaking(req, makeCtx({ env: { ...(env as Env), AI: ai as unknown as Ai }, user: u }))
+        const err = await expectError(res, 503, 'at_capacity')
+        expect(err.message).toBe(
+          'Speaking feedback has reached its limit for today. It reopens at midnight UTC. You can still practise speaking without feedback.',
+        )
+        expect(req.bodyUsed).toBe(false)
+        expect(await gradeRowsFor(u.id)).toEqual([])
+      }
+    } finally {
+      await cleanup()
+    }
+    expect(ai.run).not.toHaveBeenCalled()
+    expect(calls).toHaveLength(0)
+    expect(await freeSpeakingUsed(user.id)).toBe(0)
+    // the allowance is back (a new day, here: the rows are gone): the free sample still works
+    const body = (await (await call(user, ai)).json()) as GradeResponse
+    expect(body.free).toBe(true)
+  })
+
+  it('still answers unauthorized first for signed-out requests', async () => {
+    const cleanup = await fillAllowance()
+    try {
+      const res = await gradeSpeaking(await speakingRequest(), makeCtx({ user: null }))
+      await expectError(res, 401, 'unauthorized')
+    } finally {
+      await cleanup()
+    }
   })
 })

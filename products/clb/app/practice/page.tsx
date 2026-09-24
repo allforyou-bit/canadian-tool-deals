@@ -7,7 +7,8 @@ import { SPEAKING_TASKS, WRITING_TASKS, type TaskType } from '../../shared/tasks
 
 export const metadata: Metadata = {
   title: 'Practice tasks',
-  description: 'Two writing and eight speaking practice task types with AI feedback. Your first writing task is free.',
+  description:
+    'Two writing and eight speaking practice task types with AI feedback. Your first writing task is free, and every task can be practised without feedback for free.',
 }
 
 function TaskList(props: { tasks: TaskType[] }) {

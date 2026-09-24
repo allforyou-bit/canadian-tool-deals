@@ -1,6 +1,6 @@
 import { env } from 'cloudflare:test'
 import { describe, expect, it } from 'vitest'
-import { CAPS } from '../../shared/config'
+import { CAPS, SPEAKING_DAILY_AUDIO_MINUTES } from '../../shared/config'
 import { addDays, startOfUtcDay } from '../src/lib/time'
 import {
   capReached,
@@ -10,6 +10,8 @@ import {
   recordFreeSpeaking,
   recordFreeWriting,
   reserveGrade,
+  speakingAvailableToday,
+  speakingMinutesToday,
 } from '../src/lib/usage'
 
 const now = new Date('2026-10-05T12:00:00Z')
@@ -171,5 +173,47 @@ describe('round-2 fixes', () => {
     const s = await spendSnapshot(env, at)
     expect(s.freeTodayUsd).toBe(0)
     expect(evaluateTiers(s).freeOff).toBe(false)
+  })
+})
+
+describe('shared daily speaking allowance (memo §7.2 Z2)', () => {
+  let k = 0
+  const speakingRow = (createdAt: string, o: { seconds?: number; pending?: number; kind?: string; userId?: string | null }) =>
+    env.DB.prepare(
+      `INSERT INTO grades (id, user_id, task_id, prompt_index, kind, pending, model, audio_seconds, created_at)
+       VALUES (?1, ?2, 'advice', 0, ?3, ?4, 'm', ?5, ?6)`,
+    ).bind(`g_allow_${++k}`, o.userId ?? null, o.kind ?? 'speaking', o.pending ?? 0, o.seconds ?? 0, createdAt)
+
+  it('adds up audio minutes of every user today, counting calls in flight as full-length answers', async () => {
+    const day = new Date('2026-11-20T15:00:00Z')
+    expect(await speakingMinutesToday(env, day)).toBe(0)
+    await env.DB.batch([
+      speakingRow('2026-11-19T23:59:59.999Z', { seconds: 6000 }), // yesterday: not counted
+      speakingRow('2026-11-20T00:00:00.000Z', { seconds: 90 }),
+      speakingRow('2026-11-20T09:30:00.000Z', { seconds: 30, userId: 'u_a' }),
+      speakingRow('2026-11-20T10:00:00.000Z', { pending: 1 }), // running: counts as CAPS.maxAudioSeconds
+      speakingRow('2026-11-20T10:00:01.000Z', { pending: 1, kind: 'writing' }), // writing in flight: no audio
+    ])
+    expect(await speakingMinutesToday(env, day)).toBe((90 + 30 + CAPS.maxAudioSeconds) / 60)
+    expect(await speakingAvailableToday(env, day)).toBe(true)
+  })
+
+  it(`closes speaking for the day at ${SPEAKING_DAILY_AUDIO_MINUTES} audio minutes and reopens at 00:00 UTC`, async () => {
+    const day = new Date('2026-11-21T20:00:00Z')
+    const limit = SPEAKING_DAILY_AUDIO_MINUTES * 60
+    await env.DB.batch([speakingRow('2026-11-21T01:00:00.000Z', { seconds: limit - CAPS.maxAudioSeconds - 1 })])
+    expect(await speakingAvailableToday(env, day)).toBe(true)
+    // one more answer in flight takes it to one second short of the allowance
+    await env.DB.batch([speakingRow('2026-11-21T19:59:00.000Z', { pending: 1 })])
+    expect(await speakingMinutesToday(env, day)).toBeCloseTo(SPEAKING_DAILY_AUDIO_MINUTES - 1 / 60, 10)
+    expect(await speakingAvailableToday(env, day)).toBe(true)
+    await env.DB.batch([speakingRow('2026-11-21T19:59:30.000Z', { seconds: 1 })])
+    expect(await speakingMinutesToday(env, day)).toBe(SPEAKING_DAILY_AUDIO_MINUTES)
+    expect(await speakingAvailableToday(env, day)).toBe(false)
+    expect(await speakingAvailableToday(env, new Date('2026-11-22T00:00:00Z'))).toBe(true)
+  })
+
+  it('stays within the Workers AI free allocation (10,000 neurons/day at 46.63 neurons per audio minute)', () => {
+    expect(SPEAKING_DAILY_AUDIO_MINUTES * 46.63).toBeLessThan(10_000)
   })
 })

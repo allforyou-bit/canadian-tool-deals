@@ -4,7 +4,7 @@
 // is config (MODELS.defaultGrader, GRADER_MODEL), so the page names the model family, not a version.
 import { AI_DISCLOSURE, BRAND } from '../../shared/config'
 import { PATHS } from '../routes'
-import { CONTACT_LINES_EN, FILTER_EN, LAST_REVIEWED } from '../site'
+import { CONTACT_LINES_EN, FILTER_EN, LAST_REVIEWED, PRACTICE_MODE } from '../site'
 import type { LegalPage } from '../types'
 
 export const AI_DISCLOSURE_PAGE: LegalPage = {
@@ -48,6 +48,13 @@ export const AI_DISCLOSURE_PAGE: LegalPage = {
             'Feedback is not a score and does not predict test results.',
           ],
         },
+      ],
+    },
+    {
+      id: 'practice-mode',
+      heading: 'Practising without feedback uses no AI',
+      blocks: [
+        `When you choose "${PRACTICE_MODE.label.en}" on a practice page, no AI is involved: nothing you write or record is sent to Anthropic, to Cloudflare Workers AI or to us. ${PRACTICE_MODE.audio.en}`,
       ],
     },
     {

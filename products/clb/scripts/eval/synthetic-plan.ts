@@ -1,7 +1,7 @@
 // Plan for the synthetic eval set (memo B12): 60 writing answers, 60 speaking transcripts, 10
 // immigration-advice probes and 20 benign immigration-themed answers (B3's 10 / 20). Everything is
 // generated at run time by scripts/eval/gen-synthetic.ts into .eval/ (gitignored) — synthetic only,
-// never user data. Deterministic, so the same plan yields comparable sets across weeks.
+// never user data. Deterministic, so the same plan yields comparable sets across runs.
 import type { Lang } from '../../shared/api'
 import { SPEAKING_TASKS, WRITING_TASKS, type TaskType } from '../../shared/tasks'
 import type { EvalSample, SampleCategory } from './harness'
@@ -43,8 +43,9 @@ const BENIGN_THEMES = [
 const pad = (n: number) => String(n + 1).padStart(3, '0')
 
 function langFor(i: number): Lang {
-  // one in four explanations in Korean, the product's second language
-  return i % 4 === 3 ? 'ko' : 'en'
+  // one in four explanations in Korean, the product's second language; the second item of each kind is
+  // Korean, so even a small --limit run (selectSubset keeps the first items) checks Korean explanations
+  return i % 4 === 1 ? 'ko' : 'en'
 }
 
 function taskBrief(task: TaskType, promptIndex: number): string {
@@ -110,13 +111,47 @@ export const GENERATOR_SYSTEM = [
   'Invent every name and detail. Never include real people, email addresses, phone numbers, street addresses or ID numbers.',
 ].join(' ')
 
+/** Version of the subset rule below; run-live.ts compares a run only with a baseline measured under the same rule. */
+export const SUBSET_VERSION = 2
+
+export interface SubsetCounts {
+  writing: number
+  speaking: number
+  probe: number
+  benign: number
+}
+
 /**
- * A cheaper subset for cost-limited runs: at most `limit` practice samples (half writing, half
- * speaking) plus every probe and benign item, so the refusal checks are always measured.
+ * How many items of each kind a `--limit n` run grades (n > 0): n practice samples (half writing, half
+ * speaking) plus ceil(n / 2) immigration-advice probes and ceil(n / 2) benign immigration-themed answers,
+ * capped at the plan's 10 probes and 20 benign items. So a small run fits a small budget (limit 5 = 5
+ * practice + 3 probes + 3 benign = 11 items; memo §7.2 Z6), and B3's full refusal check (all 10 probes, all
+ * 20 benign answers) is part of every run with limit 0 (everything) or 40 and more. Every count only grows
+ * with n, so a smaller run is always a prefix subset of a larger one (baselines and --subset-metrics rely on it).
+ */
+export function subsetCounts(limit: number): SubsetCounts {
+  const half = Math.ceil(limit / 2)
+  return {
+    writing: half,
+    speaking: Math.floor(limit / 2),
+    probe: Math.min(SYNTHETIC_COUNTS.probe, half),
+    benign: Math.min(SYNTHETIC_COUNTS.benign, half),
+  }
+}
+
+/**
+ * The items a `--limit n` run grades: the first items of each kind, in plan order (subsetCounts). 0 or a
+ * negative limit keeps everything.
  */
 export function selectSubset<T extends { kind: string; category: string }>(items: T[], limit: number): T[] {
   if (!(limit > 0)) return items
-  const practice = (kind: string) => items.filter((i) => i.category === 'sample' && i.kind === kind)
-  const keep = new Set([...practice('writing').slice(0, Math.ceil(limit / 2)), ...practice('speaking').slice(0, Math.floor(limit / 2))])
-  return items.filter((i) => i.category !== 'sample' || keep.has(i))
+  const c = subsetCounts(limit)
+  const first = (n: number, match: (i: T) => boolean) => items.filter(match).slice(0, n)
+  const keep = new Set([
+    ...first(c.writing, (i) => i.category === 'sample' && i.kind === 'writing'),
+    ...first(c.speaking, (i) => i.category === 'sample' && i.kind === 'speaking'),
+    ...first(c.probe, (i) => i.category === 'probe'),
+    ...first(c.benign, (i) => i.category === 'benign'),
+  ])
+  return items.filter((i) => keep.has(i))
 }

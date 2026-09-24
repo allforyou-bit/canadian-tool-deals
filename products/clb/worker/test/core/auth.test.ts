@@ -2,7 +2,16 @@ import { env } from 'cloudflare:workers'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { MARKETING_CONSENT } from '../../../shared/config'
 import { findClaims } from '../../../shared/content-rules'
-import { acceptedConsentText, AUTH_KV, expectedConsentText, mailingAddressMissing, requestMagicLink, signInEmail } from '../../src/auth'
+import {
+  acceptedConsentText,
+  expectedConsentText,
+  MAGIC_LINK_USAGE_KIND,
+  magicLinkAllows,
+  magicLinkMode,
+  mailingAddressMissing,
+  requestMagicLink,
+  signInEmail,
+} from '../../src/auth'
 import type { Ctx, Env } from '../../src/env'
 import { saltedHash } from '../../src/lib/crypto'
 import { isDisposableEmail } from '../../src/lib/disposable'
@@ -18,13 +27,27 @@ import {
   ORIGIN,
   sessionFromSetCookie,
   sessionHash,
+  setEnv,
   signIn,
   stubFetch,
   uniqueEmail,
+  useEmailSignInForEveryone,
   userByEmail,
 } from './helpers'
 
 const PLACEHOLDER = 'SET-BEFORE-LAUNCH (CASL: owner mailing address)'
+
+// most tests here exercise the email link for any address; the launch defaults are tested below
+useEmailSignInForEveryone()
+
+/** sign-in link sends recorded in D1 for this address (free_usage kind 'ml') */
+async function linkSends(email: string): Promise<number> {
+  return count(
+    'SELECT COALESCE(SUM(count), 0) AS n FROM free_usage WHERE key_hash = ?1 AND kind = ?2',
+    await emailHashOf(email),
+    MAGIC_LINK_USAGE_KIND,
+  )
+}
 
 // no test may reach the network: every outbound call hits a stub (tests re-stub when they need to)
 beforeEach(() => {
@@ -126,27 +149,37 @@ describe('POST /api/auth/magic-link', () => {
     const res = await api('/api/auth/magic-link', { body: magicLinkBody(email) })
     expect(res.status).toBe(500)
     expect(await count('SELECT COUNT(*) AS n FROM magic_links WHERE email = ?1', email)).toBe(0)
-    expect(await env.FLAGS.get(AUTH_KV.magicLinks(await emailHashOf(email)))).toBeNull()
+    expect(await linkSends(email)).toBe(0)
   })
 
-  it('keeps the hourly limit in a KV window keyed by the email hash (no D1 rows needed)', async () => {
-    const email = uniqueEmail('kvwindow')
-    const key = AUTH_KV.magicLinks(await emailHashOf(email))
-    const nowSec = Math.floor(Date.now() / 1000)
+  it('keeps the hourly limit in D1 under the email hash (free_usage "ml", one row per send), not in KV', async () => {
+    const email = uniqueEmail('d1window')
+    const hash = await emailHashOf(email)
+    const put = vi.spyOn(env.FLAGS, 'put')
+    const at = (msAgo: number) => new Date(Date.now() - msAgo).toISOString()
+    const add = (day: string) =>
+      env.DB.prepare("INSERT INTO free_usage (key_hash, kind, day, count) VALUES (?1, 'ml', ?2, 1)").bind(hash, day).run()
 
-    await env.FLAGS.put(key, JSON.stringify({ n: 3, until: nowSec + 1800 }))
+    // sends older than an hour do not count
+    for (const ago of [3_601_000, 3_700_000, 7_200_000]) await add(at(ago))
+    expect((await api('/api/auth/magic-link', { body: magicLinkBody(email) })).status).toBe(200)
+    const row = await env.DB.prepare(
+      "SELECT day, count FROM free_usage WHERE key_hash = ?1 AND kind = 'ml' ORDER BY day DESC LIMIT 1",
+    )
+      .bind(hash)
+      .first<{ day: string; count: number }>()
+    expect(row?.count).toBe(1)
+    expect(Date.now() - Date.parse(row!.day)).toBeLessThan(60_000)
+    expect(row?.day).not.toContain(email)
+
+    // three sends in the last hour block the next one, even without magic_links rows (a deleted account)
+    await env.DB.prepare('DELETE FROM magic_links WHERE email = ?1').bind(email).run()
+    await add(at(1_000))
+    await add(at(2_000))
     const blocked = await api('/api/auth/magic-link', { body: magicLinkBody(email) })
     expect(blocked.status).toBe(429)
-
-    // an elapsed window starts a new one
-    await env.FLAGS.put(key, JSON.stringify({ n: 3, until: nowSec - 1 }))
-    expect((await api('/api/auth/magic-link', { body: magicLinkBody(email) })).status).toBe(200)
-    const w = JSON.parse((await env.FLAGS.get(key))!) as { n: number; until: number }
-    expect(w.n).toBe(1)
-    expect(w.until - nowSec).toBeGreaterThanOrEqual(3599)
-    expect(w.until - nowSec).toBeLessThanOrEqual(3601)
-    await env.FLAGS.put(key, 'not json')
-    expect((await api('/api/auth/magic-link', { body: magicLinkBody(email) })).status).toBe(200)
+    expect(put).not.toHaveBeenCalled()
+    put.mockRestore()
   })
 
   it('the hourly limit survives account deletion (decision 9)', async () => {
@@ -158,6 +191,78 @@ describe('POST /api/auth/magic-link', () => {
     expect(await count('SELECT COUNT(*) AS n FROM magic_links WHERE email = ?1', email)).toBe(0)
     const again = await api('/api/auth/magic-link', { body: magicLinkBody(email) })
     expect(again.status).toBe(429)
+  })
+})
+
+describe('MAGIC_LINK modes (memo §7.2 Z3: the email link is for the owner at launch)', () => {
+  const base = { OWNER_EMAIL: 'Owner@Coach.test' } as Env
+
+  it('reads the mode, defaulting to owner for unset or unknown values', () => {
+    expect(magicLinkMode(base)).toBe('owner')
+    expect(magicLinkMode({ ...base, MAGIC_LINK: ' ALL ' })).toBe('all')
+    expect(magicLinkMode({ ...base, MAGIC_LINK: 'off' })).toBe('off')
+    expect(magicLinkMode({ ...base, MAGIC_LINK: 'everyone' })).toBe('owner')
+  })
+
+  it('owner: only OWNER_EMAIL; all: anyone; off: nobody; a staging list overrides owner/all', () => {
+    expect(magicLinkAllows(base, 'owner@coach.test')).toBe('ok')
+    expect(magicLinkAllows(base, 'someone@example.com')).toBe('owner_only')
+    expect(magicLinkAllows({ ...base, MAGIC_LINK: 'all' }, 'someone@example.com')).toBe('ok')
+    expect(magicLinkAllows({ ...base, MAGIC_LINK: 'off' }, 'owner@coach.test')).toBe('off')
+    const staging = { ...base, STAGING_ALLOWED_EMAILS: 'owner@coach.test, tester@example.com' } as Env
+    expect(magicLinkAllows(staging, 'tester@example.com')).toBe('ok')
+    expect(magicLinkAllows(staging, 'someone@example.com')).toBe('staging')
+    expect(magicLinkAllows({ ...staging, MAGIC_LINK: 'off' }, 'owner@coach.test')).toBe('off')
+  })
+
+  it('with the launch defaults, a learner is told to use Google and nothing is sent or stored', async () => {
+    const restore = setEnv({ MAGIC_LINK: undefined, LEARNER_EMAIL: undefined })
+    try {
+      const stub = stubFetch()
+      const email = uniqueEmail('learner')
+      const res = await api('/api/auth/magic-link', { body: magicLinkBody(email) })
+      expect(res.status).toBe(403)
+      expect(await res.json()).toEqual({ error: 'forbidden', message: 'Please sign in with Google' })
+      expect(stub.calls).toHaveLength(0)
+      expect(await count('SELECT COUNT(*) AS n FROM magic_links WHERE email = ?1', email)).toBe(0)
+
+      // the owner still gets a link (Resend's sandbox delivers to the account owner only)
+      const owner = await api('/api/auth/magic-link', { body: magicLinkBody('OWNER@coach.test') })
+      expect(owner.status).toBe(200)
+      expect(stub.emails().map((m) => m.to)).toEqual([['owner@coach.test']])
+      const verified = await api('/api/auth/verify', { body: { token: lastToken(stub) } })
+      expect(verified.status).toBe(200)
+      expect(await verified.json()).toEqual({ ok: true, email: 'owner@coach.test' })
+    } finally {
+      restore()
+    }
+  })
+
+  it('MAGIC_LINK=off refuses the owner too', async () => {
+    const restore = setEnv({ MAGIC_LINK: 'off' })
+    try {
+      const stub = stubFetch()
+      const res = await api('/api/auth/magic-link', { body: magicLinkBody('owner@coach.test') })
+      expect(res.status).toBe(403)
+      expect(stub.calls).toHaveLength(0)
+    } finally {
+      restore()
+    }
+  })
+
+  it('MAGIC_LINK=all with learner email off: the link cannot be sent, so it is not stored or counted', async () => {
+    const restore = setEnv({ MAGIC_LINK: 'all', LEARNER_EMAIL: 'off' })
+    try {
+      const stub = stubFetch()
+      const email = uniqueEmail('noemail')
+      const res = await api('/api/auth/magic-link', { body: magicLinkBody(email) })
+      expect(res.status).toBe(500)
+      expect(stub.emails()).toHaveLength(0)
+      expect(await count('SELECT COUNT(*) AS n FROM magic_links WHERE email = ?1', email)).toBe(0)
+      expect(await linkSends(email)).toBe(0)
+    } finally {
+      restore()
+    }
   })
 })
 

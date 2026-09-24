@@ -23,7 +23,7 @@ function Row(props: { label: string; value: string; good: boolean | null; testId
   )
 }
 
-/** /api/health plus the kill-switch flags and banner from /api/me. */
+/** /api/health plus the kill-switch flags, the daily speaking budget and the banner from /api/me. */
 export function StatusClient() {
   const lang = useUiLang()
   const meState = useMe()
@@ -69,6 +69,10 @@ export function StatusClient() {
         : { good: null, value: loading }
   const grading = flagRow(flags?.gradingEnabled)
   const checkout = flagRow(flags?.checkoutEnabled)
+  // speaking closes for the day when the site-wide transcription budget is used up (memo §7.2 Z2)
+  const speakingRow = flagRow(flags ? flags.gradingEnabled && flags.speakingAvailable !== false : undefined)
+  const speaking =
+    flags && flags.gradingEnabled && flags.speakingAvailable === false ? { good: false, value: t(lang, 'st.closedToday') } : speakingRow
 
   return (
     <div className="mx-auto max-w-lg space-y-6">
@@ -87,6 +91,7 @@ export function StatusClient() {
           }
         />
         <Row label={t(lang, 'st.grading')} testId="status-grading" good={grading.good} value={grading.value} />
+        <Row label={t(lang, 'st.speaking')} testId="status-speaking" good={speaking.good} value={speaking.value} />
         <Row label={t(lang, 'st.checkout')} testId="status-checkout" good={checkout.good} value={checkout.value} />
       </dl>
       {(meDown || health.kind === 'down') && (

@@ -1,9 +1,10 @@
 import { env } from 'cloudflare:test'
 import { exports } from 'cloudflare:workers'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { TERMS_VERSION } from '../../../shared/config'
+import { BRAND, TERMS_VERSION } from '../../../shared/config'
 import { checkout } from '../../src/billing'
 import { STRIPE_API_VERSION } from '../../src/billing/stripe'
+import type { Env } from '../../src/env'
 import { FakeStripe, ORIGIN, createUser, eventCount, jsonRequest, makeCtx, purchaseRow, setCheckoutEnabled } from './helpers'
 
 const body = (over: Record<string, unknown> = {}) => ({
@@ -141,6 +142,18 @@ describe('POST /api/checkout', () => {
       paid_at: null,
     })
     expect(await eventCount('checkout_start', '/api/checkout')).toBe(eventsBefore + 1)
+  })
+
+  it("names the product after the brand, not the seller's legal name, and asks Stripe for no receipt email", async () => {
+    const { user } = await createUser()
+    const withLegalName = { ...env, LEGAL_NAME: 'Jane Q. Seller' } as Env
+    const res = await checkout(jsonRequest('/api/checkout', body()), makeCtx(user, { env: withLegalName }))
+    expect(res.status).toBe(200)
+    const params = new URLSearchParams(stripe.stripeCalls('POST /v1/checkout/sessions')[0].body)
+    expect(params.get('line_items[0][price_data][product_data][name]')).toBe(`${BRAND.en} — 30-day pass`)
+    expect(params.toString()).not.toContain('Jane')
+    // Stripe's own receipt emails stay off (memo §7.2 Z4): the site shows charge.receipt_url instead
+    expect([...params.keys()].some((k) => k.includes('receipt_email'))).toBe(false)
   })
 
   it('pins the Stripe API version whose card-only parameter it uses', () => {

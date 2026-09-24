@@ -1,6 +1,7 @@
 // Small UI string table for the interactive pages. Korean uses 해요체. Every string must pass
 // findClaims (shared/content-rules.ts); the two disclaimer sentences are exact ALLOWED_PHRASES.
 import type { Lang } from '../shared/api'
+import { BRAND } from '../shared/config'
 
 const en = {
   // chrome
@@ -20,6 +21,7 @@ const en = {
   'footer.notAffiliated': 'Not affiliated',
   'footer.help': 'Help',
   'footer.status': 'Status',
+  'footer.seller': '{brand} is sold by {name}, a sole proprietor in Ontario.',
 
   // common
   'common.loading': 'Loading…',
@@ -45,11 +47,12 @@ const en = {
   'err.bad_request': 'The request was not accepted. Please check your answer and try again.',
   'err.region_not_supported': 'Passes are sold only to people who live in Canada outside Quebec.',
   'err.checkout_unavailable': 'Passes are not available to buy right now.',
+  'err.at_capacity': 'This is not available right now because the daily allowance is used up. Please try again after 00:00 UTC.',
 
   // practice index
   'practice.title': 'Practice tasks',
   'practice.intro':
-    'Timed practice tasks with feedback on content, organisation, vocabulary and grammar. Your first writing task is free without an account.',
+    'Timed practice tasks with feedback on content, organisation, vocabulary and grammar. Your first writing task is free without an account. Every task can also be practised without feedback, for free and without signing in.',
   'practice.writing': 'Writing',
   'practice.speaking': 'Speaking',
   'practice.words': '{min}–{max} words',
@@ -94,8 +97,11 @@ const en = {
   't.note': 'The timer is for practice only and never blocks submission.',
 
   // speaking
-  's.signIn': 'Sign in to practise speaking. Your first speaking task is free after you verify your email.',
-  's.signInFreeOff': 'Sign in to practise speaking. Free samples are not available right now, so feedback needs a pass.',
+  's.signIn': 'Sign in with Google to get feedback on speaking. Your first speaking task with feedback is free after you sign in.',
+  's.signInFreeOff': 'Sign in with Google to get feedback on speaking. Free samples are not available right now, so feedback needs a pass.',
+  's.closedToday':
+    'Speaking feedback is closed for today: the site has used up its daily allowance for speaking. It opens again at 00:00 UTC. You can still practise speaking without feedback.',
+  's.opensAt': 'That is {time} your time.',
   's.notice':
     'Pronunciation and fluency are not assessed: the feedback is based on a transcript of your recording.',
   's.privacy': 'Your recording is used only to make a transcript and is never stored.',
@@ -116,12 +122,50 @@ const en = {
   's.duration': 'Length: {n} s',
   's.tooLarge': 'The recording is larger than {mb} MB. Please record a shorter answer.',
   's.tooShort': 'The recording is too short. Please record again.',
+  's.sizeStopped': 'Recording stopped early at the {mb} MB upload limit. Listen to it, then send it or record a shorter answer.',
   's.freeSpeaking': 'Your free speaking sample is available.',
   's.noFreeSpeaking': 'You have used your free speaking sample. Get a pass to receive more feedback.',
   's.noSpeech': 'We could not hear any speech. Check your microphone and record again.',
   's.announcePrep': 'Preparation time started. Recording starts by itself when it ends.',
   's.announceRecording': 'Recording started. Speak now.',
   's.announceStopped': 'Recording stopped. Listen to your answer before you send it.',
+
+  // free practice mode (no AI, nothing uploaded)
+  'pm.legend': 'How do you want to practise?',
+  'pm.feedback': 'Get AI feedback',
+  'pm.feedbackNoteWriting': 'Your answer is sent to the AI for feedback. Your first writing task is free.',
+  'pm.feedbackNoteSpeaking': 'Your recording is sent for a transcript and AI feedback. You need to sign in.',
+  'pm.practice': 'Practise without feedback',
+  'pm.practiceNoteWriting': 'Free, no sign-in. Nothing is sent: your answer stays in this browser tab.',
+  'pm.practiceNoteSpeaking': 'Free, no sign-in. Your recording stays on this device and is never uploaded.',
+  'pm.writingIntro':
+    'Pick a prompt, start the timer and write. Nothing you write here leaves this browser tab, and it is gone when you close or reload the page.',
+  'pm.speakingIntro':
+    'Pick a prompt, prepare, then speak. You can play your recording back here. It is never uploaded, and it is gone when you leave the page.',
+  'pm.selfCheck': 'Check your answer',
+  'pm.selfCheckNote': 'Tick each point that is true for your answer.',
+  'pm.done': 'I am done',
+  'pm.doneTitle': 'Practice finished',
+  'pm.again': 'Practise again',
+  'pm.ctaTitle': 'Want feedback on your answer?',
+  'pm.ctaWritingFree': 'Your first writing task with AI feedback is free, and no account is needed. Your answer stays in the box.',
+  'pm.ctaWritingPass': 'Your pass includes AI feedback on this answer.',
+  'pm.getFeedbackWriting': 'Get AI feedback on this answer',
+  'pm.ctaSpeakingFeedback': 'You can get AI feedback on speaking: record your answer again with AI feedback.',
+  'pm.getFeedbackSpeaking': 'Record an answer for AI feedback',
+  'pm.ctaSignIn': 'Sign in with Google to get AI feedback on speaking. Your first speaking task with feedback is free.',
+  'pm.ctaWritingSample': 'Try AI feedback on writing: your first writing task is free, and no account is needed.',
+  'pm.writingSampleLink': 'Free writing task with AI feedback',
+  'pm.ctaPricing': 'Passes give you AI feedback on every practice task.',
+  'pm.timersOnly': 'Practise with the timers only',
+  'pm.timersOnlyNote': 'This browser cannot record audio here. You can still practise with the preparation and speaking timers.',
+  'pm.speakingTime': 'Speaking time',
+  'pm.stopSpeaking': 'I have finished speaking',
+  'pm.timeUp': 'Speaking time is over.',
+  'pm.localPlayback': 'Listen to your answer. The recording stays on this device.',
+  'pm.announcePrep': 'Preparation time started. Speaking time starts by itself when it ends.',
+  'pm.announceSpeaking': 'Speaking time started. Speak now.',
+  'pm.announceStopped': 'Recording stopped. Listen to your answer.',
 
   // result
   'r.title': 'Your feedback',
@@ -172,10 +216,26 @@ const en = {
 
   // login
   'l.title': 'Sign in',
-  'l.intro': 'We will email you a sign-in link. No password needed.',
+  'l.intro': 'Sign in with your Google account. There is no new password to remember.',
+  'l.google': 'Continue with Google',
+  'l.googleOpening': 'Opening Google…',
+  'l.googleNote': 'Google gives us only your email address and a Google account ID; we never see your Google password.',
+  'l.googleOff': 'Sign-in with Google is not available right now. Please try again later.',
+  'l.tooMany': 'Too many sign-in attempts. Please wait a few minutes and try again.',
+  'l.err.google_cancelled': 'Google sign-in was cancelled. You can try again whenever you are ready.',
+  'l.err.google_failed': 'We could not sign you in with Google. Please try again.',
+  'l.err.email_unverified':
+    'Your Google account does not have a verified email address. Verify your email address with Google, then try again.',
+  'l.err.google_expired': 'The sign-in took too long or was already used. Please try again.',
+  'l.err.disposable_email': 'This Google account uses a temporary email address, which we cannot accept. Please use another Google account.',
+  'l.err.staging_only': 'This is a test version of the site. Only invited accounts can sign in.',
+  'l.ownerTitle': 'Owner sign-in by email link',
+  'l.allTitle': 'Sign in with an email link instead',
+  'l.ownerNote': 'This is for the site owner. Learners sign in with Google.',
+  'l.emailIntro': 'We will email you a sign-in link. No password needed.',
+  'l.ownerOnly': 'Email links are only for the site owner. Please continue with Google.',
   'l.email': 'Email address',
   'l.adult': 'I am 18 or older.',
-  'l.optional': 'Optional:',
   'l.submit': 'Email me a sign-in link',
   'l.sending': 'Sending…',
   'l.sentTitle': 'Check your email',
@@ -202,6 +262,16 @@ const en = {
   'a.accessUntil': 'With the passes you bought, you can practise with feedback until {date}.',
   'a.queued': 'Your next pass starts when the current one ends.',
   'a.noPass': 'You do not have an active pass.',
+  'a.purchase': 'Latest purchase',
+  'a.purchaseLine': '{name}: {status}',
+  'a.status.paid': 'paid',
+  'a.status.pending': 'being confirmed',
+  'a.status.refunded': 'refunded',
+  'a.status.disputed': 'disputed with the card issuer',
+  'a.status.rejected_region': 'refunded (passes are sold only in Canada outside Quebec)',
+  'a.receipt': 'View receipt',
+  'a.receiptPending': 'The receipt link appears here once Stripe has confirmed the payment.',
+  'a.noEmail': 'We do not send emails about purchases or passes: check your pass and receipt on this page.',
   'a.usage': 'Fair-use limits',
   'a.writingToday': 'Writing tasks today',
   'a.speakingToday': 'Speaking tasks today',
@@ -222,14 +292,11 @@ const en = {
   'a.historyGone': 'This answer and its feedback are no longer stored.',
   'a.historyMore': 'Show older tasks',
   'a.marketing': 'Email preferences',
-  'a.marketingIntro':
-    'We only send marketing emails if you agree. Sign-in links and receipts are always sent.',
+  'a.marketingIntro': 'We send marketing emails only to people who agreed to them. You can stop them here at any time.',
   'a.marketingOn': 'You receive marketing emails from us.',
   'a.marketingOff': 'You do not receive marketing emails.',
   'a.marketingWithdraw': 'Stop marketing emails',
-  'a.marketingOptIn': 'Save my choice',
   'a.marketingWithdrawn': 'Done. You will not receive marketing emails.',
-  'a.marketingSaved': 'Thanks. Your consent has been saved.',
   'a.refund': 'Refund',
   'a.refundPolicy':
     'You can request a refund within {days} days of purchase if you have used {max} or fewer tasks with feedback. Self-serve refunds are available once per person and per card.',
@@ -262,7 +329,8 @@ const en = {
   'c.start': 'Start practising',
   'c.slow':
     'Your payment is still being confirmed. This page will update if you refresh it in a minute. If your pass does not appear, contact support from your account page.',
-  'c.signedOut': 'Sign in with the email you used at checkout to see your pass.',
+  'c.signedOut': 'Sign in with the Google account you used at checkout to see your pass.',
+  'c.noEmail': 'We do not send a confirmation email. Your pass and your receipt are on your account page.',
   'c.cancelTitle': 'Payment cancelled',
   'c.cancelBody': 'You were not charged. You can buy a pass whenever you are ready.',
 
@@ -274,6 +342,8 @@ const en = {
   'st.version': 'Version {v}',
   'st.grading': 'Feedback',
   'st.checkout': 'Purchases',
+  'st.speaking': 'Speaking feedback',
+  'st.closedToday': 'Closed until 00:00 UTC',
   'st.on': 'On',
   'st.off': 'Paused',
   'st.notice': 'Notice',
@@ -282,7 +352,7 @@ const en = {
   // unsubscribe (link in every email; no sign-in)
   'u.title': 'Unsubscribe',
   'u.working': 'Updating your email preferences…',
-  'u.done': 'You are unsubscribed. We will not send you marketing emails. Sign-in links and receipts are still sent.',
+  'u.done': 'You are unsubscribed. We will not send you marketing emails.',
   'u.invalid':
     'This unsubscribe link is incomplete or has been changed. You can also sign in and stop marketing emails on your account page.',
 } as const
@@ -306,6 +376,7 @@ const ko: Record<UiKey, string> = {
   'footer.notAffiliated': '제휴 없음',
   'footer.help': '도움말',
   'footer.status': '서비스 상태',
+  'footer.seller': '{brand}는 온타리오주의 개인사업자 {name}이(가) 판매해요.',
 
   'common.loading': '불러오는 중이에요…',
   'common.tryAgain': '다시 시도',
@@ -328,9 +399,11 @@ const ko: Record<UiKey, string> = {
   'err.bad_request': '요청을 처리하지 못했어요. 답안을 확인하고 다시 시도해 주세요.',
   'err.region_not_supported': '이용권은 퀘벡을 제외한 캐나다에 사는 분께만 판매해요.',
   'err.checkout_unavailable': '지금은 이용권을 구매할 수 없어요.',
+  'err.at_capacity': '오늘 사용량을 다 써서 지금은 이용할 수 없어요. UTC 00:00 이후에 다시 시도해 주세요.',
 
   'practice.title': '연습 과제',
-  'practice.intro': '시간을 재며 연습하고 내용, 구성, 어휘, 문법에 대한 피드백을 받아요. 첫 쓰기 과제는 계정 없이 무료예요.',
+  'practice.intro':
+    '시간을 재며 연습하고 내용, 구성, 어휘, 문법에 대한 피드백을 받아요. 첫 쓰기 과제는 계정 없이 무료예요. 모든 과제는 피드백 없이 무료로, 로그인하지 않고 연습할 수도 있어요.',
   'practice.writing': '쓰기',
   'practice.speaking': '말하기',
   'practice.words': '{min}–{max}단어',
@@ -370,8 +443,11 @@ const ko: Record<UiKey, string> = {
   't.done': '시간이 끝났어요. 마무리해서 제출해도 돼요.',
   't.note': '타이머는 연습용이라 제출을 막지 않아요.',
 
-  's.signIn': '말하기 연습은 로그인 후 이용할 수 있어요. 이메일 인증 후 첫 말하기 과제는 무료예요.',
-  's.signInFreeOff': '말하기 연습은 로그인 후 이용할 수 있어요. 지금은 무료 체험을 이용할 수 없어서 피드백을 받으려면 이용권이 필요해요.',
+  's.signIn': '말하기 피드백을 받으려면 Google로 로그인해 주세요. 로그인하면 첫 말하기 과제 피드백은 무료예요.',
+  's.signInFreeOff': '말하기 피드백을 받으려면 Google로 로그인해 주세요. 지금은 무료 체험을 이용할 수 없어서 피드백을 받으려면 이용권이 필요해요.',
+  's.closedToday':
+    '오늘은 말하기 피드백이 마감됐어요. 사이트의 하루 말하기 사용량을 다 썼어요. UTC 00:00에 다시 열려요. 피드백 없이 말하기 연습은 계속할 수 있어요.',
+  's.opensAt': '내 시간으로 {time}이에요.',
   's.notice': '발음과 유창성은 평가하지 않아요. 피드백은 녹음을 받아쓴 내용을 바탕으로 해요.',
   's.privacy': '녹음은 받아쓰기에만 쓰이고 저장되지 않아요.',
   's.unsupported': '이 브라우저에서는 녹음할 수 없어요. 최신 Chrome, Edge, Firefox, Safari를 사용해 주세요.',
@@ -390,12 +466,48 @@ const ko: Record<UiKey, string> = {
   's.duration': '길이: {n}초',
   's.tooLarge': '녹음 파일이 {mb}MB보다 커요. 더 짧게 녹음해 주세요.',
   's.tooShort': '녹음이 너무 짧아요. 다시 녹음해 주세요.',
+  's.sizeStopped': '업로드 한도인 {mb}MB에 닿아서 녹음이 일찍 끝났어요. 들어 본 뒤 보내거나 더 짧게 다시 녹음해 주세요.',
   's.freeSpeaking': '무료 말하기 체험을 이용할 수 있어요.',
   's.noFreeSpeaking': '무료 말하기 체험을 이미 사용했어요. 피드백을 더 받으려면 이용권을 구매해 주세요.',
   's.noSpeech': '말소리가 들리지 않았어요. 마이크를 확인하고 다시 녹음해 주세요.',
   's.announcePrep': '준비 시간이 시작됐어요. 준비 시간이 끝나면 녹음이 저절로 시작돼요.',
   's.announceRecording': '녹음이 시작됐어요. 지금 말해 주세요.',
   's.announceStopped': '녹음이 끝났어요. 보내기 전에 답변을 들어 보세요.',
+
+  'pm.legend': '어떻게 연습할까요?',
+  'pm.feedback': 'AI 피드백 받기',
+  'pm.feedbackNoteWriting': '답안을 AI에 보내 피드백을 받아요. 첫 쓰기 과제는 무료예요.',
+  'pm.feedbackNoteSpeaking': '녹음을 보내 받아쓰기와 AI 피드백을 받아요. 로그인이 필요해요.',
+  'pm.practice': '피드백 없이 연습하기',
+  'pm.practiceNoteWriting': '무료이고 로그인이 필요 없어요. 아무것도 보내지 않아요. 답안은 이 브라우저 탭에만 있어요.',
+  'pm.practiceNoteSpeaking': '무료이고 로그인이 필요 없어요. 녹음은 이 기기에만 있고 업로드되지 않아요.',
+  'pm.writingIntro':
+    '문제를 고르고 타이머를 시작한 뒤 써 보세요. 여기에 쓴 내용은 이 브라우저 탭 밖으로 나가지 않고, 페이지를 닫거나 새로 고치면 사라져요.',
+  'pm.speakingIntro': '문제를 고르고 준비한 뒤 말해 보세요. 녹음은 여기에서 다시 들을 수 있어요. 업로드되지 않고, 페이지를 떠나면 사라져요.',
+  'pm.selfCheck': '답안 점검하기',
+  'pm.selfCheckNote': '내 답안에 맞는 항목에 표시해 보세요.',
+  'pm.done': '다 했어요',
+  'pm.doneTitle': '연습을 마쳤어요',
+  'pm.again': '다시 연습하기',
+  'pm.ctaTitle': '답안에 피드백을 받아 볼까요?',
+  'pm.ctaWritingFree': 'AI 피드백을 받는 첫 쓰기 과제는 무료이고 계정도 필요 없어요. 답안은 그대로 남아 있어요.',
+  'pm.ctaWritingPass': '이용권으로 이 답안에 AI 피드백을 받을 수 있어요.',
+  'pm.getFeedbackWriting': '이 답안에 AI 피드백 받기',
+  'pm.ctaSpeakingFeedback': '말하기 AI 피드백을 받을 수 있어요. AI 피드백용으로 답변을 다시 녹음해 주세요.',
+  'pm.getFeedbackSpeaking': 'AI 피드백용으로 녹음하기',
+  'pm.ctaSignIn': 'Google로 로그인하면 말하기 AI 피드백을 받을 수 있어요. 첫 말하기 과제 피드백은 무료예요.',
+  'pm.ctaWritingSample': '쓰기 AI 피드백을 받아 보세요. 첫 쓰기 과제는 무료이고 계정도 필요 없어요.',
+  'pm.writingSampleLink': 'AI 피드백을 받는 무료 쓰기 과제',
+  'pm.ctaPricing': '이용권이 있으면 모든 연습 과제에서 AI 피드백을 받을 수 있어요.',
+  'pm.timersOnly': '타이머만으로 연습하기',
+  'pm.timersOnlyNote': '이 브라우저에서는 여기서 녹음할 수 없어요. 준비 타이머와 말하기 타이머로 연습할 수 있어요.',
+  'pm.speakingTime': '말하기 시간',
+  'pm.stopSpeaking': '말하기를 마쳤어요',
+  'pm.timeUp': '말하기 시간이 끝났어요.',
+  'pm.localPlayback': '답변을 들어 보세요. 녹음은 이 기기에만 있어요.',
+  'pm.announcePrep': '준비 시간이 시작됐어요. 준비 시간이 끝나면 말하기 시간이 저절로 시작돼요.',
+  'pm.announceSpeaking': '말하기 시간이 시작됐어요. 지금 말해 주세요.',
+  'pm.announceStopped': '녹음이 끝났어요. 답변을 들어 보세요.',
 
   'r.title': '피드백',
   'r.disclaimer': '피드백은 점수가 아니며 시험 결과를 예측하지 않습니다.',
@@ -442,10 +554,25 @@ const ko: Record<UiKey, string> = {
   'b.reload': '페이지를 새로 고친 뒤 다시 시도해 주세요.',
 
   'l.title': '로그인',
-  'l.intro': '로그인 링크를 이메일로 보내 드려요. 비밀번호는 필요 없어요.',
+  'l.intro': 'Google 계정으로 로그인해요. 새 비밀번호를 만들 필요가 없어요.',
+  'l.google': 'Google로 계속하기',
+  'l.googleOpening': 'Google로 이동하는 중이에요…',
+  'l.googleNote': 'Google은 이메일 주소와 Google 계정 ID만 알려 주고, 저희는 Google 비밀번호를 볼 수 없어요.',
+  'l.googleOff': '지금은 Google 로그인을 이용할 수 없어요. 나중에 다시 시도해 주세요.',
+  'l.tooMany': '로그인 시도가 너무 많았어요. 몇 분 뒤에 다시 시도해 주세요.',
+  'l.err.google_cancelled': 'Google 로그인이 취소됐어요. 준비되면 언제든 다시 시도해 주세요.',
+  'l.err.google_failed': 'Google로 로그인하지 못했어요. 다시 시도해 주세요.',
+  'l.err.email_unverified': 'Google 계정의 이메일 주소가 인증되지 않았어요. Google에서 이메일 주소를 인증한 뒤 다시 시도해 주세요.',
+  'l.err.google_expired': '로그인 시간이 너무 오래 걸렸거나 이미 사용된 요청이에요. 다시 시도해 주세요.',
+  'l.err.disposable_email': '임시 이메일 주소를 쓰는 Google 계정은 받을 수 없어요. 다른 Google 계정을 사용해 주세요.',
+  'l.err.staging_only': '테스트용 사이트예요. 초대받은 계정만 로그인할 수 있어요.',
+  'l.ownerTitle': '운영자용 이메일 링크 로그인',
+  'l.allTitle': '이메일 링크로 로그인하기',
+  'l.ownerNote': '사이트 운영자용이에요. 학습자는 Google로 로그인해요.',
+  'l.emailIntro': '로그인 링크를 이메일로 보내 드려요. 비밀번호는 필요 없어요.',
+  'l.ownerOnly': '이메일 링크는 사이트 운영자만 쓸 수 있어요. Google로 계속해 주세요.',
   'l.email': '이메일 주소',
   'l.adult': '만 18세 이상이에요.',
-  'l.optional': '선택:',
   'l.submit': '로그인 링크 받기',
   'l.sending': '보내는 중이에요…',
   'l.sentTitle': '이메일을 확인해 주세요',
@@ -469,6 +596,16 @@ const ko: Record<UiKey, string> = {
   'a.accessUntil': '구매한 이용권으로 {date}까지 피드백을 받으며 연습할 수 있어요.',
   'a.queued': '다음 이용권은 지금 이용권이 끝나면 시작돼요.',
   'a.noPass': '사용 중인 이용권이 없어요.',
+  'a.purchase': '최근 구매',
+  'a.purchaseLine': '{name}: {status}',
+  'a.status.paid': '결제 완료',
+  'a.status.pending': '확인 중',
+  'a.status.refunded': '환불됨',
+  'a.status.disputed': '카드사에 이의 제기됨',
+  'a.status.rejected_region': '환불됨(이용권은 퀘벡을 제외한 캐나다에서만 판매해요)',
+  'a.receipt': '영수증 보기',
+  'a.receiptPending': 'Stripe가 결제를 확인하면 여기에 영수증 링크가 나타나요.',
+  'a.noEmail': '구매나 이용권에 관한 이메일은 보내지 않아요. 이용권과 영수증은 이 페이지에서 확인해 주세요.',
   'a.usage': '공정 사용 한도',
   'a.writingToday': '오늘 쓰기 과제',
   'a.speakingToday': '오늘 말하기 과제',
@@ -489,13 +626,11 @@ const ko: Record<UiKey, string> = {
   'a.historyGone': '이 답안과 피드백은 더 이상 보관되어 있지 않아요.',
   'a.historyMore': '이전 과제 더 보기',
   'a.marketing': '이메일 수신 설정',
-  'a.marketingIntro': '동의한 경우에만 마케팅 이메일을 보내요. 로그인 링크와 영수증은 항상 보내요.',
+  'a.marketingIntro': '동의한 분께만 마케팅 이메일을 보내요. 여기에서 언제든지 그만 받을 수 있어요.',
   'a.marketingOn': '마케팅 이메일을 받고 있어요.',
   'a.marketingOff': '마케팅 이메일을 받지 않아요.',
   'a.marketingWithdraw': '마케팅 이메일 그만 받기',
-  'a.marketingOptIn': '선택 저장하기',
   'a.marketingWithdrawn': '완료했어요. 마케팅 이메일을 보내지 않을게요.',
-  'a.marketingSaved': '고마워요. 동의가 저장됐어요.',
   'a.refund': '환불',
   'a.refundPolicy':
     '구매 후 {days}일 안에, 피드백을 받은 과제가 {max}개 이하라면 환불을 요청할 수 있어요. 직접 환불은 한 사람과 한 카드당 한 번만 가능해요.',
@@ -527,7 +662,8 @@ const ko: Record<UiKey, string> = {
   'c.start': '연습 시작하기',
   'c.slow':
     '결제를 아직 확인하는 중이에요. 1분 뒤에 새로 고치면 업데이트돼요. 이용권이 보이지 않으면 계정 페이지에서 문의해 주세요.',
-  'c.signedOut': '결제할 때 쓴 이메일로 로그인하면 이용권을 볼 수 있어요.',
+  'c.signedOut': '결제할 때 쓴 Google 계정으로 로그인하면 이용권을 볼 수 있어요.',
+  'c.noEmail': '확인 이메일은 보내지 않아요. 이용권과 영수증은 계정 페이지에서 볼 수 있어요.',
   'c.cancelTitle': '결제가 취소됐어요',
   'c.cancelBody': '요금이 청구되지 않았어요. 준비되면 언제든지 이용권을 구매할 수 있어요.',
 
@@ -538,6 +674,8 @@ const ko: Record<UiKey, string> = {
   'st.version': '버전 {v}',
   'st.grading': '피드백',
   'st.checkout': '구매',
+  'st.speaking': '말하기 피드백',
+  'st.closedToday': 'UTC 00:00까지 마감',
   'st.on': '켜짐',
   'st.off': '일시 중지',
   'st.notice': '공지',
@@ -545,7 +683,7 @@ const ko: Record<UiKey, string> = {
 
   'u.title': '수신 거부',
   'u.working': '이메일 수신 설정을 바꾸는 중이에요…',
-  'u.done': '수신 거부가 완료됐어요. 마케팅 이메일을 보내지 않을게요. 로그인 링크와 영수증은 계속 보내요.',
+  'u.done': '수신 거부가 완료됐어요. 마케팅 이메일을 보내지 않을게요.',
   'u.invalid': '수신 거부 링크가 완전하지 않거나 바뀌었어요. 로그인한 뒤 계정 페이지에서 마케팅 이메일을 끌 수도 있어요.',
 }
 
@@ -568,6 +706,15 @@ export function errorKindLabel(lang: Lang, kind: string): string {
   return key in UI[lang] ? UI[lang][key] : kind.replace(/_/g, ' ')
 }
 
+/**
+ * "Maple Practice Coach is sold by <legal name>, a sole proprietor in Ontario." (memo §7.2 Z5), or null
+ * while the owner's legal name is not configured (NEXT_PUBLIC_LEGAL_NAME).
+ */
+export function sellerLine(lang: Lang, legalName: string): string | null {
+  const name = legalName.trim()
+  return name ? t(lang, 'footer.seller', { brand: BRAND[lang], name }) : null
+}
+
 /** Canadian-dollar price, e.g. "C$39" or "C$39.50". */
 export function formatCad(cents: number): string {
   const whole = cents % 100 === 0
@@ -578,6 +725,13 @@ export function formatCad(cents: number): string {
 export function formatClock(totalSeconds: number): string {
   const s = Math.max(0, Math.ceil(totalSeconds))
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
+}
+
+/** Clock time in the viewer's time zone, e.g. "8:00 p.m." / "오후 8:00". */
+export function formatTime(iso: string, lang: Lang): string {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return iso
+  return new Intl.DateTimeFormat(lang === 'ko' ? 'ko-KR' : 'en-CA', { timeStyle: 'short' }).format(d)
 }
 
 /** Calendar date in the viewer's time zone, e.g. "Oct 24, 2026" / "2026. 10. 24.". */

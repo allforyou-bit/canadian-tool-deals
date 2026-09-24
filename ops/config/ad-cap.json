@@ -1,8 +1,0 @@
-{
-  "capCad": 1200,
-  "dailyCad": 20,
-  "startDate": "2026-10-26",
-  "endDate": "2026-11-08",
-  "confirmedByOwner": false,
-  "notes": "raise only via an owner-merged PR (memo §6 scale rules)"
-}

@@ -1,5 +1,5 @@
 // Grading eval harness (memo B12, B3). Pure metric functions over grader outputs, shared by the
-// offline test (5 hand-written fixtures, scripts/eval/harness.test.ts) and the weekly live run on
+// offline test (5 hand-written fixtures, scripts/eval/harness.test.ts) and the live run on
 // synthetic data (scripts/eval/run-live.ts). No network, no file access here.
 import { ERROR_KINDS, type GradeResult, type Lang } from '../../shared/api'
 import { GRADER_OUTPUT_RULES, findClaims } from '../../shared/content-rules'

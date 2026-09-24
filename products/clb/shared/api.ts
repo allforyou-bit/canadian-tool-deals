@@ -46,7 +46,18 @@ export interface GoogleStartRequest {
   turnstileToken: string
   /** safe same-origin path to return to after sign-in, e.g. /account/ */
   next?: string
+  /** optional CASL consent (only recorded with the exact server sentence, on the same device) */
+  marketingOptIn?: boolean
+  marketingConsentText?: string
 }
+/** /login/?error=<code> values set by GET /api/auth/google/callback */
+export type GoogleSignInError =
+  | 'google_cancelled'
+  | 'google_expired'
+  | 'google_failed'
+  | 'email_unverified'
+  | 'disposable_email'
+  | 'staging_only'
 export interface GoogleStartResponse {
   url: string
 }
@@ -230,7 +241,7 @@ export type EventName =
   | 'refund'
 export interface EventRequest {
   name: EventName
-  /** utm_source/medium/campaign and gclid captured on landing; never personal data */
+  /** utm_source/medium/campaign/term/content captured on landing (no ad click ids); never personal data */
   utm?: Record<string, string>
   path: string
 }

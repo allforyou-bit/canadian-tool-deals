@@ -3,13 +3,12 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { Notice } from '../../../components/Notice'
+import { ReceiptLink } from '../../../components/ReceiptLink'
 import { cls } from '../../../components/ui'
-import { PUBLIC_ENV } from '../../../lib/env'
-import { reportConversion } from '../../../lib/gads'
 import { useUiLang } from '../../../lib/hooks'
 import { formatDate, t } from '../../../lib/i18n'
 import { refreshMe } from '../../../lib/me'
-import { checkoutSessionId, conversionFor, purchaseOutcome, type PurchaseOutcome } from '../../../lib/purchase'
+import { checkoutSessionId, purchaseOutcome, receiptUrlFor, type PurchaseOutcome } from '../../../lib/purchase'
 import { loginHref } from '../../../lib/url'
 import { SKUS } from '../../../shared/config'
 
@@ -20,13 +19,14 @@ type State = PurchaseOutcome | { kind: 'slow' }
 
 /**
  * Polls /api/me until the purchase Stripe sent us back from (?session_id=, which is purchases.id)
- * is final: paid (then the pass and the overall end date are shown and, only then, the ads
- * conversion is reported with that purchase's price), refunded by the region rule, or refunded.
- * An older pass never counts as this purchase. Every 2 s, up to 30 s.
+ * is final: paid (then the pass and the overall end date are shown), refunded by the region rule, or
+ * refunded. An older pass never counts as this purchase. Every 2 s, up to 30 s. No email is sent to
+ * learners (memo §7.2 Z4), so this page says so and links Stripe's receipt when /api/me has it.
  */
 export function SuccessClient() {
   const lang = useUiLang()
   const [state, setState] = useState<State>({ kind: 'waiting' })
+  const [receiptUrl, setReceiptUrl] = useState<string | null>(null)
 
   useEffect(() => {
     let stopped = false
@@ -41,9 +41,7 @@ export function SuccessClient() {
       const outcome = purchaseOutcome(me, sessionId)
       if (outcome.kind !== 'waiting') {
         setState(outcome)
-        const conversion = conversionFor(outcome, sessionId)
-        // the session id de-duplicates reloads in this browser; it is not sent to Google
-        if (conversion && PUBLIC_ENV.gadsSendTo) reportConversion(PUBLIC_ENV.gadsSendTo, conversion.valueCents, conversion.dedupeKey)
+        setReceiptUrl(receiptUrlFor(me, sessionId))
         return
       }
       if (Date.now() - startedAt + POLL_MS > MAX_WAIT_MS) return setState({ kind: 'slow' })
@@ -79,6 +77,12 @@ export function SuccessClient() {
       {state.kind === 'refunded' && <Notice kind="info">{t(lang, 'c.refunded')}</Notice>}
       {state.kind === 'problem' && <Notice kind="warn">{t(lang, 'c.problem')}</Notice>}
       {state.kind === 'slow' && <Notice kind="info">{t(lang, 'c.slow')}</Notice>}
+      {receiptUrl && <ReceiptLink href={receiptUrl} lang={lang} />}
+      {state.kind !== 'waiting' && state.kind !== 'signedOut' && (
+        <p className={cls.muted} data-testid="no-email-note">
+          {t(lang, 'c.noEmail')}
+        </p>
+      )}
       {(state.kind === 'rejected' || state.kind === 'refunded' || state.kind === 'problem' || state.kind === 'slow') && (
         <Link href="/account/" className={`${cls.btn} ${cls.secondary}`}>
           {t(lang, 'common.goToAccount')}

@@ -3,6 +3,8 @@
 // automatic refunds for purchases from outside Canada or from Quebec (and for any non-card payment); disputes
 // end the pass; a refund of unused days ends the pass (owner refunds carry end_pass=true, owner-setup.md).
 // The page date is TERMS_VERSION, shared with the terms: buyers agree to both at checkout.
+// Zero-capital launch (memo §7.2 Z4): no email to learners; refunds show on the account page, where the Stripe
+// receipt link (Charge.receipt_url, kept current after refunds) also reflects them.
 import { BRAND, TERMS_VERSION } from '../../shared/config'
 import { PATHS } from '../routes'
 import { CONTACT_LINES_EN, FACTS, PAUSE_EXTENSION } from '../site'
@@ -44,7 +46,8 @@ export const REFUNDS: LegalPage = {
           ol: [
             `Sign in and open your [account page](${PATHS.account}).`,
             'Choose "Request a refund" and confirm.',
-            'We refund the full price to the card you paid with, through Stripe, and email you a confirmation. Your pass ends as soon as the refund is made.',
+            'We refund the full price to the card you paid with, through Stripe. Your pass ends as soon as the refund is made.',
+            'Your account page shows the refund, and the Stripe receipt linked there is updated to show it. We do not send a confirmation by email.',
           ],
         },
         'How long the money takes to appear on your statement depends on your bank.',
@@ -54,7 +57,7 @@ export const REFUNDS: LegalPage = {
       id: 'automatic',
       heading: 'Automatic refunds for purchases outside our sales area',
       blocks: [
-        'Passes are sold only to residents of Canada outside Quebec who pay with a card issued in Canada. After each payment we check the billing address and the country where the card was issued. If the billing address is outside Canada or in Quebec, the card was issued outside Canada, or the payment was not made by card, we do not activate the pass, we refund the full payment automatically and we email you to let you know.',
+        'Passes are sold only to residents of Canada outside Quebec who pay with a card issued in Canada. After each payment we check the billing address and the country where the card was issued. If the billing address is outside Canada or in Quebec, the card was issued outside Canada, or the payment was not made by card, we do not activate the pass and we refund the full payment automatically. Your account page shows that the payment was refunded; we do not send an email.',
       ],
     },
     {

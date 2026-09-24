@@ -1,19 +1,22 @@
 # ops/metrics — aggregate numbers only
 
 Everything in this folder is committed to git, so it must never contain personal data: no emails,
-names, essays, transcripts, card details, Stripe ids, hashes or tokens (memo §4.1, §1.4). Two
-writers put files here:
+names, essays, transcripts, card details, Stripe ids, hashes or tokens (memo §4.1, §1.4). One writer
+puts files here:
 
 | File | Written by | When |
 |---|---|---|
 | `<YYYY-MM-DD>.json` | `.github/workflows/metrics.yml` (`products/clb/scripts/metrics.ts export`) | daily, after the Worker's 05:00 UTC snapshot |
-| `ads.json` | the daily Routine (`ops/routines/daily.md`), or the owner's weekly fallback | daily while ads run |
+
+There are no ads (memo §7.2), so the Google Ads export `ads.json` of the earlier plan is no longer
+written and nothing reads it.
 
 ## Personal-data guard
 
-`products/clb/scripts/metrics.ts guard` checks **every file in this folder and in any subfolder**, in
-`metrics.yml` before each commit and in `ci.yml` on every push. Only three kinds of file may be here:
-this `README.md`, `ads.json` and `<YYYY-MM-DD>.json` (no subfolders, lower-case `.json`); anything else
+`products/clb/scripts/metrics.ts guard` checks **every file in this folder and in any subfolder**: in
+`metrics.yml` before each commit, in `metrics-guard.yml` on every pull request or push that changes this
+folder (`ci.yml` skips such changes to save Actions minutes), and in `ci.yml` whenever it runs. Only this
+`README.md` and `<YYYY-MM-DD>.json` files belong here (no subfolders, lower-case `.json`); anything else
 fails. Every file except this README is scanned, whatever its name, and fails on:
 
 - any `@` character;
@@ -21,8 +24,8 @@ fails. Every file except this README is scanned, whatever its name, and fails on
 - any token-like string: 16 or more characters of `A–Z a–z 0–9 _ -` that mix letters and digits
   (API keys, Stripe ids, hashes, UUIDs). Model ids from `shared/config.ts` and dates are allowed.
 
-Daily files and `ads.json` must also match their formats below exactly: an **allowlist** of keys at
-every level, whole numbers ≥ 0 for counts, and no other fields (so no free-text field can slip in).
+Daily files must also match their format below exactly: an **allowlist** of keys at every level, whole
+numbers ≥ 0 for counts, and no other fields (so no free-text field can slip in).
 
 The guard reports the file, rule and position only, never the matched text. If it fails, `metrics.yml`
 opens the issue "Personal-data guard failed on ops/metrics" and commits nothing. Do not "fix" the file
@@ -41,12 +44,11 @@ One file per UTC day. The `metrics` object is the Worker's `DailyMetrics` row
   "computedAt": "2026-10-28T05:00:01.870Z",
   "metrics": {
     "day": "2026-10-27",
-    "events": { "landing": 55, "sample_start": 9, "sample_done": 7, "signup": 3, "checkout_start": 2, "purchase": 1 },
-    "paidEvents": { "landing": 20, "sample_start": 4, "sample_done": 3 },
+    "events": { "landing": 55, "practice_start": 12, "practice_done": 7, "sample_start": 9, "sample_done": 7, "signup": 3, "checkout_start": 2, "purchase": 1 },
     "grades": { "writing": 9, "speaking": 6, "free": 6, "refused": 1 },
     "outcomes": { "graded": 15, "scope_refused": 1 },
     "costUsd": 0.3871,
-    "purchases": { "paid": 1, "grossCents": 7900 },
+    "purchases": { "paid": 1, "grossCents": 3900 },
     "refunds": { "count": 0, "cents": 0 },
     "disputes": 0
   }
@@ -57,11 +59,11 @@ One file per UTC day. The `metrics` object is the Worker's `DailyMetrics` row
 |---|---|
 | `day` | the UTC day the numbers cover |
 | `computedAt` | when the Worker wrote the row (`metrics_daily.created_at`) |
-| `metrics.events.<name>` | count of first-party events that day: `landing`, `sample_start`, `sample_done`, `signup`, `checkout_start`, `purchase`, `refund` (names with a zero count are missing) |
-| `metrics.paidEvents.<name>` | the same counts for events whose stored campaign tags show a **paid click** (a Google click id, or `utm_medium=cpc`); the KPI Routine uses `paidEvents.sample_start` for K3. The object is always written from 2026-09-24 on and is `{}` on a day without paid events; **a missing name means 0**. Only files written before 2026-09-24 lack the key |
+| `metrics.events.<name>` | count of first-party events that day: `landing`, `practice_start`, `practice_done`, `sample_start`, `sample_done`, `signup`, `checkout_start`, `purchase`, `refund` (names with a zero count are missing). `practice_start` / `practice_done` count sessions of the free practice mode without AI ("Practise without feedback"): nothing the learner writes or records is sent, only the event name (memo §7.2). `sample_start` / `sample_done` count free samples **with** AI feedback. Events are not linked to people, so ratios between them are aggregate ratios, not conversions |
+| `metrics.paidEvents.<name>` | optional and always **absent** now: it was meant to count events from paid ad clicks, and there are no ads (memo §7.2). The allowlist still accepts the key so the format stays stable; nothing reads it |
 | `metrics.grades` | tasks that got feedback (`writing`, `speaking`, of which `free`), and requests that got **no feedback** (`refused`: scope or safety refusals, failed model calls, no speech, and requests closed after 15 minutes still pending — memo §7.1 B10) |
-| `metrics.outcomes.<outcome>` | grade rows that day by outcome: `graded`, `scope_refused`, `safety_refused`, `failed`, `no_speech`, `too_long` (and `pending` or `unknown` for rows without an outcome). A missing name means 0; files written before this field existed lack the key. Optional detail for the daily Routine's A3 rule |
-| `metrics.costUsd` | Anthropic + Workers AI cost of every grade that day, in US dollars, including requests that gave no feedback. The eval workflow's spend is on a separate Anthropic workspace and is **not** included |
+| `metrics.outcomes.<outcome>` | grade rows that day by outcome: `graded`, `scope_refused`, `safety_refused`, `failed`, `no_speech`, `too_long` (and `pending` or `unknown` for rows without an outcome). A missing name means 0; files written before this field existed lack the key. Optional detail for the daily Routine's A2 rule |
+| `metrics.costUsd` | Anthropic + Workers AI cost of every grade that day, in US dollars, including requests that gave no feedback. Eval runs, staging checks and the level-B prompt-cache check are **not** included, although they spend the same prepaid Anthropic credits (memo §7.2) |
 | `metrics.purchases` | purchases paid that day that granted a pass (`paid`) and their total in Canadian cents (`grossCents`); region-rejected and non-card payments (refunded automatically) are excluded |
 | `metrics.refunds` | refunds issued that day (count and Canadian cents), including the owner's partial refunds (for example unused days) counted by the amount refunded; region and dispute refunds excluded |
 | `metrics.disputes` | Stripe `charge.dispute.created` events received that day |
@@ -69,40 +71,10 @@ One file per UTC day. The `metrics` object is the Worker's `DailyMetrics` row
 The export keeps the newest 3 rows and overwrites a day's file with the same content, so running it
 twice changes nothing. If the newest row is older than yesterday (UTC), the workflow opens the issue
 "Metrics snapshot missing" and fails; if the export itself fails (for example an expired Cloudflare
-token or a row that does not match the allowlist), it opens "Metrics export failed". The ads check below
-still runs in both cases.
+token or a row that does not match the allowlist), it opens "Metrics export failed".
 
-## Ads spend: `ads.json`
+## Who reads these files
 
-A JSON array with one row per day, oldest first. A re-imported day **replaces** its row (never a
-second row for the same date), so the Routine can run twice safely.
-
-```json
-[
-  { "date": "2026-10-26", "spendCad": 19.84, "clicks": 12, "impressions": 410, "conversions": 1 },
-  { "date": "2026-10-27", "spendCad": 20.11, "clicks": 15, "impressions": 388, "conversions": 1 }
-]
-```
-
-| Field | Type | Meaning |
-|---|---|---|
-| `date` | `YYYY-MM-DD` | the day the Google Ads report covers (account time zone) |
-| `spendCad` | number ≥ 0 | cost that day in Canadian dollars |
-| `clicks` | whole number ≥ 0 | clicks |
-| `impressions` | whole number ≥ 0 | impressions |
-| `conversions` | number ≥ 0 | conversions reported by Google Ads (the purchase tag on `/checkout/success/`); may be fractional under some attribution settings [unverified] |
-
-No other fields are allowed (the parser rejects unknown keys). Validation and maths:
-`products/clb/scripts/ads.ts` (tests: `scripts/ads.test.ts`).
-
-**Freshness.** While `ops/config/ad-cap.json` says ads run (`confirmedByOwner` is `true` and today is
-between `startDate` and `endDate`), the newest `date` must be at most two days before today (UTC). Age
-is measured from the newest row or from the day before `startDate`, whichever is later, so the first
-48 hours of a campaign never alert (the first report arrives a day after the start). Otherwise
-`metrics.yml` opens "Ads alert: pause the campaign" — the Worker cannot pause Google Ads, so the owner
-pauses the campaign in the Google Ads app.
-
-**CAC.** `node scripts/run.mjs scripts/ads.ts cac --from D --to D` (from `products/clb`) prints spend,
-purchases (from the daily files), Google-reported conversions, the blended CAC (spend ÷ all
-purchases) and the conservative CAC (spend ÷ the smaller of purchases and conversions) that the KPI
-Routine uses for K4.
+The Routines in `ops/routines/` (daily anomalies, the weekly KPI digest and its rules, books, the Nov 30
+and Day-90 reviews). The definitions they use — `net`, the free practice and free sample counts, the
+prepaid-credit spend — are in `ops/routines/kpi.md`.

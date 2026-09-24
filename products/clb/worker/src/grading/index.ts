@@ -1,7 +1,8 @@
-// Grading endpoints (memo B3, B4, B5, B10). Every grade call runs, in order: kill switch → input
-// checks → live spend tiers → entitlement (pass, or a free sample) → a pending `grades` row that
-// reserves the cap slot before any model call (decision 2) → speech to text / grader → claim filter
-// → the row is finished with its outcome, tokens and cost, including refusals and failures (cost log).
+// Grading endpoints (memo B3, B4, B5, B10). Every grade call runs, in order: kill switch → (speaking:
+// sign-in and the shared daily speech-to-text allowance, memo §7.2 Z2) → input checks → live spend
+// tiers → entitlement (pass, or a free sample) → a pending `grades` row that reserves the cap slot
+// before any model call (decision 2) → speech to text / grader → claim filter → the row is finished
+// with its outcome, tokens and cost, including refusals and failures (cost log).
 // Essays and transcripts are stored only for signed-in users; audio is never stored or logged.
 import type {
   GradeResponse,
@@ -27,6 +28,7 @@ import {
   recordFreeSpeaking,
   recordFreeWriting,
   reserveGrade,
+  speakingAvailableToday,
   type FreeKeys,
   type ReserveBlock,
 } from '../lib/usage'
@@ -67,6 +69,10 @@ const MSG = {
   noFeedback: `You have reached today's limit of ${CAPS.noFeedbackPerDay} requests that got no feedback. It resets at midnight UTC.`,
   /** the learner's sample is unused, but free samples are off (owner switch or spend tiers) */
   freePaused: 'Free samples are paused right now. Please try again later, or get a pass to keep practising.',
+  /** the shared daily speech-to-text allowance is used up (memo §7.2 Z2); nothing was uploaded or charged */
+  atCapacity:
+    'Speaking feedback has reached its limit for today. It reopens at midnight UTC. You can still practise speaking without feedback.',
+  lengthRequired: 'Length required: the upload did not say its size. Please try again.',
 }
 
 export function graderModel(env: Env): string {
@@ -335,9 +341,12 @@ export async function gradeSpeaking(req: Request, ctx: Ctx): Promise<Response> {
   const flags = await getFlags(env)
   if (!flags.grading_enabled) return error('grading_paused', MSG.paused)
   if (!user) return error('unauthorized', 'Please sign in to practise speaking.')
+  // the shared Workers AI allowance: checked before the upload is read, so nothing is claimed or spent
+  if (!(await speakingAvailableToday(env, now))) return error('at_capacity', MSG.atCapacity)
 
-  // streamed byte limit: a chunked upload without Content-Length cannot make the Worker buffer more
+  // Content-Length must be declared and within the limit before the runtime parses the body
   const form = await readFormDataLimited(req, MAX_FORM_BYTES)
+  if (form === 'length_required') return error('bad_request', MSG.lengthRequired)
   if (form === 'too_large') return error('too_large', MSG.audioTooLarge)
   if (!form) return error('bad_request', 'Expected multipart form data')
   const task = findTask(form.get('taskId'), 'speaking')

@@ -1,10 +1,11 @@
 // /formats/ pages: our own descriptions of the 10 practice task types in shared/tasks.ts. Everything here
 // describes THIS product's tasks. Nothing is copied from any official test, and timings are product
-// practice defaults, not statements about any test's rules.
+// practice defaults, not statements about any test's rules. Every task can also be practised without feedback
+// (memo §7.2 Z9): no AI, no sign-in, nothing uploaded; no separate page per prompt.
 import { BRAND, NOT_AFFILIATED } from '../shared/config'
 import { SPEAKING_TASKS, TASKS, WRITING_TASKS, type TaskType } from '../shared/tasks'
 import { PATHS, practicePath } from './routes'
-import { FACTS, LAST_REVIEWED } from './site'
+import { FACTS, LAST_REVIEWED, PRACTICE_MODE } from './site'
 import type { DocPage } from './types'
 
 /** Our own study tips for each task type (keyed by task id in shared/tasks.ts). */
@@ -160,6 +161,20 @@ export const FORMATS_INDEX: DocPage = {
       ],
     },
     {
+      id: 'practice-mode',
+      heading: 'Practise without feedback',
+      blocks: [
+        `Every task type can also be practised without feedback, free and without signing in: choose "${PRACTICE_MODE.label.en}" on the [practice page](${PATHS.practice}) of any task. No AI is used, so you get no feedback.`,
+        {
+          ul: [
+            '**Writing**: the task prompt, the practice timer, a word counter and a short self-check list to review your own answer.',
+            '**Speaking**: the preparation and speaking timers, then you record yourself and play the recording back.',
+          ],
+        },
+        PRACTICE_MODE.audio.en,
+      ],
+    },
+    {
       id: 'feedback',
       heading: 'What the feedback looks at',
       blocks: [
@@ -191,6 +206,7 @@ export const FORMATS_WRITING: FormatsKindPage = {
     lastReviewedLabel: 'Last reviewed',
     intro: [
       `There are ${WRITING_TASKS.length} writing task types. You read a short situation or question that we wrote, then type your answer in the browser. A word counter and a practice timer help you stay on target. The timer is for practice only and never stops you from submitting.`,
+      `To practise without feedback, choose "${PRACTICE_MODE.label.en}" on the task: you get the same prompt, timer and word counter plus a short self-check list, free and without signing in.`,
       WRITING_DEFAULTS_NOTE,
       { note: NOT_AFFILIATED.en },
     ],
@@ -214,6 +230,7 @@ export const FORMATS_SPEAKING: FormatsKindPage = {
     lastReviewedLabel: 'Last reviewed',
     intro: [
       `There are ${SPEAKING_TASKS.length} speaking task types. Each one gives you preparation time to plan, then speaking time to record your answer in the browser. A recording can be up to ${FACTS.audioMinutes} minutes long.`,
+      `To practise without feedback, choose "${PRACTICE_MODE.label.en}" on the task: you get the same timers and can play your recording back, free and without signing in. ${PRACTICE_MODE.audio.en}`,
       `Speaking feedback is based on a transcript of your recording. Pronunciation and fluency are not assessed. [How recording works](${PATHS.helpRecording}).`,
       SPEAKING_DEFAULTS_NOTE,
       { note: NOT_AFFILIATED.en },

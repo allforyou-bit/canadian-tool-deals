@@ -1,9 +1,12 @@
 // Smoke checks against a deployed Worker (deploy.yml after every deploy; level-b.yml on demand):
 //   1. GET /api/health → 200 {ok:true, version}; with --version, polls until that version is live
 //   2. key pages → 200 HTML (and robots.txt / sitemap.xml)
-//   3. GET /api/me (signed out) → 200 JSON in the MeResponse shape (shared/api.ts), no email
+//   3. GET /api/me (signed out) → 200 JSON in the MeResponse shape (shared/api.ts), no email; with
+//      --expect-google / --expect-magic-link (deploy.yml), the sign-in methods the deploy configured
+//      (memo §7.2 Z3: auth.google, auth.magicLink)
 //
 //   node scripts/run.mjs scripts/smoke.ts --base https://… [--version 0.1.0+abc1234] [--wait-seconds 120]
+//       [--expect-google true|false] [--expect-magic-link owner|all|off]
 //
 // Exit 0 when every check passed, 1 otherwise. Prints status codes and field names only.
 import type { HealthResponse, MeResponse } from '../shared/api'
@@ -43,8 +46,14 @@ export function checkHealth(body: unknown, version?: string): string[] {
   return p
 }
 
+/** What the deploy configured, checked against /api/me's `auth` (fields left out are not checked). */
+export interface MeExpectations {
+  google?: boolean
+  magicLink?: string
+}
+
 /** Problems with a signed-out GET /api/me body (MeResponse, shared/api.ts). */
-export function checkMeShape(body: unknown): string[] {
+export function checkMeShape(body: unknown, expect: MeExpectations = {}): string[] {
   if (!isObj(body)) return ['/api/me: body is not a JSON object']
   const me = body as Partial<MeResponse> & Record<string, unknown>
   const p: string[] = []
@@ -56,8 +65,21 @@ export function checkMeShape(body: unknown): string[] {
   if (!isObj(me.usage) || !num(me.usage.writingToday) || !num(me.usage.speakingToday) || !num(me.usage.graded30d)) {
     p.push('/api/me: usage must be {writingToday, speakingToday, graded30d} numbers')
   }
-  if (!isObj(me.flags) || !bool(me.flags.checkoutEnabled) || !bool(me.flags.gradingEnabled) || typeof me.flags.banner !== 'string') {
-    p.push('/api/me: flags must be {checkoutEnabled: boolean, gradingEnabled: boolean, banner: string}')
+  if (
+    !isObj(me.flags) ||
+    !bool(me.flags.checkoutEnabled) ||
+    !bool(me.flags.gradingEnabled) ||
+    !bool(me.flags.freeEnabled) ||
+    !bool(me.flags.speakingAvailable) ||
+    typeof me.flags.banner !== 'string'
+  ) {
+    p.push('/api/me: flags must be {checkoutEnabled, gradingEnabled, freeEnabled, speakingAvailable: boolean, banner: string}')
+  }
+  if (!isObj(me.auth) || !bool(me.auth.google) || !['owner', 'all', 'off'].includes(String(me.auth.magicLink))) {
+    p.push("/api/me: auth must be {google: boolean, magicLink: 'owner' | 'all' | 'off'}")
+  } else {
+    if (expect.google !== undefined && me.auth.google !== expect.google) p.push(`/api/me: auth.google is ${me.auth.google}, but this deploy ${expect.google ? 'configured' : 'did not configure'} Google sign-in`)
+    if (expect.magicLink !== undefined && me.auth.magicLink !== expect.magicLink) p.push(`/api/me: auth.magicLink is ${me.auth.magicLink}, want ${expect.magicLink}`)
   }
   if (me.pass !== undefined && me.pass !== null) p.push('/api/me: pass must be null or absent when signed out')
   return p
@@ -82,6 +104,7 @@ async function getJson(fetchImpl: Fetch, url: string): Promise<{ status: number;
 export interface SmokeOptions {
   base: string
   version?: string
+  expect?: MeExpectations
   waitSeconds?: number
   pollSeconds?: number
   fetchImpl?: Fetch
@@ -133,7 +156,7 @@ export async function runSmoke(opts: SmokeOptions): Promise<string[]> {
   const me = await getJson(fetchImpl, `${base}/api/me`)
   if (me.status !== 200) problems.push(`/api/me: HTTP ${me.status}`)
   else if (!me.type.includes('application/json')) problems.push(`/api/me: content-type ${me.type || 'missing'}, want application/json`)
-  else problems.push(...checkMeShape(me.body))
+  else problems.push(...checkMeShape(me.body, opts.expect))
   return problems
 }
 
@@ -148,7 +171,18 @@ export async function main(args: string[]): Promise<number> {
     console.error('smoke: --base must be the site origin, e.g. https://example.com')
     return 2
   }
-  const problems = await runSmoke({ base, version: argValue(args, '--version') || undefined, waitSeconds: Number(argValue(args, '--wait-seconds') ?? 0) })
+  const google = argValue(args, '--expect-google')
+  if (google !== undefined && google !== 'true' && google !== 'false') {
+    console.error('smoke: --expect-google takes true or false')
+    return 2
+  }
+  const magicLink = argValue(args, '--expect-magic-link') || undefined
+  const problems = await runSmoke({
+    base,
+    version: argValue(args, '--version') || undefined,
+    waitSeconds: Number(argValue(args, '--wait-seconds') ?? 0),
+    expect: { google: google === undefined ? undefined : google === 'true', magicLink },
+  })
   const { appendFile } = await import('node:fs/promises')
   const summary = problems.length ? `Smoke checks FAILED on ${base}:\n${problems.map((p) => `- ${p}`).join('\n')}\n` : `Smoke checks passed on ${base}: /api/health, ${KEY_PAGES.length} pages, robots.txt, sitemap.xml, /api/me shape.\n`
   if (process.env.GITHUB_STEP_SUMMARY) await appendFile(process.env.GITHUB_STEP_SUMMARY, summary)

@@ -4,7 +4,7 @@ import { CAPS } from '../shared/config'
 import { ALLOWED_PHRASES, findClaims } from '../shared/content-rules'
 import { ApiClientError } from './api'
 import { describeError } from './errors'
-import { errorKindLabel, fill, formatCad, formatClock, t, UI } from './i18n'
+import { errorKindLabel, fill, formatCad, formatClock, sellerLine, t, UI } from './i18n'
 
 describe('UI strings', () => {
   it('make no forbidden claims in either language', () => {
@@ -25,6 +25,27 @@ describe('UI strings', () => {
 
   it('say "Passes are not sold in Quebec." on the buy card', () => {
     expect(t('en', 'b.notQuebec')).toBe('Passes are not sold in Quebec.')
+  })
+
+  it('never promise emails to learners (no learner email at launch, memo §7.2 Z4)', () => {
+    for (const lang of ['en', 'ko'] as const) {
+      for (const [key, text] of Object.entries(UI[lang])) {
+        expect({ key, text: /receipts are (always|still) sent|영수증은 (항상|계속) 보내요|verify your email|이메일 인증 후/.test(text) }).toEqual({
+          key,
+          text: false,
+        })
+      }
+    }
+    expect(t('en', 'a.noEmail')).toContain('We do not send emails')
+    expect(t('en', 'c.noEmail')).toContain('We do not send a confirmation email')
+    expect(t('en', 'a.receipt')).toBe('View receipt')
+    expect(t('ko', 'a.receipt')).toBe('영수증 보기')
+  })
+
+  it('say that practice-mode recordings never leave the device', () => {
+    expect(t('en', 'pm.practiceNoteSpeaking')).toContain('never uploaded')
+    expect(t('en', 'pm.practice')).toBe('Practise without feedback')
+    expect(t('ko', 'pm.practiceNoteSpeaking')).toContain('업로드되지 않아요')
   })
 
   it('use the exact allowed disclaimer sentence', () => {
@@ -51,6 +72,13 @@ describe('helpers', () => {
     expect(formatClock(27 * 60)).toBe('27:00')
     expect(formatClock(4.2)).toBe('0:05')
     expect(formatClock(-3)).toBe('0:00')
+  })
+
+  it('names the seller once the legal name is configured (memo §7.2 Z5)', () => {
+    expect(sellerLine('en', 'Jane Q. Owner')).toBe('Maple Practice Coach is sold by Jane Q. Owner, a sole proprietor in Ontario.')
+    expect(sellerLine('ko', ' Jane Q. Owner ')).toBe('메이플 영어 연습 코치는 온타리오주의 개인사업자 Jane Q. Owner이(가) 판매해요.')
+    expect(sellerLine('en', '')).toBeNull()
+    expect(sellerLine('ko', '   ')).toBeNull()
   })
 
   it('formats Canadian dollars', () => {
@@ -122,6 +150,29 @@ describe('describeError', () => {
       'Refund window has passed',
     )
     expect(describeError(err('forbidden', 403, 'x'), 'en', 'writing').text).toBe(t('en', 'common.generic'))
+  })
+
+  it('says speaking is closed for the day on at_capacity, and when it opens', () => {
+    const closed = describeError(err('at_capacity', 503, 'x'), 'en', 'speaking')
+    expect(closed.text).toBe(t('en', 's.closedToday'))
+    expect(closed.text).toContain('00:00 UTC')
+    expect(closed.text).toContain('without feedback')
+    expect(describeError(err('at_capacity', 503), 'ko', 'speaking').text).toBe(t('ko', 's.closedToday'))
+    expect(describeError(err('at_capacity', 503), 'en', 'writing').text).toBe(t('en', 'err.at_capacity'))
+  })
+
+  it('explains Google sign-in problems, and that the email link is for the owner', () => {
+    expect(describeError(err('forbidden', 403, 'Google sign-in is not available on this site'), 'en', 'google').text).toBe(
+      t('en', 'l.googleOff'),
+    )
+    expect(describeError(err('not_found', 404, 'Not implemented'), 'ko', 'google').text).toBe(t('ko', 'l.googleOff'))
+    expect(describeError(err('rate_limited', 429), 'ko', 'google').text).toBe(t('ko', 'l.tooMany'))
+    expect(describeError(err('bad_request', 400), 'en', 'google').text).toBe(t('en', 'b.reload'))
+    expect(describeError(err('turnstile_failed', 403), 'en', 'google').text).toBe(t('en', 'err.turnstile_failed'))
+    expect(describeError(err('forbidden', 403, 'Sign in with Google'), 'en', 'login').text).toBe(
+      'Email links are only for the site owner. Please continue with Google.',
+    )
+    expect(describeError(err('bad_request', 400), 'en', 'login').text).toBe(t('en', 'l.badEmail'))
   })
 
   it('reports network failures plainly', () => {

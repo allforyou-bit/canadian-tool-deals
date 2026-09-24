@@ -41,7 +41,9 @@ export function PricingView({ copy }: { copy: PricingCopy }) {
         </h2>
         <ul className="mt-2 list-disc space-y-1 pl-5">
           {copy.free.items.map((item, i) => (
-            <li key={i}>{item}</li>
+            <li key={i}>
+              <Rich text={item} />
+            </li>
           ))}
         </ul>
         <p className="mt-2 text-sm">{copy.free.note}</p>

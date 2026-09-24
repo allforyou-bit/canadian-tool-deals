@@ -95,7 +95,7 @@ CREATE INDEX purchases_payment_intent ON purchases(payment_intent);
 CREATE INDEX purchases_paid ON purchases(status, paid_at);
 
 CREATE TABLE webhook_events (
-  id TEXT PRIMARY KEY,                -- Stripe event id (idempotency)
+  id TEXT PRIMARY KEY,                -- Stripe event id (idempotency); also guard rows (cron_alert, pause extensions, support notices)
   type TEXT NOT NULL,
   received_at TEXT NOT NULL
 );
@@ -128,7 +128,7 @@ CREATE INDEX grades_created ON grades(created_at);
 
 CREATE TABLE free_usage (
   key_hash TEXT NOT NULL,             -- device or ip/24 hash
-  kind TEXT NOT NULL,                 -- device | ip
+  kind TEXT NOT NULL,                 -- device | ip (free samples); ev_device | ev_ip (event budgets); ml (sign-in link window: day holds the send time)
   day TEXT NOT NULL,                  -- YYYY-MM-DD (UTC)
   count INTEGER NOT NULL DEFAULT 0,
   PRIMARY KEY (key_hash, kind, day)

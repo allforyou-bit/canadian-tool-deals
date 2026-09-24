@@ -1,11 +1,13 @@
 import { env } from 'cloudflare:test'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
+  MAX_RECEIPT_URL_LENGTH,
   STRIPE_API_VERSION,
   StripeError,
   describeError,
   formEncode,
   idOf,
+  receiptUrlOf,
   stripeFetch,
   verifyStripeSignature,
 } from '../../src/billing/stripe'
@@ -137,6 +139,30 @@ describe('helpers', () => {
     expect(idOf({ id: 'ch_2' })).toBe('ch_2')
     expect(idOf(null)).toBeNull()
     expect(idOf(undefined)).toBeNull()
+  })
+
+  it('receiptUrlOf keeps only absolute https links within the spec length', () => {
+    const ok = 'https://pay.stripe.com/receipts/payment/CAcaFwoVYWNjdF90ZXN0?s=ap'
+    expect(receiptUrlOf({ receipt_url: ok })).toBe(ok)
+    const longest = `https://pay.stripe.com/${'x'.repeat(MAX_RECEIPT_URL_LENGTH - 'https://pay.stripe.com/'.length)}`
+    expect(receiptUrlOf({ receipt_url: longest })).toBe(longest)
+    expect(MAX_RECEIPT_URL_LENGTH).toBe(5000)
+    for (const bad of [
+      undefined,
+      null,
+      '',
+      `${longest}x`,
+      'http://pay.stripe.com/receipts/payment/x',
+      'javascript:alert(1)',
+      'data:text/html,hi',
+      '//pay.stripe.com/receipts',
+      '/receipts/payment/x',
+      'https://user:pw@pay.stripe.com/receipts',
+      'https://',
+      42 as unknown as string,
+    ]) {
+      expect(receiptUrlOf({ receipt_url: bad }), String(bad).slice(0, 40)).toBeNull()
+    }
   })
 
   it('describeError never throws on non-errors', () => {

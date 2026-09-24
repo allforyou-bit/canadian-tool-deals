@@ -3,7 +3,7 @@
 // knowledge that was not verified (memo §1.1 "Name rules", §8 item 11).
 import { BRAND, NOT_AFFILIATED } from '../../shared/config'
 import { PATHS } from '../routes'
-import { CONTACT_LINES_EN, LAST_REVIEWED } from '../site'
+import { CONTACT_LINES_EN, LAST_REVIEWED, SELLER } from '../site'
 import type { LegalPage } from '../types'
 
 export const NOT_AFFILIATED_PAGE: LegalPage = {
@@ -21,7 +21,7 @@ export const NOT_AFFILIATED_PAGE: LegalPage = {
       id: 'independent',
       heading: 'An independent practice tool',
       blocks: [
-        `${BRAND.en} is run by a sole proprietor in Ontario, Canada. We are not connected with any test provider, test centre or government body, and no test provider has reviewed or approved this service.`,
+        `${SELLER.en} We are not connected with any test provider, test centre or government body, and no test provider has reviewed or approved this service.`,
       ],
     },
     {

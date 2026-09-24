@@ -14,7 +14,8 @@
       "payment_intent": "pi_fixture",
       "refunded": true,
       "disputed": false,
-      "status": "succeeded"
+      "status": "succeeded",
+      "receipt_url": "https://pay.stripe.com/receipts/payment/CAcaFwoVYWNjdF9maXh0dXJlX2NoX2ZpeHR1cmU"
     }
   }
 }

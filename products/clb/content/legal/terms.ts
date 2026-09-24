@@ -7,10 +7,26 @@
 // relying on them and preserves any rights that cannot be waived. Must be reviewed before launch.
 // The page date is TERMS_VERSION (shared/config.ts): BuyPass sends it with every checkout and the Worker
 // stores it on the purchase, so any change to these terms or the refund policy must bump TERMS_VERSION.
+// Zero-capital launch (memo §7.2): the seller is the owner's legal name (Z5), accounts use Google sign-in (Z3),
+// no email goes to learners, so notices appear on the site and the account page (Z4), speaking feedback can close
+// for the day at the shared capacity (Z2), and practice without feedback is free (Z9).
 import { BRAND, NOT_AFFILIATED, TERMS_VERSION } from '../../shared/config'
 import { SPEAKING_TASKS, WRITING_TASKS } from '../../shared/tasks'
 import { PATHS } from '../routes'
-import { CONTACT_LINES_EN, DAILY_RESET_EN, FACTS, NO_FEEDBACK_LIMIT, PAUSE_EXTENSION, QUEBEC_RULE } from '../site'
+import {
+  CONTACT_LINES_EN,
+  DAILY_RESET_EN,
+  FACTS,
+  GOOGLE_SIGN_IN,
+  legalNameText,
+  NO_FEEDBACK_LIMIT,
+  NO_LEARNER_EMAIL,
+  PAUSE_EXTENSION,
+  PRACTICE_MODE,
+  QUEBEC_RULE,
+  SELLER,
+  SPEAKING_CAPACITY,
+} from '../site'
 import type { LegalPage } from '../types'
 
 export const TERMS: LegalPage = {
@@ -21,9 +37,9 @@ export const TERMS: LegalPage = {
   lastReviewed: TERMS_VERSION,
   lastReviewedLabel: 'Last updated',
   draftComment:
-    'DRAFT terms of use. Must be reviewed (ideally by an Ontario lawyer) and approved by the owner before launch; see business/online/owner-setup.md. Ontario Consumer Protection Act, 2023 rules for online agreements were not verified; check the notice period for changes, the liability cap and the dispute clause against them. The date at the top is TERMS_VERSION in shared/config.ts; bump it whenever these terms or the refund policy change.',
+    'DRAFT terms of use. Must be reviewed (ideally by an Ontario lawyer) and approved by the owner before launch; see business/online/owner-setup.md. Ontario Consumer Protection Act, 2023 rules for online agreements were not verified; check the notice period for changes, the liability cap and the dispute clause against them. The date at the top is TERMS_VERSION in shared/config.ts; bump it whenever these terms or the refund policy change. [미확인] Ontario Business Names Act: whether selling under the product title, with the owner\'s legal name shown as the seller, avoids registering the product title as a business name. The owner asks ServiceOntario (a free call) before launch. [미확인] Ontario consumer rules on delivering a copy of an online agreement: the site sends no email, so check whether the account page and this page are enough.',
   intro: [
-    `These terms are an agreement between you and ${BRAND.en}, a business operated by a sole proprietor in Ontario, Canada ("we", "us"). They apply when you use the website, the free practice tasks or a pass you buy. Our [privacy policy](${PATHS.privacy}), [refund policy](${PATHS.refunds}) and [AI disclosure](${PATHS.aiDisclosure}) are part of these terms. By using the service you agree to these terms; if you do not agree, please do not use it. When you buy a pass, you agree to these terms and our refund policy, as shown next to the buy button, and we record the version (the date at the top of this page) with your purchase.`,
+    `${SELLER.en} These terms are an agreement between you and ${legalNameText} ("we", "us"). They apply when you use the website, the free practice tasks or a pass you buy. Our [privacy policy](${PATHS.privacy}), [refund policy](${PATHS.refunds}) and [AI disclosure](${PATHS.aiDisclosure}) are part of these terms. By using the service you agree to these terms; if you do not agree, please do not use it. When you buy a pass, you agree to these terms and our refund policy, as shown next to the buy button, and we record the version (the date at the top of this page) with your purchase.`,
   ],
   sections: [
     {
@@ -56,10 +72,9 @@ export const TERMS: LegalPage = {
       blocks: [
         {
           ul: [
-            `You sign in with a link we email to you. Each link works once and expires after ${FACTS.linkMinutes} minutes. Anyone who can read your email can sign in to your account, so keep your email account secure.`,
-            'One account is for one person. Do not share your account or pass with anyone else.',
+            `You sign in with your Google account, so you need one to create an account. ${GOOGLE_SIGN_IN.en} Anyone who can use your Google account can sign in to your account here, so keep your Google account secure.`,
+            'One account is for one person. Use a Google account that belongs to you, and do not share your account or pass with anyone else.',
             'You are responsible for what happens in your account. Tell us promptly if you think someone else has used it.',
-            'Give us a real email address that you can receive mail at.',
           ],
         },
       ],
@@ -68,7 +83,8 @@ export const TERMS: LegalPage = {
       id: 'free',
       heading: '4. Free tasks',
       blocks: [
-        `We offer ${FACTS.freeWriting} free writing task without an account and ${FACTS.freeSpeaking} free speaking task after you sign in with your email. We may limit, pause or end free tasks at any time, for example to prevent abuse or to control costs.`,
+        `We offer ${FACTS.freeWriting} free writing task with feedback without an account and ${FACTS.freeSpeaking} free speaking task with feedback after you sign in with Google. We may limit, pause or end free tasks at any time, for example to prevent abuse or to control costs.`,
+        `You can also practise any task without feedback ("${PRACTICE_MODE.label.en}"), free and without an account. This mode uses no AI. ${PRACTICE_MODE.audio.en}`,
       ],
     },
     {
@@ -80,6 +96,7 @@ export const TERMS: LegalPage = {
             `A pass gives you feedback on practice tasks for ${FACTS.days.pass30} or ${FACTS.days.pass90} days, starting when your payment is confirmed. If you buy a pass while another is active, the new days are added after the current pass ends.`,
             `Prices are in Canadian dollars and are shown on the [pricing page](${PATHS.pricing}). You pay once. Passes are not subscriptions and do not renew automatically; we never charge your card again unless you buy another pass.`,
             'You pay by card on the secure checkout page of our payment processor, Stripe. We do not accept other payment methods. We never receive or store your full card number.',
+            NO_LEARNER_EMAIL.en,
             'When you buy, you confirm that you live in Canada outside Quebec. After payment we check the billing address and the country where your card was issued. If the billing address is outside Canada or in Quebec, the card was issued outside Canada, or the payment was not made by card, we do not activate the pass and we refund the full payment automatically.',
             PAUSE_EXTENSION.en,
             'We may change prices for future purchases. A price change never affects a pass you have already bought.',
@@ -93,6 +110,7 @@ export const TERMS: LegalPage = {
       blocks: [
         `Each account can get feedback on up to ${FACTS.writingPerDay} writing tasks and ${FACTS.speakingPerDay} speaking tasks per day, and up to ${FACTS.gradedPer30Days} tasks in any 30 days. Daily limits reset at ${DAILY_RESET_EN}.`,
         NO_FEEDBACK_LIMIT.en,
+        SPEAKING_CAPACITY.en,
         `Writing answers can be up to ${FACTS.maxEssayChars} characters; recordings can be up to ${FACTS.audioMinutes} minutes and ${FACTS.audioMb} MB.`,
         'These limits keep the service available and affordable for everyone. If we lower them while your pass is active, you may ask us for a refund of the unused days of your pass, calculated day by day.',
       ],
@@ -186,7 +204,7 @@ export const TERMS: LegalPage = {
       id: 'changes',
       heading: '16. Changes to these terms',
       blocks: [
-        'We may update these terms. We will post the new version on this page with a new date. If a change significantly affects a pass you have already bought, we will email you at least 30 days before it takes effect, and you may then ask for a refund of the unused days of your pass, calculated day by day.',
+        'We may update these terms. We will post the new version on this page with a new date. If a change significantly affects a pass you have already bought, we will tell you at least 30 days before it takes effect, with a notice on the site and on your account page, and you may then ask for a refund of the unused days of your pass, calculated day by day.',
       ],
     },
     {

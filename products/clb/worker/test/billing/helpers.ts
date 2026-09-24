@@ -1,11 +1,13 @@
 // Test helpers for billing: users with sessions, hand-built Ctx (request.cf is not settable through the
 // router), a fake Stripe + Resend behind a stubbed global fetch, and signed webhook deliveries.
+// Learner email is off by default (LEARNER_EMAIL, memo §7.2 Z4): tests that read a buyer's email pass
+// learnerEmailOn() as the env, so they do not depend on the test bindings.
 import { createExecutionContext, env } from 'cloudflare:test'
 import { exports } from 'cloudflare:workers'
 import { vi } from 'vitest'
 import { SESSION, SKUS, type Sku, TERMS_VERSION } from '../../../shared/config'
-import { checkout } from '../../src/billing'
-import type { Ctx, User } from '../../src/env'
+import { checkout, webhook } from '../../src/billing'
+import type { Ctx, Env, User } from '../../src/env'
 import { hmacSha256Hex, randomId, randomToken, saltedHash } from '../../src/lib/crypto'
 import { addDays } from '../../src/lib/time'
 import checkoutCompletedFixture from '../fixtures/billing/checkout.session.completed.json'
@@ -60,7 +62,12 @@ export async function deleteAccount(userId: string): Promise<void> {
     .run()
 }
 
-export function makeCtx(user: User | null, over: Partial<Pick<Ctx, 'country' | 'region' | 'now'>> = {}): Ctx {
+/** The test env with learner email switched on (the deployed default is off). */
+export function learnerEmailOn(over: Partial<Env> = {}): Env {
+  return { ...env, LEARNER_EMAIL: 'on', ...over } as Env
+}
+
+export function makeCtx(user: User | null, over: Partial<Pick<Ctx, 'env' | 'country' | 'region' | 'now'>> = {}): Ctx {
   return {
     env,
     exec: createExecutionContext(),
@@ -124,6 +131,10 @@ export class FakeStripe {
   refunds: FakeRefund[] = []
   /** one-shot failures keyed by "METHOD /path" prefix */
   failures = new Map<string, { status: number; code?: string }>()
+  /** every Resend send fails while set: 'status' answers 403 (the sandbox refusing a learner), 'throw' drops the connection */
+  resendFailure: 'status' | 'throw' | null = null
+  /** Resend sends attempted, delivered or not */
+  emailAttempts = 0
   refundStatus: RefundStatus = 'succeeded'
   private seq = 0
 
@@ -161,6 +172,11 @@ export class FakeStripe {
     this.calls.push({ method: req.method, url, body, headers: req.headers })
 
     if (url.origin === 'https://api.resend.com' && url.pathname === '/emails') {
+      this.emailAttempts++
+      if (this.resendFailure === 'throw') throw new TypeError('Network connection lost.')
+      if (this.resendFailure === 'status') {
+        return Response.json({ name: 'validation_error', message: 'You can only send testing emails to your own address' }, { status: 403 })
+      }
       const msg = JSON.parse(body) as { to: string[]; subject: string; text: string }
       this.emails.push({ to: msg.to[0], subject: msg.subject, text: msg.text, idempotencyKey: req.headers.get('idempotency-key') })
       return Response.json({ id: `email_${++this.seq}` })
@@ -232,6 +248,13 @@ export interface ChargeOptions {
   fingerprint?: string | null
   refunded?: boolean
   disputed?: boolean
+  /** charge.receipt_url; default receiptUrlFor(charge id), null for none */
+  receiptUrl?: string | null
+}
+
+/** A distinct receipt link per charge (the path shape follows Stripe's fixtures3.json; the host is illustrative). */
+export function receiptUrlFor(chargeId: string): string {
+  return `https://pay.stripe.com/receipts/payment/${chargeId}`
 }
 
 /** A PaymentIntent with latest_charge expanded (Canadian card and Ontario address by default). */
@@ -254,6 +277,7 @@ export function paymentIntent(o: ChargeOptions = {}): Record<string, unknown> {
   if (o.refunded) charge.refunded = true
   if (o.disputed) charge.disputed = true
   if (o.amountRefunded !== undefined) charge.amount_refunded = o.amountRefunded
+  charge.receipt_url = o.receiptUrl === undefined ? receiptUrlFor(charge.id as string) : o.receiptUrl
   if (o.paymentMethodType && o.paymentMethodType !== 'card') {
     // e.g. Link paid from a bank account: {type:'link', link:{country, funding_source_group}} and no card
     charge.payment_method_details = { type: o.paymentMethodType, [o.paymentMethodType]: { country: 'CA' } } as never
@@ -284,7 +308,16 @@ export function checkoutCompletedEvent(s: {
   return e
 }
 
-export function chargeRefundedEvent(c: { chargeId: string; paymentIntentId: string; amountRefunded?: number; refunded?: boolean }) {
+export function chargeRefundedEvent(c: {
+  chargeId: string
+  paymentIntentId: string
+  amountRefunded?: number
+  refunded?: boolean
+  /** charge.receipt_url; default receiptUrlFor(chargeId) */
+  receiptUrl?: string | null
+  /** leave receipt_url out of the payload */
+  omitReceipt?: boolean
+}) {
   const e = clone(chargeRefundedFixture) as unknown as { id: string; data: { object: Record<string, unknown> } }
   e.id = `evt_${uid()}`
   Object.assign(e.data.object, {
@@ -292,7 +325,9 @@ export function chargeRefundedEvent(c: { chargeId: string; paymentIntentId: stri
     payment_intent: c.paymentIntentId,
     amount_refunded: c.amountRefunded ?? 3900,
     refunded: c.refunded ?? true,
+    receipt_url: c.receiptUrl === undefined ? receiptUrlFor(c.chargeId) : c.receiptUrl,
   })
+  if (c.omitReceipt) delete e.data.object.receipt_url
   return e
 }
 
@@ -319,16 +354,21 @@ export async function signatureHeader(payload: string, opts: { timestamp?: numbe
   return `t=${t},v1=${await hmacSha256Hex(opts.secret ?? env.STRIPE_WEBHOOK_SECRET, `${t}.${payload}`)}`
 }
 
-/** POSTs a signed event through the router (the webhook needs no request.cf data). */
+/**
+ * POSTs a signed event through the router (the webhook needs no request.cf data), or straight to the
+ * handler with `env` when a test needs other vars (e.g. learnerEmailOn()).
+ */
 export async function postWebhook(
   event: unknown,
-  opts: { timestamp?: number; secret?: string; header?: string | null; rawBody?: string } = {},
+  opts: { timestamp?: number; secret?: string; header?: string | null; rawBody?: string; env?: Env } = {},
 ): Promise<Response> {
   const payload = opts.rawBody ?? JSON.stringify(event)
   const header = opts.header === undefined ? await signatureHeader(payload, opts) : opts.header
   const headers: Record<string, string> = { 'content-type': 'application/json' }
   if (header !== null) headers['stripe-signature'] = header
-  return exports.default.fetch(`${ORIGIN}/api/stripe/webhook`, { method: 'POST', headers, body: payload })
+  const init = { method: 'POST', headers, body: payload }
+  if (opts.env) return webhook(new Request(`${ORIGIN}/api/stripe/webhook`, init), makeCtx(null, { env: opts.env }))
+  return exports.default.fetch(`${ORIGIN}/api/stripe/webhook`, init)
 }
 
 // ---------- flows ----------
@@ -353,14 +393,14 @@ export interface Purchase {
   res: Response
 }
 
-/** Checkout + a signed checkout.session.completed with the given payment evidence. */
-export async function purchase(stripe: FakeStripe, user: User, opts: ChargeOptions & { sku?: Sku } = {}): Promise<Purchase> {
+/** Checkout + a signed checkout.session.completed with the given payment evidence (`env`: see postWebhook). */
+export async function purchase(stripe: FakeStripe, user: User, opts: ChargeOptions & { sku?: Sku; env?: Env } = {}): Promise<Purchase> {
   const sessionId = await startCheckout(user, opts.sku)
   const pi = paymentIntent({ ...opts, amount: opts.amount ?? SKUS[opts.sku ?? 'pass30'].priceCents })
   stripe.paymentIntents.set(pi.id as string, pi)
   const charge = pi.latest_charge as { id: string; payment_method_details: { card?: { fingerprint: string | null } } }
   const event = checkoutCompletedEvent({ sessionId, paymentIntentId: pi.id as string, userId: user.id, sku: opts.sku })
-  const res = await postWebhook(event)
+  const res = await postWebhook(event, { env: opts.env })
   return {
     sessionId,
     paymentIntentId: pi.id as string,
@@ -389,6 +429,7 @@ export interface PurchaseDbRow {
   status: string
   amount_refunded_cents: number
   terms_version: string | null
+  receipt_url: string | null
   created_at: string
   paid_at: string | null
   refunded_at: string | null
@@ -439,7 +480,7 @@ export async function webhookEventExists(id: string): Promise<boolean> {
 /** A paid purchase with its pass, as the webhook would leave it. */
 export async function seedPaidPurchase(
   userId: string,
-  o: { paidAt?: Date; sku?: Sku; fingerprint?: string | null; paymentIntentId?: string } = {},
+  o: { paidAt?: Date; sku?: Sku; fingerprint?: string | null; paymentIntentId?: string; receiptUrl?: string | null } = {},
 ): Promise<{ id: string; paymentIntentId: string; chargeId: string }> {
   const sku = o.sku ?? 'pass30'
   const paidAt = o.paidAt ?? new Date()
@@ -449,9 +490,20 @@ export async function seedPaidPurchase(
   await env.DB.batch([
     env.DB.prepare(
       `INSERT INTO purchases (id, user_id, sku, amount_cents, currency, payment_intent, charge_id, card_fingerprint,
-                              card_country, payment_method_type, billing_country, billing_region, status, created_at, paid_at)
-       VALUES (?1, ?2, ?3, ?4, 'cad', ?5, ?6, ?7, 'CA', 'card', 'CA', 'ON', 'paid', ?8, ?8)`,
-    ).bind(id, userId, sku, SKUS[sku].priceCents, paymentIntentId, chargeId, o.fingerprint === undefined ? `fp_${uid()}` : o.fingerprint, paidAt.toISOString()),
+                              card_country, payment_method_type, billing_country, billing_region, status, receipt_url,
+                              created_at, paid_at)
+       VALUES (?1, ?2, ?3, ?4, 'cad', ?5, ?6, ?7, 'CA', 'card', 'CA', 'ON', 'paid', ?9, ?8, ?8)`,
+    ).bind(
+      id,
+      userId,
+      sku,
+      SKUS[sku].priceCents,
+      paymentIntentId,
+      chargeId,
+      o.fingerprint === undefined ? `fp_${uid()}` : o.fingerprint,
+      paidAt.toISOString(),
+      o.receiptUrl === undefined ? receiptUrlFor(chargeId) : o.receiptUrl,
+    ),
     env.DB.prepare('INSERT INTO passes (id, user_id, sku, starts_at, ends_at, purchase_id) VALUES (?1, ?2, ?3, ?4, ?5, ?6)').bind(
       randomId('pass_'),
       userId,

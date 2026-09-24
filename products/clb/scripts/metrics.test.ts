@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest'
 import day26 from './fixtures/metrics-2026-10-26.json'
 import { parseD1Json } from './lib/d1'
 import { findPersonalData, isTokenLike } from './lib/pii-guard'
-import adsFixture from './fixtures/ads.json'
 import { classifyMetricsPath, guardFile, guardPaths, isFresh, serializeMetricsFile, toMetricsFile, validateDailyMetrics, validateMetricsFile, type GuardFs } from './metrics'
 
 // what `wrangler d1 execute DB --remote --json --command "SELECT day, json, created_at FROM metrics_daily ..."` prints
@@ -121,22 +120,29 @@ describe('validateDailyMetrics allowlist (R61)', () => {
 })
 
 describe('personal-data guard over ops/metrics (R61)', () => {
-  it('allows only README.md, ads.json and <day>.json at the top level', () => {
+  it('allows only README.md and <day>.json at the top level (ads.json went with the ad budget, Z1)', () => {
     expect(classifyMetricsPath('README.md')).toBe('readme')
-    expect(classifyMetricsPath('ads.json')).toBe('ads')
     expect(classifyMetricsPath('2026-10-27.json')).toBe('daily')
-    for (const p of ['sub/2026-10-27.json', 'ads.csv', 'x.JSON', '2026-10-27.JSON', 'notes.json', '.hidden', 'readme.md']) expect(classifyMetricsPath(p)).toBe('unexpected')
+    for (const p of ['ads.json', 'sub/2026-10-27.json', 'ads.csv', 'x.JSON', '2026-10-27.JSON', 'notes.json', '.hidden', 'readme.md']) expect(classifyMetricsPath(p)).toBe('unexpected')
   })
 
-  it('checks every file whatever its extension, and validates daily files and ads.json', () => {
+  it('checks every file whatever its extension, and validates daily files', () => {
     expect(guardFile('README.md', 'Emails and essays never go here: someone@example.com')).toEqual([])
     expect(guardFile('2026-10-26.json', serializeMetricsFile(day26 as never))).toEqual([])
-    expect(guardFile('ads.json', JSON.stringify(adsFixture))).toEqual([])
+    expect(guardFile('ads.json', '[{"date":"2026-10-26","spendCad":1}]')).toEqual(['unexpected file: only README.md and <YYYY-MM-DD>.json belong in ops/metrics (no subfolders)'])
     expect(guardFile('ads.csv', 'date,spend\n2026-10-26,a@b.c').join(' ')).toMatch(/unexpected file.*"@" character/)
     expect(guardFile('x.JSON', '{"essay": 1}').join(' ')).toMatch(/unexpected file.*forbidden word "essay"/)
     expect(guardFile('2026-10-26.json', JSON.stringify({ ...day26, metrics: { ...day26.metrics, note: 'My landlord refused' } }))).toContain('metrics: note is not an allowed field')
-    expect(guardFile('ads.json', '[{"date":"2026-10-26","note":"x"}]').join(' ')).toMatch(/unknown field\(s\) note/)
     expect(guardFile('2026-10-26.json', 'not json')).toContain('not valid JSON')
+  })
+
+  it('accepts the free practice events and an optional paidEvents map (Z1, Z9)', () => {
+    const withPractice = { ...day26.metrics, events: { ...day26.metrics.events, practice_start: 4, practice_done: 2 } }
+    expect(validateDailyMetrics(withPractice)).toEqual([])
+    // no ads → the Worker writes no paidEvents; older files may still carry it
+    expect(validateDailyMetrics({ ...withPractice, paidEvents: { landing: 3 } })).toEqual([])
+    expect(validateDailyMetrics({ ...withPractice, paidEvents: { gclid_clicks: 3 } })).toContain('paidEvents.gclid_clicks is not an allowed field')
+    expect(validateDailyMetrics({ ...withPractice, events: { ...withPractice.events, practice_start: -1 } })).toContain('events.practice_start must be a whole number ≥ 0')
   })
 
   // in-memory tree standing in for node:fs/promises
@@ -172,7 +178,7 @@ describe('personal-data guard over ops/metrics (R61)', () => {
 
   it('passes a clean folder', async () => {
     const lines: string[] = []
-    const tree = { 'm/README.md': '# x', 'm/2026-10-26.json': serializeMetricsFile(day26 as never), 'm/ads.json': JSON.stringify(adsFixture) }
+    const tree = { 'm/README.md': '# x', 'm/2026-10-26.json': serializeMetricsFile(day26 as never), 'm/2026-10-27.json': serializeMetricsFile({ ...day26, day: '2026-10-27', metrics: { ...day26.metrics, day: '2026-10-27' } } as never) }
     expect(await guardPaths(['m/'], fakeFs(tree), { out: (l) => lines.push(l), err: (l) => lines.push(l) })).toBe(0)
     expect(lines).toEqual(['pii-guard: 3 file(s) checked, 0 with findings'])
   })

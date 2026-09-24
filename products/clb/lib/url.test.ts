@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { isSafeCheckoutUrl, loginHref, safeNextPath, tokenFromHash, unsubscribeFromHash } from './url'
+import { isGoogleSignInUrl, isSafeCheckoutUrl, loginHref, safeNextPath, safeReceiptUrl, tokenFromHash, unsubscribeFromHash } from './url'
 
 const ORIGIN = 'https://coach.test'
 
@@ -34,6 +34,35 @@ describe('isSafeCheckoutUrl', () => {
     expect(isSafeCheckoutUrl('javascript:alert(1)')).toBe(false)
     expect(isSafeCheckoutUrl('/relative')).toBe(false)
     expect(isSafeCheckoutUrl(undefined)).toBe(false)
+  })
+})
+
+describe('isGoogleSignInUrl', () => {
+  it("accepts only https URLs on Google's sign-in host", () => {
+    expect(isGoogleSignInUrl('https://accounts.google.com/o/oauth2/v2/auth?client_id=x&state=y')).toBe(true)
+    for (const bad of [
+      'http://accounts.google.com/o/oauth2/v2/auth',
+      'https://accounts.google.com.evil.test/o/oauth2/v2/auth',
+      'https://evil.test/?u=https://accounts.google.com/',
+      'https://user:pw@accounts.google.com/o/oauth2/v2/auth',
+      'javascript:alert(1)',
+      '/api/auth/google/callback',
+      '',
+      undefined,
+      42,
+    ]) {
+      expect(isGoogleSignInUrl(bad)).toBe(false)
+    }
+  })
+})
+
+describe('safeReceiptUrl', () => {
+  it('shows https receipt links only', () => {
+    expect(safeReceiptUrl('https://pay.stripe.com/receipts/payment/abc')).toBe('https://pay.stripe.com/receipts/payment/abc')
+    for (const bad of ['http://pay.stripe.com/receipts/x', 'javascript:alert(1)', 'data:text/html,x', '/receipts/x', '', null, undefined]) {
+      expect(safeReceiptUrl(bad)).toBeNull()
+    }
+    expect(safeReceiptUrl(`https://pay.stripe.com/${'x'.repeat(5000)}`)).toBeNull()
   })
 })
 

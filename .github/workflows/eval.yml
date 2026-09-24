@@ -1,35 +1,59 @@
-# Grading eval (memo B12). Offline harness tests always run. The live eval runs only when an Anthropic
-# key is available (never for pull requests from forks):
-#   synthetic set (claude-opus-5, Message Batches) → cached by generator version, never committed
-#   → grade every sample 3× with the production grader request (Batches) → thresholds + a >5-point
-#   regression check against the last accepted run on master with the same limit (Actions cache).
+# Grading eval (memo B12; zero-capital launch memo §7.2 Z6, Z7). There is no schedule. It runs only
+#   - on pull requests that change the grader (prompt PRs: the paths below), and
+#   - when started by hand: Actions → "Grading eval" → Run workflow (optionally with "compare").
+# Offline harness tests always run. The live eval needs an Anthropic key (never for pull requests from forks):
+#   synthetic set for this run's limit (claude-opus-5, Message Batches; cached by generator version and
+#   limit, never committed) → grade every sample 3× with the production grader request (Batches) →
+#   thresholds + a >5-point regression check against the last accepted run on master with the same limit,
+#   subset rule and model (Actions cache).
+# compare (manual runs only): the same samples graded once on claude-opus-5 and once on claude-sonnet-5, one
+#   batch each, reported side by side in the job summary (scripts/eval/compare.ts): each model's thresholds,
+#   and the estimated cost per grade. Informational: no baseline is used or saved, a model that misses a
+#   threshold does not fail the run, and the run fails only when a model's grading could not finish (for
+#   example the budget did not cover it). The grader model on the site stays MPC_GRADER_MODEL (unset =
+#   claude-opus-5); switching is the owner's decision.
 # Results are uploaded as an artifact (14 days) and never committed.
 #
 # Key: secrets.ANTHROPIC_EVAL_API_KEY — a key from a separate Anthropic workspace with its own monthly
 #   limit, so eval spend cannot use up the production Console limit (the Worker's spend tiers cannot
-#   see it). Without it the production ANTHROPIC_API_KEY is used and the run shows a warning.
+#   see it). Without it the production ANTHROPIC_API_KEY is used and the run shows a warning. Both spend
+#   the organization's prepaid credits.
 # Grader: vars.MPC_GRADER_MODEL / MPC_GRADER_EFFORT / MPC_GRADER_MAX_TOKENS, the same variables the
 #   deploy passes to the Worker (unset → the Worker's defaults).
-# Cost control (all ESTIMATEs; worst case = every request uses all of max_tokens, batch prices):
-#   - limit: scheduled and manual runs grade MPC_EVAL_LIMIT practice samples (unset or 0 = all 120;
-#     worst case about US$52 on claude-opus-5, typical far lower); pull requests grade
-#     MPC_EVAL_PR_LIMIT (default 20; worst case about US$17). Every probe and benign item is always in.
-#   - budget: before any batch is created, the worst case must be ≤ MPC_EVAL_BUDGET_USD (default 60,
-#     US$ per script run); otherwise nothing is sent and the run fails.
-#   - cancelling: a superseded or cancelled run cancels its batch (SIGTERM handler + the last step);
-#     a batch still running after the wait limit is cancelled too.
-# Baselines are kept per limit (cache key eval-baseline-<limit>-…). A passing run on master becomes
-# the baseline for its limit; a full scheduled run also stores the metrics of its PR-limit subset, so
+# Cost control (ESTIMATEs; worst case = every request uses all of max_tokens, batch prices):
+#   - limit: MPC_EVAL_LIMIT for manual runs (the limit input overrides it) and MPC_EVAL_PR_LIMIT for pull
+#     requests, both 5 when unset: 5 practice samples + 3 immigration-advice probes + 3 benign themed answers,
+#     3 runs each (scripts/eval/synthetic-plan.ts selectSubset). 0 grades all 150 items (worst case about
+#     US$52 on claude-opus-5; needs a bigger budget). B3's full refusal check (10 probes, 20 benign) needs
+#     limit 0 or 40+.
+#   - budget: MPC_EVAL_BUDGET_USD (the budget_usd input overrides it; default 5) is the most one run may
+#     spend in total. Every batch (the synthetic set, the grading, each compare model) is created only when
+#     its worst case fits in the budget minus what the run's earlier batches cost (spend ledger
+#     .eval/ledger.json, scripts/eval/ledger.ts); otherwise nothing more is sent and the run fails.
+#     Limit 5: worst case about US$0.57 for a new synthetic set, US$3.84 for grading on claude-opus-5 and
+#     US$1.54 on claude-sonnet-5; typical costs are far lower.
+#   - waiting: each batch is waited on for at most 60 minutes and then cancelled, so a stuck batch cannot
+#     hold the runner for hours (a private repo on GitHub Free has 2,000 Actions minutes a month).
+#   - cancelling: a superseded or cancelled run cancels its batches (SIGTERM handler + the last step).
+# Baselines are kept per limit (cache key eval-baseline-v2-<limit>-…). A passing manual run on master
+# becomes the baseline for its limit; a larger run also stores the metrics of its PR-limit subset, so
 # pull requests are compared with the same samples.
 name: Grading eval
 
 on:
-  schedule:
-    - cron: '29 10 * * 1'
   workflow_dispatch:
     inputs:
       limit:
-        description: Grade at most this many practice samples (0 = all 120; empty = the MPC_EVAL_LIMIT variable)
+        description: Practice samples to grade (0 = all 120 plus every probe and benign item; empty = MPC_EVAL_LIMIT, else 5)
+        required: false
+        default: ''
+      compare:
+        description: Compare models - grade the same samples on claude-opus-5 and on claude-sonnet-5 and show them side by side
+        required: false
+        type: boolean
+        default: false
+      budget_usd:
+        description: The most this run may spend, in US$ (empty = MPC_EVAL_BUDGET_USD, else 5)
         required: false
         default: ''
   pull_request:
@@ -50,8 +74,9 @@ concurrency:
 
 jobs:
   eval:
-    runs-on: ubuntu-latest
-    timeout-minutes: 330
+    runs-on: ubuntu-24.04
+    # a backstop only: each batch is cancelled after 60 minutes (synthetic set + grading, + one more for compare)
+    timeout-minutes: ${{ inputs.compare && 200 || 140 }}
     defaults:
       run:
         working-directory: products/clb
@@ -61,9 +86,12 @@ jobs:
       GRADER_MODEL: ${{ vars.MPC_GRADER_MODEL }}
       GRADER_EFFORT: ${{ vars.MPC_GRADER_EFFORT }}
       GRADER_MAX_TOKENS: ${{ vars.MPC_GRADER_MAX_TOKENS }}
-      EVAL_BUDGET_USD: ${{ vars.MPC_EVAL_BUDGET_USD || '60' }}
-      PR_LIMIT: ${{ vars.MPC_EVAL_PR_LIMIT || '20' }}
-      EVAL_LIMIT: ${{ github.event_name == 'pull_request' && (vars.MPC_EVAL_PR_LIMIT || '20') || (inputs.limit || vars.MPC_EVAL_LIMIT || '0') }}
+      EVAL_BUDGET_USD: ${{ inputs.budget_usd || vars.MPC_EVAL_BUDGET_USD || '5' }}
+      # every script of this run adds what its batch cost; the next batch must fit in what is left
+      EVAL_LEDGER: .eval/ledger.json
+      PR_LIMIT: ${{ vars.MPC_EVAL_PR_LIMIT || '5' }}
+      EVAL_LIMIT: ${{ github.event_name == 'pull_request' && (vars.MPC_EVAL_PR_LIMIT || '5') || (inputs.limit || vars.MPC_EVAL_LIMIT || '5') }}
+      COMPARE: ${{ github.event_name == 'workflow_dispatch' && inputs.compare && 'true' || 'false' }}
     steps:
       - name: Check out
         uses: actions/checkout@v7
@@ -89,6 +117,10 @@ jobs:
           for v in "$EVAL_LIMIT" "$PR_LIMIT"; do
             case "$v" in ''|*[!0-9]*) echo "::error::MPC_EVAL_LIMIT, MPC_EVAL_PR_LIMIT and the limit input must be whole numbers (got '$v')"; exit 1 ;; esac
           done
+          if ! [[ "$EVAL_BUDGET_USD" =~ ^[0-9]+(\.[0-9]+)?$ ]] || [[ "$EVAL_BUDGET_USD" =~ ^0+(\.0+)?$ ]]; then
+            echo "::error::MPC_EVAL_BUDGET_USD and the budget_usd input must be a positive number of US dollars (got '$EVAL_BUDGET_USD')"
+            exit 1
+          fi
           if [ -n "$ANTHROPIC_EVAL_API_KEY" ]; then
             echo "Live eval uses ANTHROPIC_EVAL_API_KEY (the eval workspace)."
           elif [ -n "$ANTHROPIC_API_KEY" ]; then
@@ -98,7 +130,9 @@ jobs:
             echo "ready=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          echo "Limit: ${EVAL_LIMIT} (0 = all) · PR limit: ${PR_LIMIT} · budget per script run: US\$${EVAL_BUDGET_USD}"
+          mode="one model (${GRADER_MODEL:-the default grader})"
+          if [ "$COMPARE" = true ]; then mode="compare claude-opus-5 and claude-sonnet-5"; fi
+          echo "Limit: ${EVAL_LIMIT} (0 = all) · PR limit: ${PR_LIMIT} · budget for this run: US\$${EVAL_BUDGET_USD} · ${mode}"
           echo "ready=true" >> "$GITHUB_OUTPUT"
 
       - name: Restore the synthetic set
@@ -107,13 +141,13 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: products/clb/.eval/synthetic
-          key: eval-synthetic-${{ hashFiles('products/clb/scripts/eval/synthetic-plan.ts', 'products/clb/scripts/eval/gen-synthetic.ts', 'products/clb/shared/tasks.ts') }}
+          key: eval-synthetic-v2-limit-${{ env.EVAL_LIMIT }}-${{ hashFiles('products/clb/scripts/eval/synthetic-plan.ts', 'products/clb/scripts/eval/gen-synthetic.ts', 'products/clb/shared/tasks.ts') }}
 
       # `exec` makes node the step's process, so the SIGINT/SIGTERM of a cancelled run reaches the
-      # script (scripts/run.mjs forwards it), which cancels its batch.
+      # script (scripts/run.mjs forwards it), which cancels its batch. Only this run's samples are made.
       - name: Generate the synthetic set
         if: steps.cfg.outputs.ready == 'true' && steps.synth.outputs.cache-hit != 'true'
-        run: exec node scripts/run.mjs scripts/eval/gen-synthetic.ts --out .eval/synthetic
+        run: exec node scripts/run.mjs scripts/eval/gen-synthetic.ts --out .eval/synthetic --limit "$EVAL_LIMIT" --max-wait-minutes 60
 
       - name: Save the synthetic set
         if: steps.cfg.outputs.ready == 'true' && steps.synth.outputs.cache-hit != 'true'
@@ -123,16 +157,16 @@ jobs:
           key: ${{ steps.synth.outputs.cache-primary-key }}
 
       - name: Restore the baseline for this limit
-        if: steps.cfg.outputs.ready == 'true'
+        if: steps.cfg.outputs.ready == 'true' && env.COMPARE != 'true'
         uses: actions/cache/restore@v6
         with:
           path: products/clb/.eval/baseline/limit-${{ env.EVAL_LIMIT }}
-          key: eval-baseline-${{ env.EVAL_LIMIT }}-${{ github.run_id }}
-          restore-keys: eval-baseline-${{ env.EVAL_LIMIT }}-
+          key: eval-baseline-v2-${{ env.EVAL_LIMIT }}-${{ github.run_id }}
+          restore-keys: eval-baseline-v2-${{ env.EVAL_LIMIT }}-
 
       - name: Grade (3 runs per sample, Message Batches)
         id: live
-        if: steps.cfg.outputs.ready == 'true'
+        if: steps.cfg.outputs.ready == 'true' && env.COMPARE != 'true'
         continue-on-error: true
         run: >-
           exec node scripts/run.mjs scripts/eval/run-live.ts
@@ -142,6 +176,41 @@ jobs:
           --runs 3
           --limit "$EVAL_LIMIT"
           --subset-metrics "$PR_LIMIT"
+          --max-wait-minutes 60
+
+      # compare: the more expensive model first, while most of the budget is left; the second run is
+      # created only if its worst case fits in what the first one did not spend
+      - name: 'Compare: grade on claude-opus-5'
+        if: steps.cfg.outputs.ready == 'true' && env.COMPARE == 'true'
+        continue-on-error: true
+        run: >-
+          exec node scripts/run.mjs scripts/eval/run-live.ts
+          --in .eval/synthetic/samples.json
+          --out .eval/results/claude-opus-5
+          --model claude-opus-5
+          --runs 3
+          --limit "$EVAL_LIMIT"
+          --max-wait-minutes 60
+
+      - name: 'Compare: grade on claude-sonnet-5'
+        if: steps.cfg.outputs.ready == 'true' && env.COMPARE == 'true'
+        continue-on-error: true
+        run: >-
+          exec node scripts/run.mjs scripts/eval/run-live.ts
+          --in .eval/synthetic/samples.json
+          --out .eval/results/claude-sonnet-5
+          --model claude-sonnet-5
+          --runs 3
+          --limit "$EVAL_LIMIT"
+          --max-wait-minutes 60
+
+      - name: 'Compare: side-by-side summary'
+        if: steps.cfg.outputs.ready == 'true' && env.COMPARE == 'true'
+        run: >-
+          node scripts/run.mjs scripts/eval/compare.ts
+          .eval/results/claude-opus-5/metrics.json
+          .eval/results/claude-sonnet-5/metrics.json
+          --out .eval/results/compare.md
 
       - name: Upload results
         if: always() && steps.cfg.outputs.ready == 'true'
@@ -151,12 +220,13 @@ jobs:
           path: |
             products/clb/.eval/results
             products/clb/.eval/synthetic/gen-report.json
+            products/clb/.eval/ledger.json
           include-hidden-files: true
           if-no-files-found: warn
           retention-days: 14
 
-      # A passing scheduled or manual run on master becomes the baseline for its limit; a larger run
-      # also becomes the baseline for the PR limit (metrics of that subset of its results).
+      # A passing manual run on master becomes the baseline for its limit; a larger run also becomes the
+      # baseline for the PR limit (metrics of that subset of its results). Never in compare mode.
       - name: Promote to baseline
         id: promote
         if: steps.live.outcome == 'success' && github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
@@ -174,23 +244,28 @@ jobs:
         uses: actions/cache/save@v6
         with:
           path: products/clb/.eval/baseline/limit-${{ env.EVAL_LIMIT }}
-          key: eval-baseline-${{ env.EVAL_LIMIT }}-${{ github.run_id }}
+          key: eval-baseline-v2-${{ env.EVAL_LIMIT }}-${{ github.run_id }}
 
       - name: Save the PR-limit baseline
         if: steps.promote.outcome == 'success' && steps.promote.outputs.subset == 'true'
         uses: actions/cache/save@v6
         with:
           path: products/clb/.eval/baseline/limit-${{ env.PR_LIMIT }}
-          key: eval-baseline-${{ env.PR_LIMIT }}-${{ github.run_id }}
+          key: eval-baseline-v2-${{ env.PR_LIMIT }}-${{ github.run_id }}
 
       - name: Fail when thresholds failed
         if: steps.live.outcome == 'failure'
         run: |
-          echo "::error::Grading eval failed its thresholds (or could not run, or its worst-case cost was above MPC_EVAL_BUDGET_USD). See the log, the job summary and the eval-results artifact."
+          echo "::error::Grading eval failed its thresholds (or could not run, or its worst-case cost did not fit in the run's budget, MPC_EVAL_BUDGET_USD). See the log, the job summary and the eval-results artifact."
           exit 1
 
       # Runs after a cancel, a timeout or a failure too: a batch whose id file is still there may still
       # be running and billing. The scripts delete the file once their batch has ended.
       - name: Cancel batches left running
         if: always() && steps.cfg.outputs.ready == 'true'
-        run: node scripts/run.mjs scripts/eval/cancel-batch.ts .eval/results/batch-id.txt .eval/synthetic/gen-batch-id.txt
+        run: >-
+          node scripts/run.mjs scripts/eval/cancel-batch.ts
+          .eval/results/batch-id.txt
+          .eval/results/claude-opus-5/batch-id.txt
+          .eval/results/claude-sonnet-5/batch-id.txt
+          .eval/synthetic/gen-batch-id.txt

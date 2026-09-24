@@ -1,5 +1,6 @@
 // User-facing text for billing: API error messages and transactional emails, in English and Korean.
 // Every string must pass shared/content-rules.ts findClaims (tested in worker/test/billing/rules.test.ts).
+// Learner email may be off (LEARNER_EMAIL): the account page shows the same status and receipt link.
 import type { Lang } from '../../../shared/api'
 import { BRAND, REFUND_POLICY, SKUS, type Sku } from '../../../shared/config'
 
@@ -91,8 +92,14 @@ const BANK_DELAY: Text = {
   ko: '은행에 따라 환불 내역이 표시되기까지 영업일 기준 며칠이 걸릴 수 있습니다.',
 }
 
+/** Stripe's receipt link as one line (it stays current after refunds); no line when there is none. */
+function receiptLine(lang: Lang, receiptUrl: string | null | undefined): string[] {
+  if (!receiptUrl) return []
+  return [lang === 'ko' ? `영수증(Stripe): ${receiptUrl}` : `Receipt (Stripe): ${receiptUrl}`]
+}
+
 /** Sent when a pass is granted. */
-export function passActiveEmail(lang: Lang, sku: Sku, endsAt: string, site: string): EmailText {
+export function passActiveEmail(lang: Lang, sku: Sku, endsAt: string, site: string, receiptUrl?: string | null): EmailText {
   const until = formatUtc(endsAt)
   if (lang === 'ko') {
     return {
@@ -101,6 +108,7 @@ export function passActiveEmail(lang: Lang, sku: Sku, endsAt: string, site: stri
         '구매해 주셔서 감사합니다.',
         `${SKUS[sku].ko}은 ${until}까지 이용할 수 있습니다.`,
         `내 계정: ${site}/account/`,
+        ...receiptLine(lang, receiptUrl),
         `구매 후 ${withinDays}일 이내이고 피드백을 받은 과제가 ${maxGradedTasksUsed}개 이하라면 계정 페이지에서 환불을 요청할 수 있습니다. ${REFUND_ONCE.ko}`,
       ].join('\n\n'),
     }
@@ -111,13 +119,14 @@ export function passActiveEmail(lang: Lang, sku: Sku, endsAt: string, site: stri
       'Thank you for your purchase.',
       `Your ${SKUS[sku].en} is active until ${until}.`,
       `Your account: ${site}/account/`,
+      ...receiptLine(lang, receiptUrl),
       `You can ask for a refund from your account page within ${withinDays} days of purchase if you used ${maxGradedTasksUsed} or fewer graded tasks. ${REFUND_ONCE.en}`,
     ].join('\n\n'),
   }
 }
 
 /** Sent when a payment is refunded because it came from outside the sales region. */
-export function regionRefundEmail(lang: Lang, amountCents: number, site: string): EmailText {
+export function regionRefundEmail(lang: Lang, amountCents: number, site: string, receiptUrl?: string | null): EmailText {
   const amount = formatCad(amountCents)
   if (lang === 'ko') {
     return {
@@ -126,6 +135,7 @@ export function regionRefundEmail(lang: Lang, amountCents: number, site: string)
         '이용권은 퀘벡을 제외한 캐나다 지역에 거주하며 캐나다에서 발급된 카드로 결제하는 분만 구매할 수 있습니다.',
         `결제 정보(청구지 주소, 결제 수단 또는 카드 발급 국가)가 이 조건에 맞지 않아 결제 금액 ${amount}을 전액 환불했습니다. 계정에 이용권은 추가되지 않았습니다.`,
         BANK_DELAY.ko,
+        ...receiptLine(lang, receiptUrl),
         `착오라고 생각되면 도움말 페이지에서 문의해 주세요: ${site}/help/`,
       ].join('\n\n'),
     }
@@ -136,22 +146,33 @@ export function regionRefundEmail(lang: Lang, amountCents: number, site: string)
       'Passes are available only to residents of Canada outside Quebec who pay with a card issued in Canada.',
       `Your payment did not meet these conditions (billing address, payment method or card country), so we refunded it in full: ${amount}. No pass was added to your account.`,
       BANK_DELAY.en,
+      ...receiptLine(lang, receiptUrl),
       `If you think this is a mistake, contact us from the help page: ${site}/help/`,
     ].join('\n\n'),
   }
 }
 
 /** Sent after a self-serve refund. */
-export function selfRefundEmail(lang: Lang, amountCents: number): EmailText {
+export function selfRefundEmail(lang: Lang, amountCents: number, receiptUrl?: string | null): EmailText {
   const amount = formatCad(amountCents)
   if (lang === 'ko') {
     return {
       subject: `${BRAND.ko}: 환불이 처리되었습니다`,
-      text: [`${amount}을 카드로 환불했으며 이용권은 종료되었습니다.`, BANK_DELAY.ko, REFUND_ONCE.ko].join('\n\n'),
+      text: [
+        `${amount}을 카드로 환불했으며 이용권은 종료되었습니다.`,
+        BANK_DELAY.ko,
+        ...receiptLine(lang, receiptUrl),
+        REFUND_ONCE.ko,
+      ].join('\n\n'),
     }
   }
   return {
     subject: `${BRAND.en}: your refund is on its way`,
-    text: [`We refunded ${amount} to your card, and your pass has ended.`, BANK_DELAY.en, REFUND_ONCE.en].join('\n\n'),
+    text: [
+      `We refunded ${amount} to your card, and your pass has ended.`,
+      BANK_DELAY.en,
+      ...receiptLine(lang, receiptUrl),
+      REFUND_ONCE.en,
+    ].join('\n\n'),
   }
 }

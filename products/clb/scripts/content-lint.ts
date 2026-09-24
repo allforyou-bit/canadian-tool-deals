@@ -1,22 +1,24 @@
-// Content lint (memo B9, B13): no forbidden claim on any exported page or in any ad line.
-// Rules come from shared/content-rules.ts (single source of truth, also used by the grader filter).
+// Content lint (memo B9): no forbidden claim on any exported page. Rules come from
+// shared/content-rules.ts (single source of truth, also used by the grader filter). There are no ads to
+// lint any more (memo §7.2 Z1: no ad budget; ops/ads was removed).
 //
-//   lintText(text, {ads})  → rule ids broken by plain text (ads adds the trademark rules)
+//   lintText(text)         → rule ids broken by plain text
 //   lintHtml(html)         → findings for one exported page: claims in visible text, meta tags,
 //                            alt/title attributes and JSON-LD, plus the trademark-notice rule
-//   lintAdsCsv(csv)        → findings for ops/ads/google.csv (claims, lengths, structure)
 //
-// CLI (from products/clb):  node scripts/run.mjs scripts/content-lint.ts [--out out] [--ads ../../ops/ads/google.csv] [--require-address]
+// CLI (from products/clb):  node scripts/run.mjs scripts/content-lint.ts [--out out] [--require-address] [--require-legal-name]
 //                            node scripts/run.mjs scripts/content-lint.ts --text "banner text"   (flags.yml)
-// Exits 1 on any finding and prints "file: rule-id — excerpt". Missing inputs are skipped with a notice.
-// --require-address (deploy.yml, integrator decision 16): also fails when any exported page still shows
-// the mailing-address placeholder, i.e. the site was built without NEXT_PUBLIC_MAILING_ADDRESS (CASL
-// requires the sender's mailing address on the consent request and in every message). With
-// --require-address, a missing out/ directory is an error instead of a skip.
+// Exits 1 on any finding and prints "file: rule-id — excerpt". A missing out/ is skipped with a notice.
+// --require-address (deploy.yml, only when MPC_MAILING_ADDRESS is set; memo §7.2 Z5): also fails when any
+// exported page still shows the mailing-address placeholder, i.e. the address did not reach the build
+// (NEXT_PUBLIC_MAILING_ADDRESS).
+// --require-legal-name (deploy.yml; production always, Z5): fails when the terms or privacy page does not
+// show the seller's legal name from the environment variable LEGAL_NAME (NEXT_PUBLIC_LEGAL_NAME did not
+// reach the build). The name is never printed.
+// With either flag, a missing out/ directory is an error instead of a skip.
 import { MAILING_ADDRESS_PLACEHOLDER } from '../content/site'
 import { NOT_AFFILIATED } from '../shared/config'
-import { AD_ONLY_FORBIDDEN, ALLOWED_PHRASES, FORBIDDEN_CLAIMS, findClaims, type ClaimRule } from '../shared/content-rules'
-import { parseCsvRecords } from './lib/csv'
+import { ALLOWED_PHRASES, FORBIDDEN_CLAIMS, findClaims, type ClaimRule } from '../shared/content-rules'
 
 export interface Finding {
   rule: string
@@ -25,7 +27,6 @@ export interface Finding {
   excerpt: string
 }
 
-const ALL_AD_RULES: ClaimRule[] = [...FORBIDDEN_CLAIMS, ...AD_ONLY_FORBIDDEN]
 const TRADEMARK = /\b(CELPIP|IELTS)\b/i
 
 export function normalizeWhitespace(text: string): string {
@@ -47,16 +48,15 @@ function excerptFor(text: string, rule: ClaimRule | undefined): string {
   return `${start > 0 ? '…' : ''}${normalizeWhitespace(t.slice(start, end))}${end < t.length ? '…' : ''}`
 }
 
-/** Rule ids the text breaks. `ads: true` also applies AD_ONLY_FORBIDDEN (no test trademarks). */
-export function lintText(text: string, opts: { ads?: boolean } = {}): string[] {
-  return findClaims(normalizeWhitespace(text), opts.ads ? ALL_AD_RULES : FORBIDDEN_CLAIMS)
+/** Rule ids the text breaks. */
+export function lintText(text: string): string[] {
+  return findClaims(normalizeWhitespace(text), FORBIDDEN_CLAIMS)
 }
 
 /** Like lintText, with an excerpt around each hit so the owner can find it. */
-export function lintTextFindings(text: string, where: string, opts: { ads?: boolean } = {}): Finding[] {
-  const rules = opts.ads ? ALL_AD_RULES : FORBIDDEN_CLAIMS
+export function lintTextFindings(text: string, where: string): Finding[] {
   const t = normalizeWhitespace(text)
-  return findClaims(t, rules).map((rule) => ({ rule, where, excerpt: excerptFor(t, rules.find((r) => r.id === rule)) }))
+  return findClaims(t, FORBIDDEN_CLAIMS).map((rule) => ({ rule, where, excerpt: excerptFor(t, FORBIDDEN_CLAIMS.find((r) => r.id === rule)) }))
 }
 
 // ---------- HTML ----------
@@ -198,71 +198,24 @@ export function addressPlaceholderFindings(html: string): Finding[] {
   return ADDRESS_PLACEHOLDERS.filter((p) => all.includes(normalizeWhitespace(p))).map((p) => ({ rule: 'mailing_address_placeholder', where: 'text', excerpt: p }))
 }
 
-// ---------- ads CSV (layout documented in ops/ads/README.md) ----------
+// ---------- seller's legal name (memo §7.2 Z5) ----------
 
-export const ADS_HEADER = ['type', 'ad_group', 'match_type', 'text'] as const
-const HEADLINE_MAX = 30
-const DESCRIPTION_MAX = 90
-/** Google's responsive search ad minimums as the owner will enter them [unverified: prior knowledge]. */
-const MIN_HEADLINES = 3
-const MIN_DESCRIPTIONS = 2
+/** Exported pages that must name the seller ("… is sold by <legal name>, a sole proprietor in Ontario"). */
+export const LEGAL_NAME_PAGES: readonly string[] = ['legal/terms/index.html', 'legal/privacy/index.html']
 
-export function lintAdsCsv(csv: string): Finding[] {
+/**
+ * Findings for pages that do not show `legalName` in their visible text (entities decoded, whitespace
+ * collapsed, case kept). `pages` maps a path relative to out/ to its HTML, or null when the file is
+ * missing. The excerpt never contains the name.
+ */
+export function legalNameFindings(pages: Record<string, string | null>, legalName: string): Finding[] {
+  const name = normalizeWhitespace(legalName)
+  if (!name) return [{ rule: 'legal_name_missing', where: 'LEGAL_NAME', excerpt: 'no legal name given to check (set MPC_LEGAL_NAME)' }]
   const findings: Finding[] = []
-  const { header, records } = parseCsvRecords(csv)
-  if (header.join(',') !== ADS_HEADER.join(',')) {
-    return [{ rule: 'csv_header', where: 'line 1', excerpt: `expected "${ADS_HEADER.join(',')}", got "${header.join(',')}"` }]
-  }
-  const groups = new Map<string, { headlines: string[]; descriptions: number; urls: number; keywords: number; line: number }>()
-  const group = (name: string, line: number) => {
-    let g = groups.get(name)
-    if (!g) groups.set(name, (g = { headlines: [], descriptions: 0, urls: 0, keywords: 0, line }))
-    return g
-  }
-  for (const { values: r, line } of records) {
-    const where = `line ${line}`
-    const text = r.text
-    const add = (rule: string, excerpt = text) => findings.push({ rule, where, excerpt })
-    if (text === '') add('empty_text')
-    switch (r.type) {
-      case 'negative':
-        // negatives are never shown; they may name what we block, but never a test trademark
-        if (!['broad', 'phrase', 'exact'].includes(r.match_type)) add('match_type', r.match_type)
-        findClaims(text, AD_ONLY_FORBIDDEN).forEach((rule) => add(rule))
-        continue
-      case 'keyword':
-        if (!['phrase', 'exact'].includes(r.match_type)) add('match_type', r.match_type)
-        group(r.ad_group, line).keywords++
-        break
-      case 'headline': {
-        const g = group(r.ad_group, line)
-        if ([...text].length > HEADLINE_MAX) add('headline_too_long', `${[...text].length} chars: ${text}`)
-        if (g.headlines.includes(text.toLowerCase())) add('duplicate')
-        g.headlines.push(text.toLowerCase())
-        break
-      }
-      case 'description':
-        if ([...text].length > DESCRIPTION_MAX) add('description_too_long', `${[...text].length} chars: ${text}`)
-        group(r.ad_group, line).descriptions++
-        break
-      case 'final_url':
-        if (!/^https:\/\/[^/\s]+\/\S*$/.test(text)) add('final_url')
-        group(r.ad_group, line).urls++
-        break
-      default:
-        add('unknown_type', r.type)
-        continue
-    }
-    if (r.ad_group === '') add('missing_ad_group')
-    lintTextFindings(text, where, { ads: true }).forEach((f) => findings.push(f))
-  }
-  for (const [name, g] of groups) {
-    const missing: string[] = []
-    if (g.headlines.length < MIN_HEADLINES) missing.push(`${MIN_HEADLINES}+ headlines`)
-    if (g.descriptions < MIN_DESCRIPTIONS) missing.push(`${MIN_DESCRIPTIONS}+ descriptions`)
-    if (g.urls !== 1) missing.push('exactly 1 final_url')
-    if (g.keywords === 0) missing.push('1+ keyword')
-    if (missing.length) findings.push({ rule: 'ad_group_incomplete', where: `ad group "${name}"`, excerpt: `needs ${missing.join(', ')}` })
+  for (const path of LEGAL_NAME_PAGES) {
+    const html = pages[path] ?? null
+    if (html === null) findings.push({ rule: 'legal_name_page_missing', where: path, excerpt: 'page not in the export' })
+    else if (!htmlToText(html).body.includes(name)) findings.push({ rule: 'legal_name_missing', where: path, excerpt: 'the seller\'s legal name is not on this page (was the site built with NEXT_PUBLIC_LEGAL_NAME?)' })
   }
   return findings
 }
@@ -296,41 +249,44 @@ export async function main(args: string[]): Promise<number> {
   }
   const { existsSync } = await import('node:fs')
   const { readFile } = await import('node:fs/promises')
+  const { join, relative, sep } = await import('node:path')
   const outDir = argValue(args, '--out', 'out')
-  const adsCsv = argValue(args, '--ads', '../../ops/ads/google.csv')
   const requireAddress = args.includes('--require-address')
+  const requireLegalName = args.includes('--require-legal-name')
   const report: string[] = []
   let checked = 0
 
   if (existsSync(outDir)) {
     const files = await listHtml(outDir)
+    const pages: Record<string, string | null> = {}
     for (const file of files) {
       checked++
       const html = await readFile(file, 'utf8')
+      const rel = relative(outDir, file).split(sep).join('/')
+      if (LEGAL_NAME_PAGES.includes(rel)) pages[rel] = html
       const findings = [...lintHtml(html), ...(requireAddress ? addressPlaceholderFindings(html) : [])]
       for (const f of findings) report.push(`${file}: ${f.rule} (${f.where}) — ${f.excerpt}`)
     }
-    console.log(`content-lint: ${files.length} HTML page(s) in ${outDir}${requireAddress ? ' (mailing address required)' : ''}`)
+    const required = [requireAddress ? 'mailing address' : '', requireLegalName ? 'legal name' : ''].filter(Boolean).join(' and ')
+    console.log(`content-lint: ${files.length} HTML page(s) in ${outDir}${required ? ` (${required} required)` : ''}`)
     if (requireAddress && files.length === 0) report.push(`${outDir}: no HTML pages to check for the mailing address`)
-  } else if (requireAddress) {
-    report.push(`${outDir}: not found — --require-address needs the built site`)
+    if (requireLegalName) {
+      for (const f of legalNameFindings(pages, process.env.LEGAL_NAME ?? '')) report.push(`${join(outDir, f.where)}: ${f.rule} — ${f.excerpt}`)
+    }
+  } else if (requireAddress || requireLegalName) {
+    report.push(`${outDir}: not found — --require-address and --require-legal-name need the built site`)
   } else {
     console.log(`content-lint: skipped pages — ${outDir} not found (run the site build first)`)
-  }
-
-  if (existsSync(adsCsv)) {
-    checked++
-    for (const f of lintAdsCsv(await readFile(adsCsv, 'utf8'))) report.push(`${adsCsv}: ${f.rule} (${f.where}) — ${f.excerpt}`)
-    console.log(`content-lint: checked ${adsCsv}`)
-  } else {
-    console.log(`content-lint: skipped ads — ${adsCsv} not found`)
   }
 
   if (report.length) {
     console.error(`content-lint: ${report.length} finding(s)`)
     for (const line of report) console.error(`  ${line}`)
     if (report.some((l) => l.includes('mailing_address_placeholder'))) {
-      console.error('content-lint: the site was built without the owner mailing address — set the MPC_MAILING_ADDRESS repository variable (business/online/owner-setup.md)')
+      console.error('content-lint: the mailing address did not reach the site build — check the MPC_MAILING_ADDRESS repository variable (business/online/owner-setup.md)')
+    }
+    if (report.some((l) => l.includes('legal_name_'))) {
+      console.error("content-lint: the seller's legal name did not reach the terms and privacy pages — check the MPC_LEGAL_NAME repository variable (business/online/owner-setup.md)")
     }
     return 1
   }

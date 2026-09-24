@@ -1,7 +1,17 @@
-# Kill switches (memo B10): set one KV flag from the Actions tab — also from the GitHub mobile app
-# (Actions → "Set a kill switch" → Run workflow). The Worker reads `flag:<name>` from the FLAGS
-# namespace (worker/src/lib/flags.ts). band_enabled is not offered: it stays false through
+# Kill switches (memo B10): set one KV flag from the Actions tab (Actions → "Set a kill switch" → Run
+# workflow). On a phone, use the phone's web browser at github.com; whether the GitHub Mobile app offers
+# "Run workflow" is not confirmed by GitHub's docs [unverified]. The Worker reads `flag:<name>` from the
+# FLAGS namespace (worker/src/lib/flags.ts). band_enabled is not offered: it stays false through
 # Jan 31 2027 and the Worker ignores it anyway.
+#
+# Without Actions (memo §7.2 Z7: on GitHub Free a private repo stops running workflows once its 2,000
+# monthly minutes are used): write the same KV keys yourself. With wrangler, from products/clb:
+#   npx wrangler kv key put owner:grading_enabled false --binding FLAGS --remote -c worker/wrangler.jsonc
+#   npx wrangler kv key put flag:grading_enabled false --binding FLAGS --remote -c worker/wrangler.jsonc
+# (owner:<flag> first, only for free_enabled and grading_enabled; add --env staging for staging), or in the
+# Cloudflare dashboard: Workers KV → the FLAGS namespace → add or edit the keys owner:<flag> and flag:<flag>
+# with the value true or false [unverified: dashboard labels]. The Worker's own spend monitor runs on
+# Cloudflare's cron and keeps working without Actions.
 #
 # Owner markers (integrator decision 12): setting free_enabled or grading_enabled also writes
 # `owner:<flag>` = the same value. The Worker's spend monitor never turns a switch back on while its
@@ -48,7 +58,7 @@ concurrency:
 
 jobs:
   set-flag:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     defaults:
       run:

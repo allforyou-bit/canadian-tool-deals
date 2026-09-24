@@ -19,10 +19,10 @@ function env(search: string, path = '/', storage: TrackEnv['storage'] = new Memo
 }
 
 describe('extractUtm', () => {
-  it('keeps only campaign parameters and gclid', () => {
+  it('keeps only campaign parameters (no ad click ids: the launch runs no ads)', () => {
     expect(
-      extractUtm('?utm_source=google&utm_medium=cpc&utm_campaign=writing&gclid=Cj0KCQ&email=a%40b.c&name=Kim&utm_id=9'),
-    ).toEqual({ utm_source: 'google', utm_medium: 'cpc', utm_campaign: 'writing', gclid: 'Cj0KCQ' })
+      extractUtm('?utm_source=kakao&utm_medium=community&utm_campaign=writing&gclid=Cj0KCQ&email=a%40b.c&name=Kim&utm_id=9'),
+    ).toEqual({ utm_source: 'kakao', utm_medium: 'community', utm_campaign: 'writing' })
   })
 
   it('drops empty values, email addresses and URLs', () => {
@@ -46,7 +46,7 @@ describe('trackOnce', () => {
     const storage = new MemoryStorage()
     const first = env('?utm_source=google&gclid=abc&email=x', '/', storage)
     expect(trackOnce('landing', first.e)).toBe(true)
-    expect(first.sent).toEqual([{ name: 'landing', path: '/', utm: { utm_source: 'google', gclid: 'abc' } }])
+    expect(first.sent).toEqual([{ name: 'landing', path: '/', utm: { utm_source: 'google' } }])
 
     const again = env('?utm_source=other', '/pricing/', storage)
     expect(trackOnce('landing', again.e)).toBe(false)
@@ -68,6 +68,25 @@ describe('trackOnce', () => {
     expect(trackOnce('sample_start', speaking.e)).toBe(true)
     expect(trackOnce('sample_done', speaking.e)).toBe(true)
     expect(speaking.sent.map((s) => s.name)).toEqual(['sample_start', 'sample_done'])
+  })
+
+  it('sends the free practice events once per task page, with the name and path only', () => {
+    const storage = new MemoryStorage()
+    trackOnce('landing', env('?utm_source=kakao', '/', storage).e)
+    const page = env('', '/practice/speaking/advice/', storage)
+    expect(isClientEvent('practice_start')).toBe(true)
+    expect(isClientEvent('practice_done')).toBe(true)
+    expect(trackOnce('practice_start', page.e)).toBe(true)
+    expect(trackOnce('practice_start', page.e)).toBe(false)
+    expect(trackOnce('practice_done', page.e)).toBe(true)
+    expect(trackOnce('practice_done', page.e)).toBe(false)
+    expect(page.sent).toEqual([
+      { name: 'practice_start', path: '/practice/speaking/advice/', utm: { utm_source: 'kakao' } },
+      { name: 'practice_done', path: '/practice/speaking/advice/', utm: { utm_source: 'kakao' } },
+    ])
+    // a different task page counts on its own
+    const other = env('', '/practice/writing/email/', storage)
+    expect(trackOnce('practice_start', other.e)).toBe(true)
   })
 
   it('omits utm when there is none', () => {

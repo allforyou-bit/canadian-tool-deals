@@ -6,14 +6,14 @@ import { useEffect, useId, useRef, useState, type FormEvent, type ReactNode } fr
 import { GradeResultView } from '../../components/GradeResultView'
 import { LangToggle } from '../../components/LangToggle'
 import { ErrorNotice, Notice } from '../../components/Notice'
+import { ReceiptLink } from '../../components/ReceiptLink'
 import { cls } from '../../components/ui'
 import { api, ApiClientError } from '../../lib/api'
-import { consentText } from '../../lib/consent'
-import { PUBLIC_ENV } from '../../lib/env'
-import { useMe, useSiteUrl, useUiLang } from '../../lib/hooks'
+import { useMe, useUiLang } from '../../lib/hooks'
 import { errorKindLabel, formatCad, formatDate, t, type UiKey } from '../../lib/i18n'
 import { appendHistoryPage } from '../../lib/history'
 import { accessEndsAt, activePass, freeSample, refreshMe, type FreeSample } from '../../lib/me'
+import { receiptUrlFor, type PurchaseStatus } from '../../lib/purchase'
 import { loginHref } from '../../lib/url'
 import { useAction } from '../../lib/use-action'
 import type { HistoryItem, HistoryItemResponse, HistoryResponse, Lang, MeResponse, RefundResponse } from '../../shared/api'
@@ -23,6 +23,14 @@ import { taskById } from '../../shared/tasks'
 const SUPPORT_MAX_CHARS = 4000
 
 const FREE_LABEL = { available: 'a.available', used: 'a.used', off: 'a.freeOff' } as const satisfies Record<FreeSample, UiKey>
+
+const PURCHASE_STATUS = {
+  paid: 'a.status.paid',
+  pending: 'a.status.pending',
+  refunded: 'a.status.refunded',
+  disputed: 'a.status.disputed',
+  rejected_region: 'a.status.rejected_region',
+} as const satisfies Record<PurchaseStatus, UiKey>
 
 const toClientError = (e: unknown) => (e instanceof ApiClientError ? e : new ApiClientError('internal', 0, 'Network error'))
 
@@ -87,6 +95,7 @@ function PassSection({ me, lang }: { me: MeResponse; lang: Lang }) {
           </Link>
         </>
       )}
+      <PurchaseBlock me={me} lang={lang} />
       <div className="space-y-3 border-t border-slate-200 pt-4">
         <h3 className="font-semibold text-slate-900">{t(lang, 'a.usage')}</h3>
         <UsageRow label={t(lang, 'a.writingToday')} used={me.usage.writingToday} cap={CAPS.writingPerDay} />
@@ -104,6 +113,33 @@ function PassSection({ me, lang }: { me: MeResponse; lang: Lang }) {
         </p>
       </div>
     </Section>
+  )
+}
+
+/**
+ * The latest purchase, its status and Stripe's receipt. Learners get no email from us (memo §7.2 Z4):
+ * this page is where the pass and the receipt live.
+ */
+function PurchaseBlock({ me, lang }: { me: MeResponse; lang: Lang }) {
+  const purchase = me.latestPurchase
+  if (!purchase) return null
+  const receipt = receiptUrlFor(me)
+  const status = PURCHASE_STATUS[purchase.status as PurchaseStatus] ?? 'a.status.pending'
+  return (
+    <div className="space-y-1 border-t border-slate-200 pt-4" data-testid="latest-purchase">
+      <h3 className="font-semibold text-slate-900">{t(lang, 'a.purchase')}</h3>
+      <p className="text-sm text-slate-900">
+        {t(lang, 'a.purchaseLine', { name: SKUS[purchase.sku]?.[lang] ?? purchase.sku, status: t(lang, status) })}
+      </p>
+      {receipt ? (
+        <ReceiptLink href={receipt} lang={lang} />
+      ) : (
+        purchase.status === 'pending' && <p className={cls.muted}>{t(lang, 'a.receiptPending')}</p>
+      )}
+      <p className={cls.muted} data-testid="no-email-note">
+        {t(lang, 'a.noEmail')}
+      </p>
+    </div>
   )
 }
 
@@ -288,40 +324,24 @@ function HistorySection({ lang }: { lang: Lang }) {
   )
 }
 
-function MarketingSection({ lang, optedIn }: { lang: Lang; optedIn: boolean }) {
-  const id = useId()
-  const siteUrl = useSiteUrl()
-  // null while the owner's mailing address is not configured: then we do not ask for consent at all
-  const consent = consentText(lang, PUBLIC_ENV.mailingAddress, siteUrl)
-  const [ticked, setTicked] = useState(false)
-  const action = useAction<'in' | 'out'>()
+/**
+ * Marketing email consent. The site no longer asks for it (memo §7.2 Z4: no email to learners, so
+ * there is no channel to send marketing on); this section appears only for someone who agreed
+ * earlier, so they can withdraw here as well as with the unsubscribe link.
+ */
+function MarketingSection({ lang }: { lang: Lang }) {
+  const action = useAction<true>()
   const stateRef = useRef<HTMLParagraphElement>(null)
-  const shownOptIn = useRef(optedIn)
 
-  // the withdraw button or the opt-in form (whichever had focus) is swapped out when the state
-  // changes after the learner's own action: keep focus on the new state line
+  // the withdraw button (which had focus) is replaced by the new state: keep focus on that line
   useEffect(() => {
-    if (shownOptIn.current !== optedIn && action.done) stateRef.current?.focus()
-    shownOptIn.current = optedIn
-  }, [optedIn, action.done])
-
-  async function optIn(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    if (!ticked || !consent) return
-    const done = await action.run(async () => {
-      await api.setMarketing({ optIn: true, consentText: consent })
-      return 'in'
-    })
-    if (done) {
-      setTicked(false)
-      void refreshMe({ force: true })
-    }
-  }
+    if (action.done) stateRef.current?.focus()
+  }, [action.done])
 
   async function optOut() {
     const done = await action.run(async () => {
       await api.setMarketing({ optIn: false })
-      return 'out'
+      return true
     })
     if (done) void refreshMe({ force: true })
   }
@@ -330,35 +350,14 @@ function MarketingSection({ lang, optedIn }: { lang: Lang; optedIn: boolean }) {
     <Section id="account-marketing" title={t(lang, 'a.marketing')}>
       <p className="text-slate-800">{t(lang, 'a.marketingIntro')}</p>
       <p ref={stateRef} tabIndex={-1} className="font-semibold text-slate-900 focus:outline-none" data-testid="marketing-state">
-        {t(lang, optedIn ? 'a.marketingOn' : 'a.marketingOff')}
+        {t(lang, action.done ? 'a.marketingOff' : 'a.marketingOn')}
       </p>
-      {optedIn ? (
+      {!action.done && (
         <button type="button" className={`${cls.btn} ${cls.secondary}`} disabled={action.pending} onClick={() => void optOut()}>
           {t(lang, 'a.marketingWithdraw')}
         </button>
-      ) : (
-        consent && (
-          <form onSubmit={optIn} className="space-y-3 border-t border-slate-200 pt-4">
-            <div className="flex items-start gap-3">
-              <input
-                id={`${id}-optin`}
-                type="checkbox"
-                required
-                checked={ticked}
-                onChange={(e) => setTicked(e.target.checked)}
-                className={cls.checkbox}
-              />
-              <label htmlFor={`${id}-optin`} className="text-sm text-slate-800" data-testid="account-consent-text">
-                {consent}
-              </label>
-            </div>
-            <button type="submit" className={`${cls.btn} ${cls.secondary}`} disabled={action.pending}>
-              {t(lang, 'a.marketingOptIn')}
-            </button>
-          </form>
-        )
       )}
-      {action.done && <Notice kind="success">{t(lang, action.done === 'in' ? 'a.marketingSaved' : 'a.marketingWithdrawn')}</Notice>}
+      {action.done && <Notice kind="success">{t(lang, 'a.marketingWithdrawn')}</Notice>}
       {action.error && <ErrorNotice error={action.error} lang={lang} context="account" returnTo="/account/" />}
     </Section>
   )
@@ -512,13 +511,19 @@ function DeleteSection({ lang, onDeleted }: { lang: Lang; onDeleted: () => void 
   )
 }
 
-/** Account page: pass, usage, free samples, history, email consent, refund, support, deletion. */
+/** Account page: pass, latest purchase and receipt, usage, free samples, history, refund, support, deletion. */
 export function AccountClient() {
   const lang = useUiLang()
   const meState = useMe()
   const router = useRouter()
   const [deleted, setDeleted] = useState(false)
   const signOut = useAction<true>()
+  // keep the marketing section (and its confirmation) after withdrawing, when /api/me says opted out
+  const [marketingShown, setMarketingShown] = useState(false)
+  const optedIn = meState.status === 'ready' && meState.me.marketingOptIn === true
+  useEffect(() => {
+    if (optedIn) setMarketingShown(true)
+  }, [optedIn])
 
   let body: ReactNode
   if (deleted) {
@@ -571,7 +576,7 @@ export function AccountClient() {
         <PassSection me={me} lang={lang} />
         <HistorySection lang={lang} />
         <RefundSection me={me} lang={lang} />
-        <MarketingSection lang={lang} optedIn={me.marketingOptIn === true} />
+        {(me.marketingOptIn === true || marketingShown) && <MarketingSection lang={lang} />}
         <SupportSection lang={lang} />
         <DeleteSection
           lang={lang}

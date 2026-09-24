@@ -1,8 +1,42 @@
 // Shared helpers for the core tests: a recording fetch stub for Resend/Turnstile and small API wrappers.
 import { env, exports } from 'cloudflare:workers'
-import { vi } from 'vitest'
+import { afterAll, beforeAll, vi } from 'vitest'
 import { MARKETING_CONSENT } from '../../../shared/config'
+import type { Env } from '../../src/env'
 import { saltedHash } from '../../src/lib/crypto'
+
+/**
+ * Overrides Worker settings for the calls that follow; returns a function that restores them. The `env`
+ * object from cloudflare:workers is the one exports.default.fetch hands to the Worker, so this reaches
+ * requests made through `api()` too. `undefined` removes a setting.
+ */
+export function setEnv(overrides: Partial<Record<keyof Env, string | undefined>>): () => void {
+  const target = env as unknown as Record<string, unknown>
+  const saved = Object.keys(overrides).map((k) => [k, Object.prototype.hasOwnProperty.call(target, k), target[k]] as const)
+  for (const [k, v] of Object.entries(overrides)) {
+    if (v === undefined) delete target[k]
+    else target[k] = v
+  }
+  return () => {
+    for (const [k, had, v] of saved) {
+      if (had) target[k] = v
+      else delete target[k]
+    }
+  }
+}
+
+/**
+ * The pre-launch sign-in setup these tests exercise: email links for everyone (MAGIC_LINK=all) and learner
+ * email on (LEARNER_EMAIL=on), for the whole test file. The launch defaults (owner-only link, no learner
+ * email) have their own tests.
+ */
+export function useEmailSignInForEveryone(): void {
+  let restore: () => void = () => {}
+  beforeAll(() => {
+    restore = setEnv({ MAGIC_LINK: 'all', LEARNER_EMAIL: 'on' })
+  })
+  afterAll(() => restore())
+}
 
 export const ORIGIN = 'https://coach.test'
 export const DEVICE = 'core-test-device'

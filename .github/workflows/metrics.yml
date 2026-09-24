@@ -1,15 +1,16 @@
 # Daily aggregate metrics export (memo §5.2, B8, B11).
 #
-# 1. Copies the newest `metrics_daily` rows (written by the Worker's 05:00 UTC cron) from D1 into
-#    ops/metrics/<day>.json, after a personal-data guard (no "@", no input_text / transcript / email /
-#    essay, no 16+ character token-like strings; every file under ops/metrics, recursively), and
-#    commits them as github-actions[bot].
-# 2. Checks ops/metrics/ads.json freshness: older than 48 h while ops/config/ad-cap.json says ads run
-#    → an issue asking the owner to pause the campaign (the Worker cannot pause Google Ads). This check
-#    runs even when the D1 export failed (it needs no Cloudflare access).
-# Outcome assertions, not job status: a missing snapshot, a failed export or stale ads data opens an
-# issue and fails the run (GitHub's failed-run email is the second alert). Scheduled runs can start
-# late — the memo notes delays of up to 11.9 h — so the export takes the newest 3 rows and is idempotent.
+# Copies the newest `metrics_daily` rows (written by the Worker's 05:00 UTC cron) from D1 into
+# ops/metrics/<day>.json, after a personal-data guard (no "@", no input_text / transcript / email /
+# essay, no 16+ character token-like strings; every file under ops/metrics, recursively), and commits
+# them as github-actions[bot]. That commit uses GITHUB_TOKEN, so it starts no other workflow.
+# There is no ads check any more (memo §7.2 Z1: no ad budget; ops/metrics/ads.json and
+# ops/config/ad-cap.json were removed).
+# Outcome assertions, not job status: a missing snapshot or a failed export opens an issue and fails the
+# run (GitHub's failed-run email is the second alert). Scheduled runs can start late — the memo notes
+# delays of up to 11.9 h — so the export takes the newest 3 rows and is idempotent.
+# Without the Cloudflare secrets the run stops after its first step (a notice, no install), so it costs
+# almost no Actions minutes before the owner has set them up.
 name: Daily metrics
 
 on:
@@ -27,7 +28,7 @@ concurrency:
 
 jobs:
   export:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     defaults:
       run:
@@ -37,10 +38,24 @@ jobs:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       WRANGLER_SEND_METRICS: 'false'
     steps:
+      - name: Check secrets
+        id: cfg
+        # before the checkout, so products/clb does not exist yet
+        working-directory: ${{ github.workspace }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::notice::Metrics export skipped: add the CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID repository secrets."
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Check out
+        if: steps.cfg.outputs.ready == 'true'
         uses: actions/checkout@v7
 
       - name: Set up Node
+        if: steps.cfg.outputs.ready == 'true'
         uses: actions/setup-node@v7
         with:
           node-version: 22
@@ -48,17 +63,8 @@ jobs:
           cache-dependency-path: products/clb/package-lock.json
 
       - name: Install
+        if: steps.cfg.outputs.ready == 'true'
         run: npm ci
-
-      - name: Check secrets
-        id: cfg
-        run: |
-          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
-            echo "::notice::Metrics export skipped: add the CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID repository secrets. The ads check still runs."
-            echo "ready=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "ready=true" >> "$GITHUB_OUTPUT"
-          fi
 
       - name: Export metrics_daily rows
         id: export
@@ -74,7 +80,7 @@ jobs:
 
       - name: Personal-data guard
         id: guard
-        if: always() && steps.cfg.outcome == 'success'
+        if: always() && steps.cfg.outputs.ready == 'true'
         run: node scripts/run.mjs scripts/metrics.ts guard ../../ops/metrics
 
       - name: Commit new metrics files
@@ -97,22 +103,14 @@ jobs:
           echo "::error::Could not push the metrics commit."
           exit 1
 
-      - name: Check ads data freshness and the spend cap
-        id: ads
-        if: always() && steps.cfg.outcome == 'success'
-        run: node scripts/run.mjs scripts/ads.ts check --ads ../../ops/metrics/ads.json --cap ../../ops/config/ad-cap.json
-
-      - name: Open an issue for a missing snapshot, a failed export or stale ads data
-        if: always() && (steps.export.outcome == 'failure' || steps.guard.outcome == 'failure' || steps.export.outputs.code == '3' || steps.ads.outputs.alert == 'true' || steps.ads.outputs.over_cap == 'true' || steps.ads.outcome == 'failure')
+      - name: Open an issue for a missing snapshot or a failed export
+        if: always() && steps.cfg.outputs.ready == 'true' && (steps.export.outcome == 'failure' || steps.guard.outcome == 'failure' || steps.export.outputs.code == '3')
         uses: actions/github-script@v9
         env:
           EXPORT_FAILED: ${{ steps.export.outcome == 'failure' }}
           GUARD_FAILED: ${{ steps.guard.outcome == 'failure' }}
           EXPORT_CODE: ${{ steps.export.outputs.code }}
           SNAPSHOT_STALE: ${{ steps.export.outputs.code == '3' }}
-          ADS_ALERT: ${{ steps.ads.outputs.alert == 'true' || steps.ads.outputs.over_cap == 'true' }}
-          ADS_CHECK_FAILED: ${{ steps.ads.outcome == 'failure' }}
-          ADS_MESSAGE: ${{ steps.ads.outputs.message }}
         with:
           script: |
             const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
@@ -120,7 +118,7 @@ jobs:
             if (process.env.EXPORT_FAILED === 'true') {
               wanted.push({
                 title: 'Metrics export failed',
-                body: `The daily D1 export (\`scripts/metrics.ts export\`) failed${process.env.EXPORT_CODE ? ` with exit code ${process.env.EXPORT_CODE}` : ''}: a wrangler or Cloudflare API error (for example an expired CLOUDFLARE_API_TOKEN), an invalid metrics_daily row, or a personal-data guard hit. Nothing was committed for the failed rows. The ads check still ran.\n\nSee the run log (it names the rule and position only, never the data): ${run}`,
+                body: `The daily D1 export (\`scripts/metrics.ts export\`) failed${process.env.EXPORT_CODE ? ` with exit code ${process.env.EXPORT_CODE}` : ''}: a wrangler or Cloudflare API error (for example an expired CLOUDFLARE_API_TOKEN), an invalid metrics_daily row, or a personal-data guard hit. Nothing was committed for the failed rows.\n\nSee the run log (it names the rule and position only, never the data): ${run}`,
               })
             }
             if (process.env.GUARD_FAILED === 'true') {
@@ -135,12 +133,6 @@ jobs:
                 body: `The newest \`metrics_daily\` row in D1 is older than yesterday (UTC), so the Worker's 05:00 UTC cron did not write one.\n\nCheck the Worker's logs in the Cloudflare dashboard and the cron trigger. Run: ${run}`,
               })
             }
-            if (process.env.ADS_ALERT === 'true') {
-              wanted.push({ title: 'Ads alert: pause the campaign', body: `${process.env.ADS_MESSAGE}\n\nRun: ${run}` })
-            }
-            if (process.env.ADS_CHECK_FAILED === 'true') {
-              wanted.push({ title: 'ops/metrics/ads.json is invalid', body: `The ads check could not read ops/metrics/ads.json or ops/config/ad-cap.json (format: ops/metrics/README.md).\n\nRun: ${run}` })
-            }
             const open = await github.paginate(github.rest.issues.listForRepo, { ...context.repo, state: 'open', per_page: 100 })
             for (const w of wanted) {
               const existing = open.find((i) => !i.pull_request && i.title === w.title)
@@ -152,7 +144,7 @@ jobs:
             }
 
       - name: Fail when an assertion failed
-        if: always() && (steps.export.outputs.code == '3' || steps.ads.outputs.alert == 'true' || steps.ads.outputs.over_cap == 'true')
+        if: always() && steps.export.outputs.code == '3'
         run: |
-          echo "::error::Metrics or ads assertion failed; see the issue opened by this run."
+          echo "::error::The metrics snapshot for yesterday is missing; see the issue opened by this run."
           exit 1

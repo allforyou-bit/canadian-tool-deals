@@ -2,14 +2,17 @@
 // carries ?session_id=<Checkout Session id>, which is also purchases.id, so the page waits for THAT
 // purchase in /api/me (latestPurchase) instead of accepting any pass the learner already had.
 import type { MeResponse } from '../shared/api'
-import { SKUS, type Sku } from '../shared/config'
+import type { Sku } from '../shared/config'
 import { accessEndsAt } from './me'
+import { safeReceiptUrl } from './url'
+
+export type PurchaseStatus = NonNullable<MeResponse['latestPurchase']>['status']
 
 export type PurchaseOutcome =
   | { kind: 'waiting' }
   | { kind: 'signedOut' }
-  /** paid and granted: `endsAt` is the end of all the learner's passes, `valueCents` the bought SKU's price */
-  | { kind: 'paid'; purchaseId: string; sku: Sku; endsAt: string; valueCents: number }
+  /** paid and granted: `endsAt` is the end of all the learner's passes */
+  | { kind: 'paid'; purchaseId: string; sku: Sku; endsAt: string }
   /** refunded at once by the sales-region rule */
   | { kind: 'rejected' }
   | { kind: 'refunded' }
@@ -35,13 +38,7 @@ export function purchaseOutcome(me: MeResponse | null, sessionId: string | null,
       const endsAt = accessEndsAt(me, now)
       // paid but the pass is not visible yet: keep waiting for the next answer
       if (!endsAt) return { kind: 'waiting' }
-      return {
-        kind: 'paid',
-        purchaseId: purchase.id,
-        sku: purchase.sku,
-        endsAt,
-        valueCents: SKUS[purchase.sku]?.priceCents ?? 0,
-      }
+      return { kind: 'paid', purchaseId: purchase.id, sku: purchase.sku, endsAt }
     }
     case 'rejected_region':
       return { kind: 'rejected' }
@@ -54,8 +51,13 @@ export function purchaseOutcome(me: MeResponse | null, sessionId: string | null,
   }
 }
 
-/** Only a confirmed purchase that Stripe sent us back from counts as an ads conversion. */
-export function conversionFor(outcome: PurchaseOutcome, sessionId: string | null): { valueCents: number; dedupeKey: string } | null {
-  if (outcome.kind !== 'paid' || sessionId === null || outcome.purchaseId !== sessionId) return null
-  return { valueCents: outcome.valueCents, dedupeKey: sessionId }
+/**
+ * Stripe's receipt for the latest purchase (for `sessionId` when given), or null. Learners get no email
+ * from us (memo §7.2 Z4), so this link on /checkout/success/ and /account/ is where the receipt lives;
+ * Stripe keeps it current after refunds.
+ */
+export function receiptUrlFor(me: MeResponse | null, sessionId: string | null = null): string | null {
+  const purchase = me?.signedIn ? me.latestPurchase : null
+  if (!purchase || (sessionId !== null && purchase.id !== sessionId)) return null
+  return safeReceiptUrl(purchase.receiptUrl)
 }

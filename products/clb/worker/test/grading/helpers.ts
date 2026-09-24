@@ -175,6 +175,20 @@ export function writingBody(f: Pick<Fixture, 'taskId' | 'promptIndex' | 'text' |
   return { taskId: f.taskId, promptIndex: f.promptIndex, text: f.text, explanationLang: f.explanationLang, turnstileToken: token }
 }
 
+/**
+ * A multipart POST with Content-Length, as a browser sends a FormData body. A Request built inside the
+ * Worker from a FormData body carries no Content-Length header, so the form is encoded first.
+ */
+export async function multipartRequest(url: string, form: FormData, headers: Record<string, string> = {}): Promise<Request> {
+  const encoded = new Request(url, { method: 'POST', body: form })
+  const body = await encoded.arrayBuffer()
+  return new Request(url, {
+    method: 'POST',
+    headers: { 'content-type': encoded.headers.get('content-type') ?? '', 'content-length': String(body.byteLength), ...headers },
+    body,
+  })
+}
+
 /** The mpc_device cookie a response set, as a Cookie header value. */
 export function deviceCookie(res: Response): string {
   const set = res.headers.get('set-cookie') ?? ''

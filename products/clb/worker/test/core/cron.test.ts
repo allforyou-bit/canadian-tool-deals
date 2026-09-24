@@ -1,7 +1,10 @@
 import { createScheduledController } from 'cloudflare:test'
 import { env } from 'cloudflare:workers'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import type { Env } from '../../src/env'
 import {
+  ALERT_GUARD_TYPE,
+  ALERT_GUARDS,
   DAILY_CRON,
   handleScheduled,
   KV,
@@ -352,18 +355,118 @@ describe('spend monitor (*/15)', () => {
     const tier = alerts().filter((a) => a.subject.includes('95%'))
     expect(tier).toHaveLength(1)
     expect(tier[0]?.text).toContain('Raise the Anthropic monthly limit or keep free samples off')
-    expect(await env.FLAGS.get('alerted:tier95:2027-06')).toBe('1')
+    // the guard is a D1 row (memo §7.2 Z2), not a KV key
+    expect(await count('SELECT COUNT(*) AS n FROM webhook_events WHERE id = ?1 AND type = ?2', ALERT_GUARDS.tier95('2027-06'), ALERT_GUARD_TYPE)).toBe(1)
+    expect((await env.FLAGS.list({ prefix: 'alerted:' })).keys).toHaveLength(0)
   })
 
   it('retries an alert whose email failed', async () => {
     stub = stubFetch({ resendOk: false })
     await insertGrade({ createdAt: '2027-06-02T10:00:00.000Z', costMicro: 145_000_000 })
     await runSpendMonitor(env, at('2027-06-15T12:00:00.000Z'))
-    expect(await env.FLAGS.get('alerted:tier95:2027-06')).toBeNull()
+    expect(await count("SELECT COUNT(*) AS n FROM webhook_events WHERE type = 'cron_alert'")).toBe(0)
     stub = stubFetch()
     await runSpendMonitor(env, at('2027-06-15T12:15:00.000Z'))
     expect(alerts().filter((a) => a.subject.includes('95%'))).toHaveLength(1)
     expect(alerts().filter((a) => a.subject.includes('Free samples switched off'))).toHaveLength(1)
+  })
+})
+
+describe('spend monitor on Workers Free: KV write failures (memo §7.2 Z2)', () => {
+  it('a failing KV write never aborts the run or repeats the alert; the switch is retried next run', async () => {
+    await insertGrade({ createdAt: '2027-03-05T10:00:00.000Z', costMicro: 135_000_000 })
+    const put = vi.spyOn(env.FLAGS, 'put').mockRejectedValue(new Error('KV put() limit exceeded for the day.'))
+    const del = vi.spyOn(env.FLAGS, 'delete').mockRejectedValue(new Error('KV delete() limit exceeded for the day.'))
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    for (const t of ['2027-03-20T12:00:00.000Z', '2027-03-20T12:15:00.000Z', '2027-03-20T12:30:00.000Z']) {
+      await expect(runSpendMonitor(env, at(t))).resolves.toBeUndefined()
+    }
+    expect(warn).toHaveBeenCalledWith('cron kv write failed', 'free_enabled')
+    // one alert for the day, whatever KV does
+    expect(alerts().filter((a) => a.subject.includes('Free samples switched off'))).toHaveLength(1)
+    expect((await getFlags(env)).free_enabled).toBe(true)
+
+    // quota back (next UTC day): the switch goes off and the day's alert is sent once
+    put.mockRestore()
+    del.mockRestore()
+    await runSpendMonitor(env, at('2027-03-21T00:15:00.000Z'))
+    expect((await getFlags(env)).free_enabled).toBe(false)
+    expect(await env.FLAGS.get(KV.autoFreeOff)).toBe('1')
+    expect(alerts().filter((a) => a.subject.includes('Free samples switched off'))).toHaveLength(2)
+  })
+
+  it('keeps the auto marker when switching back on fails, so a later run still restores the switch', async () => {
+    await insertGrade({ createdAt: '2027-03-05T10:00:00.000Z', costMicro: 120_000_000 })
+    await runSpendMonitor(env, at('2027-03-31T23:45:00.000Z'))
+    expect((await getFlags(env)).free_enabled).toBe(false)
+    const put = vi.spyOn(env.FLAGS, 'put').mockRejectedValue(new Error('quota'))
+    vi.spyOn(console, 'warn').mockImplementation(() => {})
+    await runSpendMonitor(env, at('2027-04-01T00:00:00.000Z'))
+    expect((await getFlags(env)).free_enabled).toBe(false)
+    expect(await env.FLAGS.get(KV.autoFreeOff)).toBe('1')
+    put.mockRestore()
+    await runSpendMonitor(env, at('2027-04-01T00:15:00.000Z'))
+    expect((await getFlags(env)).free_enabled).toBe(true)
+    expect(await env.FLAGS.get(KV.autoFreeOff)).toBeNull()
+  })
+})
+
+describe('prepaid Anthropic credits (memo §7.2 Z6)', () => {
+  const prepaidEnv = (usd: string, since: string) => ({ ...(env as Env), ANTHROPIC_PREPAID_USD: usd, ANTHROPIC_PREPAID_SINCE: since }) as Env
+
+  it('alerts once per level and top-up, switches free samples off at 70%, pauses grading at 97% until a top-up', async () => {
+    const e = prepaidEnv('10', '2027-06-01')
+    const uid = await insertUser('2027-06-01T00:00:00.000Z')
+    const pass = await insertPass(uid, '2027-06-10T00:00:00.000Z', '2027-07-10T00:00:00.000Z')
+    // spend before the ledger started does not count
+    await insertGrade({ createdAt: '2027-05-30T10:00:00.000Z', costMicro: 9_000_000 })
+    await insertGrade({ createdAt: '2027-06-02T10:00:00.000Z', costMicro: 5_500_000 })
+    await runSpendMonitor(e, at('2027-06-15T12:00:00.000Z'))
+    await runSpendMonitor(e, at('2027-06-15T12:15:00.000Z'))
+    const prepaidAlerts = () => alerts().filter((a) => a.subject.startsWith('[MPC] Prepaid Anthropic credits'))
+    expect(prepaidAlerts().map((a) => a.subject)).toEqual(['[MPC] Prepaid Anthropic credits 50% used'])
+    expect(prepaidAlerts()[0]?.text).toContain('US$10.00 Anthropic credits bought on 2027-06-01')
+    expect(prepaidAlerts()[0]?.text).toContain('Prepaid credits: US$5.50 of US$10.00 used since 2027-06-01 (55%')
+    expect((await getFlags(env)).free_enabled).toBe(true)
+
+    // 85%: the 80% alert, and free samples off
+    await insertGrade({ createdAt: '2027-06-03T10:00:00.000Z', costMicro: 3_000_000 })
+    await runSpendMonitor(e, at('2027-06-15T12:30:00.000Z'))
+    await runSpendMonitor(e, at('2027-06-15T12:45:00.000Z'))
+    expect(prepaidAlerts().map((a) => a.subject)).toEqual([
+      '[MPC] Prepaid Anthropic credits 50% used',
+      '[MPC] Prepaid Anthropic credits 80% used',
+    ])
+    expect((await getFlags(env)).free_enabled).toBe(false)
+    expect((await getFlags(env)).grading_enabled).toBe(true)
+
+    // 98% including a call still running: grading pauses with the top-up instructions
+    await insertGrade({ createdAt: '2027-06-15T12:50:00.000Z', costMicro: 1_300_000, pending: true })
+    await runSpendMonitor(e, at('2027-06-15T13:00:00.000Z'))
+    expect((await getFlags(env)).grading_enabled).toBe(false)
+    expect(await env.FLAGS.get(KV.pauseStartedAt)).toBe('2027-06-15T13:00:00.000Z')
+    const pause = alerts().filter((a) => a.subject.includes('prepaid credits nearly used'))
+    expect(pause).toHaveLength(1)
+    expect(pause[0]?.text).toContain('buy more credits in the Anthropic Console')
+    expect(alerts().filter((a) => a.subject.includes('daily spend cap'))).toHaveLength(0)
+
+    // the owner tops up (new amount and date): grading resumes, passes are extended, alerts can come again
+    const topped = prepaidEnv('20', '2027-06-16T09:00:00Z')
+    await runSpendMonitor(topped, at('2027-06-16T09:15:00.000Z'))
+    const flags = await getFlags(env)
+    expect(flags.grading_enabled).toBe(true)
+    expect(flags.free_enabled).toBe(true)
+    expect(await env.FLAGS.get(KV.pauseStartedAt)).toBeNull()
+    expect(await passEnd(pass)).toBe(plus('2027-07-10T00:00:00.000Z', Date.parse('2027-06-16T09:15:00.000Z') - Date.parse('2027-06-15T13:00:00.000Z')))
+    expect(prepaidAlerts()).toHaveLength(2)
+  })
+
+  it('sends only the highest level reached when spend jumps past both', async () => {
+    await insertGrade({ createdAt: '2027-06-02T10:00:00.000Z', costMicro: 9_000_000 })
+    await runSpendMonitor(prepaidEnv('10', '2027-06-01'), at('2027-06-15T12:00:00.000Z'))
+    expect(alerts().filter((a) => a.subject.startsWith('[MPC] Prepaid')).map((a) => a.subject)).toEqual([
+      '[MPC] Prepaid Anthropic credits 80% used',
+    ])
   })
 })
 
@@ -402,6 +505,17 @@ describe('daily job (0 5 * * *)', () => {
       env.DB.prepare(
         "INSERT INTO support_tickets (id, user_id, message, lang, created_at) VALUES ('t_new', NULL, 'new question text', 'en', '2027-06-30T00:00:00.000Z')",
       ),
+      // event budgets (per UTC day) and sign-in link sends (per send time) moved from KV to D1
+      env.DB.prepare("INSERT INTO free_usage (key_hash, kind, day, count) VALUES ('evd', 'ev_device', '2027-06-30', 5)"),
+      env.DB.prepare("INSERT INTO free_usage (key_hash, kind, day, count) VALUES ('evd', 'ev_device', '2027-07-01', 5)"),
+      env.DB.prepare("INSERT INTO free_usage (key_hash, kind, day, count) VALUES ('evi', 'ev_ip', '2027-06-30', 5)"),
+      env.DB.prepare("INSERT INTO free_usage (key_hash, kind, day, count) VALUES ('mlh', 'ml', '2027-06-30T04:00:00.000Z', 1)"),
+      env.DB.prepare("INSERT INTO free_usage (key_hash, kind, day, count) VALUES ('mlh', 'ml', '2027-07-01T04:30:00.000Z', 1)"),
+      env.DB.prepare(
+        `INSERT INTO oauth_states (state_hash, created_at, expires_at, code_verifier, nonce, device_hash)
+         VALUES ('st_old', '2027-07-01T04:00:00.000Z', '2027-07-01T04:10:00.000Z', 'v', 'n', 'd'),
+                ('st_live', '2027-07-01T04:55:00.000Z', '2027-07-01T05:05:00.000Z', 'v', 'n', 'd')`,
+      ),
     ])
 
     await schedule(DAILY_CRON, now)
@@ -430,6 +544,12 @@ describe('daily job (0 5 * * *)', () => {
     expect(await count("SELECT COUNT(*) AS n FROM free_usage WHERE key_hash = 'dev2'")).toBe(1)
     expect(await count("SELECT COUNT(*) AS n FROM support_tickets WHERE id = 't_old' AND message = '[purged]'")).toBe(1)
     expect(await count("SELECT COUNT(*) AS n FROM support_tickets WHERE id = 't_new' AND message = 'new question text'")).toBe(1)
+    expect(await count("SELECT COUNT(*) AS n FROM free_usage WHERE key_hash IN ('evd', 'evi')")).toBe(1)
+    expect(await count("SELECT COUNT(*) AS n FROM free_usage WHERE key_hash = 'evd' AND day = '2027-07-01'")).toBe(1)
+    expect(await count("SELECT COUNT(*) AS n FROM free_usage WHERE key_hash = 'mlh'")).toBe(1)
+    expect(await count("SELECT COUNT(*) AS n FROM free_usage WHERE key_hash = 'mlh' AND day = '2027-07-01T04:30:00.000Z'")).toBe(1)
+    expect(await count("SELECT COUNT(*) AS n FROM oauth_states WHERE state_hash IN ('st_old', 'st_live')")).toBe(1)
+    expect(await count("SELECT COUNT(*) AS n FROM oauth_states WHERE state_hash = 'st_live'")).toBe(1)
   })
 
   it("writes yesterday's aggregate metrics row (and replaces it on a re-run)", async () => {
@@ -497,8 +617,8 @@ describe('daily job (0 5 * * *)', () => {
     const row = await env.DB.prepare('SELECT json FROM metrics_daily WHERE day = ?1').bind(day).first<{ json: string }>()
     expect(JSON.parse(row!.json)).toEqual({
       day,
+      // no paidEvents: there are no ads (memo §7.2 Z1)
       events: { landing: 3, sample_start: 2, signup: 1 },
-      paidEvents: { landing: 1, sample_start: 1 },
       grades: { writing: 2, speaking: 1, free: 1, refused: 2 },
       outcomes: { failed: 1, graded: 3, scope_refused: 1 },
       costUsd: 0.061,

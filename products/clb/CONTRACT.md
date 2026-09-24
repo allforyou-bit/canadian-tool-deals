@@ -56,16 +56,18 @@ same-origin check on POSTs (webhook exempt), device cookie, `ctx.user`, salted `
 
 ## 3. Shared helpers (frozen — use, don't copy)
 
-- `lib/http.ts`: `json`, `error`, `readJson<T>(req, maxBytes)` (streamed byte limit), `readFormDataLimited(req, maxBytes)`,
+- `lib/http.ts`: `json`, `error`, `readJson<T>(req, maxBytes)` (streamed byte limit), `readFormDataLimited(req, maxBytes)`
+  (→ FormData | 'too_large' | 'length_required' | null; Content-Length required), `declaredLength(req)`,
   `readTextLimited(req, maxBytes)`, `readBodyLimited`, `getCookie`, `setCookie(name, value, {maxAgeSeconds, httpOnly})`.
 - `lib/crypto.ts`: `sha256Hex`, `saltedHash(salt, value)`, `randomToken(bytes)`, `randomId(prefix)`, `hmacSha256Hex`, `timingSafeEqualHex`.
-- `lib/session.ts`: `getUser(req, env, now)`, `getActivePass(env, userId, now)`.
+- `lib/session.ts`: `getUser(req, env, now)`, `getActivePass(env, userId, now)`, `sessionIdHash`, `createSession`.
 - `lib/flags.ts`: `getFlags(env)`, `setFlag(env, name, value)`.
 - `lib/usage.ts`: `getUsage`, `capReached`, `freeAvailability`, `recordFreeWriting`, `recordFreeSpeaking` (atomic claims →
   boolean), `reserveGrade(env, reservation, now, {fairUse})` → `'daily' | 'rolling30' | 'no_feedback' | null` (inserts the
   pending grades row in one conditional statement), `noFeedbackToday`.
 - `lib/spend.ts`: `tokenCostMicroUsd(model, usage)`, `whisperCostMicroUsd(seconds)`, `spendSnapshot(env, now)` (L capped by
-  `ANTHROPIC_MONTHLY_LIMIT_USD` when set), `evaluateTiers(snapshot)`.
+  `ANTHROPIC_MONTHLY_LIMIT_USD` when set; prepaid ledger fields), `spendSnapshotCached(env, now)` (60 s per isolate, display paths
+  only), `clearSpendCache()`, `prepaidConfig(env)`, `evaluateTiers(snapshot)` (adds `prepaidPause`, `prepaidAlert`).
 - `lib/usage.ts` (zero-capital): `speakingMinutesToday(env, now)`, `speakingAvailableToday(env, now)` (global Workers AI
   budget `SPEAKING_DAILY_AUDIO_MINUTES`).
 - `lib/time.ts`: `dayKey`, `startOfUtcDay`, `startOfUtcMonth`, `addDays` (all UTC).
@@ -113,7 +115,7 @@ Identifier hashing conventions (must match across modules):
 
 ## 6. Cross-area interfaces
 
-- **Events.** Server-side only: `signup` (core, when `auth.verify` creates a new user), `checkout_start`,
+- **Events.** Server-side only: `signup` (core, when `auth.verify` or the Google callback creates a new user), `checkout_start`,
   `purchase`, `refund` (billing). Client-side via `POST /api/events`: `landing`, `sample_start`,
   `sample_done`; `events.track` rejects the server-only names. Server code inserts directly:
   `INSERT INTO events (name, path, utm_json, day, created_at) VALUES (?1, ?2, NULL, ?3, ?4)`.

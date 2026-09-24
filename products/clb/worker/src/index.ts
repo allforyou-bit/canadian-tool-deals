@@ -1,6 +1,6 @@
 // Worker entry: /api/* is handled here; everything else is served from the static export (ASSETS).
 // Handler modules are owned per area (see products/clb/CONTRACT.md):
-//   auth.ts, account.ts, events.ts, cron.ts, email.ts, turnstile.ts  → core
+//   auth.ts, auth-google.ts, account.ts, events.ts, cron.ts, email.ts, turnstile.ts  → core
 //   grading/*                                                        → grading
 //   billing/*                                                        → billing
 

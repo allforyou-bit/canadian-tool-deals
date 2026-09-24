@@ -1,23 +1,26 @@
 // Magic-link sign-in (memo B2): Turnstile, ≤3 links per email per hour, hashed single-use tokens with a
 // 15-minute TTL, D1-backed sessions in an HttpOnly/Secure/SameSite=Lax cookie that rotates on sign-in.
+// Zero-capital launch (memo §7.2 Z3): learners sign in with Google (auth-google.ts); the email link is
+// only for the owner unless MAGIC_LINK says otherwise ('owner' default | 'all' | 'off'). A staging Worker
+// keeps its STAGING_ALLOWED_EMAILS list.
 // CASL marketing consent (decision 10): the Worker builds the consent sentence itself and records an
 // opt-in only when the box was ticked, the submitted sentence is exactly that one, the mailing address
 // is set, and the link is opened on the device that asked for it. Otherwise sign-in works without it.
 import type { Lang, MagicLinkRequest, MagicLinkResponse, VerifyRequest, VerifyResponse } from '../../shared/api'
-import { BRAND, MARKETING_CONSENT, SESSION } from '../../shared/config'
-import { sendEmail } from './email'
+import { AUTH_DEFAULTS, BRAND, MARKETING_CONSENT, SESSION } from '../../shared/config'
+import { isOwnerAddress, sendEmail } from './email'
 import type { Ctx, Env } from './env'
 import { randomId, randomToken, saltedHash } from './lib/crypto'
 import { isDisposableEmail } from './lib/disposable'
 import { error, getCookie, json, readJson, setCookie } from './lib/http'
+import { createSession, sessionIdHash } from './lib/session'
 import { dayKey } from './lib/time'
 import { verifyTurnstile } from './turnstile'
 
+export { sessionIdHash }
+
 const MAX_EMAIL_CHARS = 254
 const HOUR_MS = 3_600_000
-const HOUR_SECONDS = 3_600
-/** KV rejects expirations less than 60 s ahead (miniflare kv/namespace.worker.js MIN_EXPIRATION_TTL_SECONDS). */
-const KV_MIN_TTL_SECONDS = 60
 const DAY_SECONDS = 86_400
 
 /** Modelled on the WHATWG "valid e-mail address" pattern, but requiring a dot in the domain. */
@@ -25,8 +28,8 @@ const DAY_SECONDS = 86_400
 const EMAIL_RE =
   /^[a-z0-9.!#$%&'*+/=?^_`{|}~-]{1,64}@[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)+$/
 
-/** Consent and profile choices captured with the link; applied when the link is used. */
-interface PendingSignup {
+/** Consent and profile choices captured with the link (or the Google start); applied at sign-in. */
+export interface PendingSignup {
   lang: Lang
   adult: true
   marketingOptIn: boolean
@@ -37,13 +40,39 @@ interface PendingSignup {
   deviceHash?: string
 }
 
-/** KV keys owned by auth. Both are keyed by users.email_hash, so they survive account deletion. */
+/** KV keys owned by auth, keyed by users.email_hash so they survive account deletion. */
 export const AUTH_KV = {
-  /** sign-in links sent in the current one-hour window: {"n":2,"until":<epoch seconds>} */
-  magicLinks: (emailHash: string) => `ml:${emailHash}`,
   /** ISO time of the last unsubscribe for this address (1-day TTL; blocks opt-ins requested before it) */
   unsubscribed: (emailHash: string) => `unsub:${emailHash}`,
 } as const
+
+/**
+ * D1 free_usage kind for sign-in links sent (memo §7.2 Z2: counters live in D1, not KV, whose free plan
+ * allows 1,000 writes a day). One row per send: key_hash = users.email_hash (so deleting the account does
+ * not reset the limit, decision 9) and `day` = the send time as an ISO timestamp, so the hourly window is
+ * exact. The daily cron deletes rows older than a day.
+ */
+export const MAGIC_LINK_USAGE_KIND = 'ml'
+
+export type MagicLinkMode = 'owner' | 'all' | 'off'
+
+/** MAGIC_LINK: 'owner' (default, also for unset or unknown values), 'all' or 'off'. */
+export function magicLinkMode(env: Env): MagicLinkMode {
+  const v = (env.MAGIC_LINK ?? '').trim().toLowerCase()
+  return v === 'owner' || v === 'all' || v === 'off' ? v : AUTH_DEFAULTS.magicLink
+}
+
+/**
+ * Who may ask for an email sign-in link: nobody with 'off'; on a staging Worker, the STAGING_ALLOWED_EMAILS
+ * list (as before); otherwise only OWNER_EMAIL with 'owner', and anyone with 'all'.
+ */
+export function magicLinkAllows(env: Env, email: string): 'ok' | 'off' | 'staging' | 'owner_only' {
+  const mode = magicLinkMode(env)
+  if (mode === 'off') return 'off'
+  if ((env.STAGING_ALLOWED_EMAILS ?? '').trim()) return stagingAllows(env, email) ? 'ok' : 'staging'
+  if (mode === 'owner' && !isOwnerAddress(env, email)) return 'owner_only'
+  return 'ok'
+}
 
 export function isRecord(v: unknown): v is Record<string, unknown> {
   return typeof v === 'object' && v !== null && !Array.isArray(v)
@@ -90,10 +119,6 @@ export function acceptedConsentText(env: Env, submitted: unknown, lang?: Lang): 
   return null
 }
 
-export function sessionIdHash(env: Env, raw: string): Promise<string> {
-  return saltedHash(env.HASH_SALT, `session:${raw}`)
-}
-
 /** Set-Cookie value that removes the session cookie. */
 export function clearSessionCookie(): string {
   return setCookie(SESSION.cookieName, '', { maxAgeSeconds: 0 })
@@ -136,37 +161,27 @@ export function signInEmail(lang: Lang, link: string, marketing: boolean): { sub
   }
 }
 
-interface LinkWindow {
-  n: number
-  /** epoch seconds when the one-hour window ends */
-  until: number
+/** Sign-in links sent to this address in the last hour (D1; the rows outlive account deletion). */
+async function linksSentLastHour(env: Env, email: string, hash: string, now: Date): Promise<number> {
+  // Two counts: links issued for a live address (magic_links, including one being sent right now) and sends
+  // recorded under the email hash (free_usage 'ml'), which account deletion does not remove.
+  const since = new Date(now.getTime() - HOUR_MS).toISOString()
+  const row = await env.DB.prepare(
+    `SELECT (SELECT COUNT(*) FROM magic_links WHERE email = ?1 AND created_at > ?2) AS links,
+            (SELECT COALESCE(SUM(count), 0) FROM free_usage WHERE key_hash = ?3 AND kind = ?4 AND day > ?2) AS sent`,
+  )
+    .bind(email, since, hash, MAGIC_LINK_USAGE_KIND)
+    .first<{ links: number; sent: number }>()
+  return Math.max(row?.links ?? 0, row?.sent ?? 0)
 }
 
-/** Sign-in links sent to this address in the current window (KV, keyed by email hash so deletion keeps it). */
-async function readLinkWindow(env: Env, key: string, now: Date): Promise<LinkWindow> {
-  const nowSec = Math.floor(now.getTime() / 1000)
-  const fresh = { n: 0, until: nowSec + HOUR_SECONDS }
-  let v: unknown = null
-  try {
-    const raw = await env.FLAGS.get(key)
-    v = raw ? JSON.parse(raw) : null
-  } catch {
-    v = null
-  }
-  if (!isRecord(v) || typeof v.n !== 'number' || typeof v.until !== 'number' || v.until <= nowSec) return fresh
-  return { n: v.n, until: v.until }
-}
-
-async function countLinkSent(env: Env, key: string, w: LinkWindow, now: Date): Promise<void> {
-  const nowSec = Math.floor(now.getTime() / 1000)
-  try {
-    await env.FLAGS.put(key, JSON.stringify({ n: w.n + 1, until: w.until }), {
-      expiration: Math.max(w.until, nowSec + KV_MIN_TTL_SECONDS),
-    })
-  } catch {
-    // KV allows one write per second per key; the D1 count still limits a live account
-    console.warn('magic-link counter write failed')
-  }
+async function countLinkSent(env: Env, hash: string, now: Date): Promise<void> {
+  await env.DB.prepare(
+    `INSERT INTO free_usage (key_hash, kind, day, count) VALUES (?1, ?2, ?3, 1)
+     ON CONFLICT (key_hash, kind, day) DO UPDATE SET count = count + 1`,
+  )
+    .bind(hash, MAGIC_LINK_USAGE_KIND, now.toISOString())
+    .run()
 }
 
 /** POST /api/auth/magic-link — always answers {ok:true} on success, whether or not an account exists. */
@@ -180,7 +195,9 @@ export async function requestMagicLink(req: Request, ctx: Ctx): Promise<Response
   if (!isLang(body.lang)) return error('bad_request', 'Unsupported language')
   if (body.adult !== true) return error('bad_request', 'You must confirm that you are 18 or older')
   if (isDisposableEmail(email)) return error('bad_request', 'Please use a permanent email address')
-  if (!stagingAllows(env, email)) return error('forbidden', 'This test site only accepts the owner’s email address')
+  const allowed = magicLinkAllows(env, email)
+  if (allowed === 'staging') return error('forbidden', 'This test site only accepts the owner’s email address')
+  if (allowed !== 'ok') return error('forbidden', 'Please sign in with Google')
   // CASL: only an explicit tick with the exact sentence the Worker would show counts as a request for
   // consent. Anything else signs in without it (the client cannot fix a server-side wording mismatch).
   const consentText = body.marketingOptIn === true ? acceptedConsentText(env, body.marketingConsentText, body.lang) : null
@@ -190,16 +207,8 @@ export async function requestMagicLink(req: Request, ctx: Ctx): Promise<Response
     return error('turnstile_failed', 'Please complete the verification and try again')
   }
 
-  // Two counters: D1 rows (strongly consistent) and a KV window keyed by the email hash, which account
-  // deletion does not remove, so deleting and re-signing up cannot reset the limit.
-  const windowKey = AUTH_KV.magicLinks(await emailHash(env, email))
-  const [recent, window] = await Promise.all([
-    env.DB.prepare('SELECT COUNT(*) AS n FROM magic_links WHERE email = ?1 AND created_at > ?2')
-      .bind(email, new Date(now.getTime() - HOUR_MS).toISOString())
-      .first<{ n: number }>(),
-    readLinkWindow(env, windowKey, now),
-  ])
-  if (Math.max(recent?.n ?? 0, window.n) >= SESSION.magicLinksPerEmailPerHour) {
+  const hash = await emailHash(env, email)
+  if ((await linksSentLastHour(env, email, hash, now)) >= SESSION.magicLinksPerEmailPerHour) {
     return error('rate_limited', 'Too many sign-in links requested. Please try again in an hour.')
   }
 
@@ -234,7 +243,7 @@ export async function requestMagicLink(req: Request, ctx: Ctx): Promise<Response
     await env.DB.prepare('DELETE FROM magic_links WHERE token_hash = ?1').bind(tokenHash).run()
     return error('internal', 'We could not send the email. Please try again shortly.')
   }
-  await countLinkSent(env, windowKey, window, now)
+  await countLinkSent(env, hash, now)
   return json({ ok: true } satisfies MagicLinkResponse)
 }
 
@@ -245,6 +254,14 @@ function parsePending(raw: string | null): PendingSignup {
   } catch {
     v = null
   }
+  return pendingFrom(v)
+}
+
+/**
+ * The stored choices, defensively: the opt-in survives only with its consent sentence and the device hash
+ * of the browser that asked for it; the language falls back to English.
+ */
+export function pendingFrom(v: unknown): PendingSignup {
   const p = isRecord(v) ? v : {}
   const consentText = typeof p.marketingConsentText === 'string' && p.marketingConsentText !== '' ? p.marketingConsentText : null
   const deviceHash = typeof p.deviceHash === 'string' && p.deviceHash !== '' ? p.deviceHash : null
@@ -258,38 +275,51 @@ function parsePending(raw: string | null): PendingSignup {
   }
 }
 
+export interface UpsertOptions {
+  /** Google account id to store on the row (new users, or linking an existing live user by email) */
+  googleSub?: string
+  /** events.path of the `signup` event: where the sign-in finished */
+  signupPath?: string
+}
+
 /**
  * Finds or creates the user for a verified email and applies the pending choices. A new user also
  * gets a server-side `signup` event, written in the same batch so it is recorded exactly once, and
  * inherits free_speaking_used / self_refund_used from earlier (deleted) accounts with the same email
  * hash, so deleting and re-signing up does not reset the once-per-email rules (decision 9).
  * `consent` is the opt-in to record, already checked by the caller (null: leave consent as it is).
+ * With `opts.googleSub`, the row carries that Google account id afterwards (a live user found by email
+ * is linked to it).
  */
-async function upsertUser(
+export async function upsertUser(
   env: Env,
   email: string,
   hash: string,
   lang: Lang,
   consent: { text: string; version: string } | null,
   now: Date,
+  opts: UpsertOptions = {},
 ): Promise<string> {
   const nowIso = now.toISOString()
   const consentText = consent?.text ?? null
+  const googleSub = opts.googleSub ?? null
   const findLive = () =>
     env.DB.prepare('SELECT id FROM users WHERE email = ?1 AND deleted_at IS NULL').bind(email).first<{ id: string }>()
   const existing = await findLive()
 
   if (!existing) {
     const id = randomId('u_')
+    // No conflict target: a concurrent sign-in for the same email or the same Google account (the unique
+    // live google_sub index) makes this a no-op, and the row it lost to is updated below.
     const [inserted] = await env.DB.batch([
       env.DB.prepare(
-        `INSERT INTO users (id, email, email_hash, created_at, last_active_at, lang, adult_confirmed_at,
+        `INSERT INTO users (id, email, email_hash, google_sub, created_at, last_active_at, lang, adult_confirmed_at,
                             marketing_opt_in, marketing_consent_text, marketing_consent_at, marketing_consent_version,
                             free_speaking_used, self_refund_used)
-         VALUES (?1, ?2, ?3, ?4, ?4, ?5, ?4, ?6, ?7, ?8, ?9,
+         VALUES (?1, ?2, ?3, ?10, ?4, ?4, ?5, ?4, ?6, ?7, ?8, ?9,
                  (SELECT COALESCE(MAX(free_speaking_used), 0) FROM users WHERE email_hash = ?3),
                  (SELECT COALESCE(MAX(self_refund_used), 0) FROM users WHERE email_hash = ?3))
-         ON CONFLICT (email) DO NOTHING`,
+         ON CONFLICT DO NOTHING`,
       ).bind(
         id,
         email,
@@ -300,42 +330,60 @@ async function upsertUser(
         consentText,
         consentText ? nowIso : null,
         consent?.version ?? null,
+        googleSub,
       ),
       env.DB.prepare(
         `INSERT INTO events (name, path, utm_json, day, created_at)
-         SELECT 'signup', '/auth/verify/', NULL, ?2, ?3 WHERE EXISTS (SELECT 1 FROM users WHERE id = ?1)`,
-      ).bind(id, dayKey(now), nowIso),
+         SELECT 'signup', ?4, NULL, ?2, ?3 WHERE EXISTS (SELECT 1 FROM users WHERE id = ?1)`,
+      ).bind(id, dayKey(now), nowIso, opts.signupPath ?? '/auth/verify/'),
     ])
     if (inserted?.meta.changes === 1) return id
-    // Lost a race with a concurrent verify for the same email: fall through and update that row.
+    // Lost a race with a concurrent sign-in for the same email: fall through and update that row.
   }
 
   const row = existing ?? (await findLive())
   if (!row) throw new Error('user upsert failed')
-
-  // An unticked box never withdraws consent given earlier; withdrawal is explicit (account page or the
-  // unsubscribe link).
-  const update = consent
-    ? env.DB.prepare(
-        `UPDATE users SET last_active_at = ?2, lang = ?3, adult_confirmed_at = COALESCE(adult_confirmed_at, ?2),
-                marketing_opt_in = 1, marketing_consent_text = ?4, marketing_consent_at = ?2,
-                marketing_consent_version = ?5, marketing_withdrawn_at = NULL
-          WHERE id = ?1`,
-      ).bind(row.id, nowIso, lang, consent.text, consent.version)
-    : env.DB.prepare(
-        `UPDATE users SET last_active_at = ?2, lang = ?3, adult_confirmed_at = COALESCE(adult_confirmed_at, ?2)
-          WHERE id = ?1`,
-      ).bind(row.id, nowIso, lang)
-  await update.run()
+  await recordSignIn(env, row.id, lang, consent, now, googleSub)
   return row.id
 }
 
 /**
- * Whether the opt-in captured with the link may be recorded now: it was requested, the link is opened on
- * the same device (a link sent to someone else's address cannot sign them up for email), and the
- * address has not used an unsubscribe link since the request (the sign-in email itself carries one).
+ * Updates an existing user at sign-in: activity, language, the 18+ confirmation and, when given, the
+ * consent to record and the Google account id to link. An unticked box never withdraws consent given
+ * earlier; withdrawal is explicit (account page or the unsubscribe link).
  */
-async function consentToRecord(
+export async function recordSignIn(
+  env: Env,
+  userId: string,
+  lang: Lang,
+  consent: { text: string; version: string } | null,
+  now: Date,
+  googleSub: string | null = null,
+): Promise<void> {
+  const nowIso = now.toISOString()
+  const update = consent
+    ? env.DB.prepare(
+        `UPDATE users SET last_active_at = ?2, lang = ?3, adult_confirmed_at = COALESCE(adult_confirmed_at, ?2),
+                google_sub = COALESCE(?6, google_sub),
+                marketing_opt_in = 1, marketing_consent_text = ?4, marketing_consent_at = ?2,
+                marketing_consent_version = ?5, marketing_withdrawn_at = NULL
+          WHERE id = ?1`,
+      ).bind(userId, nowIso, lang, consent.text, consent.version, googleSub)
+    : env.DB.prepare(
+        `UPDATE users SET last_active_at = ?2, lang = ?3, adult_confirmed_at = COALESCE(adult_confirmed_at, ?2),
+                google_sub = COALESCE(?4, google_sub)
+          WHERE id = ?1`,
+      ).bind(userId, nowIso, lang, googleSub)
+  await update.run()
+}
+
+/**
+ * Whether the opt-in captured with the link (or the Google start) may be recorded now: it was requested,
+ * the sign-in finishes on the same device (a link sent to someone else's address cannot sign them up for
+ * email), and the address has not used an unsubscribe link since the request (the sign-in email itself
+ * carries one).
+ */
+export async function consentToRecord(
   env: Env,
   pending: PendingSignup,
   hash: string,
@@ -356,24 +404,6 @@ export async function markUnsubscribed(env: Env, hash: string, now: Date): Promi
   } catch {
     console.warn('unsubscribe marker write failed')
   }
-}
-
-/** Creates a fresh session (deleting the one the request carried, if any); returns the Set-Cookie value. */
-async function rotateSession(req: Request, env: Env, userId: string, now: Date): Promise<string> {
-  const old = getCookie(req, SESSION.cookieName)
-  const raw = randomToken(32)
-  const stmts: D1PreparedStatement[] = []
-  if (old) stmts.push(env.DB.prepare('DELETE FROM sessions WHERE id_hash = ?1').bind(await sessionIdHash(env, old)))
-  stmts.push(
-    env.DB.prepare('INSERT INTO sessions (id_hash, user_id, created_at, expires_at) VALUES (?1, ?2, ?3, ?4)').bind(
-      await sessionIdHash(env, raw),
-      userId,
-      now.toISOString(),
-      new Date(now.getTime() + SESSION.days * 86_400_000).toISOString(),
-    ),
-  )
-  await env.DB.batch(stmts)
-  return setCookie(SESSION.cookieName, raw, { maxAgeSeconds: SESSION.days * 86_400 })
 }
 
 /** POST /api/auth/verify — consumes a magic link (single use) and signs the user in. */
@@ -400,7 +430,7 @@ export async function verify(req: Request, ctx: Ctx): Promise<Response> {
   const hash = await emailHash(env, link.email)
   const consent = await consentToRecord(env, pending, hash, link.created_at, ctx.deviceHash)
   const userId = await upsertUser(env, link.email, hash, pending.lang, consent, now)
-  const cookie = await rotateSession(req, env, userId, now)
+  const cookie = await createSession(req, env, userId, now)
   return json({ ok: true, email: link.email } satisfies VerifyResponse, { headers: { 'set-cookie': cookie } })
 }
 

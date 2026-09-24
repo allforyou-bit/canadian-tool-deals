@@ -1,21 +1,42 @@
 # CI for both packages in this repo (memo B11, B16). Needs no secrets.
 #
-# workflows: actionlint on .github/workflows (memo B11 level A).
 # root: the home-services site (repo root). Lint, test, build, and on pull requests prove that the
 #       exported site did not change: the out/ file list of the PR must equal the base commit's
-#       (the build id directory is normalised, it is random per build).
-# clb:  the practice coach (products/clb). Typecheck, vitest with the coverage thresholds from
-#       vitest.config.mts (≥ 80% of lines in worker/src/billing and worker/src/lib/{usage,spend}.ts, memo
-#       B15), site build, Worker dry-run deploy, content lint, personal-data guard, Playwright e2e.
+#       (the build id directory is normalised, it is random per build). A PR that changes the root
+#       package.json or package-lock.json on purpose (e.g. a Next.js security patch, memo §7.2 Z11) is
+#       built with other dependencies, so that comparison is skipped with a notice instead.
+# clb:  the practice coach (products/clb). actionlint on .github/workflows (memo B11 level A; inside this
+#       job to save the per-job minute rounding, memo §7.2 Z7), typecheck, vitest with the coverage
+#       thresholds from vitest.config.mts (≥ 80% of lines in worker/src/billing and
+#       worker/src/lib/{usage,spend}.ts, memo B15), site build, Worker dry-run deploy, content lint,
+#       personal-data guard, Playwright e2e.
 #
 # Triggers: pull requests, and pushes to master only. A push to a PR branch therefore runs CI once
-# (as the pull_request event), not twice.
+# (as the pull_request event), not twice. GitHub Free gives a private repo 2,000 Actions minutes a month
+# (memo §7.2 Z7), so changes that cannot affect either job do not start it (paths-ignore):
+#   business/online/**  owner documents; the root site's Tailwind scan excludes them (app/globals.css
+#                       @source not "../business/online") and neither package reads them. The rest of
+#                       business/** is NOT ignored: the root Tailwind scan reads it, so it can change the
+#                       root site's CSS and with it the out/ file list.
+#   ops/metrics/**      daily aggregate numbers; the root scan excludes ops/. Their personal-data guard
+#                       runs in metrics-guard.yml whenever they change, and in the clb job below.
+#   ops/routines/**, ops/README.md  Routine prompts and the ops index; nothing builds or tests them.
 name: CI
 
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - 'business/online/**'
+      - 'ops/metrics/**'
+      - 'ops/routines/**'
+      - 'ops/README.md'
   pull_request:
+    paths-ignore:
+      - 'business/online/**'
+      - 'ops/metrics/**'
+      - 'ops/routines/**'
+      - 'ops/README.md'
 
 permissions:
   contents: read
@@ -25,30 +46,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  workflows:
-    name: Workflow lint (actionlint)
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Check out
-        uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-
-      # memo B11 level A. Pinned release, verified against its published checksum
-      # (actionlint_1.7.12_checksums.txt); shellcheck on the runner image checks the run: scripts.
-      - name: actionlint 1.7.12
-        run: |
-          v=1.7.12
-          sum=8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
-          curl -sSfL -o "$RUNNER_TEMP/actionlint.tgz" "https://github.com/rhysd/actionlint/releases/download/v${v}/actionlint_${v}_linux_amd64.tar.gz"
-          echo "$sum  $RUNNER_TEMP/actionlint.tgz" | sha256sum -c -
-          tar -xzf "$RUNNER_TEMP/actionlint.tgz" -C "$RUNNER_TEMP" actionlint
-          "$RUNNER_TEMP/actionlint" -color
-
   root:
     name: Root site
-    runs-on: ubuntu-latest
+    # pinned: ubuntu-latest moves to Ubuntu 26.04 in November 2026 (runner-images README)
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
       - name: Check out
@@ -88,15 +89,37 @@ jobs:
           path: base
           persist-credentials: false
 
-      - name: Build the PR base
+      # memo §7.2 Z7: new dependencies build a different site (chunk names, build output), so the B16 file
+      # list cannot be compared. The PR then says so in a notice and in the job summary.
+      - name: Did the PR change the root dependencies?
+        id: deps
         if: github.event_name == 'pull_request'
+        run: |
+          changed=""
+          for f in package.json package-lock.json; do
+            if ! cmp -s "head/$f" "base/$f"; then changed="${changed:+$changed and }$f"; fi
+          done
+          if [ -n "$changed" ]; then
+            echo "::notice title=Root out/ comparison skipped (memo B16)::This pull request changes the root $changed, so the home-services site is built with other dependencies and its exported file list cannot be compared with the base. Review the root site's build output another way before merging."
+            {
+              echo "### Root out/ comparison skipped"
+              echo ""
+              echo "This pull request changes the root $changed on purpose; the B16 file-list comparison needs the same dependencies on both sides."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build the PR base
+        if: github.event_name == 'pull_request' && steps.deps.outputs.skip == 'false'
         working-directory: base
         run: |
           npm ci
           npm run build
 
       - name: Compare out/ file lists (memo B16)
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.deps.outputs.skip == 'false'
         run: |
           # Lists every exported file; the random build-id directory is replaced by BUILD_ID *before*
           # sorting, so where the random id sorts relative to chunks/ and media/ cannot move lines.
@@ -122,7 +145,7 @@ jobs:
 
   clb:
     name: Practice coach
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     defaults:
       run:
@@ -132,6 +155,18 @@ jobs:
         uses: actions/checkout@v7
         with:
           persist-credentials: false
+
+      # memo B11 level A. Pinned release, verified against its published checksum
+      # (actionlint_1.7.12_checksums.txt); shellcheck on the runner image checks the run: scripts.
+      - name: Workflow lint (actionlint 1.7.12)
+        working-directory: ${{ github.workspace }}
+        run: |
+          v=1.7.12
+          sum=8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+          curl -sSfL -o "$RUNNER_TEMP/actionlint.tgz" "https://github.com/rhysd/actionlint/releases/download/v${v}/actionlint_${v}_linux_amd64.tar.gz"
+          echo "$sum  $RUNNER_TEMP/actionlint.tgz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/actionlint.tgz" -C "$RUNNER_TEMP" actionlint
+          "$RUNNER_TEMP/actionlint" -color
 
       - name: Set up Node
         uses: actions/setup-node@v7
@@ -159,8 +194,8 @@ jobs:
       - name: Worker dry-run deploy
         run: npm run deploy:dry
 
-      - name: Content lint (pages and ads)
-        run: node scripts/run.mjs scripts/content-lint.ts --out out --ads ../../ops/ads/google.csv
+      - name: Content lint (exported pages)
+        run: node scripts/run.mjs scripts/content-lint.ts --out out
 
       - name: Personal-data guard (ops/metrics)
         run: node scripts/run.mjs scripts/metrics.ts guard ../../ops/metrics

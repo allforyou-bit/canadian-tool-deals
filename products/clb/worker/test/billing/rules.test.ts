@@ -48,6 +48,8 @@ describe('sales region', () => {
   })
 })
 
+const RECEIPT = 'https://pay.stripe.com/receipts/payment/CAcaFwoVYWNjdF90ZXN0'
+
 describe('billing text', () => {
   const site = 'https://coach.test'
   const texts: string[] = []
@@ -55,9 +57,11 @@ describe('billing text', () => {
     for (const t of Object.values(ERRORS)) texts.push(t[lang])
     for (const mail of [
       passActiveEmail(lang, 'pass30', '2026-10-24T05:55:33.123Z', site),
-      passActiveEmail(lang, 'pass90', '2026-12-24T05:55:33.123Z', site),
+      passActiveEmail(lang, 'pass90', '2026-12-24T05:55:33.123Z', site, RECEIPT),
       regionRefundEmail(lang, 3900, site),
+      regionRefundEmail(lang, 3900, site, RECEIPT),
       selfRefundEmail(lang, 7900),
+      selfRefundEmail(lang, 7900, RECEIPT),
     ]) {
       texts.push(mail.subject, mail.text)
     }
@@ -75,5 +79,23 @@ describe('billing text', () => {
     expect(langOf('fr')).toBe('en')
     expect(passActiveEmail('ko', 'pass30', '2026-10-24T05:55:33.123Z', site).text).toContain('30일 이용권은 2026-10-24 05:55 UTC까지')
     expect(passActiveEmail('en', 'pass90', '2026-10-24T05:55:33.123Z', site).text).toContain('Your 90-day pass is active until')
+  })
+
+  it('adds the Stripe receipt link to buyer emails only when there is one', () => {
+    const withReceipt = [
+      passActiveEmail('en', 'pass30', '2026-10-24T05:55:33.123Z', site, RECEIPT),
+      regionRefundEmail('en', 3900, site, RECEIPT),
+      selfRefundEmail('en', 3900, RECEIPT),
+    ]
+    for (const mail of withReceipt) expect(mail.text).toContain(`\n\nReceipt (Stripe): ${RECEIPT}\n\n`)
+    expect(passActiveEmail('ko', 'pass30', '2026-10-24T05:55:33.123Z', site, RECEIPT).text).toContain(`영수증(Stripe): ${RECEIPT}`)
+    for (const mail of [
+      passActiveEmail('en', 'pass30', '2026-10-24T05:55:33.123Z', site, null),
+      regionRefundEmail('ko', 3900, site, ''),
+      selfRefundEmail('en', 3900),
+    ]) {
+      expect(mail.text).not.toMatch(/Receipt|영수증/)
+      expect(mail.text).not.toContain('\n\n\n')
+    }
   })
 })

@@ -4,6 +4,19 @@
 //
 // IDs: the owner creates the D1 database and KV namespace once (business/online/owner-setup.md)
 // and pastes the printed IDs below. Secrets are never stored here — see worker/src/env.ts.
+//
+// Plans (memo §7.2 Z2): everything here runs on Workers Free with the free workers.dev address — D1, KV,
+// Workers AI (AI), static assets and Workers Logs are all available on Free, and the two crons per Worker
+// (production + staging = 4) stay within the 5 Cron Triggers per account
+// (cloudflare-docs workers/platform/limits.mdx, read 2026-09-24).
+//
+// Vars: the values below are placeholders and safe defaults for a deploy that bypasses deploy.yml.
+// deploy.yml replaces every var with --var (vars not listed there are removed): SITE_URL, APP_VERSION,
+// FROM_EMAIL (default: Resend's sandbox sender below), OWNER_EMAIL, MAILING_ADDRESS (when set), LEGAL_NAME,
+// GOOGLE_CLIENT_ID (with the GOOGLE_CLIENT_SECRET secret), MAGIC_LINK ('owner') and LEARNER_EMAIL ('off')
+// passed explicitly, GRADER_*, ANTHROPIC_MONTHLY_LIMIT_USD and, on production, ANTHROPIC_PREPAID_USD /
+// ANTHROPIC_PREPAID_SINCE (ops/config/anthropic-limit.json). MAGIC_LINK and LEARNER_EMAIL are not set here:
+// the Worker's defaults (shared/config.ts AUTH_DEFAULTS) are the same values.
 {
   "$schema": "../node_modules/wrangler/config-schema.json",
   "name": "maple-practice-coach",
@@ -45,19 +58,19 @@
   "vars": {
     "SITE_URL": "https://maple-practice-coach.example.workers.dev",
     "APP_VERSION": "0.1.0",
-    "FROM_EMAIL": "Maple Practice Coach <coach@example.com>",
+    // Resend's sandbox sender: delivers only to the Resend account's own address (= OWNER_EMAIL), memo §7.2 Z4
+    "FROM_EMAIL": "Maple Practice Coach <onboarding@resend.dev>",
     "MAILING_ADDRESS": "SET-BEFORE-LAUNCH (CASL: owner mailing address)",
     "OWNER_EMAIL": "owner@example.com"
   },
 
-  // Staging Worker: `wrangler … --env staging` (deploy.yml on same-repo pull requests when the
-  // repository variable MPC_STAGING is 'true', or a manual run with target=staging). It has its own
-  // D1 database and KV namespace (owner-setup: `npx wrangler d1 create mpc-staging` and
+  // Staging Worker: `wrangler … --env staging` (deploy.yml, only by a manual run with target=staging,
+  // memo §7.2 Z7). It has its own D1 database and KV namespace (owner-setup: `npx wrangler d1 create mpc-staging` and
   // `npx wrangler kv namespace create FLAGS --env staging`, paste both ids below). Per
   // config-schema.json, vars, d1_databases, kv_namespaces and ai are NOT inherited from the top level,
   // so they are repeated here; main, assets, compatibility settings and observability are inherited.
   // deploy.yml overrides SITE_URL, APP_VERSION and the owner vars with --var, like production, and adds
-  // ANTHROPIC_MONTHLY_LIMIT_USD (the eval workspace limit). STAGING_ALLOWED_EMAILS locks staging: sign-in
+  // ANTHROPIC_MONTHLY_LIMIT_USD (the eval workspace limit; no prepaid ledger). STAGING_ALLOWED_EMAILS locks staging: sign-in
   // links go only to those addresses and anonymous grading is off (worker/src/auth.ts stagingAllows).
   // deploy.yml always replaces the placeholder below with MPC_STAGING_ALLOWED_EMAILS (or MPC_OWNER_EMAIL)
   // and refuses to deploy staging without one; the placeholder keeps any other staging deploy locked.
@@ -87,7 +100,7 @@
       "vars": {
         "SITE_URL": "https://maple-practice-coach-staging.example.workers.dev",
         "APP_VERSION": "0.1.0-staging",
-        "FROM_EMAIL": "STAGING - Maple Practice Coach <coach@example.com>",
+        "FROM_EMAIL": "STAGING - Maple Practice Coach <onboarding@resend.dev>",
         "MAILING_ADDRESS": "SET-BEFORE-LAUNCH (CASL: owner mailing address)",
         "OWNER_EMAIL": "owner@example.com",
         "STAGING_ALLOWED_EMAILS": "owner@example.com"

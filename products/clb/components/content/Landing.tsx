@@ -1,5 +1,6 @@
 // Landing page body for / and /ko/ (copy: content/landing.ts). The Korean page puts the
-// "explanations in Korean" section first, because that is its main benefit.
+// "explanations in Korean" section first, because that is its main benefit. The free practice section
+// (practice without feedback, memo §7.2 Z9) comes right after, on both pages.
 import Link from 'next/link'
 import type { LandingCopy, TaskLine } from '../../content/landing'
 import { cls, tone } from '../ui'
@@ -24,6 +25,32 @@ function TaskList({ heading, tasks, id }: { heading: string; tasks: TaskLine[]; 
         ))}
       </ul>
     </div>
+  )
+}
+
+function PracticeSection({ copy }: { copy: LandingCopy }) {
+  return (
+    <section aria-labelledby="practice-heading" className={`${cls.card} max-w-3xl`}>
+      <h2 id="practice-heading" className={cls.h2}>
+        {copy.practice.heading}
+      </h2>
+      <p className="mt-3 leading-7 text-slate-800">{copy.practice.intro}</p>
+      <ul className="mt-4 list-disc space-y-2 pl-5 leading-7 text-slate-800 marker:text-slate-400">
+        {copy.practice.items.map((item, i) => (
+          <li key={i}>
+            <Rich text={item} />
+          </li>
+        ))}
+      </ul>
+      <div className="mt-6">
+        <Link href={copy.practice.cta.href} className={`${cls.btn} ${cls.primary}`}>
+          {copy.practice.cta.label}
+        </Link>
+      </div>
+      <p className="mt-4 text-sm leading-6 text-slate-700">
+        <Rich text={copy.practice.next} />
+      </p>
+    </section>
   )
 }
 
@@ -62,7 +89,9 @@ export function Landing({ copy }: { copy: LandingCopy }) {
             {copy.hero.secondary.label}
           </Link>
         </div>
-        <p className={`${cls.muted} mt-3`}>{copy.hero.note}</p>
+        <p className={`${cls.muted} mt-3`}>
+          <Rich text={copy.hero.note} />
+        </p>
       </section>
 
       <aside aria-labelledby="disclosure-heading" className={`${tone.info} max-w-3xl text-base`}>
@@ -73,6 +102,8 @@ export function Landing({ copy }: { copy: LandingCopy }) {
       </aside>
 
       {koreanFirst && <KoreanSection copy={copy} />}
+
+      <PracticeSection copy={copy} />
 
       <section aria-labelledby="steps-heading">
         <h2 id="steps-heading" className={cls.h2}>

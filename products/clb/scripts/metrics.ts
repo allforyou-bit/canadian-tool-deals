@@ -8,13 +8,13 @@
 //                    3 files written but the newest row is older than yesterday (UTC): the Worker's
 //                      daily cron did not run — the workflow opens an issue.
 // guard: walks directories recursively and checks EVERY file (any name, extension or case). Only
-//   README.md, ads.json and <YYYY-MM-DD>.json may live in ops/metrics; anything else fails. Daily files
-//   and ads.json must also match their allowlisted shapes, so no free-text field can slip through.
+//   README.md and <YYYY-MM-DD>.json may live in ops/metrics (ads.json went with the ad budget, memo §7.2
+//   Z1); anything else fails. Daily files must also match their allowlisted shape, so no free-text field
+//   can slip through.
 // File format: ops/metrics/README.md. The row's JSON is written by worker/src/cron.ts (core).
 import type { EventName } from '../shared/api'
 import type { DailyMetrics } from '../worker/src/cron'
 import type { GradeOutcome } from '../worker/src/grading/store'
-import { parseAdsJson } from './ads'
 import { parseD1Json, queryRemoteD1, type Row } from './lib/d1'
 import { describeFinding, findPersonalData } from './lib/pii-guard'
 
@@ -34,7 +34,7 @@ const ISO_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?Z$/
 
 // ---- allowlists (every key at every level; values must be numbers) ----
 
-export const EVENT_NAMES = ['landing', 'sample_start', 'sample_done', 'signup', 'checkout_start', 'purchase', 'refund'] as const
+export const EVENT_NAMES = ['landing', 'sample_start', 'sample_done', 'practice_start', 'practice_done', 'signup', 'checkout_start', 'purchase', 'refund'] as const
 /** grades.outcome values, plus what the cron reports for rows still pending or without an outcome */
 export const OUTCOME_KEYS = ['graded', 'scope_refused', 'safety_refused', 'failed', 'no_speech', 'too_long', 'pending', 'unknown'] as const
 const TOP_KEYS = ['day', 'events', 'paidEvents', 'grades', 'outcomes', 'costUsd', 'purchases', 'refunds', 'disputes'] as const
@@ -49,12 +49,18 @@ const FILE_KEYS = ['schema', 'day', 'source', 'computedAt', 'metrics'] as const
 type Covers<T, L extends readonly PropertyKey[]> = [Exclude<keyof T, L[number]>] extends [never] ? ([Exclude<L[number], keyof T>] extends [never] ? true : false) : false
 type Assert<T extends true> = T
 /**
+ * DailyMetrics as the validator accepts it: `paidEvents` (paid-click events, used by the ads kill rules)
+ * stays an optional field whether or not the Worker still writes it — with no ads it is always absent now
+ * (memo §7.2 Z1), and older files may carry it.
+ */
+type AcceptedDailyMetrics = Omit<DailyMetrics, 'paidEvents'> & { paidEvents?: Record<string, number> }
+/**
  * Compile-time guard: `npx tsc -p scripts/tsconfig.json` fails here when worker/src/cron.ts
  * DailyMetrics or shared/api.ts EventName gains, loses or renames a field. Update the allowlists
  * above and ops/metrics/README.md together.
  */
 export type AllowlistsMatchDailyMetrics = [
-  Assert<Covers<DailyMetrics, typeof TOP_KEYS>>,
+  Assert<Covers<AcceptedDailyMetrics, typeof TOP_KEYS>>,
   Assert<Covers<DailyMetrics['grades'], (typeof GROUP_KEYS)['grades']>>,
   Assert<Covers<DailyMetrics['purchases'], (typeof GROUP_KEYS)['purchases']>>,
   Assert<Covers<DailyMetrics['refunds'], (typeof GROUP_KEYS)['refunds']>>,
@@ -103,7 +109,7 @@ export function validateDailyMetrics(value: unknown): string[] {
   problems.push(...unknownKeys(m, TOP_KEYS, ''))
   if (typeof m.day !== 'string' || !DAY.test(m.day)) problems.push('day must be YYYY-MM-DD')
   countMap(m.events, EVENT_NAMES, 'events', problems)
-  // optional: files written before 2026-09-24 lack these (K3 counts paid sample starts from paidEvents)
+  // optional: files written before 2026-09-24 lack these; paidEvents is always absent without ads (Z1)
   if (m.paidEvents !== undefined) countMap(m.paidEvents, EVENT_NAMES, 'paidEvents', problems)
   if (m.outcomes !== undefined) countMap(m.outcomes, OUTCOME_KEYS, 'outcomes', problems)
   for (const [g, keys] of Object.entries(GROUP_KEYS)) {
@@ -218,26 +224,25 @@ async function exportCommand(args: string[]): Promise<number> {
 
 // ---------- personal-data guard for committed files ----------
 
-export type GuardKind = 'readme' | 'daily' | 'ads' | 'unexpected'
+export type GuardKind = 'readme' | 'daily' | 'unexpected'
 
-/** What a path (relative to ops/metrics, "/"-separated) may be. Only three kinds of file belong there. */
+/** What a path (relative to ops/metrics, "/"-separated) may be. Only two kinds of file belong there. */
 export function classifyMetricsPath(relPath: string): GuardKind {
   if (relPath === 'README.md') return 'readme'
-  if (relPath === 'ads.json') return 'ads'
   if (/^\d{4}-\d{2}-\d{2}\.json$/.test(relPath)) return 'daily'
   return 'unexpected'
 }
 
 /**
  * Problems for one file: unexpected files fail; every file except README.md is scanned for personal
- * data whatever its name; daily files and ads.json must also parse into their allowlisted shapes.
+ * data whatever its name; daily files must also parse into their allowlisted shape.
  * Messages name rules and positions only, never the matched text.
  */
 export function guardFile(relPath: string, text: string): string[] {
   const kind = classifyMetricsPath(relPath)
   if (kind === 'readme') return []
   const problems: string[] = []
-  if (kind === 'unexpected') problems.push('unexpected file: only README.md, ads.json and <YYYY-MM-DD>.json belong in ops/metrics (no subfolders)')
+  if (kind === 'unexpected') problems.push('unexpected file: only README.md and <YYYY-MM-DD>.json belong in ops/metrics (no subfolders)')
   problems.push(...findPersonalData(text).map(describeFinding))
   if (kind === 'daily') {
     let parsed: unknown
@@ -247,14 +252,6 @@ export function guardFile(relPath: string, text: string): string[] {
       return [...problems, 'not valid JSON']
     }
     problems.push(...validateMetricsFile(parsed, relPath.slice(0, 10)))
-  }
-  if (kind === 'ads') {
-    try {
-      parseAdsJson(text)
-    } catch (e) {
-      // parseAdsJson names rows and fields only
-      problems.push(e instanceof Error ? e.message : 'ads.json invalid')
-    }
   }
   return problems
 }

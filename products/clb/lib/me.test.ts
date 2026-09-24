@@ -10,7 +10,8 @@ function meBody(signedIn: boolean): MeResponse {
     pass: null,
     free: { writing: true, speaking: false },
     usage: { writingToday: 0, speakingToday: 0, graded30d: 0 },
-    flags: { checkoutEnabled: true, gradingEnabled: true, freeEnabled: true, banner: '' },
+    flags: { checkoutEnabled: true, gradingEnabled: true, freeEnabled: true, banner: '', speakingAvailable: true },
+    auth: { google: true, magicLink: 'owner' },
   }
 }
 
@@ -142,5 +143,19 @@ describe('accessEndsAt', () => {
   it('falls back to the active pass, and is null when everything has ended', () => {
     expect(store.accessEndsAt({ ...meBody(true), pass }, now)).toBe(pass.endsAt)
     expect(store.accessEndsAt({ ...meBody(true), pass: null, accessEndsAt: '2026-09-01T00:00:00.000Z' }, now)).toBeNull()
+  })
+})
+
+describe('speakingOpen', () => {
+  it('follows the site-wide daily speaking budget flag', () => {
+    const me = meBody(true)
+    expect(store.speakingOpen(me)).toBe(true)
+    expect(store.speakingOpen({ ...me, flags: { ...me.flags, speakingAvailable: false } })).toBe(false)
+  })
+
+  it('treats a missing flag (an older Worker) as open', () => {
+    const me = meBody(false)
+    const { speakingAvailable: _omit, ...older } = me.flags
+    expect(store.speakingOpen({ ...me, flags: older } as unknown as MeResponse)).toBe(true)
   })
 })

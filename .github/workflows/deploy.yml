@@ -1,48 +1,57 @@
-# Deploy of the practice coach Worker + static site (memo §5.2, B0, B11).
+# Deploy of the practice coach Worker + static site (memo §5.2, B0, B11; zero-capital launch memo §7.2).
 #
 # production: pushes to master (and manual runs) when the repository variable MPC_DEPLOY is 'true'.
-# staging:    same-repo pull requests (and manual runs with target=staging) when MPC_STAGING is 'true'.
-#             The env.staging Worker in worker/wrangler.jsonc (own D1 and KV), at MPC_STAGING_SITE_URL,
+# staging:    manual runs with target=staging only (memo §7.2 Z7: no pull-request trigger, to save Actions
+#             minutes). The env.staging Worker in worker/wrangler.jsonc (own D1 and KV), at MPC_STAGING_SITE_URL,
 #             on a public workers.dev host, so it is LOCKED (memo §7.1 B11 / level B):
 #             - STAGING_ALLOWED_EMAILS = MPC_STAGING_ALLOWED_EMAILS, else MPC_OWNER_EMAIL (the deploy is
-#               refused when both are empty): sign-in links go only to those addresses and anonymous
+#               refused when both are empty): sign-in goes only to those addresses and anonymous
 #               grading is off (worker/src/auth.ts stagingAllows). Never set for production.
 #             - the Anthropic key is ANTHROPIC_EVAL_API_KEY only, never the production key; without it a
 #               placeholder key is sent and every staging grade fails (a warning says so).
-#             - ANTHROPIC_MONTHLY_LIMIT_USD = evalMonthlyLimitUsd (ops/config/anthropic-limit.json).
-#             - FROM_EMAIL is MPC_FROM_EMAIL with a "STAGING - " prefix; it reuses RESEND_API_KEY, which
-#               is safe because only allowlisted addresses (and the owner's alerts) receive mail.
+#             - ANTHROPIC_MONTHLY_LIMIT_USD = evalMonthlyLimitUsd (ops/config/anthropic-limit.json); no
+#               prepaid-credit ledger (the credits are the organization's; staging sees only its own spend).
+#             - FROM_EMAIL gets a "STAGING - " prefix; it reuses RESEND_API_KEY, which is safe because only
+#               the owner's address receives mail (LEARNER_EMAIL=off, Resend's sandbox sender).
 #             - Stripe TEST keys only (secrets STRIPE_TEST_SECRET_KEY, STRIPE_TEST_WEBHOOK_SECRET; a live
 #               key is refused), Cloudflare's Turnstile TEST keys (safe only behind the allowlist, see
-#               the Deploy step), no analytics or ads tag, a robots.txt that disallows crawling, and a
-#               random HASH_SALT on its first deploy. Pull requests from forks never deploy (no secrets).
+#               the Deploy step), no analytics tag, a robots.txt that disallows crawling, and a random
+#               HASH_SALT on its first deploy. Google sign-in when configured (same OAuth client; its
+#               redirect URI must list the staging address too).
 #
-# Steps: secrets present? → install → configuration check (scripts/deploy-config.ts: production
-# refuses to run without MPC_MAILING_ADDRESS or without a real Turnstile site key + TURNSTILE_SECRET;
-# staging refuses without an allowlist) → tests (production) → site build (public env from
-# repository variables) → content lint (production: --require-address fails on the address
-# placeholder) → IndexNow key file (production) → note the live Worker version → D1 migrations →
-# deploy with secrets, vars and the custom domain → verification that does not depend on the Deploy
-# step's exit code (wrangler makes the new version live BEFORE it attaches routes, custom domains and
-# crons, so a failed Deploy step can leave new code serving):
-#   - smoke test (scripts/smoke.ts: /api/health with this commit's version, key pages, /api/me shape)
-#     whenever `wrangler deploy` was started, whether the Deploy step succeeded or failed;
+# Steps: secrets present? → install → configuration check (scripts/deploy-config.ts: production refuses to
+# run without MPC_LEGAL_NAME, without Google sign-in (MPC_GOOGLE_CLIENT_ID + GOOGLE_CLIENT_SECRET), without
+# MPC_OWNER_EMAIL, or without a real Turnstile site key + TURNSTILE_SECRET; MPC_MAILING_ADDRESS is optional;
+# staging refuses without an allowlist) → tests (production) → site build (public env from repository
+# variables) → content lint (--require-legal-name when a legal name is set; --require-address only when
+# MPC_MAILING_ADDRESS is set) → IndexNow key file (production; MPC_INDEXNOW_KEY or a key derived from the
+# site URL) → note the live Worker version → D1 migrations → deploy with secrets, vars and the custom domain
+# → verification that does not depend on the Deploy step's exit code (wrangler makes the new version live
+# BEFORE it attaches routes, custom domains and crons, so a failed Deploy step can leave new code serving):
+#   - smoke test (scripts/smoke.ts: /api/health with this commit's version, key pages, /api/me shape and
+#     the sign-in methods this deploy configured) whenever `wrangler deploy` was started, whether the Deploy
+#     step succeeded or failed;
 #   - when the Deploy step or the smoke test failed: read the live version again and, if it is not the
 #     one noted before the deploy, `wrangler rollback` to that one; the job fails naming the failed step.
 # → production: IndexNow ping (never fails the deploy). D1 migrations are never rolled back.
 #
-# Worker vars from repository variables: SITE_URL, FROM_EMAIL, MAILING_ADDRESS, OWNER_EMAIL,
-# GRADER_MODEL, GRADER_EFFORT, GRADER_MAX_TOKENS (MPC_*), STAGING_ALLOWED_EMAILS (staging only), and
-# ANTHROPIC_MONTHLY_LIMIT_USD from ops/config/anthropic-limit.json (production: monthlyLimitUsd, the
-# limit set in the Anthropic Console; staging: evalMonthlyLimitUsd; a merged change redeploys).
+# Worker vars (all passed explicitly): SITE_URL, FROM_EMAIL (MPC_FROM_EMAIL, else Resend's sandbox sender
+# 'Maple Practice Coach <onboarding@resend.dev>', memo §7.2 Z4), OWNER_EMAIL, LEGAL_NAME (MPC_LEGAL_NAME),
+# MAILING_ADDRESS (when set), GOOGLE_CLIENT_ID (MPC_GOOGLE_CLIENT_ID, only together with the
+# GOOGLE_CLIENT_SECRET secret), MAGIC_LINK (MPC_MAGIC_LINK, else 'owner') and LEARNER_EMAIL
+# (MPC_LEARNER_EMAIL, else 'off'), GRADER_MODEL, GRADER_EFFORT, GRADER_MAX_TOKENS (MPC_*),
+# STAGING_ALLOWED_EMAILS (staging only), ANTHROPIC_MONTHLY_LIMIT_USD from ops/config/anthropic-limit.json
+# (production: monthlyLimitUsd; staging: evalMonthlyLimitUsd; a merged change redeploys) and, on production,
+# ANTHROPIC_PREPAID_USD / ANTHROPIC_PREPAID_SINCE (prepaidUsd / prepaidSince, only when both are valid).
 # Custom domain: when the site URL is not *.workers.dev, `--domain <host>` attaches it (the API token
-# needs the permissions listed in business/online/owner-setup.md).
+# needs the permissions listed in business/online/owner-setup.md). The zero-capital launch uses workers.dev.
 #
 # Wrangler 4.137.0 flags checked with --help: deploy --secrets-file --var KEY:VALUE --message
 # --domain/--domains; -e/--env (global; --env= selects the top level); deployments status --json;
 # d1 migrations apply <db> --remote; rollback [version-id] -y/--yes -m/--message. `--var` values are
-# merged over the config's vars (wrangler-dist/cli.js: cliVars override getBindings(config)), and
-# without --keep-vars every var not in the config or on the command line is removed.
+# merged over the config's vars (wrangler-dist/cli.js: cliVars override getBindings(config); KEY:VALUE is
+# split at the first colon), and without --keep-vars every var not in the config or on the command line
+# is removed.
 name: Deploy practice coach
 
 on:
@@ -50,11 +59,10 @@ on:
     branches: [master]
     paths:
       - 'products/clb/**'
-      - 'ops/config/anthropic-limit.json'
-      - '.github/workflows/deploy.yml'
-  pull_request:
-    paths:
-      - 'products/clb/**'
+      # not deployed: docs, the eval harness and the browser tests
+      - '!products/clb/**/*.md'
+      - '!products/clb/scripts/eval/**'
+      - '!products/clb/e2e/**'
       - 'ops/config/anthropic-limit.json'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
@@ -77,27 +85,26 @@ permissions:
   contents: read
 
 concurrency:
-  group: deploy-clb-${{ (github.event_name == 'pull_request' || inputs.target == 'staging') && 'staging' || 'production' }}
+  group: deploy-clb-${{ inputs.target == 'staging' && 'staging' || 'production' }}
   cancel-in-progress: false
 
 jobs:
   deploy:
-    if: >-
-      (github.event_name == 'pull_request' && vars.MPC_STAGING == 'true' && github.event.pull_request.head.repo.full_name == github.repository) ||
-      (github.event_name != 'pull_request' && inputs.target == 'staging' && vars.MPC_STAGING == 'true') ||
-      (github.event_name != 'pull_request' && inputs.target != 'staging' && vars.MPC_DEPLOY == 'true')
-    runs-on: ubuntu-latest
+    # a staging run is always started by hand, which is its own opt-in; production needs MPC_DEPLOY
+    if: inputs.target == 'staging' || vars.MPC_DEPLOY == 'true'
+    runs-on: ubuntu-24.04
     timeout-minutes: 40
     defaults:
       run:
         working-directory: products/clb
     env:
-      TARGET: ${{ (github.event_name == 'pull_request' || inputs.target == 'staging') && 'staging' || 'production' }}
+      TARGET: ${{ inputs.target == 'staging' && 'staging' || 'production' }}
       DRILL: ${{ github.event_name == 'workflow_dispatch' && inputs.rollback_drill && 'true' || 'false' }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       MPC_SITE_URL: ${{ vars.MPC_SITE_URL }}
       MPC_STAGING_SITE_URL: ${{ vars.MPC_STAGING_SITE_URL }}
+      MPC_LEGAL_NAME: ${{ vars.MPC_LEGAL_NAME }}
       MPC_MAILING_ADDRESS: ${{ vars.MPC_MAILING_ADDRESS }}
       MPC_FROM_EMAIL: ${{ vars.MPC_FROM_EMAIL }}
       MPC_OWNER_EMAIL: ${{ vars.MPC_OWNER_EMAIL }}
@@ -122,10 +129,10 @@ jobs:
       - name: Check secrets and select the target
         id: secrets
         run: |
-          # Contact details are repository variables, not secrets: mask them so logs never show them
-          # (each staging allowlist entry on its own, since the Worker gets them as one list).
+          # Contact details and the owner's legal name are repository variables, not secrets: mask them so
+          # logs never show them (each staging allowlist entry on its own, since the Worker gets them as one list).
           IFS=',' read -r -a allowlist <<< "$MPC_STAGING_ALLOWED_EMAILS"
-          for v in "$MPC_OWNER_EMAIL" "$MPC_FROM_EMAIL" "$MPC_MAILING_ADDRESS" "$MPC_STAGING_ALLOWED_EMAILS" "${allowlist[@]}"; do
+          for v in "$MPC_OWNER_EMAIL" "$MPC_FROM_EMAIL" "$MPC_MAILING_ADDRESS" "$MPC_LEGAL_NAME" "$MPC_STAGING_ALLOWED_EMAILS" "${allowlist[@]}"; do
             v="${v#"${v%%[![:space:]]*}"}"; v="${v%"${v##*[![:space:]]}"}"
             if [ -n "$v" ]; then echo "::add-mask::$v"; fi
           done
@@ -162,7 +169,11 @@ jobs:
         id: cfg
         if: steps.secrets.outputs.ready == 'true'
         env:
+          LEGAL_NAME: ${{ vars.MPC_LEGAL_NAME }}
           MAILING_ADDRESS: ${{ vars.MPC_MAILING_ADDRESS }}
+          GOOGLE_CLIENT_ID: ${{ vars.MPC_GOOGLE_CLIENT_ID }}
+          MAGIC_LINK: ${{ vars.MPC_MAGIC_LINK }}
+          LEARNER_EMAIL: ${{ vars.MPC_LEARNER_EMAIL }}
           GRADER_MODEL: ${{ vars.MPC_GRADER_MODEL }}
           GRADER_EFFORT: ${{ vars.MPC_GRADER_EFFORT }}
           GRADER_MAX_TOKENS: ${{ vars.MPC_GRADER_MAX_TOKENS }}
@@ -171,8 +182,11 @@ jobs:
           OWNER_EMAIL: ${{ vars.MPC_OWNER_EMAIL }}
           STRIPE_TEST_SECRET_KEY: ${{ secrets.STRIPE_TEST_SECRET_KEY }}
           TURNSTILE_SECRET: ${{ secrets.TURNSTILE_SECRET }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         run: |
           # only the secrets' shape is inspected; the values themselves are never printed
+          GOOGLE_SECRET_MODE=""
+          if [ -n "$GOOGLE_CLIENT_SECRET" ]; then GOOGLE_SECRET_MODE='set'; fi
           STRIPE_KEY_MODE=""
           if [ "$TARGET" = staging ]; then
             case "$STRIPE_TEST_SECRET_KEY" in
@@ -186,8 +200,8 @@ jobs:
             [123]x0000000000000000000000000000000AA) TURNSTILE_SECRET_MODE='test' ;;
             *) TURNSTILE_SECRET_MODE='set' ;;
           esac
-          export STRIPE_KEY_MODE TURNSTILE_SECRET_MODE
-          unset STRIPE_TEST_SECRET_KEY TURNSTILE_SECRET
+          export STRIPE_KEY_MODE TURNSTILE_SECRET_MODE GOOGLE_SECRET_MODE
+          unset STRIPE_TEST_SECRET_KEY TURNSTILE_SECRET GOOGLE_CLIENT_SECRET
           node scripts/run.mjs scripts/deploy-config.ts check --target "$TARGET"
 
       - name: Typecheck and test
@@ -199,21 +213,20 @@ jobs:
       - name: Build site
         if: steps.secrets.outputs.ready == 'true'
         env:
+          NEXT_PUBLIC_LEGAL_NAME: ${{ steps.cfg.outputs.legal_name }}
           NEXT_PUBLIC_MAILING_ADDRESS: ${{ vars.MPC_MAILING_ADDRESS }}
           NEXT_PUBLIC_SUPPORT_EMAIL: ${{ vars.MPC_SUPPORT_EMAIL }}
           PROD_TURNSTILE_SITE_KEY: ${{ vars.MPC_TURNSTILE_SITE_KEY }}
           PROD_CF_BEACON_TOKEN: ${{ vars.MPC_CF_BEACON_TOKEN }}
-          PROD_GADS_SEND_TO: ${{ vars.MPC_GADS_SEND_TO }}
         run: |
           export NEXT_PUBLIC_SITE_URL="$SITE_URL"
-          # staging: Turnstile test key, no Web Analytics, no ads conversion tag
+          # staging: Turnstile test key, no Web Analytics (there is no ads tag any more, memo §7.2 Z1)
           if [ "$TARGET" = production ]; then
             export NEXT_PUBLIC_TURNSTILE_SITE_KEY="$PROD_TURNSTILE_SITE_KEY"
             export NEXT_PUBLIC_CF_BEACON_TOKEN="$PROD_CF_BEACON_TOKEN"
-            export NEXT_PUBLIC_GADS_SEND_TO="$PROD_GADS_SEND_TO"
           fi
           # unset variables arrive as empty strings; drop them so the site's safe defaults apply
-          for v in NEXT_PUBLIC_SITE_URL NEXT_PUBLIC_MAILING_ADDRESS NEXT_PUBLIC_TURNSTILE_SITE_KEY NEXT_PUBLIC_CF_BEACON_TOKEN NEXT_PUBLIC_GADS_SEND_TO NEXT_PUBLIC_SUPPORT_EMAIL; do
+          for v in NEXT_PUBLIC_SITE_URL NEXT_PUBLIC_LEGAL_NAME NEXT_PUBLIC_MAILING_ADDRESS NEXT_PUBLIC_TURNSTILE_SITE_KEY NEXT_PUBLIC_CF_BEACON_TOKEN NEXT_PUBLIC_SUPPORT_EMAIL; do
             if [ -z "${!v:-}" ]; then unset "$v"; fi
           done
           npm run build
@@ -223,19 +236,26 @@ jobs:
 
       - name: Content lint
         if: steps.secrets.outputs.ready == 'true'
+        env:
+          LEGAL_NAME: ${{ steps.cfg.outputs.legal_name }}
+          REQUIRE_ADDRESS: ${{ steps.cfg.outputs.require_address }}
         run: |
-          args=(--out out --ads ../../ops/ads/google.csv)
-          # production: fail when a page still shows the mailing-address placeholder (decision 16)
-          if [ "$TARGET" = production ]; then args+=(--require-address); fi
+          args=(--out out)
+          # memo §7.2 Z5: the seller's legal name must be on the terms and privacy pages (production always
+          # has one; deploy-config.ts refused it otherwise), and a mailing address, when one is set, must
+          # have reached the pages instead of the placeholder
+          if [ -n "$LEGAL_NAME" ]; then args+=(--require-legal-name); fi
+          if [ "$REQUIRE_ADDRESS" = true ]; then args+=(--require-address); fi
           node scripts/run.mjs scripts/content-lint.ts "${args[@]}"
 
-      # The IndexNow key is the repository variable MPC_INDEXNOW_KEY (not a secret: search engines read
-      # it from the site). The key file is generated here into the export, never committed.
+      # The IndexNow key is the repository variable MPC_INDEXNOW_KEY, or, when it is unset, a key derived
+      # from the site URL (memo §7.2 Z10; not a secret: search engines read it from the site). The key file
+      # is generated here into the export, never committed.
       - name: IndexNow key file
         if: steps.secrets.outputs.ready == 'true' && env.TARGET == 'production'
         env:
           INDEXNOW_KEY: ${{ vars.MPC_INDEXNOW_KEY }}
-        run: node scripts/run.mjs scripts/indexnow.ts write-key --out out
+        run: node scripts/run.mjs scripts/indexnow.ts write-key --out out --site "$SITE_URL"
 
       - name: Note the live Worker version
         id: prev
@@ -260,8 +280,14 @@ jobs:
           PREV_VERSION: ${{ steps.prev.outputs.version }}
           DOMAIN: ${{ steps.cfg.outputs.domain }}
           ANTHROPIC_LIMIT_USD: ${{ steps.cfg.outputs.anthropic_limit_usd }}
+          PREPAID_USD: ${{ steps.cfg.outputs.prepaid_usd }}
+          PREPAID_SINCE: ${{ steps.cfg.outputs.prepaid_since }}
           STAGING_ALLOWED_EMAILS: ${{ steps.cfg.outputs.staging_allowed_emails }}
-          STAGING_FROM_EMAIL: ${{ steps.cfg.outputs.from_email }}
+          FROM_EMAIL: ${{ steps.cfg.outputs.from_email }}
+          LEGAL_NAME: ${{ steps.cfg.outputs.legal_name }}
+          GOOGLE_CLIENT_ID: ${{ steps.cfg.outputs.google_client_id }}
+          MAGIC_LINK: ${{ steps.cfg.outputs.magic_link }}
+          LEARNER_EMAIL: ${{ steps.cfg.outputs.learner_email }}
           # production-only and staging-only secrets are not even handed to the other target's step
           SECRET_ANTHROPIC_API_KEY: ${{ env.TARGET == 'production' && secrets.ANTHROPIC_API_KEY || '' }}
           SECRET_ANTHROPIC_EVAL_API_KEY: ${{ env.TARGET == 'staging' && secrets.ANTHROPIC_EVAL_API_KEY || '' }}
@@ -272,6 +298,7 @@ jobs:
           SECRET_RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           SECRET_TURNSTILE_SECRET: ${{ env.TARGET == 'production' && secrets.TURNSTILE_SECRET || '' }}
           SECRET_HASH_SALT: ${{ secrets.HASH_SALT }}
+          SECRET_GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
         run: |
           suffix=""
           if [ "$TARGET" = staging ]; then suffix="-staging"; fi
@@ -298,8 +325,9 @@ jobs:
               ANTHROPIC_API_KEY: staging ? e("ANTHROPIC_EVAL_API_KEY") || "staging-without-ANTHROPIC_EVAL_API_KEY" : e("ANTHROPIC_API_KEY"),
               STRIPE_SECRET_KEY: staging ? e("STRIPE_TEST_SECRET_KEY") : e("STRIPE_SECRET_KEY"),
               STRIPE_WEBHOOK_SECRET: staging ? e("STRIPE_TEST_WEBHOOK_SECRET") : e("STRIPE_WEBHOOK_SECRET"),
-              // staging reuses the production Resend key: STAGING_ALLOWED_EMAILS limits its mail to the
-              // owner addresses (sign-in links) and OWNER_EMAIL (alerts)
+              // staging reuses the production Resend key: STAGING_ALLOWED_EMAILS limits its sign-in links to
+              // the owner addresses, LEARNER_EMAIL=off sends nothing to anyone else, and the Resend sandbox
+              // sender delivers only to the address of the Resend account itself (memo §7.2 Z4)
               RESEND_API_KEY: e("RESEND_API_KEY"),
               // Staging: the Cloudflare always-pass TEST secret (turnstile/troubleshooting/testing.mdx), which
               // accepts the public dummy token XXXX.DUMMY.TOKEN.XXXX, so Turnstile stops nobody there. That is
@@ -310,6 +338,8 @@ jobs:
               TURNSTILE_SECRET: staging ? "1x0000000000000000000000000000000AA" : e("TURNSTILE_SECRET"),
               // staging keeps the salt of its first deploy; production takes the HASH_SALT secret
               HASH_SALT: staging ? (process.env.PREV_VERSION ? "" : e("HASH_SALT")) : e("HASH_SALT"),
+              // only together with GOOGLE_CLIENT_ID (deploy-config.ts passes the id only when this secret is set)
+              GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_ID ? e("GOOGLE_CLIENT_SECRET") : "",
             }
             if (staging && pick.STRIPE_SECRET_KEY && !/^(sk|rk)_test_/.test(pick.STRIPE_SECRET_KEY)) {
               console.log("::error::staging only takes Stripe test keys")
@@ -319,7 +349,7 @@ jobs:
             const missing = []
             for (const [n, v] of Object.entries(pick)) {
               if (v) out[n] = v
-              else if (!(staging && n === "HASH_SALT")) missing.push(n)
+              else if (!(staging && n === "HASH_SALT") && n !== "GOOGLE_CLIENT_SECRET") missing.push(n)
             }
             require("fs").writeFileSync(process.argv[1], JSON.stringify(out), { mode: 0o600 })
             console.log("Worker secrets sent with this deploy: " + (Object.keys(out).join(", ") || "none"))
@@ -343,17 +373,25 @@ jobs:
               exit 1
             fi
             args+=(--var "STAGING_ALLOWED_EMAILS:$STAGING_ALLOWED_EMAILS")
-            from="$STAGING_FROM_EMAIL"
-          else
-            from="$MPC_FROM_EMAIL"
           fi
-          if [ -n "$from" ]; then args+=(--var "FROM_EMAIL:$from"); fi
+          # memo §7.2 Z3/Z4: the sign-in and email modes are always explicit, never left to a default
+          if [ -z "$MAGIC_LINK" ] || [ -z "$LEARNER_EMAIL" ] || [ -z "$FROM_EMAIL" ]; then
+            echo "::error::The configuration check gave no MAGIC_LINK, LEARNER_EMAIL or FROM_EMAIL."
+            exit 1
+          fi
+          args+=(--var "MAGIC_LINK:$MAGIC_LINK" --var "LEARNER_EMAIL:$LEARNER_EMAIL" --var "FROM_EMAIL:$FROM_EMAIL")
+          if [ -n "$LEGAL_NAME" ]; then args+=(--var "LEGAL_NAME:$LEGAL_NAME"); fi
+          if [ -n "$GOOGLE_CLIENT_ID" ]; then args+=(--var "GOOGLE_CLIENT_ID:$GOOGLE_CLIENT_ID"); fi
           if [ -n "$MPC_MAILING_ADDRESS" ]; then args+=(--var "MAILING_ADDRESS:$MPC_MAILING_ADDRESS"); fi
           if [ -n "$MPC_OWNER_EMAIL" ]; then args+=(--var "OWNER_EMAIL:$MPC_OWNER_EMAIL"); fi
           if [ -n "$MPC_GRADER_MODEL" ]; then args+=(--var "GRADER_MODEL:$MPC_GRADER_MODEL"); fi
           if [ -n "$MPC_GRADER_EFFORT" ]; then args+=(--var "GRADER_EFFORT:$MPC_GRADER_EFFORT"); fi
           if [ -n "$MPC_GRADER_MAX_TOKENS" ]; then args+=(--var "GRADER_MAX_TOKENS:$MPC_GRADER_MAX_TOKENS"); fi
           if [ -n "$ANTHROPIC_LIMIT_USD" ]; then args+=(--var "ANTHROPIC_MONTHLY_LIMIT_USD:$ANTHROPIC_LIMIT_USD"); fi
+          # deploy-config.ts gives both or neither (production only)
+          if [ -n "$PREPAID_USD" ] && [ -n "$PREPAID_SINCE" ]; then
+            args+=(--var "ANTHROPIC_PREPAID_USD:$PREPAID_USD" --var "ANTHROPIC_PREPAID_SINCE:$PREPAID_SINCE")
+          fi
           if [ -n "$DOMAIN" ]; then args+=(--domain "$DOMAIN"); fi
           # From here on Cloudflare may change: the smoke test and the rollback check run even if this fails.
           echo "attempted=true" >> "$GITHUB_OUTPUT"
@@ -369,13 +407,17 @@ jobs:
         continue-on-error: ${{ env.DRILL == 'true' }}
         env:
           APP_VERSION: ${{ steps.deploy.outputs.app_version }}
+          EXPECT_GOOGLE: ${{ steps.cfg.outputs.google_client_id != '' }}
+          EXPECT_MAGIC_LINK: ${{ steps.cfg.outputs.magic_link }}
         # the new version can take a little while to reach every location; a drill asks for a version
-        # that cannot exist, so the check fails after the new version is live
+        # that cannot exist, so the check fails after the new version is live. /api/me must report the
+        # sign-in methods this deploy configured.
         run: |
+          expect=(--expect-google "$EXPECT_GOOGLE" --expect-magic-link "$EXPECT_MAGIC_LINK")
           if [ "$DRILL" = true ]; then
-            node scripts/run.mjs scripts/smoke.ts --base "$SITE_URL" --version "$APP_VERSION-drill" --wait-seconds 30
+            node scripts/run.mjs scripts/smoke.ts --base "$SITE_URL" --version "$APP_VERSION-drill" --wait-seconds 30 "${expect[@]}"
           else
-            node scripts/run.mjs scripts/smoke.ts --base "$SITE_URL" --version "$APP_VERSION" --wait-seconds 120
+            node scripts/run.mjs scripts/smoke.ts --base "$SITE_URL" --version "$APP_VERSION" --wait-seconds 120 "${expect[@]}"
           fi
 
       - name: Roll back if the deploy or the smoke test failed

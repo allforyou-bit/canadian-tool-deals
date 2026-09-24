@@ -9,6 +9,7 @@
 // batch nobody will read is not left running and billed.
 import Anthropic from '@anthropic-ai/sdk'
 import { MODELS } from '../../shared/config'
+import { tokenCostMicroUsd } from '../../worker/src/lib/spend'
 
 export type BatchRequest = Anthropic.Beta.Messages.BatchCreateParams.Request
 export type BatchParams = BatchRequest['params']
@@ -61,17 +62,31 @@ export function maxBatchCostUsd(requests: BatchRequest[], prices: Record<string,
 }
 
 /**
- * Pre-flight check against the budget (US$ per script run, from --budget-usd or EVAL_BUDGET_USD).
- * Returns an error message when the bound is above the budget or the budget is not a positive number.
+ * Pre-flight check against the budget (US$ for the whole workflow run, from --budget-usd or EVAL_BUDGET_USD),
+ * minus `spentUsd`, what the run's earlier batches cost (ledger.ts). Returns an error message when the bound
+ * is above what is left or the budget is not a positive number; null when the batch may be created (or no
+ * budget is set).
  */
-export function checkBudget(bound: CostBound, budgetRaw: string | undefined): string | null {
+export function checkBudget(bound: CostBound, budgetRaw: string | undefined, spentUsd = 0): string | null {
   if (budgetRaw === undefined || budgetRaw.trim() === '') return null
   const budget = Number(budgetRaw)
   if (!Number.isFinite(budget) || budget <= 0) return `EVAL_BUDGET_USD must be a positive number of US dollars (got "${budgetRaw}")`
-  if (bound.usd > budget) {
-    return `the worst case for this run is US$${bound.usd} (${bound.requests} requests, up to ${bound.outputTokens} output tokens), above the budget US$${budget}. Grade fewer samples (--limit / MPC_EVAL_LIMIT), lower GRADER_MAX_TOKENS, or raise MPC_EVAL_BUDGET_USD.`
+  const left = Math.round((budget - spentUsd) * 100) / 100
+  if (bound.usd > left) {
+    const against = spentUsd > 0 ? `above the US$${Math.max(0, left)} left of the budget US$${budget} (earlier batches of this run cost US$${spentUsd})` : `above the budget US$${budget}`
+    return `the worst case for this run is US$${bound.usd} (${bound.requests} requests, up to ${bound.outputTokens} output tokens), ${against}. Grade fewer samples (--limit / MPC_EVAL_LIMIT), lower GRADER_MAX_TOKENS, or raise MPC_EVAL_BUDGET_USD.`
   }
   return null
+}
+
+/**
+ * ESTIMATE of what a finished batch cost: the token counts of its succeeded results at config.MODELS prices
+ * × BATCH_PRICE_FACTOR (errored, expired and cancelled requests are not billed), rounded up to the cent.
+ */
+export function resultsCostUsd(results: Iterable<BatchResult>): number {
+  let micro = 0
+  for (const r of results) if (r.type === 'succeeded') micro += tokenCostMicroUsd(r.message.model, r.message.usage)
+  return Math.ceil(Math.round(micro * BATCH_PRICE_FACTOR) / 1e4) / 100
 }
 
 export class BatchStoppedError extends Error {

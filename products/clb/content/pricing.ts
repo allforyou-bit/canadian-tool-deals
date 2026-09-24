@@ -1,10 +1,21 @@
 // Pricing page copy: /pricing/ (English) and /ko/pricing/ (Korean). The buy buttons are <BuyPass> from
 // frontend-app (components/BuyPass.tsx), which shows each pass's name, price and days itself.
+// Zero-capital launch (memo §7.2): Google sign-in (Z3), no email receipts (Z4, Stripe's receipt link is on the
+// account page), the shared daily speaking capacity (Z2) and free practice without feedback (Z9).
 import type { Lang } from '../shared/api'
 import { BRAND } from '../shared/config'
 import { SPEAKING_TASKS, TASKS, WRITING_TASKS } from '../shared/tasks'
 import { PATHS } from './routes'
-import { DAILY_RESET_EN, DAILY_RESET_KO, FACTS, NO_FEEDBACK_LIMIT, PAUSE_EXTENSION, QUEBEC_RULE } from './site'
+import {
+  DAILY_RESET_EN,
+  DAILY_RESET_KO,
+  FACTS,
+  NO_FEEDBACK_LIMIT,
+  NO_LEARNER_EMAIL,
+  PAUSE_EXTENSION,
+  QUEBEC_RULE,
+  SPEAKING_CAPACITY,
+} from './site'
 import type { DocSection } from './types'
 
 export interface PricingCopy {
@@ -16,6 +27,7 @@ export interface PricingCopy {
   /** the short statements shown right under the heading */
   facts: string[]
   passesHeading: string
+  /** items are rich text (links allowed) */
   free: { heading: string; items: string[]; note: string }
   sections: DocSection[]
   help: string
@@ -42,8 +54,9 @@ export const PRICING_EN: PricingCopy = {
   free: {
     heading: 'Try it free',
     items: [
-      `${FACTS.freeWriting} free writing task, no account needed.`,
-      `${FACTS.freeSpeaking} free speaking task after you sign in with your email.`,
+      `${FACTS.freeWriting} free writing task with feedback, no account needed.`,
+      `${FACTS.freeSpeaking} free speaking task with feedback after you sign in with Google.`,
+      `Practise any task without feedback, free and with no account needed. [Start practising](${PATHS.practice}).`,
     ],
     note: 'The free writing task is limited to one per device. Free tasks can be paused at busy times or to stop abuse.',
   },
@@ -55,6 +68,7 @@ export const PRICING_EN: PricingCopy = {
         'You pay once. A pass is not a subscription: it does not renew automatically, and we never charge your card again unless you buy another pass.',
         'Your pass starts as soon as your payment is confirmed. If you buy a pass while another one is active, the new days are added to the end of your current pass.',
         PAUSE_EXTENSION.en,
+        NO_LEARNER_EMAIL.en,
       ],
     },
     {
@@ -66,7 +80,7 @@ export const PRICING_EN: PricingCopy = {
             `Feedback on all ${TASKS.length} practice task types: ${WRITING_TASKS.length} writing and ${SPEAKING_TASKS.length} speaking.`,
             'Explanations in English or Korean.',
             `Your saved answers and feedback, which you can open from your account page for ${FACTS.retentionDays} days after your last activity, and a record of the error types that keep coming back.`,
-            'Access from any device where you sign in with your email.',
+            'Access from any device where you sign in with your Google account.',
           ],
         },
       ],
@@ -77,6 +91,7 @@ export const PRICING_EN: PricingCopy = {
       blocks: [
         `Each account can get feedback on up to ${FACTS.writingPerDay} writing tasks and ${FACTS.speakingPerDay} speaking tasks per day, and up to ${FACTS.gradedPer30Days} tasks in any 30 days. Daily limits reset at ${DAILY_RESET_EN}.`,
         NO_FEEDBACK_LIMIT.en,
+        SPEAKING_CAPACITY.en,
         `Writing answers can be up to ${FACTS.maxEssayChars} characters. Recordings can be up to ${FACTS.audioMinutes} minutes long and ${FACTS.audioMb} MB in size.`,
       ],
     },
@@ -120,8 +135,9 @@ export const PRICING_KO: PricingCopy = {
   free: {
     heading: '무료로 해 보기',
     items: [
-      `쓰기 과제 ${FACTS.freeWriting}개: 계정 없이 무료`,
-      `말하기 과제 ${FACTS.freeSpeaking}개: 이메일로 로그인한 뒤 무료`,
+      `피드백을 받는 쓰기 과제 ${FACTS.freeWriting}개: 계정 없이 무료`,
+      `피드백을 받는 말하기 과제 ${FACTS.freeSpeaking}개: Google 계정으로 로그인한 뒤 무료`,
+      `피드백 없이 연습하기: 모든 과제를 계정 없이 무료로 연습할 수 있어요. [연습 시작하기](${PATHS.practice}?lang=ko)`,
     ],
     note: '무료 쓰기 과제는 기기 하나당 한 번이에요. 이용자가 몰리거나 악용을 막아야 할 때는 무료 체험을 잠시 멈출 수 있어요.',
   },
@@ -133,6 +149,7 @@ export const PRICING_KO: PricingCopy = {
         '한 번만 결제해요. 이용권은 구독이 아니라서 자동으로 갱신되지 않고, 이용권을 새로 사지 않는 한 카드로 다시 청구하지 않아요.',
         '결제가 확인되면 바로 이용권이 시작돼요. 이용권이 남아 있을 때 새로 사면, 지금 이용권이 끝나는 날 뒤로 일수가 더해져요.',
         PAUSE_EXTENSION.ko,
+        NO_LEARNER_EMAIL.ko,
       ],
     },
     {
@@ -144,7 +161,7 @@ export const PRICING_KO: PricingCopy = {
             `연습 과제 ${TASKS.length}가지 전부(쓰기 ${WRITING_TASKS.length}가지, 말하기 ${SPEAKING_TASKS.length}가지)에 대한 피드백`,
             '한국어 또는 영어 설명',
             `저장된 답안과 피드백 다시 보기(마지막 활동 후 ${FACTS.retentionDays}일 동안 계정 페이지에서), 자주 반복되는 오류 유형 모아 보기`,
-            '이메일로 로그인한 어느 기기에서나 이용',
+            'Google 계정으로 로그인한 어느 기기에서나 이용',
           ],
         },
       ],
@@ -155,6 +172,7 @@ export const PRICING_KO: PricingCopy = {
       blocks: [
         `계정 하나당 하루에 쓰기 ${FACTS.writingPerDay}개, 말하기 ${FACTS.speakingPerDay}개까지, 30일 동안 모두 ${FACTS.gradedPer30Days}개까지 피드백을 받을 수 있어요. 하루 한도는 ${DAILY_RESET_KO}에 초기화돼요.`,
         NO_FEEDBACK_LIMIT.ko,
+        SPEAKING_CAPACITY.ko,
         `쓰기 답안은 ${FACTS.maxEssayChars}자까지, 녹음은 ${FACTS.audioMinutes}분, ${FACTS.audioMb}MB까지 가능해요.`,
       ],
     },

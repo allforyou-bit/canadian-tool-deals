@@ -9,16 +9,17 @@ import type {
   UnsubscribeRequest,
 } from '../../shared/api'
 import { MARKETING_CONSENT, type Sku } from '../../shared/config'
-import { acceptedConsentText, clearSessionCookie, isLang, isRecord, mailingAddressMissing, markUnsubscribed } from './auth'
+import { acceptedConsentText, clearSessionCookie, isLang, isRecord, magicLinkMode, mailingAddressMissing, markUnsubscribed } from './auth'
+import { googleConfigured } from './auth-google'
 import { alertOwner, unsubscribeSignature } from './email'
 import type { Ctx, Env } from './env'
 import { randomId, timingSafeEqualHex } from './lib/crypto'
 import { getFlags } from './lib/flags'
 import { error, json, readJson } from './lib/http'
 import { getActivePass } from './lib/session'
-import { evaluateTiers, spendSnapshot } from './lib/spend'
+import { evaluateTiers, spendSnapshotCached } from './lib/spend'
 import { dayKey, startOfUtcDay } from './lib/time'
-import { freeAvailability, getUsage } from './lib/usage'
+import { freeAvailability, getUsage, speakingAvailableToday } from './lib/usage'
 
 /** Support tickets per email address per UTC day (keyed on users.email_hash: deleting and signing up again does not reset it). */
 export const SUPPORT_PER_DAY = 5
@@ -75,24 +76,42 @@ export function accessEnd(passes: { starts_at: string; ends_at: string }[], now:
   return endIso
 }
 
+/** Stripe's hosted receipt link (charge.receipt_url), passed on only when it is an https URL. */
+function safeReceiptUrl(v: string | null): string | null {
+  if (!v) return null
+  try {
+    return new URL(v).protocol === 'https:' ? v : null
+  } catch {
+    return null
+  }
+}
+
 /**
- * GET /api/me — who is signed in, their pass and usage, free samples left and public flags.
- * flags.freeEnabled is what the grade handlers apply: the KV flag and the live spend tiers (which can
- * switch free samples off before the cron flips the flag). While it is false, `free` is all false.
+ * GET /api/me — who is signed in, their pass and usage, free samples left, public flags and the sign-in
+ * methods on offer. flags.freeEnabled is what the grade handlers apply: the KV flag and the spend tiers
+ * (which can switch free samples off before the cron flips the flag); the snapshot comes from the
+ * per-isolate cache, so /api/me does not scan the month's grades on every call (memo §7.2 Z2). While it
+ * is false, `free` is all false. flags.speakingAvailable: grading is on and today's shared Workers AI
+ * speaking budget is not used up.
  */
 export async function me(_req: Request, ctx: Ctx): Promise<Response> {
   const { env, now, user } = ctx
   const flags = await getFlags(env)
-  // one spend snapshot per request, and none while the owner (or the cron) has free samples off
-  const freeEnabled = flags.free_enabled && !evaluateTiers(await spendSnapshot(env, now)).freeOff
+  // no spend snapshot while the owner (or the cron) has free samples off
+  const freeEnabled = flags.free_enabled && !evaluateTiers(await spendSnapshotCached(env, now)).freeOff
   const keys = { user, deviceHash: ctx.deviceHash, ipHash: ctx.ipHash }
-  const free = await freeAvailability(env, keys, now, freeEnabled)
+  const [free, speakingAvailable] = await Promise.all([
+    freeAvailability(env, keys, now, freeEnabled),
+    flags.grading_enabled ? speakingAvailableToday(env, now) : Promise.resolve(false),
+  ])
   const publicFlags = {
     checkoutEnabled: flags.checkout_enabled,
     gradingEnabled: flags.grading_enabled,
     freeEnabled,
     banner: flags.banner,
+    speakingAvailable,
   }
+  const auth: MeResponse['auth'] = { google: googleConfigured(env), magicLink: magicLinkMode(env) }
 
   if (!user) {
     const body: MeResponse = {
@@ -101,6 +120,7 @@ export async function me(_req: Request, ctx: Ctx): Promise<Response> {
       free,
       usage: { writingToday: 0, speakingToday: 0, graded30d: 0 },
       flags: publicFlags,
+      auth,
     }
     return json(body)
   }
@@ -116,9 +136,11 @@ export async function me(_req: Request, ctx: Ctx): Promise<Response> {
     )
       .bind(user.id, now.toISOString())
       .all<{ starts_at: string; ends_at: string }>(),
-    env.DB.prepare('SELECT id, sku, status FROM purchases WHERE user_id = ?1 ORDER BY created_at DESC, rowid DESC LIMIT 1')
+    env.DB.prepare(
+      'SELECT id, sku, status, receipt_url FROM purchases WHERE user_id = ?1 ORDER BY created_at DESC, rowid DESC LIMIT 1',
+    )
       .bind(user.id)
-      .first<{ id: string; sku: Sku; status: PurchaseStatus }>(),
+      .first<{ id: string; sku: Sku; status: PurchaseStatus; receipt_url: string | null }>(),
   ])
   await env.DB.prepare('UPDATE users SET last_active_at = ?2 WHERE id = ?1 AND last_active_at < ?3')
     .bind(user.id, now.toISOString(), new Date(now.getTime() - ACTIVITY_REFRESH_MS).toISOString())
@@ -129,18 +151,22 @@ export async function me(_req: Request, ctx: Ctx): Promise<Response> {
     pass: pass ? { sku: pass.sku, startsAt: pass.starts_at, endsAt: pass.ends_at } : null,
     marketingOptIn: consent?.marketing_opt_in === 1,
     accessEndsAt: accessEnd(chain.results, now),
-    latestPurchase: purchase ? { id: purchase.id, sku: purchase.sku, status: purchase.status } : null,
+    latestPurchase: purchase
+      ? { id: purchase.id, sku: purchase.sku, status: purchase.status, receiptUrl: safeReceiptUrl(purchase.receipt_url) }
+      : null,
     free,
     usage,
     flags: publicFlags,
+    auth,
   }
   return json(body)
 }
 
 /**
  * POST /api/account/delete — removes essays/transcripts and feedback, sessions, support messages and the
- * profile. The users row stays as a tombstone: purchases, passes and refunds reference it (payment
- * records), and email_hash is kept so the once-per-email rules survive re-signup (CONTRACT §3).
+ * profile, including the Google account id (personal information). The users row stays as a tombstone:
+ * purchases, passes and refunds reference it (payment records), and email_hash is kept so the
+ * once-per-email rules survive re-signup (CONTRACT §3).
  * Grades rows are de-identified, not deleted (decision 5): they are also the spend ledger behind the
  * spend tiers, the free budget and the daily cost metrics, so model, tokens, cost, free, refused, kind
  * and created_at stay while user_id, device_hash, the text, the feedback and the error kinds go.
@@ -171,7 +197,7 @@ export async function deleteAccount(_req: Request, ctx: Ctx): Promise<Response> 
     // unused sign-in links still hold the address and consent choices
     env.DB.prepare('DELETE FROM magic_links WHERE email = ?1').bind(user.email),
     env.DB.prepare(
-      `UPDATE users SET email = 'deleted:' || id, marketing_opt_in = 0, marketing_consent_text = NULL,
+      `UPDATE users SET email = 'deleted:' || id, google_sub = NULL, marketing_opt_in = 0, marketing_consent_text = NULL,
               marketing_consent_at = NULL, marketing_consent_version = NULL, deleted_at = ?2
         WHERE id = ?1`,
     ).bind(user.id, now.toISOString()),

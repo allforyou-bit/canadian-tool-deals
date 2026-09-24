@@ -5,7 +5,8 @@ import type { ApiClientError } from './api'
 import { t } from './i18n'
 import { loginHref } from './url'
 
-export type ErrorContext = 'writing' | 'speaking' | 'checkout' | 'login' | 'account'
+/** 'login' is the email-link form; 'google' is "Continue with Google" (POST /api/auth/google/start). */
+export type ErrorContext = 'writing' | 'speaking' | 'checkout' | 'login' | 'google' | 'account'
 
 export interface ErrorView {
   text: string
@@ -50,8 +51,12 @@ export function describeError(
       return { text: t(lang, 'err.free_unavailable'), actions: context === 'writing' ? [signIn, pricing] : [pricing] }
     case 'grading_paused':
       return { text: t(lang, 'err.grading_paused'), actions: [] }
+    case 'at_capacity':
+      // the site-wide daily speaking budget is used up (memo §7.2 Z2); it resets at 00:00 UTC
+      return { text: t(lang, context === 'speaking' ? 's.closedToday' : 'err.at_capacity'), actions: [] }
     case 'rate_limited':
       if (context === 'login') return { text: t(lang, 'l.rateLimited'), actions: [] }
+      if (context === 'google') return { text: t(lang, 'l.tooMany'), actions: [] }
       // the Worker answers rate_limited for the graded-task caps and for the daily cap on answers
       // that got no feedback (refusals, failures); the message names all of them
       return {
@@ -77,6 +82,8 @@ export function describeError(
       return { text: t(lang, 'err.checkout_unavailable'), actions: [] }
     case 'bad_request':
       if (context === 'login') return { text: t(lang, 'l.badEmail'), actions: [] }
+      // the page checks the 18+ box itself; anything else the Worker refuses means a stale page
+      if (context === 'google') return { text: t(lang, 'b.reload'), actions: [] }
       // speaking: the Worker's bad_request for a valid upload means the transcript was empty
       if (context === 'speaking') return { text: t(lang, 's.noSpeech'), actions: [] }
       // checkout: a stale page (e.g. terms version changed since it loaded)
@@ -84,6 +91,10 @@ export function describeError(
       return { text: context === 'account' && err.message ? err.message : t(lang, 'err.bad_request'), actions: [] }
     case 'forbidden':
     case 'not_found':
+      // the email link is only for the owner's address while MAGIC_LINK is 'owner'
+      if (context === 'login' && err.code === 'forbidden') return { text: t(lang, 'l.ownerOnly'), actions: [] }
+      // Google sign-in is not set up on this deployment (no GOOGLE_CLIENT_ID): the Worker answers forbidden
+      if (context === 'google') return { text: t(lang, 'l.googleOff'), actions: [] }
       // refund eligibility and similar policy answers come with a specific server message
       if (context === 'account' && err.message) return { text: err.message, actions: [] }
       return { text: t(lang, 'common.generic'), actions: [] }

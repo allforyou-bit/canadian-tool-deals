@@ -17,10 +17,11 @@
 //   E2E_REPEAT         run the whole suite this many times (default 1), to shake out timing-dependent tests
 //
 // Exit code is non-zero when any test fails. Nothing here reaches the network: requests to other
-// hosts are aborted, and Turnstile and Stripe Checkout are replaced by local stand-ins.
+// hosts are aborted, and Turnstile, Google's sign-in page and Stripe Checkout are replaced by local
+// stand-ins.
 
 import assert from 'node:assert/strict'
-import { existsSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { createServer } from 'node:http'
 import { tmpdir } from 'node:os'
 import { dirname, extname, join, normalize, resolve, sep } from 'node:path'
@@ -52,21 +53,22 @@ const TASK_PAGES = [
   ),
 ]
 /** TERMS_VERSION from shared/config.ts: BuyPass must send exactly this. */
-const TERMS_VERSION = /export const TERMS_VERSION = '([^']+)'/.exec(readFileSync(join(ROOT, 'shared/config.ts'), 'utf8'))?.[1]
+const CONFIG_TS = readFileSync(join(ROOT, 'shared/config.ts'), 'utf8')
+const TERMS_VERSION = /export const TERMS_VERSION = '([^']+)'/.exec(CONFIG_TS)?.[1]
 if (!TERMS_VERSION) throw new Error('TERMS_VERSION not found in shared/config.ts')
+/** CAPS.recordingBitsPerSecond and CAPS.maxAudioBytes from shared/config.ts (memo §7.2 Z2). */
+const RECORDING_BPS = Number(/recordingBitsPerSecond: ([\d_]+)/.exec(CONFIG_TS)?.[1].replace(/_/g, ''))
+const MAX_AUDIO_BYTES = 1024 * 1024
+if (!(RECORDING_BPS > 0) || !/maxAudioBytes: 1024 \* 1024,/.test(CONFIG_TS)) throw new Error('CAPS audio settings not found in shared/config.ts')
 
-/**
- * Whether this build had NEXT_PUBLIC_MAILING_ADDRESS: only then may the site ask for marketing
- * consent (lib/consent.ts), and the prerendered sign-in page contains the consent sentence.
- */
-let mailingAddressBuilt
-function builtWithMailingAddress() {
-  mailingAddressBuilt ??= readFileSync(join(OUT, 'login/index.html'), 'utf8').includes('send me occasional emails')
-  return mailingAddressBuilt
-}
 const TURNSTILE_TOKEN = 'XXXX.DUMMY.TOKEN.XXXX'
 const CHECKOUT_URL = 'https://checkout.stripe.com/c/pay/cs_test_e2e'
+/** What the mocked POST /api/auth/google/start returns: Google's authorization endpoint with test values. */
+const GOOGLE_URL = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=e2e.apps.googleusercontent.com&state=e2eState'
+const RECEIPT_URL = 'https://pay.stripe.com/receipts/payment/e2e_receipt'
 const GOOD_TOKEN = 'e2eGoodMagicToken_0123456789abcdef'
+/** MAGIC_LINK = 'owner': the mocked Worker sends email links only to this address. */
+const OWNER_EMAIL = 'owner@example.test'
 
 // ---------------------------------------------------------------- static server (trailing-slash export)
 
@@ -177,7 +179,10 @@ function defaultState() {
     marketingOptIn: false,
     free: { writing: true, speaking: false },
     usage: { writingToday: 0, speakingToday: 0, graded30d: 0 },
-    flags: { checkoutEnabled: true, gradingEnabled: true, freeEnabled: true, banner: '' },
+    /** speakingAvailable: the site-wide daily speaking budget is not used up (else speaking answers at_capacity) */
+    flags: { checkoutEnabled: true, gradingEnabled: true, freeEnabled: true, banner: '', speakingAvailable: true },
+    /** sign-in methods: Google, and the email link for the owner only (the launch defaults) */
+    auth: { google: true, magicLink: 'owner' },
     /** GET /api/history: the first page says there is an older page (nextBefore) */
     olderHistory: false,
     /** next response per endpoint, e.g. { 'POST /api/grade/writing': { status: 402, body: {...} } } */
@@ -209,6 +214,7 @@ function meBody(s) {
     free: s.free,
     usage: s.usage,
     flags: s.flags,
+    auth: s.auth,
   }
 }
 
@@ -228,7 +234,15 @@ function apiHandler(s, method, path, body, query) {
       return ok({ ok: true, version: 'e2e' })
     case 'POST /api/events':
       return ok({ ok: true })
+    case 'POST /api/auth/google/start':
+      // like the Worker: the 18+ box and the security check first, then Google's URL
+      if (body?.adult !== true) return err(400, 'bad_request', 'Please confirm that you are 18 or older.')
+      if (body?.turnstileToken !== TURNSTILE_TOKEN) return err(403, 'turnstile_failed')
+      if (!s.auth.google) return err(403, 'forbidden', 'Google sign-in is not available on this site')
+      return ok({ url: GOOGLE_URL })
     case 'POST /api/auth/magic-link':
+      if (s.auth.magicLink === 'off') return err(404, 'not_found', 'Not found')
+      if (s.auth.magicLink === 'owner' && body?.email !== OWNER_EMAIL) return err(403, 'forbidden', 'Sign in with Google')
       return ok({ ok: true })
     case 'POST /api/auth/verify':
       if (body?.token !== GOOD_TOKEN) return err(400, 'bad_request', 'Invalid or expired link')
@@ -263,6 +277,8 @@ function apiHandler(s, method, path, body, query) {
       return ok({ gradeId: 'g-w', result: { ...WRITING_RESULT, explanationLang: body?.explanationLang ?? 'en' }, free: !s.pass })
     case 'POST /api/grade/speaking':
       if (!s.signedIn) return err(401, 'unauthorized')
+      // the site-wide daily speaking budget is used up (checked before the upload is processed)
+      if (s.flags.speakingAvailable === false) return err(503, 'at_capacity', 'Speaking feedback is closed for today.')
       if (!s.pass && !s.flags.freeEnabled) return err(429, 'free_unavailable', 'The free speaking sample is not available right now.')
       return ok({ gradeId: 'g-s', result: SPEAKING_RESULT, free: !s.pass })
     case 'POST /api/checkout':
@@ -323,6 +339,10 @@ async function installRoutes(context, state, base) {
     const onload = new URL(route.request().url()).searchParams.get('onload')
     return route.fulfill({ status: 200, contentType: 'text/javascript', body: fakeTurnstileScript(onload) })
   })
+  // Google's sign-in page: the tab lands here after POST /api/auth/google/start
+  await context.route('https://accounts.google.com/**', (route) =>
+    route.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Google test</title><h1>Google test sign-in</h1>' }),
+  )
   await context.route('https://checkout.stripe.com/**', (route) =>
     route.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Stripe test</title><h1>Stripe test checkout</h1>' }),
   )
@@ -412,6 +432,9 @@ test('every practice page shows the AI disclosure before any input', async ({ pa
       return Boolean(n && first && n.compareDocumentPosition(first) & Node.DOCUMENT_POSITION_FOLLOWING)
     }, AI_DISCLOSURE_EN)
     assert.ok(before, `${path}: disclosure precedes the inputs`)
+    // every practice page offers the free practice mode (memo §7.2 Z9)
+    assert.equal(await page.getByRole('radio', { name: /Practise without feedback/ }).count(), 1, `${path}: practice mode offered`)
+    assert.equal(await page.getByRole('radio', { name: /Get AI feedback/ }).isChecked(), true, `${path}: feedback mode by default`)
     const footer = await page.locator('footer').innerText()
     assert.ok(footer.includes(NOT_AFFILIATED_START), `${path}: footer not-affiliated line`)
   }
@@ -460,7 +483,8 @@ test('anonymous writing sample: 18+ confirmation, security check, feedback, even
     return evs
   })
   const landing = events.find((e) => e.name === 'landing')
-  assert.deepEqual(landing.utm, { utm_source: 'google', gclid: 'abc123' })
+  // campaign tags only: no ad click id is kept (no ads, memo §7.2 Z1)
+  assert.deepEqual(landing.utm, { utm_source: 'google' })
   assert.equal(landing.path, '/practice/writing/email/')
   for (const e of events) assert.ok(!JSON.stringify(e).includes('@'), 'no personal data in events')
 
@@ -525,8 +549,8 @@ test('free samples switched off: a new visitor is told they are not available, n
 
   // speaking: signed out, the sign-in note does not promise a free task
   await page.goto(`${base}/practice/speaking/opinions/?lang=en`)
-  await page.getByText('Sign in to practise speaking. Free samples are not available right now, so feedback needs a pass.').waitFor()
-  assert.equal(await page.getByText('Your first speaking task is free').count(), 0)
+  await page.getByText('Sign in with Google to get feedback on speaking. Free samples are not available right now, so feedback needs a pass.').waitFor()
+  assert.equal(await page.getByText('is free after you sign in').count(), 0)
 
   // speaking: signed in without a pass (never used the sample)
   state.signedIn = true
@@ -564,6 +588,17 @@ test('speaking: keyboard flow with focus and announcements, no-speech message, t
     return
   }
 
+  // record the options the page gives MediaRecorder (the bitrate must be CAPS.recordingBitsPerSecond)
+  await page.evaluate(() => {
+    const Original = window.MediaRecorder
+    window.__recorderOptions = []
+    window.MediaRecorder = class extends Original {
+      constructor(stream, options) {
+        window.__recorderOptions.push(options ?? null)
+        super(stream, options)
+      }
+    }
+  })
   const live = page.getByTestId('recorder-live')
   await page.getByRole('button', { name: 'Start: preparation time' }).focus()
   await page.keyboard.press('Enter')
@@ -610,43 +645,149 @@ test('speaking: keyboard flow with focus and announcements, no-speech message, t
   assert.match(raw, /name="audio"; filename="answer\.(webm|mp4)"\r\nContent-Type: audio\/(webm|mp4)/)
   const duration = Number(/name="durationSeconds"\r\n\r\n([\d.]+)\r\n/.exec(raw)?.[1])
   assert.ok(duration >= 1 && duration <= 120, `duration ${duration}`)
-  assert.ok(call.raw.length > 1000 && call.raw.length < 3 * 1024 * 1024, `upload size ${call.raw.length}`)
+  assert.ok(call.raw.length > 1000 && call.raw.length < MAX_AUDIO_BYTES, `upload size ${call.raw.length}`)
+  // low bitrate (memo §7.2 Z2): the requested rate, and about that much data per second in Chromium
+  const options = await page.evaluate(() => window.__recorderOptions)
+  assert.ok(options.length >= 1, 'MediaRecorder was created')
+  assert.equal(options[0].audioBitsPerSecond, RECORDING_BPS)
+  const perSecond = call.raw.length / duration
+  // measured in Chromium only: WebKit's AAC rate with this setting has not been measured (the size guard covers it)
+  if (browserName === 'chromium') assert.ok(perSecond < (RECORDING_BPS / 8) * 2.5, `about ${Math.round((perSecond * 8) / 1000)} kbps uploaded`)
 })
 
-test('speaking asks signed-out visitors to sign in', async ({ page, base }) => {
+test('speaking: a browser that ignores the bitrate stops recording before the 1 MB upload limit', async ({ page, base, state, browserName }) => {
+  if (browserName === 'webkit' && process.env.E2E_WEBKIT_MEDIA !== '1') return
+  state.signedIn = true
+  state.pass = ACTIVE_PASS
+  await page.goto(`${base}/practice/speaking/experience/`)
+  // every second the recorder hands over 300 KB, as a browser recording far above the requested rate would
+  await page.evaluate(() => {
+    const Original = window.MediaRecorder
+    window.MediaRecorder = class extends Original {
+      set ondataavailable(fn) {
+        super.ondataavailable = fn ? () => fn({ data: new Blob([new Uint8Array(300_000)], { type: 'audio/webm' }) }) : null
+      }
+      get ondataavailable() {
+        return super.ondataavailable
+      }
+    }
+  })
+  await page.getByRole('button', { name: 'Start: preparation time' }).click()
+  await page.getByRole('button', { name: 'Start speaking now' }).click()
+  // no click on "Stop recording": the size guard stops it after about two seconds
+  const stopped = page.getByRole('status').filter({ hasText: 'Recording stopped early at the 1 MB upload limit.' })
+  await stopped.waitFor({ timeout: 8000 })
+  await page.locator('audio').waitFor()
+  await page.getByRole('button', { name: 'Get feedback' }).click()
+  await page.getByTestId('grade-result').waitFor()
+  const [call] = callsTo(state, '/api/grade/speaking')
+  assert.ok(call.raw.length < MAX_AUDIO_BYTES, `upload ${call.raw.length} bytes is under the cap`)
+})
+
+test('speaking asks signed-out visitors to sign in for feedback, and offers the practice mode', async ({ page, base }) => {
   await page.goto(`${base}/practice/speaking/opinions/`)
   const link = page.getByRole('link', { name: 'Sign in', exact: true }).last()
-  await page.getByText('Sign in to practise speaking.').waitFor()
+  await page.getByText('Sign in with Google to get feedback on speaking.').waitFor()
   assert.equal(await link.getAttribute('href'), '/login/?next=/practice/speaking/opinions/')
+  await page.locator('main').getByRole('button', { name: 'Practise without feedback' }).click()
+  await page.getByTestId('speaking-practice-mode').waitFor()
+  assert.equal(await page.getByRole('radio', { name: /Practise without feedback/ }).isChecked(), true)
 })
 
-test('login → magic link → verify (hash token) → account shows the pass', async ({ page, base, state }) => {
+test('Google sign-in: 18+ box and security check, start → Google, the callback lands signed in', async ({ page, base, state }) => {
   await page.goto(`${base}/login/?next=/account/`)
-  await freshToken(page) // hydrated, and the form holds a token
-  const marketing = page.getByRole('checkbox', { name: /occasional emails/ })
-  if (builtWithMailingAddress()) {
-    assert.equal(await marketing.isChecked(), false, 'marketing box starts unticked')
-    // the site URL in the wording is filled in after hydration
-    await page.getByTestId('consent-text').filter({ hasText: new URL(base).origin }).waitFor()
-    const consent = await page.getByTestId('consent-text').innerText()
-    assert.ok(consent.startsWith('Yes, send me occasional emails'), 'English consent wording')
-    assert.ok(!consent.includes('Privacy page'), 'names the real mailing address')
-    const address = process.env.NEXT_PUBLIC_MAILING_ADDRESS
-    if (address) assert.ok(consent.includes(`Maple Practice Coach, ${address}, ${new URL(base).origin}.`), 'address and site as configured')
-  } else {
-    // no mailing address configured: CASL consent cannot be asked for, so there is no box at all
-    assert.equal(await marketing.count(), 0, 'no marketing box without a mailing address')
-  }
+  await freshToken(page) // hydrated, and the page holds a token
+  await page.locator('section[data-me="ready"]').waitFor()
+  await page.getByText('Google gives us only your email address and a Google account ID; we never see your Google password.').waitFor()
+  // no marketing box: learners get no email from us (memo §7.2 Z4)
+  assert.equal(await page.getByRole('checkbox').count(), 1, 'only the 18+ box')
+  assert.ok(!(await page.locator('main').innerText()).includes('occasional emails'))
+  // the email link is folded away and labelled for the owner
+  await page.getByText('Owner sign-in by email link').waitFor()
+  assert.equal(await page.getByLabel('Email address').isVisible(), false)
 
-  await page.getByLabel('Email address').fill(state.email)
+  const google = page.getByRole('button', { name: 'Continue with Google' })
+  await google.click()
+  await page.getByRole('alert').filter({ hasText: 'Please confirm that you are 18 or older.' }).waitFor()
+  assert.equal(callsTo(state, '/api/auth/google/start').length, 0, 'nothing sent before the 18+ confirmation')
   await page.getByRole('checkbox', { name: 'I am 18 or older.' }).check()
+  await google.click()
+  // the page hands the tab over to Google (a local stand-in here)
+  await page.waitForURL(GOOGLE_URL)
+  await page.getByRole('heading', { name: 'Google test sign-in' }).waitFor()
+  assert.deepEqual(callsTo(state, '/api/auth/google/start')[0].body, {
+    lang: 'en',
+    adult: true,
+    turnstileToken: TURNSTILE_TOKEN,
+    next: '/account/',
+  })
+
+  // Google returns to the Worker's callback, which sets the session cookie and redirects (303) to next
+  state.signedIn = true
+  state.pass = ACTIVE_PASS
+  await page.goto(`${base}/account/`)
+  await page.getByTestId('pass-summary').waitFor()
+  await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Account' }).waitFor()
+})
+
+test('Google sign-in problems: callback errors (EN and KO), refused starts, and an unexpected address', async ({ page, base, state }) => {
+  const cases = [
+    ['google_cancelled', 'Google sign-in was cancelled.', 'Google 로그인이 취소됐어요.'],
+    ['google_failed', 'We could not sign you in with Google.', 'Google로 로그인하지 못했어요.'],
+    ['email_unverified', 'does not have a verified email address', 'Google 계정의 이메일 주소가 인증되지 않았어요.'],
+    ['google_expired', 'The sign-in took too long or was already used.', '로그인 시간이 너무 오래 걸렸거나'],
+    ['disposable_email', 'uses a temporary email address', '임시 이메일 주소를 쓰는 Google 계정은'],
+    ['staging_only', 'Only invited accounts can sign in.', '초대받은 계정만 로그인할 수 있어요.'],
+  ]
+  for (const [code, en, ko] of cases) {
+    await page.goto(`${base}/login/?error=${code}&lang=en`)
+    await page.getByRole('alert').filter({ hasText: en }).waitFor()
+    await page.goto(`${base}/login/?error=${code}&lang=ko`)
+    await page.getByRole('alert').filter({ hasText: ko }).waitFor()
+  }
+  // an unknown code is shown as a failed sign-in, never echoed
+  await page.goto(`${base}/login/?error=%3Cb%3Ehi%3C%2Fb%3E&lang=en`)
+  await page.getByTestId('login-callback-error').filter({ hasText: 'We could not sign you in with Google.' }).waitFor()
+  assert.ok(!(await page.locator('main').innerText()).includes('<b>'))
+
+  await page.goto(`${base}/login/`)
+  let seen = await freshToken(page)
+  await page.getByRole('checkbox', { name: 'I am 18 or older.' }).check()
+  const google = page.getByRole('button', { name: 'Continue with Google' })
+  const refusals = [
+    [{ status: 403, body: { error: 'turnstile_failed', message: 'x' } }, 'The security check did not pass.'],
+    [{ status: 403, body: { error: 'forbidden', message: 'Google sign-in is not available on this site' } }, 'Sign-in with Google is not available right now.'],
+    [{ status: 429, body: { error: 'rate_limited', message: 'x' } }, 'Too many sign-in attempts.'],
+    // a start answer that is not Google's sign-in page is never followed
+    [{ status: 200, body: { url: 'https://evil.test/login' } }, 'Something went wrong.'],
+  ]
+  for (const [i, [response, expected]] of refusals.entries()) {
+    if (i > 0) seen = await freshToken(page, seen) // each attempt uses up the single-use token
+    state.overrides['POST /api/auth/google/start'] = response
+    await google.click()
+    await page.getByRole('alert').filter({ hasText: expected }).waitFor()
+    assert.equal(new URL(page.url()).origin, new URL(base).origin, 'still on the site')
+  }
+  assert.equal(callsTo(state, '/api/auth/google/start').length, refusals.length)
+})
+
+test('owner email link: labelled for the owner, other addresses are sent to Google, verify → account', async ({ page, base, state }) => {
+  await page.goto(`${base}/login/?next=/account/`)
+  let seen = await freshToken(page)
+  await page.getByText('Owner sign-in by email link').click()
+  await page.getByText('This is for the site owner. Learners sign in with Google.').waitFor()
+  await page.getByRole('checkbox', { name: 'I am 18 or older.' }).check()
+  await page.getByLabel('Email address').fill('learner@example.test')
+  await page.getByRole('button', { name: 'Email me a sign-in link' }).click()
+  await page.getByRole('alert').filter({ hasText: 'Email links are only for the site owner. Please continue with Google.' }).waitFor()
+
+  seen = await freshToken(page, seen)
+  await page.getByLabel('Email address').fill(OWNER_EMAIL)
   await page.getByRole('button', { name: 'Email me a sign-in link' }).click()
   await page.getByRole('heading', { name: 'Check your email' }).waitFor()
   await focusOn(page, 'Check your email') // the form is gone; focus moves to the confirmation
-
-  const [link] = callsTo(state, '/api/auth/magic-link')
-  assert.deepEqual(link.body, {
-    email: state.email,
+  assert.deepEqual(callsTo(state, '/api/auth/magic-link')[1].body, {
+    email: OWNER_EMAIL,
     lang: 'en',
     turnstileToken: TURNSTILE_TOKEN,
     marketingOptIn: false,
@@ -655,6 +796,7 @@ test('login → magic link → verify (hash token) → account shows the pass', 
   })
 
   // the emailed link opens /auth/verify/#token=…
+  state.email = OWNER_EMAIL
   state.pass = ACTIVE_PASS
   await page.goto(`${base}/auth/verify/#token=${GOOD_TOKEN}`)
   await page.waitForURL(`${base}/account/`)
@@ -665,6 +807,22 @@ test('login → magic link → verify (hash token) → account shows the pass', 
   assert.deepEqual(callsTo(state, '/api/auth/verify')[0].body, { token: GOOD_TOKEN })
   await page.getByText('Recurring error types').waitFor()
   await page.getByText('Grammar · 3 times').waitFor()
+
+  // MAGIC_LINK = 'off': no email form at all; 'all': offered to everyone
+  state.signedIn = false
+  state.auth.magicLink = 'off'
+  await page.goto(`${base}/login/`)
+  await page.locator('section[data-me="ready"]').waitFor()
+  assert.equal(await page.getByText('email link').count(), 0)
+  state.auth.magicLink = 'all'
+  await page.reload()
+  await page.getByText('Sign in with an email link instead').waitFor()
+  // no Google client configured (e.g. staging): say so, and open the email form
+  state.auth = { google: false, magicLink: 'owner' }
+  await page.reload()
+  await page.getByText('Sign-in with Google is not available right now.').waitFor()
+  assert.equal(await page.getByRole('button', { name: 'Continue with Google' }).count(), 0)
+  await page.getByLabel('Email address').waitFor({ state: 'visible' })
 })
 
 test('sign-in wins over a slow /api/me that left before the session cookie existed', async ({ page, base, state }) => {
@@ -683,25 +841,18 @@ test('sign-in wins over a slow /api/me that left before the session cookie exist
   assert.equal(await page.getByTestId('pass-summary').count(), 1)
 })
 
-test('login in Korean sends the Korean consent text', async ({ page, base, state }) => {
+test('sign-in in Korean: Google button, note and request language', async ({ page, base, state }) => {
   await page.goto(`${base}/login/?lang=ko`)
   await page.getByRole('heading', { name: '로그인', exact: true }).waitFor()
   await freshToken(page)
-  await page.getByLabel('이메일 주소').fill(state.email)
+  await page.getByText('Google은 이메일 주소와 Google 계정 ID만 알려 주고, 저희는 Google 비밀번호를 볼 수 없어요.').waitFor()
+  await page.getByText('운영자용 이메일 링크 로그인').waitFor()
   await page.getByRole('checkbox', { name: '만 18세 이상이에요.' }).check()
-  let consent = ''
-  if (builtWithMailingAddress()) {
-    await page.getByTestId('consent-text').filter({ hasText: new URL(base).origin }).waitFor()
-    consent = await page.getByTestId('consent-text').innerText()
-    assert.ok(consent.startsWith('네, Maple Practice Coach'))
-    await page.getByRole('checkbox', { name: /이메일을 가끔 받겠습니다/ }).check()
-  }
-  await page.getByRole('button', { name: '로그인 링크 받기' }).click()
-  await page.getByRole('heading', { name: '이메일을 확인해 주세요' }).waitFor()
-  const [link] = callsTo(state, '/api/auth/magic-link')
-  assert.equal(link.body.lang, 'ko')
-  assert.equal(link.body.marketingOptIn, builtWithMailingAddress())
-  assert.equal(link.body.marketingConsentText, consent)
+  await page.getByRole('button', { name: 'Google로 계속하기' }).click()
+  await page.waitForURL(GOOGLE_URL)
+  const [start] = callsTo(state, '/api/auth/google/start')
+  assert.equal(start.body.lang, 'ko')
+  assert.equal('next' in start.body, false, 'no return path without ?next=')
 })
 
 test('Korean entry points keep Korean: landing CTA → practice feedback in Korean, pricing → sign-in', async ({ page, base, state }) => {
@@ -813,35 +964,62 @@ test('account: overall access date and self-serve refund with a focused confirm 
   await page.getByText('You do not have an active pass.').waitFor()
 })
 
-test('account: marketing state, withdrawal, opt-in and support message', async ({ page, base, state }) => {
+test('account: an earlier marketing opt-in can be withdrawn, nobody is asked to opt in, and support messages', async ({ page, base, state }) => {
   state.signedIn = true
   state.marketingOptIn = true
   await page.goto(`${base}/account/`)
   const marketingState = page.getByTestId('marketing-state')
   await marketingState.filter({ hasText: 'You receive marketing emails from us.' }).waitFor()
-  // opted in: only the withdraw button, no consent form
-  assert.equal(await page.getByTestId('account-consent-text').count(), 0)
   await page.getByRole('button', { name: 'Stop marketing emails' }).click()
   await page.getByText('You will not receive marketing emails.').waitFor()
   assert.deepEqual(callsTo(state, '/api/account/marketing')[0].body, { optIn: false })
   await marketingState.filter({ hasText: 'You do not receive marketing emails.' }).waitFor()
   await focusOn(page, 'You do not receive marketing emails.') // the button it replaced had focus
   assert.equal(await page.getByRole('button', { name: 'Stop marketing emails' }).count(), 0)
+  // no consent request anywhere: there is no channel to send marketing email on (memo §7.2 Z4)
+  assert.equal(await page.getByRole('checkbox', { name: /occasional emails/ }).count(), 0)
 
-  if (builtWithMailingAddress()) {
-    const consent = await page.getByTestId('account-consent-text').innerText()
-    await page.getByRole('checkbox', { name: /occasional emails/ }).check()
-    await page.getByRole('button', { name: 'Save my choice' }).click()
-    await marketingState.filter({ hasText: 'You receive marketing emails from us.' }).waitFor()
-    assert.deepEqual(callsTo(state, '/api/account/marketing')[1].body, { optIn: true, consentText: consent })
-  } else {
-    assert.equal(await page.getByTestId('account-consent-text').count(), 0, 'no consent request without a mailing address')
-  }
+  // someone who never agreed sees no email preferences at all
+  await page.reload()
+  await page.getByTestId('pass-summary').or(page.getByText('You do not have an active pass.')).first().waitFor()
+  assert.equal(await page.getByTestId('marketing-state').count(), 0)
 
   await page.getByLabel('Your message').fill('The timer did not start on my phone.')
   await page.getByRole('button', { name: 'Send message' }).click()
   await page.getByText('We will reply by email.').waitFor()
   assert.deepEqual(callsTo(state, '/api/support')[0].body, { message: 'The timer did not start on my phone.', lang: 'en' })
+})
+
+test('account: latest purchase with the Stripe receipt link, and no email about it', async ({ page, base, state }) => {
+  state.signedIn = true
+  state.pass = ACTIVE_PASS
+  state.latestPurchase = { id: 'cs_test_e2e', sku: 'pass30', status: 'paid', receiptUrl: RECEIPT_URL }
+  await page.goto(`${base}/account/`)
+  const block = page.getByTestId('latest-purchase')
+  await block.filter({ hasText: '30-day pass: paid' }).waitFor()
+  const link = block.getByRole('link', { name: 'View receipt' })
+  assert.equal(await link.getAttribute('href'), RECEIPT_URL)
+  assert.equal(await link.getAttribute('target'), '_blank')
+  assert.equal(await link.getAttribute('rel'), 'noopener noreferrer')
+  assert.ok((await block.innerText()).includes('We do not send emails about purchases or passes'))
+
+  // a refund keeps the same (updated) receipt; an unsafe link is never shown; pending says when it appears
+  state.latestPurchase = { id: 'cs_test_e2e', sku: 'pass30', status: 'refunded', receiptUrl: RECEIPT_URL }
+  await page.reload()
+  await block.filter({ hasText: '30-day pass: refunded' }).waitFor()
+  assert.equal(await block.getByRole('link', { name: 'View receipt' }).getAttribute('href'), RECEIPT_URL)
+  state.latestPurchase = { id: 'cs_test_e2e2', sku: 'pass90', status: 'pending', receiptUrl: 'javascript:alert(1)' }
+  await page.reload()
+  await block.filter({ hasText: '90-day pass: being confirmed' }).waitFor()
+  assert.equal(await block.getByRole('link').count(), 0)
+  await block.getByText('The receipt link appears here once Stripe has confirmed the payment.').waitFor()
+
+  // Korean
+  state.latestPurchase = { id: 'cs_test_e2e', sku: 'pass30', status: 'paid', receiptUrl: RECEIPT_URL }
+  await page.goto(`${base}/account/?lang=ko`)
+  await block.filter({ hasText: '30일 이용권: 결제 완료' }).waitFor()
+  await block.getByRole('link', { name: '영수증 보기' }).waitFor()
+  await block.getByText('구매나 이용권에 관한 이메일은 보내지 않아요.').waitFor()
 })
 
 test('account: history opens the saved answer and feedback; purged items say so', async ({ page, base, state }) => {
@@ -924,18 +1102,25 @@ test('checkout success waits for THIS purchase, not an older pass', async ({ pag
   assert.equal(await page.getByTestId('purchase-confirmed').count(), 0, 'the old pass is not shown as this purchase')
 
   state.latestPurchase.status = 'paid'
+  state.latestPurchase.receiptUrl = RECEIPT_URL
   state.accessEndsAt = '2100-01-18T12:00:00.000Z'
   const confirmed = page.getByTestId('purchase-confirmed')
   await confirmed.waitFor({ timeout: 8000 })
   const text = await confirmed.innerText()
   assert.ok(text.includes('90-day pass is confirmed'), text)
   assert.ok(text.includes('Jan 18, 2100'), text)
+  // no confirmation email (memo §7.2 Z4): the receipt is linked here and on the account page
+  assert.equal(await page.getByRole('link', { name: 'View receipt' }).getAttribute('href'), RECEIPT_URL)
+  await page.getByTestId('no-email-note').filter({ hasText: 'We do not send a confirmation email.' }).waitFor()
+  // no advertising tag was loaded
+  assert.equal(await page.evaluate(() => 'gtag' in window || 'dataLayer' in window), false)
 
   // a payment refunded by the region rule is never shown as active
-  state.latestPurchase = { id: 'cs_test_region', sku: 'pass30', status: 'rejected_region' }
+  state.latestPurchase = { id: 'cs_test_region', sku: 'pass30', status: 'rejected_region', receiptUrl: RECEIPT_URL }
   await page.goto(`${base}/checkout/success/?session_id=cs_test_region`)
   await page.getByText('so we refunded this payment').waitFor()
   assert.equal(await page.getByTestId('purchase-confirmed').count(), 0)
+  assert.equal(await page.getByRole('link', { name: 'View receipt' }).getAttribute('href'), RECEIPT_URL)
 })
 
 test('status page reports health, the notice, and a failing /api/me', async ({ page, base, state }) => {
@@ -943,6 +1128,7 @@ test('status page reports health, the notice, and a failing /api/me', async ({ p
   await page.goto(`${base}/status/`)
   await page.getByTestId('status-api').filter({ hasText: 'Working' }).waitFor()
   await page.getByTestId('status-grading').filter({ hasText: 'On' }).waitFor()
+  await page.getByTestId('status-speaking').filter({ hasText: 'On' }).waitFor()
   assert.ok((await page.getByRole('status').first().innerText()).includes('Scheduled maintenance tonight.'))
 
   state.overrides['GET /api/me'] = { status: 500, body: { error: 'internal', message: 'x' } }
@@ -973,6 +1159,201 @@ test('unsubscribe link works without signing in (EN and KO)', async ({ page, bas
   await page.getByRole('alert').filter({ hasText: '수신 거부 링크가 완전하지 않거나' }).waitFor()
   assert.equal(callsTo(state, '/api/unsubscribe').length, 2)
 }, { needs: 'unsubscribe/index.html' })
+
+/** Paths of every /api call other than /api/me and /api/events (the practice mode must send nothing else). */
+const otherApiCalls = (state) => state.calls.map((c) => c.path).filter((p) => p !== '/api/me' && p !== '/api/events')
+
+/** practice_* events sent so far; each must carry only the name, the path and campaign tags. */
+function practiceEvents(state, path) {
+  const evs = callsTo(state, '/api/events')
+    .map((c) => c.body)
+    .filter((e) => e.name.startsWith('practice_'))
+  for (const e of evs) {
+    assert.deepEqual(Object.keys(e).filter((k) => k !== 'utm').sort(), ['name', 'path'], 'no content in practice events')
+    assert.equal(e.path, path)
+  }
+  return evs.map((e) => e.name).sort()
+}
+
+test('free practice (writing): timer, word counter and self-check, nothing sent, then AI feedback on the same answer', async ({ page, base, state }) => {
+  await page.goto(`${base}/practice/writing/email/?mode=practice`)
+  const mode = page.getByTestId('writing-practice-mode')
+  await mode.waitFor()
+  assert.equal(await page.getByRole('radio', { name: /Practise without feedback/ }).isChecked(), true)
+  // no security check and no AI submission in this mode
+  assert.equal(await page.locator('[data-turnstile-tokens]').count(), 0)
+  assert.equal(await page.getByRole('button', { name: 'Get feedback' }).count(), 0)
+  await mode.getByText('Nothing you write here leaves this browser tab').waitFor()
+
+  await page.getByRole('button', { name: 'Start timer' }).click()
+  await page.getByRole('button', { name: 'Pause' }).waitFor()
+  await page.getByLabel('Your answer').fill(ESSAY)
+  await page.getByText('165 words', { exact: true }).waitFor()
+  await page.getByTestId('word-range-live').filter({ hasText: 'Within the target range.' }).waitFor({ state: 'attached' })
+  const checks = page.getByTestId('self-check').getByRole('checkbox')
+  assert.equal(await checks.count(), 6)
+  await checks.first().check()
+  assert.equal(await checks.first().isChecked(), true)
+
+  await page.getByRole('button', { name: 'I am done' }).click()
+  await focusOn(page, 'Practice finished')
+  const cta = page.getByTestId('practice-cta')
+  await cta.getByText('Your first writing task with AI feedback is free, and no account is needed.').waitFor()
+  assert.equal(await cta.getByRole('link', { name: 'See pricing' }).getAttribute('href'), '/pricing/')
+  await eventually(() => assert.deepEqual(practiceEvents(state, '/practice/writing/email/'), ['practice_done', 'practice_start']))
+  for (const c of callsTo(state, '/api/events')) assert.ok(!String(c.raw ?? '').includes('driveway'), 'no answer text sent')
+  assert.deepEqual(otherApiCalls(state), [], 'nothing but /api/me and events')
+
+  // "Get AI feedback on this answer": the feedback mode, with the answer kept and focused
+  await cta.getByRole('button', { name: 'Get AI feedback on this answer' }).click()
+  assert.equal(await page.getByRole('radio', { name: /Get AI feedback/ }).isChecked(), true)
+  await page.waitForFunction(() => document.activeElement?.tagName === 'TEXTAREA')
+  assert.equal(await page.getByLabel('Your answer').inputValue(), ESSAY)
+  await freshToken(page)
+  await page.getByRole('checkbox', { name: 'I am 18 or older.' }).check()
+  await page.getByRole('button', { name: 'Get feedback' }).click()
+  await page.getByTestId('grade-result').waitFor()
+  assert.equal(callsTo(state, '/api/grade/writing')[0].body.text, ESSAY)
+  // the free sample started with the carried-over answer
+  await eventually(() => assert.ok(callsTo(state, '/api/events').some((c) => c.body?.name === 'sample_start')))
+
+  // Korean
+  await page.goto(`${base}/practice/writing/survey/?mode=practice&lang=ko`)
+  await page.getByRole('radio', { name: /피드백 없이 연습하기/ }).waitFor()
+  await page.getByTestId('self-check').getByText('답안 점검하기').waitFor()
+})
+
+test('free practice (speaking): signed out, record and play back on the device, never uploaded', async ({ page, base, state, browserName }) => {
+  await page.goto(`${base}/practice/speaking/advice/`)
+  await page.getByText('Sign in with Google to get feedback on speaking.').waitFor()
+  await page.getByRole('radio', { name: /Practise without feedback/ }).check()
+  const mode = page.getByTestId('speaking-practice-mode')
+  await mode.waitFor()
+  await mode.getByText('Your recording stays on this device and is never uploaded.').waitFor()
+  // no transcript notice or explanation language here: nothing is transcribed
+  assert.equal(await page.getByTestId('transcript-notice').count(), 0)
+
+  if (browserName === 'webkit' && process.env.E2E_WEBKIT_MEDIA !== '1') {
+    // no fake microphone in Playwright's WebKit: the recorder or the timers-only choice is offered
+    await page.getByRole('button', { name: 'Start: preparation time' }).or(page.getByRole('button', { name: 'Practise with the timers only' })).first().waitFor()
+    return
+  }
+
+  const live = page.getByTestId('practice-live')
+  await page.getByRole('button', { name: 'Start: preparation time' }).click()
+  await focusOn(page, 'Start speaking now')
+  await live.filter({ hasText: 'Preparation time started.' }).waitFor({ state: 'attached' })
+  await page.keyboard.press('Enter')
+  await focusOn(page, 'Stop recording')
+  await page.waitForTimeout(1500) // the length of the recording, not a wait for the app
+  await page.keyboard.press('Enter')
+  const audio = page.getByTestId('practice-audio')
+  await audio.waitFor()
+  assert.ok((await audio.getAttribute('src')).startsWith('blob:'), 'played back from memory')
+  await focusOn(page, 'Record again')
+  await live.filter({ hasText: 'Recording stopped. Listen to your answer.' }).waitFor({ state: 'attached' })
+
+  assert.equal(await page.getByTestId('self-check').getByRole('checkbox').count(), 5)
+  const cta = page.getByTestId('practice-cta')
+  await cta.getByText('Sign in with Google to get AI feedback on speaking.').waitFor()
+  assert.equal(await cta.getByRole('link', { name: 'Sign in' }).getAttribute('href'), '/login/?next=/practice/speaking/advice/')
+  assert.equal(await cta.getByRole('link', { name: 'Free writing task with AI feedback' }).getAttribute('href'), '/practice/writing/email/')
+  assert.equal(await cta.getByRole('link', { name: 'See pricing' }).getAttribute('href'), '/pricing/')
+
+  // never uploaded: no grading call, no multipart body, nothing but /api/me and events
+  assert.equal(callsTo(state, '/api/grade/speaking').length, 0)
+  assert.ok(state.calls.every((c) => !c.contentType.startsWith('multipart/')), 'no upload')
+  assert.deepEqual(otherApiCalls(state), [])
+  await eventually(() => assert.deepEqual(practiceEvents(state, '/practice/speaking/advice/'), ['practice_done', 'practice_start']))
+  assert.equal(state.signedIn, false, 'no sign-in needed')
+})
+
+test('free practice (speaking): a blocked microphone still leaves the timers', async ({ page, base, state }) => {
+  await page.addInitScript(() => {
+    if (!navigator.mediaDevices) return
+    navigator.mediaDevices.getUserMedia = () => Promise.reject(new DOMException('blocked', 'NotAllowedError'))
+  })
+  await page.goto(`${base}/practice/speaking/scene/?mode=practice`)
+  await page.getByTestId('speaking-practice-mode').waitFor()
+  const start = page.getByRole('button', { name: 'Start: preparation time' })
+  const timersOnly = page.getByRole('button', { name: 'Practise with the timers only' })
+  await start.or(timersOnly).first().waitFor()
+  if (await start.count()) {
+    await start.click()
+    await page.getByRole('alert').filter({ hasText: 'Microphone access was blocked.' }).waitFor()
+  }
+  await timersOnly.click()
+  await page.getByRole('button', { name: 'Start speaking now' }).click()
+  await page.getByText('Speaking time', { exact: true }).waitFor()
+  await page.getByRole('button', { name: 'I have finished speaking' }).click()
+  await page.getByTestId('speaking-practice-mode').getByText('Speaking time is over.').first().waitFor()
+  await page.getByTestId('self-check').waitFor()
+  assert.equal(await page.getByTestId('practice-audio').count(), 0)
+  assert.deepEqual(otherApiCalls(state), [])
+})
+
+test('speaking closed for today (at_capacity): said before recording, after a refused upload, and on the status page', async ({ page, base, state, browserName }) => {
+  state.signedIn = true
+  state.pass = ACTIVE_PASS
+  state.flags.speakingAvailable = false
+  await page.goto(`${base}/practice/speaking/advice/`)
+  const closed = page.getByTestId('speaking-closed')
+  await closed.waitFor()
+  const text = await closed.innerText()
+  assert.ok(text.includes('Speaking feedback is closed for today'), text)
+  assert.ok(text.includes('00:00 UTC'), text)
+  assert.ok(/That is .+ your time\./.test(text), text)
+  assert.equal(await page.getByRole('button', { name: 'Start: preparation time' }).count(), 0, 'no recording for feedback')
+  // Korean
+  await page.goto(`${base}/practice/speaking/advice/?lang=ko`)
+  await closed.filter({ hasText: '오늘은 말하기 피드백이 마감됐어요.' }).waitFor()
+  await page.goto(`${base}/practice/speaking/advice/?lang=en`)
+  // the practice mode still works
+  await closed.getByRole('button', { name: 'Practise without feedback' }).click()
+  await page.getByTestId('speaking-practice-mode').waitFor()
+
+  await page.goto(`${base}/status/`)
+  await page.getByTestId('status-speaking').filter({ hasText: 'Closed until 00:00 UTC' }).waitFor()
+
+  if (browserName === 'webkit' && process.env.E2E_WEBKIT_MEDIA !== '1') return
+  // open when the page loaded, closed by the time the answer is sent: the Worker answers at_capacity (503)
+  state.flags.speakingAvailable = true
+  await page.goto(`${base}/practice/speaking/advice/`)
+  await page.getByRole('button', { name: 'Start: preparation time' }).click()
+  await page.getByRole('button', { name: 'Start speaking now' }).click()
+  await page.waitForTimeout(1200)
+  await page.getByRole('button', { name: 'Stop recording' }).click()
+  await page.locator('audio').waitFor()
+  state.flags.speakingAvailable = false
+  await page.getByRole('button', { name: 'Get feedback' }).click()
+  await page.getByRole('alert').filter({ hasText: 'Speaking feedback is closed for today' }).waitFor()
+  // /api/me is asked again and now says closed: sending stays off, the recording can still be played
+  await page.waitForFunction(
+    () => [...document.querySelectorAll('button')].find((b) => b.textContent?.trim() === 'Get feedback')?.disabled === true,
+  )
+  await page.locator('audio').waitFor()
+  assert.equal(callsTo(state, '/api/grade/speaking').length, 1)
+})
+
+/** Every file under `dir` (recursively). */
+function walk(dir) {
+  if (!existsSync(dir)) return []
+  return readdirSync(dir, { withFileTypes: true }).flatMap((d) => (d.isDirectory() ? walk(join(dir, d.name)) : [join(dir, d.name)]))
+}
+
+test('no advertising code is left in the site or the build (memo §7.2 Z1)', async () => {
+  assert.equal(existsSync(join(ROOT, 'lib/gads.ts')), false, 'lib/gads.ts removed')
+  // gtag.js loader, Google Ads hosts, the conversion helper, the build variable and ad click ids
+  const pattern =
+    /googletagmanager|googleadservices|doubleclick\.net|\bgtag\b|\bgclid\b|GADS_SEND_TO|\bgads\b|reportConversion|conversionFor|\bdataLayer\b/
+  const sources = ['app', 'components', 'lib', 'public']
+    .flatMap((d) => walk(join(ROOT, d)))
+    .filter((f) => /\.(tsx?|m?js|css|svg|json|html)$/.test(f) && !f.endsWith('.test.ts'))
+  const built = walk(OUT).filter((f) => /\.(html|js|txt|json)$/.test(f))
+  const offenders = [...sources, ...built].filter((f) => pattern.test(readFileSync(f, 'utf8'))).map((f) => f.slice(ROOT.length + 1))
+  assert.ok(sources.length > 50 && built.length > 20, 'the scan saw the site')
+  assert.deepEqual(offenders, [])
+})
 
 // ---------------------------------------------------------------- runner
 

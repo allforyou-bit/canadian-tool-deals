@@ -3,9 +3,13 @@ import { CAPS } from '../shared/config'
 import {
   checkRecording,
   durationSeconds,
+  expectedBytes,
   fileExtension,
+  nearSizeLimit,
   pickMimeType,
   PREFERRED_MIME_TYPES,
+  recorderOptions,
+  RECORDING_SIZE_MARGIN_BYTES,
   recordingLimitSeconds,
 } from './recorder'
 
@@ -79,5 +83,38 @@ describe('recording limits', () => {
     expect(checkRecording(1000, CAPS.maxAudioSeconds + 1)).toBe('too_long')
     expect(checkRecording(0, 5)).toBe('too_short')
     expect(checkRecording(500, 0.4)).toBe('too_short')
+  })
+
+  it('has no size cap for practice recordings that never leave the device', () => {
+    expect(checkRecording(CAPS.maxAudioBytes * 5, 60, Infinity)).toBe('ok')
+    expect(checkRecording(0, 60, Infinity)).toBe('too_short')
+  })
+})
+
+describe('bitrate and upload size (memo §7.2 Z2)', () => {
+  it('records at the configured low bitrate, with or without a chosen format', () => {
+    expect(CAPS.recordingBitsPerSecond).toBe(32_000)
+    expect(recorderOptions('audio/webm;codecs=opus')).toEqual({ mimeType: 'audio/webm;codecs=opus', audioBitsPerSecond: 32_000 })
+    expect(recorderOptions(null)).toEqual({ audioBitsPerSecond: 32_000 })
+  })
+
+  it('fits the longest answer in the 1 MB cap with room to spare', () => {
+    expect(CAPS.maxAudioBytes).toBe(1024 * 1024)
+    // 120 s at 32 kbps is 480,000 bytes: about half the cap
+    expect(expectedBytes(CAPS.maxAudioSeconds)).toBe(480_000)
+    expect(2 * expectedBytes(CAPS.maxAudioSeconds)).toBeLessThan(CAPS.maxAudioBytes)
+    // the size guard does not stop a normal answer early
+    expect(nearSizeLimit(expectedBytes(CAPS.maxAudioSeconds), expectedBytes(1))).toBe(false)
+  })
+
+  it('stops a recording before it outgrows the cap when a browser ignores the bitrate', () => {
+    // 128 kbps (a browser default) passes 1 MB after about 65 s
+    const perSecond = expectedBytes(1, 128_000)
+    expect(nearSizeLimit(60 * perSecond, perSecond)).toBe(false)
+    expect(nearSizeLimit(62 * perSecond, perSecond)).toBe(true)
+    expect(nearSizeLimit(CAPS.maxAudioBytes - RECORDING_SIZE_MARGIN_BYTES, 1000)).toBe(true)
+    // a large last piece widens the margin
+    expect(nearSizeLimit(CAPS.maxAudioBytes - 200_000, 100_000)).toBe(true)
+    expect(nearSizeLimit(100, 10, 1000)).toBe(true)
   })
 })

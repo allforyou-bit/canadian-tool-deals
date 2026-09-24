@@ -7,6 +7,8 @@
     "day": "2026-10-28",
     "events": {
       "landing": 38,
+      "practice_done": 5,
+      "practice_start": 9,
       "sample_done": 4,
       "sample_start": 4,
       "signup": 1

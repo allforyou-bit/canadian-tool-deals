@@ -3,7 +3,8 @@ import { type MockInstance, afterEach, beforeEach, describe, expect, it, vi } fr
 import { TERMS_VERSION } from '../../../shared/config'
 import { findClaims } from '../../../shared/content-rules'
 import { webhook } from '../../src/billing'
-import { STRIPE_API_VERSION } from '../../src/billing/stripe'
+import { MAX_RECEIPT_URL_LENGTH, STRIPE_API_VERSION } from '../../src/billing/stripe'
+import type { Env } from '../../src/env'
 import { addDays } from '../../src/lib/time'
 import {
   FakeStripe,
@@ -11,14 +12,17 @@ import {
   chargeRefundedEvent,
   checkoutCompletedEvent,
   createUser,
+  deleteAccount,
   disputeCreatedEvent,
   eventCount,
+  learnerEmailOn,
   makeCtx,
   passesOf,
   paymentIntent,
   postWebhook,
   purchase,
   purchaseRow,
+  receiptUrlFor,
   refundFailedEvent,
   refundedCents,
   refundsOf,
@@ -134,6 +138,7 @@ describe('POST /api/stripe/webhook', () => {
         billing_region: 'BC',
         terms_version: TERMS_VERSION,
         amount_refunded_cents: 0,
+        receipt_url: receiptUrlFor(p.chargeId),
         refunded_at: null,
       })
       expect(Date.parse(row?.paid_at ?? '')).toBeGreaterThanOrEqual(started - 1000)
@@ -144,23 +149,34 @@ describe('POST /api/stripe/webhook', () => {
       expect(Date.parse(pass.starts_at)).toBeGreaterThanOrEqual(started - 1000)
 
       expect(await eventCount('purchase', '/api/stripe/webhook')).toBe(purchasesBefore + 1)
+      expect(stripe.stripeCalls('POST /v1/refunds')).toHaveLength(0)
+    })
+
+    it('emails the buyer the pass end and the receipt link when learner email is on', async () => {
+      const { user } = await createUser()
+      const p = await purchase(stripe, user, { env: learnerEmailOn() })
+      expect(p.res.status).toBe(200)
+      const [pass] = await passesOf(user.id)
       const mail = stripe.emails.find((m) => m.to === user.email)
       expect(mail?.idempotencyKey).toBe(p.eventId)
       expect(mail?.text).toContain(`active until ${pass.ends_at.slice(0, 10)} ${pass.ends_at.slice(11, 16)} UTC`)
-      expect(stripe.stripeCalls('POST /v1/refunds')).toHaveLength(0)
+      expect(mail?.text).toContain(`Receipt (Stripe): ${receiptUrlFor(p.chargeId)}`)
+      expect(findClaims(mail?.text ?? '')).toEqual([])
     })
 
     it('extends: a second purchase starts when the first pass ends', async () => {
       const { user } = await createUser({ lang: 'ko' })
-      await purchase(stripe, user, { sku: 'pass30' })
-      await purchase(stripe, user, { sku: 'pass90' })
+      await purchase(stripe, user, { sku: 'pass30', env: learnerEmailOn() })
+      await purchase(stripe, user, { sku: 'pass90', env: learnerEmailOn() })
       const [first, second] = await passesOf(user.id)
       expect(first.sku).toBe('pass30')
       expect(second.sku).toBe('pass90')
       expect(second.starts_at).toBe(first.ends_at)
       expect(Date.parse(second.ends_at) - Date.parse(second.starts_at)).toBe(90 * DAY_MS)
       // Korean users get the Korean email
-      expect(stripe.emails.filter((m) => m.to === user.email).every((m) => m.subject.includes('이용권'))).toBe(true)
+      const mails = stripe.emails.filter((m) => m.to === user.email)
+      expect(mails).toHaveLength(2)
+      expect(mails.every((m) => m.subject.includes('이용권') && m.text.includes('영수증(Stripe): https://'))).toBe(true)
     })
 
     it('processes a duplicate event id only once', async () => {
@@ -186,7 +202,7 @@ describe('POST /api/stripe/webhook', () => {
       ['a missing billing country', { billingCountry: null }],
     ])('refunds %s and grants nothing', async (_label, evidence) => {
       const { user } = await createUser()
-      const p = await purchase(stripe, user, evidence)
+      const p = await purchase(stripe, user, { ...evidence, env: learnerEmailOn() })
       expect(p.res.status).toBe(200)
 
       const [refundCall] = stripe.stripeCalls('POST /v1/refunds')
@@ -200,6 +216,8 @@ describe('POST /api/stripe/webhook', () => {
       expect(row?.refunded_at).not.toBeNull()
       expect(row?.paid_at).toBeNull()
       expect(row?.charge_id).toBe(p.chargeId)
+      // the account page shows the receipt (it shows the refund) instead of relying on the email below
+      expect(row?.receipt_url).toBe(receiptUrlFor(p.chargeId))
       expect(await refundsOf(p.sessionId)).toEqual([
         { id: `region_${p.sessionId}`, reason: 'region', amount_cents: 3900, user_id: user.id },
       ])
@@ -208,6 +226,7 @@ describe('POST /api/stripe/webhook', () => {
       const mail = stripe.emails.find((m) => m.to === user.email)
       expect(mail?.text).toContain('outside Quebec')
       expect(mail?.text).toContain('refunded it in full: C$39.00')
+      expect(mail?.text).toContain(`Receipt (Stripe): ${receiptUrlFor(p.chargeId)}`)
       expect(findClaims(mail?.text ?? '')).toEqual([])
 
       // Stripe's charge.refunded for that refund is not counted as a customer refund; only the amount is kept
@@ -223,7 +242,7 @@ describe('POST /api/stripe/webhook', () => {
       ['Klarna', 'klarna'],
     ])('refunds a non-card payment (%s) by the region rule and alerts the owner', async (_label, type) => {
       const { user } = await createUser()
-      const p = await purchase(stripe, user, { paymentMethodType: type })
+      const p = await purchase(stripe, user, { paymentMethodType: type, env: learnerEmailOn() })
       expect(p.res.status).toBe(200)
       expect(await purchaseRow(p.sessionId)).toMatchObject({
         status: 'rejected_region',
@@ -264,7 +283,7 @@ describe('POST /api/stripe/webhook', () => {
     it('alerts the owner when a region refund comes back failed', async () => {
       const { user } = await createUser()
       stripe.refundStatus = 'failed'
-      const p = await purchase(stripe, user, { billingCountry: 'GB' })
+      const p = await purchase(stripe, user, { billingCountry: 'GB', env: learnerEmailOn() })
       expect(p.res.status).toBe(200)
       expect((await purchaseRow(p.sessionId))?.status).toBe('rejected_region')
       expect(stripe.emails.some((m) => m.to === env.OWNER_EMAIL && m.subject.includes('Region refund failed'))).toBe(true)
@@ -342,8 +361,12 @@ describe('POST /api/stripe/webhook', () => {
       const { user } = await createUser()
       const refunded = await purchase(stripe, user, { refunded: true, amountRefunded: 3900 })
       const disputed = await purchase(stripe, user, { disputed: true })
-      expect(await purchaseRow(refunded.sessionId)).toMatchObject({ status: 'refunded', amount_refunded_cents: 3900 })
-      expect((await purchaseRow(disputed.sessionId))?.status).toBe('disputed')
+      expect(await purchaseRow(refunded.sessionId)).toMatchObject({
+        status: 'refunded',
+        amount_refunded_cents: 3900,
+        receipt_url: receiptUrlFor(refunded.chargeId),
+      })
+      expect(await purchaseRow(disputed.sessionId)).toMatchObject({ status: 'disputed', receipt_url: receiptUrlFor(disputed.chargeId) })
       expect(await passesOf(user.id)).toHaveLength(0)
     })
 
@@ -523,6 +546,119 @@ describe('POST /api/stripe/webhook', () => {
     it('ignores charges that match no purchase', async () => {
       const res = await postWebhook(chargeRefundedEvent({ chargeId: `ch_${uid()}`, paymentIntentId: `pi_${uid()}` }))
       expect(res.status).toBe(200)
+    })
+  })
+
+  describe('receipt link (shown on the site instead of an email)', () => {
+    it.each([
+      ['no receipt', null],
+      ['a plain http link', 'http://pay.stripe.com/receipts/payment/x'],
+      ['a script link', 'javascript:alert(1)'],
+      ['a relative link', '/receipts/payment/x'],
+      ['a link with credentials', 'https://user:pw@pay.stripe.com/receipts/payment/x'],
+      ['an over-long link', `https://pay.stripe.com/${'x'.repeat(MAX_RECEIPT_URL_LENGTH)}`],
+    ])('stores nothing for %s and still grants the pass', async (_label, receiptUrl) => {
+      const { user } = await createUser()
+      const p = await purchase(stripe, user, { receiptUrl, env: learnerEmailOn() })
+      expect(p.res.status).toBe(200)
+      expect(await purchaseRow(p.sessionId)).toMatchObject({ status: 'paid', receipt_url: null })
+      expect(await passesOf(user.id)).toHaveLength(1)
+      const mail = stripe.emails.find((m) => m.to === user.email)
+      expect(mail?.text).toContain('is active until')
+      expect(mail?.text).not.toContain('Receipt')
+    })
+
+    it('refreshes the receipt from charge.refunded, for partial and full refunds', async () => {
+      const { user } = await createUser()
+      const p = await purchase(stripe, user)
+      const event = (total: number, refunded: boolean, receiptUrl: string) =>
+        chargeRefundedEvent({ chargeId: p.chargeId, paymentIntentId: p.paymentIntentId, amountRefunded: total, refunded, receiptUrl })
+
+      await postWebhook(event(1000, false, `${receiptUrlFor(p.chargeId)}?v=partial`))
+      expect(await purchaseRow(p.sessionId)).toMatchObject({ status: 'paid', receipt_url: `${receiptUrlFor(p.chargeId)}?v=partial` })
+
+      await postWebhook(event(3900, true, `${receiptUrlFor(p.chargeId)}?v=full`))
+      expect(await purchaseRow(p.sessionId)).toMatchObject({ status: 'refunded', receipt_url: `${receiptUrlFor(p.chargeId)}?v=full` })
+    })
+
+    it('keeps the stored receipt when charge.refunded has none or an unusable one', async () => {
+      const { user } = await createUser()
+      const p = await purchase(stripe, user)
+      const base = { chargeId: p.chargeId, paymentIntentId: p.paymentIntentId, refunded: false }
+      await postWebhook(chargeRefundedEvent({ ...base, amountRefunded: 500, omitReceipt: true }))
+      await postWebhook(chargeRefundedEvent({ ...base, amountRefunded: 700, receiptUrl: null }))
+      await postWebhook(chargeRefundedEvent({ ...base, amountRefunded: 900, receiptUrl: 'javascript:alert(1)' }))
+      expect(await purchaseRow(p.sessionId)).toMatchObject({ amount_refunded_cents: 900, receipt_url: receiptUrlFor(p.chargeId) })
+    })
+
+    it("does not take the receipt of another charge that matched by payment_intent", async () => {
+      const { user } = await createUser()
+      const p = await purchase(stripe, user)
+      const other = `ch_other_${uid()}`
+      await postWebhook(chargeRefundedEvent({ chargeId: other, paymentIntentId: p.paymentIntentId, amountRefunded: 1000, refunded: false }))
+      // the refund is still recorded on the purchase; only the receipt link stays the paid charge's
+      expect(await purchaseRow(p.sessionId)).toMatchObject({ amount_refunded_cents: 1000, receipt_url: receiptUrlFor(p.chargeId) })
+    })
+
+    it('refreshes the receipt of a purchase refunded under the region rule', async () => {
+      const { user } = await createUser()
+      const p = await purchase(stripe, user, { billingState: 'QC' })
+      const fresh = `${receiptUrlFor(p.chargeId)}?refunded=1`
+      await postWebhook(chargeRefundedEvent({ chargeId: p.chargeId, paymentIntentId: p.paymentIntentId, receiptUrl: fresh }))
+      expect(await purchaseRow(p.sessionId)).toMatchObject({ status: 'rejected_region', receipt_url: fresh })
+    })
+  })
+
+  describe('buyer email is optional', () => {
+    it.each([
+      ['Resend refuses the address (sandbox)', 'status'],
+      ['the connection to Resend drops', 'throw'],
+    ] as const)('grants the pass and stores the receipt when %s', async (_label, mode) => {
+      const { user } = await createUser()
+      stripe.resendFailure = mode
+      const p = await purchase(stripe, user, { env: learnerEmailOn() })
+      expect(p.res.status).toBe(200)
+      expect(await p.res.json()).toEqual({ received: true })
+      expect(await webhookEventExists(p.eventId)).toBe(true)
+      expect(stripe.emailAttempts).toBeGreaterThan(0)
+      expect(stripe.emails).toHaveLength(0)
+      expect(await purchaseRow(p.sessionId)).toMatchObject({ status: 'paid', receipt_url: receiptUrlFor(p.chargeId) })
+      expect(await passesOf(user.id)).toHaveLength(1)
+      expect(JSON.stringify([...warn.mock.calls, ...err.mock.calls])).not.toContain(user.email)
+    })
+
+    it('completes a region refund when the buyer email fails', async () => {
+      const { user } = await createUser()
+      stripe.resendFailure = 'throw'
+      const p = await purchase(stripe, user, { cardCountry: 'US', env: learnerEmailOn() })
+      expect(p.res.status).toBe(200)
+      expect(await purchaseRow(p.sessionId)).toMatchObject({ status: 'rejected_region', receipt_url: receiptUrlFor(p.chargeId) })
+      expect(await refundsOf(p.sessionId)).toMatchObject([{ reason: 'region' }])
+      expect(await webhookEventExists(p.eventId)).toBe(true)
+    })
+
+    it('grants the pass and stores the receipt with learner email off (the default)', async () => {
+      const { user } = await createUser()
+      const p = await purchase(stripe, user, { env: { ...env, LEARNER_EMAIL: 'off' } as Env })
+      expect(p.res.status).toBe(200)
+      expect(await purchaseRow(p.sessionId)).toMatchObject({ status: 'paid', receipt_url: receiptUrlFor(p.chargeId) })
+      expect(await passesOf(user.id)).toHaveLength(1)
+      // billing mails through sendEmail, which drops learner mail in this mode
+      expect(stripe.emails.some((m) => m.to === user.email)).toBe(false)
+    })
+
+    it('grants the pass without an email when the account was deleted after checkout', async () => {
+      const { user } = await createUser()
+      const sessionId = await startCheckout(user)
+      await deleteAccount(user.id)
+      const pi = paymentIntent()
+      stripe.paymentIntents.set(pi.id as string, pi)
+      const res = await postWebhook(checkoutCompletedEvent({ sessionId, paymentIntentId: pi.id as string, userId: user.id }), {
+        env: learnerEmailOn(),
+      })
+      expect(res.status).toBe(200)
+      expect((await purchaseRow(sessionId))?.status).toBe('paid')
+      expect(stripe.emailAttempts).toBe(0)
     })
   })
 

@@ -15,6 +15,7 @@
     "refunded": false,
     "disputed": false,
     "status": "succeeded",
+    "receipt_url": "https://pay.stripe.com/receipts/payment/CAcaFwoVYWNjdF9maXh0dXJlX2NoX2ZpeHR1cmU",
     "billing_details": {
       "address": {
         "city": "Toronto",

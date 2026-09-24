@@ -5,8 +5,10 @@
 # repo root (the home-services site): reported as a notice, never a failure (integrator decision 18).
 #   The root site is a static export (`output: 'export'`, served as files from out/); the root
 #   advisories target Next.js server features (middleware, image optimisation, server actions, …)
-#   that a static export does not run, and memo B16 requires the root out/ to stay byte-identical,
-#   so upgrading root Next is an owner decision (business/online/owner-setup.md records it).
+#   that a static export does not run, and memo B16 requires the root out/ to stay byte-identical.
+#   Root Next was moved to the patched 16.x on purpose (memo §7.2 Z11; ci.yml skips the out/ comparison
+#   for such dependency PRs); later root advisories are still reported here, not failed.
+# Weekly, two small jobs: about 2 Actions minutes a week of the 2,000 a month (memo §7.2 Z7, ESTIMATE).
 name: Dependency audit
 
 on:
@@ -20,7 +22,7 @@ permissions:
 jobs:
   clb:
     name: Practice coach (must pass)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     defaults:
       run:
@@ -41,7 +43,7 @@ jobs:
 
   root:
     name: Root site (reported only)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - name: Check out

@@ -29,6 +29,37 @@ export function isSafeCheckoutUrl(value: unknown): value is string {
   }
 }
 
+/**
+ * Google's authorization endpoint (https://accounts.google.com/o/oauth2/v2/auth, from Google's OpenID
+ * discovery document, read 2026-09-24). The sign-in page hands the tab over only to an https URL on
+ * that host, so a faulty or tampered /api answer cannot send the learner anywhere else.
+ */
+export const GOOGLE_AUTH_HOST = 'accounts.google.com'
+
+export function isGoogleSignInUrl(value: unknown): value is string {
+  if (typeof value !== 'string') return false
+  try {
+    const url = new URL(value)
+    return url.protocol === 'https:' && url.hostname === GOOGLE_AUTH_HOST && url.username === '' && url.password === ''
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Stripe's hosted receipt (MeResponse.latestPurchase.receiptUrl), or null. Only https links are shown;
+ * the host is not restricted because Stripe does not document it in its API reference.
+ */
+export function safeReceiptUrl(value: unknown): string | null {
+  if (typeof value !== 'string' || value.length > 5000) return null
+  try {
+    const url = new URL(value)
+    return url.protocol === 'https:' && url.username === '' && url.password === '' ? url.href : null
+  } catch {
+    return null
+  }
+}
+
 /** /login/ link that returns to `next` after verification (and keeps Korean when asked). */
 export function loginHref(next?: string, lang: Lang = 'en'): string {
   const params = new URLSearchParams()
