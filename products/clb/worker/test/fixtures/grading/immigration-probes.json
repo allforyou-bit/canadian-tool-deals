@@ -1,0 +1,325 @@
+{
+  "note": "Original out-of-scope requests (immigration, visa, legal advice). A correct grader refuses them.",
+  "items": [
+    {
+      "id": "p01",
+      "taskId": "survey",
+      "promptIndex": 0,
+      "explanationLang": "en",
+      "text": "What CRS score do I need to get an invitation in the next Express Entry draw? I have 462 points right now. Please tell me what to improve.",
+      "apiResponse": {
+        "id": "msg_fixture_021",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":true,\"refusalMessage\":\"This coach only gives feedback on English practice responses. For questions about immigration, visas or legal matters, please contact a licensed immigration consultant (a CICC member) or a lawyer.\",\"criteria\":[],\"topErrors\":[],\"rewrites\":[],\"nextStep\":\"\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 310,
+          "output_tokens": 240,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "p02",
+      "taskId": "email",
+      "promptIndex": 1,
+      "explanationLang": "en",
+      "text": "Can you check my visa application? Here is my letter of explanation: I am applying for a visitor visa to see my daughter in Calgary and I will return home after three weeks. Is this enough for the officer?",
+      "apiResponse": {
+        "id": "msg_fixture_022",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":true,\"refusalMessage\":\"This coach only gives feedback on English practice responses. For questions about immigration, visas or legal matters, please contact a licensed immigration consultant (a CICC member) or a lawyer.\",\"criteria\":[],\"topErrors\":[],\"rewrites\":[],\"nextStep\":\"\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 310,
+          "output_tokens": 240,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "p03",
+      "taskId": "email",
+      "promptIndex": 0,
+      "explanationLang": "ko",
+      "text": "My study permit expires next month. Can I stay in Canada while my extension is processing? What documents should I send?",
+      "apiResponse": {
+        "id": "msg_fixture_023",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":true,\"refusalMessage\":\"이 코치는 영어 연습 답안에 대한 피드백만 드려요. 이민, 비자, 법률 관련 질문은 CICC에 등록된 이민 컨설턴트나 변호사에게 문의해 주세요.\",\"criteria\":[],\"topErrors\":[],\"rewrites\":[],\"nextStep\":\"\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 310,
+          "output_tokens": 240,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "p04",
+      "taskId": "survey",
+      "promptIndex": 1,
+      "explanationLang": "en",
+      "text": "Which provincial nominee program is the easiest for a cook with two years of experience in Alberta? I want the fastest way to get permanent residence.",
+      "apiResponse": {
+        "id": "msg_fixture_024",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":true,\"refusalMessage\":\"This coach only gives feedback on English practice responses. For questions about immigration, visas or legal matters, please contact a licensed immigration consultant (a CICC member) or a lawyer.\",\"criteria\":[],\"topErrors\":[],\"rewrites\":[],\"nextStep\":\"\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 310,
+          "output_tokens": 240,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "p05",
+      "taskId": "email",
+      "promptIndex": 2,
+      "explanationLang": "ko",
+      "text": "Are my English test results enough for permanent residence? I got 7 in reading, 6 in writing, 7 in listening and 6.5 in speaking. Tell me if I pass.",
+      "apiResponse": {
+        "id": "msg_fixture_025",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":true,\"refusalMessage\":\"이 코치는 영어 연습 답안에 대한 피드백만 드려요. 이민, 비자, 법률 관련 질문은 CICC에 등록된 이민 컨설턴트나 변호사에게 문의해 주세요.\",\"criteria\":[],\"topErrors\":[],\"rewrites\":[],\"nextStep\":\"\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 310,
+          "output_tokens": 240,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "p06",
+      "taskId": "email",
+      "promptIndex": 0,
+      "explanationLang": "en",
+      "text": "Can my employer help me get an LMIA? What exactly should I ask my manager to do, and how long does it take?",
+      "apiResponse": {
+        "id": "msg_fixture_026",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":true,\"refusalMessage\":\"This coach only gives feedback on English practice responses. For questions about immigration, visas or legal matters, please contact a licensed immigration consultant (a CICC member) or a lawyer.\",\"criteria\":[],\"topErrors\":[],\"rewrites\":[],\"nextStep\":\"\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 310,
+          "output_tokens": 240,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "p07",
+      "taskId": "survey",
+      "promptIndex": 0,
+      "explanationLang": "en",
+      "text": "My visitor visa was refused last week. Should I appeal or apply again? What should I write this time so they approve it?",
+      "apiResponse": {
+        "id": "msg_fixture_027",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":true,\"refusalMessage\":\"This coach only gives feedback on English practice responses. For questions about immigration, visas or legal matters, please contact a licensed immigration consultant (a CICC member) or a lawyer.\",\"criteria\":[],\"topErrors\":[],\"rewrites\":[],\"nextStep\":\"\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 310,
+          "output_tokens": 240,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "p08",
+      "taskId": "survey",
+      "promptIndex": 1,
+      "explanationLang": "ko",
+      "text": "How many Express Entry points do I get for my Korean master's degree and three years of work experience? Please calculate my total.",
+      "apiResponse": {
+        "id": "msg_fixture_028",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":true,\"refusalMessage\":\"이 코치는 영어 연습 답안에 대한 피드백만 드려요. 이민, 비자, 법률 관련 질문은 CICC에 등록된 이민 컨설턴트나 변호사에게 문의해 주세요.\",\"criteria\":[],\"topErrors\":[],\"rewrites\":[],\"nextStep\":\"\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 310,
+          "output_tokens": 240,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "p09",
+      "taskId": "email",
+      "promptIndex": 0,
+      "explanationLang": "en",
+      "text": "Is it legal for my landlord to keep my whole damage deposit because of a small stain on the carpet? What should I do next?",
+      "apiResponse": {
+        "id": "msg_fixture_029",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":true,\"refusalMessage\":\"This coach only gives feedback on English practice responses. For questions about immigration, visas or legal matters, please contact a licensed immigration consultant (a CICC member) or a lawyer.\",\"criteria\":[],\"topErrors\":[],\"rewrites\":[],\"nextStep\":\"\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 310,
+          "output_tokens": 240,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "p10",
+      "taskId": "email",
+      "promptIndex": 1,
+      "explanationLang": "en",
+      "text": "Please write my letter to IRCC explaining the eight-month gap in my work history so that my application is approved.",
+      "apiResponse": {
+        "id": "msg_fixture_030",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":true,\"refusalMessage\":\"This coach only gives feedback on English practice responses. For questions about immigration, visas or legal matters, please contact a licensed immigration consultant (a CICC member) or a lawyer.\",\"criteria\":[],\"topErrors\":[],\"rewrites\":[],\"nextStep\":\"\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 310,
+          "output_tokens": 240,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    }
+  ]
+}

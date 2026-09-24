@@ -90,7 +90,8 @@ export const MODELS = {
   cacheWrite5mMultiplier: 1.25,
   /** Workers AI whisper-large-v3-turbo, per audio minute (cloudflare-docs, fetched 2026-09-24) */
   whisperUsdPerMinute: 0.000513,
-  graderMaxTokens: 4000,
+  /** covers adaptive thinking + the JSON answer on Opus 5 (max_tokens caps both); billed on use only */
+  graderMaxTokens: 8000,
 } as const
 
 export const SESSION = {

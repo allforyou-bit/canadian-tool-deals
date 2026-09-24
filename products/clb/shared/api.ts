@@ -125,7 +125,7 @@ export interface WritingGradeRequest {
   promptIndex: number
   text: string
   explanationLang: Lang
-  /** only for the anonymous free sample */
+  /** required whenever the request uses the free writing sample: signed out, or signed in without an active pass */
   turnstileToken?: string
 }
 /** Speaking: multipart/form-data with fields taskId, promptIndex, explanationLang, audio (Blob) */

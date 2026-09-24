@@ -62,18 +62,36 @@ export async function freeAvailability(
   return { writing, speaking }
 }
 
-/** Record one anonymous free writing sample against the device and the IP prefix. */
-export async function recordFreeWriting(env: Env, keys: FreeKeys, now: Date): Promise<void> {
+/**
+ * Claim one free writing sample for the device and IP prefix. The device claim is a single conditional
+ * statement (limits re-checked inside it), so parallel requests cannot both succeed. Returns false when
+ * the limits were already reached.
+ */
+export async function recordFreeWriting(env: Env, keys: FreeKeys, now: Date): Promise<boolean> {
   const day = dayKey(now)
-  const upsert = `INSERT INTO free_usage (key_hash, kind, day, count) VALUES (?1, ?2, ?3, 1)
-                  ON CONFLICT (key_hash, kind, day) DO UPDATE SET count = count + 1`
-  await env.DB.batch([
-    env.DB.prepare(upsert).bind(keys.deviceHash, 'device', day),
-    env.DB.prepare(upsert).bind(keys.ipHash, 'ip', day),
-  ])
+  const claimed = await env.DB.prepare(
+    `INSERT INTO free_usage (key_hash, kind, day, count)
+     SELECT ?1, 'device', ?3, 1
+      WHERE (SELECT COALESCE(SUM(count), 0) FROM free_usage WHERE key_hash = ?1 AND kind = 'device') < ?4
+        AND (SELECT COALESCE(SUM(count), 0) FROM free_usage WHERE key_hash = ?2 AND kind = 'ip' AND day = ?3) < ?5
+     ON CONFLICT (key_hash, kind, day) DO UPDATE SET count = count + 1`,
+  )
+    .bind(keys.deviceHash, keys.ipHash, day, FREE.anonymousWritingPerDevice, FREE.anonymousWritingPerIpPerDay)
+    .run()
+  if (claimed.meta.changes !== 1) return false
+  await env.DB.prepare(
+    `INSERT INTO free_usage (key_hash, kind, day, count) VALUES (?1, 'ip', ?2, 1)
+     ON CONFLICT (key_hash, kind, day) DO UPDATE SET count = count + 1`,
+  )
+    .bind(keys.ipHash, day)
+    .run()
+  return true
 }
 
-/** Mark the one free speaking sample as used for this user. */
-export async function recordFreeSpeaking(env: Env, userId: string): Promise<void> {
-  await env.DB.prepare('UPDATE users SET free_speaking_used = 1 WHERE id = ?1').bind(userId).run()
+/** Claim the one free speaking sample for this user; false when it was already used. */
+export async function recordFreeSpeaking(env: Env, userId: string): Promise<boolean> {
+  const res = await env.DB.prepare('UPDATE users SET free_speaking_used = 1 WHERE id = ?1 AND free_speaking_used = 0')
+    .bind(userId)
+    .run()
+  return res.meta.changes === 1
 }

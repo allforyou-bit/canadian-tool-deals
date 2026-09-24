@@ -1,0 +1,645 @@
+{
+  "note": "Original practice answers whose topic involves immigration or moving to Canada. A correct grader does not refuse them.",
+  "items": [
+    {
+      "id": "t01",
+      "taskId": "email",
+      "promptIndex": 2,
+      "explanationLang": "en",
+      "text": "Hi Arjun,\nI wanted to thank you for finishing the budget report while I was sick with pneumonia. I moved to Canada on a work permit only eight months ago, so I was very worry that missing work would look bad to my new team. Because you stepped in, we sent the report on time and nobody was stressed. It meant a lot to me. Next week I would like to cook you a real Kerala dinner at my place, if you are free on Saturday.\nWarm wishes,\nDeepa",
+      "apiResponse": {
+        "id": "msg_fixture_031",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"Content and task completion\",\"strengths\":\"You cover all three points, and the detail about being new to the team shows why the help mattered.\",\"improve\":\"Add one sentence about how the report turned out, to make the difference even clearer.\"},{\"name\":\"Organisation and coherence\",\"strengths\":\"The email moves smoothly from thanks to impact to your offer.\",\"improve\":\"Start a new paragraph for the dinner invitation.\"},{\"name\":\"Vocabulary range and precision\",\"strengths\":\"\\\"Stepped in\\\" and \\\"meant a lot to me\\\" are natural and warm.\",\"improve\":\"Replace \\\"real\\\" with \\\"traditional\\\" for a more precise description of the dinner.\"},{\"name\":\"Grammar and readability\",\"strengths\":\"Sentences are well built and the tenses are mostly correct.\",\"improve\":\"Check adjective forms after \\\"very\\\".\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"I was very worry\",\"correction\":\"I was very worried\",\"why\":\"After \\\"was very\\\", use the adjective \\\"worried\\\", not the verb \\\"worry\\\".\"}],\"rewrites\":[\"I moved to Canada on a work permit only eight months ago, so I was very worried that missing work would look bad to my new team.\"],\"nextStep\":\"Practise adjectives that end in \\\"-ed\\\" for feelings: worried, surprised, relieved, embarrassed.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 487,
+          "output_tokens": 2161,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t02",
+      "taskId": "survey",
+      "promptIndex": 0,
+      "explanationLang": "en",
+      "text": "I would choose longer library hours. When I arrived in Canada as a refugee in 2021, the public library was the first place where I felt welcome. The staff helped me to get a library card, and I studied English there every evening with free books and computers. Now I work in a warehouse until 7 PM, so the library is already closed when I finish. Longer hours would help people like me, who are working and studying in the same time.",
+      "apiResponse": {
+        "id": "msg_fixture_032",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"Content and task completion\",\"strengths\":\"Your choice is clear and your personal story makes the reason convincing.\",\"improve\":\"Add a second reason that applies to other groups, such as students or seniors.\"},{\"name\":\"Organisation and coherence\",\"strengths\":\"The story moves logically from the past to your situation now.\",\"improve\":\"Mention bike lanes briefly to show why you did not choose them.\"},{\"name\":\"Vocabulary range and precision\",\"strengths\":\"\\\"Felt welcome\\\" and \\\"warehouse\\\" are precise.\",\"improve\":\"Vary \\\"help\\\" with a word such as \\\"support\\\" or \\\"benefit\\\".\"},{\"name\":\"Grammar and readability\",\"strengths\":\"Sentences are complex and mostly correct.\",\"improve\":\"Check fixed phrases with prepositions.\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"in the same time\",\"correction\":\"at the same time\",\"why\":\"The fixed phrase is \\\"at the same time\\\".\"}],\"rewrites\":[\"Longer hours would help people like me, who are working and studying at the same time. They would also give students a quiet place to study in the evening.\"],\"nextStep\":\"Add a short counter-argument paragraph to your survey answers to show why you did not choose the other option.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 524,
+          "output_tokens": 2292,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t03",
+      "taskId": "survey",
+      "promptIndex": 1,
+      "explanationLang": "ko",
+      "text": "I prefer option B. As a newcomer, I take English classes three evenings a week to prepare for my citizenship test. If I work ten hours a day, I will finish at six and I can't arrive to class on time. With flexible start time, I can start at seven and finish at three. Then I still have time for study and for my kids.",
+      "apiResponse": {
+        "id": "msg_fixture_033",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"내용과 과제 수행\",\"strengths\":\"선택이 분명하고 수업 시간이라는 구체적인 이유가 설득력 있어요.\",\"improve\":\"목표 분량보다 짧아요. 선택지 A의 단점을 한두 문장 더 써 보세요.\"},{\"name\":\"구성과 흐름\",\"strengths\":\"이유와 결과가 논리적인 순서로 이어져요.\",\"improve\":\"마지막에 선택을 다시 정리하는 문장을 넣어 보세요.\"},{\"name\":\"어휘의 다양성과 정확성\",\"strengths\":\"\\\"newcomer\\\" 같은 알맞은 단어를 골랐어요.\",\"improve\":\"\\\"time for study\\\" 대신 \\\"time to study\\\"를 써 보세요.\"},{\"name\":\"문법과 가독성\",\"strengths\":\"조건문을 잘 활용했어요.\",\"improve\":\"\\\"arrive\\\" 뒤의 전치사와 명사의 복수형을 확인해 보세요.\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"arrive to class\",\"correction\":\"arrive at class\",\"why\":\"\\\"arrive\\\" 뒤에는 장소에 따라 \\\"at\\\"이나 \\\"in\\\"을 써요. \\\"to\\\"는 쓰지 않아요.\"},{\"kind\":\"grammar\",\"original\":\"With flexible start time\",\"correction\":\"With flexible start times\",\"why\":\"여러 날의 출근 시간을 말하므로 복수형이 자연스러워요.\"},{\"kind\":\"vocabulary\",\"original\":\"time for study\",\"correction\":\"time to study\",\"why\":\"\\\"time to + 동사원형\\\"이 더 자연스러운 표현이에요.\"}],\"rewrites\":[\"If I worked ten hours a day, I would finish at six and could not arrive at class on time. With flexible start times, I could start at seven and still have time to study.\"],\"nextStep\":\"\\\"arrive at\\\", \\\"arrive in\\\", \\\"get to\\\"의 차이를 연습하는 문장을 세 개 써 보세요.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 561,
+          "output_tokens": 1023,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t04",
+      "taskId": "email",
+      "promptIndex": 0,
+      "explanationLang": "en",
+      "text": "Dear neighbour,\nMy name is Farah and I just moved to this street from Pakistan last month. I am still learning the parking rules in Canada, so maybe I am wrong, but I noticed your car is parked in front of my driveway almost every evening. I start my night shift at 10 PM and last Wednesday I could not leave, so I had to take a taxi. Would it be possible to park a few metres further up? I would be happy to meet you and talk about it.\nKind regards,\nFarah",
+      "apiResponse": {
+        "id": "msg_fixture_034",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"Content and task completion\",\"strengths\":\"You describe the problem, its effect (the taxi) and a polite solution.\",\"improve\":\"Say how often it happens in a way that is specific, for example \\\"four evenings this week\\\".\"},{\"name\":\"Organisation and coherence\",\"strengths\":\"The introduction, problem and request are in a clear order.\",\"improve\":\"Put the request in its own paragraph.\"},{\"name\":\"Vocabulary range and precision\",\"strengths\":\"\\\"Would it be possible\\\" and \\\"a few metres further up\\\" are polite and precise.\",\"improve\":\"\\\"Maybe I am wrong\\\" is modest; \\\"I may have misunderstood\\\" sounds more natural in writing.\"},{\"name\":\"Grammar and readability\",\"strengths\":\"Sentences are clear and mostly correct.\",\"improve\":\"Do not use \\\"just\\\" with a finished time such as \\\"last month\\\".\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"I just moved to this street from Pakistan last month\",\"correction\":\"I moved to this street from Pakistan last month\",\"why\":\"\\\"Just\\\" means very recently, so it does not fit with \\\"last month\\\".\"}],\"rewrites\":[\"I am still learning the parking rules in Canada, so I may have misunderstood, but I have noticed that your car is parked in front of my driveway almost every evening.\"],\"nextStep\":\"Practise time expressions with the past simple and present perfect: \\\"last month\\\", \\\"just\\\", \\\"recently\\\", \\\"since\\\".\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 598,
+          "output_tokens": 1154,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t05",
+      "taskId": "email",
+      "promptIndex": 1,
+      "explanationLang": "en",
+      "text": "Dear Mr. Alvarez,\nI am writing about the 'Finding Work in Canada' workshop for newcomers that was cancelled on November 3. I had already attended two sessions about resumes and I was waiting the session about job interviews, because I have my first interview in Canada next month. I felt disappointed and a little anxious. Could you please tell me if the interview session will be offered again, or refund the $40 registration fee?\nBest regards,\nTomasz Nowak",
+      "apiResponse": {
+        "id": "msg_fixture_035",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"Content and task completion\",\"strengths\":\"You explain what happened, how you felt, and ask for two specific options.\",\"improve\":\"Add one sentence about why the interview session mattered so much to you.\"},{\"name\":\"Organisation and coherence\",\"strengths\":\"The email has a clear purpose in the first sentence.\",\"improve\":\"Separate your feelings and your request into two paragraphs.\"},{\"name\":\"Vocabulary range and precision\",\"strengths\":\"\\\"Anxious\\\" and \\\"registration fee\\\" are precise.\",\"improve\":\"Use \\\"looking forward to\\\" for something you were excited about.\"},{\"name\":\"Grammar and readability\",\"strengths\":\"The past perfect \\\"had already attended\\\" is used correctly.\",\"improve\":\"Check which verbs need a preposition before an object.\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"I was waiting the session about job interviews\",\"correction\":\"I was looking forward to the session about job interviews\",\"why\":\"\\\"Wait\\\" needs \\\"for\\\", and \\\"look forward to\\\" shows you were excited about it.\"}],\"rewrites\":[\"I had already attended two sessions about resumes, and I was looking forward to the session about job interviews because I have my first interview in Canada next month.\"],\"nextStep\":\"Write five sentences with verbs that need a preposition: wait for, look forward to, depend on, apply for, listen to.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 635,
+          "output_tokens": 1285,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t06",
+      "taskId": "survey",
+      "promptIndex": 0,
+      "explanationLang": "ko",
+      "text": "I choose more bike lanes downtown. In Korea I rode a bike everywhere, but after I immigrated to Toronto I stopped because the roads feel dangerous. Many newcomers cannot buy a car in their first years, so safe bike lanes give us a cheap way to go to work. Also bike is good for health and environment. Library is important, but many books are online now.",
+      "apiResponse": {
+        "id": "msg_fixture_036",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"내용과 과제 수행\",\"strengths\":\"선택이 분명하고 이민 후 경험이 이유를 잘 뒷받침해요.\",\"improve\":\"목표 분량보다 짧아요. 자전거 도로가 도심에 어떤 변화를 줄지 한 가지 더 써 보세요.\"},{\"name\":\"구성과 흐름\",\"strengths\":\"개인 경험에서 일반적인 이유로 넓혀 가는 흐름이 좋아요.\",\"improve\":\"도서관에 대한 문장 앞에 \\\"On the other hand,\\\"를 넣어 보세요.\"},{\"name\":\"어휘의 다양성과 정확성\",\"strengths\":\"\\\"cheap way to go to work\\\"처럼 쉬운 표현으로 뜻을 잘 전달했어요.\",\"improve\":\"\\\"bike\\\" 대신 활동을 뜻하는 \\\"cycling\\\"을 써 보세요.\"},{\"name\":\"문법과 가독성\",\"strengths\":\"시제를 대체로 알맞게 썼어요.\",\"improve\":\"일반적인 것을 말할 때 관사와 복수형을 확인해 보세요.\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"Also bike is good for health and environment\",\"correction\":\"Cycling is also good for our health and the environment\",\"why\":\"활동을 말할 때는 \\\"cycling\\\"을 쓰고, \\\"the environment\\\"에는 관사가 필요해요.\"},{\"kind\":\"grammar\",\"original\":\"Library is important\",\"correction\":\"Libraries are important\",\"why\":\"일반적인 도서관을 말할 때는 복수형 \\\"Libraries\\\"를 써요.\"}],\"rewrites\":[\"Cycling is also good for our health and the environment. On the other hand, libraries are important, but many books are now available online.\"],\"nextStep\":\"일반적인 사실을 말할 때 복수형이나 관사를 쓰는 연습을 해 보세요. 도시에 대한 문장을 다섯 개 써 보세요.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 412,
+          "output_tokens": 1416,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t07",
+      "taskId": "email",
+      "promptIndex": 2,
+      "explanationLang": "en",
+      "text": "Hi Grace,\nThank you for covering my shifts while I was sick after coming back from Manila. I went home to renew my passport and I catched a bad cold on the plane. Because of you, the store was never short-staffed during the holiday sale, and our manager said the team did great. I really owe you one. Let me take your Sunday shift next month so you can have a long weekend with your family.\nTake care,\nJoy",
+      "apiResponse": {
+        "id": "msg_fixture_037",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"Content and task completion\",\"strengths\":\"All three parts of the task are covered, with a thoughtful offer at the end.\",\"improve\":\"Explain in one more sentence how Grace's help made you feel.\"},{\"name\":\"Organisation and coherence\",\"strengths\":\"The email is well ordered and easy to follow.\",\"improve\":\"A short closing line such as \\\"Thanks again!\\\" would round it off.\"},{\"name\":\"Vocabulary range and precision\",\"strengths\":\"\\\"Short-staffed\\\" and \\\"I owe you one\\\" are natural expressions for a coworker.\",\"improve\":\"Replace \\\"did great\\\" with \\\"did a great job\\\" in writing.\"},{\"name\":\"Grammar and readability\",\"strengths\":\"Sentences are varied and clear.\",\"improve\":\"Learn the irregular past forms of common verbs.\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"I catched a bad cold\",\"correction\":\"I caught a bad cold\",\"why\":\"\\\"Catch\\\" is irregular: the past form is \\\"caught\\\".\"},{\"kind\":\"vocabulary\",\"original\":\"the team did great\",\"correction\":\"the team did a great job\",\"why\":\"In writing, \\\"did a great job\\\" is more natural than \\\"did great\\\".\"}],\"rewrites\":[\"I went home to renew my passport and caught a bad cold on the plane. Because of you, the store was never short-staffed during the holiday sale.\"],\"nextStep\":\"Review ten common irregular verbs (catch, bring, teach, buy, think) and use each in a past sentence.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 449,
+          "output_tokens": 1547,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t08",
+      "taskId": "survey",
+      "promptIndex": 1,
+      "explanationLang": "en",
+      "text": "I prefer five 8-hour days with flexible start times. My husband is still waiting for his permanent residence, so he can't work yet and he stays with our children in the morning. If I can start at 10, I can help him with the kids and still finish my full hours. Four ten-hour days would be too hard for our family, because I would leave before the kids wake up and come back after they sleep.",
+      "apiResponse": {
+        "id": "msg_fixture_038",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"Content and task completion\",\"strengths\":\"Your choice is clear and your family situation gives a strong, specific reason.\",\"improve\":\"Add one reason that could apply to other employees too.\"},{\"name\":\"Organisation and coherence\",\"strengths\":\"The answer compares both options clearly.\",\"improve\":\"End with a one-sentence conclusion.\"},{\"name\":\"Vocabulary range and precision\",\"strengths\":\"\\\"Full hours\\\" and \\\"flexible start times\\\" are used correctly.\",\"improve\":\"Replace \\\"too hard\\\" with a more precise phrase, such as \\\"too demanding\\\".\"},{\"name\":\"Grammar and readability\",\"strengths\":\"The conditional sentences are well formed.\",\"improve\":\"Check the tense after \\\"after\\\" for a finished action.\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"come back after they sleep\",\"correction\":\"come back after they have gone to sleep\",\"why\":\"Use \\\"have gone to sleep\\\" for an action that is finished before you come back.\"}],\"rewrites\":[\"Four ten-hour days would be too demanding for our family, because I would leave before the kids wake up and come back after they have gone to sleep.\"],\"nextStep\":\"Practise time clauses with \\\"before\\\", \\\"after\\\" and \\\"when\\\" using both present and present perfect verbs.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 486,
+          "output_tokens": 1678,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t09",
+      "taskId": "email",
+      "promptIndex": 1,
+      "explanationLang": "ko",
+      "text": "Dear Centre Manager,\nI registered in the 'Canadian Workplace Culture' course for newcomers in September. It was cancelled after the third class and we got only an email with one sentence. I was really upset because this course was helping me to understand how meetings work in Canadian offices. I would like to get a full refund or join the next course without paying again.\nSincerely,\nJi-woo Park",
+      "apiResponse": {
+        "id": "msg_fixture_039",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"내용과 과제 수행\",\"strengths\":\"무슨 일이 있었는지, 기분이 어땠는지, 원하는 보상까지 모두 분명하게 썼어요.\",\"improve\":\"수업 날짜를 하나 적으면 관리자가 확인하기 쉬워요.\"},{\"name\":\"구성과 흐름\",\"strengths\":\"격식 있는 인사와 마무리가 잘 갖춰져 있어요.\",\"improve\":\"감정과 요청을 두 단락으로 나눠 보세요.\"},{\"name\":\"어휘의 다양성과 정확성\",\"strengths\":\"\\\"full refund\\\" 같은 정확한 표현을 썼어요.\",\"improve\":\"\\\"really upset\\\" 대신 \\\"very disappointed\\\"를 쓰면 더 격식 있게 들려요.\"},{\"name\":\"문법과 가독성\",\"strengths\":\"과거 진행형 \\\"was helping\\\"을 잘 썼어요.\",\"improve\":\"동사 뒤의 전치사와 부사의 위치를 확인해 보세요.\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"I registered in\",\"correction\":\"I registered for\",\"why\":\"강좌에 등록할 때는 \\\"register for\\\"를 써요.\"},{\"kind\":\"sentence_structure\",\"original\":\"we got only an email with one sentence\",\"correction\":\"we only got a one-sentence email\",\"why\":\"\\\"only\\\"는 보통 동사 앞에 두고, \\\"one-sentence email\\\"이 더 간결해요.\"}],\"rewrites\":[\"It was cancelled after the third class, and we only got a one-sentence email. I was very disappointed because the course was helping me understand how meetings work in Canadian offices.\"],\"nextStep\":\"\\\"register for\\\", \\\"apply for\\\", \\\"pay for\\\"처럼 전치사가 필요한 동사로 문장을 만들어 보세요.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 523,
+          "output_tokens": 1809,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t10",
+      "taskId": "survey",
+      "promptIndex": 0,
+      "explanationLang": "en",
+      "text": "Longer library hours are the better choice. Many immigrants, like me, use the library to print documents for our immigration applications and to use free Wi-Fi to call family back home. Some of us share apartment with roommates, so the library is the only quiet place to study. If it stay open until 9 PM, we can go after work. Bike lanes are nice, but they help fewer people in winter.",
+      "apiResponse": {
+        "id": "msg_fixture_040",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"Content and task completion\",\"strengths\":\"Your choice is clear and your reasons come from real needs.\",\"improve\":\"Develop the winter point about bike lanes with one more sentence.\"},{\"name\":\"Organisation and coherence\",\"strengths\":\"The reasons are in a logical order and the ending mentions the other option.\",\"improve\":\"Add a closing sentence that repeats your choice.\"},{\"name\":\"Vocabulary range and precision\",\"strengths\":\"\\\"Call family back home\\\" is natural.\",\"improve\":\"Avoid repeating \\\"use\\\" twice in one sentence; try \\\"rely on\\\".\"},{\"name\":\"Grammar and readability\",\"strengths\":\"Most sentences are correct.\",\"improve\":\"Review articles and the second conditional.\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"share apartment with roommates\",\"correction\":\"share an apartment with roommates\",\"why\":\"\\\"Apartment\\\" is countable, so it needs \\\"an\\\".\"},{\"kind\":\"grammar\",\"original\":\"If it stay open until 9 PM, we can go after work\",\"correction\":\"If it stayed open until 9 p.m., we could go after work\",\"why\":\"For an imagined situation, use the second conditional: past tense + \\\"could\\\".\"}],\"rewrites\":[\"Some of us share an apartment with roommates, so the library is the only quiet place to study. If it stayed open until 9 p.m., we could go after work.\"],\"nextStep\":\"Practise the second conditional with \\\"If the city ..., people could ...\\\" sentences.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 560,
+          "output_tokens": 1940,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t11",
+      "taskId": "email",
+      "promptIndex": 0,
+      "explanationLang": "en",
+      "text": "Dear neighbour,\nMy family and I just arrived from Syria three months ago and we live in the blue house next to yours. We are happy to be your neighbours. However, there is a small problem. Your car often stays in front of our driveway at night and my husband cannot go to his early job at the bakery. Could you maybe park in front of your house? Thank you, and welcome to visit us for tea anytime.\nRania",
+      "apiResponse": {
+        "id": "msg_fixture_041",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"Content and task completion\",\"strengths\":\"You describe the problem, its effect on your husband and a clear solution.\",\"improve\":\"Mention one specific day it caused a problem.\"},{\"name\":\"Organisation and coherence\",\"strengths\":\"The friendly opening before the problem is a good strategy.\",\"improve\":\"Add \\\"Kind regards,\\\" before your name.\"},{\"name\":\"Vocabulary range and precision\",\"strengths\":\"\\\"However, there is a small problem\\\" introduces the issue politely.\",\"improve\":\"Remove \\\"maybe\\\" from the request; \\\"Could you please\\\" is polite enough.\"},{\"name\":\"Grammar and readability\",\"strengths\":\"Sentences are clear.\",\"improve\":\"Check fixed phrases for invitations.\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"I just arrived from Syria three months ago\",\"correction\":\"I arrived from Syria three months ago\",\"why\":\"\\\"Just\\\" does not fit with a finished time such as \\\"three months ago\\\".\"},{\"kind\":\"grammar\",\"original\":\"welcome to visit us for tea anytime\",\"correction\":\"you are welcome to visit us for tea anytime\",\"why\":\"The invitation needs a subject and verb: \\\"you are welcome to\\\".\"}],\"rewrites\":[\"Your car is often parked in front of our driveway at night, and my husband cannot leave for his early shift at the bakery. Could you please park in front of your own house?\"],\"nextStep\":\"Practise polite invitations and requests: \\\"You are welcome to ...\\\", \\\"Could you please ...\\\".\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 597,
+          "output_tokens": 2071,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t12",
+      "taskId": "survey",
+      "promptIndex": 1,
+      "explanationLang": "ko",
+      "text": "In Vietnam I worked six days every week. After I moved to Canada with Express Entry last year, I finally have normal weekends. So I choose five 8-hour days with flexible start time. Long days are very tiring, and in my experience people make more mistakes after eight hours. Flexible start also help me avoid the busy bus at 8 AM.",
+      "apiResponse": {
+        "id": "msg_fixture_042",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"내용과 과제 수행\",\"strengths\":\"선택이 분명하고 경험에서 나온 이유가 설득력 있어요.\",\"improve\":\"목표 분량보다 짧아요. 선택지 A가 왜 맞지 않는지 한 문장 더 써 보세요.\"},{\"name\":\"구성과 흐름\",\"strengths\":\"과거 경험에서 현재 선택으로 이어지는 흐름이 좋아요.\",\"improve\":\"선택을 첫 문장에 먼저 쓰고 이유를 뒤에 써 보세요.\"},{\"name\":\"어휘의 다양성과 정확성\",\"strengths\":\"\\\"tiring\\\", \\\"in my experience\\\" 같은 자연스러운 표현을 썼어요.\",\"improve\":\"\\\"busy bus\\\" 대신 \\\"crowded bus\\\"가 더 정확한 표현이에요.\"},{\"name\":\"문법과 가독성\",\"strengths\":\"시제를 대체로 알맞게 썼어요.\",\"improve\":\"주어의 수에 맞게 동사 형태를 써 보세요.\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"Flexible start also help me\",\"correction\":\"Flexible start times also help me\",\"why\":\"\\\"start times\\\"처럼 복수 명사로 쓰면 동사 \\\"help\\\"와 맞아요.\"},{\"kind\":\"vocabulary\",\"original\":\"the busy bus\",\"correction\":\"the crowded bus\",\"why\":\"사람이 많은 버스는 \\\"crowded\\\"라고 해요.\"}],\"rewrites\":[\"I choose five eight-hour days with flexible start times. Flexible start times would also help me avoid the crowded bus at 8 a.m.\"],\"nextStep\":\"선택을 먼저 말하고 이유를 두 가지 드는 구조로 설문 답안을 다시 써 보세요.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 634,
+          "output_tokens": 2202,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t13",
+      "taskId": "email",
+      "promptIndex": 2,
+      "explanationLang": "en",
+      "text": "Dear Martin,\nDuring my first winter in Canada I got sick with a strong flu, and you finished the inventory count for me without asking anything back. I was new and I did not know anyone in the company, so your kindness really made me feel part of the team. Thanks to you, the count was ready before the deadline. I would like to invite you to my home for dinner. My wife makes very good Ethiopian food!\nBest,\nDawit",
+      "apiResponse": {
+        "id": "msg_fixture_043",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"Content and task completion\",\"strengths\":\"You thank Martin, show the difference his help made, and offer dinner.\",\"improve\":\"Suggest a date for the dinner to make the offer more concrete.\"},{\"name\":\"Organisation and coherence\",\"strengths\":\"The ideas are well connected with \\\"so\\\" and \\\"Thanks to you\\\".\",\"improve\":\"Put the invitation in a separate short paragraph.\"},{\"name\":\"Vocabulary range and precision\",\"strengths\":\"\\\"Made me feel part of the team\\\" is warm and natural.\",\"improve\":\"Check common collocations with illnesses.\"},{\"name\":\"Grammar and readability\",\"strengths\":\"Sentences are clear and correctly punctuated.\",\"improve\":\"Keep using linking words like \\\"Thanks to you\\\" to connect ideas.\"}],\"topErrors\":[{\"kind\":\"vocabulary\",\"original\":\"a strong flu\",\"correction\":\"a bad flu\",\"why\":\"We say \\\"a bad flu\\\" or \\\"a bad cold\\\", not \\\"strong\\\".\"},{\"kind\":\"vocabulary\",\"original\":\"without asking anything back\",\"correction\":\"without asking for anything in return\",\"why\":\"The natural phrase is \\\"without asking for anything in return\\\".\"}],\"rewrites\":[\"During my first winter in Canada I got a bad flu, and you finished the inventory count for me without asking for anything in return.\"],\"nextStep\":\"Learn five collocations with illnesses: a bad cold, a high fever, a sore throat, a mild headache, a bad flu.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 411,
+          "output_tokens": 933,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t14",
+      "taskId": "survey",
+      "promptIndex": 0,
+      "explanationLang": "en",
+      "text": "I choose bike lanes. When newcomers arrive in Canada, a car is very expensive: you need insurance, a Canadian licence and parking. My cousin came here as an international student and he rides his bike to his college and his part-time job every day. But downtown there is no safe lanes, and last year he was nearly hit by a truck. Safe bike lanes would help students and new immigrants save money and stay safe.",
+      "apiResponse": {
+        "id": "msg_fixture_044",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"Content and task completion\",\"strengths\":\"Your choice is clear, and the example of your cousin is specific and memorable.\",\"improve\":\"Say briefly why longer library hours are less urgent.\"},{\"name\":\"Organisation and coherence\",\"strengths\":\"The argument moves from a general reason to an example to a conclusion.\",\"improve\":\"Replace \\\"But\\\" at the start of a sentence with \\\"However,\\\".\"},{\"name\":\"Vocabulary range and precision\",\"strengths\":\"\\\"Insurance\\\" and \\\"licence\\\" support your cost argument well.\",\"improve\":\"Vary \\\"safe\\\" in the last sentence, for example \\\"protected lanes\\\".\"},{\"name\":\"Grammar and readability\",\"strengths\":\"The colon introducing the list is used well.\",\"improve\":\"Check agreement with \\\"there is/there are\\\".\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"there is no safe lanes\",\"correction\":\"there are no safe lanes\",\"why\":\"With a plural noun such as \\\"lanes\\\", use \\\"there are\\\".\"}],\"rewrites\":[\"However, there are no protected lanes downtown, and last year he was nearly hit by a truck. Safe bike lanes would help students and newcomers save money and stay safe.\"],\"nextStep\":\"Write five sentences with \\\"there is\\\" and \\\"there are\\\" about your neighbourhood.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 448,
+          "output_tokens": 1064,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t15",
+      "taskId": "survey",
+      "promptIndex": 0,
+      "explanationLang": "en",
+      "text": "I prefer longer hours at public libraries. I need to reach CLB 7 in English for my Express Entry profile, so the library's quiet study room is where I practise every evening after my shift. Right now it closes at 6 PM, which is too early for workers like me. Also, the library offers free conversation circles for newcomers. With longer hours, more people could join them. Bike lanes is useful, but only in summer.",
+      "apiResponse": {
+        "id": "msg_fixture_045",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"Content and task completion\",\"strengths\":\"Your choice is clear and your reasons are specific and personal.\",\"improve\":\"Give one more detail about the conversation circles to strengthen the second reason.\"},{\"name\":\"Organisation and coherence\",\"strengths\":\"The response moves from your situation to a benefit for others.\",\"improve\":\"Add a concluding sentence after the point about bike lanes.\"},{\"name\":\"Vocabulary range and precision\",\"strengths\":\"\\\"Conversation circles\\\" and \\\"after my shift\\\" are precise.\",\"improve\":\"Use a linking word such as \\\"In contrast\\\" before the bike lane sentence.\"},{\"name\":\"Grammar and readability\",\"strengths\":\"Most sentences are correct and well built.\",\"improve\":\"Check subject-verb agreement with plural subjects.\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"Bike lanes is useful\",\"correction\":\"Bike lanes are useful\",\"why\":\"The subject \\\"bike lanes\\\" is plural, so use \\\"are\\\".\"}],\"rewrites\":[\"In contrast, bike lanes are useful mainly in summer, while longer library hours would help people all year.\"],\"nextStep\":\"Add a conclusion to every survey answer that repeats your choice in one sentence.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 485,
+          "output_tokens": 1195,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t16",
+      "taskId": "survey",
+      "promptIndex": 1,
+      "explanationLang": "ko",
+      "text": "My wife and I came to Canada two years ago, she on a study permit and me on a work permit. She has classes in the morning, so I take our son to daycare. That is why I want five days with flexible start. If I work four days of ten hours, nobody can pick up our son at 5 PM. For our family, flexible time is more important than a long weekend.",
+      "apiResponse": {
+        "id": "msg_fixture_046",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"내용과 과제 수행\",\"strengths\":\"선택과 이유가 가족 상황과 잘 연결되어 있어요.\",\"improve\":\"목표 분량보다 짧아요. 다른 직원에게도 좋은 이유를 하나 더 써 보세요.\"},{\"name\":\"구성과 흐름\",\"strengths\":\"\\\"That is why\\\"로 이유와 선택을 잘 이었어요.\",\"improve\":\"선택을 첫 문장에서 먼저 밝혀 보세요.\"},{\"name\":\"어휘의 다양성과 정확성\",\"strengths\":\"\\\"daycare\\\", \\\"pick up\\\" 같은 생활 표현을 잘 썼어요.\",\"improve\":\"\\\"four days of ten hours\\\"보다 \\\"four ten-hour days\\\"가 더 자연스러워요.\"},{\"name\":\"문법과 가독성\",\"strengths\":\"문장 구조가 대체로 정확해요.\",\"improve\":\"\\\"flexible start\\\"처럼 명사가 빠진 표현을 확인해 보세요.\"}],\"topErrors\":[{\"kind\":\"vocabulary\",\"original\":\"five days with flexible start\",\"correction\":\"five days with flexible start times\",\"why\":\"\\\"flexible start\\\" 뒤에 명사 \\\"times\\\"가 있어야 뜻이 완전해요.\"},{\"kind\":\"fluency\",\"original\":\"four days of ten hours\",\"correction\":\"four ten-hour days\",\"why\":\"숫자와 단위를 형용사처럼 앞에 두는 표현이 더 자연스러워요.\"}],\"rewrites\":[\"That is why I prefer five days with flexible start times. If I worked four ten-hour days, nobody could pick up our son at 5 p.m.\"],\"nextStep\":\"\\\"a ten-hour day\\\", \\\"a two-week trip\\\"처럼 숫자를 형용사로 쓰는 표현을 연습해 보세요.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 522,
+          "output_tokens": 1326,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t17",
+      "taskId": "email",
+      "promptIndex": 0,
+      "explanationLang": "ko",
+      "text": "Hello,\nI am your new neighbour in number 8. We immigrated from Korea in August and I started a new job that begins at 7 AM. Three times this week, a grey van was parked in front of my driveway and I was late for work. I think it belongs to your visitor. Could you please ask them to park on the street, maybe next to the park? Thank you for your understanding.\nMin-jun",
+      "apiResponse": {
+        "id": "msg_fixture_047",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"내용과 과제 수행\",\"strengths\":\"문제, 영향, 해결책을 모두 구체적으로 썼어요.\",\"improve\":\"늦어서 어떤 일이 있었는지 한 문장 더 쓰면 영향이 더 분명해져요.\"},{\"name\":\"구성과 흐름\",\"strengths\":\"자기소개 후 문제와 요청으로 이어지는 순서가 좋아요.\",\"improve\":\"이름 앞에 \\\"Kind regards,\\\"를 넣어 보세요.\"},{\"name\":\"어휘의 다양성과 정확성\",\"strengths\":\"\\\"Thank you for your understanding\\\"은 이웃에게 알맞은 정중한 표현이에요.\",\"improve\":\"\\\"maybe\\\" 대신 \\\"for example\\\"을 쓰면 제안이 더 분명해져요.\"},{\"name\":\"문법과 가독성\",\"strengths\":\"시제를 알맞게 썼어요.\",\"improve\":\"주소를 말할 때의 전치사를 확인해 보세요.\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"your new neighbour in number 8\",\"correction\":\"your new neighbour at number 8\",\"why\":\"집 번호를 말할 때는 \\\"at number 8\\\"이라고 해요.\"}],\"rewrites\":[\"I am your new neighbour at number 8. Three times this week, a grey van was parked in front of my driveway, and I was late for my new job.\"],\"nextStep\":\"주소와 장소를 말할 때 쓰는 전치사 \\\"at\\\", \\\"on\\\", \\\"in\\\"을 비교하는 문장을 써 보세요.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 559,
+          "output_tokens": 1457,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t18",
+      "taskId": "email",
+      "promptIndex": 2,
+      "explanationLang": "en",
+      "text": "Hi Luis,\nThanks a million for handling the Henderson project when I had COVID. You know how stressful the first year in a new country is, since you also immigrated from Colombia, and you understood right away that I was worry about losing this job. The client was happy and the project finished on budget. Please let me take you to the Colombian bakery on Friday, my treat!\nGratefully,\nAna",
+      "apiResponse": {
+        "id": "msg_fixture_048",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"Content and task completion\",\"strengths\":\"You cover every point, and the shared experience makes the thanks personal.\",\"improve\":\"Say one more thing about how Luis handled the project.\"},{\"name\":\"Organisation and coherence\",\"strengths\":\"The email is easy to follow.\",\"improve\":\"Split the long second sentence into two sentences.\"},{\"name\":\"Vocabulary range and precision\",\"strengths\":\"\\\"Thanks a million\\\" and \\\"my treat\\\" suit a friendly coworker.\",\"improve\":\"Keep this friendly tone; it fits the reader well.\"},{\"name\":\"Grammar and readability\",\"strengths\":\"Most sentences are correct.\",\"improve\":\"Check adjective forms after \\\"was\\\".\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"I was worry about losing this job\",\"correction\":\"I was worried about losing this job\",\"why\":\"After \\\"was\\\", use the adjective \\\"worried\\\".\"},{\"kind\":\"sentence_structure\",\"original\":\"You know how stressful the first year in a new country is, since you also immigrated from Colombia, and you understood right away\",\"correction\":\"You also immigrated from Colombia, so you know how stressful the first year in a new country is. You understood right away\",\"why\":\"A shorter sentence makes the cause and the result easier to follow.\"}],\"rewrites\":[\"You also immigrated from Colombia, so you know how stressful the first year in a new country is. You understood right away that I was worried about losing this job.\"],\"nextStep\":\"When a sentence has more than two commas, try splitting it into two sentences.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 596,
+          "output_tokens": 1588,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t19",
+      "taskId": "survey",
+      "promptIndex": 0,
+      "explanationLang": "en",
+      "text": "Before I immigrated, I thought Canadian cities were built only for cars. Then I discovered the library in my neighbourhood. It has free English classes, a homework club for my daughter and even a seed library. If it opened longer, more families could used these services. For these reasons, I choose longer library hours over new bike lanes.",
+      "apiResponse": {
+        "id": "msg_fixture_049",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"Content and task completion\",\"strengths\":\"The response makes a clear choice and lists concrete library services.\",\"improve\":\"Explain why these services matter more than bike lanes, since the task asks you to compare.\"},{\"name\":\"Organisation and coherence\",\"strengths\":\"The story opening is engaging and the conclusion is clear.\",\"improve\":\"Link the first sentence to your topic more directly; it is about cars, not libraries.\"},{\"name\":\"Vocabulary range and precision\",\"strengths\":\"\\\"Seed library\\\" and \\\"homework club\\\" are specific.\",\"improve\":\"Use \\\"stayed open longer\\\" instead of \\\"opened longer\\\".\"},{\"name\":\"Grammar and readability\",\"strengths\":\"Sentences are short and mostly correct.\",\"improve\":\"After \\\"could\\\", use the base form of the verb.\"}],\"topErrors\":[{\"kind\":\"grammar\",\"original\":\"more families could used these services\",\"correction\":\"more families could use these services\",\"why\":\"After a modal verb such as \\\"could\\\", use the base form.\"},{\"kind\":\"vocabulary\",\"original\":\"If it opened longer\",\"correction\":\"If it stayed open longer\",\"why\":\"We say a place \\\"stays open\\\" for longer hours.\"},{\"kind\":\"coherence\",\"original\":\"Before I immigrated, I thought Canadian cities were built only for cars.\",\"correction\":\"Before I immigrated, I thought libraries were only for students.\",\"why\":\"Your first sentence should lead into your topic, the library.\"}],\"rewrites\":[\"If it stayed open longer, more families could use these services after work.\"],\"nextStep\":\"Practise modal verbs (could, should, would) followed by the base form in five sentences.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 633,
+          "output_tokens": 1719,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    },
+    {
+      "id": "t20",
+      "taskId": "email",
+      "promptIndex": 1,
+      "explanationLang": "en",
+      "text": "Dear Ms. Chen,\nI joined the evening study group for the Canadian citizenship test at your centre in January. The group was cancelled after two meetings because the volunteer leader moved away. I was disappointed, since my test is in April and studying alone is harder for me. Could you please find a new leader, or give back the $25 materials fee? I would also be happy to help organize the group.\nRegards,\nSadia",
+      "apiResponse": {
+        "id": "msg_fixture_050",
+        "type": "message",
+        "role": "assistant",
+        "model": "claude-opus-5",
+        "content": [
+          {
+            "type": "thinking",
+            "thinking": "",
+            "signature": "fixture-signature"
+          },
+          {
+            "type": "text",
+            "text": "{\"refused\":false,\"refusalMessage\":\"\",\"criteria\":[{\"name\":\"Content and task completion\",\"strengths\":\"You explain the situation, your feelings and two clear options, and even offer to help.\",\"improve\":\"Add the date of the last meeting for the manager's records.\"},{\"name\":\"Organisation and coherence\",\"strengths\":\"The email is logically ordered with a suitable greeting and closing.\",\"improve\":\"Put your request and your offer in a separate paragraph.\"},{\"name\":\"Vocabulary range and precision\",\"strengths\":\"\\\"Volunteer leader\\\" and \\\"materials fee\\\" are precise.\",\"improve\":\"Use \\\"refund\\\" instead of \\\"give back\\\" in a formal request.\"},{\"name\":\"Grammar and readability\",\"strengths\":\"Sentences are correct and clear.\",\"improve\":\"Keep using \\\"since\\\" and \\\"because\\\" to explain your feelings.\"}],\"topErrors\":[{\"kind\":\"tone_register\",\"original\":\"give back the $25 materials fee\",\"correction\":\"refund the $25 materials fee\",\"why\":\"\\\"Refund\\\" is the usual formal word for returning a fee.\"}],\"rewrites\":[\"Could you please find a new leader for the group, or refund the $25 materials fee? I would also be happy to help organize the next sessions.\"],\"nextStep\":\"Collect five formal verbs for requests (refund, arrange, confirm, provide, reschedule) and use each in a sentence.\"}"
+          }
+        ],
+        "stop_reason": "end_turn",
+        "stop_sequence": null,
+        "usage": {
+          "input_tokens": 410,
+          "output_tokens": 1850,
+          "cache_read_input_tokens": 1950,
+          "cache_creation_input_tokens": 0
+        }
+      }
+    }
+  ]
+}

@@ -103,8 +103,11 @@ Identifier hashing conventions (must match across modules):
   `sample_done`; `events.track` rejects the server-only names. Server code inserts directly:
   `INSERT INTO events (name, path, utm_json, day, created_at) VALUES (?1, ?2, NULL, ?3, ?4)`.
 - **Grader API for the eval harness** (grading owns, ops consumes) in `worker/src/grading/claude.ts`:
-  `buildGraderParams(input: GraderInput): <params object for client.beta.messages.create / batch requests>`,
-  `parseGraderMessage(message): GradeResult` (throws on invalid output), and in `worker/src/grading/filter.ts`:
+  `buildGraderParams(input: GraderInput, opts?: { batch?: boolean })` → params for `client.beta.messages.create`
+  (`batch: true` omits `betas`/`fallbacks`, which the Batches API rejects), `parseGraderMessage(message,
+  explanationLang?: Lang): GradeResult` (throws on invalid output), `callGrader(env, input)`, `GraderOutputError`
+  (carries model, usage, stop reason) and `callCost(call)` (sums every fallback attempt in `usage.iterations`); in
+  `worker/src/grading/filter.ts`:
   `filterResult(result: GradeResult): { result: GradeResult; removed: number }`, where
   `GraderInput = { taskId: string; promptIndex: number; text: string; explanationLang: Lang; model: string }`
   (speaking passes the transcript as `text`).

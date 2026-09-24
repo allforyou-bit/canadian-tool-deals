@@ -12,6 +12,7 @@ CREATE TABLE users (
   adult_confirmed_at TEXT,
   marketing_opt_in INTEGER NOT NULL DEFAULT 0,
   marketing_consent_text TEXT,        -- exact wording shown (CASL s.13 evidence)
+  marketing_consent_version TEXT,     -- MARKETING_CONSENT.version the wording came from
   marketing_consent_at TEXT,
   marketing_withdrawn_at TEXT,
   free_speaking_used INTEGER NOT NULL DEFAULT 0,
