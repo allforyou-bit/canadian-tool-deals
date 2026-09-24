@@ -1,0 +1,131 @@
+{
+ "topic": "AI-operator feasibility: what Claude (scheduled Routines + GitHub Actions + Cloudflare + Claude API) can run week after week for an online business owned by a Korean-speaking GTA owner (≤10 h setup, ≤3 h/week), what still needs the human, and monthly running costs. Target: average CAD 5,000/month by about Dec 2026 – Jan 2027.",
+ "key_facts": [
+  {
+   "fact": "FIRST-HAND (this session's create_trigger tool definition): a Routine can be scheduled no more often than hourly ('Minimum interval is normally hourly (some projects allow shorter); a too-frequent schedule is rejected'). Granting connectors to a Routine 'attaches the connectors only — individual tool calls from fired sessions still go through runtime permission checks'.",
+   "source": "Claude_Code_Remote create_trigger tool schema in this session (first-hand)"
+  },
+  {
+   "fact": "SECONDARY (three independent 2026 GitHub sources agree): Routines launched 2026-04-14 as a research preview. Daily run caps are 5 (Pro), 15 (Max) and 25 (Team/Enterprise). A claude.ai subscription login is required, so an API key alone cannot run them. Runs are stateless: the only memory between runs is the repo and whatever connectors read. GitHub-webhook events over the hourly cap are dropped, not queued. The official docs page was not reachable.",
+   "source": "https://github.com/AesopScott/Aesop/blob/main/ai-news/articles/2026-04-20-anthropic-claude-routines.html ; https://github.com/NeoZi12/dispatchseo/blob/main/src/content/blog/claude-code-routines-vs-cron.mdx ; https://github.com/Arthur-Ficial/apfel/blob/main/.claude/routines/README.md"
+  },
+  {
+   "fact": "OFFICIAL (Claude Code CHANGELOG): Routines are a young feature and have had reliability bugs. Fixes listed: editing a routine could 'make it fire twice or re-enable a routine that had just been paused' (2.1.274); one-off routines 'occasionally running a second time after a transient server error' (2.1.269); runs 'treated as finished too early, which could skip the retry after a real failure or start a duplicate run' (2.1.269); scheduled routines 'silently failing to run' in some Slack setups (2.1.280). Current behaviour includes: a run is skipped and retried 'for up to 72 hours when the owner's GitHub connection is missing' (2.1.274); when the subscription is paused the owner must turn the routine back on themselves (2.1.274); locally configured MCP servers 'can't be attached to cloud routines' (2.1.251).",
+   "source": "https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md (lines 49, 283-292, 585-590, 866-867, 1446)"
+  },
+  {
+   "fact": "OFFICIAL (Claude Code CHANGELOG): scheduled-task deliveries 'can no longer approve a pending action' (2.1.183). A routine that hits a permission prompt therefore waits for a human. Scheduled routine runs may republish an artifact the user can edit without asking, but 'public artifacts, first publishes and deletes still ask' (2.1.275).",
+   "source": "https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md (lines 451, 2988)"
+  },
+  {
+   "fact": "FIRST-HAND egress test from this cloud environment (2026-09-24). Blocked with CONNECT 403: api.stripe.com, api.cloudflare.com, api.resend.com, play.google.com, developer.chrome.com. Reachable: api.anthropic.com (401 without a key) and googleapis.com. The environment docs say the owner changes 'Network access' in the environment settings to allow a host. API tokens go in environment settings ('Never ask the person to paste a token … into the chat').",
+   "source": "curl tests in this session; mcp__Claude_Code_Remote__read_documentation topics environment.network and environment.secrets"
+  },
+  {
+   "fact": "FIRST-HAND: this session's connectors are Gmail (search threads, create/update drafts, reply, send), Google Calendar, GitHub (create/merge PRs, enable auto-merge, trigger Actions, run secret scanning) and Claude Docs. There is no Stripe, Cloudflare, analytics or social-media connector. The repo's decision memo states 'Routine delivery was not tested this session.'",
+   "source": "deferred-tool list in this session; /home/user/canadian-tool-deals/business/research/decision-memo.md line 512"
+  },
+  {
+   "fact": "OFFICIAL (github/docs): Actions minutes are free for public repositories on standard runners. Private repositories get 2,000 min/month (Free plan) or 3,000 (Pro). Each GitHub-hosted job can run up to 6 hours.",
+   "source": "https://github.com/github/docs/blob/main/data/reusables/billing/actions-included-quotas.md ; https://github.com/github/docs/blob/main/content/billing/concepts/product-billing/github-actions.md ; https://github.com/github/docs/blob/main/content/actions/reference/limits.md"
+  },
+  {
+   "fact": "OFFICIAL (github/docs): the shortest cron interval is every 5 minutes. 'The schedule event can be delayed during periods of high loads … High load times include the start of every hour. If the load is sufficiently high enough, some queued jobs may be dropped.' In a public repository, scheduled workflows are disabled automatically after 60 days with no repository activity.",
+   "source": "https://github.com/github/docs/blob/main/data/reusables/actions/schedule-delay.md ; https://github.com/github/docs/blob/main/content/actions/reference/workflows-and-actions/events-that-trigger-workflows.md"
+  },
+  {
+   "fact": "FIRST-HAND (GitHub REST API, public data for this repo). The 'Daily Price Scrape' workflow (cron '0 8 * * *', unchanged in local history since 2026-08-05) logged 162 scheduled runs from 2026-04-14 to 2026-09-23, and all 162 concluded 'success'. One calendar day, 2026-05-26, had no scheduled run; the cron then in force is outside the shallow local history. In the verified window (2026-08-05 to 2026-09-23, n=50), runs were created 0.40 to 11.88 hours after 08:00 UTC (median 4.12 h), and 5 runs were more than 6 h late. Each run took 9.1–9.5 min.",
+   "source": "https://api.github.com/repos/allforyou-bit/canadian-tool-deals/actions/runs?event=schedule ; /home/user/canadian-tool-deals/archive/tool-deals/.github-workflows/scrape.yml"
+  },
+  {
+   "fact": "FIRST-HAND (repo): the same automation stayed 'green' every day while producing nothing of value. ARCHIVED.md says the scrapers 'had returned 0 live prices in every daily snapshot since 2026-08-08'. That is about 46 successful daily runs with no business output, and nobody was alerted.",
+   "source": "/home/user/canadian-tool-deals/archive/tool-deals/ARCHIVED.md ; /home/user/canadian-tool-deals/business/research/dossiers/cand_content.json (verification)"
+  },
+  {
+   "fact": "OFFICIAL (Cloudflare docs repo). Workers Free: 100,000 requests/day; 10 ms CPU per request (time 'waiting on network requests (such as fetch() calls…)' does not count, so a Worker that proxies Claude API calls fits); 50 subrequests per invocation; 5 Cron Triggers per account. Workers Paid: US$5/month with 10M requests included; CPU up to 5 min; Cron CPU 30 s (<1 h interval) or 15 min (≥1 h); Cron wall-clock up to 15 min. Requests to static assets are free and unlimited. Pages Free: 500 builds/month.",
+   "source": "https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/workers/platform/limits.mdx ; https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/workers/platform/pricing.mdx ; https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/pages/platform/limits.mdx"
+  },
+  {
+   "fact": "OFFICIAL (Cloudflare docs repo). D1 Free: 5M rows read/day, 100,000 rows written/day, 5 GB total, 500 MB per database, 10 databases, 7-day Time Travel (point-in-time restore). D1 on Workers Paid: 25B rows read and 50M rows written per month included, 10 GB per database, 30-day Time Travel. KV Free: 100,000 reads/day, 1,000 writes/day, 1 GB; 'If you exceed any one of these limits, further operations of that type will fail with an error.' Workers AI: 10,000 Neurons/day free, then US$0.011 per 1,000 Neurons.",
+   "source": "https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/partials/workers/d1-pricing.mdx ; .../src/content/docs/d1/platform/limits.mdx ; .../src/content/partials/workers/kv_pricing.mdx ; .../src/content/docs/workers-ai/platform/pricing.mdx"
+  },
+  {
+   "fact": "OFFICIAL (Anthropic claude-api skill, cached 2026-06-24). Price per 1M tokens, input/output: Opus 5 $5/$25, Sonnet 5 $2/$10, Haiku 4.5 $1/$5. A cache write costs about 1.25× input (5-min TTL) and a cache read about 0.1×. The Batch API costs 50% less. The minimum cacheable prefix is 512 tokens on Opus 5, 1,024 on Sonnet 5 and 4,096 on Haiku 4.5, so a 3,000-token system prompt 'silently won't' cache on Haiku 4.5.",
+   "source": "claude-api skill SKILL.md model table; shared/prompt-caching.md lines 131-140 (local bundled skill)"
+  },
+  {
+   "fact": "ESTIMATE, cost per chatbot conversation. ASSUMPTIONS: 6 turns; 3,000-token system prompt; about 1,500 tokens of history per turn; 300 output tokens per turn. Haiku 4.5 (no cache, prefix below 4,096): 6 × (4,500×$1/M + 300×$5/M) = 6 × $0.006 = US$0.036. Sonnet 5 (cached): 6 × (3,000×0.1×$2/M + 1,500×$2/M + 300×$10/M) + 3,000×1.25×$2/M = 6 × $0.0066 + $0.0075 = US$0.047. Opus 5 (cached): 6 × $0.0165 + $0.01875 = US$0.118. At 3,000 conversations/month that is about $108, $141 and $353.",
+   "source": "ESTIMATE from official prices above"
+  },
+  {
+   "fact": "ESTIMATE, freemium cost trap. Subscribers needed at C$9.99/month via Stripe Canada: 9.99 − (0.029×9.99 + 0.30) − 0.007×9.99 = C$9.33 net, and 5,000 / 9.33 ≈ 536. At 3% free-to-paid conversion (upper end of the sourced 0.8–3% range): 536 / 0.03 ≈ 17,867 users, of whom 17,331 are free. ASSUMING 3 conversations/month per free user and 20 per paid user: 17,331×3 + 536×20 ≈ 62,712 conversations/month. Inference cost: Haiku ≈ US$2,258, Sonnet 5 ≈ $2,954, Opus 5 ≈ $7,384 per month. Paid users alone cost $386 / $505 / $1,262. So free-tier usage must be capped hard.",
+   "source": "ESTIMATE; fees from /home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json (Stripe 2.9%+C$0.30 secondary; Billing 0.7% secondary)"
+  },
+  {
+   "fact": "SECONDARY: Claude Pro costs US$20/month and Max US$100 or US$200/month. A secondary page dated 2026-06-12 claims that from 2026-06-15, 'claude -p', Agent SDK and Claude Code GitHub Action usage draws from a separate credit pool billed at API rates. LOW CREDIBILITY: the same page prices Opus 4.6 at $15/$75, which contradicts the official $5/$25.",
+   "source": "https://github.com/centminmod/my-claude-code-setup/blob/main/README.md ; https://github.com/mixpeek/amux/blob/main/site/guides/anthropic-agentic-billing-june-2026/index.html"
+  },
+  {
+   "fact": "OFFICIAL (Chrome docs repo; the doc was last updated 2022-01-18). The Chrome Web Store Publish API can create, update and publish items programmatically. Developers 'are required to enable 2-Step Verification'. The Store Listing and Privacy practices tabs must be filled in the dashboard before a new item is published. Every publish 'will undergo a review process'. A paid (trader) listing shows the seller's legal name, phone number and physical address, and a policy suspension may reach 'related Google services'.",
+   "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/using_webstore_api/index.md ; /home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json (verification)"
+  },
+  {
+   "fact": "SECONDARY (several 2026 repos, one says 'Confirmed live in Play Console 2026-07-23'). A Google Play personal developer account created after 2023-11-13 must run a closed test 'with a minimum of 12 testers who have been opted-in for at least the last 14 days continuously' before it can apply for production access. On a personal account, 'your legal (personal) name and address will be publicly visible on Google Play'.",
+   "source": "https://github.com/katyanotkin/verbboard/blob/main/GOOGLE_PLAY_CHECKLIST.md ; https://github.com/futuredapp/Engineering-Handbook/blob/main/docs/teams/android/release/00_google_play_account.md"
+  },
+  {
+   "fact": "Payments need human KYC, and cash arrives late. Stripe 'typically schedules your initial payout for 7-14 days after' the first payment (Canada: 7 days; secondary doc mirror). Polar (official docs): 5% + 50¢; transaction fees are not returned on refunds; Polar may refund at its discretion for up to 60 days and may suspend an account whose chargeback rate approaches about 0.7%. Stripe Managed Payments adds 3.5% (secondary capture) and does not accept professional-service or consulting offers.",
+   "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json (verification: ruiyuwg/anytext Stripe mirror; polarsource/polar fees.mdx; brianbolze/truffle Stripe capture)"
+  },
+  {
+   "fact": "SEARCH-SUMMARY evidence. Google's scaled-content-abuse policy is 'method-agnostic': it targets many pages made mainly to manipulate rankings, whether AI-written or not. The March 2026 core update reportedly cut traffic 50–80% at sites publishing 'hundreds or thousands of AI-generated pages without editorial oversight'. A separate 2026-06-08 design doc says 60–90% for near-identical keyword-swap pages.",
+   "source": "/home/user/canadian-tool-deals/business/research/evidence-corpus.md S103 ; https://github.com/trylinky/linky/blob/main/docs/superpowers/specs/2026-06-08-seo-geo-foundation-design.md"
+  },
+  {
+   "fact": "OFFICIAL statute text (from the repo's compliance dossier). Under CASL, a commercial email needs consent. SOR/2013-221 s.3(b) exempts a message 'sent in response to a request, inquiry or complaint', so AI-drafted support replies are allowed. Cold consumer email is not. The sender bears the onus of proving consent (s.13). Maximum penalty: $1M for an individual (s.20(4)). Under PIPEDA, chat transcripts are personal information: breaches with a real risk of significant harm must be reported, and a breach record kept for 24 months.",
+   "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_compliance.json (justicecanada/laws-lois-xml E-1.6, SOR-2013-221, P-8.6)"
+  },
+  {
+   "fact": "OFFICIAL (IRPA, consolidated to 2026-03-31). s.91(1): 'no person shall knowingly, directly or indirectly, represent or advise a person for consideration — or offer to do so' in connection with an application under the Act. Exempt: lawyers, notaries, paralegals and CICC members. s.91(9) penalties: up to $200,000 and/or 2 years on indictment; up to $40,000 and/or 6 months on summary conviction. This corrects the corpus's secondary '$50,000–$100,000' figure. Whether a paid AI chatbot counts as advising 'indirectly' is my interpretation and untested.",
+   "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/I-2.5.xml"
+  },
+  {
+   "fact": "BASE RATES (secondary, from the repo's SaaS dossier). TrustMRR (n=5,079, Stripe-verified, opt-in so biased upward): median MRR in year 0 is $148/month, and 0.9% are 'breaking out'. Among 28 survivors, median time to $1K MRR was 8 months. More than 54% of 937 Indie Hackers products earned $0 (2022). The fast launches (AudioPen, TypingMind) came from founders who already had audiences. Freemius 2025: 57% of founders running ads wait 7+ months for a return or cannot tell, and 47% call communities and partnerships their most dependable channel.",
+   "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json (pfurini/furiai-skills capture.md, cac.md)"
+  },
+  {
+   "fact": "FIRST-HAND: the repo allforyou-bit/canadian-tool-deals is PUBLIC (GitHub API 'private': false). The owner's plans are readable without logging in, including business/03-EI-결정규칙.md, which returned HTTP 200 from raw.githubusercontent.com, and the research on their employment-insurance situation.",
+   "source": "https://api.github.com/repos/allforyou-bit/canadian-tool-deals ; raw.githubusercontent.com fetch in this session"
+  },
+  {
+   "fact": "[prior knowledge, unverified, pre-2026-06] Apple's Developer Program costs US$99/year and every app and update goes through App Review. The Anthropic Console lets an organization set monthly spend limits, and new API accounts start on low rate-limit tiers. Anthropic's usage policy adds extra requirements for consumer-facing legal, medical or financial advice. Gmail consumer accounts have daily sending caps.",
+   "source": "[prior knowledge, unverified, pre-2026-06]"
+  }
+ ],
+ "conclusions": [
+  "1. The AI can run the build, maintain and report cycle every week. It cannot run the money, identity, platform or legal cycle, and the part that drives revenue (distribution: getting customers to show up) needs the owner or paid platforms. Being fully operable by the AI does not change demand. C$5,000/month is about 34× the TrustMRR year-0 median (5,000 / 148 = 33.8, currency ignored). Hitting it by Dec 2026 – Jan 2027 is still a low-probability outcome even if the AI operates flawlessly.",
+  "2. Architecture I recommend, based on the observed constraints. A Routine is the 'brain': it edits the repo, opens PRs, drafts Gmail replies and updates a private dashboard artifact. GitHub Actions are the 'hands', holding secrets: they deploy with wrangler, pull Stripe and Cloudflare metrics into repo JSON, and run Claude API batch jobs. A Cloudflare Worker is the product runtime and runs the time-critical crons. This split is forced by the evidence: the cloud environment here blocks api.stripe.com and api.cloudflare.com; routines cannot approve pending actions; and GitHub cron started up to 11.9 h late in this repo.",
+  "3. Recurring tasks the AI can automate (with guardrails). (a) Bug fixes and features: the Routine opens a PR, CI tests must pass, and auto-merge applies only to allowed paths. The owner cannot review code, so tests, rollback and D1 Time Travel are the safety net. (b) Content and SEO pages: at low volume with a quality gate. Mass generation invites scaled-content-abuse penalties. (c) Analytics digest: an Action pulls metrics, the Routine summarizes them into a Gmail draft or artifact. (d) Support: first-line answers come instantly from the in-product Claude bot; email replies are drafted by the Routine within hours (CASL-exempt as responses to inquiries). (e) Price and copy experiments: the AI proposes a PR to a config file, and an Action applies it only after the owner merges. (f) Dependency and secret scans.",
+  "4. Tasks that stay with the human. KYC and bank accounts: Stripe or Polar, Cloudflare, domain, Anthropic API billing, app-store developer accounts. Security: 2FA (required for Chrome Web Store publishing) and entering or rotating secrets (never through chat). Money: refunds beyond policy, disputes and chargebacks, and GST/HST registration at $30k, T2125 and CPP. Legal sign-off: privacy policy (PIPEDA accountability), terms, CASL consent records. Platform appeals: Chrome Web Store rejections, Google Play production access, processor holds. Posting from personal or community accounts. Keeping the automation alive: re-enabling routines after a paused subscription or lost GitHub connection, and allowlisting hosts in the environment's network settings.",
+  "5. Channel choice for AI operability. A web app or PWA on Cloudflare has the fewest human gates. A Chrome extension adds $5 registration, trader address disclosure and a review on every publish, though updates can be pushed by API. A native Android app adds the 12-tester, 14-day closed test (secondary) and a public personal address, which probably breaks the 10-hour setup budget and the 2–3 month window. iOS was not researched ([prior knowledge] $99/yr plus App Review). A game or other ad-funded product needs large traffic; RPM data was not found.",
+  "6. ESTIMATE, monthly running costs. Fixed: a Claude subscription for Routines, US$20 (Pro, 5 runs/day, secondary) or US$100 (Max, 15/day); Cloudflare US$0–5; GitHub US$0 (a private repo's 2,000 free minutes suffice: a daily 10-min job is 10 × 30 = 300 min); a domain at roughly $1/month [prior knowledge]. Total ≈ US$21–106/month. Variable: payment fees ≈ 6.6% on C$9.99 (Stripe plus Billing: 0.66 / 9.99) or ≈ 10% via a merchant of record (Polar: 0.05×9.99 + 0.50 = C$1.00); Claude API ≈ US$0.036–0.118 per chatbot conversation (Haiku to Opus). At launch scale (3,000 conversations/month) that is about US$108–353. At target scale, uncapped free-tier chat alone could cost about US$2,300/month on Haiku. The AI's own operating work (digests, content) is trivial: a Haiku digest at 20k input + 1k output tokens is about $0.025/day, or $0.75/month, and half that on Batch.",
+  "7. Routine capacity fits a lean plan. Example: 1 daily ops run (digest plus support drafts), 1 daily build/fix run, 2 content runs/week, 1 weekly experiment review, 1 weekly security sweep ≈ 2.6 runs/day. That fits Pro's 5/day cap (secondary figure) with room for retries. But runs are hourly at best and stateless, so state must live in the repo, D1 or KV, and every job must be idempotent (Routines have double-fire bugs in the CHANGELOG).",
+  "8. Monitoring must check outcomes, not job status. This repo's scraper stayed green for 162 of 162 runs while producing 0 prices for about 46 days. Every automated job needs an assertion such as 'new rows > 0', 'revenue feed updated < 26 h ago' or 'API spend < cap', with the alert as a Gmail draft or email. Time-critical checks belong in Worker crons, not GitHub cron.",
+  "9. ESTIMATE of owner time. One-time setup: about 6–10 h for a web app (Cloudflare + GitHub 1–1.5 h; Stripe or Polar KYC 1–2 h plus waiting; Anthropic key, spend cap and Worker secret 0.5–1 h; domain 0.5 h; Gmail support label 0.5 h; legal review 1–2 h; business registration 1 h+). Weekly: about 1.5–3 h (digest review 25 min; ASSUMING 50 support drafts × 1 min = 50 min; PR and pricing approvals 15 min; money ops 15–30 min; occasional platform or appeal spikes). If the owner also posts to communities or social media, the total exceeds 3 h/week. Without that, distribution depends on slow SEO or paid ads (secondary: 57% wait 7+ months for ad returns).",
+  "10. Risk controls the AI can build and the owner must switch on. Turnstile plus per-IP limits on the chatbot endpoint; an Anthropic spend cap [prior knowledge]; scoped, read-only-where-possible API tokens stored as GitHub or Cloudflare secrets; D1 backups via Time Travel. Make the repo private (owner decision): it currently exposes the owner's business plans and EI research publicly. Avoid consultation-bot niches in regulated advice: paid immigration advice risks IRPA s.91 (up to $200k / 2 years); legal, medical and financial advice have similar gates."
+ ],
+ "unknowns": [
+  "Official Routine limits: the daily run caps (5/15/25), the hourly-cap rules for webhooks and whether retries or 'Run now' count against the cap come only from secondary sources. The official docs were not reachable. How much of the subscription's session or weekly usage a typical coding run consumes: not found.",
+  "The owner's current Claude plan and whether they will pay US$20 vs US$100/month: not known.",
+  "Whether the reported 2026-06-15 change (programmatic usage billed from a separate credit pool at API rates) is real: only one low-credibility secondary source.",
+  "Anthropic API new-account rate-limit tiers, deposit requirements and spend-cap mechanics: prior knowledge only, not verified.",
+  "Cloudflare's official statement that the Free plan allows commercial use: not found (secondary only). Cloudflare email-sending limits: docs path returned 404. The transactional email provider (receipts, password resets) and its limits: not researched.",
+  "Reliability data for Routines (missed or duplicate fire rates): none found. Only the CHANGELOG bug fixes and this repo's GitHub Actions history (n=162) are evidence.",
+  "Apple App Store 2026 fees, commission and review times; Google Play official policy page (secondary only); web-game ad RPMs and AdSense approval rules: not researched or verified.",
+  "Stripe Canada Billing fee (0.7%), dispute fee, restricted-key scopes and Stripe Tax for Canada: secondary or not verified. The USD→CAD exchange rate for converting API costs: not sourced.",
+  "Whether IRPA s.91 applies to advice produced by an AI chatbot the operator charges for: legal interpretation, untested. Anthropic usage-policy requirements for consumer legal, medical or financial advice: prior knowledge only.",
+  "Demand-side inputs: which niche, the free-to-paid conversion for this product, conversations per user, churn, SEO timelines for a new domain: not found. Every revenue figure above depends on unsourced assumptions.",
+  "The owner's English level (affects approving support drafts and legal copy) and savings runway: unknown.",
+  "Whether the scheduled workflow gap on 2026-05-26 was a dropped cron or a different schedule: the shallow git history does not cover it."
+ ]
+}

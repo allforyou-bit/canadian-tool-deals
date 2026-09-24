@@ -1,0 +1,286 @@
+{
+ "dossier": {
+  "candidate": "Chrome extension freemium (AI-powered or utility), built and operated by Claude via GitHub + Routines + GitHub Actions; owner does only the account and ID steps",
+  "summary": "VERDICT: The AI can build nearly all of this and run most of it, and it costs little. But the evidence says it will almost certainly NOT average CAD 5,000/month by Dec 2026–Jan 2027. The realistic month-3 result is USD 0–300 MRR (monthly recurring revenue). The limit is not building or operating; it is getting users. The one channel that needs no owner work (Chrome Web Store search plus Google search landing on the store listing) rewards weekly active users, install velocity and ratings, so a new extension starts from zero with no momentum. Treat it as a cheap, low-touch long-tail asset (about 1–1.5 owner hours/week after setup), not the income plan.\n\nWHAT THIS DOSSIER ADDS TO cand_saas.json:\n(1) Policy on AI and remote code, from the official CWS docs repo, which was archived in Dec 2023, so these policies may be out of date. Calling an LLM API (Claude) from an extension is allowed as remote DATA. MV3 bans remote CODE. The rule also bans \"building an interpreter to run complex commands fetched from a remote source, even if those commands are fetched as data\". That puts \"AI agent\" extensions that carry out LLM-returned action plans at risk. The API key must sit on a server (a Cloudflare Worker proxy), never in the extension. Page content sent to an LLM is a transfer to a third party. It must be needed for the single purpose, named in the privacy policy, and certified in the Privacy tab.\n(2) Which categories make money (secondary 2026 sources). Subscriptions dominate the high-revenue tier: SEO/marketing, developer tools, AI, and workflow tools inside a platform (GMass in Gmail, Closet Tools for Poshmark, SuperX/BlackMagic for X). Generic utilities need millions of users (GoFullPage about $10k MRR on about 4M users; Weather extension about $2.5k MRR at 200k users). About 94% of extensions are free. The average is about $42 per 1,000 monthly active users (MAU).\n(3) Conversion. Secondary sources say 1–3% of ACTIVE users (a survey average of 2.8%). One real 2026 portfolio of 5 extensions converted 0.8% and made $60/month at month 3 and $180/month at month 6.\n(4) Store search. The official doc says ranking uses ratings plus usage (downloads vs uninstalls over time) and listing metadata. Secondary sources say most installs come from Google search landing on the store listing, and that spam clusters game in-store search.\n(5) What the owner must touch after launch. Updates can be fully automated: the CWS Publish API v2 supports upload, publish and staged rollout, driven from GitHub Actions. New items, the Privacy tab, replies to reviews, stats and policy appeals are dashboard or owner tasks.\n(6) Users needed. ESTIMATE about 575 payers at USD 9.99 (about 29k weekly active users at 2% conversion), or about 250 payers at USD 19 (about 8–30k actives), or about 81 new lifetime sales at USD 49 every month.",
+  "best_variant": "ONE distinct single-purpose prosumer extension that works inside one web app where users already pay for tools. The policy allows several extensions only if their functionality differs, and the AI should add a second one only if data supports it.\n- Permissions: narrow host permission (one domain or activeTab) for faster review. No Gmail restricted scopes: secondary sources say they need a CASA audit of 4–8 weeks and about US$1.5k/yr.\n- Freemium from day 1. Adding a paywall later reportedly draws 1-star reviews.\n- Price: USD 9.99/month or USD 79/year, plus an optional USD 49 lifetime unlock for utility-type buyers.\n- Billing: Polar Starter, which acts as merchant of record (MoR) so it handles VAT/sales tax, and issues license keys that are revoked automatically on cancel.\n- AI: Claude Haiku 4.5 through a Cloudflare Worker, for paid users only. The free tier gets a hard cap (for example 10 AI actions/month) or uses Chrome's on-device Prompt API, whose explainer names this free-on-device/paid-cloud hybrid.\n- Distribution: the same package goes to the Microsoft Edge Add-ons store; listings are localized through _locales (EN, KO, JA, ES, and others).\n- Example niche (ILLUSTRATIVE, NOT VALIDATED): an AI listing/SEO assistant for marketplace sellers or creators, next to the documented earners Closet Tools (sellers, $30/month) and SuperX/BlackMagic (X creators). Both categories already have funded competitors, and platforms keep adding built-in AI. Avoid a generic AI sidebar/summarizer/rewriter: it is crowded and Gemini in Chrome and AI browsers compete directly [prior knowledge, unverified, pre-2026-06].\n- The niche MUST be validated in week 1 with keyword and competitor data. That could not be done here, because chromewebstore.google.com is blocked from this sandbox.",
+  "unit_economics": "All ESTIMATE. FX assumption: 1 USD = 1.38 CAD [prior knowledge, unverified, pre-2026-06], so CAD 5,000 net = 5,000 / 1.38 = USD 3,623/month.\n\nFEE MODEL (Polar Starter, official docs): 5% + $0.50, plus 1.5% for non-US cards (applied to every sale to be conservative), plus about 1.25% payout cost (0.25%, plus up to 1% cross-border; the $0.25/payout and $2/month are ignored). Total about 7.75% + $0.50 per transaction.\n\nAI COST (Haiku 4.5 at $1/$5 per million tokens): a 1,500-token input and 400-token output call costs 0.0015 + 0.0020 = $0.0035.\n\nA) Utility, USD 4.99/month, no AI:\n- Fee: 0.0775 × 4.99 + 0.50 = 0.887. Net USD 4.10.\n- Payers: 3,623 / 4.10 = 883.\n- Active users needed: 29,400 at 3%, 44,150 at 2%, 88,300 at 1%, 110,000 at 0.8% (the real portfolio rate).\n\nB) AI extension, USD 9.99/month:\n- Fee: 0.0775 × 9.99 + 0.50 = 1.274.\n- AI per payer: 200 calls × 0.0035 = 0.70.\n- Free-tier AI burden per payer at 2% conversion: 49 free users × 10 calls × 0.0035 = 1.715.\n- Net: 9.99 − 1.274 − 0.70 − 1.715 = USD 6.30. Payers: 3,623 / 6.30 = 575. Active users: 575 / 0.02 = 28,750.\n- At 1% conversion: free burden = 99 × 10 × 0.0035 = 3.465, net = 4.55, payers = 796, active users = 79,600.\n- If the free tier uses on-device Chrome AI: net = 8.02, payers = 452 (22,600 active at 2%).\n- API bill at the 2% target: 575 × 0.70 + 28,175 × 10 × 0.0035 = 402 + 986 = about USD 1,390/month. This is paid before revenue if free users arrive first.\n\nC) Prosumer, USD 19/month:\n- Fee: 0.0775 × 19 + 0.50 = 1.97. AI: 400 calls × 0.0035 = 1.40. Free burden at 3%: 32.3 × 10 × 0.0035 = 1.13.\n- Net: 19 − 1.97 − 1.40 − 1.13 = USD 14.50. Payers: 250. Active users: 8,333 at 3%.\n- At 1%: net 12.16, payers 298, active users 29,800.\n\nD) Lifetime, USD 49:\n- Fee: 0.0775 × 49 + 0.50 = 4.30. Net 44.70.\n- 3,623 / 44.70 = 81 NEW sales every month, with no recurring base. That is about 4,050 new active users/month at 2%.\n\nHOSTING: Cloudflare Workers Free covers 100k requests/day. Scenario B is about (28,175 × 10 + 575 × 200) / 30 = about 13k requests/day, so it fits the free plan (Paid is $5/month minimum).\n\nCROSS-CHECK: the secondary average of $42 per 1,000 MAU implies 3,623 / 42 × 1,000 = about 86,000 MAU for an average extension.\n\nMARGIN: about 63% (B, with the free-tier API burden) to about 76% (C), before Claude Routines subscription cost, which was not verified.",
+  "distribution_plan": "Channels that need NO owner work (all run by the AI):\n(1) Chrome Web Store search. Put an exact-match keyword in the title and in the 132-character summary, use 5 real screenshots, and localize the name and summary through _locales so updates ship them by API. Ask for a review in-product right after a success moment; incentivized reviews are banned. The official ranking inputs are ratings plus downloads vs uninstalls over time and listing metadata. Secondary sources rank weekly active users (about 40%) and install velocity (about 25%) highest, so growth compounds slowly from zero.\n(2) Google search landing on the CWS listing. One founder reports 70–80% of installs this way (secondary). New listings and sites usually take months to rank [prior knowledge, unverified, pre-2026-06].\n(3) The same package on Microsoft Edge Add-ons, and optionally Firefox AMO. Registration and review steps: [prior knowledge, unverified, pre-2026-06].\n(4) A landing site with a small number of genuinely useful how-to pages. NOT mass AI pages: Google's scaled-content-abuse enforcement caused 50–80% traffic drops in March 2026 (corpus S103).\n\nOwner-assisted, one-time only, inside the 10-hour setup: optionally one Product Hunt launch and one or two Reddit or community posts that the AI drafts and the owner pastes. A low-credibility benchmark: outside the Product Hunt top 10, a launch brings under 500 visitors and under 20 signups.\n\nPaid ads are possible but need budget. Freemius (secondary): 57% of founders running ads wait 7+ months for return on ad spend or cannot tell whether ads work.\n\nOWNER HOURS: ESTIMATE about 1–1.5 h/week after launch (review replies, support and dispute escalations, stats export), plus about 1.5 h each time a NEW extension is listed. None of these hours drives growth. Growth depends on organic search alone, which is why the 90-day odds are low.",
+  "timeline": "ESTIMATE, with dates from today (2026-09-24):\n\nBUILD, Sep 28 – Oct 9. The AI builds the MV3 extension, Worker, site, assets and CI in about 3–7 days of sessions while the owner does the setup (about 10 h). ExtPay's README quotes payment setup at under an hour; Polar will take longer (ID checks).\n\nLAUNCH, about Oct 9 submission. Go-live about Oct 16–30. The official doc (2021) says 90% of reviews finish within 3 days. 2026 secondary sources advise budgeting 1–3 weeks, with longer review for new developers, new items and broad host permissions. A new item is indexed in store search within \"a few hours\" of publishing (official).\n\nFIRST DOLLAR, about November 2026. A first conversion is plausible 1–4 weeks after going live. Polar allows manual withdrawals. Stripe typically schedules the first payout 7–14 days after the first payment (Stripe doc mirror, via cand_saas verification).\n\nCAD 5,000/MONTH: NOT expected by Dec 2026 – Jan 2027. Base rates:\n- A 5-extension portfolio made $60/month at month 3 and $180/month at month 6 (secondary, May 2026).\n- TrustMRR year-0 median is $148 MRR. Among survivors, the median time to $1K MRR is 8 months.\n- SuperX reached $1K MRR, then $14K MRR after about 10 months of FULL-TIME founder work, including building in public on X.\n- Easy Folders reached $3.7K MRR at 6 months; Data Fetcher reached $5K at about 16 months.\nExpected month-3 MRR: USD 0–300. A plausible 12-month range is USD 0–2,000 MRR, and it is highly skewed: most outcomes are near zero and a few break out.",
+  "owner_one_time_tasks": [
+   "Create a dedicated Google account for publishing, not personal Gmail. The account email cannot be changed, and a suspension can spread to related Google services. Enable 2-Step Verification, which is required before publishing or updating (0.5 h).",
+   "Register as a Chrome Web Store developer: pay US$5 (secondary), verify the contact email, set the publisher name, and make the Trader declaration with a physical address. The address is required for items that sell features or subscriptions, and trader status shows name, phone and address publicly. Decide whether to use a mailbox address; its cost was not found (1 h).",
+   "Enable the Chrome Web Store API in Google Cloud and create an OAuth Desktop client. Run `npx chrome-webstore-upload-keys` to get the refresh token. Put CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN and publisherId into GitHub Actions secrets. The guide says about 10 minutes. With a personal Gmail the OAuth app may sit in 'Testing', where refresh tokens can expire after 7 days; set it to production [prior knowledge, unverified, pre-2026-06] (0.5–1 h).",
+   "Open a Polar account (identity check and bank payout via Stripe). Create the products (monthly, annual, lifetime) with the License Keys benefit and give the AI an API token (1 h).",
+   "In the Anthropic Console, create an API key with a hard monthly spend limit (for example US$50–100 at start). Open a Cloudflare account, buy the domain, and create a Workers deploy API token. Add all of these to GitHub secrets (1 h).",
+   "Set up a dedicated support email address and, if possible, connect it to Claude's Gmail connector so the AI can triage and draft replies (0.5 h).",
+   "First CWS item: upload the AI-built zip, paste the AI-written listing, upload the images, and fill in the Privacy tab (single purpose, a justification for each permission, 'No remote code', data certifications, privacy-policy URL). Choose regions and submit (1.5 h).",
+   "Register with Microsoft Partner Center for Edge Add-ons and make the first submission [prior knowledge, unverified, pre-2026-06: free registration] (1 h).",
+   "Read and approve the privacy policy, terms of sale, refund policy and the Limited Use statement drafted by the AI (0.5 h).",
+   "Optional: post one Product Hunt launch and 1–2 community posts drafted by the AI (1 h). Optional: a 30-minute accountant question on GST/HST treatment of sales through an MoR (see risks)."
+  ],
+  "owner_weekly_tasks": [
+   "Paste AI-drafted replies to Chrome Web Store user reviews in the dashboard. No API for reviews was found [prior knowledge, unverified, pre-2026-06] (15–20 min).",
+   "Handle escalations the AI flags: refund approvals, dispute evidence (Polar charges $15 per dispute), and any CWS policy or rejection email that needs an appeal from the account owner (20–30 min).",
+   "Download the CWS stats CSV (installs, uninstalls, impressions, weekly users) into the repo if GA4 or telemetry automation is not enough (10 min).",
+   "Skim the AI's weekly report and approve spend-limit changes or a proposed new extension (15 min).",
+   "When a NEW extension is approved, list it through the dashboard: listing and Privacy tab, about 1.5 h each time. Monthly: export Polar payouts for bookkeeping (15 min)."
+  ],
+  "ai_build_tasks": [
+   "Niche validation memo. Constraint: this sandbox cannot reach chromewebstore.google.com. Any scraping must run from GitHub Actions, and Google's terms on automated access were not verified here.",
+   "MV3 extension in TypeScript with narrow permissions (activeTab or one host), no remote code, and no obfuscation (minified only). Include i18n _locales, a feature/usage gate, a paywall prompt shown mid-task, and license-key entry and validation through the Worker.",
+   "Cloudflare Worker: a Claude Haiku 4.5 proxy with per-license and per-install quotas (KV/D1), prompt caching, spend guardrails, Polar license validation, and a disclosed anonymous usage-telemetry endpoint.",
+   "Landing site: pricing, terms of sale and refund policy (required when selling), a privacy policy naming Anthropic, Cloudflare and Polar as data recipients, the CWS Limited Use statement, and docs.",
+   "Listing assets: 128px icon, five 1280×800 screenshots captured with Puppeteer, 440×280 promo tile, summary of 132 characters or less, description without keyword spam, per-permission justifications and a single-purpose statement.",
+   "GitHub Actions: build, run Puppeteer end-to-end tests, zip, then upload and publish through CWS API v2 with staged rollout. Also deploy the Worker with wrangler, publish to Edge, and run a nightly metrics collector (Polar sales API, Worker telemetry, CWS item status) that commits JSON for the Routines to read."
+  ],
+  "ai_recurring_tasks": [
+   "Weekly Routine: read the metrics JSON (installs, weekly users, conversion, churn, API cost). Ship one experiment (paywall copy, free-tier cap, localized summary, onboarding) as a version bump with staged rollout through Actions.",
+   "Scheduled end-to-end tests to catch breakage from host-site page changes or Chrome releases. Fix and release through the API.",
+   "Draft replies to support email and to reviews; triage CWS policy emails if the Gmail connector is available. Keep the privacy policy in step with any change in data flows before shipping it.",
+   "Monitor Anthropic spend against the limit and tune quotas. Watch for abuse and so-called denial-of-wallet traffic (floods of paid API calls).",
+   "Monthly finance summary: revenue, fees, API cost and margin. Track the GST/HST small-supplier threshold (C$30k over 4 consecutive quarters).",
+   "Quarterly: decide whether a second extension with clearly DIFFERENT functionality is justified. Duplicate-functionality extensions are banned."
+  ],
+  "money_needed_cad": "ESTIMATE C$50–400 for the first 3 months, excluding the Claude subscription for Routines (not verified) and living costs.\n- CWS fee: US$5, about C$7.\n- Domain: about C$15–30/yr [prior knowledge, unverified, pre-2026-06].\n- Fixed fees: $0 for Cloudflare Workers Free, Polar Starter and Edge.\n- Anthropic API: prepaid, with a spend cap of about US$25–100/month during ramp. It grows with free users: at the Scenario B scale it would be about USD 1,390/month, so free-tier caps or on-device AI are essential.\n- Optional mailbox address to avoid publishing the home address: cost not found.",
+  "facts": [
+   {
+    "fact": "Official MV3 policy (dated 2022-11-01): the full functionality must be discernible from the submitted code. External resources may be loaded as data but 'must not contain any logic'. Violations include eval of remote strings and 'Building an interpreter to run complex commands fetched from a remote source, even if those commands are fetched as data'. Allowed: syncing account data, remote config for A/B tests where the logic ships in the package, and server-side operations on data.",
+    "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/program-policies/mv3-requirements/index.md"
+   },
+   {
+    "fact": "The GoogleChrome/developer.chrome.com repo is ARCHIVED ('As of 7 November, 2023, we stopped merging new pull requests'; last commit 2023-12-05). Every official CWS policy cited here may have changed since then.",
+    "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/README.md"
+   },
+   {
+    "fact": "MV3 overview: 'Remotely hosted code is no longer allowed; an extension can only execute JavaScript that is included within its package'; remote configuration files are recommended instead. The FAQ says extensions can make cross-origin requests and 'call remote APIs directly', so calling an LLM API for data is allowed.",
+    "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/extensions/mv3/intro/mv3-overview/index.md ; https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/extensions/mv3/faq/index.md"
+   },
+   {
+    "fact": "The Privacy practices tab needs: a single-purpose description, a justification for each permission, a remote-code declaration ('Extensions that call remote code and do not declare and justify it... will be rejected'), and data-use certifications consistent with the privacy policy (updated 2023-10-05).",
+    "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/cws-dashboard-privacy/index.md"
+   },
+   {
+    "fact": "Limited Use: collecting browsing activity is prohibited except for a prominently described user-facing feature. User data may go to third parties only when 'necessary to providing or improving your single purpose'. Selling or transferring it for ads or to data brokers is prohibited. An affirmative Limited Use statement must appear on the extension's website.",
+    "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/program-policies/limited-use/index.md"
+   },
+   {
+    "fact": "The privacy policy must disclose collection, use and sharing, and 'All parties the user data will be shared with'. The User Data FAQ lists website content, form data, personal communications and user-generated content as personal or sensitive data. Such data must be encrypted in transit (HTTPS) and at rest. If the data use is not closely related to the described functionality, a prominent in-UI disclosure plus consent is required.",
+    "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/program-policies/user-data-faq/index.md ; https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/program-policies/privacy/index.md"
+   },
+   {
+    "fact": "Accepting payment policy: if basic functionality requires payment, the description must say so. The developer must identify themself, not Google, as the seller and conspicuously post terms of sale, including refund policy.",
+    "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/program-policies/accepting-payment/index.md"
+   },
+   {
+    "fact": "A physical address is required only for 'items that offer functionality to purchase items, additional features, or subscriptions'. 2-Step Verification is required 'prior to publishing an extension or updating an existing extension'.",
+    "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/set-up-account/index.md ; https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/program-policies/two-step-verification/index.md"
+   },
+   {
+    "fact": "Official discovery doc (updated 2023-08-24): 'Ranking is performed by a heuristic that takes into account ratings from users as well as usage statistics, such as the number of downloads vs. uninstalls over time'. Search also uses listing metadata. New items take 'a few hours' to be indexed. Featured and Editors' Picks placement cannot be requested or bought. The Established Publisher badge takes 'at least a few months' for new developers. A Featured-badge nomination requires that 'core features must be accessible without additional credentials or payments' and English support.",
+    "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/discovery/index.md"
+   },
+   {
+    "fact": "Listing rules: the summary is 132 characters or fewer and is what users see in search results. Keyword spam is banned, for example repeating a keyword more than 5 times or listing brands or regions. Anonymous testimonials are banned. The spam policy bans duplicate-functionality extensions from the same or related developers and manipulating ratings or installs, including incentivized reviews.",
+    "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/best_listing/index.md ; https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/program-policies/listing-requirements/index.md ; https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/program-policies/spam-and-abuse/index.md"
+   },
+   {
+    "fact": "Publish API: REST endpoints create, update and publish items with an OAuth refresh token. 'Before you can publish a new item, you have to fill out the Store Listing and Privacy practices tabs in the Developer Dashboard'. Updates go through review.",
+    "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/using_webstore_api/index.md"
+   },
+   {
+    "fact": "The chrome-webstore-upload library documents CWS API v2 endpoints: upload to an existing item, publish (DEFAULT, TRUSTED_TESTERS or STAGED_PUBLISH), set the deploy percentage 'without triggering a re-review', and fetchStatus. It needs a publisherId. Key setup takes 'approximately 10 minutes'.",
+    "source": "https://raw.githubusercontent.com/fregante/chrome-webstore-upload/main/readme.md ; https://raw.githubusercontent.com/fregante/chrome-webstore-upload-keys/main/readme.md"
+   },
+   {
+    "fact": "CWS metrics give daily installs and uninstalls, impressions, and weekly users. The 'Users' stat 'only captures installations; it doesn't monitor whether users are active'. Reports export as CSV, and there is a GA4 opt-in.",
+    "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/metrics/index.md"
+   },
+   {
+    "fact": "The Prompt API explainer says it is 'experimentally available in Google Chrome and Microsoft Edge'. It names the hybrid approach 'free users of a website use on-device AI whereas paid users use a more powerful API-based model'. Some parameters work only in extension contexts.",
+    "source": "https://raw.githubusercontent.com/webmachinelearning/prompt-api/main/README.md"
+   },
+   {
+    "fact": "Cloudflare Workers Free: 100,000 requests/day and 10 ms CPU per invocation. Paid: $5/month minimum with 10M requests included and $0.30 per additional million. There are no egress charges.",
+    "source": "https://raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/workers/platform/pricing.mdx"
+   },
+   {
+    "fact": "Polar (official docs): the Starter plan charges 5% + 50¢, plus 1.5% for non-US cards, and $15 per dispute. Fees are not refunded, and Polar may refund at its discretion for up to 60 days. License Keys offer automatic revocation on cancelled subscriptions, activation limits and usage quotas 'without... hosting an API to validate them'.",
+    "source": "https://raw.githubusercontent.com/polarsource/polar/main/docs/merchant-of-record/fees.mdx ; https://raw.githubusercontent.com/polarsource/polar/main/docs/features/benefits/license-keys.mdx"
+   },
+   {
+    "fact": "Secondary (Zovo 2026: 138k extensions, 240+ developers): about 94% of extensions are fully free, and freemium makes up 3.2% of all extensions. The average subscription is about $3.99/month, average freemium conversion about 2.8%, and revenue about $42 per 1,000 MAU.",
+    "source": "https://raw.githubusercontent.com/minalGoel/micro-tools/main/project_planning/source_files/Chrome%20Extension%20Economics%20and%20Distribution%202024%E2%80%932026.md"
+   },
+   {
+    "fact": "Secondary (NicheCheck, Feb 22 2026), top-10% performers by category: SEO & Marketing $10k–50k/month at $15–30/month; Developer Tools $5k–30k at $6–8; AI-Powered $5k–25k at $10–20; Productivity $3k–15k at $3–7; Privacy $1k–8k. 'Recurring subscriptions dominate profitable extensions'. Freemium conversion is 1–3% of the active base.",
+    "source": "https://raw.githubusercontent.com/nnnkit/totem/main/plans/research/premium-monetization/raw/rs-recent-discourse.md"
+   },
+   {
+    "fact": "Secondary (chromegoldmine, Mar 26 2026): at 10k–50k users, subscription revenue is $500–7,500/month. A Reddit case had 50,000 users and $21K ARR at under 1% conversion. Paywalls shown mid-task convert 3–5× better than prompts at install. A retroactive paywall 'generates negative reviews' (ExtensionFast, Dec 2025).",
+    "source": "https://raw.githubusercontent.com/nnnkit/totem/main/plans/research/premium-monetization/raw/rs-recent-discourse.md"
+   },
+   {
+    "fact": "Secondary case studies: GoFullPage about $10k MRR on about 4M users (2021); Weather Extension about $2.5k MRR at 200k+ users; ChatGPT Writer about 700k users and $20k MRR; Closet Tools about $28–42k MRR at about $30/month; SuperX $1K MRR in May 2025, then $14K MRR after about 10 months of full-time solo work.",
+    "source": "https://raw.githubusercontent.com/minalGoel/micro-tools/main/project_planning/source_files/Chrome%20Extension%20Economics%20and%20Distribution%202024%E2%80%932026.md"
+   },
+   {
+    "fact": "Secondary discovery claims: most installs come from Google search landing on CWS listing pages, 70–80% for one SEO-focused founder. One large publisher reported up to a 70% traffic drop after CWS moved domains in 2024. A Reddit analysis of 200+ extensions (low credibility) estimates ranking weights: WAU about 40%, install velocity about 25%, ratings about 20%, keywords about 10%, click-through about 5%.",
+    "source": "https://raw.githubusercontent.com/minalGoel/micro-tools/main/project_planning/source_files/Chrome%20Extension%20Economics%20and%20Distribution%202024%E2%80%932026.md"
+   },
+   {
+    "fact": "The ETA zero-rates a 'licence or privilege to use' copyright or other IP supplied to a non-resident who is not registered under Subdivision D of Division V (Sched. VI Part V s.10), and some intangible personal property supplied to non-residents (s.10.1). So sales to non-residents, and possibly to a foreign MoR, may carry 0% GST/HST, depending on the MoR's registration status (not verified).",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml"
+   },
+   {
+    "fact": "Typical freemium conversion: self-serve SaaS is often cited at 2–5% of active users. Browser extensions usually sit at the low end, about 0.5–2% of ACTIVE users, and lower when measured against installs, because many installs are low-intent or go inactive.",
+    "source": "[prior knowledge, unverified, pre-2026-06]"
+   },
+   {
+    "fact": "The earlier extension scaffold referenced in cand_saas now lives at archive/tool-deals/extension/manifest.json. It is a retailer price checker and a weak base for a paid product (see the cand_saas verification).",
+    "source": "/home/user/canadian-tool-deals/archive/tool-deals/extension/manifest.json"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "A real 2026 portfolio of 5 extensions on ExtensionPay converted 0.8% overall (best 1.4%, worst 0.3%), with MRR of $60/month at month 3 and $180/month at month 6. That is the closest documented analogue to this plan at the 90-day mark.",
+    "source": "https://raw.githubusercontent.com/nnnkit/totem/main/plans/research/premium-monetization/raw/rs-recent-discourse.md"
+   },
+   {
+    "fact": "Large user bases can still earn little: Responsive Viewer had 70k+ users and about $30/month from ads, and an image compressor with 9k+ downloads had 'single digit sales'.",
+    "source": "https://raw.githubusercontent.com/minalGoel/micro-tools/main/project_planning/source_files/Micro-SaaS%20and%20AI%20tool%20monetization%20what%20actually%20works.md"
+   },
+   {
+    "fact": "TrustMRR (n=5,079, opt-in so biased upward): median year-0 MRR is $148, and 'the median product does not reach $1k MRR by year 2'. Over 54% of tracked Indie Hackers products earn $0 (2022).",
+    "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md"
+   },
+   {
+    "fact": "An unverified but widely repeated claim: of about 112,000 extensions, 86.3% have fewer than 1,000 active users.",
+    "source": "https://raw.githubusercontent.com/LoopheadLabs/meetingfocus-site/main/chrome-extension-opportunity-brief.md"
+   },
+   {
+    "fact": "The documented solo successes involved heavy founder-led distribution, for example SuperX after about 10 months full-time and building in public on X. The fast successes (TypingMind, AudioPen) came from founders who already had audiences. This plan deliberately removes the owner from distribution.",
+    "source": "https://raw.githubusercontent.com/minalGoel/micro-tools/main/project_planning/source_files/Chrome%20Extension%20Economics%20and%20Distribution%202024%E2%80%932026.md ; /home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+   },
+   {
+    "fact": "CWS search is gamed by spam clusters that stuff keywords and reuse near-identical code (Palant, Jan 2025, via secondary). Security reports in Dec 2025 found AI-adjacent extensions with about 8M installs harvesting AI chats, some carrying Featured badges. Both depress trust in new AI extensions.",
+    "source": "https://raw.githubusercontent.com/minalGoel/micro-tools/main/project_planning/source_files/Chrome%20Extension%20Economics%20and%20Distribution%202024%E2%80%932026.md"
+   },
+   {
+    "fact": "Google built Gemini into Chrome (2025 rollout), and AI browsers (for example Perplexity Comet and OpenAI's Atlas) launched in 2025. Both compete directly with generic AI summarize, rewrite and sidebar extensions.",
+    "source": "[prior knowledge, unverified, pre-2026-06]"
+   },
+   {
+    "fact": "ExtensionPay, the easiest payment path, had global outages, including an HTTP 500 on /subscribe from 2026-05-22 that blocked all paid subscriptions (#349).",
+    "source": "https://github.com/Glench/ExtPay/issues/349"
+   }
+  ],
+  "risks": [
+   "Distribution (the dominant risk). With the owner absent, only organic store and Google search remain. Both reward existing weekly users, install velocity and ratings, which a new item has none of. The likely result is under 1,000 users by month 3.",
+   "Free-tier AI cost ('denial-of-wallet'). At 1–2% conversion, free users' API calls can cost more than paying users' calls (ESTIMATE about USD 986 of a USD 1,390 monthly API bill in Scenario B). This needs hard caps, per-install quotas, a spend limit, or on-device AI for the free tier.",
+   "Remote-code and agent policy. Extensions that carry out LLM-returned action plans risk the 'interpreter of remote commands' ban. Undeclared remote code means rejection. Minified or bundled libraries have triggered obfuscation ('Red Titanium') rejections (per cand_saas).",
+   "Account-level platform risk. Takedowns can be opaque. Repeat violations can suspend related accounts and Google services, so use a dedicated account. Policy docs checked here are from a repo archived in 2023, and newer rules were not verified.",
+   "Privacy exposure. A paid (trader) listing shows legal name, phone and physical address publicly.",
+   "Competition and built-in AI. Generic AI wrappers compete with Gemini in Chrome and AI browsers [prior knowledge, unverified, pre-2026-06], and host platforms add native AI features. Code is easily cloned.",
+   "Host-site breakage. Workflow extensions break when the target site's page structure changes (DOM changes). Ongoing AI maintenance is needed, and a store review is required for every fix: 1–3 weeks secondary budget, though staged-rollout percentage changes skip re-review.",
+   "Operational gaps. Stats, reviews and new listings are dashboard-bound (no API found). This session's sandbox cannot reach non-GitHub hosts, so any external data collection must run in GitHub Actions.",
+   "Payments and tax. Polar can suspend accounts near a 0.7% chargeback rate and can refund at its discretion for 60 days. The GST/HST small-supplier threshold is C$30k over 4 quarters; zero-rating of sales to a foreign MoR depends on its registration status, which was not verified, so ask an accountant. EU VAT applies from the first sale without an MoR.",
+   "Opportunity cost and cash need. Revenue in Oct 2026 – Jan 2027 will very likely be near zero. This must not be the owner's income plan."
+  ],
+  "scores": {
+   "p5k_90d": 0.5,
+   "owner_light": 7,
+   "capital_light": 8,
+   "ai_build": 8,
+   "ai_operate": 6,
+   "low_risk": 6
+  },
+  "score_rationale": "P5K_90D, 0.5. Needs roughly 575 payers at USD 9.99 (about 29k active users at 2%) or about 250 at USD 19 by about Dec–Jan, starting from zero, with no owner-led distribution. The closest real analogue made $60/month at month 3, and the year-0 median is $148 MRR. Every documented $5k+ path took 6–16+ months with an active founder. ESTIMATE: under a 5% chance.\n\nOWNER_LIGHT, 7. One-time setup fits in about 9–10 h. Afterwards about 1–1.5 h/week (review replies, escalations, stats CSV), plus about 1.5 h per new listing. Not 9–10, because the dashboard-only steps and the trader and dispute duties cannot be delegated.\n\nCAPITAL_LIGHT, 8. Fixed costs are about C$7 (CWS fee) plus a domain; Polar, Cloudflare and Edge cost nothing up front. The only variable exposure is the API, which the spend limit bounds, but a free tier on cloud AI can burn hundreds of dollars a month before revenue.\n\nAI_BUILD, 8. The AI can write the extension, Worker, site, legal drafts, screenshots (Puppeteer), listing copy and CI. The owner must enter the first listing and Privacy tab in the dashboard. Niche validation data is not reachable from this sandbox.\n\nAI_OPERATE, 6. The AI can ship updates end to end through CWS API v2 from Actions (with staged rollout), run experiments, fix breakage, localize, monitor costs and draft support replies. Reviews, stats, new items, appeals and disputes need the owner. The main growth lever, distribution, is not something the AI can operate.\n\nLOW_RISK, 6. Legal and financial exposure is low: no licence, little capital, and an MoR handles VAT. The deductions are for platform takedowns and account-linked suspension, a public trader address, AI-cost runaway, remote-code rejection risk, and GST/HST questions.\n\nCONFIDENCE: the official CWS policies come from a repo archived in 2023. Market and conversion numbers are secondary 2026 compilations (vendor or SEO sources, some Reddit) and could not be checked against primaries, because the sites were egress-blocked and web search was exhausted."
+ },
+ "verification": {
+  "problems": [
+   {
+    "claim": "Scenario B needs about 575 payers, or 28,750 active users at 2% conversion (the central case).",
+    "problem": "The rest of the dossier contradicts this central case. Its own closest analogue (a 5-extension portfolio) converted 0.8%. Its own cross-check of $42 per 1,000 MAU implies about 86,000 MAU. Scenario B yields about $126 net per 1,000 actives (3,623 / 28.75), 3 times the survey average. Using 2% as the central case makes the target look closer than the evidence supports.",
+    "correction": "Use 0.8–1% as the central case and 2% as the upside. ESTIMATE at 1%: 796 payers and 79,600 active users. At 0.8%, free burden = 124 × 10 × 0.0035 = 4.34, net = 9.99 − 1.274 − 0.70 − 4.34 = 3.676, payers = 3,623 / 3.676 = 986, actives = 986 / 0.008 = 123,000. Also state that the $42/1,000 MAU cross-check (about 86k MAU) is the base-rate figure."
+   },
+   {
+    "claim": "AI cost per call is $0.0035 (1,500 input and 400 output tokens on Haiku 4.5).",
+    "problem": "The token counts are an unsourced assumption that is not labelled as one. A listing or SEO assistant that reads page content plus a system prompt could plausibly use several thousand input tokens. Unit economics B and C are very sensitive to this number.",
+    "correction": "Label it as an assumption and add a sensitivity case. ESTIMATE at 5,000 input and 800 output tokens: 0.005 + 0.004 = $0.009/call. B at 2%: AI per payer = 200 × 0.009 = 1.80, free burden = 49 × 10 × 0.009 = 4.41, net = 9.99 − 1.274 − 1.80 − 4.41 = 2.506, payers = 3,623 / 2.506 = about 1,446, actives = about 72,300. Prompt caching cuts only the static system-prompt part, at about 0.1× the input price."
+   },
+   {
+    "claim": "Cloudflare Workers Free (100k requests/day) covers Scenario B at about 13k requests/day, so hosting costs $0.",
+    "problem": "The design needs per-license and per-install quota counters in KV. The official Cloudflare KV limits doc gives the Free plan 1,000 writes/day to different keys, and 1 write/second to the same key. At about 13,225 AI calls/day, the quota writes break the free KV limit about 13-fold. The request count also leaves out license checks and telemetry pings. The Workers limits doc also says heavy payload parsing typically takes 10–20 ms CPU, against a 10 ms cap on Free.",
+    "correction": "Budget Workers Paid at US$5/month minimum (official pricing doc), or use D1 or Durable Objects for counters. ESTIMATE: US$5 × 1.38 = about C$6.90/month. Source: raw.githubusercontent.com/cloudflare/cloudflare-docs/production/src/content/docs/kv/platform/limits.mdx and workers/platform/limits.mdx."
+   },
+   {
+    "claim": "Money needed is C$50–400 for the first 3 months, excluding the Claude subscription for Routines.",
+    "problem": "The whole plan depends on Routines, which run under the owner's Claude subscription, so leaving that out hides the largest fixed cost. Claude Pro is about US$20/month and Max about US$100–200/month [prior knowledge, unverified, pre-2026-06]. Daily or weekly autonomous sessions plausibly need Max-tier usage limits [prior knowledge, unverified, pre-2026-06]. GitHub Actions minutes for nightly Puppeteer E2E runs in a private repo are also left out.",
+    "correction": "ESTIMATE: 3 months × US$20–200 × 1.38 = C$83–828 for Claude. Add Workers Paid of about C$21 over 3 months. Revised 3-month cash need: about C$150–1,250 (excluding living costs), with a high chance of near-zero revenue over the same period."
+   },
+   {
+    "claim": "Weekly Routine: ship one experiment per week as a version bump with staged rollout.",
+    "problem": "This contradicts the dossier's own review-latency evidence. Every new version goes through CWS review (1–3 weeks budgeted by secondary sources, and longer for new developers). Only changing the rollout percentage skips re-review. Any change that adds a permission or changes data flows also needs a Privacy-tab edit, which is dashboard-only and falls to the owner. A new permission can also disable the extension until users re-accept it [prior knowledge, unverified, pre-2026-06].",
+    "correction": "ESTIMATE: from go-live (about Oct 16–30) to the end of Dec, about 8–10 weeks. At 1–3 weeks per review that allows about 3–8 releases, not 10+, and in practice fewer for a new developer. Treat most A/B work as remote-config variants of logic that already ships in the package, which the MV3 policy explicitly allows, and schedule a monthly owner check of the Privacy tab."
+   },
+   {
+    "claim": "The free tier can use Chrome's on-device Prompt API, giving net $8.02/payer, 452 payers and 22,600 actives.",
+    "problem": "This assumes every free user can run on-device AI. Gemini Nano has hardware and OS requirements: desktop only, about 22 GB free disk, a GPU with more than 4 GB VRAM or enough RAM [prior knowledge, unverified, pre-2026-06]. The cited explainer itself says the API is 'experimentally available'. Many free users would be ineligible, and they would either get no AI or fall back to cloud cost.",
+    "correction": "Present the on-device case as an upper bound, with a blended free-tier cost. ESTIMATE with 50% of free users eligible at 2%: free burden = 0.5 × 1.715 = 0.858, net = 9.99 − 1.274 − 0.70 − 0.858 = 7.158, payers = 506, actives = 25,300."
+   },
+   {
+    "claim": "Payer counts (575, 250, 883) are treated as the steady state needed by month 3.",
+    "problem": "The model has no churn or ramp. Reaching an AVERAGE of CAD 5k/month by Dec–Jan means the payer base has to be built in about 8–10 weeks live, while the base also churns. Consumer subscriptions commonly lose several percent a month [prior knowledge, unverified, pre-2026-06]. The annual plan (US$79/yr) is priced but left out of the MRR mix.",
+    "correction": "ESTIMATE at 8%/month churn [assumption]: holding 575 payers needs 0.08 × 575 = 46 replacement payers/month, which is 2,300 new active users/month at 2%, or about 5,750 at 0.8%, on top of the ramp. Counting only the roughly 2 live months: at 2%, 575 / 2 = about 288 new payers/month, about 14,400 new actives/month. Against that, the 86.3% of extensions with fewer than 1,000 users (unverified secondary) makes this implausible."
+   },
+   {
+    "claim": "Conversion is measured against 'active users' / 'weekly active users'.",
+    "problem": "The dossier's own source (the CWS metrics doc) says the 'Users' stat 'only captures installations; it doesn't monitor whether users are active'. The dossier's conversion targets therefore cannot be checked from CWS stats. They need the AI's own telemetry, which in turn requires disclosure in the privacy policy and the Privacy tab. In install terms, the user requirement is higher still.",
+    "correction": "State the targets in CWS weekly users (installs) and in telemetry-measured actives separately, and apply the lower install-based conversion. The dossier's own prior-knowledge fact says conversion is lower against installs."
+   },
+   {
+    "claim": "Owner time after launch is about 1–1.5 h/week, and setup is at most 10 h.",
+    "problem": "The setup tasks listed add up to about 8.5–10.5 h, which is at the ceiling with no buffer. The following are left out or undercounted: waiting days for Polar/Stripe KYC (identity checks), rejection and resubmission cycles (these are dashboard-only), Privacy-tab edits whenever data flows change, OAuth refresh-token expiry if the Cloud app stays in Testing, English-language appeals by an owner whose English level is unknown, and bookkeeping for self-employment income tax/CPP (not mentioned).",
+    "correction": "ESTIMATE: 1–1.5 h in a normal week and 3–5 h in a rejection or appeal week. Budget about 2 h/week on average, plus 1–2 accountant hours per year. The owner_light score falls slightly."
+   },
+   {
+    "claim": "Polar Starter is the billing layer (5% + $0.50 + 1.5% non-US + about 1.25% payout).",
+    "problem": "The fees match cand_saas's official Polar doc citations. However, (a) whether Polar/Stripe Connect pays out to Canadian individuals was not verified in the dossier: not found. (b) At the target scale, cand_saas says Polar Pro (US$20/month, 3.8% + 40¢) breaks even against Starter at about US$1,379/month in sales, so Starter is not the right plan at scale (a minor point that makes the dossier conservative).",
+    "correction": "Mark 'Polar payouts to a Canadian individual bank account' as not verified, and add a week-1 owner check. Keep ExtPay/Stripe Canada as a fallback. Note that the plan should switch to Pro above about US$1.4k/month in sales."
+   },
+   {
+    "claim": "The ETA zero-rates the owner's supply to a foreign MoR (Sched. VI Part V s.10).",
+    "problem": "The condition in s.10 is that the non-resident is NOT registered under Subdivision D of Division V, which is normal GST registration. A large MoR may well hold normal registration [prior knowledge, unverified, pre-2026-06], and then s.10 would not apply. The dossier hedges this, but its bullet reads as if zero-rating is likely. It has no practical effect in 90 days, because revenue will almost certainly stay below the C$30k small-supplier threshold.",
+    "correction": "Rephrase: 'zero-rating applies only if Polar is not normally GST-registered — not verified; irrelevant below C$30k/4 quarters (s.148)'. Also add that net income is taxable business income, with self-employed CPP [prior knowledge, unverified, pre-2026-06]."
+   },
+   {
+    "claim": "Scores: ai_operate 6, capital_light 8, p5k_90d 0.5.",
+    "problem": "ai_operate scores highly for the parts the AI can run, but the only lever that matters (distribution), plus reviews, new listings, Privacy-tab changes and appeals, cannot be delegated. capital_light leaves out Routines and Workers Paid. At about 8–10 weeks live, p5k_90d at 0.5 (about 5%) is still generous: the documented analogue made $60/month at month 3, about 1.7% of the US$3,623 target (60 / 3,623).",
+    "correction": "See the adjusted scores: p5k_90d 0.2, ai_operate 5, capital_light 7."
+   }
+  ],
+  "unlabelled_prior_knowledge": [
+   "The 1,500-input / 400-output tokens per AI call is an unlabelled modelling assumption, with no source and no ESTIMATE tag. The 200 calls/payer (B), 400 calls/payer (C) and 10 free calls/month are also assumptions and need the same label.",
+   "'Polar Starter ... bank payout via Stripe' implies Canadian individual payouts are supported. No source was given (not found in cand_saas either).",
+   "'ExtPay ... Polar will take longer (ID checks)' is an untagged expectation.",
+   "Timeline 'AI builds ... in about 3–7 days of sessions' is an untagged estimate.",
+   "'A first conversion is plausible 1–4 weeks after going live' is partly supported by cand_saas, but here it is not tagged ESTIMATE.",
+   "'Adding a paywall later reportedly draws 1-star reviews' is sourced in the facts list (ExtensionFast via secondary), but the best_variant text states it without a citation.",
+   "'No Gmail restricted scopes: CASA audit 4–8 weeks and about US$1.5k/yr' is called secondary, but no URL is given in the facts list.",
+   "The 'Owner hours about 1–1.5 h/week' breakdown minutes (15–20, 20–30, 10, 15) are not tagged ESTIMATE in owner_weekly_tasks.",
+   "'Paid ads ... Freemius: 57% of founders ...' is secondary, but no URL is given in the facts.",
+   "'Easy Folders $3.7K MRR at 6 months; Data Fetcher $5K at about 16 months' has no URL in this dossier; it relies on cand_saas line 129 and should cite it.",
+   "'Twelve-month range USD 0–2,000 MRR' is an untagged estimate with no arithmetic."
+  ],
+  "math_check": "I recomputed every calculation shown; all of them are correct. FX: 5,000 / 1.38 = 3,623.2. A: 0.0775 × 4.99 + 0.50 = 0.887, net 4.103, 3,623 / 4.103 = 883 payers; actives 29,433 / 44,150 / 88,300 / 110,375. B: fee 0.0775 × 9.99 + 0.5 = 1.274; AI 200 × 0.0035 = 0.70; free burden 49 × 10 × 0.0035 = 1.715; net 6.301, payers 575, actives 28,750. At 1%: 99 × 0.035 = 3.465, net 4.551, payers 796, actives 79,600. On-device: 8.016, 452 payers, 22,600 actives. API bill: 575 × 0.70 = 402.5 plus 28,175 × 0.035 = 986.1, total 1,388.6. C: 1.9725 + 1.40 + 1.1317 → net 14.496, payers 250, actives 8,333; at 1%: net 12.16, payers 298, actives 29,800. D: 0.0775 × 49 + 0.5 = 4.2975, net 44.70, 81 sales, 4,050 actives. Requests/day: (281,750 + 115,000) / 30 = 13,225. MAU cross-check: 3,623 / 42 × 1,000 = 86,262. Margins: 3,623 / 5,744 = 63%, 3,623 / 4,750 = 76%.\n\nThe errors are in the assumptions, not the arithmetic.\n(1) The Cloudflare Free fit ignores the official KV Free limit of 1,000 writes/day, which about 13k quota writes/day exceed.\n(2) Central conversion of 2% conflicts with the dossier's own 0.8% analogue and its $42/1,000 MAU base rate. Scenario B's implied $126 per 1,000 actives is 3× that average.\n(3) There is no token-count sensitivity: at 5k in / 800 out, B needs about 1,446 payers.\n(4) Churn and the short live window are not modelled: about 8–10 weeks live by end of Dec means about 288 new payers/month at 2%.\n(5) Costs leave out the Claude subscription for Routines.\nThe owner setup hours add up to about 8.5–10.5, consistent with the stated ≤10 h but with no slack.",
+  "adjusted_scores": {
+   "p5k_90d": 0.2,
+   "owner_light": 6.5,
+   "capital_light": 7,
+   "ai_build": 7.5,
+   "ai_operate": 5,
+   "low_risk": 6
+  },
+  "verdict": "The dossier is mostly honest and its arithmetic is correct. Its bottom line (under 5% chance of CAD 5k/month by Dec 2026–Jan 2027; expected month-3 MRR of USD 0–300) is right, and if anything still slightly generous.\n\nMost of its facts check out against the repo research, and they are internally consistent: the TrustMRR $148 year-0 median, 8 months to $1K MRR, Polar fees, the S103 March-2026 traffic drops, and the CWS policies (from a repo archived in 2023).\n\nMain flaws:\n- Its central 2% conversion contradicts its own 0.8% real-world analogue and its own $42/1,000 MAU base rate. The realistic requirement is about 80k–120k active users within about 8–10 weeks of go-live, from zero, with no owner-led distribution.\n- It has no token-count sensitivity on AI cost; realistic page-content prompts could more than double the payers needed.\n- It wrongly claims Cloudflare Free suffices. Official KV Free allows 1,000 writes/day, against about 13k quota writes/day.\n- Its cost total leaves out the Claude Routines subscription (about C$83–828 over 3 months, ESTIMATE, prior-knowledge prices), which is the largest fixed cost.\n- A weekly experiment cadence is infeasible given the CWS re-review latency the dossier itself cites. Privacy-tab and permission changes add owner dashboard work.\n- Polar payouts to a Canadian individual were not verified.\n\nKeep it only as a cheap, low-touch side asset (about C$150–1,250 over 3 months, ESTIMATE; about 1.5–2 owner hours/week on average). It cannot be the owner's income plan for the 2–3 month horizon."
+ }
+}

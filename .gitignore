@@ -46,3 +46,11 @@ extension/key.pem
 # owner's real customer records (CRM copies, opt-out list) — never commit
 /private/
 **/*.private.*
+
+# product packages
+products/*/node_modules
+products/*/.next
+products/*/out
+products/**/.wrangler
+products/*/next-env.d.ts
+products/*/*.tsbuildinfo

@@ -1,0 +1,153 @@
+{
+ "topic": "Distribution without the owner's labour for an AI-built online product launched in Oct 2026 (Canada-based, Korean-speaking owner). Channels compared on (a) time to first users, (b) owner hours, (c) money needed and (d) automation/ToS risk. Goal: find the 2–3 channels with the best odds of 300–600 paying users within about 90 days (by roughly Jan 2027) at 3 owner-hours/week or less.",
+ "key_facts": [
+  {
+   "fact": "How Chrome Web Store (CWS) ranks items, per Google's official doc (updated 2023-08-24): 'Ranking is performed by a heuristic that takes into account ratings from users as well as usage statistics, such as the number of downloads vs. uninstalls over time.' Editors pick featured items, and 'there is no set checklist developers can follow to guarantee being featured.' So a new extension with 0 users and 0 ratings starts at the bottom.",
+   "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/discovery/index.md"
+  },
+  {
+   "fact": "CWS spam policy (official, 2022-11-01) bans three things: (1) 'inflating product ratings, reviews, or install counts by illegitimate means, such as fraudulent or incentivized downloads, reviews and ratings'; (2) submitting 'multiple extensions that provide duplicate experiences or functionality'; (3) extensions that 'send messages on behalf of the user without giving the user the ability to confirm the content and intended recipients'. Result: no paid-for reviews, no clone portfolios, and no automatic invite messages in referral loops.",
+   "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/program-policies/spam-and-abuse/index.md"
+  },
+  {
+   "fact": "CWS listing guidance (official, updated 2021-11-22): repetitive or irrelevant keywords 'can ... result in an item being suspended from the Chrome Web Store'.",
+   "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/best_listing/index.md"
+  },
+  {
+   "fact": "The CWS API (official, 2022-01-18) has 'endpoints for creating a new item, updating an existing item, and publishing an item'. After the owner registers once, the AI can ship updates without the owner.",
+   "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/using_webstore_api/index.md"
+  },
+  {
+   "fact": "CWS friction from the repo's SaaS dossier verification (secondary sources): (1) budget 1–3 weeks for a new developer's first review; (2) the fee is a one-time US$5; (3) a paid extension is a 'trader', and its listing publicly shows the seller's legal name, phone and physical address; (4) a CWS suspension can spread to 'related Google services', so a dedicated Google account is needed.",
+   "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json (verification section)"
+  },
+  {
+   "fact": "Real CWS conversion and revenue (secondary, 2026). ktg0215 (May 2026): 0.8% average free-to-paid across 5 extensions (best 1.4%, worst 0.3%), and about $180 MRR after about 6 months. NicheCheck (Feb 2026): freemium converts '1–3% of the user base'. chromegoldmine (Mar 2026): 2k–10k users gives $100–1,500/mo of subscription MRR. The same compilation has no data on install speed after launch or on the share of installs coming from CWS search.",
+   "source": "https://raw.githubusercontent.com/nnnkit/totem/main/plans/research/premium-monetization/raw/rs-recent-discourse.md"
+  },
+  {
+   "fact": "Shopify App Store (secondary). Revenue share is 0% on the first US$1M of lifetime revenue and 15% above it; listing costs US$19 one-time (pfurini, 'verified Jan 2025'). A 2026-01-30 research note adds: (1) the first review response takes 5–10 business days, the whole process 1–2 weeks, and 4–8 weeks for complex apps; (2) apps that charge must use the Shopify Billing API; (3) the ranking algorithm is not public; (4) 'New apps receive no automatic visibility.'",
+   "source": "https://raw.githubusercontent.com/Remaker-Digital/groundtruth-kb/737b4c9ad79dbfe4daf98c1d0d976b545fc771e2/applications/Agent_Red/docs/research/SHOPIFY-PARTNER-APP-STORE-RESEARCH.md ; https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/cac.md"
+  },
+  {
+   "fact": "WordPress.org plugin guidelines (official repo). Guideline 5: 'Plugins may not contain functionality that is restricted or locked, only to be made available by payment or upgrade' (no trialware). Guideline 6: SaaS interfaces are allowed, 'even for paid services'. Review time (secondary): 'first reply usually arrives within days to a few weeks'.",
+   "source": "https://raw.githubusercontent.com/WordPress/wporg-plugin-guidelines/trunk/guideline-05.md ; https://raw.githubusercontent.com/egenil/sitelemetry-wordpress-plugin/main/docs/SUBMISSION.md"
+  },
+  {
+   "fact": "Google Play (secondary; one note says 'Confirmed live in Play Console 2026-07-23'). A personal developer account created after 2023-11-13 'must run a closed test ... with a minimum of 12 testers who have been opted-in for at least the last 14 days continuously' before it can apply for production. Production review takes 3–7 days. The fee is US$25 one-time, and the legal name is public. Organization accounts (D-U-N-S number required) are exempt from the tester rule.",
+   "source": "https://raw.githubusercontent.com/katyanotkin/verbboard/main/GOOGLE_PLAY_CHECKLIST.md ; https://raw.githubusercontent.com/phirogue/SparkyGames/main/docs/publishing/google-play-account.md"
+  },
+  {
+   "fact": "Apple (secondary, 2026). The Developer Program is US$99/yr. The Small Business Program charges 15% on apps and subscriptions for developers under US$1M/yr. App Review Guideline 4.3(b) was tightened in Dec 2025: 'Don't submit apps that are indistinguishable from what's already widely available ... Repeated submissions of this kind may lead to removal from the Apple Developer Program.'",
+   "source": "https://raw.githubusercontent.com/phirogue/SparkyGames/main/docs/research/2026-07-29-monetization-research.md ; https://github.com/rlridenour/elfeed-db (MacRumors item quoting Apple guideline 4.3(b))"
+  },
+  {
+   "fact": "RevenueCat State of Subscription Apps 2026 (secondary compilations). Median day-35 download-to-paid conversion: 2.1% for freemium apps, 10.7% for hard-paywall apps. By store: App Store median 2.6%, Google Play 0.9%. Median realized LTV per payer after year 1: $32 in North America ($23 global). 95% of annual subscribers who cancel never return.",
+   "source": "https://github.com/damian87x/structly-workspace/blob/main/docs/council/model-council-gpt_5_5.md ; https://github.com/Feras01440/Just-12-Weeks/blob/main/docs/02-research/annex-b-market-landscape.md"
+  },
+  {
+   "fact": "Paid-install benchmarks (compiled 2026-08-13, secondary). Cost per install (CPI): Meta $2.00–5.50, TikTok $1.75–4.00, Google app campaigns $1.50–4.50 (AdAction via insertaffiliate, 2026-05-14). Business of Apps 2025 gives Facebook $1–3 and TikTok $0.50–2.50. Apple Search Ads median cost per tap (CPT): $2.05 in Shopping (AppTweak 2025). These figures are mostly US or global; Canadian numbers were not found.",
+   "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-italy-b2c/global-benchmarks-sourcing.md"
+  },
+  {
+   "fact": "Web/SaaS paid acquisition (secondary). Google Ads cross-industry average: $5.42 per click and $66.69 per lead (WordStream, Apr 2025–Mar 2026, 13,474 US campaigns). Meta B2C customer acquisition cost (CAC) is about $230 (First Page Sage, flagged unreliable). ChartMogul trial-to-paid: 18% for opt-in trials with no card, 50% for opt-out trials with a card, 3–4% for freemium. Freemius 2025: 57% of micro-SaaS founders running ads wait 7+ months for return on ad spend or cannot tell whether ads work.",
+   "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/cac.md"
+  },
+  {
+   "fact": "SEO base rates for new domains (secondary, citing Ahrefs). Only 1.74% of newly published pages reach Google's top 10 within a year for even one keyword (down from 5.7% in 2017). 72.9% of top-10 pages are more than 3 years old, and 96.55% of all pages get zero Google traffic. In a practitioner poll on reaching 5,000 visits/month on a new site, 74% answered '6 to 12 months' (Matt Diggity). A 75-expert survey (Feb 2026) gives a 6–12 month minimum.",
+   "source": "https://github.com/superagnt/leverage/blob/main/skills/packaged/super-seo/references/new-domain-zero-to-one.md ; https://github.com/0xenzyme/awesome-seo-articles/blob/main/ahrefs-blog/general-seo/seo-statistics.md"
+  },
+  {
+   "fact": "Google's scaled-content-abuse policy (introduced Mar 2024, enforced from May 2024) covers mass-produced low-value pages however they are made: AI, human or scraped. In May 2026 Google extended its spam policies to AI Overviews and AI Mode. An agency claims AI-scaled sites lost 50–80% of traffic in the March 2026 core update, and the August 2026 spam update targeted thin affiliate and programmatic content. These come from search snippets only.",
+   "source": "/home/user/canadian-tool-deals/business/research/evidence-corpus.md (S103) ; /home/user/canadian-tool-deals/business/research/dossiers/cand_content.json"
+  },
+  {
+   "fact": "Reddit rules (archived official text) ban 'Mass-posting repetitive content for the purpose of exposure or financial gain' and 'Using tools (e.g., bots, generative AI tools) that may break Reddit or facilitate the proliferation of spam'. Apps must not 'Mask as a human or fail to register as an app'.",
+   "source": "https://raw.githubusercontent.com/OpenTermsArchive/pga-versions/main/Reddit/Community%20Guidelines.md"
+  },
+  {
+   "fact": "Reddit API (secondary notes citing support.reddithelp.com, accessed Jul–Aug 2026). The November 2025 'Responsible Builder Policy' ended self-service API keys: 'You must request access and get explicit approval'. Stated review time is 2–4 weeks in one note and '7+ day lead time' in another. Commercial and subscription uses need permission. Posts can be removed silently with no API notice.",
+   "source": "https://github.com/JPresting/3---Setup-Guides/blob/main/Reddit/Setup-Reddit-Bot.md ; https://github.com/Chatforest/chatforest.com/blob/main/strategy/03-reddit-account-recon-2026-08.md ; https://github.com/jikig-ai/soleur/blob/main/knowledge-base/project/learnings/2026-03-12-reddit-api-automation-risk-assessment.md"
+  },
+  {
+   "fact": "X API. Pricing is pay-per-use for new accounts (tiers ended 2026-02-06): $0.015 per post created, $0.20 if the post contains a link (secondary, 'verified against X's own pricing docs on 2026-08-13'). X's rules (archived) ban 'Automated or scripted accounts that do not comply with our Developer Policy' and 'repeatedly posting identical or nearly identical posts'.",
+   "source": "https://raw.githubusercontent.com/quinngifford/News-Daemon/main/docs/X_API_COSTS.md ; https://raw.githubusercontent.com/OpenTermsArchive/pga-versions/main/X/Community%20Guidelines.md"
+  },
+  {
+   "fact": "Meta APIs (secondary, 2026-08-12, confidence C2). Instagram allows 100 API-published posts per 24h per professional account; Threads allows 250 posts per 24h. Apps that serve other people's accounts need Business Verification plus App Review, estimated at 4–12 weeks. Another setup guide posts to the owner's own account from an app left in Development Mode. Instagram's Terms of Use forbid 'creating accounts or accessing or collecting information in an automated way without our express permission'.",
+   "source": "https://raw.githubusercontent.com/Emmanuelok/SMM/main/research/06-platform-apis-tier1.md ; https://github.com/wiroai/Wiro-Docs/blob/main/markdown/integration-instagram-skills.md ; https://raw.githubusercontent.com/OpenTermsArchive/pga-versions/main/Instagram/Terms%20of%20Service.md"
+  },
+  {
+   "fact": "Video platforms block unaudited automation. TikTok: until the Content Posting API audit is passed, 'all posts are forced SELF_ONLY (private)' (secondary, C2). YouTube (Google revision-history quote): 'All videos uploaded via the videos.insert endpoint from unverified API projects created after 28 July 2020 will be restricted to private viewing mode'; the default quota allows about 6 uploads/day. YouTube renamed 'repetitious content' to 'inauthentic content' on 2025-07-15 to cover 'mass-produced' content, which is ineligible for monetization.",
+   "source": "https://raw.githubusercontent.com/Emmanuelok/SMM/main/research/06-platform-apis-tier1.md ; https://github.com/porjo/youtubeuploader/blob/master/README.md ; https://github.com/OpenTermsArchive/pga-versions/blob/main/YouTube/Content%20Monetisation%20Policy.md"
+  },
+  {
+   "fact": "Korean channels. Naver held 62.86% of Korean domestic search in 2025, up from 58.14% in 2024 (InternetTrend, quoted in a news text inside a GitHub notebook). A 2026 code comment says Naver ended the blog-writing API in May 2020, so automatic posting is impossible; another note says a limited write API still exists, so the sources conflict. Tistory's API ended in 2024. The Korean-Canadian population is 218,140 (2021 Census), with 74,975 in the Toronto metro area. Commercial-posting rules for KakaoTalk open chats and Naver cafes were not found.",
+   "source": "https://github.com/altakappa/pap-magazine-v2/blob/main/api/admin/naver-blog-draft.js ; https://github.com/boring-km/idea-vault/blob/main/ideas/archived/002-ai-blog-auto-posting.md ; https://github.com/kgmyhGit/SKN31-inst (3_Fine_tuning.ipynb news text) ; /home/user/canadian-tool-deals/business/research/dossiers/cand_korean.json"
+  },
+  {
+   "fact": "Referral virality benchmarks (secondary). Extole reports k ≈ 0.05 across 400 referral programs. Adjust reports a median k = 0.45, but only among apps with measurable k. Andrew Chen (2025-11-13): 'Most of the time, you see viral factors that are 0.2 or 0.3 or below.'",
+   "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-italy-b2c/global-benchmarks-sourcing.md"
+  },
+  {
+   "fact": "Product Hunt launch outcomes (secondary). #1 of the day: 2,000–10,000 visitors and 600–800 signups (fromscratch, 2026-02-26). Outside the top 10: under 500 visitors and under 20 signups (rated low credibility).",
+   "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-italy-b2c/global-benchmarks-sourcing.md ; https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/cac.md"
+  },
+  {
+   "fact": "Game portals pay from ad revenue; they do not sell subscriptions. Poki splits revenue '50/50 on Poki traffic, 100/0 on yours'. CrazyGames pays about 60% of ad revenue (2026 jam terms) with a €100 minimum payout. CrazyGames' Basic Launch runs 7–21 days with monetization off and needs at least 500 plays. One developer's low-engagement WebGL portfolio earned about €0.75–1.05 per 1,000 gameplays. A Poki representative quoted '$500 to $3,000 per month' for a first web game. On Steam in 2025, 65.9% of about 12,732 releases earned under $1,000 (Gamalytic).",
+   "source": "https://raw.githubusercontent.com/efoltyn/gta6/a89952c886e421343e14033dbebfa57194df2a02/GO-TO-MARKET.md ; https://raw.githubusercontent.com/d954mas/game-67-idle/d8b1f7f6864a4db339b371cdbce6ea1af80dde02/features/platform-sdk/references/portals/crazygames.md ; https://github.com/bekirmfr/Emberwatch/blob/main/docs/compass-research.md"
+  },
+  {
+   "fact": "ChatGPT app directory: developers could submit apps from 2025-12-17. 'In this early phase, developers can link out ... to complete transactions for physical goods'; digital goods are still being 'explored'. As of that date it was not a channel for selling subscriptions.",
+   "source": "https://github.com/windwild/news-articles/blob/main/original/openai/2025-12-17-developers-can-now-submit-apps-to-chatgpt-openai.md"
+  },
+  {
+   "fact": "CASL (Canada's anti-spam law, statute text). Cold commercial email is allowed only to conspicuously published business addresses and only when relevant to the recipient's role (s.10(9)(b)). The first message sent on a referral must name the referrer (SOR/2013-221 s.4(1)). Every commercial email needs a mailing address and an unsubscribe link. The maximum penalty for an individual is $1M. This affects referral invites that the product sends by email.",
+   "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_compliance.json (citing github.com/justicecanada/laws-lois-xml E-1.6 and SOR-2013-221)"
+  },
+  {
+   "fact": "Base rate for new products: across 5,079 Stripe-verified products, median MRR is $148/month in year 0 (TrustMRR via Indie Hackers). Only 0.9% are 'breaking out', and fast launch successes came from founders who already had audiences.",
+   "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+  },
+  {
+   "fact": "ESTIMATE: paying users needed for C$5,000/month net. At C$9.99/mo via Stripe (2.9% + C$0.30, plus 0.7% Billing): net = 9.99 − 0.590 − 0.070 = C$9.33, so 5,000/9.33 = 536 payers. At C$14.99: net = 14.99 − 0.735 − 0.105 = C$14.15, so 354 payers. At C$9.99 in an app store at 15%: net 8.49, so 589 payers. Churn, FX and tax are ignored, so the real number of gross sign-ups needed is higher.",
+   "source": "ESTIMATE computed from fees in cand_saas.json and RevenueCat/Apple 15% facts above"
+  },
+  {
+   "fact": "ESTIMATE: paid-ads budget to reach 500 payers (USD, median benchmarks).\n(a) Mobile hard paywall + Meta: CPI $2.00–5.50 / 10.7% = CAC $18.69–51.40, × 500 = $9,346–25,701.\n(b) Mobile hard paywall + TikTok: $1.75–4.00 / 10.7% = $16.36–37.38, so $8,178–18,692.\n(c) Mobile freemium + Meta: $2.00–5.50 / 2.1% = $95.24–261.90, so $47,619–130,952.\n(d) Web SaaS via Google Search: CPL $66.69 / 18% opt-in trial-to-paid = $370.50, so $185,250; with a card-required trial at 50%, $133.38, so $66,690.\n(e) Meta B2C CAC of $230 gives $115,000.\nPayback check: year-1 North America LTV of $32 divided by CAC $18.69–51.40 = 1.71x down to 0.62x.\nCaveat: the RevenueCat conversion medians include organic installs, so paid cohorts may convert worse (unverified).",
+   "source": "ESTIMATE from pfurini benchmark files + RevenueCat 2026 figures above"
+  },
+  {
+   "fact": "ESTIMATE: channel-specific volume needed.\n(1) CWS: 500 payers / 3% = 16,667 active users, and / 0.8% = 62,500. chromegoldmine puts 2k–10k users at $100–1,500 MRR.\n(2) Web game ads: C$5,000/mo at €0.75–1.05 per 1,000 plays, converted at €1 ≈ C$1.5 (ASSUMPTION, unsourced), is C$1.13–1.58 per 1,000 plays, which means about 3.2M–4.4M plays/month.\n(3) Referral multiplier 1/(1−k): k = 0.05 gives 1.05x, k = 0.2 gives 1.25x, k = 0.3 gives 1.43x.\n(4) Google Play earliest public launch: 1–3 days of ID verification + 14-day closed test + 3–7 days of review = about 18–24 days, provided 12 testers opt in on day 1.",
+   "source": "ESTIMATE from sourced figures above"
+  },
+  {
+   "fact": "[prior knowledge, unverified, pre-2026-06] Paid social usually needs about 50 optimization events per ad set per week to leave the learning phase. New ad accounts can start with spending limits. Q4 costs per thousand impressions (CPMs) rise around Black Friday and the holidays, which is the Nov–Dec 2026 window of this plan. Apple pays App Store proceeds roughly 30–45 days after the fiscal month ends. The Google Ads API needs a developer token approval before the AI can manage campaigns programmatically. The Kakao platform offers no open-chat posting API, and many open-chat rooms ban advertising.",
+   "source": "[prior knowledge, unverified, pre-2026-06]"
+  }
+ ],
+ "conclusions": [
+  "CHANNEL COMPARISON (time to first users / owner hours / money / automation-ToS risk). Owner-hour and money figures are ESTIMATES built from the facts above.\n(1) Chrome Web Store: first installs about 2–4 weeks after submission (1–3 week review for a new developer) / 1–2 h one-time (dedicated Google account, US$5, trader declaration), 0–0.5 h per week / US$5 / LOW if it is one non-duplicate extension with no incentivized reviews; HIGH for clone portfolios. A suspension can spread to related Google services. Main weakness: ranking depends on existing users and ratings, and 0.3–3% conversion means about 17k–63k active users for 500 payers.\n(2) Shopify App Store: first installs about weeks 3–6 (1–2 week review, up to 4–8) / 2–3 h one-time, 0.5–1 h per week for escalated merchant support / US$19, 0% revenue share on the first US$1M / LOW-MEDIUM (Billing API mandatory). Strength: merchants pay US$10–30+/mo, so roughly 200–350 payers reach the target. Weakness: 'new apps receive no automatic visibility', and install-to-paid conversion was not found.\n(3) WordPress.org: days to weeks / 1 h one-time, plus weekly support-forum replies that the owner has to post / free / LOW, but locking features behind payment (trialware) is banned, so payment must come through an external SaaS. Weak fit.\n(4) Google Play: 18–24+ days before a public launch because of the 12-tester, 14-day gate / 3–5 h one-time, including recruiting 12 real testers / US$25 / MEDIUM. Paid conversion is 0.9% vs 2.6% on the App Store. Poor primary channel.\n(5) iOS App Store with search ads: days / 2–3 h one-time / US$99/yr plus ad budget / MEDIUM (guideline 4.3(b) rejects template 'me-too' apps). Best consumer store for paid conversion.\n(6) Game portals: 7–21 day Basic Launch / 1–2 h / US$0 / LOW. Pays ad revenue, not subscriptions; about 3–4M plays/month would be needed for C$5k, and a Poki representative's own range for a first game is US$500–3,000/mo. Not a fit for the goal.\n(7) SEO: typically 6–12 months to 5k visits/month; only 1.74% of new pages reach the top 10 within a year / 0.5 h one-time / domain only / MEDIUM-HIGH if pages are AI-scaled (scaled-content-abuse policy, 2026 updates). Will not deliver inside 90 days.\n(8) Paid ads (Meta, TikTok, Apple Search Ads, Google): users within days / 2–3 h one-time (ad account, card, verification, API token for the AI), about 0.5 h per week approving spend / ESTIMATE US$7k–26k for 500 payers at median CPI with a hard-paywall trial, and US$48k–131k with freemium or US$67k–185k for web SaaS via search / LOW ToS risk but HIGH financial risk: year-1 LTV of $32 is 0.62x–1.71x of CAC.\n(9) Social posting via official APIs (Instagram, Threads, X): automated posting is allowed once the owner connects accounts / 2–3 h one-time, 0 h per week / X charges $0.20 per post with a link / MEDIUM (duplicate-content and platform-manipulation rules). A brand-new account has no audience, so there is no near-term user volume (no sourced data on reach). TikTok and YouTube force uploads private until an API audit.\n(10) Reddit and communities: automation is effectively barred (API pre-approval since Nov 2025; rules against bots, generative-AI spam, and apps that pose as humans). The manual version needs the owner's labour and karma-building. HIGH risk.\n(11) Korean channels (Naver blog, KakaoTalk open chat, Instagram): Naver has 62.86% of Korean search, but blog auto-posting is unavailable (API ended 2020, conflicting source), so the owner would paste posts at about 1–1.5 h/week. KakaoTalk has no posting API and room rules are unknown. The Korean-Canadian market is small (218k people). HIGH labour or ToS risk; not a primary channel.\n(12) Referral/share loops inside the product: effect starts with the first users / 0 h / US$0 / LOW-MEDIUM (CASL applies to system-sent invites; CWS bans unconfirmed messages and incentivized reviews). Typical k of 0.05–0.3 multiplies other channels by only 1.05–1.43x; it is not a source of users by itself.",
+  "BEST 2–3 CHANNELS for 300–600 payers in about 90 days at 3 owner-hours/week or less:\n(1) ONE intent-driven marketplace chosen to fit the product. For a B2B tool, the Shopify App Store: highest price per customer, 0% fee, one-click Billing API. For a consumer app, the iOS App Store with a hard paywall and free trial: 10.7% median day-35 conversion vs 2.1% for freemium, and 2.6% on the App Store vs 0.9% on Play. The Chrome Web Store is a cheap second listing, but at 0.3–3% conversion it needs tens of thousands of users.\n(2) A capped paid-acquisition test run by the AI through the ad platforms' APIs, with the owner approving the budget. This is the ONLY channel whose volume can be bought inside 90 days.\n(3) Share/referral mechanics built into the product, as a multiplier on (1) and (2).\nSEO and Korean localization of store listings are worth running in the background at no owner time, but they should not count toward the 90-day target.",
+  "HONEST ODDS: no source found shows an audience-less founder reaching 300–600 paying users in 90 days through organic marketplace or content channels. Anchor ESTIMATE: the TrustMRR year-0 median of $148 MRR is roughly 15 payers at C$10. The only evidence-backed path to 500 payers by about Jan 2027 is paid acquisition. Even at median benchmarks with a hard-paywall trial funnel, that costs roughly US$9k–26k on Meta or US$8k–19k on TikTok, before any failed creative tests, and it breaks even only if the product converts at or above the median. Freemium or web-SaaS funnels push the cost to US$48k–185k. Without that capital, the realistic Jan 2027 outcome is tens of payers, not hundreds. Frame it as a 6–12 month build.",
+  "DECISION RULE FOR PAID ADS (ESTIMATE, the owner approves). Spend a US$1,000–1,500 test first. Scale only if the measured CAC after the trial period is at or below about US$25. At that level, 500 payers cost at most about US$12.5k, and year-1 LTV of $32 gives at least 1.28x. If CAC is above US$50 after two creative and paywall iterations, stop. Expect higher costs in Nov–Dec 2026 because of Q4 ad inflation [prior knowledge, unverified, pre-2026-06].",
+  "ONE-TIME OWNER TASKS THAT FIT IN 10 HOURS: (1) a dedicated Google account plus the CWS or Play fee; (2) an Apple Developer account, US$99; (3) a Shopify Partner account, US$19; (4) the payment processor or merchant-of-record identity checks; (5) the ad account plus card; (6) a virtual mailing address and phone number, because CWS trader listings, Play personal accounts and CASL all expose or require an address; (7) granting API tokens so the AI can operate. Weekly owner work, 3 h or less: approve ad spend and kill decisions, handle identity-bound escalations such as store rejection appeals and chargebacks, and optionally answer support the AI cannot.",
+  "DO NOT RELY ON these for the 90-day number: Reddit, X, Threads or Instagram auto-posting (no audience, ToS risk); TikTok or YouTube automation (needs audits; YouTube's 'inauthentic content' policy); Naver or KakaoTalk (manual, small diaspora market, rules unknown); game portals (ad revenue far below the target); WordPress.org (trialware ban, forum support labour); Google Play as the primary store (tester gate, 0.9% conversion); Product Hunt (needs founder presence, one-off spike); the ChatGPT app directory (no digital-goods payments as of Dec 2025); AI-scaled SEO pages (penalty risk).",
+  "PRODUCT DESIGN CONSEQUENCES FOR DISTRIBUTION: (1) Use a hard paywall with a free trial, not freemium. The median conversion gap is about 5x, which decides whether paid ads can work. (2) Price for 350–590 payers (C$9.99–14.99) or use a B2B price so that about 200 payers suffice. (3) Build shareable outputs and user-initiated share links rather than system-sent email invites, which keeps the product inside CASL and the CWS messaging rule. (4) Never reward reviews. (5) Ship one polished product per store; clone portfolios break CWS and Apple spam rules."
+ ],
+ "unknowns": [
+  "Install or user growth of a brand-new CWS extension or Shopify app from store search alone in its first 90 days: not found in any source. This is the key gap for the marketplace recommendation.",
+  "Install-to-paid conversion for Shopify App Store apps and for WordPress freemium plugins: not found. The platforms do not publish it (pfurini cac.md).",
+  "Canada-specific CPI, CPT and CPM for Meta, TikTok, Apple Search Ads and Google: not found. All benchmarks are US or global.",
+  "Whether paid-install cohorts convert at the RevenueCat medians (which mix in organic installs): not found. Paid cohorts may convert worse.",
+  "The owner's available capital for ads: unknown, and it decides whether the only fast channel is usable.",
+  "Meta and Google new-advertiser spending limits, verification delays, and the Google Ads API developer-token approval time in 2026: not verified.",
+  "Churn assumptions: monthly churn for consumer subscriptions was not sourced. The payer counts above ignore churn, so the real number of acquisitions needed is higher.",
+  "Naver blog write-API status (sources conflict), Naver 'low-quality' penalty mechanics, and KakaoTalk open chat / Naver cafe commercial-posting rules: not verified.",
+  "Reach of new Instagram, Threads or X accounts posting AI-generated content via API: no sourced data.",
+  "Official Google Search Central text for the 2026 scaled-content and spam updates: not opened; the claims rest on search snippets.",
+  "The official current Shopify US$19 fee and 0%-on-first-$1M terms, the Apple 4.3(b) text, and the Google Play tester rule were all confirmed only through secondary GitHub sources, not official pages.",
+  "Whether the owner can recruit 12 real Play testers, and how well they write English for escalated support (Shopify merchants, CWS rejection appeals).",
+  "ChatGPT app directory monetization status after Dec 2025: not found."
+ ]
+}

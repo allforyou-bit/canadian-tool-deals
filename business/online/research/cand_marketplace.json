@@ -1,0 +1,322 @@
+{
+ "dossier": {
+  "candidate": "B2B marketplace apps/plugins (Shopify App Store, WordPress.org, Figma Community, Google Workspace Marketplace, Notion Marketplace; Atlassian Forge added as a hedge because its terms turned up in the evidence)",
+  "summary": "VERDICT: If the owner insists on a marketplace product, the Shopify App Store has the best odds. Atlassian Forge is the only credible second choice. But no marketplace makes CAD 5,000/month by month 3 (Dec 2026 – Jan 2027) likely. ESTIMATE: the chance of a CAD 5k/month run-rate by the end of Jan 2027 is about 2–5%, and the most likely MRR at that point is CAD 0–1,500. Treat this as a 6–18-month asset the AI can run with little owner time, not as income replacement in 3 months.\n\nWHY SHOPIFY FIRST:\n(1) Buyers are businesses already searching an app store with money to spend.\n(2) Billing is built in and mandatory ('Apps that do not use the Shopify Billing API cannot be distributed through the Shopify App store'), so the owner needs no Stripe or merchant-of-record account.\n(3) Shopify takes 0% on the first US$1M of lifetime revenue (since 1 Jan 2025; before that the threshold reset annually), plus 2.9% processing and a one-time US$19 registration fee.\n(4) Price points are B2B: the average plan is US$58–66/month.\n(5) The Shopify CLI supports a non-interactive automation token (SHOPIFY_APP_AUTOMATION_TOKEN), so GitHub Actions and Routines can deploy.\n\nWHY IT STILL PROBABLY FAILS THE 3-MONTH TARGET:\n(a) Crowding. There are about 12,300–15,500 apps, 445 were added in one 30-day window (Nov 2025), and 35% of apps have zero reviews.\n(b) The best 2026 evidence is modest. A solo developer's AI virtual try-on app reached about US$700 MRR in about 2–3 months, and only after a month of manual prospecting. He paid about US$2.50 per click for Shopify ads and found that merchants 'don't want to touch their stores' over Christmas. That is exactly when this owner's app would launch (listing about late Oct – mid Nov 2026, then the BFCM/holiday freeze).\n(c) A 2026 Shopify analytics app made US$180 in total before its founder quit, calling the store 'saturated'.\n(d) The fast outlier (Kaching, US$6.5K MRR in about 4 months) had a founder with Shopify domain experience who got 1,000 users in month 1 through manual Facebook-group outreach. The owner's ≤3 h/week budget rules that out.\n(e) No platform publishes install→paid rates.\n\nTHE OTHER MARKETPLACES:\n- WordPress.org: bans trialware, so all revenue must go through an outside checkout. Installs follow a power law (57% of plugins are never rated). Revenue arrives too slowly.\n- Figma: 15% fee, a 30-business-day payout hold, and paid plugins must keep free functionality. Figma no longer approves new paid file creators. Low ceiling.\n- Google Workspace: no native billing, and OAuth verification takes 3–8+ weeks for sensitive or restricted scopes, which consumes most of the window.\n- Notion: 10% + $0.40 per sale, one-time template sales rather than MRR, and creator approval takes 'a few months'.\n- Atlassian Forge: 0% on the first US$1M lifetime from 2026-01-01, native billing, and Atlassian hosts the app, so there is no server to run. Review takes 10–15 business days and payouts are monthly with a US$500 minimum. Organic install volume for a new app: not found.\n\nCORRECTION TO A PRIOR DOSSIER: cand_saas.json quotes 'marketplace installs convert ~2.5% by day 7 / 1% by day 14'. The underlying source (ChartMogul via pfurini cac.md) says that figure is for self-serve SaaS trials. The same source states: 'No published install→paid conversion rates for Shopify, Slack, Atlassian, or Chrome listings.'",
+  "best_variant": "A Shopify embedded app in a narrow, under-served merchant workflow, run as a 2-app portfolio with an Atlassian Forge app as the hedge.\n\nSHOPIFY APP:\n- Niche selection: the AI picks the niche from data, copying Kaching's filter of 'only 2 competitors with <30 reviews'. Canada-specific ideas (French-Canadian/Quebec storefront copy QA, Canadian tax/duty display, Canada Post workflows) are hypotheses only. Demand is unverified, and Shopify's own free Translate & Adapt app [prior knowledge, unverified, pre-2026-06] would compete with any translation idea.\n- Pricing: US$19.99/month (plus an optional US$29.99 tier) with a 7–14-day free trial through the Shopify Billing API. No free-forever plan, so installs are forced to choose pay or leave.\n- AI features: Claude Haiku 4.5 only where it adds clear value.\n- Hosting: Cloudflare Workers Paid (US$5/month), deployed from GitHub Actions with the Shopify CLI automation token.\n- Support: a dedicated inbox handled by a Routine, which escalates refunds and angry merchants to the owner.\n- Second app: launched about 6 weeks after the first. The 'must not be identical to other apps you've published' rule means it must be a genuinely different app.\n\nATLASSIAN FORGE HEDGE: a small Jira/Confluence utility with per-user tiers, 0% revenue share and Atlassian-hosted, so it adds no server cost.\n\nChosen because it keeps the owner out of payments, tax collection on the merchant invoice and hosting operations, and puts the product where business buyers already search.",
+  "unit_economics": "All figures are ESTIMATES. FX ASSUMPTION: 1 USD = 1.35 CAD [prior knowledge, unverified, pre-2026-06]; the rate was not sourced.\n\nSHOPIFY at US$19.99/month:\n- Processing 2.9% → 19.99 × 0.971 = US$19.41 net; 0% revenue share under US$1M lifetime.\n- In CAD: × 1.35 = C$26.20.\n- AI cost, assuming 500 generations per merchant per month at 1,000 input + 400 output tokens on Haiku 4.5 ($1/$5 per M): 500 × (0.001 + 0.002) = US$1.50 = C$2.03.\n- Net per paying merchant ≈ C$24.18.\n- Fixed costs ≈ C$40/month (Workers US$5 = C$6.75, plus domain, DB and email allowance).\n- Merchants needed for C$5,000 net: (5,000 + 40) / 24.18 = 208.4 → about 209 paying merchants.\n\nSHOPIFY at US$29.99/month:\n- 29.99 × 0.971 × 1.35 = C$39.31; minus C$2.03 AI = C$37.28.\n- 5,040 / 37.28 = 135.2 → about 136 merchants.\n\nINSTALLS NEEDED:\n- Install→paid for trial-gated apps assumed at 10–30% [prior knowledge, unverified, pre-2026-06]; no platform publishes this.\n- At the US$19.99 price: 209 / 0.25 = 836 installs; 209 / 0.10 = 2,090 installs; zero churn assumed.\n- Over about 80 live days (about Nov 10 → Jan 31) that is 10.5–26 installs per day, sustained through the holiday freeze.\n\nBENCHMARK: Genlook's roughly US$700 MRR after 2–3 months = C$945, which is 19% of target, and it took founder-led prospecting.\n\nOTHER MARKETPLACES (C$5k/month equivalent, same FX):\n- Notion template at US$19: 19 × 0.90 − 0.40 − 0.19 (1% FX) = US$16.51 → C$22.29 → 224 NEW sales every month (one-time, no MRR base).\n- Figma plugin at US$10/month: US$8.50 after the 15% fee → C$11.48 → 436 subscribers.\n- WordPress plugin at US$79/year with an assumed ~10% combined processing/Freemius fee [prior knowledge, unverified, pre-2026-06]: US$71 × 1.35 = C$95.9 per sale → 52 new annual sales every month. At an assumed 1.5% free→paid rate [prior knowledge, unverified] that means about 3,480 new active installs a month.\n- Atlassian Forge, hypothetical US$60/month average per paying site at 0% share: C$81 → about 62 paying sites. Install volume: not found.\n\nMARGIN: about 90% gross on Shopify before the owner's Claude subscription, whose cost was not sourced.",
+  "distribution_plan": "Customers are meant to arrive with no owner work.\n\n1) SHOPIFY APP STORE SEARCH AND CATEGORY PAGES (main channel):\n- The AI writes the listing name, subtitle, keywords and screenshots, and iterates on them weekly against install data from the Partner API.\n- Listing rules forbid stats and unsubstantiated claims.\n- Ranking inputs Shopify does not publish; secondary estimates weight installs, rating, review count and retention.\n\n2) IN-APP REVIEW PROMPTS after a success moment. Incentivized reviews are prohibited [prior knowledge, unverified, pre-2026-06], so the paid-installer 'Upwork hack' Genlook used is off the table. The target is 5 reviews and 50 net installs, which unlocks the Built for Shopify badge (a secondary source reports +49% new installs within 14 days).\n\n3) SEO/GEO SITE: the AI writes landing, comparison and how-to pages on the app's domain. Genlook reports 80% organic traffic after the AI chatbot ChatGPT started recommending his app, but that is one anecdote.\n\n4) OPTIONAL SHOPIFY APP STORE ADS: about US$2.50 per click (Genlook, Jan 2026). The AI proposes a capped test and the owner approves the budget.\n\n5) HEDGE: Atlassian Marketplace organic listing for the Forge app.\n\nDeliberately excluded because they break the owner-time budget: manual Facebook-group or Reddit outreach, cold email, and calls.\n\nOwner hours/week: 1–3, all approvals and escalations, no selling.\n\nHonest caveat: every documented fast Shopify success in the evidence involved founder-led outreach. A purely passive listing relies on organic search volume that is not known for any niche.",
+  "timeline": "ESTIMATE, from today (2026-09-24):\n\n1) BUILD, Sep 28 – Oct 16 (about 3 weeks).\n- The AI scans niches, builds the app, tests it on a dev store and prepares listing assets and the screencast.\n- The owner does the one-time account setup.\n\n2) SUBMIT about Oct 16 – 19. Review is 5–10 business days to first response and 3–7 business days per resubmission, so 1–2 weeks if clean and 2–4 weeks with 1–2 feedback rounds (secondary, 2026-01-30). Another secondary source says 10–20 business days.\n→ LISTED about Oct 30 – Nov 20.\n\n3) FIRST DOLLAR: the trial (7–14 days) ends → first charge about Nov 10 – Dec 5. Payout cadence: Shopify partner payouts twice monthly [prior knowledge, unverified, pre-2026-06], so first cash about late Nov – mid Dec. Genlook's first paying users came about 3 weeks after listing, and that was with prospecting.\n\n4) HOLIDAY DRAG: late Nov – Jan 1 is the BFCM/holiday period, when merchants avoid store changes (Genlook anecdote). The first 6 weeks live overlap it.\n\n5) APP #2 and the FORGE HEDGE: submitted about mid-Nov, listed about Dec. Forge review is 10–15 business days.\n\n6) CAD 5k/MONTH:\n- Base case (ESTIMATE): NOT reached by Jan 2027; run-rate at Jan 31 of C$0–1,500.\n- If it happens, most likely at 6–18 months. Basis: TrustMRR year-1 median US$334 MRR; survivors' median of 8 months to US$1K MRR (cand_saas.json); Genlook at about US$700 MRR after 2–3 months.\n- Upside case (about 5%): a niche with real unmet search demand reaches 10+ paid conversions per week by December.",
+  "owner_one_time_tasks": [
+   "Create a Shopify Partner account with own identity and email, pay the US$19 one-time fee, set up payout (bank/PayPal) and tax details (~1.5 h)",
+   "In the Partner Dashboard, create a development store and generate a CLI automation token (SHOPIFY_APP_AUTOMATION_TOKEN); paste it into GitHub repo secrets (~0.5 h)",
+   "Create a Cloudflare account, buy the domain (Cloudflare Registrar, at cost), create a scoped API token and add it to GitHub secrets (~1 h)",
+   "Create an Anthropic API key with a hard monthly spend limit and add it to secrets (~0.5 h)",
+   "Create a dedicated support mailbox (e.g. a new Gmail), connect it as a connector for the Routines, and set forwarding for Shopify partner and reviewer emails (~1 h)",
+   "In the Claude cloud environment settings, allow network access to the hosts the Routines need (shopify.com / myshopify.com / partners API, Cloudflare API, Anthropic API); the current session is egress-restricted (~0.25 h)",
+   "Review and click-submit the AI-prepared app listing (texts, screenshots, screencast, privacy policy, test instructions) in the Partner Dashboard; request Protected Customer Data access only if the app needs it (~1.5 h)",
+   "Relay reviewer feedback during 1–2 review rounds; the AI prepares the fixes and reply text (~1–2 h total)",
+   "Read and approve the AI-drafted privacy policy and terms (~0.5 h)",
+   "Optional hedge: create an Atlassian Marketplace partner profile (individuals allowed), set up payout and tax details, and submit the Forge app (~1 h)",
+   "Admin: decide on sole-proprietor setup and bookkeeping; if on EI, declare self-employment (EI Regs s.30 'full working week' test) (~0.5 h)"
+  ],
+  "owner_weekly_tasks": [
+   "Read the AI's weekly KPI report: installs, uninstalls, trials, paid conversions, MRR, reviews, costs (~15–20 min)",
+   "Handle support escalations the AI flags: refund requests, angry merchants, anything needing the account holder; approve or edit AI-drafted replies (~30–60 min)",
+   "Approve spend: ad tests, API budget increases, new app submissions (~10 min)",
+   "Do Partner Dashboard or Atlassian actions the CLI/API cannot: listing edits, pricing plan changes, submission clicks (~15–30 min)",
+   "Monthly: reconcile payouts and export bookkeeping (~30 min/month)"
+  ],
+  "ai_build_tasks": [
+   "Niche selection: scrape or analyze App Store categories, competitor counts, review counts and prices (needs egress to apps.shopify.com); pick a niche with ≤3 competitors under 30 reviews and write a demand memo",
+   "Build the embedded app from the Shopify CLI template: Polaris UI, App Bridge, session-token auth, GraphQL Admin API (required for new public apps), theme app extension if it touches the storefront",
+   "Billing through the Shopify Billing API: plans, trial, cancel and reinstall flows",
+   "Mandatory compliance/GDPR webhooks and data-deletion handling; minimal data scopes",
+   "Hosting on Cloudflare Workers plus a DB, with a GitHub Actions CI/CD pipeline that runs `shopify app deploy --allow-updates` using the automation token",
+   "Automated E2E tests on the dev store with Playwright, and a storefront Lighthouse check (the requirement is at most a 10-point drop)",
+   "Listing assets: copy without stats or claims, screenshots, a screencast recorded with Playwright, FAQ, test instructions, draft privacy policy and terms",
+   "App website: landing page, docs and help center, SEO/GEO articles, changelog",
+   "Support system: inbox triage Routine, reply templates, escalation rules, in-app review prompt",
+   "Metrics: Partner API pull of installs and charges into a KPI dashboard, with error, uptime and API-spend alerts",
+   "App #2 (different functionality) and the Atlassian Forge hedge app with per-user pricing tiers"
+  ],
+  "ai_recurring_tasks": [
+   "Daily Routine: triage the support inbox, send routine answers, escalate refunds, complaints and legal questions to the owner",
+   "Daily: check error logs, uptime, failed webhooks and billing anomalies; open fixes as PRs and auto-deploy after tests pass",
+   "Weekly: KPI report (installs → trials → paid, churn, MRR, reviews, CAC if ads run)",
+   "Weekly: listing-optimization experiments (keywords, screenshots, subtitle) and a competitor watch",
+   "Weekly: 2–4 SEO/GEO content pieces on the app site",
+   "Monthly: ship features requested in reviews and support; track Shopify API version deprecations and upgrade",
+   "Monthly: cost and bookkeeping export; track the GST/HST C$30k small-supplier threshold (ETA s.148)",
+   "Quarterly: decide whether to kill or double down on each app based on install→paid data"
+  ],
+  "money_needed_cad": "ESTIMATE: C$150–700 for the first 3 months, excluding living costs and the owner's Claude subscription used by the Routines (plan cost not sourced).\n\nBreakdown:\n- Shopify registration: US$19 ≈ C$26.\n- Domain: about C$15–30/year [prior knowledge, unverified, pre-2026-06]; Cloudflare Registrar sells at cost.\n- Cloudflare Workers Paid: US$5/month × 3 = US$15 ≈ C$20 (the free tier of 100k requests/day may be enough early on).\n- Claude API: C$20–150, depending on the AI feature (Haiku 4.5 at $1/$5 per M tokens).\n- Optional App Store ads test: C$0–440 (e.g. 130 clicks × US$2.50 × 1.35 = C$439).\n- Atlassian Forge hedge: C$0 cash (no registration fee reported; a free hosting allowance).",
+  "facts": [
+   {
+    "fact": "Shopify App Store: 0% revenue share on the first US$1M of LIFETIME gross App Store revenue (effective Jan 1, 2025; previously the threshold reset annually), 15% above that; one-time US$19 partner registration fee; 2.9% processing fee.",
+    "source": "https://raw.githubusercontent.com/samber/developer-platform-skills/main/skills/app-marketplace-monetization-model/references/fee-stack-and-incentives.md ; https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/cac.md (citing shopify.dev/docs/apps/launch/distribution/revenue-share)"
+   },
+   {
+    "fact": "An older mirror of the Shopify docs shows the pre-2025 terms: 20% default share, a reduced plan of 0% on the first US$1M of ANNUAL revenue ('Every year on January 1 ... resets to zero'), and ineligibility for developers earning US$20M+ a year. The sources conflict on the registration fee: one 2026 secondary source says US$99, another says the partner program is free; the $19 figure comes from both the docs mirror and two independent 2026 compilations.",
+    "source": "https://raw.githubusercontent.com/Mayil-AI/shopify_documentation/main/docs/apps/store/revenue-share/content.txt ; https://raw.githubusercontent.com/joyelgeorge/Taskman/main/docs/research/2026-09-22-marketplace-seller-viability.md"
+   },
+   {
+    "fact": "Shopify App Store requirements (docs mirror): 'Apps that do not use the Shopify Billing API cannot be distributed through the Shopify App store'. 'App must not be identical to other apps you've published'. A merchant support email is required. 'We require a screencast or video walkthrough when submitting an app'. All public apps must subscribe to mandatory data-deletion webhooks. The app must not reduce Lighthouse scores by more than 10 points. Listings must not include data or statistics.",
+    "source": "https://raw.githubusercontent.com/Mayil-AI/shopify_documentation/main/docs/apps/store/requirements/content.txt"
+   },
+   {
+    "fact": "Shopify app review (secondary, dated 2026-01-30): '5-10 business days' to first response, '3-7 business days' after requested changes, '1-2 weeks' total for apps meeting all requirements, '2-4 weeks' with 1–2 feedback rounds. Another 2026-09-22 secondary gives '10–20 business days'.",
+    "source": "https://raw.githubusercontent.com/Remaker-Digital/groundtruth-kb/main/applications/Agent_Red/docs/research/SHOPIFY-PARTNER-APP-STORE-RESEARCH.md ; https://raw.githubusercontent.com/joyelgeorge/Taskman/main/docs/research/2026-09-22-marketplace-seller-viability.md"
+   },
+   {
+    "fact": "Built for Shopify prerequisites: 'a minimum of 50 net installs' and 'a minimum of 5 reviews', plus a recent-rating threshold (a 2026-07-21 secondary says the 50 installs must be on paid Shopify plans). Secondary claim: BFS apps see 'average 49% boost in new installs within 14 days'.",
+    "source": "https://raw.githubusercontent.com/Mayil-AI/shopify_documentation/main/docs/apps/store/built-for-shopify/criteria/content.txt ; https://raw.githubusercontent.com/sidnayak1801-work/review-app-v1/main/docs/11_APP_STORE_AND_BFS.md ; https://raw.githubusercontent.com/GodMode-Team/godmode/main/research/plugin-marketplace-research.md"
+   },
+   {
+    "fact": "Shopify ecosystem size (secondary): 12,320 apps and 40,556 registered partners, of whom 7,874 had apps listed (Jan 2025). 34.98% of apps have no reviews. Average app plan US$66.54/month. 45.71% offer a free plan or trial. About 15,500 apps by Nov 2025, with 445 added in the prior 30 days.",
+    "source": "https://raw.githubusercontent.com/Nathandela/long-running-harness/main/docs/research/b2c_product/app-ecosystem-product-intelligence.md ; https://raw.githubusercontent.com/GodMode-Team/godmode/main/research/plugin-marketplace-research.md"
+   },
+   {
+    "fact": "Shopify CLI release notes: 'Add support for SHOPIFY_APP_AUTOMATION_TOKEN env var as a new name for SHOPIFY_CLI_PARTNERS_TOKEN'; 'Use --allow-updates for CI/CD environments'. This means non-interactive deploys from GitHub Actions or Routines are supported.",
+    "source": "https://raw.githubusercontent.com/Shopify/cli/main/RELEASE_NOTES/3.93.md"
+   },
+   {
+    "fact": "Genlook (solo developer, r/SideProject, Jan 2026): a Shopify virtual try-on app built as a proof of concept in under a week with Cursor, listed about a week later, and 'crossed 700MRR' after about 2–3 months. 'The first month was hard, with almost no users. I had to manually prospect every user'; first paying users after 3 weeks. 'Shopify Ads: Expensive ($2.50/click)'. 'merchants don't want to touch their stores' over Christmas.",
+    "source": "https://raw.githubusercontent.com/rumca-js/RSS-Link-Database-2026/main/2026/01/2026-01-07/https...www.reddit.com.r.SideProject..rss_entries.json (post: reddit.com/r/SideProject/comments/1q6j6nm) ; .../2026-01-13/... (post 1qbq04l)"
+   },
+   {
+    "fact": "Kaching Appz (compiled Feb 2026 from Starter Story, no primary URL): the founder, a UI/UX designer who freelanced on Shopify stores, reached US$6.5K MRR on his first paid app 'within approximately 4 months'. He 'analyzed Shopify App Store for low-competition niches (only 2 competitors with <30 reviews)' and 'got 1,000 users in first month through manual Facebook group outreach'.",
+    "source": "https://raw.githubusercontent.com/AnshumanAtrey/licon/main/research/founder-stories/solo-saas-founders-research.md"
+   },
+   {
+    "fact": "Atlassian Marketplace: Forge apps pay 0% on the first US$1M of lifetime revenue (from 1 Jan 2026), then 16% rising to 17%; Connect apps go 15% → 20% → 25%. Secondary 2026-09-22 details: $0 partner and listing fees, review turnaround 10–15 business days, US$500 payout minimum, monthly remittance, a free Forge hosting allowance, and individuals may register.",
+    "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/cac.md (citing atlassian.com/blog/development/updates-to-marketplace-revenue-share-2026) ; https://raw.githubusercontent.com/joyelgeorge/Taskman/main/docs/research/2026-09-22-marketplace-seller-viability.md"
+   },
+   {
+    "fact": "WordPress.org official guideline 5: 'Trialware is not permitted. Plugins may not contain functionality that is restricted or locked, only to be made available by payment or upgrade.' Guideline 6: SaaS interfaces 'are allowed, even for paid services', but validation-only services are prohibited.",
+    "source": "https://raw.githubusercontent.com/WordPress/wporg-plugin-guidelines/trunk/guideline-05.md ; https://raw.githubusercontent.com/WordPress/wporg-plugin-guidelines/trunk/guideline-06.md"
+   },
+   {
+    "fact": "WordPress (secondary): submissions went from about 150/week to 330+/week by the end of 2025; 12,713 plugins were reviewed in 2025. '57% of plugins never receive any ratings or reviews'. 'Only 30 plugins published in the last 3 years achieved 100K+ installs'. The top 10 plugins take 27.6% of installs. One 2026 plugin (Keel) was approved 2026-08-25 after one 'pended' round and published 2026-08-26; its submission date is not explicit.",
+    "source": "https://raw.githubusercontent.com/GodMode-Team/godmode/main/research/plugin-marketplace-research.md ; https://raw.githubusercontent.com/dknauss/Keel/main/ROADMAP.md"
+   },
+   {
+    "fact": "Notion Marketplace: '10% + $0.40 per transaction', plus a 1% FX fee for non-US creators, with biweekly payouts and a US$20 minimum. Approval takes 'a few months' (Notion Help Center via secondary, 2026-05-11); another secondary quotes the Stripe payment approval as taking 'a few months'. Typical template prices are US$5–29.",
+    "source": "https://raw.githubusercontent.com/CSmithy89/hyyve/main/_bmad-output/planning-artifacts/research/business-marketplace-economics-research-2026-01-20.md ; https://raw.githubusercontent.com/tyschacht/nanoclaw_passive/main/content/research/notion-template-marketplace-passive-pipeline.md ; https://raw.githubusercontent.com/daidue/OpenClaw/main/projects/invoice-tracker/research/notion-gallery-submission.md"
+   },
+   {
+    "fact": "Figma Community: a '15%' flat fee that includes payment processing and sales tax, and 30 business days before cash-out (secondary, 2026-01-20). Paid plugins/widgets 'must have free functionality', and Figma does 'not approve new paid file creators' (citing help.figma.com).",
+    "source": "https://raw.githubusercontent.com/CSmithy89/hyyve/main/_bmad-output/planning-artifacts/research/business-marketplace-economics-research-2026-01-20.md ; https://raw.githubusercontent.com/skaleto/vibe-coding-research/main/light-app-low-ai-2026/10-codex-breadth-pipeline-2026.md"
+   },
+   {
+    "fact": "Google Workspace Marketplace (secondary, 2026-03-27): SDK configuration review '3-7 business days'. OAuth verification takes '3-6 weeks' for sensitive scopes and '4-8+ weeks' for restricted scopes, with the whole process at '4-10 weeks'. Restricted scopes need a CASA third-party security audit renewed annually. Apps Script hosts the add-on code, so no server is needed. No billing is described (another secondary says there is a 0% Google fee and outside payments are needed).",
+    "source": "https://raw.githubusercontent.com/Insightpulseai/odoo/main/docs/skills/gmail-addon-marketplace-publishing.md ; https://raw.githubusercontent.com/tyschacht/nanoclaw_passive/main/content/index.md"
+   },
+   {
+    "fact": "No published install→paid conversion rates exist for Shopify, Slack, Atlassian or Chrome listings. ChartMogul (Q1 2024–Q1 2025, n=2,500): freemium→paid 3–4%, opt-in trial (no card) 18%, opt-out trial (card) 50%, pure self-serve trials about 2.5% at day 7 and about 1% by day 14. This last figure applies to SaaS trials, NOT marketplace installs, which corrects cand_saas.json.",
+    "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/cac.md"
+   },
+   {
+    "fact": "Other take rates (secondary): HubSpot charges 'no revenue share and no listing or certification fee'. Salesforce AppExchange charges 15% (25% OEM), plus a US$999 security review and US$150/year listing.",
+    "source": "https://raw.githubusercontent.com/samber/developer-platform-skills/main/skills/connector-marketplace-strategy/references/take-rate-benchmarks.md"
+   },
+   {
+    "fact": "Cloudflare Workers: the Free plan allows 100,000 requests/day; the Paid plan is US$5/month with 10M requests included (official docs repo, via cross_tooling.json).",
+    "source": "https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/workers/platform/pricing.mdx"
+   },
+   {
+    "fact": "ETA Schedule VI Part V s.7 zero-rates 'A supply of a service made to a non-resident person', excluding services to individuals in Canada, advisory/consulting services and others. s.10.1 zero-rates intangible personal property supplied to unregistered non-residents. Whether Shopify's billing arrangement makes the developer the supplier to the (mostly foreign) merchant was NOT verified.",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml (local copy read 2026-09-24)"
+   },
+   {
+    "fact": "GST/HST small-supplier threshold is C$30,000 over four consecutive quarters or within one quarter (ETA s.148).",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_compliance.json"
+   },
+   {
+    "fact": "Claude API list prices per 1M tokens (input/output): Haiku 4.5 $1/$5, Sonnet 5 $2/$10.",
+    "source": "Task brief citing official skill docs cached 2026-06-24"
+   },
+   {
+    "fact": "Typical indie SaaS medians (TrustMRR, n=5,079): year-0 median US$148 MRR, year-1 US$334. Survivors' median time to US$1K MRR is 8 months.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json (citing pfurini capture.md)"
+   },
+   {
+    "fact": "Install→paid for trial-gated Shopify apps typically 10–30%; freemium apps 2–5%. Shopify partner payouts are issued about twice a month. Incentivized reviews are prohibited. Shopify offers a free first-party Translate & Adapt app. Freemius charges about 7% plus gateway fees. The WordPress.org review queue ran multi-week waits in 2024.",
+    "source": "[prior knowledge, unverified, pre-2026-06]"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "A 2026 solo developer's Shopify analytics dashboard 'made $180 total before quitting': 'Shopify app store was saturated. Getting discovered required paid ads competing against funded companies.'",
+    "source": "https://raw.githubusercontent.com/rumca-js/RSS-Link-Database-2026/main/2026/01/2026-01-29/https...www.reddit.com.r.SideProject..rss_entries.json (post: reddit.com/r/SideProject/comments/1qq9cdb)"
+   },
+   {
+    "fact": "Even the 2026 success case (Genlook) needed a month of manual prospecting and one review obtained by paying Upwork e-commerce managers to install the app. That tactic is not available to a hands-off owner and likely breaches review rules [prior knowledge, unverified]. It reached only about US$700 MRR, about 19% of the C$5k target at the assumed FX rate, after 2–3 months.",
+    "source": "https://raw.githubusercontent.com/rumca-js/RSS-Link-Database-2026/main/2026/01/2026-01-13/https...www.reddit.com.r.SideProject..rss_entries.json"
+   },
+   {
+    "fact": "Holiday freeze: 'I expected the Christmas period to be busier, but it turns out merchants don't want to touch their stores during that time.' A listing in Nov 2026 would launch straight into this window.",
+    "source": "https://raw.githubusercontent.com/rumca-js/RSS-Link-Database-2026/main/2026/01/2026-01-07/https...www.reddit.com.r.SideProject..rss_entries.json"
+   },
+   {
+    "fact": "34.98% of Shopify apps have no reviews; 445 new apps appeared in one 30-day window (Nov 2025); the app count is 12k–15.5k.",
+    "source": "https://raw.githubusercontent.com/Nathandela/long-running-harness/main/docs/research/b2c_product/app-ecosystem-product-intelligence.md ; https://raw.githubusercontent.com/GodMode-Team/godmode/main/research/plugin-marketplace-research.md"
+   },
+   {
+    "fact": "The widely quoted 'average Shopify developer earns ~$93K/year' comes from marketing blogs (Meetanshi/AppNavigator). It is a mean skewed by top earners (0.18% earn over US$1M/year) and says nothing about a new app's first 3 months.",
+    "source": "https://raw.githubusercontent.com/Nathandela/long-running-harness/main/docs/research/b2c_product/app-ecosystem-product-intelligence.md"
+   },
+   {
+    "fact": "WordPress: 57% of plugins never get a rating, only 30 plugins from the last 3 years reached 100K+ installs, and trialware is banned. Monetization depends on a slow-growing install base.",
+    "source": "https://raw.githubusercontent.com/GodMode-Team/godmode/main/research/plugin-marketplace-research.md ; https://raw.githubusercontent.com/WordPress/wporg-plugin-guidelines/trunk/guideline-05.md"
+   },
+   {
+    "fact": "The Notion and Figma creator successes (Thomas Frank, Easlo, Untitled UI) were driven by the creators' own YouTube/Twitter audiences or by months of free giveaways, not by marketplace discovery alone.",
+    "source": "https://raw.githubusercontent.com/AnshumanAtrey/licon/main/research/founder-stories/solo-saas-founders-research.md"
+   },
+   {
+    "fact": "Notion creator approval takes 'a few months' and Google Workspace OAuth verification takes 3–8+ weeks. Either would consume most or all of a 3-month window before the first sale.",
+    "source": "https://raw.githubusercontent.com/tyschacht/nanoclaw_passive/main/content/research/notion-template-marketplace-passive-pipeline.md ; https://raw.githubusercontent.com/Insightpulseai/odoo/main/docs/skills/gmail-addon-marketplace-publishing.md"
+   },
+   {
+    "fact": "Across 5,079 Stripe-verified products, only 0.9% were 'breaking out'. More than 54% of tracked Indie Hackers products earn $0 (2022).",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+   },
+   {
+    "fact": "The 'earnings potential' figures for Shopify, Figma, Notion and Workspace in the nanoclaw_passive library table (e.g. '$500–5,000+/mo per app portfolio') are an AI agent's unsourced estimates and should not be treated as evidence.",
+    "source": "https://raw.githubusercontent.com/tyschacht/nanoclaw_passive/main/content/index.md"
+   }
+  ],
+  "risks": [
+   "Demand risk (largest): organic App Store search volume for any chosen niche is unknown. Every documented fast Shopify success involved founder-led outreach, which the owner-time budget excludes.",
+   "Timing risk: first listing about Nov 2026 collides with the BFCM/holiday freeze, so the first 6 weeks live are the weakest selling period.",
+   "Review risk: 1–4+ weeks per submission with human reviewers; rejections for UX, billing or permissions can each add a week. The owner must relay reviewer emails.",
+   "Platform risk: Shopify or Atlassian can change revenue share, ranking or requirements (Shopify moved from annual to lifetime US$1M in 2025; Atlassian Connect shares are rising to 25%), or delist an app.",
+   "Support and reputation risk: merchants expect fast, accurate help. A wrong AI reply or a bug that breaks a storefront can bring 1-star reviews that sink ranking. Built for Shopify needs a minimum rating.",
+   "Data and privacy risk: apps touching customer data need Protected Customer Data approval and GDPR/PIPEDA-compliant deletion. A breach in AI-written code creates legal exposure.",
+   "Operating-environment risk: the Claude cloud environment is egress-restricted today. The Routines need allow-listed access to Shopify, Cloudflare and Anthropic hosts, or they cannot deploy or read metrics.",
+   "Tax and admin: whether sales to foreign merchants through Shopify billing are zero-rated (ETA Sched. VI Part V s.7) is unverified. Registration is needed past the C$30k threshold. Income is USD, so FX risk.",
+   "EI interaction: if the owner is on EI, running a business can count as a 'full working week' unless it is minor in extent (EI Regs s.30). Declare it.",
+   "English: listing copy, reviewer communication and merchant support are in English. The AI drafts everything, but escalations the owner cannot judge may go unanswered.",
+   "Opportunity cost: the 3-month expected value is small (ESTIMATE C$0–1,500 MRR by end of Jan 2027), so the owner still needs other income."
+  ],
+  "scores": {
+   "p5k_90d": 1,
+   "owner_light": 6,
+   "capital_light": 8,
+   "ai_build": 8,
+   "ai_operate": 6,
+   "low_risk": 6
+  },
+  "score_rationale": "P5K_90D = 1. C$5k net needs about 136–209 paying merchants (ESTIMATE, at US$29.99 or US$19.99). At an assumed 10–30% install→paid rate that is 450–2,090 installs, or about 10–26 per day through the holiday freeze. The best 2026 comparable (Genlook) reached about US$700 MRR in 2–3 months with active prospecting. A 2026 analytics app earned US$180 in total. The fast outlier (Kaching) relied on 1,000 users from manual Facebook outreach. ESTIMATE: 2–5% chance of a C$5k run-rate by the end of Jan 2027.\n\nOWNER_LIGHT = 6. The one-time setup fits about 8–10 h (partner, payout and tax, tokens, domain, API key, support inbox, submission clicks, review rounds), and routine weeks fit 1–3 h. But review rounds, refunds and angry merchants arrive unpredictably, and some Partner Dashboard actions are human-only.\n\nCAPITAL_LIGHT = 8. Under C$150 without ads: the US$19 fee, Workers at US$5/month, a domain, and API usage. An ad test raises it to about C$700. The owner's Claude subscription cost is not sourced.\n\nAI_BUILD = 8. The Shopify CLI template, Billing API, webhooks, Cloudflare hosting, Playwright tests, screencast, listing copy and site are all within the AI's capability. The niche scan depends on egress to apps.shopify.com.\n\nAI_OPERATE = 6. The CLI automation token enables CI deploys, and Routines with a mail connector can run support, metrics and SEO. Reviewer communication, Partner Dashboard changes, escalations and payouts still need the owner, and network allow-listing is a prerequisite.\n\nLOW_RISK = 6. Financial downside is small and there is no physical liability. Offsetting that: platform/delisting risk, customer-data compliance, AI-code security, unverified GST/HST treatment, and the EI interaction.\n\nWHY SHOPIFY OVER THE OTHERS:\n- Workspace: OAuth verification delay and no billing.\n- Notion: approval delay and one-time sales.\n- Figma: 15% fee, payout hold and small paid market.\n- WordPress: trialware ban and slow installs.\n- Atlassian Forge is structurally attractive (no server, 0% share, native billing), but its install volume for new apps was not found, so it stays the hedge.\n\nCONFIDENCE: most numbers are secondary GitHub compilations from 2026. WebSearch was exhausted and shopify.dev, atlassian.com, figma.com, notion.so and google.com were unreachable, so the fee terms should be re-checked on the official pages before committing."
+ },
+ "verification": {
+  "problems": [
+   {
+    "claim": "ESTIMATE: 2–5% chance of a C$5k/month run-rate by end of Jan 2027 (p5k_90d = 1).",
+    "problem": "This is optimistic against the repo's own base rates. In cand_saas.json only 0.9% of 5,079 TrustMRR products were 'breaking out'. C$5k/month is about 34× the year-0 median of US$148 and above the 90th-percentile trajectory. The best comparable, Genlook, got about 19% of target with founder prospecting, and this plan explicitly excludes prospecting. Launch also lands in the holiday freeze.",
+    "correction": "ESTIMATE: ≤1% (0.3–1%). Replace '2–5%' with '<1%, roughly in line with the 0.9% breakout base rate or worse, because there is no founder outreach'."
+   },
+   {
+    "claim": "If C$5k/month happens, most likely at 6–18 months (basis: survivors' median 8 months to US$1K MRR).",
+    "problem": "The source gives survivors' median time to US$1K MRR (n=28, survivor-selected, p75 = 12 months). C$5k is about US$3.7K (5,000/1.35 = 3,704). Time to US$1K cannot support a claim about time to US$3.7K, and survivor selection hides the >54% that earn $0.",
+    "correction": "Say: 'Time to US$3.7K MRR is not found. Survivors took a median 8 months just to reach US$1K, and most products never reach US$1K.' Frame 6–18 months as the upside for the minority that survive."
+   },
+   {
+    "claim": "Most likely MRR at Jan 31, 2027: C$0–1,500.",
+    "problem": "The upper end (C$1,500 ≈ US$1,111) is above Genlook's US$700 in 2–3 months, and Genlook had founder prospecting and a pre-holiday launch. The TrustMRR year-0 median is US$148.",
+    "correction": "ESTIMATE: most likely C$0–300, with a tail of about C$1,000. Arithmetic: US$148 × 1.35 ≈ C$200 is the year-0 median, and a hands-off launch into the BFCM freeze gives no reason to beat it."
+   },
+   {
+    "claim": "Installs needed at a 10–30% install→paid rate: 836–2,090; 10.5–26 per day over about 80 live days.",
+    "problem": "(a) The low end uses 25%, not the stated 30%: 209/0.30 = 697. (b) Zero churn is assumed. (c) Trials delay revenue, so installs after about Jan 17 (with a 14-day trial) do not count toward Jan 31 MRR. The effective window is about Nov 10 → Jan 17 = 68 days, not 80. (d) The 10–30% rate itself is prior knowledge, and no platform publishes it.",
+    "correction": "ESTIMATE: 697–2,090 installs over 68 days = 10.3–30.7 installs/day, sustained, before any churn or uninstalls. For comparison, only 445 new apps were added across the whole store in a 30-day window, and 35% of apps have zero reviews."
+   },
+   {
+    "claim": "AI cost is C$2.03 per paying merchant; net per merchant is C$24.18.",
+    "problem": "(a) The 500 generations/merchant/month and 1,000/400 token sizes are unsourced assumptions. An image feature such as virtual try-on would cost far more per call. (b) Non-converting trial installs consume AI but pay nothing. At a 10% conversion rate there are 9 trial users per payer. (c) Refunds are not counted, and neither is 'uninstall = charge stops mid-cycle'.",
+    "correction": "ESTIMATE: if each non-converting trial uses half a month of usage (US$0.75), then at 10% conversion trial AI cost per payer = 9 × 0.75 = US$6.75 ≈ C$9.11. Net per payer falls to 24.18 − 9.11 = C$15.07, and payers needed = 5,040/15.07 ≈ 335. Label the token/usage figures as ASSUMPTIONS and cap trial usage in the product."
+   },
+   {
+    "claim": "Money needed C$150–700 for 3 months, excluding the owner's Claude subscription (not sourced).",
+    "problem": "The Routines that build and operate everything depend on that subscription, so excluding it hides a core fixed cost. [prior knowledge, unverified, pre-2026-06] Claude Max plans ran about US$100–200/month, which would be C$405–810 over 3 months (100 × 3 × 1.35 = 405; 200 × 3 × 1.35 = 810). Income tax and CPP on self-employment are also not in 'net'.",
+    "correction": "Add a line: 'Claude plan for Routines: not found (prior knowledge suggests C$405–810 per 3 months)'. That raises the ESTIMATE to about C$550–1,500. Reduce capital_light to 7. State that C$5k is before income tax and CPP."
+   },
+   {
+    "claim": "One-time owner setup fits about 8–10 h.",
+    "problem": "The listed tasks sum to about 9.75 h: 1.5 + 0.5 + 1 + 0.5 + 1 + 0.25 + 1.5 + 1.5 (midpoint of 1–2) + 0.5 + 1 + 0.5. That excludes the second Shopify app's submission and review rounds (about 1.5 + 1.5 h, same assumptions as app #1). It also excludes any reduced-revenue-share enrolment step [prior knowledge, unverified, pre-2026-06: the pre-2025 plan required opting in on the Partner Dashboard] and the Protected Customer Data request. The owner's English level is unknown, and reviewer and merchant exchanges in English may take longer.",
+    "correction": "ESTIMATE: 12–14 h one-time, which exceeds the 10 h budget. Either drop app #2 and the Forge hedge from the 3-month plan, or state the overrun. Lower owner_light to 5."
+   },
+   {
+    "claim": "The AI does niche selection from App Store data (the 'Kaching filter'), then builds in 3 weeks.",
+    "problem": "The dossier makes niche choice the main success lever, but apps.shopify.com is currently egress-blocked. Even after allow-listing, listing pages give competitor and review counts but not search volume. The Kaching filter comes from a secondary compilation with no primary URL. Without the network change the niche is picked blind.",
+    "correction": "Make allow-listing apps.shopify.com a hard prerequisite before build day 1. State that the demand memo can show only competition, not demand. Lower ai_build to 7."
+   },
+   {
+    "claim": "Hosting on Cloudflare Workers (US$5/month) deployed via the Shopify CLI token.",
+    "problem": "[prior knowledge, unverified, pre-2026-06] The standard Shopify app template assumes a Node server with Prisma session storage. Running it on Workers needs adaptation (D1/KV session storage, runtime differences), and no evidence shows this path working. The CLI token also covers app config and extensions only, so the backend needs a separate Cloudflare deploy.",
+    "correction": "Tag this as prior knowledge and add 1 week of build risk. Alternatively, cite evidence that a Shopify app template runs on Workers, or say 'not found'."
+   },
+   {
+    "claim": "Built for Shopify badge: 5 reviews and 50 net installs unlocks +49% installs within 14 days.",
+    "problem": "The +49% comes from a secondary compilation (GodMode) of vendor marketing. A 2026-07 secondary says the 50 installs must be on paid Shopify plans, and the badge also has rating and performance criteria. Reaching 50 net installs plus 5 organic reviews (incentivized reviews are banned) inside the window is itself unlikely for a hands-off launch.",
+    "correction": "Treat the badge as a month 4+ milestone and the +49% as unverified marketing. Remove it from the 3-month revenue path."
+   },
+   {
+    "claim": "Payout: first cash about late Nov – mid Dec.",
+    "problem": "The payout cadence is prior knowledge. [prior knowledge, unverified, pre-2026-06] Shopify bills merchants on their own 30-day cycle and pays partners only after merchants are charged, which pushes cash later than the trial-end date. The Forge hedge pays monthly with a US$500 minimum, so it very likely pays nothing in the window.",
+    "correction": "State that realistic first cash is Dec – Jan, and Forge cash within 3 months is ESTIMATE ≈ C$0. Present the Forge hedge as a cost (AI and owner time), not as a revenue hedge, for this horizon."
+   },
+   {
+    "claim": "Shopify billing 'keeps the owner out of... tax collection on the merchant invoice'; foreign merchants may be zero-rated under ETA Sched. VI Part V s.7.",
+    "problem": "Who the supplier and recipient are is unverified. [prior knowledge, unverified, pre-2026-06] Shopify Inc. is a Canadian-resident company, so if the developer's supply is to Shopify, not to the merchant, the s.7 non-resident zero-rating reasoning would not apply. The claim that tax on the merchant invoice is out of the owner's hands has no source.",
+    "correction": "Replace with: 'GST/HST characterization of Shopify app revenue: not found. Irrelevant under the C$30k small-supplier threshold (s.148), but decide before registration.' Remove the 'keeps owner out of tax collection' benefit."
+   },
+   {
+    "claim": "Average app plan US$58–66/month.",
+    "problem": "Only US$66.54 is sourced (Nathandela compilation). The US$58 low end appears in no cited fact. It is also a mean across all apps, heavily skewed, and the dossier's own price is US$19.99, so it is irrelevant to this plan.",
+    "correction": "Use 'US$66.54 mean (secondary, skewed)' and drop 58. Don't cite it as a pricing tailwind for a US$19.99 app."
+   },
+   {
+    "claim": "Genlook reports 80% organic traffic after ChatGPT started recommending the app.",
+    "problem": "This claim is not in the dossier's cited Genlook facts (the Jan 7/13 posts cover prospecting, ads, the holiday freeze and the Upwork reviews). Its source is unclear.",
+    "correction": "Cite the exact post, or mark it 'source not located in this dossier; unverified'."
+   },
+   {
+    "claim": "Owner weekly 1–3 h, 'no selling'; support handled by a Routine.",
+    "problem": "Weekly tasks sum to about 1.3–2.1 h (15–20 + 30–60 + 10 + 15–30 + 30/4.33 ≈ 7 min), which fits. But that assumes a calm steady state. One storefront-breaking bug or a bad AI reply in BFCM season can create hours of work and 1-star reviews. The owner may not be able to judge English escalations. Many owners will also try outreach once the app sees no traction, which leaves the hands-off premise.",
+    "correction": "Keep 1–3 h as the median but state a tail of 5–8 h in incident weeks. Lower ai_operate to 5 because reviewer communication, dashboard-only actions and escalations remain human."
+   },
+   {
+    "claim": "Two-app Shopify portfolio (app #2 about 6 weeks later) plus a Forge app, all within 3 months.",
+    "problem": "This splits a small effort three ways during the weakest selling period. Each app adds its own review rounds, support surface and owner submission time. None of it raises the probability of C$5k by Jan, and it adds owner hours beyond the budget.",
+    "correction": "For the 3-month plan: one Shopify app only. Consider app #2 or Forge only after the kill/continue decision on install→paid data (month 4)."
+   }
+  ],
+  "unlabelled_prior_knowledge": [
+   "The GraphQL Admin API is 'required for new public apps' (no source given)",
+   "Polaris UI / App Bridge / session-token auth as required stack elements (untagged technical claims)",
+   "Protected Customer Data access and approval as a Shopify process (untagged)",
+   "The Shopify Partner API exposes installs, uninstalls and charges for a KPI pull (untagged)",
+   "'Cloudflare Registrar sells at cost' (untagged in money_needed and owner tasks)",
+   "The Shopify CLI template runs on Cloudflare Workers with a DB (implicit and untagged)",
+   "Merchants are 'forced to choose pay or leave' at trial end, which implies uninstall behaviour (untagged)",
+   "The US$58 low end of 'average plan US$58–66/month' (in no cited fact)",
+   "'Genlook reports 80% organic traffic after ChatGPT started recommending his app' (not in the cited Genlook facts)",
+   "Upwork paid-install reviews 'likely breach review rules' is tagged in counter_evidence but stated as fact in distribution_plan",
+   "'Shopify API version deprecations' quarterly cadence implied in the recurring tasks (untagged)",
+   "'Atlassian hosts the app, so there is no server to run' goes beyond the sourced 'free Forge hosting allowance' (whether the free allowance suffices is unverified)",
+   "'Shopify billing keeps the owner out of tax collection on the merchant invoice' (no source)",
+   "A Claude Routines network allow-list for shopify.com, Cloudflare and Anthropic is settable by the owner in about 0.25 h (untagged; the documentation was not read)"
+  ],
+  "math_check": "These checks were verified line by line:\n- 19.99 × 0.971 = 19.41, × 1.35 = C$26.20.\n- AI cost: 500 × (1,000 × $1/M + 400 × $5/M) = 500 × 0.003 = US$1.50 → C$2.03.\n- Net per merchant: C$24.18. Merchants needed: 5,040/24.18 = 208.4.\n- At US$29.99: 29.99 × 0.971 × 1.35 = 39.31; − 2.03 = 37.28; 5,040/37.28 = 135.2.\n- Notion: 19 − 1.90 − 0.40 − 0.19 = 16.51 → C$22.29 → 224.3 sales.\n- Figma: 10 × 0.85 × 1.35 = 11.475 → 435.7 subscribers.\n- WordPress: 79 × 0.9 × 1.35 = 95.99 → 52.1 sales. 52.2/0.015 ≈ 3,478 installs.\n- Atlassian: 60 × 1.35 = 81 → 61.7 sites.\n- Genlook: 700 × 1.35 = 945 = 18.9% of target.\n\nErrors and inconsistencies:\n(1) The install range claims 10–30% but computes the low end at 25%. At 30%: 209/0.30 = 697 installs.\n(2) The 80-day window ignores trial lag. The effective window is about 68 days: 697–2,090 / 68 = 10.3–30.7 installs/day.\n(3) Zero churn is assumed, and trial AI cost is excluded. With 9 non-paying trials per payer at US$0.75 each: net per payer ≈ C$15.07 → about 335 payers needed (5,040/15.07).\n(4) The Claude subscription is excluded. [prior knowledge] US$100–200/month × 3 × 1.35 = C$405–810, which roughly doubles the capital estimate.\n(5) One-time owner hours sum to 9.75 h before app #2, its review rounds and the Forge submission. The realistic total is about 12–14 h, over the 10 h budget.\n(6) The WordPress figure of 52 annual sales/month gives C$5k cash per month, but only C$416/month in recognized MRR per cohort (5,000/12). That understates how far WordPress is from recurring C$5k.\n(7) FX 1.35 is unsourced but applied consistently.",
+  "adjusted_scores": {
+   "p5k_90d": 0.5,
+   "owner_light": 5,
+   "capital_light": 7,
+   "ai_build": 7,
+   "ai_operate": 5,
+   "low_risk": 6
+  },
+  "verdict": "The dossier is unusually honest. It already concludes that C$5k/month by Jan 2027 is unlikely, corrects the misapplied 2.5%/1% conversion figure, and its arithmetic is mostly correct. It is still too optimistic in four places:\n1. **Probability.** 2–5% is above the repo's own base rate: 0.9% breakout, and C$5k is about 34× the TrustMRR year-0 median. It should be ≤1%, because the one channel that worked in every documented Shopify success (founder outreach) is excluded by design.\n2. **Most likely outcome.** C$0–1,500 MRR exceeds the only comparable (Genlook, US$700 with prospecting). C$0–300 is more realistic.\n3. **Time to target.** '6–18 months to C$5k' misuses a survivor-selected 'time to US$1K' statistic.\n4. **Hidden costs and hours.** It omits the Claude subscription (the cost that makes AI operation possible), trial-user AI costs, churn and trial lag. Adding app #2 and the Forge hedge pushes owner setup to about 12–14 h, over budget.\n\nThe niche-selection step the plan depends on also needs egress that is currently blocked, and it can measure competition, not demand. Forge cannot pay out inside the window because of the US$500 monthly minimum.\n\n**Recommendation:** keep Shopify as the best marketplace option, but only as a single-app, 6–12-month asset with a month-4 kill/continue gate on measured install→paid data. Do not present it to the owner as a path to C$5k in 2–3 months; on the evidence, no marketplace variant is."
+ }
+}

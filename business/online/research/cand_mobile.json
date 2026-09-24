@@ -1,0 +1,284 @@
+{
+ "dossier": {
+  "candidate": "Mobile app with subscription (Google Play / App Store): an AI-built Expo/React Native app (or PWA wrapper) with in-app subscriptions, operated by Claude Routines + GitHub Actions",
+  "summary": "VERDICT: The AI can build and mostly run this model, and the owner's time can stay within budget (about 6–10 h setup, then 1–2 h/week). The problem is revenue. The evidence says CAD 5,000/month net by month 3 (about Jan–Feb 2027) is an outlier, not a plan. Keep it only as a low-cost side bet or a \"portfolio of shots\". Do not use it as the income plan.\n\nWHY:\n(1) Typical results for subscription apps, from RevenueCat 2026 as compiled on GitHub and dated 2026-09-12:\n- The median subscription app earns about US$72/month 12 months after launch.\n- 57.7% never reach US$1,000 in cumulative revenue.\n- Only 17.3% reach US$1K MRR (within 2 years).\n- 4.6% reach US$10K MRR.\n- The top 10% earn above about US$2,574/month.\nESTIMATE: the owner's target needs about US$5,058/month gross, which is about 2× the top-decile figure.\n(2) Distribution is the bottleneck, and the owner has excluded the channels that work: their own social posting, creators, and cash for ads.\n- Apple says about 65% of downloads follow a search, so App Store search optimization (ASO) matters, but the store is flooding. New app launches rose about 60% in Q1 2026 (iOS +80%, Appfigures), and one 2026 article says Apple review times stretched \"from two days to weeks\".\n- Paid acquisition in North America costs US$2.50–5.00 per install. At median conversion rates it does not pay back (arithmetic below).\n(3) The platform mechanics are workable without a Mac.\n- Expo's official docs say EAS builds iOS apps on its own cloud Macs, and \"you don't need a Mac to ship iOS builds\".\n- Store fees are 15% (Apple Small Business Program; Google Play's first US$1M).\n- Google Play personal accounts must run a closed test with 12 testers for 14 days before production. This is owner work, so the plan launches on iOS first.\n(4) Cash arrives late. Apple pays within 45 days after the end of its fiscal month, and Google around the 15th of the next month. Sales made in November reach the bank around mid-December (Google) and around January (Apple).\n(5) Legal traps:\n- Apple has rejected apps in 2026 for sending user data to a third-party AI without clear consent (guideline 5.1.2(i)).\n- A paid \"AI immigration consultant\" bot would risk breaching IRPA s.91(1), which bars advising for consideration unless licensed.\n- GST/HST: the platform-operator deeming rule in ETA s.211.13 covers only NON-resident suppliers, so a Canadian developer's GST/HST position needs an accountant.\n\nESTIMATE of month-3 MRR:\n- Base case US$0–500.\n- Optimistic US$1–3K.\n- CAD 5K net: roughly 1–2% likelihood.",
+  "best_variant": "Launch on iOS first (Android only after it shows traction). Build a hard-paywall, single-purpose AI utility, not a game and not regulated \"consultation\":\n- Product: \"photo → plain-language explanation + reply draft\" for everyday paperwork (bills, leases, school and utility letters, forms). Output in English plus Korean and about 8 other localizations.\n- Storefronts: US, Canada, UK and Australia. Excluding the EU avoids the DSA trader address/phone disclosure [prior knowledge, unverified, pre-2026-06].\n- Price: US$9.99/month with no trial, plus US$39.99/year with a 7-day trial on a transparent timeline paywall, not a toggle. These are the North America medians in the RevenueCat 2026 compilation. Evidence behind the design: the 5–9 day trial band converts at 37.4% vs 25.5% for 3-day trials, and Apple is reported to reject trial-toggle paywalls.\n- AI and billing: Claude Haiku 4.5 through a Cloudflare Worker proxy, with rate limits and an explicit in-app consent screen for sending data to Anthropic (5.1.2(i)). RevenueCat handles billing (free to US$2.5K monthly tracked revenue, then 1%).\n- Positioning: explain and translate only. No legal, tax or immigration advice (IRPA s.91).\n- Portfolio: run it as a portfolio of up to 3 genuinely distinct apps over 3 months (distinct because of Apple's 4.3 spam rule). Kill any app whose day-35 download-to-paid is under 2.6% (the iOS median) or whose day-14 revenue per install is under US$0.23 (the median).\n- Why this variant: Utilities and Photo & Video have the best milestone rates in RevenueCat SOSA 2025 NA (28% and 27.6% reach $1K, 12% and 8.75% reach $10K), vs Gaming at 20%/7%. Hard paywalls convert 10.7% vs 2.1% for freemium by day 35. iOS converts 2.6% vs 0.9% for Google Play.\nIt remains a long shot for CAD 5K by month 3.",
+  "unit_economics": "All figures are ESTIMATES. FX assumed at 1 USD = 1.37 CAD [prior knowledge, unverified, pre-2026-06].\n\nTARGET: CAD 5,000 net ÷ 1.37 = US$3,649.6 net per month (before income tax).\n\nFEES AND COSTS:\n- Store fee 15% (Apple Small Business Program; Google's first US$1M).\n- RevenueCat 1% once monthly tracked revenue passes US$2.5K.\n- AI cost per chat turn:\n  - Haiku 4.5 ($1/$5 per 1M tokens; cache reads 0.1×), with 2,000 cached system tokens + 1,500 fresh input + 400 output: 2000×0.1×1/1M + 1500×1/1M + 400×5/1M = US$0.0037.\n  - Sonnet 5 ($2/$10) on the same mix: US$0.0074.\n  - At 300 turns/month per payer: US$1.11 (Haiku) or US$2.22 (Sonnet).\n  - Trial users who do not convert add about (1/0.32 − 1) × 30 turns × 0.0037 = US$0.24 per new payer (negligible).\n- Fixed costs: EAS Starter US$19 + Apple US$99/12 = US$8.25 + US$10 misc = US$37.25/month.\n\nGROSS NEEDED:\n- Net = G × (1 − 0.15 − 0.01 − 1.11/9.99) − 37.25 = 0.7289G − 37.25.\n- Setting that equal to 3,649.6 gives G = US$5,058/month gross.\n- That is about 506 active monthly subscribers at US$9.99, or about 126 annual purchases at US$39.99 in the month.\n- Net margin after store fee, RevenueCat, AI and fixed costs: about 72%.\n\nNEW PAYERS NEEDED:\n- First monthly renewal 53.2% (RevenueCat median). Later renewals assumed at 80% (assumption).\n- Month-3 active payers = N × (1 + 0.532 + 0.532×0.8) = 1.958N, so N = 259 new payers every month from launch.\n\nINSTALLS NEEDED PER MONTH (at 259 new payers/month):\n\n| Conversion benchmark | Installs/month | Per day |\n|---|---|---|\n| iOS median, day-35 download-to-paid 2.6% | 9,948 | about 332 |\n| Hard-paywall median 10.7% | 2,417 | about 81 |\n| Google Play median 0.9% | 28,739 | about 958 |\n\nORGANIC ONLY (installs flat from month 1): the 10–50 downloads/day anecdote (from a founder posting daily, which the owner will not do) gives:\n\n| Downloads/day | Conversion | Month-3 net |\n|---|---|---|\n| 30 | 2.6% | about CAD 406 |\n| 30 | 10.7% | about CAD 1,830 |\n| 50 | 10.7% | about CAD 3,083 |\n\nPAID ACQUISITION:\n- Expected paid months per payer = 1 + 0.532/(1 − 0.8) = 3.66.\n- Lifetime value per payer: US$36.56 gross, about US$26.65 net.\n- Cost per paying customer = cost per install ÷ conversion:\n  - US$3 CPI at 2.6% conversion: US$115, so a loss of about US$89 per payer.\n  - US$3 CPI at 10.7% conversion: US$28, roughly break-even over about a year.\n- Scaling to the target by ads needs about 2,417 installs × US$3 = US$7,252/month (about CAD 9,935) in ad spend.\n- Only about 30% of that comes back in the first month (US$2,170 net from each cohort's first month). This is capital-intensive and cash-negative for months.",
+  "distribution_plan": "Without the owner doing any work, customers can only come from store search, a capped ad budget, and slow web search traffic:\n\n(1) App Store search optimization, run entirely by the AI. Apple states about 65% of downloads happen right after a search (secondary). The AI handles:\n- keyword research from competitor listings and reviews;\n- title and subtitle;\n- screenshots generated with benefits first;\n- about 10 localizations to widen keyword coverage;\n- Product Page Optimization tests;\n- replies to reviews through the App Store Connect API.\n\n(2) A small Apple Search Ads learning budget, capped by the owner (for example CAD 15–30/day). The AI manages keywords and bids [Campaign Management API: prior knowledge, unverified, pre-2026-06]. Scale only if day-60 revenue per install exceeds the cost per install.\n\n(3) An App Store featuring nomination. The AI drafts it, and a user with the Admin or Marketing role submits it; the recommended lead time is at least 3 weeks, per the perceva compilation.\n\n(4) SEO landing pages and articles on Cloudflare Pages. This takes months to compound.\n\n(5) Excluded by the owner's constraints: posting from the owner's personal social accounts, creator deals and community posting.\n\nThe evidence says these excluded channels drove the fast successes. Cal AI used 250+ creators on retainer, and Coconote used about 25 part-time creators. Hevy launched without an audience in 2019 and did not hit its inflection until January 2022. So this plan is honestly weak on distribution.\n\nOwner hours/week: about 1–2 (approving spend and releases, relaying App Review messages if needed, reading the weekly report).",
+  "timeline": "BUILD (Sep 24 – about Oct 20, 2026): the AI scaffolds the Expo app, backend, paywall, metadata and CI in about 2–3 weeks (ESTIMATE). Apple enrollment and ID verification run in parallel; their duration was not found (days to weeks [prior knowledge, unverified, pre-2026-06]).\n\nLAUNCH, iOS (about late Oct – mid Nov 2026):\n- The official-style figure is about 90% of submissions reviewed within 24 hours (secondary, 2026-05).\n- A 2026-07 article says review times \"stretched from two days to weeks\" after the flood of new apps.\n- A real AI-labelled app went through rejections on 2026-06-16 and again on 2026-07-13 (5.1.2(i), 5.1.1(iv), 2.1(a), 4.4.1). Budget 1–4 weeks.\n\nLAUNCH, Android (optional, about late Nov – Dec 2026 at the earliest): needs at least 14 days of closed testing with 12 engaged testers, then a production-access application. Its review time was not found (about 7 days [prior knowledge, unverified, pre-2026-06]).\n\nFIRST REVENUE: the first charge comes about 7 days after the first trial starts, so mid to late November. Cash in the bank:\n- Google: about the 15th of the following month, so about Dec 15.\n- Apple: within 45 days of fiscal-month close, so November proceeds arrive about January 2027.\n\nCAD 5,000/month: not expected by Jan–Feb 2027. Basis:\n- Among the apps that do succeed, the median is 58 days to US$1K MRR and 109 days to US$10K (RevenueCat 2026, flagged unverified by the compiler).\n- The median app earns US$72/month at 12 months.\n- ESTIMATE: log-interpolating 17.3% (reach $1K) and 4.6% (reach $10K) puts about 6.8% of apps EVER reaching about US$5K MRR within 2 years. The share that gets there within about 90 days, with no audience and no ad budget, is lower: about 1–2%.\n- Realistic month-3 MRR: US$0–500 (base case), US$1–3K (optimistic).",
+  "owner_one_time_tasks": [
+   "Apple Developer Program enrollment as an individual: US$99/yr, an Apple ID with 2FA, ID verification. The seller name shown will be the owner's legal name [prior knowledge, unverified, pre-2026-06]. May need an iPhone/iPad for the Apple Developer app ID check [prior knowledge, unverified, pre-2026-06]. About 1–2 h plus waiting.",
+   "App Store Connect: accept the Paid Apps agreement, complete tax forms (a non-US individual used W-8BEN in a 2026 ADR; Canadian specifics not verified) and add a Canadian bank account. About 1 h.",
+   "Apply to the App Store Small Business Program so the fee is 15% instead of 30%. About 15 min.",
+   "Create an App Store Connect API key and an Expo access token, and store both as GitHub Actions secrets so the AI can build, submit and manage metadata. About 30 min.",
+   "Create a RevenueCat account and connect the App Store in-app purchase key. Create an Anthropic API account with billing and a hard monthly spend limit. About 1 h.",
+   "Create a Cloudflare account (Workers for the AI proxy, Pages for the privacy policy and landing site), buy a domain, and create a dedicated support email address. About 1 h.",
+   "Review and approve the AI-drafted privacy policy, terms, AI-data consent wording and storefront list (recommend excluding the EU to avoid publishing a DSA trader address and phone [prior knowledge, unverified, pre-2026-06]). About 1 h.",
+   "Optional: an Apple Search Ads account with a card and a hard daily cap. About 30 min.",
+   "Optional (Android): Google Play Console personal account (US$25 one-time, ID verification; the owner's legal name and address are shown publicly for personal accounts). Recruit 12 real testers who stay opted in and engaged for 14 days, then file the production-access application. About 2–4 h. Device verification is [prior knowledge, unverified, pre-2026-06].",
+   "A one-hour accountant consult on GST/HST registration timing (the $30K small-supplier test in ETA s.148) and how app-store proceeds are treated for a Canadian-resident developer. About 1 h."
+  ],
+  "owner_weekly_tasks": [
+   "Read the AI's weekly metrics report (trials, day-35 download-to-paid, day-14/day-60 revenue per install, MRR, refunds, crashes) and approve the go / iterate / kill decision. About 20–30 min.",
+   "Approve spending changes (ad budget, API spend limit, Expo plan) and any new app or version submission. About 15 min.",
+   "Relay or confirm App Review messages when a rejection needs the account holder. The AI drafts the reply; the owner pastes it if the API cannot post it [prior knowledge, unverified, pre-2026-06]. 0–60 min.",
+   "Glance at payouts and bank deposits, and forward any bank or platform verification requests. About 10 min.",
+   "Answer escalated support cases the AI flags, such as refund disputes or angry users. About 0–15 min."
+  ],
+  "ai_build_tasks": [
+   "Niche selection: the AI mines competitor listings and 1–3★ reviews to find an underserved, non-regulated utility keyword. The iTunes Search API is public but was not tested from this sandbox.",
+   "Expo/React Native app: onboarding with value before login, a hard paywall with a transparent 7-day-trial timeline (no trial toggle), the RevenueCat react-native-purchases SDK (the listed Expo IAP option), a restore-purchases flow, account deletion, and localization (EN, KO and about 8 more).",
+   "Backend: a Cloudflare Worker proxy to the Claude API (Haiku 4.5 by default, prompt caching on the system prompt), RevenueCat webhook entitlement checks, per-user rate limits and spend caps, and no user data kept beyond the request unless consented.",
+   "Compliance artifacts: privacy policy (PIPEDA), App Privacy labels, a Google Data Safety form, an explicit third-party-AI consent screen (Apple 5.1.2(i)), a 'not legal, tax or immigration advice' disclaimer (IRPA s.91), and App Review notes with a demo account.",
+   "CI/CD: GitHub Actions to run EAS Build (cloud Mac for iOS), EAS Submit and EAS Update; lint and tests; Maestro end-to-end tests on an Android emulator in CI.",
+   "Store assets: titles, subtitles and keywords per locale; generated screenshots; preview text; a featuring-nomination draft.",
+   "Landing and SEO site on Cloudflare Pages, a support page, and a metrics dashboard pulling from the RevenueCat API."
+  ],
+  "ai_recurring_tasks": [
+   "Daily Routine: pull RevenueCat metrics, crash logs and new App Store reviews; reply to reviews through the App Store Connect API; draft support-email replies (sent automatically only for templated cases).",
+   "Ship bug fixes as over-the-air JavaScript updates through EAS Update, and build new native versions only when native code changes. Whether Apple allows a given OTA change is [prior knowledge, unverified, pre-2026-06].",
+   "Weekly search-optimization iteration: keyword and subtitle changes (need a new version), screenshot A/B tests through Product Page Optimization, and localization upkeep.",
+   "Weekly paywall and pricing experiments, tested in this order: price → duration mix → trial → layout (RevenueCat's recommended order).",
+   "If the owner has approved a cap, manage Apple Search Ads keywords, bids and negatives, and stop when day-60 revenue per install is below the cost per install.",
+   "Apply the kill rule at day 30–45: if day-35 download-to-paid is under 2.6% or day-14 revenue per install is under US$0.23, pivot or build the next distinct app.",
+   "Monthly: check for SDK, target-API and policy changes (Apple's April-2026 SDK-26 minimum; Google's yearly target API), and produce a bookkeeping export (T2125 categories) plus a GST/HST $30K threshold tracker."
+  ],
+  "money_needed_cad": "ESTIMATE, at 1 USD = 1.37 CAD [prior knowledge, unverified, pre-2026-06].\n\nMINIMUM: about CAD 250–450.\n- Apple US$99 ≈ CAD 136.\n- Google US$25 ≈ CAD 34 (optional).\n- Expo Starter US$19/month × 3 ≈ CAD 78 (optional; the Free plan has low-priority builds).\n- Claude API testing US$20–50 ≈ CAD 27–68.\n- Domain about CAD 15–25 [prior knowledge, unverified, pre-2026-06].\n- Cloudflare free tiers: CAD 0.\n\nRECOMMENDED: about CAD 1,000–2,000, adding an Apple Search Ads learning budget of CAD 500–1,500.\n\nSCALING TO CAD 5K VIA ADS (not recommended): about CAD 10,000/month in ad spend (2,417 installs × US$3 × 1.37), with break-even or worse lifetime value at median conversion. That is about CAD 20–30K at risk over 3 months.\n\nThe owner's living costs during the months with little or no revenue are extra and are the decisive unknown.",
+  "facts": [
+   {
+    "fact": "The repo's evidence corpus (196 searches) has no mobile-app, App Store, Google Play, Expo or RevenueCat evidence. A grep for these terms matched only unrelated lines (Jiffy app listing, TaskRabbit fees). Everything below was gathered this session from GitHub-hosted sources.",
+    "source": "/home/user/canadian-tool-deals/business/research/evidence-corpus.md"
+   },
+   {
+    "fact": "Expo official docs: 'EAS Submit works on macOS, Linux, and Windows, so you don't need a Mac to ship iOS builds.' 'A paid Apple Developer account is required to submit apps to the Apple App Store.'",
+    "source": "https://raw.githubusercontent.com/expo/expo/main/docs/pages/submit/ios.mdx"
+   },
+   {
+    "fact": "Expo official docs: 'Android builds run on Linux runners hosted in Google Cloud Platform, and iOS builds run on macOS runners hosted in Expo's macOS cloud.'",
+    "source": "https://raw.githubusercontent.com/expo/expo/main/docs/pages/build/introduction.mdx"
+   },
+   {
+    "fact": "Expo official docs: the Free plan gives a limited number of low-priority builds per month, resetting monthly, with no overage charges. The Starter plan costs $19/month and includes $45 of build credit and 3,000 EAS Update monthly active users (1,000 on Free). The exact Free build count is not in the repo docs (not found).",
+    "source": "https://raw.githubusercontent.com/expo/expo/main/docs/pages/billing/faq.mdx"
+   },
+   {
+    "fact": "Expo official docs: on a first submission, 'eas submit' creates the app's first release on the Google Play internal testing track. It needs a Google Service Account key. TestFlight allows up to 100 internal testers and a public link for up to 10,000 external testers.",
+    "source": "https://raw.githubusercontent.com/expo/expo/main/docs/pages/submit/android.mdx ; https://raw.githubusercontent.com/expo/expo/main/docs/pages/build/automate-submissions.mdx"
+   },
+   {
+    "fact": "Expo's in-app purchase guide lists react-native-purchases (RevenueCat, wrapping Google Play Billing and StoreKit) and expo-iap. Both need a development build, not Expo Go.",
+    "source": "https://raw.githubusercontent.com/expo/expo/main/docs/pages/guides/in-app-purchases.mdx"
+   },
+   {
+    "fact": "Google Play (agency engineering handbook): 'A one-time registration fee of US$25 applies to both personal and organization accounts.' Personal accounts need a 'Minimum of 12 testers' who are 'continuously opted-in for 14 days' before a production release. On personal accounts, the owner's legal name, address and developer email are publicly visible. Organization accounts need a D-U-N-S number: 'up to 30 business days' standard, or about 8 business days expedited for $200–300.",
+    "source": "https://raw.githubusercontent.com/futuredapp/Engineering-Handbook/main/docs/teams/android/release/00_google_play_account.md"
+   },
+   {
+    "fact": "Google Play research compiled 2026-05-02 (secondary):\n- Personal accounts created after Nov 2023 must run closed testing with at least 12 opted-in testers for 14 continuous days before applying for production. Verified organization accounts with a DUNS number are exempt.\n- 'As of April 2026' Google measures user engagement time, and inactive testers don't count.\n- The fee is 15% on the first $1M/year, and subscriptions have been 15% since Jan 1, 2022.",
+    "source": "https://raw.githubusercontent.com/ItachiDevv/ClawVille/master/docs/app-publishing-research/02-google-play.md"
+   },
+   {
+    "fact": "Apple research compiled 2026-05-02 (secondary):\n- The Developer Program costs $99/year.\n- The Small Business Program rate is 15% for developers under $1M in annual proceeds.\n- About 90% of submissions are reviewed in under 24 hours.\n- 4.3 (spam) is among the most-cited rejection reasons.\n- Since April 28, 2026, submissions require the iOS 26 SDK.\n- Contains an error: it says the 30% rate drops to 15% 'after Year 2' of a subscription (the rate drops after the first year [prior knowledge, unverified, pre-2026-06]).\n- It also says a Mac is required, which Expo's official docs contradict for EAS cloud builds.",
+    "source": "https://raw.githubusercontent.com/ItachiDevv/ClawVille/master/docs/app-publishing-research/01-apple.md"
+   },
+   {
+    "fact": "An ADR dated 2026-09-02 (secondary, cites developer.apple.com and revenuecat.com):\n- 'Apple pays no later than 45 days after the end of the fiscal month.'\n- Google 'normally pays around the 15th of the following month.'\n- RevenueCat 'is free through USD 2,500 in monthly tracked revenue and then charges 1%.'\n- The US storefront 'permits external-purchase calls to action without an entitlement.'\n- For Google, 'a different lower-fee model is rolling out by region through 2027' (details not found).\n- An individual can sign Apple's Paid Apps agreement without forming a company.",
+    "source": "https://raw.githubusercontent.com/lermanori/HealthyFlow/main/docs/adr/0015-apple-iap-through-revenuecat-is-the-launch-rail.md"
+   },
+   {
+    "fact": "RevenueCat 2026 benchmarks (secondary compilation dated 2026-08-01; dataset '115,000+ apps and $16B'):\n- Day-35 download-to-paid: hard paywall 10.7% vs freemium 2.1%.\n- Day-35 download-to-paid by platform: iOS 2.6% vs Google Play 0.9%.\n- Trial-to-paid: iOS 32.0%, Google Play 32.5%.\n- Revenue per install: day-14 $0.23; day-60 $0.34 (North America $0.55).\n- First renewal: monthly 53.2%, yearly 25.2%.\n- About 32% of Google Play cancellations are failed payments.\n- North America price medians: about $9.99/month and $39.99/year.\n- Trial-to-paid by length: 25.5% for ≤4-day trials, 37.4% for 5–9 days.\nThe compiler flags revenue-per-install and time-to-milestone figures as unverified against source.",
+    "source": "https://raw.githubusercontent.com/Teamz-Lab-LTD/teamz-company-automation/main/claude-config/knowledge/RevenueCat_Benchmarks_2026.md"
+   },
+   {
+    "fact": "The raw research source says: 'median across all categories is about 58 days to reach $1K in monthly revenue and 109 days to reach $10K, with only 17.3% of apps reaching $1K at all and 4.6% reaching $10K' (RevenueCat 2026 State report, citations corrupted).",
+    "source": "https://raw.githubusercontent.com/Teamz-Lab-LTD/teamz-company-automation/main/claude-config/knowledge/sources/2026-08-01-chatgpt-deep-research-revenuecat-60day-launch.md"
+   },
+   {
+    "fact": "A compilation dated 2026-09-12 citing RevenueCat State of Subscription Apps 2026:\n- The median subscription app earns US$72/month 12 months after launch.\n- 17.3% reach US$1K MRR within 2 years.\n- 57.7% never reach US$1K in cumulative revenue.\n- The top 10% earn above US$2,574/month.\n- 77% of launches are on iOS.",
+    "source": "https://raw.githubusercontent.com/andrlut/perceva/main/docs/brand/research/gtm-benchmarks.md"
+   },
+   {
+    "fact": "Same compilation:\n- 'Almost 65% of downloads happen directly after a search' (Apple Ads official page).\n- North America cost per install: US$2.50–5.00 (Business of Apps).\n- Apple Search Ads brand terms: US$0.80–3.00.\n- Health & Fitness iOS Tier-1 cost per install: US$2–10.\n- Its own worked case finds paid acquisition 'does not pay' in the first 90 days.\n- 'Build in public' without an audience yields about 10–50 downloads/day (weak, anecdotal).",
+    "source": "https://raw.githubusercontent.com/andrlut/perceva/main/docs/brand/research/gtm-benchmarks.md"
+   },
+   {
+    "fact": "RevenueCat SOSA 2025, North America, milestone success rates:\n- Utilities: 28% reach $1K (median 50 days), 12% reach $10K (160 days).\n- Photo & Video: 27.57% / 8.75%.\n- Business: 30% / 15%.\n- Gaming: 20% / 7% (70 / 210 days).\n- Social & Lifestyle: 18% / 6%.",
+    "source": "https://raw.githubusercontent.com/best-trading-indicator-tools/devrel-hackaton-adapty/main/revenuecat-data/revenue-milestone-benchmarks.json"
+   },
+   {
+    "fact": "An Apple Search Ads average of US$2.50–4.00 per install in the US market (attributed to 2025 AppsFlyer data; secondary).",
+    "source": "https://github.com/pmstani/pmstani.github.io/blob/main/_posts/2026-02-22-app-store-optimization-complete-guide.md"
+   },
+   {
+    "fact": "Claude API list prices (skill docs cached 2026-06-24), per 1M tokens input/output:\n- Haiku 4.5: $1/$5 (200K context).\n- Sonnet 5: $2/$10.\n- Opus 5: $5/$25.\nCache reads cost about 0.1× the input price.",
+    "source": "claude-api skill, Current Models table (cached 2026-06-24)"
+   },
+   {
+    "fact": "IRPA s.91(1): 'no person shall knowingly, directly or indirectly, represent or advise a person for consideration — or offer to do so — in connection with ... a proceeding or application under this Act'. The exceptions are lawyers, notaries, paralegals and College members (s.91(2)). The statute file is dated to 2026-03-26.",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/I-2.5.xml"
+   },
+   {
+    "fact": "ETA s.211.13 (the platform-operator deemed-supply rule) applies when 'a specified supply is made through a specified distribution platform by a specified non-resident supplier'. It does not settle GST/HST for a Canadian-resident developer selling through app stores. The small-supplier threshold is $30,000 (s.148), and registration is due within 30 days of the first supply made while no longer a small supplier (s.240(2.1)(b)).",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml ; /home/user/canadian-tool-deals/business/research/dossiers/cross_compliance.json"
+   },
+   {
+    "fact": "The prior micro-SaaS dossier's base rates: year-0 median MRR about $148/month (TrustMRR, n=5,079). Free-to-paid conversion for extensions is about 0.8–3%. Fast launches mostly came from founders who already had audiences.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "The median subscription app earns only US$72/month after 12 months, and 57.7% never reach US$1K in cumulative revenue. The top decile's US$2,574/month is about half of the US$5,058/month gross this plan needs.",
+    "source": "https://raw.githubusercontent.com/andrlut/perceva/main/docs/brand/research/gtm-benchmarks.md"
+   },
+   {
+    "fact": "Appfigures: global new app launches rose about 60% in Q1 2026 (iOS about +80%), led by utilities, productivity, lifestyle and health apps (the categories AI builders target). Apple said it rejected over 320,000 submissions in 2024 for spam, copycat or misleading content.",
+    "source": "https://raw.githubusercontent.com/dotku/jy-news/main/content/news-en/1558728.mdx"
+   },
+   {
+    "fact": "'In Q1 2026 iOS submissions were up 80% year over year. The surge is so large that Apple's review times have stretched from two days to weeks.'",
+    "source": "https://github.com/uto-usui/magazine/blob/main/articles/2026-07-12/ai-has-torched-the-market-for-junior-programmers.md"
+   },
+   {
+    "fact": "A real AI-labelled iOS app was rejected on 2026-06-16 under 5.1.1(i) and 5.1.2(i) ('appears to share the user's personal data with a third-party AI service'). It was rejected again on 2026-07-13 (2.1(a), 5.1.1(iv)). That is about 4 weeks of review cycles.",
+    "source": "https://raw.githubusercontent.com/getdictus/dictus-ios/main/.planning/app-review-history.md"
+   },
+   {
+    "fact": "Google Play's median day-35 download-to-paid is 0.9% vs iOS 2.6%, and about 32% of Google Play cancellations are failed payments. The Android half of 'both stores' earns much less per install.",
+    "source": "https://raw.githubusercontent.com/Teamz-Lab-LTD/teamz-company-automation/main/claude-config/knowledge/RevenueCat_Benchmarks_2026.md"
+   },
+   {
+    "fact": "Fast subscription-app successes relied on channels this owner excludes. Cal AI used 250+ creators on retainer, then paid media. Coconote reached $1M ARR in 4 months with about 25 part-time creators. Hevy launched without an audience in 2019, and its inflection came only in January 2022.",
+    "source": "https://raw.githubusercontent.com/andrlut/perceva/main/docs/brand/research/gtm-benchmarks.md ; https://github.com/Volyume/ADPhysique/blob/main/docs/GROWTH_STRATEGY_PASS_3_CLAUDE.md"
+   },
+   {
+    "fact": "The perceva compilation's own math concludes paid acquisition 'does not pay' for a new app in 90 days (for example, US iOS wellness at US$4–10 per install vs a US$19.99/yr price) and should be used only as a learning budget.",
+    "source": "https://raw.githubusercontent.com/andrlut/perceva/main/docs/brand/research/gtm-benchmarks.md"
+   },
+   {
+    "fact": "The RevenueCat time-to-milestone figures (58 and 109 days, 17.3%, 4.6%) come from a deep-research run whose citations are corrupted. The compiler marks them 'unverified against source'. Sources also disagree on whether 17.3% means 'ever' or 'within 2 years'.",
+    "source": "https://raw.githubusercontent.com/Teamz-Lab-LTD/teamz-company-automation/main/claude-config/knowledge/RevenueCat_Benchmarks_2026.md"
+   }
+  ],
+  "risks": [
+   "Distribution risk (dominant): with no owner social posting, no creators and no meaningful ad budget, a new app in a store flooded with AI-built apps (+60–80% launches in Q1 2026) may get almost no installs. Store search optimization alone has no sourced install figures for brand-new apps (not found).",
+   "Revenue-timing risk: even a successful app pays out late (Apple within 45 days of fiscal-month close; Google about the 15th of the next month). Month-3 income on paper lands in the bank in month 4–5.",
+   "Review and approval risk: multi-round rejections (5.1.2(i) third-party-AI disclosure, 4.3 spam and duplicate apps, 2.1 completeness, trial-toggle paywalls) can eat weeks. The account holder may have to answer App Review personally.",
+   "Google Play gate: personal accounts need 12 engaged testers for 14 days, and since about April 2026 inactive testers reportedly don't count. That needs owner networking, contradicting the no-owner-work goal. Organization accounts need a D-U-N-S number (up to 30 business days).",
+   "Privacy exposure: personal Google Play accounts publicly show the legal name and address. Apple individual accounts show the legal name as seller [prior knowledge, unverified, pre-2026-06]. EU distribution may require a public DSA trader address and phone [prior knowledge, unverified, pre-2026-06].",
+   "Legal: an AI 'consultation' bot in regulated domains risks unauthorized practice. IRPA s.91 bars paid immigration advice by unlicensed people; legal, medical and tax advice raise similar issues [prior knowledge, unverified, pre-2026-06]. PIPEDA governs user data, and CASL governs any marketing email.",
+   "Tax: GST/HST treatment of app-store proceeds for a Canadian-resident developer is unresolved (ETA s.211.13 covers only non-resident suppliers). At CAD 5K/month the $30K small-supplier threshold would be crossed within about 6 months, so an accountant is needed.",
+   "AI cost blowout: a chat-style app with heavy users or abuse could exceed the US$1.11/payer/month estimate. It needs per-user caps and Haiku by default.",
+   "Platform and account termination risk: publishing several similar apps can trigger spam enforcement on both stores and lose the developer account. Policy changes (EU terms from 2026-10-01, Google fee changes through 2027) shift the economics.",
+   "Owner-attribute unknowns: English level (App Review and support correspondence is in English, drafted by the AI), whether the owner has an iPhone for Apple ID verification and on-device checks, and savings to cover months with little or no revenue.",
+   "Evidence quality: most store rules and benchmarks here come from dated secondary GitHub compilations (2026-05 to 2026-09), not from official Apple, Google or RevenueCat pages, which could not be opened this session."
+  ],
+  "scores": {
+   "p5k_90d": 0.5,
+   "owner_light": 7,
+   "capital_light": 7,
+   "ai_build": 8,
+   "ai_operate": 6,
+   "low_risk": 6
+  },
+  "score_rationale": "p5k_90d = 0.5:\n- The target needs about US$5,058/month gross (about 506 subscribers at $9.99), which is about 2× the top-decile 12-month figure (US$2,574) in RevenueCat 2026 data.\n- ESTIMATE: a log-interpolation between 17.3% (reach $1K) and 4.6% (reach $10K) gives about 6.8% of apps ever reaching about $5K MRR within 2 years.\n- Achievers' median times are 58 days to $1K and 109 days to $10K, and launch is about November, so only a fraction of that 6.8% get there by Jan–Feb 2027.\n- With no audience, no creators and no ad capital: about 1–2%.\n\nowner_light = 7:\n- An iOS-only path fits the 10-hour setup: Apple enrollment, agreements, tax, bank, API keys, RevenueCat, Anthropic, Cloudflare.\n- Weekly work can stay at 1–2 h.\n- It loses points because Android needs 12 recruited testers, App Review escalations may need the account holder, and the evidence says owner-driven distribution is what moves results.\n\ncapital_light = 7:\n- Launch costs are about CAD 250–450, or about CAD 1–2K with an ads learning budget.\n- The only path that scales without owner labour (paid acquisition) needs about CAD 10K/month, with break-even or worse lifetime value at median conversion.\n\nai_build = 8:\n- Expo cloud builds and submission remove the Mac requirement, and the AI can write the app, backend, paywall, compliance text and store assets.\n- It loses points because the AI cannot run the iOS simulator on Linux or hand-test on a device, and some steps (first agreements, keys) are owner-only.\n\nai_operate = 6:\n- Routines can watch RevenueCat and reviews, ship over-the-air fixes, iterate store search optimization and pricing, and manage capped ads.\n- They cannot fix distribution, post from the owner's accounts, or (probably) reply in App Review's Resolution Center.\n\nlow_risk = 6:\n- Financial downside is small if no ads are run, and legal exposure is manageable if the app avoids regulated advice and discloses AI data flows.\n- The risks are rejection and termination, public disclosure of the owner's name and address on Google personal accounts, unresolved GST/HST treatment, and AI-cost abuse."
+ },
+ "verification": {
+  "problems": [
+   {
+    "claim": "Paid acquisition: 'Only about 30% of that comes back in the first month (US$2,170 net from each cohort's first month).'",
+    "problem": "Arithmetic uses a different margin from the rest of the dossier. 258.6 payers × $9.99 × 0.84 (store fee and RevenueCat only) = $2,170. The dossier's own net factor includes AI cost and is 0.7289.",
+    "correction": "ESTIMATE: 258.6 × 9.99 × 0.7289 = US$1,883, or about 26% of the $7,252 ad spend (1,883 / 7,252). The ads path is more cash-negative than stated."
+   },
+   {
+    "claim": "Scaling to the target by ads needs about CAD 10,000/month in ad spend.",
+    "problem": "This uses only the most optimistic conversion (hard-paywall median 10.7%) and the low end of the CPI range. The dossier's own iOS median is 2.6%, and its sourced CPI range is US$2.50–5.00.",
+    "correction": "ESTIMATE: at 2.6% and US$3 CPI, 9,948 × 3 = US$29,843, about CAD 40,900/month. At 10.7% and CPI $2.50–5.00, it is CAD 8,300–16,600/month. Show the range CAD 8K–41K/month, not a single CAD 10K figure."
+   },
+   {
+    "claim": "p5k_90d score = 0.5 (0–10 scale), with a stated likelihood of about 1–2%.",
+    "problem": "On a 0–10 likelihood scale, 0.5 means about 5%, which is 2.5–5× the dossier's own estimate. The 1–2% also rests on the wrong window. The task window is Dec 2026–Jan 2027, but the dossier shifted it to 'month 3 ≈ Jan–Feb 2027', counted from launch.",
+    "correction": "Use about 0.2. With launch around mid-Nov after 1–4 weeks of review, only 1.5–2.5 months of sales fall inside the window. 'Averaging' CAD 5K by then also needs the ramp-up months to be high."
+   },
+   {
+    "claim": "The month-3 model assumes N = 259 new payers every month from launch, with installs flat from month 1.",
+    "problem": "A brand-new app with no ratings, no audience and no owner posting does not start at steady-state install volume. The dossier admits organic install figures for ASO-only new apps were 'not found', yet the organic table uses 30–50 downloads/day. That figure comes from a founder who posts daily, which the owner explicitly will not do.",
+    "correction": "Label the 30–50/day rows as an upper bound from a channel the owner excludes. Add a row for 5 downloads/day (ESTIMATE, unsourced). At 2.6%: 150 × 0.026 = 3.9 payers/month; × 1.9576 = 7.6 active; × 9.99 × 0.7289 − 37.25 = about US$18 net. The honest base case is closer to US$0–100 MRR than US$0–500."
+   },
+   {
+    "claim": "Later monthly renewals are assumed at 80%.",
+    "problem": "This number is unsourced. It is optimistic for an episodic-need product: people need a paperwork explainer occasionally, not every month. The paid-acquisition LTV is very sensitive to it.",
+    "correction": "Tag it as an assumption and add a sensitivity case. ESTIMATE: at 60% later retention, expected paid months = 1 + 0.532/0.4 = 2.33, net LTV = 2.33 × 9.99 × 0.7289 = US$16.97. That is below the US$28 cost per payer even at 10.7% conversion and $3 CPI, so paid acquisition never breaks even."
+   },
+   {
+    "claim": "The AI cost share is 1.11/9.99 of revenue, applied to all gross revenue, including the '126 annual purchases at US$39.99' equivalence.",
+    "problem": "An annual subscriber who uses 300 turns/month costs 1.11 × 12 = US$13.32/year, which is 33% of US$39.99, not 11%. The equivalence understates cost for any annual-heavy mix. The per-turn cost also excludes image tokens for a photo-based product, cache-write premiums and longer reply drafts.",
+    "correction": "Model AI cost per subscriber-month, not as a share of revenue. Add image input (roughly 1,000–1,600 tokens per photo [prior knowledge, unverified, pre-2026-06]) and cache writes (about 1.25× input [prior knowledge, unverified, pre-2026-06]). This is still small per turn. But either the annual plan needs a usage cap, or a margin of about 0.51 must be used for annual revenue."
+   },
+   {
+    "claim": "The recommended budget includes a CAD 500–1,500 Apple Search Ads learning budget, while the distribution plan says CAD 15–30/day.",
+    "problem": "This is internally inconsistent. CAD 15–30/day over 60–90 days is CAD 900–2,700.",
+    "correction": "ESTIMATE: either state CAD 900–2,700 (15 × 60 = 900; 30 × 90 = 2,700) or cap at CAD 15/day for about 60 days. Add the accountant consult (not costed; CAD 150–400 [prior knowledge, unverified, pre-2026-06]) and the owner's living costs to 'money needed'."
+   },
+   {
+    "claim": "Portfolio of up to 3 distinct apps over 3 months, with a kill rule at day-35 download-to-paid < 2.6% or day-14 RPI < US$0.23.",
+    "problem": "The timeline makes this impossible. Each app needs 2–3 weeks to build, 1–4 weeks of review and 35 days of measurement, which is about 2.5–3 months per app. So at most one app gets a real verdict inside the horizon. At 30 downloads/day, day-35 cohorts give about 20–25 payers, too noisy to separate 2.6% from 5%. Several similar apps on one individual account also raise the risk of Apple 4.3 spam enforcement and account loss.",
+    "correction": "State that only one app can be evaluated within the horizon. Base the kill rule on minimum sample sizes (for example, at least 1,000 installs) rather than calendar days. Drop the '3-app portfolio' from the 90-day plan."
+   },
+   {
+    "claim": "Hard paywalls convert 10.7% vs 2.1% for freemium, so a hard paywall is the design choice.",
+    "problem": "This is a correlation across apps that chose hard paywalls, which likely have high-intent traffic or paid funnels (selection bias). It is not a treatment effect. Also, 10.7% (all platforms, hard paywall) and 2.6% (iOS, all paywalls) are different cuts and should not be presented as alternatives for the same app.",
+    "correction": "Treat 10.7% as an upper reference, not a planning case. Use 2.6%–5% as the planning range for a new app with no audience (ESTIMATE; unsourced upper bound)."
+   },
+   {
+    "claim": "Product: 'photo → plain-language explanation + reply draft' at US$9.99/month.",
+    "problem": "There is no evidence of willingness to pay, and no competitor or demand data was gathered. General free assistants already do photo-to-explanation [prior knowledge, unverified, pre-2026-06]. The repo's own cand_saas.json records a '$0 because 5+ free alternatives existed' failure. The product also targets immigrants and people handling official letters, which drifts toward the IRPA s.91 and unauthorized-practice risk the dossier wants to avoid, for example when explaining IRCC letters and drafting replies.",
+    "correction": "Downgrade confidence in the variant. Require the AI's niche research to show paying competitors with reviews that complain about something fixable before building. Block immigration and legal letters in the product, not just with a disclaimer."
+   },
+   {
+    "claim": "Owner weekly time 1–2 h; owner_light = 7.",
+    "problem": "Some owner-only work is hidden:\n- The Account Holder must accept updated Apple agreements in the web UI, or submissions and payouts are blocked [prior knowledge, unverified, pre-2026-06].\n- 2FA prompts on the owner's device.\n- App Review Resolution Center replies are likely not possible through the API [prior knowledge, unverified, pre-2026-06], and with multi-round rejections that means English correspondence, while the owner's English level is unknown.\n- Apple ID verification may need an iPhone.\n- The Android path requires the owner to recruit 12 engaged testers.\n- Most importantly, the only distribution channels with evidence of working (creators, founder posting) are owner-dependent, so staying 'owner-light' effectively means accepting near-zero distribution.",
+    "correction": "Score owner_light at 6. Budget 2–3 h/week during launch and review months. List agreement acceptance and 2FA as recurring owner tasks."
+   },
+   {
+    "claim": "CAD 5,000 'net' target = US$3,649.6/month.",
+    "problem": "The figure is before income tax and before self-employed CPP (roughly 11.9% on self-employed earnings [prior knowledge, unverified, pre-2026-06]). The FX rate is unverified. Apple payouts lag 45+ days, so income 'by month 3' is not cash by month 3.",
+    "correction": "State explicitly that CAD 5K here is pre-tax business profit, and that cash received by Jan 2027 would be roughly one to two months behind accrued revenue."
+   },
+   {
+    "claim": "The Apple Small Business Program gives a 15% fee.",
+    "problem": "Hidden detail: the program must be applied for, and the reduced rate starts after enrollment is processed, not retroactively [prior knowledge, unverified, pre-2026-06]. This is minor, but early sales could carry 30%.",
+    "correction": "Make applying before the first sale an explicit prerequisite in the owner's setup steps."
+   },
+   {
+    "claim": "'Roughly break-even over about a year' at US$3 CPI and 10.7% conversion.",
+    "problem": "By the dossier's own numbers, the cost per payer is US$28.04 and the expected LTV is US$26.65 over 3.66 expected months. That is a small expected loss, not break-even, and it relies on the unsourced 80% retention.",
+    "correction": "Say 'slightly negative expected return (−US$1.4 per payer) even at the optimistic conversion, and clearly negative if retention is below 80%'."
+   },
+   {
+    "claim": "ai_build = 8.",
+    "problem": "The AI cannot run the iOS simulator on Linux or test camera, photo capture and StoreKit sandbox purchases on a device. A photo-first app depends on exactly those flows. Rejections under 2.1 (completeness) are common, and the cited dictus case had one.",
+    "correction": "Score ai_build at 7. The TestFlight smoke test has to be done by the owner or a tester on an iPhone, which is further hidden owner labour."
+   }
+  ],
+  "unlabelled_prior_knowledge": [
+   "Apple individual-account seller name, and needing an iPhone for Apple ID verification, are tagged. However, 'Apple is reported to reject trial-toggle paywalls' has no source cited in the facts list.",
+   "'Hevy launched without an audience in 2019 ... inflection January 2022' is cited to GitHub compilations. That is acceptable, but it is secondary.",
+   "Timeline item 'the AI scaffolds the Expo app... in about 2–3 weeks' is labelled ESTIMATE, but with no basis given.",
+   "'Store search optimization alone has no sourced install figures' is correctly marked not found, yet the organic table still relies on the founder-posting 30–50/day anecdote without tagging it as inapplicable.",
+   "'Kill ... day-60 revenue per install exceeds cost per install': the NA day-60 RPI of $0.55 is flagged unverified by the compiler, and the dossier does not repeat that flag when using it.",
+   "'Utilities and Photo & Video have the best milestone rates': the cited JSON shows Business at 30%/15%, which is higher, so 'best' is inaccurate.",
+   "The 'EAS Update OTA changes allowed by Apple' tag is fine. But the RevenueCat claim 'recommended test order: price → duration mix → trial → layout' has no source in the facts list."
+  ],
+  "math_check": "Recomputed:\n- Target: 5000 / 1.37 = US$3,649.6.\n- Haiku per turn: 0.0002 + 0.0015 + 0.002 = $0.0037. Sonnet per turn: $0.0074.\n- 300 turns × 0.0037 = $1.11. Trial overhead: 2.125 × 30 × 0.0037 = $0.24.\n- Fixed costs: 19 + 8.25 + 10 = $37.25.\n- Net factor: 1 − 0.15 − 0.01 − 0.1111 = 0.7289.\n- Gross needed: G = (3,649.6 + 37.25) / 0.7289 = $5,058. That is 506 monthly subscribers, or 126.5 annual purchases.\n- Active-payer multiplier: 1 + 0.532 + 0.4256 = 1.9576, so N = 258.6.\n- Installs needed: 9,946 (2.6%), 2,417 (10.7%), 28,739 (0.9%).\n- Organic table: CAD 406, 1,830 and 3,083. All check.\n- Paid months: 1 + 0.532/0.2 = 3.66. LTV: $36.56 gross, $26.65 net. Cost per payer: $115.4 and $28.0. Ad spend: $7,252 = CAD 9,934.\n- Log-interpolation: about 6.85%. 5,058 / 2,574 = 1.97×.\n\nErrors and inconsistencies:\n(a) The cohort first-month return of $2,170 uses a 0.84 margin. The correct figure is $1,883 (26%, not 30%).\n(b) The ads cost is quoted only at best-case conversion. At the iOS 2.6% median it is about CAD 40.9K/month.\n(c) The AI-cost share is wrong for annual plans: 33% of revenue, not 11%.\n(d) The Search Ads budget is inconsistent: CAD 15–30/day over 60–90 days is CAD 900–2,700, not 500–1,500.\n(e) A p5k score of 0.5 on a 0–10 scale implies about 5%, versus the stated 1–2%.\n(f) 'Break-even' at 10.7% is actually −$1.4 per payer. At 60% retention, LTV is $16.97, so paid acquisition never pays back.\n(g) The month-3 model assumes steady-state installs from day 1 and redefines the window as Jan–Feb 2027 instead of the task's Dec 2026–Jan 2027.",
+  "adjusted_scores": {
+   "p5k_90d": 0.2,
+   "owner_light": 6,
+   "capital_light": 6.5,
+   "ai_build": 7,
+   "ai_operate": 5,
+   "low_risk": 5.5
+  },
+  "verdict": "The dossier's overall conclusion holds: this is a low-cost side bet, not an income plan. Most of its arithmetic checks out, but where it is wrong it errs toward optimism:\n- The ads payback figure used the wrong margin: US$1,883, not US$2,170.\n- Ad spend was quoted only at the best-case 10.7% conversion. At the iOS median it is about CAD 41K/month, not 10K.\n- The renewal rate behind LTV (80%) is unsourced. At 60%, paid acquisition never pays back.\n- AI cost is understated for annual plans (33% of revenue, not 11%).\n- The Search Ads budget does not match the stated daily cap.\n- The organic case borrows 30–50 downloads/day from a founder who posts daily, which the owner won't do. An ASO-only new app plausibly gets far less, so the base case is closer to US$0–100 MRR.\n- The 3-app portfolio and the day-35 kill rule do not fit a 90-day window. At most one app can be judged.\n- The chosen product (a photo paperwork explainer) has no willingness-to-pay evidence, competes with free general assistants, and drifts toward the IRPA s.91 risk.\n- Hidden owner work: accepting Apple agreements, 2FA, App Review correspondence in English, on-device TestFlight checks, and Android tester recruiting.\n\nAgainst the task's Dec 2026–Jan 2027 window, with launch around mid-November, the chance of averaging CAD 5K/month is well under 1–2%. Adjusted p5k_90d = 0.2/10. Keep it only if the owner accepts it as a cheap lottery ticket (about CAD 300–500 plus 8 h setup). It should not be the plan the owner relies on for income."
+ }
+}

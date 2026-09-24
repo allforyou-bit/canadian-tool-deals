@@ -1,0 +1,169 @@
+{
+ "topic": "Base rates: how often do AI-built or indie online products (SaaS, mobile subscription apps, browser and mobile games, Chrome extensions, digital products, AI chatbot sites for small businesses) reach USD/CAD 5k/month within about 3 months? Covers which evidence is representative and which is survivorship-biased anecdote, a plain probability statement for the owner's case, and the strategies that evidence says improve the odds. Owner's case: launch Oct 2026, target by Dec 2026–Jan 2027, owner time ≤3 h/week after setup, no audience, owner does not post personally. Note: the repo's cross_baserates.json shard was BLOCKED and contains no data. This shard rebuilds base rates from the existing dossiers, the evidence corpus, and GitHub-hosted sources fetched 2026-09-24.",
+ "key_facts": [
+  {
+   "fact": "RESEARCH-PROCESS NOTE: the earlier base-rate shard gathered nothing. WebSearch budget was 200/200 and every non-GitHub domain was egress-blocked, so it says 'NO EVIDENCE-BACKED CONCLUSION IS POSSIBLE FROM THIS SHARD'. Every base rate below comes instead from the existing candidate dossiers and from GitHub-hosted secondary research that cites the primary reports. No primary report page (RevenueCat, TrustMRR/Indie Hackers, Gamalytic, ChartMogul) was opened directly.",
+   "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_baserates.json"
+  },
+  {
+   "fact": "[REPRESENTATIVE-ISH, SaaS] Indie Hackers analysis of TrustMRR data (n=5,079 Stripe-verified products, 12 Mar 2026). Median MRR is $169. The 75th, 90th and 99th percentiles are about $800, $10,000 and $98,500. Only 0.9% (48 of 5,079) were 'breaking out' (>$10k MRR and >50% month-over-month growth). Median MRR by product age: year 0 $148, year 1 $334, year 2 $656, year 4 $2,399, year 5 $2,509. The compiler adds: 'the median product does not reach $1k MRR by year 2'. Bias: TrustMRR is opt-in (launched Oct 2025), so the numbers skew UPWARD.",
+   "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md"
+  },
+  {
+   "fact": "[REPRESENTATIVE-ISH, SaaS, only downward corrector] ScrapingFish, n=937 Indie Hackers products, July 2022 (dated): more than 54% earned $0. Time to first $1k MRR was p25 5 months, median 8, p75 12, but that sample is n=28, filtered from about 100 down to 'steady growth' products, so it is survivor-selected and effectively anecdotal.",
+   "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md"
+  },
+  {
+   "fact": "ESTIMATE: where USD 5k MRR sits in the TrustMRR all-ages distribution. Log interpolation between p75 ($800) and p90 ($10,000): (ln5000 − ln800)/(ln10000 − ln800) = (8.517 − 6.685)/(9.210 − 6.685) = 0.726, so percentile ≈ 75 + 0.726×15 ≈ 86. Linear interpolation: 75 + (4,200/9,200)×15 ≈ 82. So about 14–18% of opt-in products OF ALL AGES are at or above $5k MRR. Year-0 medians are $148, about 34× below $5k (5,000/148 = 33.8). The year-0 tail distribution was not published (not found).",
+   "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md"
+  },
+  {
+   "fact": "[EXCLUDED AS UNRELIABLE] RockingWeb's 'median micro-SaaS $4.2K MRR / 70% under $1K' and its '82% never reach $5k' figures are flagged as content-farm numbers that contradict the Stripe-verified $169 median by 25×. The same goes for '0 to $10K MRR in 6 months' and 'median 12–18 months to $1K MRR' (no methodology). The repo's SaaS verifier also marked RockingWeb 'refuted'. The minalGoel compilation still repeats the '12–18 months / 70% never cross $1K' claim, so treat it as unsupported.",
+   "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md"
+  },
+  {
+   "fact": "[REPRESENTATIVE-ISH, mobile subscription apps] RevenueCat State of Subscription Apps, as paraphrased in two 2026 secondary docs. First: 'roughly one in five reaches $1,000 in revenue within two years and about one in twenty reaches $10,000, and the drop-off roughly halves at every milestone after that' (page dated 2026-09-16). Second, the 2025 report: 'Only ~20% of new apps reach $1,000 total in two years'. These are CUMULATIVE revenue milestones, not monthly. The population is apps that already integrated a paid-subscription SDK, which is upward-biased relative to all apps.",
+   "source": "https://raw.githubusercontent.com/tryforma/forma/884964886602deba6ad1b0d42b8683367f3afc2b/web/slideshow-play/index.html ; https://raw.githubusercontent.com/rpiechowicz/scoffie-backend/8e9ee9afd14aba221e6b8bbe12675f0e3cadab0d/docs/plans/scoffie-ai-agent/market-research.md"
+  },
+  {
+   "fact": "ESTIMATE (logical upper bound): averaging USD 5k/month over months 1–3 means at least $15k cumulative within 3 months, which implies reaching the '$10,000 cumulative within two years' milestone. RevenueCat puts that milestone at about 1 in 20 (5%) of subscription apps. So P(single new app averages $5k/month in its first 3 months) is below 5%, probably far below.",
+   "source": "https://raw.githubusercontent.com/tryforma/forma/884964886602deba6ad1b0d42b8683367f3afc2b/web/slideshow-play/index.html"
+  },
+  {
+   "fact": "[REPRESENTATIVE-ISH, mobile; definition ambiguous] A secondary 2026 compilation attributes to RevenueCat the claim that the top 5% of newly launched subscription apps make $8,880 after their first year while the bottom 25% make no more than $19. It also says the top 5% earn about 400× the bottom 25%. It lists 'Days to $1K MRR: 65; Days to $5K MRR: 120', which almost certainly apply only to apps that eventually reach those milestones (survivor-conditioned). ESTIMATE: if $8,880 is first-year cumulative revenue, the 95th percentile averages 8,880/12 = $740/month in year 1.",
+   "source": "https://raw.githubusercontent.com/timdunn22/streak-tracker-apps/36bf08450c348cf09f332dc5f55e5f92df17907a/INDIE_APP_MARKETING_RESEARCH.md"
+  },
+  {
+   "fact": "[REPRESENTATIVE-ISH, mobile funnel] RevenueCat 2026 (115k+ apps, $16B+, secondary summaries):\n- Download→paid by day 35: median 2.0%; freemium 2.1% vs hard paywall 10.7%; low-, mid- and high-priced apps 1.4%, 2.0% and 2.8%; Gaming 1.0%.\n- Revenue per install at day 60: all apps $0.34, freemium $0.38, hard paywall $3.09; D14 Gaming $0.08.\n- Realized 12-month LTV per payer: global $23; Gaming $11.22.\n- Trial→paid: ≤4-day trials 25.5% vs 17–32-day trials 42.5%.\n- AI apps: +41% LTV per payer ($30.16 vs $21.37), but 12-month retention on annual plans is 21.1% vs 30.7%.",
+   "source": "https://raw.githubusercontent.com/rpiechowicz/scoffie-backend/8e9ee9afd14aba221e6b8bbe12675f0e3cadab0d/docs/plans/scoffie-ai-agent/market-research.md ; https://raw.githubusercontent.com/Nikolai-Iakubovskii/app-paywall-pilot/0572b91f860d1d36cccf5c4af93f1b3bba968ba1/outputs/2026-paywall-research.md"
+  },
+  {
+   "fact": "[REPRESENTATIVE-ISH, mobile, ambiguous] Adapty State of In-App Subscriptions 2026 (16k apps, $3B), secondary: 'median app $492/month; 59.3% of apps under $1,000 total'. Whether the $1,000 is monthly or cumulative is not stated in the secondary source, so treat it only as confirming a heavily skewed distribution.",
+   "source": "https://raw.githubusercontent.com/rpiechowicz/scoffie-backend/8e9ee9afd14aba221e6b8bbe12675f0e3cadab0d/docs/plans/scoffie-ai-agent/market-research.md"
+  },
+  {
+   "fact": "[PRIOR KNOWLEDGE] VisionMobile Developer Economics surveys from about 2013–2015 reported that roughly half or more of app developers earned below an 'app poverty line' of about $500 per app per month. Separately, commonly cited app-intelligence analyses show store revenue concentrated in a very small share of apps. The exact share of apps earning over $5k/month was NOT found this session.",
+   "source": "[prior knowledge, unverified, pre-2026-06]"
+  },
+  {
+   "fact": "[REPRESENTATIVE-ISH, PC games] Gamalytic estimates for 2025 Steam releases, via a GamesRadar article copy: 8,388 games (65.9%) earned under $1,000 gross. 47.4% sold under 100 copies and 28% sold 100–1,000. More than 5,000 did not recover the $100 Steam listing fee, and the bottom 30% averaged $37 gross. Gamalytic's own caveat: 77% of individual estimates fall within ±30%, and there is more error for small and F2P games.",
+   "source": "https://raw.githubusercontent.com/BstWPY/WildGraphBench/c334bc806511e029285d208c24c2a8901ed5cf2c/corpus/technology/Steam(service)/reference_pages/Over%205000%20games%20released%20on%20Steam%20this%20year%20didnt%20make%20enough%20money%20to%20recover%20t.txt"
+  },
+  {
+   "fact": "[SECONDARY, browser/web games] A 2026-09-12 game-project research note says:\n- CrazyGames pays developers 60% of ad revenue and 70% of in-app purchases.\n- 'Good' portal games earn $200–2,000/month.\n- Game subscriptions convert poorly (RevenueCat 2026: download→paid 1.0%; D60 revenue per install $0.14).\n- Casual-game ad ARPDAU is typically $0.05–0.50.\nESTIMATE: at $200–2,000 per good portal game, 5,000/2,000 = 2.5 → 3 top-of-range games up to 5,000/200 = 25 games are needed for $5k/month.",
+   "source": "https://raw.githubusercontent.com/beingabstrac/gamepals/47023e493d4c058090ff2cebb6ec2bcb618b62dc/docs/01-research.md"
+  },
+  {
+   "fact": "[PRIOR KNOWLEDGE] On itch.io and similar open storefronts most listed games earn nothing or near nothing. Web-portal publishers (Poki, CrazyGames) curate which games they accept, so acceptance is not guaranteed. No representative earnings distribution for web-portal games was found this session.",
+   "source": "[prior knowledge, unverified, pre-2026-06]"
+  },
+  {
+   "fact": "[REPRESENTATIVE-ISH, Chrome extensions; secondary survey data] About 94% of extensions are fully free with no direct monetization. About 6% use a paid model (freemium 3.2%, subscription 1.8%, one-time 0.7% of all extensions). Developer-reported revenue averages about $42 per 1,000 monthly active users. Average freemium conversion is about 2.8% (240-developer survey). ESTIMATE: at $42 per 1,000 MAU, $5,000/month needs 5,000/42×1,000 ≈ 119,000 monthly active users.",
+   "source": "https://raw.githubusercontent.com/minalGoel/micro-tools/main/project_planning/source_files/Chrome%20Extension%20Economics%20and%20Distribution%202024%E2%80%932026.md"
+  },
+  {
+   "fact": "[COMMUNITY DATA POINTS, Chrome extensions] One developer with 5 extensions on ExtensionPay (May 2026): 0.8% free→paid conversion and $180 MRR after 6 months, up from $60 at month 3. A 50,000-user extension made about $1,750/month at under 1% conversion. Responsive Viewer had 70,000+ users and about $30/month. chromegoldmine benchmarks: 2k–10k active users bring $50–500/month on freemium. NicheCheck: TOP-10% extensions by category earn $3k–50k/month.",
+   "source": "https://raw.githubusercontent.com/nnnkit/totem/main/plans/research/premium-monetization/raw/rs-recent-discourse.md ; /home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+  },
+  {
+   "fact": "[REPRESENTATIVE-ISH, SaaS conversion] ChartMogul SaaS Go-To-Market Report (2,500 companies): pure self-serve converts about 2.5% by day 7 and about 1% by day 14. Freemium→paid is 3–4%, opt-in trials without a card about 18%, card-required trials about 50%. Median time to 1,000 B2B subscribers is 24 months (top performers 11 months). Bootstrapped SaaS median growth is 20% a year (SaaS Capital 2026).",
+   "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/cac.md"
+  },
+  {
+   "fact": "[REPRESENTATIVE-ISH, paid acquisition, web] WordStream 2026 Google Ads benchmarks (13,474 US campaigns): Business Services CPC $5.87 and CPL $93.69. At 2–5% trial→paid that means $1,900–4,700 per PAYING customer. Freemius/MicroConf: 57% of micro-SaaS founders running ads wait 7+ months for return on ad spend or cannot tell whether ads work. No CAC benchmark exists for solo founders spending under $2,000/month. ESTIMATE: the 107 customers a C$49/month product needs for C$5k would cost 107×1,900 = $203,300 to 107×4,700 = $502,900 in acquisition.",
+   "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/cac.md"
+  },
+  {
+   "fact": "[SECONDARY, paid acquisition, mobile] CPI is $1–5 for health/wellness apps, and Meta averages $3.50–4.00 (Instagram) and $3.75 (Facebook), per a 2026 indie compilation citing Business of Apps. ESTIMATE, 60-day payback = D60 revenue per install / CPI:\n- Median freemium app: 0.38/2.50 = 15%.\n- Hard-paywall median: 3.09/4.00 = 77% up to 3.09/2.50 = 124%, before the 15% store commission and API costs.\n- $5k/month from a median hard-paywall app ≈ 5,000/3.09 ≈ 1,618 installs/month, costing $4,045–6,472/month in ads.\nResult: roughly break-even to loss-making. Only top-quartile monetizers buy growth profitably inside a 2–3 month window.",
+   "source": "https://raw.githubusercontent.com/timdunn22/streak-tracker-apps/36bf08450c348cf09f332dc5f55e5f92df17907a/INDIE_APP_MARKETING_RESEARCH.md ; https://raw.githubusercontent.com/rpiechowicz/scoffie-backend/8e9ee9afd14aba221e6b8bbe12675f0e3cadab0d/docs/plans/scoffie-ai-agent/market-research.md"
+  },
+  {
+   "fact": "[SURVIVORSHIP-BIASED ANECDOTES] A 30-founder 'built fast and made money' compilation (Feb 2026) is selected ON success, so it cannot give a base rate. Its fast cases:\n- TypingMind: $10K in 10 days; the founder already had 8K Twitter followers and prior products.\n- AudioPen: 100 customers in 2 days.\n- Chatbase: $1M ARR in 117 days, launched 2 months before ChatGPT.\n- Base44: $1M ARR in 3 weeks.\n- HeadshotPro, Subscribr: Subscribr presold $20K to an existing 1,000-person list.\nAlmost all fast cases had an existing audience, first-mover timing in the 2023 AI wave, or a presale list. The same file records the slow cases: Data Fetcher about 2 years to $10K MRR, Angel Match stuck at $3K MRR for 4 years, Bannerbear about 16 months.",
+   "source": "https://raw.githubusercontent.com/AnshumanAtrey/licon/main/research/founder-stories/solo-saas-founders-research.md"
+  },
+  {
+   "fact": "[SURVIVORSHIP-BIASED, but informative on per-shot hit rates] Pieter Levels: 'Only 4 out of 70+ projects I ever did made money. >95% of everything I ever did failed' (4/70 ≈ 5.7%). Marc Lou built 28 startups before his breakthrough. Damon Chen made $1.99 total across 4 failed products first. Max Artemov had 10 years of mobile experience, spent 5 years on one failed app, then built 30 ASO-targeted apps to about $22K/month in under a year, using ads plus paid social; individual apps make about $500–1,000/month. These are EVENTUAL WINNERS, so even their per-shot rates overstate a typical newcomer's.",
+   "source": "https://raw.githubusercontent.com/AnshumanAtrey/licon/main/research/founder-stories/solo-saas-founders-research.md ; https://raw.githubusercontent.com/timdunn22/streak-tracker-apps/36bf08450c348cf09f332dc5f55e5f92df17907a/INDIE_APP_MARKETING_RESEARCH.md"
+  },
+  {
+   "fact": "[FAILURE ANECDOTES, the other side of the ledger] One developer built 11 SaaS products (1,600 hours building, 3 hours talking to users) and got about 10 users total. A 'Viral AI Script Generator' got 30 waitlist signups and $0 because 5+ free alternatives existed. FeedbackWise shut down after 6 months with 0 paying customers. Nudge's donation model made $8/month. Text-Behind-Objects had 1M views and $23 total.",
+   "source": "https://raw.githubusercontent.com/minalGoel/micro-tools/main/project_planning/source_files/Micro-SaaS%20and%20AI%20tool%20monetization%20what%20actually%20works.md"
+  },
+  {
+   "fact": "[AI-BUILT-SPECIFIC HEADWIND, SINGLE SECONDARY SOURCE] A 2026-09-16 practitioner page says that on June 8, 2026 Apple rewrote App Review guideline 4.3(b) to reject 'mediocre, low-quality, or low-effort' apps. It names categories (dating, flashlight, sound effects, wallpaper, timers, fortune telling) and cites an 84% surge in submissions attributed to AI coding tools. It says repeated same-kind submissions can cost the developer account, and that LLM chat wrappers and template habit trackers are spotted instantly. The same page says TikTok throttles automation behaviour and multi-account devices. Not verified against Apple's own page.",
+   "source": "https://raw.githubusercontent.com/tryforma/forma/884964886602deba6ad1b0d42b8683367f3afc2b/web/slideshow-play/index.html"
+  },
+  {
+   "fact": "[OFFICIAL POLICY] Chrome Web Store Spam and Abuse policy (2022-11-01): 'We don't allow any developer, related developer accounts, or their affiliates to submit multiple extensions that provide duplicate experiences or functionality… Extensions should provide value to users through the creation of unique content or services.' A 'many near-identical shots' portfolio is therefore disallowed on CWS. Each shot must be genuinely distinct.",
+   "source": "https://raw.githubusercontent.com/GoogleChrome/developer.chrome.com/main/site/en/docs/webstore/program-policies/spam-and-abuse/index.md"
+  },
+  {
+   "fact": "[SECONDARY, content/SEO headwind] Google's 'scaled content abuse' spam policy (from 2024) covers mass-produced pages whether made by AI or not. Agency reports (unverified) say sites with hundreds or thousands of unreviewed AI pages lost 50–80% of traffic in the March 2026 core update, and that the August 2026 spam update hit thin affiliate and programmatic sites. The content dossier found no sourced case of a new creator or site reaching CAD 5,000/month within 1–3 months.",
+   "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_content.json"
+  },
+  {
+   "fact": "[AI-OPERATED BUSINESS EVIDENCE] Anthropic Project Vend (GitHub mirror of the official post, Dec 18, 2025). In phase 1 (Claude Sonnet 3.7 running an office shop alone), Claudius 'lost money over time'. Phase 2 (Sonnet 4.0/4.5, a CEO agent, better tools, no payment access without human approval) largely eliminated negative-margin weeks. But the post concludes 'the gap between \"capable\" and \"completely robust\" remains wide' and that the agents 'still needed a great deal of human support'. A separate WSJ-newsroom deployment was socially engineered into losses. Takeaway: even well-scaffolded autonomous operation needs human guardrails, and this is weak evidence against a fully hands-off business.",
+   "source": "https://raw.githubusercontent.com/johnzfitch/claude-wiki/7d93f4bace21c5a9261d3d27ccce26ef04cdc309/19-Reference/project-vend-phase-two-anthropic.md"
+  },
+  {
+   "fact": "[MARKETPLACE DISTRIBUTION, mixed evidence]\nFor:\n- Data Fetcher gets 70–80% of customers from Airtable marketplace placement (anecdote).\n- Kaching Appz reached $4.5M/yr with $0 marketing on the Shopify App Store (anecdote).\n- Shopify charges 0% revenue share on a developer's first $1M lifetime, and Atlassian Forge 0% on the first $1M from 1 Jan 2026 (platform docs as cited).\n- CWS extension marketers say most installs come from Google Search landing on the store listing.\nAgainst:\n- 34.98% of 12,320 Shopify apps had zero reviews (Jan 2025 scrape), a proxy for never gaining traction.\n- No marketplace publishes install→paid funnel data.",
+   "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md ; https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/cac.md ; https://raw.githubusercontent.com/AnshumanAtrey/licon/main/research/founder-stories/solo-saas-founders-research.md"
+  },
+  {
+   "fact": "[COMMUNITY/INDUSTRY, channels] Freemius State of Micro-SaaS 2025 (synthesising MicroConf, about 700 founders): 47% say integrations, partnerships and communities became their most dependable growth source. Product Hunt (low credibility, no methodology): outside the top 10 a launch gets under 500 visitors and under 20 signups. These channels mostly need the founder to post and engage personally, which this owner excludes.",
+   "source": "https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/cac.md"
+  },
+  {
+   "fact": "[AI chatbot / 'consultation bot' sites for small businesses] From the evidence corpus:\n- Cold-email reply rate averages 3.43% (Instantly 2026).\n- Direct-to-SMB AI receptionists already sell at $49/month (Rosie), $79 (Goodcall) and $95 (Smith.ai), which caps reseller pricing.\n- A Reddit-summary source (a vendor site) says most people who start AI automation agencies never reach meaningful revenue.\nThe repo verifier rated this candidate 1.5/10 for $5k within 60 days and found that its own blended scenario averages about $3k/month, not $5k. ESTIMATE: at a $49/month competitor price point, 5,000/49 ≈ 102 paying SMB clients.",
+   "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_aismb.json ; /home/user/canadian-tool-deals/business/research/evidence-corpus.md (S173, S175, S178)"
+  },
+  {
+   "fact": "[REPO VERDICTS for comparison; all scores out of 10 for 'average $5k within about 60 days'] Micro-SaaS/Chrome extension/AI tools: adjusted probability_5k 0.5, ELIMINATE as the main plan. Digital products/content/affiliate: 1, ELIMINATE as the main plan. Freelancing marketplaces: 1. AI productized services for SMBs: 1.5. Korean-community services: 1. The owner's new 2–3 month horizon is longer than those 60-day verdicts, but the base-rate data here covers 1–2 years and still puts the median far below $5k.",
+   "source": "/home/user/canadian-tool-deals/business/research/dossiers/INDEX.md"
+  },
+  {
+   "fact": "[OFFICIAL PAGE, via a third-party copy] Apple Small Business Program: 15% commission if proceeds were ≤$1M USD in the prior calendar year (developer.apple.com, fetched by a third party 2026-08-27). The 15% comes off gross before the owner sees money.",
+   "source": "https://raw.githubusercontent.com/rpiechowicz/scoffie-backend/8e9ee9afd14aba221e6b8bbe12675f0e3cadab0d/docs/plans/scoffie-ai-agent/market-research.md"
+  },
+  {
+   "fact": "[PRIOR KNOWLEDGE, cash timing] Apple pays developers within about 45 days of the end of each fiscal month. Google Play pays monthly, around the 15th, for the prior month's earnings. So revenue earned in December 2026 on the app stores likely arrives as cash in late January to February 2027. For Stripe Canada the repo verifier found a first payout 7–14 days after the first payment (Stripe doc mirror).",
+   "source": "[prior knowledge, unverified, pre-2026-06] ; /home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+  },
+  {
+   "fact": "[PRIOR KNOWLEDGE, FX] CAD 5,000 is roughly USD 3,600–3,700 at a CAD/USD rate of about 1.35–1.40 (rate not sourced this session). The USD-denominated base rates above therefore apply to a slightly lower bar than 'USD 5k'. This does not change the qualitative bands.",
+   "source": "[prior knowledge, unverified, pre-2026-06]"
+  },
+  {
+   "fact": "ESTIMATE, portfolio arithmetic (assumes independent shots, which overstates the odds). P(at least one product hits the target) = 1 − (1 − p)^n:\n- n=10, p=0.5%: 1 − 0.995^10 = 4.9%\n- n=10, p=1%: 9.6%\n- n=20, p=1%: 18.2%\n- n=10, p=5% (the hard RevenueCat upper bound): 40.1%\nReaching $5k as the sum of five $1k/month products: P(≥5 hits of 20 shots) = 0.26% at p=5% and 4.3% at p=10%.",
+   "source": "ESTIMATE computed in this shard from https://raw.githubusercontent.com/tryforma/forma/884964886602deba6ad1b0d42b8683367f3afc2b/web/slideshow-play/index.html"
+  }
+ ],
+ "conclusions": [
+  "REPRESENTATIVE vs ANECDOTE:\n- The only datasets with a denominator are TrustMRR (n=5,079, opt-in, biased upward), RevenueCat (115k apps already running a paid SDK, biased upward), Adapty, Gamalytic Steam 2025, the ScrapingFish IH sample, and ChartMogul/WordStream funnels.\n- All of them say the typical outcome is tiny: SaaS year-0 median $148 MRR; about 1 in 5 subscription apps reach $1k CUMULATIVE within 2 years and about 1 in 20 reach $10k; 65.9% of 2025 Steam releases grossed under $1k; about 94% of Chrome extensions earn nothing directly.\n- The fast stories (TypingMind, AudioPen, Chatbase, Base44, HeadshotPro, Levels, Artemov, TikTok-slideshow MRR claims) come from success-selected compilations. Nearly all had an existing audience, 2023 AI-wave timing, a presale list, or years of prior failures.\n- None of these can be used as a base rate.",
+  "PLAIN PROBABILITY STATEMENT: SINGLE PRODUCT. The case: one AI-built product (game, AI consultation-bot site, subscription app, extension or micro-SaaS) averaging CAD 5k/month net by about Dec 2026–Jan 2027, with ≤3 h/week of owner time, no audience and no personal posting.\n- Band: VERY UNLIKELY. The hard evidence-based ceiling is below about 5%, because $15k in 3 months implies the '$10k cumulative within 2 years' milestone that only about 1 in 20 subscription apps reach.\n- My judgment is that it sits around 1% or lower, since the owner lacks the audience and founder-led distribution that the base-rate populations mostly had.",
+  "PLAIN PROBABILITY STATEMENT: PORTFOLIO. A portfolio of about 10–20 genuinely distinct AI-built shots in the same window is UNLIKELY.\n- ESTIMATE: roughly 5–20% under independence at a 0.5–1% per-shot chance. The real figure is probably at the lower end, because the shots share the same weaknesses (no audience, owner cannot post, same channels).\n- Hitting CAD 5k as the sum of several small winners (5 × $1k) is less likely still: under 5% even with generous assumptions.\n- Some revenue (first dollars to a few hundred dollars a month) by Jan 2027 is PLAUSIBLE to LIKELY for a portfolio.\n- CAD 5k/month within 12–24 months is better than the 3-month odds but still below even for any single product: the TrustMRR age medians are year 1 $334, year 2 $656, year 4 $2,399.",
+  "The owner's constraints make the published base rates OPTIMISTIC for them (inference, not measured). The base-rate populations are mostly founders who market full-time. The channels the evidence ranks highest are communities, founder-led posting, talking to users and presales, plus the audiences behind every fast case, and they all need the human the owner does not want to supply. Project Vend (Anthropic, Dec 2025) found that even well-scaffolded autonomous AI operators 'still needed a great deal of human support'.",
+  "AI-built-specific headwinds in 2026 lower odds relative to older data:\n- Apple's reported June 2026 guideline 4.3(b) rewrite targets low-effort, AI-surge apps (single secondary source, unverified).\n- The official Chrome Web Store policy bans duplicate-functionality extensions from the same developer.\n- Google's scaled-content-abuse enforcement (2026 updates) hits mass AI pages.\n- TikTok reportedly throttles automated multi-account posting.\n- The 'wrapper graveyard' and 'everything is oversaturated' discourse describes copycat pressure.\nA volume-of-clones portfolio is policy-blocked. Every shot must be genuinely distinct.",
+  "STRATEGY 1, portfolio of shots: this improves odds, and it is the main lever the AI can pull without the owner. The evidence is survivor anecdotes: Levels 4/70 projects made money, Marc Lou built 28 before his hit, Artemov built 30 apps. Make it work by:\n- choosing shots that are genuinely different and do not share one review queue (e.g. web tools/SEO pages, one extension, one app, one portal game);\n- setting explicit kill criteria (Artemov: no traction in 2–4 weeks → move on).\nPer-shot odds stay low, so a portfolio raises the chance of SOME revenue far more than the chance of hitting CAD 5k by January.",
+  "STRATEGY 2, built-in marketplace distribution: this is the best substitute for an audience the owner lacks. Examples: Shopify App Store and Atlassian Forge (0% revenue share on the first $1M), the Airtable/Notion-style integration marketplaces, the Chrome Web Store listing plus Google Search, and web-game portals (CrazyGames 60% of ad revenue). Evidence: Data Fetcher got 70–80% of customers from marketplace placement, and Kaching Appz spent $0 on marketing. Counter-evidence: 35% of Shopify apps have zero reviews, no platform publishes funnel data, and 'good' portal games make only $200–2,000/month.",
+  "STRATEGY 3, paid acquisition: only with PROVEN positive unit economics, and treat it as a capped test, not a plan. At median metrics paid growth loses money inside a 2–3 month window:\n- Freemium app: D60 revenue per install $0.38 vs CPI $1–5, about 15% payback.\n- Hard paywall: $3.09 vs $2.50–4.00, about 77–124% before the 15% store fee.\n- B2B web SaaS via Google Ads: $1,900–4,700 per paying customer.\n- 57% of micro-SaaS founders running ads wait 7+ months or cannot tell whether ads work.\nPaid only works for a top-quartile monetizer (hard paywall, higher price), and that has to be demonstrated organically first.",
+  "STRATEGY 4, niche with existing demand: validate search demand before building. Postma only builds where keyword difficulty is under 10–20; Artemov requires popularity over 20 and difficulty under 60. SiteGPT and Bannerbear used free tools as SEO magnets. Counter: Google's 2026 enforcement against scaled AI pages, so free tools must be genuinely useful, not programmatic filler.",
+  "STRATEGY 5, pricing (RevenueCat 2026, secondary):\n- A hard paywall converts about 5× better than freemium (10.7% vs 2.1% download→paid) with similar 1-year retention.\n- Higher price tiers convert better (1.4% / 2.0% / 2.8%).\n- 17–32-day trials convert 42.5% vs 25.5% for trials of 4 days or less.\n- AI apps earn +41% LTV per payer but churn faster.\n- For client-side utility extensions, one-time pricing reportedly beat subscriptions by 60% (single anecdote).\n- B2B pricing above $25 ARPA cuts the customer count needed (107 customers at C$49 vs about 631 at C$9).\nCharge from day one, because a free user base converts to almost nothing (70k users ≈ $30/month).",
+  "Other evidence-backed levers that conflict with the owner's constraints:\n- Presales and talking to users: Subscribr presold $20K. The failure pattern is '1,600 hours building, 3 hours talking to users'.\n- Software-enabled services instead of pure SaaS: Centori pivoted from a failed SaaS to a $14K MRR service.\nBoth need human conversations. If the owner can spare even part of the 3 h/week for customer conversations, that time likely matters more than extra AI build output (judgment).",
+  "Planning implication: the honest target is 'build an AI-operated portfolio that produces SOME revenue by Jan 2027 and compounds', not 'CAD 5k/month by Jan 2027'.\n- Any plan that needs CAD 5k by January from online products alone should be treated as a very-low-probability bet.\n- It needs a separate income floor.\n- It needs pre-set kill and continue rules at about day 30, 60 and 90."
+ ],
+ "unknowns": [
+  "Primary RevenueCat State of Subscription Apps 2025/2026 PDFs were not opened. The exact wording of the milestone statistics is only in secondary paraphrases: the 1-in-5 reaching $1k and 1-in-20 reaching $10k within 2 years, the top 5% at $8,880 after year 1, and 'days to $5K MRR 120'. It is also unclear whether the $8,880 is cumulative or monthly, and whether RevenueCat revenue-per-install figures are gross or net of store commission.",
+  "The year-0 and first-90-days upper tail of the TrustMRR distribution (what share of products under 3 months old exceed $5k MRR): not found.",
+  "Share of mobile apps (all apps, not only RevenueCat SDK users) earning more than $5k/month in 2025–2026: not found. Only old prior-knowledge survey figures are available.",
+  "A representative earnings distribution for web-portal games (Poki, CrazyGames), itch.io and HTML5 ad-monetized games: not found. Only a secondary 'good games earn $200–2,000/month' figure is available.",
+  "A representative earnings distribution for Etsy/Gumroad digital products and for AI chatbot/consultation sites sold to SMBs: not found.",
+  "Install-to-paid conversion for Chrome Web Store, Shopify, Atlassian and Airtable listings: platforms do not publish it (not found).",
+  "Apple's June 8, 2026 guideline 4.3(b) rewrite and its '84% surge in AI-attributed submissions' figure come from one secondary page and were not verified against developer.apple.com. The same applies to the TikTok 2026 throttling triggers.",
+  "Canadian-market CPI and CPC, and CAD/USD exchange rate on the day: not sourced this session.",
+  "The owner's English level, savings runway, any existing audience or community ties (e.g. Korean-Canadian networks) and willingness to use part of the 3 h/week on customer conversations. Each materially shifts the odds.",
+  "How far the published base rates (built mostly on full-time, self-marketing founders) overstate odds for an owner who will not post or talk to customers: no dataset quantifies this, so the downward adjustment here is a judgment.",
+  "Per-shot probabilities of 0.5–1% used in the portfolio arithmetic are judgments bounded by the RevenueCat 5% ceiling, not measured values. Correlation between shots, which lowers portfolio odds, is not quantified.",
+  "Whether Anthropic Project Vend results (a physical vending shop) transfer to a purely digital, AI-operated product business: an analogy only."
+ ]
+}

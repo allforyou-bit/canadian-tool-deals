@@ -1,0 +1,32 @@
+{
+  "name": "maple-practice-coach",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "worker:dev": "wrangler dev -c worker/wrangler.jsonc",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p worker/tsconfig.json",
+    "deploy:dry": "wrangler deploy -c worker/wrangler.jsonc --dry-run --outdir .wrangler/dry"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.128.0",
+    "next": "16.2.3",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "0.22.0",
+    "@cloudflare/workers-types": "^5.20260924.1",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitest/coverage-istanbul": "^4.1.11",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^4.1.0",
+    "wrangler": "4.137.0"
+  }
+}

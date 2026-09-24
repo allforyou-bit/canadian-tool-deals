@@ -1,0 +1,310 @@
+{
+ "dossier": {
+  "candidate": "Digital products on marketplaces (Etsy / Gumroad / Payhip / Notion templates, printables, AI-generated planners), built and operated by Claude from a GitHub repo",
+  "summary": "VERDICT: The AI can build almost all of this and run most of it within Etsy's rules. But reaching an average of CAD 5,000/month by Dec 2026 – Jan 2027 has almost no supporting evidence. A realistic 3-month result is roughly CAD 0–1,000/month (ESTIMATE). It fits better as a cheap, low-owner-time side asset than as the main income plan.\n\nWhat the evidence shows:\n\n(1) Automation is allowed on Etsy if it goes through the official API.\n- Etsy's Open API v3 supports the whole listing lifecycle for your own shop: createDraftListing with listing_type=download, file and image upload, and updateListing state=active to publish.\n- A 'Seller App' key for your own shop is reportedly approved within minutes.\n- Scraping and browser automation are prohibited.\n- Buyer messages, Etsy Ads and refunds have no API endpoints, so the owner has to handle them in the dashboard.\n- Gumroad's open-source code exposes product create/publish and file upload through its API.\n- Payhip's API has no product-creation endpoint.\n- Notion Marketplace review 'may take a few months'.\n- Pinterest API posts stay sandbox-only until Standard access is granted.\n\n(2) AI use is allowed on Etsy with disclosure.\n- The Seller Policy (reported effective 2026-07-09) says: 'If an item is created through the use of artificial intelligence, you must disclose this in your relevant listings.'\n- The Creativity Standards (updated 2025-06-10) allow AI creations 'based on a seller's original prompts' under 'Designed by', require 'a human touch', and ban AI prompt bundles.\n- A shop where the AI does everything and the owner does nothing sits in a grey zone. The owner has to genuinely direct and curate the products.\n\n(3) Volume needed for CAD 5,000/month (ESTIMATE):\n- About 810 sales/month at C$8.\n- About 413 sales/month at C$15.\n- About 243 sales/month at C$25.\n- That is roughly 31× the average Etsy seller: Etsy's marketplace GMS in Q1 2025 was US$2.3B across 5.4M active sellers, about US$142 per seller per month.\n\n(4) The closest real-world test failed. An autonomous AI-run Gumroad store with 32 products and 145 agent sessions between 2026-06-16 and 2026-09-23 made €0 in lifetime revenue. It was stuck on distribution: social credentials were missing and its Pinterest drafts were waiting on manual review.\n\n(5) Time to first sale has no reliable data. The only claims ('2–4 weeks organic') come from SEO blogs and AI-written plans. Even the optimistic plan puts cumulative organic sales at 100 after 5–6 months.\n\nBest use if pursued: an Etsy-first shop of curated 'functional' templates, launched in October to catch the Dec–Jan planner season, with no expectation of CAD 5k by January.",
+  "best_variant": "An Etsy-first shop of 'functional templates', curated by the owner and built and listed by the AI through the official Etsy API.\n\nTwo collections:\n- (a) Korean-learning printables and iPad PDFs: Hangul tracing workbooks, TOPIK I vocabulary trackers, bilingual flashcards. The Korean-speaking owner acts as the real editor, which gives the 'human touch' and the 'seller's original prompts' that Etsy's Creativity Standards require.\n- (b) 2027 dated and undated hyperlinked iPad planners and budget spreadsheets (XLSX / Google Sheets), which peak around Dec–Jan [prior knowledge, unverified, pre-2026-06].\n\nPricing: single items C$9–15, bundles C$24–35. Price in CAD with a CAD bank account.\n\nEvery listing carries a standard AI-disclosure paragraph and code-rendered mockups (no stock photos).\n\nMirror the bestsellers on Payhip Free (5% + processor) or Gumroad (10% + $0.50 + 2.9% + $0.30) for email and Pinterest traffic. Pinterest posting only begins after Standard API access is approved.\n\nAvoid:\n- Notion Marketplace: months of review.\n- AI prompt bundles: banned on Etsy.\n- Tax or financial templates that could create accuracy liability.\n- Mass SEO blogs: Google's scaled-content-abuse policy.\n\nKorean-learner market size: not found.",
+  "unit_economics": "ESTIMATE. Etsy fee inputs are from cand_content.json / corpus S099–S100 (6.5% transaction, ~3% + C$0.25 processing, 0.5% ROF, US$0.20 listing ≈ C$0.28 at an ASSUMED rate), plus 13% Ontario HST on Etsy's fees.\n\nNet per Etsy sale (price − 10% − C$0.53 fixed − HST on fees):\n- C$8: fees = 0.80 + 0.53 = 1.33; HST = 0.17; net ≈ C$6.50.\n- C$15: fees = 1.50 + 0.53 = 2.03; HST = 0.26; net ≈ C$12.71.\n- C$25: fees = 2.50 + 0.53 = 3.03; HST = 0.39; net ≈ C$21.58.\n- Offsite Ads become mandatory at 12% once trailing sales pass US$10k/365 days. If 15% of orders are offsite-attributed (ASSUMPTION), that costs another ≈ 0.15 × 12% = 1.8% of price.\n\nOperating costs (ESTIMATE, C$/month):\n- Etsy Ads, optional: C$90–150 (C$3–5/day).\n- Listing renewals: under C$10.\n- Claude API on Sonnet 5 ($2/$10 per 1M tokens): building one product ≈ 200k input + 40k output = US$0.40 + US$0.40 = US$0.80; 60 products ≈ US$48 one-time. Weekly operations at 4 runs × (300k in + 30k out) = 4 × US$0.90 = US$3.60/week ≈ US$16/month, less with prompt caching at 0.1× input.\n- If routines run on a Claude subscription instead, its price is not found in the repo [prior knowledge, unverified, pre-2026-06: Pro ~US$20, Max ~US$100–200/month].\n- Assume about C$250/month of costs, excluding the subscription.\n\nSales needed for C$5,000/month net (C$5,250 before costs):\n- C$8: 5,250 / 6.50 ≈ 808/month (≈ 27/day).\n- C$15: 5,250 / 12.71 ≈ 413/month (≈ 14/day).\n- C$25: 5,250 / 21.58 ≈ 243/month (≈ 8/day).\n- At an ASSUMED 2% visit-to-order conversion [prior knowledge, unverified, pre-2026-06: Etsy conversion 1–3%], that is about 20,650 listing visits/month at C$15, or 12,150 at C$25.\n\nBase-rate check: Etsy marketplace Q1 2025 GMS US$2.3B / 5.4M active sellers = US$426 per quarter ≈ US$142 per seller per month. The C$15 target = 413 × 15 = C$6,195 gross ≈ US$4,460 (0.72 USD/CAD ASSUMED) ≈ 31× the average seller.\n\nOther channels, per sale:\n- Gumroad direct at US$15: fee = 15 × 12.9% + 0.80 = 2.74, net US$12.26. Discover-marketplace sales pay 30%, net US$10.50.\n- Payhip Free at US$15: 5% + 2.9% + 0.30 = 1.49, net US$13.51.\n\nGross margin after platform fees is about 80–87%. Volume, not margin, is the constraint.",
+  "distribution_plan": "Customers have to find the products through channels the AI can feed without the owner's personal social accounts.\n\n(1) Etsy's internal search is the main channel. It has 88.5M marketplace active buyers (10-Q, Mar 2025). The AI keeps titles (≤140 characters) and tags (13 × ≤20 characters) up to date through updateListing and adds 5–10 new listings a week in batches the owner approves. Seasonal items go up 6–8 weeks ahead of demand (secondary playbook claim): 2027 planners in October, Korean-learning New Year's-resolution items in December.\n\n(2) Etsy Ads at a small budget (C$3–5/day). There is no API for this, so the owner sets and adjusts the budget in the dashboard (about 10 minutes a week). The AI reads spend from the ledger and recommends changes.\n\n(3) Pinterest, a business account in the shop's name (not the owner's personal account). The AI generates pins and posts through API v5 only after Pinterest grants Standard access; Trial-access pins are sandbox-only. Conservative cap of 5 pins a day or fewer, because Pinterest's anti-spam heuristics are stricter than its rate limits suggest (secondary).\n\n(4) Free lead-magnet printables on Payhip or Gumroad to build an email list. Opt-in only, with a CASL identification and unsubscribe footer. Monthly emails through the Gumroad or Payhip audience tools.\n\n(5) Do not use scaled AI blog or SEO pages (Google scaled-content-abuse risk, corpus S103) or scraped competitor data (Etsy API Terms).\n\nOwner time: about 2.5–3 hours a week for Etsy buyer messages (Claude drafts, the owner sends; there is no messages API), approving publish batches, the ads budget, refunds, a Korean-content spot check, and reading the weekly KPI report.\n\nKnown failure mode: the AI-run Gumroad store (NoahNL89/Gumroad_AI) had no marketplace search traffic, its social credentials were never supplied, and Pinterest was stuck in manual review. It made €0 in 14 weeks. That is why the plan uses Etsy's own buyer traffic first.",
+  "timeline": "ESTIMATE, from week of 2026-09-28:\n\nWeek 0 (≤ 8 owner hours): the owner opens the Etsy shop (ID, bank, card, one-time setup fee), creates the Etsy Seller App (reportedly approved in minutes), opens Payhip or Gumroad, and applies for Pinterest Standard access.\n\nWeeks 1–3 (October): the AI builds the generator pipeline and the first 30–60 listings as drafts. Drafts cost nothing until published. The owner approves publishing in batches. First listings live about mid-October 2026.\n\nFirst dollar: ESTIMATE November 2026 (2–6 weeks after the first listings). The only basis is low-quality secondary claims: an SEO blog and an AI-written plan saying 'first sale 2–4 weeks organic'. The counter-case is an AI-run Gumroad store with 0 paid sales in 14 weeks, though it had no marketplace traffic.\n\nDecember – January: the planner and New Year season [prior knowledge, unverified, pre-2026-06] is the best window this model has.\n\nCAD 5,000/month: not supported by any evidence for Dec 2026 – Jan 2027.\n- ESTIMATE for January 2027: C$0–1,000/month gross.\n- The AI-written optimistic plan (daidue/OpenClaw) itself projects 100 cumulative organic sales at 5–6 months. The target needs about 243–808 sales every month.\n- If the target is reached at all, it most likely takes 12+ months and depends on a few breakout listings (ESTIMATE, unsourced).\n\nTax: at C$5k/month the C$30k small-supplier threshold would be crossed around month 6 (30,000 / 5,000).",
+  "owner_one_time_tasks": [
+   "Open the Etsy shop (~1.5–2 h): government ID verification, Canadian bank account for deposits in CAD, credit card for fees, and the one-time non-refundable setup fee (amount shown at signup; ~US$15 per a third-party plan). Etsy requires one listing to open the shop.",
+   "Create an Etsy developer 'Seller App' under the same Etsy account (~0.5 h). Complete the OAuth consent once. Store the keystring and refresh token in GitHub Actions secrets. The AI handles the 90-day refresh-token rotation after that.",
+   "Open a Payhip (Free plan) and/or Gumroad account and connect Stripe or PayPal payouts (~1 h).",
+   "Create a Pinterest business account in the shop's name, register a developer app and apply for Standard access (~1 h). Trial access only creates sandbox pins.",
+   "Set creative direction (~2 h): pick the two collections, approve the brand and the first 10 product concepts and prompt briefs, and write the shop's 'about / how we make it' text. This supplies the 'seller's original prompts' and 'human touch' that Etsy's Creativity Standards require.",
+   "Provide an Anthropic API key or Claude subscription for the Routines, and set a spend cap (~0.5 h).",
+   "Tax setup (~0.5–1 h): note that Etsy reports sellers to CRA past 30 sales or C$2,800 a year (corpus S111). Decide whether to register for GST/HST voluntarily; registration is mandatory once past C$30k in four quarters. Record income on T2125."
+  ],
+  "owner_weekly_tasks": [
+   "Answer Etsy buyer messages in Shop Manager using replies the Claude drafts (~45–60 min). There is no messages endpoint in API v3.",
+   "Approve the weekly batch of new or changed listings before they go live (~30 min). Publishing costs US$0.20 each and is visible to buyers.",
+   "Set or adjust the Etsy Ads daily budget and process any refunds, both dashboard-only (~15 min).",
+   "Spot-check Korean-language accuracy and planner or spreadsheet function on new products (~45 min).",
+   "Read the AI's weekly KPI and compliance report: sales, views, fees, disclosure audit and the C$30k threshold tracker (~15 min)."
+  ],
+  "ai_build_tasks": [
+   "Product generator pipeline in the repo: HTML/SVG to PDF for printable worksheets and hyperlinked iPad planners (tabs and internal links), and XLSX / Google Sheets templates with formulas. Automated QA for page counts, broken links, fonts, overflow, spelling and Korean text encoding.",
+   "Code-rendered mockups and preview images (no stock photos), 1:1 thumbnails, and an optional listing video. The first image must show the finished product.",
+   "Etsy Open API v3 client covering: OAuth PKCE and refresh-token rotation; createDraftListing with listing_type=download, who_made, when_made and taxonomy_id; uploadListingImage; uploadListingFile (5 files × 20 MB limit, secondary); updateListing to state=active, gated behind owner approval; 429 / retry-after handling; no scraping or browser automation.",
+   "Listing-copy generator: title ≤140 characters, 13 tags ≤20 characters, and a mandatory AI-disclosure paragraph in every description ('designed by [shop] with AI assistance from our original prompts; reviewed by a native Korean speaker'). A compliance linter blocks trademarks, celebrity names, prompt bundles and missing disclosures.",
+   "Gumroad mirror through the API v2 flow in Gumroad's open-source code (presign file, create, publish). For Payhip, which has no product API, the AI prepares upload packets for the owner.",
+   "Pinterest pin generator and API v5 poster, switched on only after Standard access is granted, with rate and duplicate caps.",
+   "KPI and bookkeeping dashboard built from getShopReceipts: net per sale after Etsy fees plus HST on fees, the Offsite Ads share, a tracker for the C$30k small-supplier threshold, and a T2125 export.",
+   "Free lead-magnet printables plus a CASL-compliant opt-in and email sequence (identification, contact details, working unsubscribe)."
+  ],
+  "ai_recurring_tasks": [
+   "Daily: pull receipts and listing stats through the API, keep displayed data within Etsy's freshness caps, draft buyer-message replies for the owner, and flag reviews and problems.",
+   "Weekly: design 5–10 new products from the owner's concept briefs, stage them as draft listings, and send the approval list. Rewrite titles and tags on listings with low views after 14–21 days.",
+   "Seasonal rotation: 2027 planners Oct–Jan, Korean-learning New Year items in December, then refresh evergreen items.",
+   "Monthly: decide renewals and prune dead listings (each renewal is US$0.20), run small price tests, recommend Etsy Ads changes, and produce the bookkeeping and GST/HST export.",
+   "Post Pinterest pins (≤5/day) and send a monthly email to the opt-in list once those channels are live.",
+   "Audit policy compliance on every change: AI disclosure present, no IP violations, images follow the rules. Watch for Etsy policy updates on AI and digital items and alert the owner."
+  ],
+  "money_needed_cad": "ESTIMATE: C$60–100 to launch. About C$300–600 total over 3 months with modest ads, excluding any Claude subscription.\n\nLaunch costs:\n- Etsy setup fee: about US$15 ≈ C$21 (third-party figure; the exact amount is shown at signup).\n- 60 published listings × US$0.20 = US$12 ≈ C$17.\n- Claude API for building 60 products: about US$48 ≈ C$67.\n\nMonthly costs:\n- Optional Etsy Ads: C$90–150.\n- Claude API operations: about US$16/month.\n- Claude subscription for Routines: not found [prior knowledge, unverified, pre-2026-06: US$20–200/month].\n\nPayhip Free, Gumroad, the Etsy API and Pinterest API cost nothing to join. No inventory is needed.\n\nThe larger hidden cost is 3+ months of living expenses from savings while revenue stays near zero.",
+  "facts": [
+   {
+    "fact": "Etsy fees for a Canadian seller: US$0.20 per listing, charged again on each sale and renewal; 6.5% transaction fee; about 3% + C$0.25 payment processing; 0.50% Regulatory Operating Fee from June 22, 2026; GST/HST charged on Etsy's fees at the seller's provincial rate (13% in Ontario). Offsite Ads cost 15%, or 12% and become mandatory once trailing sales pass $10k (third-party snippets).",
+    "source": "/home/user/canadian-tool-deals/business/research/evidence-corpus.md (S099, S100); /home/user/canadian-tool-deals/business/research/dossiers/cand_content.json"
+   },
+   {
+    "fact": "Etsy Seller Policy (reported effective 2026-07-09): 'If an item is created through the use of artificial intelligence, you must disclose this in your relevant listings.' Production partners must also be disclosed, and 'All listings must offer an item for sale.' The quotes were attested by a third party through a browser session; etsy.com was not fetched directly here.",
+    "source": "https://github.com/jamesryancooper/commerce-foundry/blob/bce9d2118dfa962e733fe71979f38858ad4c4d05/project-dossier/v0.2/verification/etsy-reverification-2026-07-23.md ; policy text copy: https://github.com/shachafha/Terms-and-Services-RAG/blob/a8ddcf07b0efa43623c9ba3424d75a19724eac36/src/dataset/Etsy/Marketplace%20Sellers%20Conditions.md"
+   },
+   {
+    "fact": "Etsy Creativity Standards (last updated 2025-06-10 on the page as fetched 2026-08-16): 'Creations that were generated using AI tools… based on a seller's original prompts' are allowed under 'Designed by a seller'. 'Sellers must disclose within their listing description if an item is created with the use of AI.' 'AI prompt bundles do not qualify.' 'All items must incorporate a human touch.'",
+    "source": "https://github.com/th3coke-dot/ai-author-platform-rules/blob/7735c79e212915449d52d2af3ce7ff5f1fe2f344/data/etsy.json ; https://github.com/ItMoney22/imagine-this-printed/blob/576b362be5d68991d83dadd36ee844d4f7f13873/docs/research/2026-07-24-etsy-ai-operations-feasibility-blueprint.md"
+   },
+   {
+    "fact": "Etsy Open API v3 (OpenAPI spec copy): createDraftListing creates draft listings. listing_type enum = physical | download | both. updateListing with state=active 'will also publish the listing on etsy.com and requires that the listing have an image set.' Required fields include quantity, title, description, price, who_made, when_made and taxonomy_id.",
+    "source": "https://raw.githubusercontent.com/api-evangelist/etsy/main/openapi/etsy-shoplisting-api-openapi.yml"
+   },
+   {
+    "fact": "Etsy API access tiers (per developer docs quoted 2026-07-24): a 'Seller App' for your own shop is 'approved within minutes, with no manual review queue'. Personal and Commercial tiers get manual review. Draft listings do not incur the $0.20 fee until published. Access tokens expire after 1 hour; refresh tokens last 90 days and rotate.",
+    "source": "https://github.com/ItMoney22/imagine-this-printed/blob/576b362be5d68991d83dadd36ee844d4f7f13873/docs/research/2026-07-24-etsy-ai-operations-feasibility-blueprint.md ; https://github.com/ItMoney22/imagine-this-printed/blob/576b362be5d68991d83dadd36ee844d4f7f13873/docs/ETSY_API_RESEARCH.md"
+   },
+   {
+    "fact": "Etsy API Terms prohibit using 'automated systems or browser extensions to access, analyze, or scrape the Etsy Site, the Etsy API or any Etsy data… unless expressly authorized in writing'. The developer docs add 'Applications must not sidestep the API… Screen-scraping is not allowed.' API data may not be used for 'analytics, machine learning, training artificial intelligence models'. Listing data shown may be at most 6 hours stale.",
+    "source": "https://github.com/ItMoney22/imagine-this-printed/blob/576b362be5d68991d83dadd36ee844d4f7f13873/docs/research/2026-07-24-etsy-ai-operations-feasibility-blueprint.md ; https://github.com/jamesryancooper/commerce-foundry/blob/bce9d2118dfa962e733fe71979f38858ad4c4d05/project-dossier/v0.2/verification/etsy-reverification-2026-07-23.md"
+   },
+   {
+    "fact": "Etsy API v3 has no endpoints for buyer messages, Etsy Ads campaigns or budgets, or refunds. These are dashboard-only, so the human must do them. Listings, images, tags, pricing and receipts can be read or written through the API.",
+    "source": "https://github.com/ItMoney22/imagine-this-printed/blob/576b362be5d68991d83dadd36ee844d4f7f13873/docs/research/2026-07-24-etsy-ai-operations-feasibility-blueprint.md (section 4 capability matrix)"
+   },
+   {
+    "fact": "Etsy Terms of Use as quoted: 'Etsy reserves the right to terminate or suspend your account, and any related accounts, at any time, for any reason, and without advance notice.' Suspending one account triggers suspension of accounts linked by payment details, IP address, tax ID, address or bank.",
+    "source": "https://github.com/ItMoney22/imagine-this-printed/blob/576b362be5d68991d83dadd36ee844d4f7f13873/docs/research/2026-07-24-etsy-ai-operations-feasibility-blueprint.md"
+   },
+   {
+    "fact": "Etsy 10-Q (Q1 2025): Etsy marketplace had 5.4 million active sellers and 88.5 million active buyers as of March 31, 2025. Etsy marketplace GMS for the quarter was $2.3 billion. Marketplace GMS per active buyer (trailing 12 months) was $120, down 3.5%. Consolidated active sellers were 8,095k vs 9,131k a year earlier (−11.3%), after a seller setup fee launched in April 2024.",
+    "source": "https://github.com/Deskearth/financial_en_level4/blob/0a4ed9918c6d653bec67632c332831590a55eb99/10-Q_etsy-20250331.htm.md"
+   },
+   {
+    "fact": "Etsy marketplace GMS fell 8.6% year over year in Q4 2024 and 2.4% in Q3 2025, per earnings-call transcripts. A secondary note reports Q1 2026 marketplace GMS of $2.46B (+5.5% YoY). About 74–75% of GMS comes from US buyers.",
+    "source": "https://github.com/Ngafney/garda-spring26/blob/c207d258165d9626cf027b34e41d6ebb62761430/amir/transcripts/etsy/2024/Q4/ETSY_2025-02-19_Q4.txt ; https://github.com/Ngafney/garda-spring26/blob/c207d258165d9626cf027b34e41d6ebb62761430/amir/transcripts/etsy/2025/Q3/ETSY_2025-11-28_Q3.txt ; https://github.com/alvations/ctarnidd/blob/642e4a6428e0dc75a70394dd190232074e7d30cf/sources/etsy/2026-06-15-search-01-research.md"
+   },
+   {
+    "fact": "Gumroad fees in its open-source code (commit ff7313a): GUMROAD_FLAT_FEE_PER_THOUSAND = 100 (10%), GUMROAD_FIXED_FEE_CENTS = 50, and PROCESSOR_FEE_PER_THOUSAND = 29 (2.9%) plus 30¢ when the charge runs through Gumroad's own merchant account. Discover (marketplace-recommended) sales pay GUMROAD_DISCOVER_FEE_PER_THOUSAND = 300 (30%) with no fixed fee. A 5% rate applies once month-to-date GMV reaches $20k, behind a feature flag. Whether production gumroad.com matches this commit is not verified.",
+    "source": "https://github.com/antiwork/gumroad/blob/ff7313a06631114fb9b5f5db4a7ede83fa30d14e/app/models/purchase.rb ; https://github.com/antiwork/gumroad/blob/ff7313a06631114fb9b5f5db4a7ede83fa30d14e/app/models/user.rb"
+   },
+   {
+    "fact": "Gumroad API v2 in the same open-source code exposes POST /v2/products (create, native_type defaults to digital, then publish), file upload via /v2/files/presign and /v2/files/complete, and cover, thumbnail and email endpoints under the edit_products scope. So listing and updating can be automated through the official API.",
+    "source": "https://github.com/antiwork/gumroad/blob/ff7313a06631114fb9b5f5db4a7ede83fa30d14e/app/controllers/api/v2/links_controller.rb ; https://github.com/antiwork/gumroad/blob/ff7313a06631114fb9b5f5db4a7ede83fa30d14e/config/routes.rb"
+   },
+   {
+    "fact": "Payhip plans (stated as verified from payhip.com/pricing, 2026): Free $0/month with a 5% fee per sale; Plus $29/month with 2%; Pro $99/month with 0%. Stripe or PayPal processing fees apply on top.",
+    "source": "https://github.com/api-evangelist/payhip/blob/c0583f4616d8ba6f82c153d381bf8ba532cebb7f/plans/payhip-plans-pricing.yml"
+   },
+   {
+    "fact": "Payhip's public API (OpenAPI copy) covers only coupons (create, list, get), license keys (verify, enable, disable, usage) and webhooks (paid, refunded, subscription events). It has no product-creation or file-upload endpoint.",
+    "source": "https://github.com/api-evangelist/payhip/blob/c0583f4616d8ba6f82c153d381bf8ba532cebb7f/openapi/_original/payhip-openapi.yml"
+   },
+   {
+    "fact": "Notion Marketplace paid templates: sources conflict on the fee, 10% + $0.40 (plus 1% FX for non-US creators) in one and 8% + $0.40 in another. Both describe the official statement that review 'can take a few months'.",
+    "source": "https://github.com/tarkaai/gtm-skills/blob/a915d9b12730f0ee1df48ca87c64733f7697bc0f/fundamentals/marketplaces/notion-template-publish.md ; https://github.com/tomada1114/braintrust/blob/ad998bb04af600927f316098481fdf5627fd810a/docs/plan/indie-earning-fields/research/marketplace-surfaces.md ; https://github.com/tyschacht/nanoclaw_passive/blob/fe6dc686639444a9add8ee0b5654ba153a7a1161/content/research/notion-template-marketplace-passive-pipeline.md"
+   },
+   {
+    "fact": "Pinterest API: 'all Pins and Boards created with Trial access are only visible to their creator as Sandbox entities.' Standard (production) access requires app review.",
+    "source": "https://github.com/NicholasSutin/iloveme/blob/4a9672ad78364f026adf37154c43d3913a432d67/docs/api-notes.md (quoting developers.pinterest.com/docs/key-concepts/access-tiers/)"
+   },
+   {
+    "fact": "Excise Tax Act s.211.13 (consolidation current to 2026-06-21): a distribution platform operator is deemed to make a 'specified supply' only when the supplier is a 'specified non-resident supplier'. So a Canadian-resident seller of digital downloads remains the supplier for GST/HST purposes.",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml"
+   },
+   {
+    "fact": "ETA Schedule VI, Part V, s.10.1 zero-rates 'a supply of intangible personal property made to a non-resident person' who is not registered. The zero-rating does not cover a supply to an individual unless that individual is outside Canada at the time. Sales of digital files to foreign buyers are therefore zero-rated once the seller is registered. The small-supplier threshold is C$30,000 (ETA s.148).",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml ; /home/user/canadian-tool-deals/business/research/dossiers/cross_compliance.json"
+   },
+   {
+    "fact": "Under the CRA digital-platform reporting rules, platforms including Etsy report Canadian sellers who pass C$2,800 or 30 sales in a calendar year.",
+    "source": "/home/user/canadian-tool-deals/business/research/evidence-corpus.md (S111)"
+   },
+   {
+    "fact": "US Copyright Office Part 2 report (January 2025), as summarized: 'purely AI-generated material' is not copyrightable, and 'prompts do not alone provide sufficient control.' AI-generated designs are therefore easy for others to copy legally.",
+    "source": "https://github.com/th3coke-dot/ai-author-platform-rules/blob/7735c79e212915449d52d2af3ce7ff5f1fe2f344/data/etsy.json"
+   },
+   {
+    "fact": "Gumroad planner and template market data (compiled 2026-09-12): top seller 'Live Intentionally' at 13,089 × $19.99; the goal-workbook category had 15 products, none with ≥1,000 sales or ≥100 ratings. The closest new-entrant comparable ('Ideas To Thrive') made 251 sales of its $49 flagship in about eight months using a YouTube and newsletter funnel.",
+    "source": "https://github.com/StrataGenAI/northingstudioagents/blob/cda7487df2d69e29b259ea11d713988737be34ce/Product%20Plans/2026-09-12%20Product%20Plan.md"
+   },
+   {
+    "fact": "Etsy digital listing limits (secondary): up to 5 files of 20 MB each, titles ≤140 characters, 13 tags of ≤20 characters. New shops face a 3–10 day reserve hold on first sales (secondary).",
+    "source": "https://github.com/StrataGenAI/northingstudioagents/blob/cda7487df2d69e29b259ea11d713988737be34ce/Product%20Plans/2026-09-12%20Product%20Plan.md ; https://github.com/vertexnetwork/etsymargin/blob/839cd58882c18e4dc03bc205cb5a325c4c3c0b6a/lib/etsy-fees/content.ts"
+   },
+   {
+    "fact": "Opening an Etsy shop may require a one-time non-refundable setup fee, with the amount shown only at onboarding. Third-party plans cite about US$15 (or US$15–29).",
+    "source": "https://github.com/jamesryancooper/commerce-foundry/blob/bce9d2118dfa962e733fe71979f38858ad4c4d05/project-dossier/v0.2/verification/etsy-reverification-2026-07-23.md ; https://github.com/ItMoney22/imagine-this-printed/blob/576b362be5d68991d83dadd36ee844d4f7f13873/docs/plans/2026-07-24-etsy-integration-plan.md"
+   },
+   {
+    "fact": "Time to first sale: the only claims found are low-quality. An SEO blog says 'Most new shops make their first sale within 2-4 weeks'. An AI-written plan gives 'Organic Only: first sale 2-4 weeks; 10 sales 6-8 weeks; 50 sales 3-4 months; 100 sales 5-6 months'. No measured dataset was found.",
+    "source": "https://github.com/fadalstore/fadalstore.github.io/blob/12bffdaca620c81f62e93e2cabc6a0ccaee9bb0e/_posts/2026-06-26-etsy-digital-downloads-passive-income-2026.md ; https://github.com/daidue/OpenClaw/blob/aee66874adea58366e633b7880b9a83883833abb/research/etsy-strategy-final.md"
+   },
+   {
+    "fact": "Claude API prices per 1M input/output tokens: Opus 5 $5/$25, Sonnet 5 $2/$10, Haiku 4.5 $1/$5. Prompt-cache reads cost about 0.1× the input price.",
+    "source": "Task brief (official skill docs cached 2026-06-24)"
+   },
+   {
+    "fact": "Google's scaled-content-abuse policy (enforced since May 2024) targets mass-produced low-value pages whether made by AI or by humans. This rules out mass AI blog content as a traffic source.",
+    "source": "/home/user/canadian-tool-deals/business/research/evidence-corpus.md (S103)"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "The closest real test of this exact model failed. An autonomous AI agent (Codex, Claude Code and Antigravity sessions) ran Gumroad store schephenk.gumroad.com from 2026-06-16 to 2026-09-23: 145 logged sessions, 32 products (27 live), €0 lifetime net revenue, 1 free checkout, 0 payouts. Its 2026-09-23 status reads: 'owned social distribution is blocked by missing credentials, and Pinterest has one pending manual-review draft.' This is one case, it sold AI and prompt guides, and it had no marketplace search traffic.",
+    "source": "https://github.com/NoahNL89/Gumroad_AI/blob/db0fbc27337a621b0e41a288536a92ad9bda93fc/agent/ledger.json ; https://github.com/NoahNL89/Gumroad_AI/blob/db0fbc27337a621b0e41a288536a92ad9bda93fc/agent/MISSION.md"
+   },
+   {
+    "fact": "ESTIMATE from the 10-Q: the average Etsy marketplace active seller grossed about US$142/month (US$2.3B / 5.4M = US$426 per quarter). C$5k/month net needs roughly 31× that average (US$4,460 gross at C$15 items and an ASSUMED 0.72 USD/CAD). The median is certainly lower but was not found.",
+    "source": "https://github.com/Deskearth/financial_en_level4/blob/0a4ed9918c6d653bec67632c332831590a55eb99/10-Q_etsy-20250331.htm.md"
+   },
+   {
+    "fact": "Even an optimistic, AI-written Etsy plan for a $27 template product projects only 100 cumulative sales after 5–6 months organic. The C$5k target needs about 243–808 sales every month.",
+    "source": "https://github.com/daidue/OpenClaw/blob/aee66874adea58366e633b7880b9a83883833abb/research/etsy-strategy-final.md"
+   },
+   {
+    "fact": "A comparable new Gumroad planner seller with an existing YouTube and newsletter funnel made 251 sales of its $49 product in about 8 months, about US$1,500/month gross at best. The owner has no audience.",
+    "source": "https://github.com/StrataGenAI/northingstudioagents/blob/cda7487df2d69e29b259ea11d713988737be34ce/Product%20Plans/2026-09-12%20Product%20Plan.md"
+   },
+   {
+    "fact": "Anecdote, from notes on a YouTube video: a digital shop with 11,900 sales at very low prices probably made under $1,000 a year over 9 years after listing fees and Etsy's cut. Cheap digital items can make volume but not income.",
+    "source": "https://github.com/JaneSwiss/switzer-dashboard/blob/b19b7c4b701037e49b663a325d642b334601a737/context/nerd-insights/etsy-seo.md"
+   },
+   {
+    "fact": "Etsy's demand has been weak. Marketplace GMS fell 8.6% YoY in Q4 2024 and 2.4% in Q3 2025, and marketplace active buyers fell 3.4% to 88.5M by March 2025. A Q1 2026 +5.5% figure exists only in a secondary note.",
+    "source": "https://github.com/Ngafney/garda-spring26/blob/c207d258165d9626cf027b34e41d6ebb62761430/amir/transcripts/etsy/2024/Q4/ETSY_2025-02-19_Q4.txt ; https://github.com/Deskearth/financial_en_level4/blob/0a4ed9918c6d653bec67632c332831590a55eb99/10-Q_etsy-20250331.htm.md"
+   },
+   {
+    "fact": "Etsy's enforcement is described as explicitly against low-effort AI. Creativity Standards violations lead to reduced visibility or removal (enforced from July 15, 2025, per third-party guides). A disclosed-AI listing 'lives near the enforcement boundary.'",
+    "source": "https://github.com/bastienyoussfi/claude-ceo/blob/258bde875c06dc5cc1a9a02345ae02ca7a84aba9/memory/research/c6-etsy-feasibility.md"
+   },
+   {
+    "fact": "Account risk: Etsy may suspend 'without advance notice', related accounts are suspended too, and community reports describe appeals denied within minutes. No guaranteed reinstatement path was found.",
+    "source": "https://github.com/ItMoney22/imagine-this-printed/blob/576b362be5d68991d83dadd36ee844d4f7f13873/docs/research/2026-07-24-etsy-ai-operations-feasibility-blueprint.md"
+   },
+   {
+    "fact": "Channel blockers inside the 2–3 month window: Notion Marketplace review 'can take a few months'; Pinterest Trial-access pins are sandbox-only until Standard access is approved; Payhip has no product-creation API, so listings there are manual.",
+    "source": "https://github.com/tarkaai/gtm-skills/blob/a915d9b12730f0ee1df48ca87c64733f7697bc0f/fundamentals/marketplaces/notion-template-publish.md ; https://github.com/NicholasSutin/iloveme/blob/4a9672ad78364f026adf37154c43d3913a432d67/docs/api-notes.md ; https://github.com/api-evangelist/payhip/blob/c0583f4616d8ba6f82c153d381bf8ba532cebb7f/openapi/_original/payhip-openapi.yml"
+   },
+   {
+    "fact": "The earlier dossier on this candidate (verified pass) concluded 'ELIMINATE as the primary 30–60-day income plan'. It found no sourced evidence of a new Etsy or digital account reaching CAD 5,000/month within 1–3 months, and adjusted probability_5k to 1/10.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_content.json"
+   }
+  ],
+  "risks": [
+   "Demand and traffic: a new shop starts with no ranking, reviews or sales history in crowded categories (planners, trackers). The volume needed (about 243–808 sales/month) has no supporting evidence for a new shop within 3 months.",
+   "Etsy AI policy grey zone: permission depends on 'a seller's original prompts' and 'a human touch'. A shop where the AI runs everything could be judged non-compliant, leading to removed listings, reduced visibility or suspension. The owner must genuinely direct and review the products.",
+   "Account concentration: Etsy can suspend without notice and also suspends linked accounts, with no guaranteed appeal. One suspension could remove all revenue, so mirror the products on Payhip or Gumroad.",
+   "Tasks that cannot be automated: buyer messages, Etsy Ads and refunds are dashboard-only. If message volume grows, the owner's time goes over 3 hours a week.",
+   "No copyright moat: purely AI-generated designs are not copyrightable per USCO, so bestsellers can be cloned freely.",
+   "Fee creep: Offsite Ads become mandatory at 12% after US$10k trailing sales. GST/HST on Etsy fees can't be recovered unless registered. New shops may face reserve holds.",
+   "Tax and compliance: registration is mandatory past C$30k (about month 6 at C$5k/month), with CRA platform reporting past 30 sales or C$2,800. Email marketing must follow CASL. Quebec French-language requirements are not researched.",
+   "Quality liability: errors in planners, spreadsheets or Korean content lead to refunds, bad reviews and lower ranking. Avoid tax or financial-advice templates.",
+   "Channel approval risk: Pinterest Standard access may be refused. Notion review takes months. Google penalizes scaled AI pages.",
+   "Evidence quality: Etsy policy wording comes from third-party copies and attestations, not etsy.com fetched directly. Gumroad fees come from the open-source repo, and production parity is not verified. Time-to-first-sale data is anecdotal or AI-written."
+  ],
+  "scores": {
+   "p5k_90d": 1,
+   "owner_light": 6,
+   "capital_light": 9,
+   "ai_build": 8,
+   "ai_operate": 6,
+   "low_risk": 6
+  },
+  "score_rationale": "**p5k_90d = 1.**\n- The target needs about 243–808 Etsy sales every month, roughly 31× the average Etsy seller's GMS.\n- The only direct analogue, an autonomous AI-run Gumroad store, made €0 in 14 weeks with 27 live products.\n- Even optimistic AI-written plans reach 100 cumulative sales only at 5–6 months.\n- The Dec–Jan planner season is the one real tailwind, which keeps the score above 0.\n\n**owner_light = 6.**\n- One-time setup is about 7–9 hours: Etsy ID, bank, card and fee; Seller App; Payhip; Pinterest application; creative direction.\n- Weekly work is about 2.5–3 hours, because messages, ads and refunds are dashboard-only and Etsy's 'human touch' standard needs real curation.\n- It fits the budget, but with little slack.\n\n**capital_light = 9.** Launch costs about C$60–100, and 3 months with modest ads about C$300–600. There is no inventory. The main cost is living expenses during the near-zero-revenue months.\n\n**ai_build = 8.** The AI can build:\n- The product generators (PDF, hyperlinked PDF, XLSX).\n- Code-rendered mockups and listing copy.\n- The Etsy API v3 client (draft, file upload, publish), the Gumroad API flow, and the KPI and tax tracking.\n\nIt loses points because product images and design taste still need human judgement, and Payhip listings are manual.\n\n**ai_operate = 6.**\n- Listing creation, updates, SEO refreshes, renewals, receipts and analytics all run through official APIs within Etsy's API Terms (no scraping).\n- Buyer messages, Etsy Ads, refunds and Pinterest approval stay human.\n- Etsy policy expects the seller to direct the creative work.\n\n**low_risk = 6.**\n- Financial and legal exposure is small: disclosure is simple, and digital downloads to foreign buyers are zero-rated.\n- Platform risk is high: suspension without notice, an AI-policy grey zone, no copyright moat, and some evidence resting on third-party copies of policy pages."
+ },
+ "verification": {
+  "problems": [
+   {
+    "claim": "money_needed_cad: 'C$60–100 to launch' (setup ~US$15≈C$21 + 60 listings US$12≈C$17 + Claude API US$48≈C$67)",
+    "problem": "Arithmetic error. The three launch items the dossier lists add up to more than its own upper bound.",
+    "correction": "ESTIMATE: 21 + 17 + 67 = C$105 (US$75 / 0.72 = C$104). Launch should read about C$105, or C$40–110 if API build costs come in lower. With ads for 3 months (C$270–450) plus API ops (US$16 × 3 / 0.72 ≈ C$67), 3-month cash is C$440–620, not C$300–600, unless ads are cut."
+   },
+   {
+    "claim": "unit_economics: 'Assume about C$250/month of costs' vs money_needed: 'C$300–600 total over 3 months'",
+    "problem": "The two cost figures do not agree: C$250 × 3 = C$750, which is above the C$300–600 range.",
+    "correction": "Use one cost figure. ESTIMATE: C$150–250/month (ads C$90–150 + API C$22–80), or C$450–750 for 3 months plus launch C$105. Add the Claude subscription separately if Routines need one."
+   },
+   {
+    "claim": "Weekly operations at 4 runs × (300k in + 30k out) ≈ US$16/month",
+    "problem": "This does not match the dossier's own ai_recurring_tasks, which list daily receipt pulls, daily reply drafting and 5–10 new products per week. Also, 200k input tokens per product is an unlabelled assumption. Agentic Claude Code sessions resend their context every turn and commonly use far more tokens.",
+    "correction": "ESTIMATE: new products 5–10/week × US$0.80 × 4.33 = US$17–35/month; daily runs 30 × US$0.90 = US$27/month; total about US$45–60/month (C$60–85), before any token blow-up. Label the 200k/40k per product as an ASSUMPTION. The bigger point is that Routines likely run on a Claude subscription. The dossier leaves that cost out ('excluding'), when it is probably required and could be the largest recurring cost ([prior knowledge, unverified, pre-2026-06]: US$20–200/month)."
+   },
+   {
+    "claim": "ai_recurring_tasks: 'Daily: … draft buyer-message replies for the owner'",
+    "problem": "The dossier itself says there is no messages endpoint in API v3, so the AI cannot see buyer messages. Drafting replies needs the owner to copy each message out and paste each reply back in. That is hidden owner labour, or an unmentioned Gmail-connector workaround that reads Etsy notification emails.",
+    "correction": "Either (a) remove this AI task and budget owner time for copy-paste, or (b) state the Gmail-connector workaround as an unverified dependency. Weekly owner time for messages grows with sales volume. At the target volume of ~413 orders/month, even a 3–5% contact rate (ASSUMPTION) means 12–20 threads a month."
+   },
+   {
+    "claim": "Owner weekly: 'Spot-check Korean-language accuracy and planner or spreadsheet function on new products (~45 min)'; one-time setup ≤ 8–10 h",
+    "problem": "This undercounts owner time. Checking 5–10 multi-page workbooks or hyperlinked planners in 45 minutes leaves 4.5–9 minutes each, which is not the real 'human touch' review Etsy expects. Launch also needs the owner to approve and QA 30–60 listings in weeks 1–3, and none of those hours are counted.",
+    "correction": "ESTIMATE: launch QA of 60 products × 10–15 min = 10–15 h, on top of the ~7–8 h setup. Realistic one-time owner time is therefore 17–23 h, over the ≤10 h budget. Steady-state weekly time is about 3–4 h, at or over the ≤3 h budget."
+   },
+   {
+    "claim": "Best variant relies on the owner 'genuinely directing and curating' to satisfy Etsy's 'seller's original prompts' / 'human touch' standard",
+    "problem": "This conflicts directly with the user's hard constraint that the owner does not do the work personally. The dossier calls it a grey zone but still scores the plan as owner-light. The model only stays compliant if the owner keeps doing creative work.",
+    "correction": "State it plainly: the only compliant version of this plan requires ongoing creative input from the owner. That should lower owner_light and ai_operate."
+   },
+   {
+    "claim": "Etsy 'Seller App' key 'approved within minutes, with no manual review queue'",
+    "problem": "This is a single third-party source, and it goes to the heart of the plan. Without an approved API key, the AI cannot list anything, and the only fallback (browser automation) is prohibited. The risks list does not mention it.",
+    "correction": "Add a risk: API key approval may be delayed or refused ([prior knowledge, unverified, pre-2026-06]: Etsy v3 keys have historically sat 'pending' for days to weeks, and some requests were rejected). Fallback: the owner lists manually from AI-prepared packets. That is a large amount of hidden labour."
+   },
+   {
+    "claim": "Etsy API Terms quoted: API data may not be used for 'analytics, machine learning, training artificial intelligence models'",
+    "problem": "The plan pipes receipt and listing data into a Claude-driven KPI dashboard and an SEO-rewrite loop. The dossier quotes this restriction and then does not check whether its own analytics use conflicts with it.",
+    "correction": "Flag it as an unresolved legal question. It probably targets aggregate or third-party data rather than a seller's own shop data, but that is not verified. Limit processing to the owner's own shop data, and never store it for model training."
+   },
+   {
+    "claim": "Tax: 'the C$30k small-supplier threshold would be crossed around month 6 (30,000 / 5,000)'",
+    "problem": "The threshold is measured on gross taxable supplies, including zero-rated ones, not on net income. It also contradicts the dossier's own estimate that C$5k is reached only after 12+ months, if at all.",
+    "correction": "ESTIMATE: at the required C$15-item volume, gross ≈ 413 × 15 = C$6,195/month, so 30,000 / 6,195 ≈ 4.8 months after reaching target run-rate. Realistically this is not relevant within the 2–3 month window."
+   },
+   {
+    "claim": "'That is roughly 31× the average Etsy seller' (base rate)",
+    "problem": "The arithmetic is right (US$2.3B / 5.4M / 3 = US$142; 413 × 15 × 0.72 = US$4,460; 4,460 / 142 ≈ 31×). But the mean is inflated by top sellers and includes physical goods, and a new shop starts well below the median. The comparison understates how far the target is from a typical new seller. It lines up with TrustMRR (cand_saas.json): year-0 median MRR is US$148/month, so C$5k is about 34× the median.",
+    "correction": "Present both base rates together: Etsy mean ≈ US$142/month per active seller, and TrustMRR year-0 median US$148/month. The target is above 30× both. Say that the median new digital shop is likely far lower (not found)."
+   },
+   {
+    "claim": "'Gross margin after platform fees is about 80–87%'",
+    "problem": "This covers Etsy only. Across the channels the dossier lists, Gumroad Discover nets 10.50 / 15 = 70% and Payhip nets 13.51 / 15 = 90%. Mandatory Offsite Ads at 12% on attributed orders also cut margin once trailing sales pass US$10k, which would happen within about 2–3 months at target volume (ESTIMATE: US$4,460/month × 2.2 months ≈ US$10k).",
+    "correction": "Etsy net margin is 81–86% (6.50/8 to 21.58/25). Across all channels it is 70–90%. Past US$10k trailing sales, Offsite Ads become unavoidable."
+   },
+   {
+    "claim": "Timeline: 2027 planners listed mid-October catch the Dec–Jan planner season; seasonal items should go up '6–8 weeks ahead' (secondary playbook claim)",
+    "problem": "No source is given for the 6–8 week lead time. A new shop with no sales history listing in mid-October enters categories where established listings have already built ranking. The seasonal tailwind helps incumbents more than new entrants.",
+    "correction": "Tag the 6–8 week claim as unsourced. Treat the Dec–Jan season as a small upside for a new shop, not a demand driver. Keep the January 2027 ESTIMATE at C$0–1,000 gross, with a mode near the bottom of that range."
+   },
+   {
+    "claim": "Etsy Ads C$3–5/day is 'optional'",
+    "problem": "No evidence is given for how a new shop gets visibility without ads. If organic ranking is close to zero, ads are effectively required, with unknown ROAS, and the owner must manage them manually in the dashboard.",
+    "correction": "Treat ads as a likely-required C$90–150/month cost with unknown return (not found). Add an owner-managed stop-loss rule, for example pausing if ad spend passes 50% of revenue after 4 weeks (ASSUMPTION)."
+   },
+   {
+    "claim": "Hidden legal/IP costs not listed",
+    "problem": "The dossier does not address commercial font licensing for Korean and handwriting fonts embedded in sold PDFs, the realism of code-rendered mockups compared with the photo mockups competitors use (a likely conversion drag), or the 20 MB file limit for large hyperlinked planners.",
+    "correction": "Use only OFL or commercial-use fonts (for example, the Noto CJK family [prior knowledge, unverified, pre-2026-06]) and record the licences in the repo. Treat the conversion effect of mockups as unknown. Test file sizes against the 20 MB limit."
+   }
+  ],
+  "unlabelled_prior_knowledge": [
+   "The '6–8 weeks ahead' seasonal listing lead time is labelled 'secondary playbook claim' but no source is cited.",
+   "'Pinterest's anti-spam heuristics are stricter than its rate limits suggest (secondary)' has no source cited.",
+   "200k input + 40k output tokens per product and 300k/30k per ops run are unlabelled assumptions presented inside the ESTIMATE.",
+   "The Etsy Ads budget of C$3–5/day is an assumption; nothing supports its effectiveness for a new shop.",
+   "'Listing renewals: under C$10/month' has no arithmetic shown. ESTIMATE: 60 × C$0.28 every 4 months ≈ C$4/month, so it is plausible.",
+   "'The first image must show the finished product' is an unsourced Etsy listing guideline.",
+   "'Etsy requires one listing to open the shop' has no source cited in the facts.",
+   "Gumroad Discover '30%, net US$10.50' assumes no separate processing fee. The code excerpt supports the 30% rate, but whether processing is included is not verified.",
+   "'Tax or financial templates could create accuracy liability' is reasonable but unsourced.",
+   "The implicit assumption that a new shop gains organic Etsy search visibility within weeks has no measured source; only an SEO blog and an AI-written plan are cited."
+  ],
+  "math_check": "I verified the per-sale nets. C$8: 8 − (0.80 + 0.53) − 0.17 = 6.50. C$15: 15 − 2.03 − 0.26 = 12.71. C$25: 25 − 3.03 − 0.39 = 21.58. All correct, using 6.5% + 3% + 0.5% = 10% plus the C$0.25 processing fee and C$0.28 listing fee, with 13% HST on fees. Sales needed are correct: 5,250 / 6.50 = 808, 5,250 / 12.71 = 413, 5,250 / 21.58 = 243 per month. Visits at 2% conversion are correct: 413 / 0.02 = 20,650 and 243 / 0.02 = 12,150. Base rate is correct: 2.3B / 5.4M = US$426 per quarter = US$142/month; 413 × 15 = C$6,195 ≈ US$4,460 at 0.72; 4,460 / 142 ≈ 31×. Gumroad (1.935 + 0.80 = 2.74, net 12.26) and Payhip (1.185 + 0.30 = 1.49, net 13.51) are correct. Claude API figures are correct as computed (0.40 + 0.40 = US$0.80 per product, US$48 for 60; US$0.90 per run × 4 × 4.33 ≈ US$16), but the inputs are unlabelled assumptions and undercount the daily and weekly runs the dossier itself lists; corrected ESTIMATE is about US$45–60/month. Errors found: (1) launch costs 21 + 17 + 67 = C$105, above the stated C$60–100; (2) 'C$250/month costs' does not match 'C$300–600 over 3 months'; (3) the C$30k threshold should use gross revenue (~C$6,195/month), giving about 4.8 months, not 6. Ideas To Thrive checks out (251 × 49 / 8 ≈ US$1,537/month). The Gumroad_AI window of 2026-06-16 to 2026-09-23 is 14 weeks, as stated.",
+  "adjusted_scores": {
+   "p5k_90d": 0.5,
+   "owner_light": 4.5,
+   "capital_light": 8,
+   "ai_build": 7,
+   "ai_operate": 5,
+   "low_risk": 5
+  },
+  "verdict": "The dossier is unusually honest and well sourced, and its core conclusion holds: this does not reach CAD 5,000/month in 2–3 months. Required volume is 243–808 sales/month, which is more than 30× both the Etsy mean seller (US$142/month) and the TrustMRR year-0 median (US$148/month). The only autonomous-AI analogue (Gumroad_AI) made €0 in 14 weeks. Its own ESTIMATE of C$0–1,000/month by January 2027 is reasonable, with the likely outcome near the low end.\n\nThe review found five weaknesses:\n- A launch-cost arithmetic error: C$105 against a stated C$60–100.\n- Inconsistent monthly cost figures, and understated Claude operating cost with the subscription for Routines left out.\n- The AI cannot actually read Etsy buyer messages.\n- Launch QA hours are left out, which pushes one-time owner time to roughly 17–23 hours, over the 10-hour budget.\n- There is a structural conflict. Etsy's AI policy requires the seller's own prompts and a 'human touch', which means real ongoing creative work by the owner. That breaks the user's core requirement of not doing the work personally.\n\nEtsy API key approval is a single-point-of-failure risk that the dossier does not list.\n\nAdjusted: p5k_90d 0.5, owner_light 4.5, capital_light 8, ai_build 7, ai_operate 5, low_risk 5. Classify this as ELIMINATE as the primary plan. At most, keep it as an optional low-cash side asset, and only if the owner accepts about 3–4 hours a week of real curation."
+ }
+}

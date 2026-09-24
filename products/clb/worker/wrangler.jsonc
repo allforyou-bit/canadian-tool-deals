@@ -1,0 +1,52 @@
+// Cloudflare Worker for the practice coach: serves the static export (../out) and handles /api/*.
+// Keys checked against node_modules/wrangler/config-schema.json (wrangler 4.137.0) and
+// cloudflare-docs src/content/docs/workers/static-assets/binding.mdx (fetched 2026-09-24).
+//
+// IDs: the owner creates the D1 database and KV namespace once (business/online/owner-setup.md)
+// and pastes the printed IDs below. Secrets are never stored here — see worker/src/env.ts.
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "maple-practice-coach",
+  "main": "src/index.ts",
+  // workerd 1.20260815 (installed with wrangler/miniflare) supports dates up to 2026-08-15
+  "compatibility_date": "2026-08-15",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": true },
+
+  "assets": {
+    "directory": "../out",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"],
+    "html_handling": "force-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "mpc",
+      // "database_id": "<paste from `npx wrangler d1 create mpc`>",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "FLAGS"
+      // "id": "<paste from `npx wrangler kv namespace create FLAGS`>"
+    }
+  ],
+  "ai": { "binding": "AI" },
+
+  // every 15 min: spend/error monitor; daily 05:00 UTC: retention purge + aggregate metrics
+  "triggers": { "crons": ["*/15 * * * *", "0 5 * * *"] },
+
+  "vars": {
+    "SITE_URL": "https://maple-practice-coach.example.workers.dev",
+    "APP_VERSION": "0.1.0",
+    "FROM_EMAIL": "Maple Practice Coach <coach@example.com>",
+    "MAILING_ADDRESS": "SET-BEFORE-LAUNCH (CASL: owner mailing address)",
+    "OWNER_EMAIL": "owner@example.com"
+  }
+}

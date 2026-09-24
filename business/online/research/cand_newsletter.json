@@ -1,0 +1,317 @@
+{
+ "dossier": {
+  "candidate": "AI-curated paid newsletter / membership community (Substack, beehiiv or Ghost), written and operated by AI in a niche such as Canadian immigration news in Korean, deals, or K-content",
+  "summary": "VERDICT: The AI can build and run this model almost entirely by itself. The economics do not support CAD 5,000/month by Dec 2026–Jan 2027. At best it is a low-cost side asset. Do not count on it as the income plan.\n\n(1) Owner time is low. Ghost's official docs (GitHub, commit 2026-09-23) confirm three things: an Admin API that can publish a post and email it to free or paid members, a 0% platform cut, and native Stripe billing. After setup the AI can run the full loop (source → draft → fact-check → publish/email → metrics), and the owner spends about 1.5–3 h/week. Substack is a poor fit for AI operation: it has no official content-creation API (secondary source).\n\n(2) The numbers are hard. At about CAD 10/month, CAD 5,000/month net takes about 550–650 paying subscribers. With the commonly cited 2–5% free-to-paid conversion (low-grade secondary sources), that means about 11,000–27,000 free subscribers.\n\n(3) Base rates are against it (secondary sources):\n- Substack: about 5M paid subscriptions (Mar 2025) across about 50k–100k earning publications, so the mean is about 50–100 paid subscribers per earning publication, and the distribution is skewed.\n- beehiiv: US$19M of paid-subscription revenue in 2025 across 140k+ newsletters, about US$136 per newsletter per year.\n- An affiliate blog says reaching 5,000 subscribers takes 9–18 months of consistent publishing.\n\n(4) The owner's example niche has specific problems:\n- Small base: 218,140 Korean Canadians in the 2021 Census (snippet-level). Free competition exists.\n- Legal limit: IRPA s.91 (verified statute) makes paid representation or advice 'in connection with' an application an offence. Penalties are up to $200k or 2 years on indictment, and $40k or 6 months on summary conviction. So only general news and data can be sold, not the personal help readers pay most for.\n- Tax: selling to readers who live in Korea triggers Korean simplified VAT registration within 20 days (secondary source).\n\n(5) Operational blocker: this environment currently blocks outbound access to canada.ca, Ghost, beehiiv, Substack and Korean news sites (tested today). The owner must allowlist those hosts in the environment's network settings.\n\nESTIMATE of realistic month-3 revenue: CAD 0–500/month.",
+  "best_variant": "A Korean-language publication, '캐나다 이민·정착 데이터 브리핑', on Ghost(Pro) with its own domain, fully written by AI and labelled as AI-written.\n\n- FREE weekly issue: IRCC news releases, Express Entry and PNP draw data, and processing-time changes, summarized in Korean with a source link on every claim.\n- PAID tier at CAD 9.99/month or CAD 99/year: same-day change alerts, a searchable archive, bilingual data tables and form glossaries. It stays general information only: no reader Q&A about individual cases and no eligibility verdicts, to stay clear of IRPA s.91.\n- Paid tier limited to Canadian billing addresses at first, to avoid Korean VAT registration.\n- A flat-fee sponsor slot sold through a Stripe Payment Link to Korean-Canadian businesses.\n\nWhy this variant: it fits the owner's language (they can spot-check Korean quality), Ghost's API is documented, and there is a real information gap (English-only official sources that change often).\n\nHigher-revenue-per-subscriber alternative: an English B2B data digest, for example public tenders for small firms, at CAD 29–49/month. It needs only about 110–180 subscribers. But acquisition would rely on cold email under CASL, the owner would have to review in English (their English level is unknown), and free government alerts compete with it [prior knowledge, unverified, pre-2026-06]. Neither variant has evidence of reaching CAD 5k/month by month 3.",
+  "unit_economics": "ESTIMATE, all figures CAD unless stated.\n\nA) Ghost(Pro) + Stripe at 9.99/month\n- Stripe: 0.029 × 9.99 = 0.29, plus 0.30, = 0.59. Stripe Billing: 0.7% × 9.99 = 0.07 (the 0.7% is secondary; that it applies to Ghost subscriptions is [prior knowledge, unverified, pre-2026-06]).\n- Net per subscriber: 9.99 − 0.59 − 0.07 = 9.33/month.\n- Fixed costs ≈ 100/month:\n  - Ghost(Pro): docs say \"from $15/mo\", but the price of the tier that allows paid members was not verified; assume about USD 30–60.\n  - LLM API: about USD 7–18 (see below).\n  - PO box or virtual mailbox for the CASL footer: price not found.\n- Paid subscribers needed: (5,000 + 100) / 9.33 = 547.\n- Free subscribers needed: 547 / 0.02 = 27,350 at 2% conversion; 547 / 0.05 = 10,940 at 5%; 547 / 0.10 = 5,470 at 10%.\n\nB) Annual plan at 99\n- Stripe: 0.029 × 99 + 0.30 = 3.17. Billing: 0.69.\n- Net 95.14/year = 7.93/month, so 5,100 / 7.93 = 643 subscribers. Cash arrives upfront.\n\nC) Substack at 9.99\n- 9.99 − 1.00 (10%) − 0.59 − 0.07 = 8.33 net. With about 40/month fixed cost: 5,040 / 8.33 = 605 subscribers.\n\nD) Subscriber who lives in Korea\n- International card +0.8% and FX +2% (secondary): 0.028 × 9.99 = 0.28.\n- Korean VAT at 10% [prior knowledge, unverified, pre-2026-06], VAT-inclusive: 9.99 / 11 = 0.91.\n- Net ≈ 8.14.\n\nE) LTV and paid acquisition\n- Lifetime value: 9.33 / 0.05 = 187 at 5% monthly churn; 9.33 / 0.021 = 444 at the 2.1% publishing voluntary churn (secondary).\n- ASSUMPTION: free subscribers cost 2–4 each via Boosts or Meta [prior knowledge, unverified, pre-2026-06], with 3% conversion. Cost per paid subscriber = 2 / 0.03 = 67 to 4 / 0.03 = 133.\n- Reaching 547 paid would need 18,233 free subscribers, i.e. 36k–73k of capital. The long-run economics are positive, but this is not capital-light and not fast.\n\nF) AI cost (USD; per-token prices from the official Claude API skill docs)\n- Sonnet 5, per daily issue:\n  - Draft: 60k input tokens × $2/1M = 0.12, plus 4k output × $10/1M = 0.04, = 0.16.\n  - Fact-check: 30k × 2/1M = 0.06, plus 2k × 10/1M = 0.02, = 0.08.\n  - Total 0.24/day × 30 = about $7/month.\n- Opus 5 with the same tokens: (0.30 + 0.10) + (0.15 + 0.05) = 0.60/day, about $18/month.\n- Negligible either way. If it runs via Routines, the cost falls on the owner's Claude plan instead; plan prices were not verified.\n\nG) Month-3 expectation\n- 300–1,500 free subscribers (ASSUMPTION; no Korean-niche data found) × 3% = 9–45 paid × 9.33 = about 84–420/month.\n- Margin is above 85% once past the fixed costs, but the volume is not there.",
+  "distribution_plan": "Channels that need no owner work:\n\n1. Search. The AI publishes the free web version of every issue plus 2–3 Korean-language explainers per week, each carefully sourced. It deliberately keeps volume low to avoid Google's 'scaled content abuse' enforcement. Caveat: Korean searches run largely on Naver, and how well Naver indexes an external Ghost site was not found [prior knowledge, unverified, pre-2026-06].\n2. Ghost Recommendations. The AI can recommend other Ghost sites and ask them to recommend back. Emailing other publishers is B2B outreach that CASL allows only to conspicuously published addresses, with ID and unsubscribe.\n3. A welcome sequence and share prompts, written by the AI.\n4. Optional paid acquisition. The owner opens a Meta ad account once and sets a fixed monthly budget. The AI writes the ads and landing pages, and the owner uploads them (about 30 min/week). Automating this through the ads API needs app approval that was not verified.\n\nChannels the AI cannot use:\n- Naver cafés, KakaoTalk open chats and Instagram. These need the owner's personal accounts, which this plan excludes except for an optional one-time launch post of about 1 h.\n- Substack's internal network. More than half of new Substack subscribers come from it (secondary), but there is no official posting API.\n\nHonest expectation: with no owner posting and no ad budget, organic reach in 90 days is likely in the low hundreds of free subscribers. This is an ESTIMATE; the only comparable is a 2026 plan for an AI local-news newsletter that expected 200–500 subscribers by week 8, and that plan used Reddit, Instagram and partner outlets.\n\nOwner time: about 1.5–3 h/week (review, spot-checks, escalated reader emails, ad approvals).",
+  "timeline": "ESTIMATE:\n- Sep 28–Oct 9, 2026: the owner does the one-time setup (≤10 h). The AI builds the Ghost theme, the source fetchers, the draft → fact-check → publish pipeline and the Routines, and produces 3 pilot issues.\n- About Oct 12: launch the free weekly.\n- About Nov 9: open the paid tier after 4–5 free issues, since a secondary source says introducing paid early converts better.\n- First dollar: November 2026. Stripe's first payout comes 7–14 days after the first payment (Canada: 7 days for the first settlement), per a Stripe doc mirror cited in cand_saas.json.\n- Month 3 (Jan 2027): CAD 0–500/month.\n- CAD 5k/month: no evidence supports it within 2–3 months. If reachable at all, ESTIMATE 12–24+ months. Basis: a secondary claim of 9–18 months to reach 5,000 total subscribers, while 11k–27k free subscribers are needed at 2–5% conversion.\n- Kill criterion for the owner: under 1,000 free subscribers or under 20 paid by end of January 2027 means stop investing money beyond hosting.",
+  "owner_one_time_tasks": [
+   "Pick the niche and brand name, and sign the editorial policy: news and data only, no individual immigration advice, and a clear AI-authorship masthead (0.5–1 h)",
+   "Buy the domain, e.g. through Cloudflare Registrar, which sells at cost per the official docs (0.5 h)",
+   "Open a Ghost(Pro) account and pay for a plan that allows paid memberships; point DNS to it with the AI's instructions (1 h)",
+   "Open a Stripe account with ID verification and connect it to Ghost (1 h)",
+   "Create a Ghost Admin API key and an Anthropic API key, and store them as secrets in the GitHub repo and the Claude environment (0.5 h)",
+   "Change the Claude cloud environment's Network access to allow the Ghost site, canada.ca/ircc, Canada Gazette and the chosen news sources; they are blocked today (0.5 h)",
+   "Get a mailing address for the CASL footer, such as a PO box or virtual mailbox, so the home address is not published (1 h)",
+   "Decide the tax scope: limit paid billing to Canada, or register for Korean simplified VAT and handle EU VAT (0.5 h). Confirm the GST/HST small-supplier status plan (0.5 h)",
+   "If claiming EI: call Service Canada about the 'minor in extent' self-employment rule before launch (1 h)",
+   "Optional: a one-time legal check with an RCIC or lawyer that the paid content stays clear of IRPA s.91 (fee not found; 1 h)",
+   "Test-fire the Routines and approve the first 3 pilot issues (1 h)"
+  ],
+  "owner_weekly_tasks": [
+   "Read the AI's weekly metrics email (subscribers, conversion, churn, revenue, failed runs) and reply approve or stop (20–30 min)",
+   "Spot-check 2 issues for Korean quality and factual accuracy against the linked IRCC sources (45 min)",
+   "Answer or approve AI-drafted replies to reader emails that were escalated: refunds, questions that drift into personal advice, which must be declined (30 min)",
+   "Optional: upload the AI-written ads and approve the budget (30 min)",
+   "If on EI: declare net self-employment earnings in the biweekly report (15 min)"
+  ],
+  "ai_build_tasks": [
+   "Ghost theme customization: Korean typography, paywall layout, AI-disclosure masthead, no-advice disclaimer, privacy notice (PIPEDA) and a CASL-compliant email footer",
+   "Source fetchers in GitHub Actions: IRCC news releases, Express Entry and PNP round data, processing times, Canada Gazette immigration regulations, and the chosen Korean-Canadian news RSS, with deduplication and change detection",
+   "Drafting pipeline: summarize in Korean in the AI's own words, attach a source link to every factual claim, and credit source and author as required for fair dealing (Copyright Act s.29.2)",
+   "Automatic fact-check pass: a second model call verifies each number and date against the fetched source text and blocks publication on mismatch",
+   "Publisher: calls the Ghost Admin API to publish and email (the newsletter parameter; email_segment status:free or status:-free), with retry on a 'failed' email status",
+   "Welcome email sequence, upgrade prompts and an annual-plan offer",
+   "Data pages: draw history tables and processing-time trends, as useful non-scaled content",
+   "Metrics collector via the Ghost Members API, weekly report written to the repo plus an email draft, and kill-criteria tracking",
+   "Routines (recurring Claude sessions): daily ingest and draft, a weekly issue, a weekly report, and a failure watchdog",
+   "Intake filter that routes reader emails asking for personal immigration advice to a polite referral template listing CICC and law-society lookups"
+  ],
+  "ai_recurring_tasks": [
+   "Daily: fetch sources, detect changes, draft same-day alerts for paid members, fact-check and publish",
+   "Weekly: compile the free issue plus 2–3 sourced evergreen explainers, and publish them to the web archive and email",
+   "Update data tables such as draw history and processing times",
+   "Test subject lines and upgrade prompts; adjust the welcome sequence based on conversion data",
+   "Draft replies to reader emails and escalate refunds and advice-seeking questions to the owner",
+   "Weekly metrics and kill-criteria report; alert the owner if a Routine or email send fails",
+   "Keep a correction log and publish corrections when the AI got something wrong",
+   "Pitch Ghost Recommendations swaps by B2B email, CASL-compliant and only to conspicuously published addresses"
+  ],
+  "money_needed_cad": "ESTIMATE: CAD 300–1,000 for the first 3 months without ads.\n- Ghost(Pro): the docs say \"from $15/mo\". The tier that allows paid members is ASSUMED to be USD 30–60/month [prior knowledge, unverified, pre-2026-06].\n- Domain: about CAD 20–30/year (not verified).\n- Mailing address: price not found.\n- LLM API: about USD 7–18/month by the arithmetic above.\n- Claude plan for Routines: price not verified.\nOptional ad test: CAD 500–3,000. Reaching CAD 5k/month through paid acquisition would take about CAD 36k–73k (see unit economics), so it is not capital-light at scale.",
+  "facts": [
+   {
+    "fact": "OFFICIAL: 'Ghost takes 0% of your revenue... Standard Stripe processing fees still apply.' Stripe is the only natively supported payment provider; others need API or Zapier workarounds.",
+    "source": "https://github.com/TryGhost/Docs/blob/main/members.mdx (commit 0f3298a, 2026-09-23)"
+   },
+   {
+    "fact": "OFFICIAL: through the Ghost Admin API a post is emailed when it is published with the `newsletter` query parameter. `email_segment` can target status:free or status:-free (paid) members. A failed email can be retried by reverting to draft and republishing. So an AI can publish and send without a human in the loop.",
+    "source": "https://github.com/TryGhost/Docs/blob/main/admin-api/posts/sending-a-post.mdx"
+   },
+   {
+    "fact": "OFFICIAL: Ghost(Pro) base hosting is 'From $15/mo' with email newsletter delivery included. Self-hosting starts at $10/mo plus email delivery from $15/mo, and self-hosted bulk newsletter email requires Mailgun. CONFLICT: a 2026-05-24 secondary report says Ghost(Pro) runs '$9/mo (Starter) to $199/mo (Business)'.",
+    "source": "https://github.com/TryGhost/Docs/blob/main/hosting.mdx ; https://github.com/TryGhost/Docs/blob/main/faq/mailgun-newsletters.mdx ; https://github.com/vibewatch/startup/blob/317a56f41e975cb6b03ff17c435f30d31fd094f3/reports/20260524181810-substack/03-competitors.yaml"
+   },
+   {
+    "fact": "SECONDARY (dated 2026-05-21): Substack charges 10% of paid-subscription revenue plus Stripe at about 2.9% + $0.30. On $10/month the writer keeps about $8.41. Free newsletters cost $0.",
+    "source": "https://github.com/kacky000/aitoolpick/blob/415f1820eb34b4e951e55bf91e6e61c0e2902a63/src/content/blog/substack-pricing-2026.md"
+   },
+   {
+    "fact": "SECONDARY (2026-04-27): a Substack custom domain costs a one-time $50. Automation is limited: there is no welcome sequence and no segmentation. The Recommendations network is the main early growth lever.",
+    "source": "https://github.com/cabinetai/cabinets/blob/4dd50e5609af8b966471ac6f20e7e1d775f0611e/newsletter-factory/platform-guide/substack.md"
+   },
+   {
+    "fact": "SECONDARY (2026): 'Substack has no official content-creation API and its API ToS reserves the right to restrict access in its sole discretion.' Ghost has a draft-gate API but no free tier. Buttondown's API creates drafts by default (April 2026).",
+    "source": "https://github.com/contofalskyR/epistemic-receipts/blob/main/tracker/news-cycle-research-report.md"
+   },
+   {
+    "fact": "SECONDARY, CONFLICTING: beehiiv's Launch plan is free up to 2,500 subscribers but excludes paid subscriptions and the ad network. Scale is '~$39/mo' (annual billing, 2026-05-21 source) or '$49 per month' (a source claiming verification in Feb 2026). Max is ~$99 or $109. beehiiv takes 0% of subscription revenue.",
+    "source": "https://github.com/kacky000/aitoolpick/blob/415f1820eb34b4e951e55bf91e6e61c0e2902a63/src/content/blog/beehiiv-pricing-2026.md ; https://github.com/Ozigi-app/OziGi/blob/50ca420b40dafd3cb097fb307357704dc4c6edc3/apps/blog/content/blog/ozigi-vs-beehiiv-substack-kit-newsletter-ai.mdx"
+   },
+   {
+    "fact": "SECONDARY (report compiled 2026-05-24): Substack reached 5M paid subscriptions by March 2025; 'nearly 100,000 publications earn money' as of April 2026, up from 50,000 in May 2025. 'More than half of new subscribers come from Substack's built-in network. 30%+ of paid subscriptions come from within Substack's network.'",
+    "source": "https://github.com/vibewatch/startup/blob/317a56f41e975cb6b03ff17c435f30d31fd094f3/reports/20260524181810-substack/evidence.yaml"
+   },
+   {
+    "fact": "SECONDARY: beehiiv had 140,000 active newsletters and $30M ARR (June 2025). Paid subscriptions through beehiiv generated $19M in 2025, up from $8M in 2024, per beehiiv's 'State of Newsletters 2026'.",
+    "source": "https://github.com/vibewatch/startup/blob/317a56f41e975cb6b03ff17c435f30d31fd094f3/reports/20260524181810-substack/03-competitors.yaml ; .../evidence.yaml"
+   },
+   {
+    "fact": "SECONDARY, LOW-GRADE (several AI-written skill files that agree with each other): free-to-paid conversion '2-5% is normal, 5-10% is excellent'. Another source gives a 1–5% range with 3% as 'good'.",
+    "source": "https://github.com/FerroxLabs/wayland/blob/4c030c7b01c241df7b6e3535635a970f10d781af/src/process/resources/skills-library/bodies/skills/marketing-sales/substack-writer/SKILL.md ; https://github.com/AgriciDaniel/claude-email/blob/182270a0bbcd9c710713cbff4b7ce8475f5964f9/skills/email-plan/assets/creator.md"
+   },
+   {
+    "fact": "SECONDARY: trial-to-paid conversion was 33.7% in 2024, down from 46.4% in 2021 (citing Marketing Charts). Cold direct-signup conversion is 1–5%. Publishing has 2.1% voluntary churn (citing Recurly).",
+    "source": "https://github.com/wilfred-py/tldrsec-ai/blob/c2054c59a8f49ce03b1987d183c04c622a0ea85d/premium-newsletter-business-models-2024-2025.md"
+   },
+   {
+    "fact": "SECONDARY, LOW-GRADE (affiliate blog, 2026): 'Most creators who publish consistently reach 5,000 subscribers in 9-18 months'; Boosts can compress this to 6–9 months depending on budget. beehiiv takes 20% of Boosts payouts.",
+    "source": "https://github.com/quakrliu/quakr-site/blob/e8c48e1dc7388205793bf77105692e5c5e645ba9/src/content/blog/beehiiv-newsletter-income-5000-subscribers-2026.md"
+   },
+   {
+    "fact": "OFFICIAL STATUTE (IRPA, current to 2026-03-31): s.91(1) says 'no person shall knowingly, directly or indirectly, represent or advise a person for consideration — or offer to do so — in connection with ... a proceeding or application under this Act', unless they are a lawyer, paralegal, Quebec notary or CICC member (s.91(2)). s.91(9) sets penalties: on indictment up to $200,000 and/or 2 years; on summary conviction up to $40,000 and/or 6 months. This corrects the secondary '$50k–$100k' figure in cand_korean.json.",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/I-2.5.xml"
+   },
+   {
+    "fact": "OFFICIAL STATUTE (Copyright Act, current to 2025-07-24): s.29.2 says fair dealing for news reporting does not infringe copyright 'if the following are mentioned: (a) the source; and (b) if given in the source, the name of the author'.",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/C-42.xml"
+   },
+   {
+    "fact": "OFFICIAL STATUTE (Competition Act, current to 2026-03-31): under s.74.01(1)(a), making 'a representation to the public that is false or misleading in a material respect' to promote a business interest is reviewable conduct. The consolidation contains 0 occurrences of 'artificial intelligence', so no AI-specific disclosure rule was found in it.",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/C-34.xml"
+   },
+   {
+    "fact": "CASL applies to newsletter email. It requires consent (express or implied), sender identification including a mailing address, and an unsubscribe that works for 60 days and is honoured within 10 business days. The maximum penalty is $1M for an individual.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_compliance.json"
+   },
+   {
+    "fact": "GST/HST small-supplier threshold is $30,000 over four consecutive calendar quarters (ETA s.148). ESTIMATE: at $5k/month it would be crossed in about month 6.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_compliance.json"
+   },
+   {
+    "fact": "SECONDARY (updated 2026-08-27): a foreign business supplying electronic services, including digitally delivered content, directly to Korean consumers is liable for Korean VAT. It must apply for simplified VAT registration through NTS Hometax 'within 20 days of commencing business activities'. B2B sales are excluded, and an intermediary platform assumes the liability when sales go through it.",
+    "source": "https://github.com/openaccountants/openaccountants/blob/ab70f684e7b2afc35026fda0940a53c747698bbb/packages/south-korea/simplified-business-operator-registration-under-vat-act.md"
+   },
+   {
+    "fact": "EU VAT: sellers outside the EU have no threshold for digital services sold to EU consumers. Plain Stripe is not a merchant of record.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json (verification, citing openaccountants eu-oss-digital.md)"
+   },
+   {
+    "fact": "SECONDARY: Stripe Canada charges 2.9% + C$0.30 per domestic card, plus about 0.8% for international cards and 2% FX (single source). Stripe Billing costs 0.7%. The first payout typically comes 7–14 days after the first payment.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_tooling.json ; /home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+   },
+   {
+    "fact": "SNIPPET-LEVEL: the 2021 Census counted 218,140 Korean Canadians, 74,975 of them in the Toronto CMA. The verifier warns that census and consulate counts are not comparable.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_korean.json"
+   },
+   {
+    "fact": "Google's scaled-content-abuse policy targets mass-produced low-value pages however they are made. An agency claims AI-scaled sites lost 50–80% of traffic in the March 2026 core update (unverified).",
+    "source": "/home/user/canadian-tool-deals/business/research/evidence-corpus.md (S103); /home/user/canadian-tool-deals/business/research/dossiers/cand_content.json"
+   },
+   {
+    "fact": "In this session on 2026-09-24, HTTPS requests from this environment to www.canada.ca, api.beehiiv.com, demo.ghost.io, substack.com, www.koreatimes.net and news.google.com all returned HTTP 000 (blocked). The environment documentation says the person changes 'Network access' in the cloud environment's settings, either to a broader level or by adding allowed domains.",
+    "source": "this session: curl egress test + Claude Code Remote read_documentation(topic=environment.network)"
+   },
+   {
+    "fact": "Claude API list prices per 1M input/output tokens: Opus 5 $5/$25, Sonnet 5 $2/$10, Haiku 4.5 $1/$5. Prompt-cache reads cost about 0.1× the input price.",
+    "source": "official Claude API skill docs (cached 2026-06-24), as provided in the task"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "ESTIMATE from secondary numbers: 5M paid Substack subscriptions / 50k–100k earning publications = a mean of 50–100 paid subscribers per earning publication, and the distribution is skewed toward top writers. This plan needs about 550–650, i.e. 6–12× the mean, within 3 months.",
+    "source": "https://github.com/vibewatch/startup/blob/317a56f41e975cb6b03ff17c435f30d31fd094f3/reports/20260524181810-substack/evidence.yaml"
+   },
+   {
+    "fact": "ESTIMATE: US$19M of 2025 paid-subscription revenue / 140,000 beehiiv newsletters = about US$136 per newsletter per year on average.",
+    "source": "https://github.com/vibewatch/startup/blob/317a56f41e975cb6b03ff17c435f30d31fd094f3/reports/20260524181810-substack/03-competitors.yaml"
+   },
+   {
+    "fact": "Growth is slow even for consistent human publishers: 9–18 months to 5,000 subscribers (low-grade affiliate claim). A 2026 plan for an AI local-news newsletter expected only 200–500 subscribers at week 8, and that plan included Reddit, Instagram and partner-outlet promotion.",
+    "source": "https://github.com/quakrliu/quakr-site/blob/e8c48e1dc7388205793bf77105692e5c5e645ba9/src/content/blog/beehiiv-newsletter-income-5000-subscribers-2026.md ; https://github.com/sharkfinnhoohaha/finn-wiki/blob/349f0fb2d41eb5cf3bcc85344596376d4602f57e/raw/pier-and-point-research.md"
+   },
+   {
+    "fact": "Substack's discovery engine drives more than half of new subscribers, but it cannot be used without manual posting from a person's account, because there is no official content API.",
+    "source": "https://github.com/contofalskyR/epistemic-receipts/blob/main/tracker/news-cycle-research-report.md ; vibewatch evidence.yaml"
+   },
+   {
+    "fact": "AI-written text has little market value. Writing jobs fell 33% and translation jobs 19% on Upwork after ChatGPT (Bloomberry analysis). A study found demand for substitutable writing and translation skills down 20–50% against trend.",
+    "source": "/home/user/canadian-tool-deals/business/research/evidence-corpus.md (S159, S160)"
+   },
+   {
+    "fact": "The service Korean readers would pay most for, help with their own application, is legally closed. Paid advice 'in connection with' an IRPA application is an offence for anyone who is not a lawyer, paralegal or CICC member (s.91). That leaves only general news, which competes with free sources.",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/I-2.5.xml"
+   },
+   {
+    "fact": "Licensed immigration consultants and Korean-Canadian media already publish Korean-language immigration news for free, as lead generation or ad-funded content [prior knowledge, unverified, pre-2026-06]. No count of these competitors was found.",
+    "source": "[prior knowledge, unverified]"
+   },
+   {
+    "fact": "LOW-GRADE: 41% of consumers report subscription fatigue (Zuora SEI via a blog). Subscription fatigue is said to push churn up 23%.",
+    "source": "https://github.com/vibewatch/startup/blob/317a56f41e975cb6b03ff17c435f30d31fd094f3/reports/20260524181810-substack/evidence.yaml"
+   },
+   {
+    "fact": "Google enforcement against scaled AI content (March 2026 core update, August 2026 spam update) makes search, the main no-owner distribution channel, risky for an AI-written site.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_content.json"
+   },
+   {
+    "fact": "The earlier SaaS dossier found the same pattern for other AI-built digital products: fast successes came from founders who already had audiences, and 'distribution, not building, is now the limit'.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+   }
+  ],
+  "risks": [
+   "Distribution is the binding constraint. Every channel that works quickly (Substack Notes and network, Naver cafés, KakaoTalk, Instagram) needs the owner's manual posting, and paid acquisition needs tens of thousands of CAD to reach 5k/month.",
+   "Harm from AI errors: a wrong CRS cutoff, deadline or eligibility detail could lead a reader into a costly immigration mistake. This creates reputational risk, possible negligence claims, and misleading-representation exposure under Competition Act s.74.01 if the marketing overstates accuracy or expertise.",
+   "Legal scope creep: reader Q&A, 'which program fits me' tools, or personalized alerts could become paid advice 'in connection with' an application under IRPA s.91. Penalties reach $200k or 2 years. This interpretation is not legal advice, and a one-time RCIC or lawyer check is recommended.",
+   "Disclosure and trust: a fake human persona would be risky under s.74.01 (my interpretation). Korea's AI Basic Act (effective Jan 2026) and EU AI Act Art. 50 (from Aug 2026) have AI-labelling duties whose application to a small foreign publisher is uncertain [prior knowledge, unverified, pre-2026-06]. How Korean readers react to AI-written news was not found.",
+   "Copyright: summarizing Korean or English news articles too closely, or reproducing paywalled text, risks infringement. Fair dealing for news reporting requires naming the source and author (s.29.2).",
+   "Tax friction: Korean simplified VAT from the first B2C sale to Korea residents, EU VAT from the first EU consumer sale, and GST/HST after $30k. A merchant of record would cost about 3.5% to 5% + $0.50, and Ghost's native support is Stripe-only.",
+   "Operations: the environment currently blocks all source and publishing hosts. A Routine that fails silently means missed issues and churn, so a watchdog plus the owner's weekly check are required. Routine delivery has not been tested in this repo.",
+   "Platform and account risk: Stripe account review for a new AI publisher, deliverability problems on a new sending domain [prior knowledge, unverified, pre-2026-06], and Ghost/Stripe policy changes.",
+   "EI interaction: if the owner claims EI, a business that is more than 'minor in extent' can make every week a full working week, meaning $0 EI (EI Regs s.30, cross_compliance.json). Earnings must be declared.",
+   "Evidence quality: most platform-fee, conversion and growth figures here are secondary or AI-written GitHub content. Only the Ghost docs and the Canadian statutes are primary."
+  ],
+  "scores": {
+   "p5k_90d": 0.5,
+   "owner_light": 7,
+   "capital_light": 8,
+   "ai_build": 8,
+   "ai_operate": 6,
+   "low_risk": 5
+  },
+  "score_rationale": "p5k_90d 0.5: The target needs about 550–650 paid subscribers, which means about 11k–27k free subscribers at 2–5% conversion, inside roughly 12 weeks after launch. Secondary base rates point the other way: a mean of 50–100 paid subscribers per earning Substack publication, about US$136/year average paid revenue per beehiiv newsletter, and 9–18 months to 5,000 subscribers. The Korean niche is small, has free competitors and is legally limited to general news. No evidence was found of any new AI-written newsletter reaching this in 3 months.\n\nowner_light 7: After about 9–10 hours of setup, publishing, email, metrics and reader-email drafting can run without the owner (Ghost Admin API, officially documented). The owner still reviews Korean output, handles escalations, approves any ad spend, and does EI and tax filings: about 1.5–3 h/week. It is not a 9 or 10, because the growth channels that work fastest need the owner's own accounts.\n\ncapital_light 8: CAD 300–1,000 over 3 months without ads, and LLM cost is trivial (about US$7–18/month by the arithmetic). Scaling through paid acquisition would need tens of thousands of CAD.\n\nai_build 8: Everything is code or content the AI can produce, and the Ghost API is verified. The owner must still grant ID-based accounts, API keys and network allowlisting.\n\nai_operate 6: The publishing loop can be automated, but growth mostly cannot, quality and legal checks in Korean benefit from a human, and Routine reliability is untested.\n\nlow_risk 5: Little money is at risk, but there is real exposure: IRPA s.91 scope creep, harm from AI errors on immigration facts, copyright, CASL, and Korean and EU VAT."
+ },
+ "verification": {
+  "problems": [
+   {
+    "claim": "Unit economics A: fixed costs are about CAD 100/month (Ghost(Pro) USD 30–60 + LLM USD 7–18 + mailbox not found).",
+    "problem": "USD and CAD are mixed with no FX rate shown, and the mailbox is left out of the total. The biggest real running cost is also missing: the Claude subscription that runs the Routines. The dossier says the plan price was not verified, then leaves it out of the CAD 100 anyway. Summing the USD figures gives USD 37–78 before FX and before the mailbox, so 'about CAD 100' is not shown arithmetic.",
+    "correction": "ESTIMATE: state the FX assumption explicitly, e.g. 1 USD = 1.37 CAD [prior knowledge, unverified, pre-2026-06]. Then (37 to 78) × 1.37 = CAD 51–107 before the mailbox and the Claude plan. Add a Claude plan line of USD 20–200/month [prior knowledge, unverified, pre-2026-06], which is roughly CAD 27–274. The fixed-cost range becomes about CAD 80–400/month, and subscribers needed becomes (5,000 + 80 to 400) / 9.33 = 544–579."
+   },
+   {
+    "claim": "Unit economics F: the AI cost is negligible, USD 7–18/month for one draft call plus one fact-check call per day.",
+    "problem": "This models one API call per issue. The operating model in the dossier is agentic Routines: Claude Code sessions that fetch, read and diff sources, edit the repo, publish, write replies and produce reports. Those sessions use many tool-call turns with large contexts. The dossier also adds 2–3 explainers per week, reader-email drafting and metrics reports, none of which are costed. If Routines run on a subscription, the cost is the plan fee plus usage limits, not tokens.",
+    "correction": "ESTIMATE, illustrative only: one agentic session reading 500k input tokens and writing 20k output tokens on Sonnet 5 costs 0.5 × 2 + 0.02 × 10 = USD 1.20. At about 40 sessions/month that is about USD 48/month, and on Opus 5 it is 0.5 × 5 + 0.02 × 25 = 3.00 × 40 = USD 120/month. Either way the conclusion stays 'small next to revenue', but it is not 'negligible' next to CAD 84–420 of month-3 revenue."
+   },
+   {
+    "claim": "Unit economics B: the annual plan needs 643 subscribers, more than the monthly plan's 547.",
+    "problem": "The 643 figure is right if revenue is recognized per month. But the target is 'average CAD 5,000/month by month 3', and the owner experiences that as cash. Annual plans put 12 months of cash into the month of signup, so the dossier's comparison points the wrong way for a 90-day cash target and hides this lever.",
+    "correction": "ESTIMATE: 3 months × 5,000 = 15,000 of cash, and 15,000 / 95.14 = 158 annual subscribers over the 90 days would reach the cash average. Say plainly that this is revenue pulled forward, not recurring income (MRR stays 158 × 7.93 = CAD 1,253). Even 158 annual buyers from a new AI-written Korean newsletter with no owner promotion has no supporting evidence."
+   },
+   {
+    "claim": "Unit economics E: free subscribers cost 2–4 each 'via Boosts or Meta', and the long-run economics are positive.",
+    "problem": "Boosts is a beehiiv feature. The recommended variant runs on Ghost, so that channel does not exist for it. The 2–4 figure is also unlabelled as USD or CAD, and a Korean-language audience inside Canada is a small ad audience, so cost per subscriber could be higher. 'Positive' also depends on the 3% conversion assumption and on counting only voluntary churn (2.1%). Paid-acquired subscribers usually convert and retain worse than organic ones [prior knowledge, unverified, pre-2026-06].",
+    "correction": "Remove Boosts from the Ghost variant. ESTIMATE: at 1% conversion, cost per paid subscriber = 2/0.01 to 4/0.01 = 200–400, which exceeds the LTV of 9.33/0.05 = 187 at 5% churn, so the economics turn negative. State the result as 'positive only if conversion ≥ about 2–3% and churn ≤ 5%; unproven'. Payback at 3% conversion is 67/9.33 = 7.2 to 133/9.33 = 14.3 months, which is outside the 3-month horizon."
+   },
+   {
+    "claim": "Unit economics G: 300–1,500 free subscribers by month 3.",
+    "problem": "This contradicts the dossier's own distribution section, which says organic reach with no owner posting and no ads is 'likely in the low hundreds'. The upper bound of 1,500 implies either ads or owner posting, and neither is budgeted in the base plan. The 3% free-to-paid rate also comes from lifetime or cumulative benchmarks, but the paid tier opens only about Nov 9, roughly 11–12 weeks before end of January, so early conversion is likely lower.",
+    "correction": "ESTIMATE, no ads: 100–500 free × 1–3% = 1–15 paid × 9.33 = CAD 9–140/month. After about CAD 80–400 of fixed costs, that is roughly break-even to a net loss. The CAD 84–420 range applies only with ad spend."
+   },
+   {
+    "claim": "The kill criterion is under 1,000 free or under 20 paid by end of January 2027.",
+    "problem": "By the dossier's own organic estimate (low hundreds free, about 9–45 paid only at the optimistic end), the base plan is expected to trip this kill criterion. The summary does not say so plainly, so the owner may read the plan as having a reasonable chance.",
+    "correction": "State outright that the expected outcome of the no-ads base plan is to hit the kill criterion by end of January 2027. It can also be described as a low-cost experiment for learning whether demand exists."
+   },
+   {
+    "claim": "The mean of 50–100 paid subscribers per earning Substack publication, and about US$136/year per beehiiv newsletter.",
+    "problem": "The Substack mean mixes dates: 5M paid (Mar 2025) against 50k (May 2025) or 100k (Apr 2026) earning publications. The 100k denominator is a year later than the numerator, so only the ~100 end is date-matched. The median is far below the mean because of skew, and it covers publications of all ages, not 3-month-old ones. The beehiiv figure divides paid revenue by all 140k newsletters, most of which do not sell subscriptions. That understates the average for paid-enabled newsletters, so as counter-evidence it is mis-framed, even though the direction still holds. The strongest repo base rate, TrustMRR, is not cited at all.",
+    "correction": "Use the date-matched figure: 5M / 50k ≈ 100 mean paid per earning publication (all ages; the median is lower but not found). Label the beehiiv figure 'per newsletter including free-only ones'. Add the TrustMRR base rate from cand_saas.json: median MRR is US$148/month in year 0 (n = 5,079). CAD 5,000 ≈ 34× that, and only 0.9% of products were 'breaking out'."
+   },
+   {
+    "claim": "Distribution: a 2026 AI local-news newsletter plan expected 200–500 subscribers by week 8, used as 'the only comparable'.",
+    "problem": "This is a projection in someone's planning document, not an observed outcome, and it included Reddit, Instagram and partner promotion. Using it as a comparable makes the estimate look more evidence-based than it is.",
+    "correction": "Relabel it as 'another planner's unvalidated projection'. State that no observed outcome for a new AI-written, owner-silent newsletter was found."
+   },
+   {
+    "claim": "The owner reviews and spot-checks Korean quality and factual accuracy against the linked IRCC sources, 45 min/week.",
+    "problem": "Checking facts against IRCC sources means reading official English (or French) pages. The owner's English level is unknown. Immigration facts such as CRS cutoffs, deadlines and eligibility carry high harm if wrong, and 2 spot-checks a week do not cover daily paid alerts. This is hidden labour and a hidden skill requirement.",
+    "correction": "Either (a) state an owner prerequisite of working English reading, plus a realistic 1–2 h/week for daily-alert accuracy, or (b) rely on the automated fact-check and accept un-reviewed publication. If (b), cut the paid tier's promise to 'data mirrored from IRCC with links', never interpretation. With (a), weekly owner time is about 2.5–4 h, which may exceed the 3 h/week budget."
+   },
+   {
+    "claim": "The paid tier is limited to Canadian billing addresses at first, to avoid Korean VAT.",
+    "problem": "There is no evidence that Ghost can restrict paid signup by country. Stripe Radar rules may be able to block non-CA cards, but that is untested and may carry a cost [prior knowledge, unverified, pre-2026-06]. Korean VAT also depends on the consumer's residence, not the card's country, so a Canadian card is only a proxy. The feasibility is asserted without a source.",
+    "correction": "Mark this 'feasibility not verified'. Add an AI build task to test a Stripe Radar block rule on non-CA card country and a residence-declaration checkbox at checkout. If neither works, treat Korean VAT registration as a possible day-one owner task."
+   },
+   {
+    "claim": "Operational blocker: the owner must allowlist canada.ca, Ghost, etc. in the environment's network settings.",
+    "problem": "This is partly overstated. The ai_build_tasks already put the source fetchers in GitHub Actions. GitHub-hosted runners generally have open internet egress [prior knowledge, unverified, pre-2026-06], so ingest and Ghost API publishing could run from Actions. Only the Routine sessions themselves are blocked.",
+    "correction": "Reframe it: run fetch and publish in GitHub Actions and have Routines work on repo-committed snapshots, or allowlist the hosts. Either way, one test run must confirm it before launch."
+   },
+   {
+    "claim": "The Ghost(Pro) tier that allows paid members is assumed to be USD 30–60, and the AI builds a custom Ghost theme and uses a custom integration Admin API key.",
+    "problem": "The verified docs (hosting.mdx, fetched 2026-09-24) show only 'From $15/mo'. Admin API keys come from a 'Custom Integration' (admin-api.mdx, verified). Whether the entry tier allows custom integrations, custom themes and paid subscriptions is not stated in the docs. My recollection is that the entry plan restricts custom integrations and themes [prior knowledge, unverified, pre-2026-06]. If so, the whole AI-operates model needs a higher tier, and the owner must pick it at setup.",
+    "correction": "Add an explicit owner check at signup: 'confirm the plan includes custom integrations, custom themes and paid subscriptions'. Keep USD 30–60 as an assumption, tagged."
+   },
+   {
+    "claim": "The sponsor slot is sold through a Stripe Payment Link to Korean-Canadian businesses.",
+    "problem": "There is no revenue estimate, and no audience yet to sell. Sourcing sponsors means B2B outreach, which is only CASL-safe to conspicuously published addresses with a relevant message. The dossier also does not discuss who approves sponsors. Immigration-consultant sponsors would create a conflict with the 'no advice' positioning and a Competition Act s.74.01 risk if the ad copy is misleading.",
+    "correction": "Model sponsor revenue at CAD 0 for the 90 days (ESTIMATE; no audience). List sponsor approval as owner time, and add a policy on which sponsor categories are excluded."
+   },
+   {
+    "claim": "Setup ≤10 h (the task list sums to about 9–9.5 h).",
+    "problem": "The list sums to 8.5–9.5 h, which leaves almost no slack. Stripe identity verification, DNS propagation and debugging, finding and booking an RCIC or lawyer, and a first-time EI call often overrun [prior knowledge, unverified, pre-2026-06]. The legal check fee is 'not found' but is a real cost.",
+    "correction": "ESTIMATE: realistic setup is 10–14 h. Add the legal consult as a cash item with an unknown fee, not only as 1 h of time."
+   },
+   {
+    "claim": "Score low_risk 5 and ai_operate 6.",
+    "problem": "low_risk: the product is paid alerts on immigration facts written by AI with minimal human review, for a readership making high-stakes decisions. Add unresolved VAT gating and untested Routines. ai_operate: growth is not automated, Korean and English quality checks need a human, and Routine reliability is untested.",
+    "correction": "low_risk 4, ai_operate 5."
+   }
+  ],
+  "unlabelled_prior_knowledge": [
+   "'a secondary source says introducing paid early converts better' (timeline): no source appears in facts or counter_evidence",
+   "'Cloudflare Registrar, which sells at cost per the official docs': the official-docs source is not in the facts list",
+   "'A merchant of record would cost about 3.5% to 5% + $0.50' (risks): no source listed in this dossier",
+   "Ghost Recommendations exists and supports reciprocal recommending: not sourced to Ghost docs",
+   "'Automating this through the ads API needs app approval' (Meta Marketing API app review): hedged but not tagged",
+   "'there is a real information gap (English-only official sources that change often)': there is no evidence of reader demand, and IRCC/third-party Korean-language coverage was not checked",
+   "Being able to limit Ghost/Stripe paid signups to Canadian billing addresses: feasibility is untagged",
+   "'Domain about CAD 20–30/year (not verified)': flagged as unverified but not tagged [prior knowledge]",
+   "The implicit USD→CAD conversion inside the 'fixed costs ≈ 100/month' figure: no rate given",
+   "Stripe Billing 0.7% counted in the Substack scenario C: whether Substack passes it through is not sourced (the secondary source's $8.41 excludes it)",
+   "'Boosts' as an acquisition channel for the Ghost variant: Boosts is beehiiv-only, so this is an unstated and wrong assumption",
+   "The '~40/month fixed cost' for Substack (scenario C): its components are never given"
+  ],
+  "math_check": "I recomputed the dossier's arithmetic, and almost all of it is correct.\n\nA) Fees on CAD 9.99: 0.029 × 9.99 = 0.290, plus 0.30 = 0.59; Billing 0.007 × 9.99 = 0.07. Net 9.33 (correct). Subscribers: 5,100 / 9.33 = 546.6, so 547 (correct). Free subscribers needed: 547 / 0.02 = 27,350, / 0.05 = 10,940, / 0.10 = 5,470 (correct).\n\nB) Annual plan: 0.029 × 99 + 0.30 = 3.171 (correct); 0.007 × 99 = 0.693 (correct); 99 − 3.17 − 0.69 = 95.14; 95.14 / 12 = 7.93; 5,100 / 7.93 = 643 (correct). One framing error: for a 90-day cash average, 15,000 / 95.14 = 158 annual subscribers would be enough.\n\nC) Substack: 9.99 − 1.00 − 0.59 − 0.07 = 8.33 (correct); 5,040 / 8.33 = 605 (correct). The CAD 40 fixed cost is never broken down.\n\nD) Korea-resident subscriber: 0.028 × 9.99 = 0.28; 9.99 / 11 = 0.908; 9.33 − 0.28 − 0.91 = 8.14 (correct).\n\nE) LTV: 9.33 / 0.05 = 186.6 and 9.33 / 0.021 = 444.3 (correct). Cost per paid subscriber: 2 / 0.03 = 66.7 and 4 / 0.03 = 133.3 (correct). Free subscribers needed: 547 / 0.03 = 18,233; × 2 = 36,467 and × 4 = 72,933 (correct). Currency is unlabelled, and Boosts does not apply to Ghost.\n\nF) Sonnet 5: 60k × 2 / 1M = 0.12; 4k × 10 / 1M = 0.04; 30k × 2 / 1M = 0.06; 2k × 10 / 1M = 0.02; total 0.24/day × 30 = 7.2 (correct). Opus 5: 0.30 + 0.10 + 0.15 + 0.05 = 0.60/day × 30 = 18 (correct). The model itself understates cost, because it assumes one call per issue instead of agentic sessions.\n\nG) 300 × 0.03 = 9 and 1,500 × 0.03 = 45; 9 × 9.33 = 84 and 45 × 9.33 = 420 (correct). The 1,500 upper bound contradicts the dossier's own 'low hundreds' organic estimate.\n\nBase rates: 5M / 50k = 100 and 5M / 100k = 50 (correct, but the dates are mixed). 19M / 140k = 135.7 (correct, but the denominator includes free-only newsletters).\n\nInternal consistency:\n- The summary's '550–650 paid' matches 547–643.\n- Fixed costs are not consistent: CAD 100 comes from unconverted USD figures and leaves out the Claude plan.\n- Month-3 revenue of CAD 84–420 is before about CAD 80–400 of fixed costs, so month-3 net is roughly −300 to +340.\n- The setup task list sums to 8.5–9.5 h, just under the 10 h cap.\n- Weekly owner tasks sum to about 2.3–2.5 h, within 3 h, but that excludes adequate English-source fact review.",
+  "adjusted_scores": {
+   "p5k_90d": 0.3,
+   "owner_light": 6,
+   "capital_light": 7,
+   "ai_build": 8,
+   "ai_operate": 5,
+   "low_risk": 4
+  },
+  "verdict": "The dossier's core conclusion holds up under review: an AI-run Korean immigration-data newsletter will not reach an average of CAD 5,000/month by month 3. The arithmetic is almost all correct.\n\nVerified: I fetched the official TryGhost/Docs files today. The Admin API supports publishing with `newsletter` and `email_segment=status:free/status:-free`, and a failed email can be retried by reverting to draft. Ghost(Pro) hosting is 'From $15/mo'. The docs do not say which plan allows custom integrations, custom themes or paid subscriptions.\n\nWhere the dossier is too optimistic:\n1. The month-3 upper bound of 1,500 free subscribers contradicts its own 'low hundreds' organic estimate. Without ads, a realistic month-3 result is about CAD 9–140/month gross (ESTIMATE). Fixed costs of about CAD 80–400/month (ESTIMATE) include the Claude plan the dossier left out, so the base case is break-even to a loss.\n2. The plan is expected to trigger its own kill criterion by January 2027.\n3. Paid acquisition relies on Boosts, which Ghost does not have. It only pays back if conversion is at least about 2–3%, with 7–14-month payback.\n4. Owner review requires reading English IRCC sources, and the owner's English level is unknown. This is hidden labour and a hidden skill requirement.\n5. Limiting sales to Canada to avoid Korean VAT has no verified way to enforce it.\n6. The strongest base rate in the repo is missing: TrustMRR year-0 median MRR is US$148, so CAD 5k ≈ 34× the median.\n\nMissed lever: annual plans pull cash forward. About 158 annual subscribers would reach the cash average but not the recurring rate, and there is still no evidence the plan can get even that many.\n\nAdjusted scores: p5k_90d 0.3, owner_light 6, capital_light 7, ai_build 8, ai_operate 5, low_risk 4.\n\nTreat this as a low-cost experiment to test demand, not as the owner's income plan."
+ }
+}

@@ -1,0 +1,120 @@
+{
+ "verdict": "NOT READY TO ADOPT AS WRITTEN. The memo is honest in its headline and most of its arithmetic is correct, but the fixes below are needed before the owner acts on it.\n\nWhat I checked and found correct:\n- API cost per call (warm and cold).\n- Per-sale net (29.87–34.18 and 63.73–70.34).\n- Every scenario cell, and the three-month averages (−188, −48, +1,172).\n- The formula N = 5,100 ÷ (31 − CAC) at each CAC.\n- CPP 6,724; EI 3,159; the probabilities 4.9% and 9.6%; setup total 9.35 h.\n- The calendar: Oct 10 and Dec 26 2026 are both Saturdays, and Day 90 is Dec 26.\n- Sources: the Whisper-turbo price of US$0.000513 per minute (I fetched the cloudflare-docs JSON, which gives base64 input), and the exact wording of the Anthropic policy clauses (OpenTermsArchive main still shows effective 2025-09-15).\n\nWhat is wrong:\n1. **The odds are inconsistent with the memo's own numbers.** The \"top-decile\" upside reaches only C$2,030 in January. So a 1–2% chance of averaging C$5k is too high; <1% is what the scenarios support.\n2. **The content channel breaks Anthropic's policy as designed.** The owner merging a PR is not review by a \"qualified professional\". Breaking the policy could cost the API account, and with it the whole product.\n3. **Several controls contradict each other or block the plan's own upside.** The US$150 monthly API cap would lock out paying users in the upside case. The ≤3-guides-a-week CI gate blocks the 10–15 guides planned for launch. The C$1,200 ad cap is not enforced after Nov 30.\n4. **Legal gaps.** Quebec buyers are sold to without French. The EI rule only restricts paid sales, although EI Regs s.30(1) is triggered by operating a business, which may include building it before any sale.\n5. **Kill rules have holes.** The only sourced CPC benchmark is ignored, the C$300 ad test cannot trip K2, and there are no stop rules for schedule slips, owner hours, platform suspension or cumulative loss.\n6. **The build spec is too big for one session and does not match the decision in several places.** There is no referral component, no way to get ad-spend data into the rules, no checkout success page, and no root-config exclusions. Several acceptance criteria also need live secrets this session does not have.\n\nFix the blockers and majors, then re-issue the memo.",
+ "problems": [
+  {
+   "issue": "Guide pages break Anthropic's policy as designed. The fetched text (effective 2025-09-15) lists 'Media or professional journalistic content: … automatically generate content and publish it for external consumption' as High-Risk. For High-Risk uses the policy requires that 'a qualified professional in that field must review the content … prior to dissemination'. The memo treats the owner's PR merge, based on a Korean summary, as that review. The owner is not an ESL or test-prep professional, and their English level is unknown. A policy breach can cost the API account, which the only product runs on.",
+   "severity": "blocker",
+   "fix": "Section 1.4, B9, 4.2 and 5.2: remove AI guide publishing from the launch plan. Either (a) hire a qualified reviewer, such as a certified ESL or CELPIP instructor, who signs off each page in the PR (cost: not found; add a budget placeholder and an owner task to hire one), or (b) publish only non-advice factual pages (format and timing descriptions, the product's own help pages) and state that SEO is not a channel in this window. Rewrite the 1.3 Gate B mitigation to say this. Remove the claim that an owner merge counts as human review."
+  },
+  {
+   "issue": "Gate B is marked 'done' by the AI, whose own plan benefits from passing it. The check is based only on a 2025-09-15 archived policy, and the memo itself lists 'current Anthropic Usage Policy version' as unverified. The clause reads 'Use cases related to standardized testing companies that administer … language proficiency … exams'. A product that grades CELPIP-style answers against a proficiency scale is plausibly 'related to'. The AI's own reading is 'probably outside', which is not a pass.",
+   "severity": "major",
+   "fix": "Mark Gate B as UNRESOLVED, not done. Add owner task 1b (0.25 h): on Day 1, open the live anthropic.com/legal/aup page and have the AI compare it with the archived text. Email Anthropic (usage-policy contact) describing the product. Launch rule: if there is no reply by Day 21, launch only with the product framed as 'writing and speaking practice feedback', with no CLB or band vocabulary in any output. Accept the stated risk in writing in the owner checklist."
+  },
+  {
+   "issue": "The headline probability contradicts the memo's own scenarios. The 'Upside (top-decile luck)' case gives a Dec–Jan average of (1,094 + 2,030) ÷ 2 = C$1,562, about 31% of target. Even so the memo claims 1–2% for C$5k. This is the same flaw the cand_aichat verifier flagged in the dossier (a '5–10%' headline against cases that never reach the target). The '1–2%' figure reuses the verifier's 'well under 2%' as a range that goes up to 2%.",
+   "severity": "major",
+   "fix": "Section 0.2 and 2.1: change to 'ESTIMATE, judgement: well under 1%. Even our top-decile case reaches about C$1.6k/month average over Dec–Jan (1,094 + 2,030) ÷ 2.' In 0.2, change 'Realistic month-3 net is C$0–1,000' to match the table: January conservative −C$81, base +C$74, upside +C$2,030. Say 'most likely −C$100 to +C$500'."
+  },
+  {
+   "issue": "The CPC used in every scenario is prior knowledge (C$1.50; upside C$0.80). The bundle's only sourced benchmark, WordStream 2026 (cross-industry US$5.42 per click and US$66.69 per lead; Business Services US$5.87), sits in the base-rates table but is never used. At that CPC the C$300 test is statistically meaningless. K2 (≥300 paid clicks) cannot fire in phase 1 even at C$1.50: C$280 ÷ 1.50 ≈ 187 clicks.",
+   "severity": "major",
+   "fix": "Add a 'Sourced-CPC' row to 2.2. ESTIMATE: US$5.42 × 1.37 = C$7.43 per click; C$300 ÷ 7.43 ≈ 40 clicks; × 0.72% ≈ 0.29 payers; CAC ≈ 7.43 ÷ 0.0072 ≈ C$1,032. Rewrite K2 on an upper-funnel metric the budget can actually measure. Example: after C$280 spent, if fewer than 10 free samples were started (visit→sample < about 5% of clicks), ads go off. Keep K3 for CAC. State in section 6 that phase 1 can detect only catastrophic failure, not profitability."
+  },
+  {
+   "issue": "The spend caps contradict each other and would lock out paying users. The hard daily cap is US$30, which allows up to US$900 a month, while the owner's Anthropic limit is US$150 a month. In the upside January: about 100 active passes × US$1.96–3.64 = US$196–364, plus free samples of about 563 × US$0.061 ≈ US$34, plus eval US$30, gives about US$260–430 (ESTIMATE). That exceeds US$150, so grading stops for pass-holders mid-month. The result would be refunds, disputes (K6) and a possible misleading-representation problem.",
+   "severity": "major",
+   "fix": "B10 and task 5: set the Anthropic monthly limit to max(US$150, 25% of trailing-30-day gross in USD) and have the KPI Routine propose raises as a PR for the owner to approve. Add a Worker-side monthly soft cap that stops FREE samples first, keeps paid grading running, and alerts at 70% of the Anthropic limit. Add a test: a simulated monthly spend at 90% of the limit disables free samples but keeps paid grading on."
+  },
+  {
+   "issue": "The EI rule only covers paid sales, but EI Regs s.30(1) is triggered in any week the claimant 'is … engaged in the operation of a business on the claimant's own account', whoever does the work (cross_payments). Setup starts Sep 28 (Stripe, domain, ads account, product build). EI is filed by Oct 10, and the product launches Oct 19–25, before any Service Canada ruling. Paid sales are not the only thing that can trigger s.30. The memo also treats the home-services plan as the 'floor' without adding that business into the same minor-extent test and the same owner-hours budget. decision-memo.md §5.4 has the owner running that plan in October.",
+   "severity": "major",
+   "fix": "Gate 0: (1) declare self-employment activity on the EI application and every bi-weekly report from the first week of setup, not only from the first sale. (2) When calling Service Canada, describe BOTH activities (home-services Path A and the online product) together, with hours and capital (the C$1,200 ads plus fixed costs). (3) Do not open the Stripe account or buy ads until that call has happened. Add a table that states per week whether the owner runs home-services, the online product, or both, with combined hours. If combined owner hours exceed about 15/week, the online product waits."
+  },
+  {
+   "issue": "Sales go to all of Canada, including Quebec, but there is no French UI, terms or checkout. Quebec rules on French for commercial websites and contracts (Charter of the French Language as amended by Bill 96) and Quebec CPA distance-contract duties (cross_payments lists Quebec as an unknown) are unaddressed. Quebec CPA also gives a statutory chargeback (cross_payments, secondary).",
+   "severity": "major",
+   "fix": "Section 1.1 and B6: exclude Quebec for this window. Reject Checkout completion when customer_details.address.state == 'QC' (auto-refund), exclude Quebec in the Google Ads geo settings, and add 'Not available in Quebec' to the pricing page and terms. Add '[prior knowledge, unverified] Quebec French-language requirements' to the section 8 verify list."
+  },
+  {
+   "issue": "Refund and dispute cost is backed by a reference that does not exist. Section 3.2 says refunds and disputes are 'covered by the ≈5% buyer uplift assumed in section 2', but section 2 has no uplift. The self-serve refund (≤14 days, ≤5 tasks) also works as up to 5 extra free graded tasks. Stripe keeps its fee on refunds [prior knowledge], and non-CA auto-refunds also lose fees.",
+   "severity": "major",
+   "fix": "Delete the phantom reference. Add a 'Refunds' line to 3.2. ESTIMATE at a 10% refund rate (the K6 threshold): per gross sale 0.10 × (1.43 fee + up to 5 tasks × US$0.031 × 1.37 = 0.21) ≈ C$0.16, plus lost revenue. That gives a planned net per 30-day sale of about 0.9 × 31 − 0.16 ≈ C$27.7. Re-run the section 2.2 cells with that value. Allow the refund path only once per customer email or card fingerprint, and test it."
+  },
+  {
+   "issue": "The referral programme is a stated channel (30% commission to tutors), but the build spec has no referral codes, attribution, commission ledger or payout path. Payouts to tutors would be manual owner labour, and possibly tax-slip labour ([prior knowledge, unverified]), that appears in no task list. Scenarios also book referred buyers at the full C$31 net: 30% × C$39 = C$11.70, so a referred sale nets about C$19.30.",
+   "severity": "major",
+   "fix": "Either add B17 (a referral code in the URL stored with the checkout's client_reference_id, a D1 commissions table, a monthly payout CSV for the owner to pay by Interac, and a Competition Act material-connection disclosure clause in the partner terms) plus an owner task of 10 min/month, or drop referrals from 1.1 and 2.2. If kept, recompute the upside: referral net is overstated by 5 × 11.70 = C$58.50 in Dec and 10 × 11.70 = C$117 in Jan."
+  },
+  {
+   "issue": "The CI content gate conflicts with the plan's own schedule. B9 enforces '≤3 new guides per ISO week', but 5.1 and the W2/W4 milestones call for 5 guides in W2 and 10–15 live by W4 (at most 9 are possible in 3 weeks). The ops Routine also adds 3 a week on top.",
+   "severity": "major",
+   "fix": "Pick one. Either launch with ≤6 guides (W2 3, W3 3) and keep the gate, or exempt a one-time launch batch with an explicit label, but note that this weakens the scaled-content defence. Update 5.1 item 7 and the W2/W4 milestones to match. This depends on the policy blocker above being resolved first."
+  },
+  {
+   "issue": "The kill and scale rules need Google Ads spend data, but no ingestion path exists. The Google Ads API token is optional and unapproved, and the build has no spend import. The KPI Routine therefore cannot compute CAC for K3/S1/S2, and the owner silently has to supply spend data each week.",
+   "severity": "major",
+   "fix": "B8/B11: add 'ads_spend' ingestion. Either (a) the owner sets up a Google Ads scheduled daily email report (a one-time 10-minute task) that the ops Routine reads through the Gmail connector and commits to ops/metrics/ads.json, or (b) the owner uploads a CSV each week (put the 5 minutes in 4.2). Add an outcome assertion: if ads.json is older than 48 h while ads are on, alert and pause ads using a KV flag in the landing UTM logic."
+  },
+  {
+   "issue": "Kill criteria are missing or contradictory. (a) There is no schedule-slip kill: nothing happens if checkout is not live by a set date. (b) There is no owner-hours kill. (c) There is no platform kill for a Google Ads suspension or a Stripe reserve or rejection. (d) There is no cumulative stop-loss. (e) CAC between C$15 and C$31 has no scale rule. (f) K5 ('< C$500 → month-4 asset decision') contradicts 1.1 ('next product only if November net ≥ C$500'). (g) The ad cap is enforced only to Nov 30, yet the upside keeps C$600/month through January: 120 + 600 + 600 + 600 = C$1,920, which exceeds the C$1,200 the owner confirmed at Gate C. S1 allows C$1,800 a month.",
+   "severity": "major",
+   "fix": "Add these rules:\n- K0: checkout not live by Sun Nov 1 → stop; revert to decision-memo.md.\n- K1: owner hours more than 3 h/week in any two weeks, or setup more than 12 h → cut to the core (no ads, no referrals).\n- K9: Ads account suspended or Stripe reserve/rejection → organic only; on a second failure → stop.\n- K10: cumulative net loss (fixed + ads + API − revenue) over C$1,500 → stop.\n- S0: CAC C$15–31 → hold at C$20/day.\n- Make total ad spend to Jan 31 capped at the Gate C amount unless the owner re-confirms in writing.\n- Make K5 and 1.1 agree: the next product is considered only if November net is at least C$500."
+  },
+  {
+   "issue": "Cash-at-risk and the scenarios leave out part of the horizon. The plan runs Sep 28 – Jan 31, which is 4 billed months (Oct–Jan) of fixed costs, but 3.4 counts 3. October ad spend (Oct 26–31: 6 × C$20 = C$120) is in no scenario. November's ad portion is stated as C$180, but Nov 1–8 is 8 days = C$160.",
+   "severity": "minor",
+   "fix": "3.4: add a fourth month of F (+C$77–217) and the October ad spend (+C$120). New maximum ≈ 2,342 + 217 + 120 = C$2,679 (ESTIMATE). In 2.2, add an October column, or state that October costs are excluded, and correct November ads to C$160."
+  },
+  {
+   "issue": "The build is not implementable to its stated acceptance criteria in one session. The AI cannot use Stripe, Cloudflare or Resend from here (blocked), has no Anthropic key, and has no Cloudflare account. Yet B3 (cache reads > 0), B4 (Whisper under 20 s), B6 (Stripe CLI events), B12 (120 Opus-generated samples), B13 (import into a test account), the B1 Lighthouse run and the B15 Playwright test with Stripe test checkout all need live secrets or services. Task 7 also asks for live keys but not Stripe TEST keys. The scope (16 components, 10 prompts, 120 samples, 10–15 × 900-word guides, 6 workflows) is also very large.",
+   "severity": "major",
+   "fix": "Section 5.1: split acceptance into (A) in-session: both builds pass, vitest with mocked fetch for Stripe, Anthropic and Workers AI, fixtures, wrangler dry-run if installable, and no secrets; (B) post-secrets, run in Actions after the owner adds keys: the live checks listed above. Task 7: add Stripe test-mode secret key and test webhook secret. Put priority tiers in the build order: P0 = B0, B2, B3, B5, B6, B10, B15-unit, B16; P1 = B4, B7, B8, B11; P2 = B9, B12, B13, B14. Commit synthetic eval generation as a script, not as data."
+  },
+  {
+   "issue": "Adding the new app will break the root checks unless the root configs change. Root tsconfig.json includes '**/*.ts' and excludes only node_modules, archive and out. Root vitest includes '**/*.test.ts', and the root eslint ignores do not cover products/. So products/clb/** (Worker code needing Workers types, and its own tests) will be type-checked, linted and tested by the root build, which breaks B16's 'root build unchanged' requirement. There is also no current .github/workflows directory, so 'CI keeps building it' is new work.",
+   "severity": "major",
+   "fix": "B16: explicitly require adding 'products' to root tsconfig.json 'exclude', 'products/**' to root vitest exclude and to eslint globalIgnores. Add a CI job that runs the root build on main and on the PR and diffs the out/ file list. Allow these three config edits despite the 'no changes to root' rule."
+  },
+  {
+   "issue": "The owner-hours arithmetic does not reconcile, and some tasks are missing. Summing the 4.2 table gives 20+20+15+15+10+5+10+0 = 95 min (1.6 h) to 20+30+30+20+10+5+10+30 = 155 min (2.6 h), not 1.7–2.3 h. If 'Mon/Wed/Fri 20–30 min' is per session, it is 135–215 min (2.25–3.6 h), which breaks the 3 h cap. Also missing: reviewing and sending the Routine's support drafts (cross_operator ESTIMATE about 1 min per draft), referral payouts, and Google Ads policy appeals.",
+   "severity": "major",
+   "fix": "Write each weekly row as minutes per week with the arithmetic, add 'send support drafts: 10–30 min' and 'referral payouts: 10 min/month', and restate the total as an ESTIMATE range. If the upper bound is over 180 min, cut the guide merges to 1 a week or drop manual CSV ad ops."
+  },
+  {
+   "issue": "Setup hours are understated and missing items. Task 1 packs an IRCC document check, the online EI application and a Service Canada phone call into 1.0 h, with no tag; the Service Canada call alone is realistically longer (hold times [prior knowledge, unverified]). Missing items: Ontario business-name registration if trading under '[Brand]' (decision-memo.md Q5 says it is unverified; SOR/2012-36 requires a business name in every commercial email), Stripe test keys, an Anthropic reply email, and allowlisting hosts in the environment. None of the per-task times carry an ESTIMATE tag.",
+   "severity": "major",
+   "fix": "Tag each task time as an ESTIMATE. Split task 1 into IRCC check (0.25), EI application (1.0) and Service Canada call (0.5–1.5). Add ServiceOntario business-name registration (0.5 h; fee [prior knowledge, unverified]) or trade under the owner's legal name. Recompute: about 9.35 + 1.25–2.25 ≈ 10.6–11.6 h, which is over budget. To get back under 10 h, drop Google Ads (−1.5 h) or defer Microsoft/Bing (−0.25 h)."
+  },
+  {
+   "issue": "Marketing 'CLB-aligned feedback' while calibration is synthetic and circular (B12; cand_aichat verification: 'AI-labelled targets are circular') is a material representation that cannot be backed up. That is a Competition Act s.74.01 risk (up to C$750k for an individual, cross_payments). band_enabled has no path to true: no rater budget and no owner task to hire one.",
+   "severity": "major",
+   "fix": "Remove 'CLB-aligned' from product and ad copy. Use 'feedback on the four writing criteria used in Canadian test formats (descriptive)' and state 'not calibrated against official scores'. Say explicitly that band_enabled stays false through Jan 31. Add 'CLB-aligned', 'accurate' and 'score' to the B3/B13 forbidden-claim filters."
+  },
+  {
+   "issue": "Personal information could leak into git. The 'Eval review: examine failing samples' Routine and the metrics exports have no rule forbidding real user essays or transcripts in the repo. GitHub is an undisclosed processor, and git history defeats the 90-day deletion (PIPEDA 4.5.3). The repo is also public until the owner does task 2, but the AI starts committing on Day 1.",
+   "severity": "major",
+   "fix": "Add to B12/B14: eval datasets are synthetic only, and no user-generated text is ever committed; ops/metrics are aggregate counts only, and a CI grep rejects email or essay-like fields. Add to 5.1: nothing under business/online/ or products/ is pushed until the GitHub API shows the repo is private."
+  },
+  {
+   "issue": "Speaking recording will likely fail on iPhones. B4 specifies MediaRecorder webm/opus only. iOS Safari's MediaRecorder produces audio/mp4 (AAC), not webm [prior knowledge, unverified]. Speaking is 8 of the 10 task types, and many buyers use iPhones.",
+   "severity": "major",
+   "fix": "B4: detect with MediaRecorder.isTypeSupported and accept audio/mp4 and audio/webm. Test that Whisper-turbo accepts both (the schema accepts base64 or {body, contentType}; verified in cloudflare-docs). Add a Playwright WebKit test and a manual iPhone check to the owner's launch-day task 13."
+  },
+  {
+   "issue": "The Canada-only check is weak and costly. Billing address is self-declared, and auto-refunding after payment loses the Stripe fee [prior knowledge]. The foreign-VAT reason for Canada-only rests on customer-location evidence (EU needs two consistent pieces, cross_payments).",
+   "severity": "minor",
+   "fix": "B6: before creating the Checkout Session, require request.cf.country == 'CA'. After payment, require billing country == 'CA' AND payment_method_details.card.country == 'CA'; otherwise refund. Store both evidence fields. Enable a Radar block on non-CA cards if available."
+  },
+  {
+   "issue": "Misquoted or misread sources. (a) '3.6% vs 8.6% at C$5k': cross_payments' 3.6% includes Stripe Billing 0.7%, which the memo itself says does not apply, and leaves out the C$0.30 fixed fee. The source's total is 5.1% vs 8.6% at a C$20 price; at C$39 the effective rate is 1.43 ÷ 39 = 3.7%. (b) 'Stripe pays out … then every 3 business days': the source lists a 3-business-day settlement delay, not a payout frequency. (c) '1 in 20 reach US$10k … averaging US$5k over 3 months means ≥$15k': the target is C$5k, so 3 × 5,000 ÷ 1.37 ≈ US$10.9k cumulative. (d) The Apify 'US$10/month ramp' is not what cand_apiagents says: its figure is a creator who took 7 months to reach $100.",
+   "severity": "minor",
+   "fix": "(a) Change to 'Stripe direct ≈ 3.7% at C$39 (2.9% + C$0.30) vs Stripe Managed Payments ≈ 8.6% (cross_payments ESTIMATE at C$20)'. (b) Change to 'first payout about 7 days after the first charge; then a rolling 3-business-day delay (secondary)'. (c) Correct the units. (d) Quote cand_apiagents' wording exactly."
+  },
+  {
+   "issue": "Smaller inconsistencies between the spec and the decision. (a) B1 has no /checkout/success/ or /checkout/cancel/, although B8 puts the conversion tag on /checkout/success/. (b) S3 'add explanation languages' conflicts with launching 7 languages, 6 of which nobody can review. (c) The upside worst-case API cost of C$6.37 at the fair-use cap is outside the C$2.69–4.99 range used for net. (d) The B3 guardrail has no false-positive test: CELPIP-style essays often mention immigration topics. (e) Numbering starts at K2 (no K1).",
+   "severity": "minor",
+   "fix": "(a) Add both pages to B1. (b) Launch with EN + KO explanations only, and make the other languages S3's expansion, gated on a paid reviewer. (c) State the net floor at the fair-use cap: 39 − 1.43 − 6.37 − 2.71 = C$28.49. (d) Add an acceptance criterion: at most 1 of 20 benign immigration-themed essays refused. (e) Renumber the rules."
+  }
+ ]
+}

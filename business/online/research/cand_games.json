@@ -1,0 +1,284 @@
+{
+ "dossier": {
+  "candidate": "HTML5 web games built by AI: a portfolio distributed through portals (CrazyGames, Playgama Bridge network, Y8, Poki, GameDistribution, itch.io, Newgrounds) and/or an owner site with ads",
+  "summary": "VERDICT: DOWNGRADE. This is a cheap side bet with a possible hit, not a plan that can plausibly average CAD 5,000/month by Dec 2026–Jan 2027.\n\nWhat the evidence shows:\n(1) Mechanics are real and cost almost nothing. Portals host the game, bring the traffic and share ad revenue. CrazyGames is non-exclusive, pays monthly and has a €100 minimum. Playgama publishes 70–90% partner tiers and a fixed 50% on its own site. Y8 pays 50%. GameDistribution pays 33% of Net Revenue.\n(2) The gate is engagement, not code. A first CrazyGames submission always goes through Basic Launch: 7–21 days, UNMONETIZED, with a limited audience. It moves to paid Full Launch only if metrics beat platform benchmarks. The documented targets are 10+ minutes average playtime, 10–15% day-1 retention and 80%+ conversion. Simple AI hyper-casual games are unlikely to hit these (ESTIMATE; no pass-rate data found).\n(3) Platforms explicitly filter AI filler. CrazyGames rejects 'unoriginal content (clones or asset flips)'. Playgama rejects 'low-quality titles constructed wholly with generative AI' and says AI-graphics titles perform 'more than 2x worse on metrics'. Its guidance is to use AI for logic, math and story, not art.\n(4) Revenue per play is small. Sources range from about €0.75–1.05 per 1,000 gameplays for low-engagement games up to an unsourced $1–5 per 1,000. A vendor claim puts YouTube Playables at about $10 gross per 1,000, for selected proven games.\nESTIMATE: CAD 5k/month ≈ USD 3.7k needs about 0.7M–4M gameplays a month. That is about 16–80 live monetized non-hit games, or 1–3 genuine hits.\n(5) Timing. Build, review and the unmonetized Basic Launch plus monthly €100-minimum payouts put the first cash around Jan 2027 at best.\n(6) The owner stays in the loop. Portal submission and dashboards are behind the owner's logins, and no portal API for submission or analytics was found. The owner must upload each game (about 30–40 min each) and relay metrics. At 3 h/week that caps output at about 3–4 submissions a week.\n(7) The own-site variant is worse. AdSense rejected a comparable game site for 'low value content'. H5 Games Ads needs beta approval. Google is demoting scaled AI content. Aggregator payment reliability is poor (GameDistribution late payments 2018–2025; GamePix non-payment 2025).\n\nUpside: near-zero capital, no customers or support, a tax treatment that looks simple (a licence to a non-resident portal appears zero-rated under ETA Sched. VI Pt V s.10), and a genuine hit tail. Playgama says its YouTube Playables games average $3.1k/month, but that is a vendor claim about a selected set.\n\nFraction of portal games earning >$1k/month: NOT FOUND. ESTIMATE ≤2–5% of live games, lower for all submissions (arithmetic under facts).",
+  "best_variant": "'AI puzzle studio': a portfolio of small, original logic, number and word puzzle games. Levels are procedurally generated, and the first 20–40 levels are hand-tuned by the AI against real playtest metrics. Art is clean vector/geometric (no AI-generated imagery, per Playgama's 2x-worse note).\n\n- Stack: Phaser or vanilla canvas plus TypeScript and Vite, with initial download under 3–8 MB.\n- Integration: one Playgama Bridge integration (official Claude Code plugins exist) ships each game to Playgama.com and its partner network (MSN, Y8, Xiaomi, others, and later YouTube Playables candidacy). A CrazyGames SDK v3 build is submitted directly to CrazyGames, non-exclusive.\n- Price: free to play. Money comes from ad revenue share (interstitials at level breaks, rewarded ads for hints). No IAP; CrazyGames allows IAP only for selected games via Xsolla, Poki forbids it.\n- Avoid for now: Poki's default 5-year (some sources say 7-year) open-web exclusivity, GameDistribution (33% share plus payment-delay history), and own-site AdSense.\n- Cadence: about 2 new games per week plus updates to games that pass Basic Launch.\n- Kill rule (proposal): stop if none of the first 6 games is invited to Full Launch by about week 9.\n\nRealistic month-3 outcome, ESTIMATE: under CAD 700/month realized, with a steady-state range of about USD 90–1,600/month from ~24 submissions unless a hit occurs.",
+  "unit_economics": "ALL ESTIMATES unless sourced.\n\nREVENUE PER PLAY. Developer revenue per 1,000 gameplays:\n- low: €0.75–1.05, about USD 0.85–1.20 (postmortem cited in Emberwatch research; €→USD ~1.13 [prior knowledge, unverified, pre-2026-06])\n- mid: USD 1.5 (assumption)\n- high: USD 5 (unsourced upper bound in Geo-Fighters doc)\n- YouTube Playables: about USD 10 gross per 1,000 for selected games, before split (Playgama vendor claim)\n\nSHARES. Playgama 70–90% on partner network, 50% on playgama.com. Y8 50%. GameDistribution 33% of net. CrazyGames % unpublished (a secondary source says its terms deduct 20% 'Direct Game-related Costs' first). Poki 100% on direct traffic and 50% on Poki referrals (secondary).\n\nTARGET. CAD 5,000 × 0.72 USD/CAD [prior knowledge FX] ≈ USD 3,600. Plus ~3% payout/FX fees gives ≈ USD 3,710/month of developer revenue.\n\nGAMEPLAYS NEEDED PER MONTH:\n- at $1/1k: 3,710 ÷ 1 × 1,000 = 3.71M\n- at $1.5/1k: 2.47M\n- at $5/1k: 0.74M\n\nPER NON-HIT MONETIZED GAME. 1k–5k plays/day (speculative figure in nanoclaw idea file) = 30k–150k plays/month. At $1.5/1k that is USD 45–225/month; mid ≈ USD 135.\n\nGAMES NEEDED:\n- 3,710 ÷ 135 ≈ 27 live Full-Launch games (range 3,710 ÷ 225 ≈ 16.5 to 3,710 ÷ 45 ≈ 82)\n- At a 10–30% Basic→Full pass rate (no data found), 27 ÷ 0.3 = 90 to 27 ÷ 0.1 = 270 submissions\n\nOWNER TIME. 90 submissions × 0.5 h = 45 h, against 3 h × 12 weeks = 36 h available.\n\nREALISTIC 12-WEEK OUTPUT. About 2 games/week × 12 = 24 submissions, so about 2–7 monetized games and USD 90–1,575/month at steady state (2 × 45 to 7 × 225). Month-3 realized is lower because of the unmonetized Basic Launch lag.\n\nHIT ALTERNATIVE. Poki rep's 'USD 500–3,000/month for a first web game' applies to accepted Poki games. 3,710 ÷ 3,000 ≈ 1.2 to 3,710 ÷ 500 ≈ 7.4 such games.\n\nCOSTS:\n- hosting USD 0 (portals host; GitHub Pages for a privacy page)\n- domain optional ~CAD 20/yr\n- Claude: the owner's existing plan; Pro ~USD 20/mo, Max USD 100–200/mo [prior knowledge, unverified, pre-2026-06]\n- If built via API, per game on Sonnet 5: 2M input × $2/M = $4, plus 0.3M output × $10/M = $3, ≈ USD 7 (less with cache reads at ~0.1×). On Opus 5: 2M × $5/M = $10, plus 0.3M × $25/M = $7.5, ≈ USD 17.5.\n\nMARGIN. Above 90% of whatever revenue arrives. The constraint is revenue per play and pass rate, not cost.",
+  "distribution_plan": "Traffic comes only from the portals' own discovery; no owner marketing and no personal social accounts. CrazyGames reports ~300M gameplays/month and Poki ~1B plays/month (secondary sources).\n\nChannels, in order:\n1. Playgama Bridge. One SDK distributes to Playgama.com plus partners (MSN, Y8, Xiaomi, others) after 1–5 business days of moderation; partner portals take up to 2 weeks.\n2. CrazyGames direct. Non-exclusive; Basic Launch 7–21 days unmonetized, then Full Launch if metrics beat benchmarks.\n3. YouTube Playables via Playgama, only for games with a proven track record (direct access is invitation-only).\n4. itch.io as a free mirror. Donations only for browser games, so no real revenue.\n\nNot used:\n- Reddit: r/playmygame and r/indiegames ban AI-generated games; r/IndieGaming requires GenAI disclosure.\n- Poki: 5-year exclusivity; reconsider only for a proven game.\n- Own-site SEO/AdSense: AdSense 'low value content' rejections, H5 ads beta-only, Google scaled-content enforcement.\n\nDiscovery levers the AI controls: covers and 15–20 s preview videos (mandatory on CrazyGames), fast first load (under 5–10 s, under 20 MB for the CrazyGames mobile homepage), and frequent updates. CrazyGames processes updates 'usually within the same working day'.\n\nOwner hours/week: about 2–3. That covers 2 uploads × ~35 min, ~20 min copying dashboard metrics into the repo, ~20–30 min relaying QA/moderation messages, and ~20 min playtesting on a phone.",
+  "timeline": "ESTIMATES. Basis: portal docs as quoted in secondary GitHub packets.\n\n- Weeks 0–2 (Sep 24–Oct 8): owner opens accounts. AI builds the engine template, the SDK adapters and the automated QA harness, then games #1–2.\n- Week 2–3: first submissions. Playgama moderation takes 1–5 business days (partner portals up to 2 weeks). CrazyGames' first-review time is not documented; an unverified idea file says 'days to 2 weeks'.\n- Weeks 3–7: CrazyGames Basic Launch, 7–21 days, UNMONETIZED; it ends at ≥7 days live and ≥500 plays, or at 21 days. Playgama partner-network plays can start earning around week 3–5.\n- Weeks 6–9: first Full Launch invitations, if metrics pass. Then Full SDK integration and full QA, after which monetization turns on.\n- First dollar earned: about week 5–9 (early–late Nov 2026).\n- First cash received: CrazyGames pays monthly with a €100 minimum that rolls over; Playgama has a USD 100 withdrawal threshold; GameDistribution is NET-60. Earliest realistic cash is late Dec 2026–Jan 2027.\n- CAD 5k/month: NOT expected within 3 months. ESTIMATE: 12–24+ months for a non-hit portfolio, or never, since many portfolios plateau at CAD 200–1,500/month. Reaching it sooner requires a hit, whose probability for AI-built casual games was not found.",
+  "owner_one_time_tasks": [
+   "Create a CrazyGames developer account (developer.crazygames.com) and complete the payout/billing profile (Tipalti per secondary sources: legal name, address, tax info, bank or PayPal). About 1 h.",
+   "Create a Playgama developer account (developer.playgama.com), verify the email and set payout details. About 45 min.",
+   "Optionally create a Y8 developer account (USD 100 PayPal / USD 500 bank minimums) and an itch.io account for a free mirror. About 30 min.",
+   "Open a PayPal and/or Wise account able to receive EUR/USD and convert to CAD. About 30–60 min.",
+   "Give Claude write access to a GitHub repo, and set up 1–2 Routines (weekly build, weekly metrics review) plus GitHub Actions. About 1 h.",
+   "Record-keeping setup: a spreadsheet or repo ledger for foreign payouts converted to CAD for T2125. Decide with an accountant on GST/HST registration once worldwide taxable supplies (zero-rated included, ESTIMATE/interpretation) approach CAD 30,000. About 1–2 h including a call.",
+   "Optionally buy a domain (~CAD 20/yr) for a studio or privacy-policy page; GitHub Pages is free. About 20 min.",
+   "Do the first 2 game uploads alongside the AI's checklist, to learn the portal forms: Upload, then QA tool, then Details (3 covers + 2 videos), then Submit. About 1.5 h.",
+   "Total ≈ 6.5–8 h."
+  ],
+  "owner_weekly_tasks": [
+   "Upload the AI-prepared package for about 2 new or updated games to CrazyGames and Playgama (zip, covers, preview videos and listing text are all prepared in the repo). About 60–75 min.",
+   "Export or copy the portal dashboard metrics (plays, average playtime, D1 retention, conversion, revenue) into a CSV in the repo, because the AI cannot log in. About 20 min.",
+   "Paste any QA or moderation messages into a GitHub issue, and send the AI-drafted English replies back. About 20–30 min.",
+   "Playtest each new build for 5–10 minutes on a phone and a desktop, and note anything broken or boring in an issue. About 20 min.",
+   "Monthly: check the payout arrived and forward the statement to the ledger. About 10 min.",
+   "Total ≈ 2–3 h/week."
+  ],
+  "ai_build_tasks": [
+   "Reusable game template (Phaser 3 or vanilla canvas + TypeScript + Vite) that lands straight in gameplay (at most 1 click), handles focus and pause, mutes around ads, gives consistent physics at 60/144/165 Hz, and keeps the initial download under 3–8 MB.",
+   "Portal adapter layer: CrazyGames SDK v3 (init, loadingStart/Stop, gameplayStart/Stop, happytime, midgame and rewarded ads, the 1 MB data module) and Playgama Bridge (using the official Claude Code plugin), with graceful no-ad behaviour during Basic Launch.",
+   "Automated QA harness (Playwright, headless Chrome) that checks load time, build size, file count, no console errors, resolution matrix (907x510 … 1920x1080, 800x450 mobile), audio pause on blur and ads, save/restore, and translation completeness for declared languages.",
+   "Procedural level generators plus difficulty curves for each puzzle design, and auto-generated English copy for the 'How to play' text and descriptions.",
+   "Cover pipeline: vector/SVG art rendered to 1920x1080, 800x1200 and 800x800 PNGs, following the rules (title text only, no borders or badges, not a raw screenshot).",
+   "Preview video pipeline: scripted gameplay recorded in headless Chrome and encoded with ffmpeg into 15–20 s videos, landscape 1080p 16:9 and portrait 1080p 2:3, no audio, under 50 MB.",
+   "Per-game submission packet in the repo: zip with index.html at the root, assets, listing text, and a checklist mapped to each portal's rejection reasons.",
+   "Privacy/terms page on GitHub Pages; a metrics ingestion script and dashboard (CSV to charts, and a kill/iterate decision per game); a foreign-currency income ledger template in CAD."
+  ],
+  "ai_recurring_tasks": [
+   "Weekly Routine: design and build about 1–2 new puzzle games from the template, run the QA harness, and produce the submission packets.",
+   "Read the metrics CSV the owner drops in, rank games against the Basic Launch benchmarks (playtime, D1, conversion), and decide per game whether to iterate, relaunch or retire.",
+   "Ship updates to games that pass: onboarding tweaks, more levels, and tuning ad placement. CrazyGames processes updates within the same working day, but Playgama updates go back through moderation.",
+   "Draft replies to QA and moderation feedback, and fix the flagged defects.",
+   "Monthly P&L: payouts converted to CAD, a running total against the CAD 30,000 small-supplier threshold, and a CPP/income-tax set-aside estimate.",
+   "Watch portal docs in the repo for requirement changes: new SDK versions, cover and video specs, policy on AI content."
+  ],
+  "money_needed_cad": "About CAD 0–300 over 3 months: an optional domain (~CAD 20/yr), optional CC0 or paid sound packs (≤ CAD 100), and PayPal/Wise/FX fees on the first payouts (ESTIMATE ~2–4% of receipts). This excludes the owner's existing Claude subscription (Pro ~USD 20/mo or Max USD 100–200/mo [prior knowledge, unverified, pre-2026-06]). Portal accounts and hosting are free. There are no developer fees for CrazyGames or Playgama in the sources read, unlike the Apple USD 99/yr or Steam USD 100/app fees.",
+  "facts": [
+   {
+    "fact": "CrazyGames docs (quoted in a packet checked 2026-09-07): a first submission is locked to Basic Launch, where 'Test your game on our platform with a limited audience for a temporary period of 7 to 21 days'. Monetization is disabled. Basic Launch ends at ≥7 days live AND ≥500 plays, otherwise automatically at 21 days.",
+    "source": "https://github.com/d954mas/game-67-idle/blob/HEAD/features/platform-sdk/references/portals/crazygames.md"
+   },
+   {
+    "fact": "CrazyGames Basic Launch KPI targets: average playtime 10+ minutes per session, day-1 retention 10–15%, conversion (plays of at least 1 minute) 80%+, build under 20 MB and load under 10 s. Metrics are 'benchmarked against other games on the platform'. If most metrics fall below benchmark the game 'can't proceed to Full Launch' and must be resubmitted as a new game with significant improvements.",
+    "source": "https://github.com/d954mas/game-67-idle/blob/HEAD/features/platform-sdk/references/portals/crazygames.md ; https://github.com/cosmicrafts/Adventures-Bevy/blob/HEAD/crazygames.md"
+   },
+   {
+    "fact": "CrazyGames rejection reasons: 'bugs or broken mechanics', 'missing English-language support', 'unoriginal content (e.g. clones or asset flips)', PEGI-12 non-compliance. Game names, assets and content 'should exhibit originality'. The audience is 13+, and monetization is disabled on its kids domain.",
+    "source": "https://github.com/d954mas/game-67-idle/blob/HEAD/features/platform-sdk/references/portals/crazygames.md ; https://github.com/cosmicrafts/Adventures-Bevy/blob/HEAD/crazygames.md"
+   },
+   {
+    "fact": "CrazyGames commercials: non-exclusive by default (Developer Terms art. 3.1, 18 Aug 2025). Optional 2-month exclusivity gives '+50%'. Only CrazyGames SDK ads are allowed. It can remove a game 'at any time, at its sole discretion'. The revenue-share percentage is NOT stated in the terms. Payout is monthly, minimum €100 rolling over, by wire or PayPal. The 60/40 ad and 70/30 IAP figures come only from GameMaker Web Jam terms.",
+    "source": "https://github.com/Stephenuffugus/lucid-winds/blob/HEAD/PUB-LISTINGS.md (quotes files.crazygames.com/documents/developer_terms_20250818.pdf)"
+   },
+   {
+    "fact": "CrazyGames technical and listing requirements: initial download ≤50 MB (≤20 MB for mobile homepage eligibility); total ≤250 MB and ≤1,500 files. Three cover images are mandatory (1920x1080, 800x1200, 800x800) plus 15–20 s preview videos in both landscape and portrait 1080p. Updates are 'usually processed within the same working day'. Individual SDK tech support starts at 50k combined plays.",
+    "source": "https://github.com/d954mas/game-67-idle/blob/HEAD/features/platform-sdk/references/portals/crazygames.md ; https://github.com/cosmicrafts/Adventures-Bevy/blob/HEAD/crazygames.md"
+   },
+   {
+    "fact": "Poki: 'By default, exclusive deals run for 5 years' (developers.poki.com/guide/revenue-deal-types, accessed 2026-08-27). The exclusivity covers open web, Discord and YouTube Playables. No IAP. The alternative is a one-time flat licence fee with no revenue share. Other secondary sources say 7-year exclusivity with '100% on direct searches, 50% on Poki referrals'. The sources conflict, and the percentage is second-hand.",
+    "source": "https://github.com/Stephenuffugus/lucid-winds/blob/HEAD/PUB-LISTINGS.md ; https://github.com/bekirmfr/Emberwatch/blob/HEAD/docs/compass-research.md"
+   },
+   {
+    "fact": "GameDistribution Developer License Agreement: 'the Developer is entitled to a revenue share of 33% (thirty three percent) of the Net Revenue'. Games must 'not include any third party Ads, In-Game Purchases or data tracking software'. Payment is NET-60.",
+    "source": "https://github.com/RUDY4K/plixfy/blob/HEAD/docs/research/html5-partners-2026-05/research_report.md (quotes static.gamedistribution.com/terms/developer.html)"
+   },
+   {
+    "fact": "Playgama (partner wiki): partner-network share 'ranges from 70% on earnings up to $1,000, escalating to 90% on amounts exceeding $3,000'; games on Playgama itself pay 'a fixed 50%'; withdrawal threshold USD 100. Moderation takes 1–5 business days; partner portals up to 2 weeks.",
+    "source": "https://github.com/RUDY4K/plixfy/blob/HEAD/docs/research/html5-partners-2026-05/evidence.md ; https://github.com/d954mas/game-67-idle/blob/HEAD/features/platform-sdk/references/portals/playgama.md"
+   },
+   {
+    "fact": "Playgama AI policy: AI-generated assets are allowed, but 'Platforms will reject low-quality titles constructed wholly with generative AI that bring nothing fresh to the player experience'. AI-graphics titles perform 'more than 2x worse on metrics'. Story, logic and math via AI are fine.",
+    "source": "https://github.com/d954mas/game-67-idle/blob/HEAD/features/platform-sdk/references/portals/playgama.md"
+   },
+   {
+    "fact": "Playgama publishes official Claude Code plugins for its Bridge SDK. One SDK targets CrazyGames, Y8, Poki, MSN, YouTube Playables and others.",
+    "source": "https://github.com/Playgama/bridge-claude-plugins ; https://github.com/Playgama/bridge"
+   },
+   {
+    "fact": "Playgama (interview on the official Defold blog, 2026-09-07): in June 2026 its portfolio generated 57M gameplays across ~50 YouTube Playables titles. 'Our games average $3.1k a month.' 'A game earns roughly $10,000 gross per million gameplays.' Its best title cleared $15,000 net in month 1. Monetization runs at roughly 15–20% of capacity. Playgama 'only publish[es] games that already have a good performance track record elsewhere'.",
+    "source": "https://github.com/defold/defold.github.io/blob/HEAD/_posts/2026-09-07-Interview-Green-Train-Playgama.md"
+   },
+   {
+    "fact": "Y8: 'Developers receive 50% of eligible advertising revenue'. Its SDK is mandatory. Payout minimum is USD 100 by PayPal or USD 500 by bank. itch.io browser games can only take donations. Kongregate has not accepted submissions since 1 July 2020. YouTube Playables is invitation-only. Google Play Instant was discontinued in Dec 2025.",
+    "source": "https://github.com/Stephenuffugus/lucid-winds/blob/HEAD/PUB-LISTINGS.md"
+   },
+   {
+    "fact": "A Poki representative quoted 'USD 500 to 3,000 per month' as a realistic range for a first web game, i.e. one Poki has accepted. A developer postmortem reported €0.75–€1.05 per 1,000 gameplays on low-engagement titles. Secondary compilation; original URLs stripped.",
+    "source": "https://github.com/bekirmfr/Emberwatch/blob/HEAD/docs/compass-research.md"
+   },
+   {
+    "fact": "Scale: Poki ~1B monthly plays and 30M–60M+ MAU; CrazyGames ~30–35M MAU and ~300M gameplays/month. These are secondary compilations of press coverage.",
+    "source": "https://github.com/Sweatpantslife/Swoosh/blob/HEAD/docs/research/market-research.md"
+   },
+   {
+    "fact": "The AdSense H5 Games Ads (Ad Placement API) package requires applying to a beta: 'Once approved, you may use the package. Without approval... your AdSense account may face policy issues.'",
+    "source": "https://github.com/flutter/packages/blob/main/packages/google_adsense/doc/h5.md"
+   },
+   {
+    "fact": "ETA Schedule VI (Zero-Rated Supplies), Part V Exports, s.10 zero-rates 'a supply of ... copyright ... or any right, licence or privilege to use any such property, where the recipient is a non-resident person who is not registered under Subdivision D of Division V of Part IX'. That would plausibly cover licensing a game to a non-resident portal. This is an interpretation; confirm with an accountant.",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml (local clone HEAD 8eea850, 2026-09-22)"
+   },
+   {
+    "fact": "The GST/HST small-supplier threshold is CAD 30,000 of worldwide taxable supplies over four calendar quarters (ETA s.148). Self-employed CPP is 9.9% base plus 2.0% first additional (CPP Act schedules).",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_compliance.json"
+   },
+   {
+    "fact": "Claude API prices per 1M tokens (input/output): Opus 5 $5/$25, Sonnet 5 $2/$10, Haiku 4.5 $1/$5; cache reads ≈0.1× input.",
+    "source": "task brief (official skill docs cached 2026-06-24)"
+   },
+   {
+    "fact": "Pieter Levels' AI-assisted browser game fly.pieter.com (Feb–Mar 2025) was widely reported to reach a ~USD 1M ARR run-rate within weeks by selling in-game ad placements to brands. This was driven by his very large X following, not by portals.",
+    "source": "[prior knowledge, unverified, pre-2026-06]"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Basic Launch pays nothing: 'Basic Launch does not pay ad revenue. Acceptance and Full Launch selection are not guaranteed.' Games that fail the benchmarks never monetize on CrazyGames.",
+    "source": "https://github.com/jmmoser/RetroTankShooter/blob/HEAD/docs/commercial-launch.md ; https://github.com/cosmicrafts/Adventures-Bevy/blob/HEAD/crazygames.md"
+   },
+   {
+    "fact": "The portal-reaching success stories are experienced teams. Green Train Studio is 3 people with 'many years of experience creating mobile games', and hand-designs and validates the first 20–40 levels. Emolingo reached 100M+ plays with a studio.",
+    "source": "https://github.com/defold/defold.github.io/blob/HEAD/_posts/2026-09-07-Interview-Green-Train-Playgama.md ; https://github.com/bekirmfr/Emberwatch/blob/HEAD/docs/compass-research.md"
+   },
+   {
+    "fact": "Reported portfolio failure on an aggregator: one publisher said 30 games yielded USD 0.12/day in total. Another said ~20 games earned ~USD 0.10/day. GamePix also had Jan 2025 non-payment complaints and a 40% traffic decline.",
+    "source": "https://github.com/RUDY4K/plixfy/blob/HEAD/docs/research/html5-partners-2026-05/evidence.md"
+   },
+   {
+    "fact": "GameDistribution payment problems span 2018–2020, including a public apology from its product owner in March 2020, with forum reports persisting into Jan 2025.",
+    "source": "https://github.com/RUDY4K/plixfy/blob/HEAD/docs/research/html5-partners-2026-05/evidence.md"
+   },
+   {
+    "fact": "A low-engagement WebGL portfolio earned about €0.75–1.05 per 1,000 gameplays; its developer said 'In terms of cash? NO! It's a big fail.'",
+    "source": "https://github.com/bekirmfr/Emberwatch/blob/HEAD/docs/compass-research.md"
+   },
+   {
+    "fact": "Supply glut of AI-made games: a community catalog listed 61 games from a single AI model by Sep 9, 2026. Platforms such as Astrocade and Rosebud exist specifically for vibe-coded games. One report says '79% of web games are hypercasual'.",
+    "source": "https://github.com/JoshTheMenace/partyplace/blob/HEAD/docs/research/vibe-game-platform-report.md ; https://github.com/wowlegend/Crafty/blob/HEAD/memory/MONETIZATION-VIRALITY-SCAN-2026-05-30.md"
+   },
+   {
+    "fact": "Game communities close the door to AI games. r/playmygame: 'We do not allow full-AI-generated games'. r/indiegames: 'No generative AI posts'. r/IndieGaming requires disclosure, and games that rely heavily on GenAI should not be posted.",
+    "source": "https://github.com/Stephenuffugus/lucid-winds/blob/HEAD/PUB-LISTINGS.md"
+   },
+   {
+    "fact": "The own-site variant: a small web-game site (brikaya.com) shows an AdSense rejection for low-value content, diagnosed 2026-07-15. Google's March 2026 core update targeted scaled AI content, with reported 50–80% traffic drops for sites publishing AI pages without editorial oversight (search snippet).",
+    "source": "https://github.com/Malnati/brikaya/blob/HEAD/docs/monetizacao-google.md ; /home/user/canadian-tool-deals/business/research/evidence-corpus.md (S103)"
+   },
+   {
+    "fact": "Famobi requires 50,000+ monthly visits before a site can publish its games. This blocks a new own-site aggregator at launch.",
+    "source": "https://github.com/RUDY4K/plixfy/blob/HEAD/docs/research/html5-partners-2026-05/evidence.md"
+   },
+   {
+    "fact": "Analogous long-tail base rate (Steam 2025, Gamalytic estimate): 65.9% of ~12,732 releases grossed under USD 1,000, 40% did not recoup the USD 100 fee, and 8% grossed over USD 100k.",
+    "source": "https://github.com/bekirmfr/Emberwatch/blob/HEAD/docs/compass-research.md"
+   },
+   {
+    "fact": "The AI-builder analogy from the SaaS dossier: 'building is now easy, but marketing, maintenance, and distribution remain unsolved… vibe coding solves the wrong bottleneck'. The median Stripe-verified indie product earns USD 169 MRR.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+   },
+   {
+    "fact": "The only 'AI game factory for CrazyGames' plan found is itself speculative. It projects USD 30–200/month per passing game and USD 150–2,000/month for 5–10 games, with an unknown QA pass rate and a guessed 20–40% rejection rate. No results are reported.",
+    "source": "https://github.com/tyschacht/nanoclaw_passive/blob/HEAD/content/research/crazygames-html5-agent-game-factory.md"
+   }
+  ],
+  "risks": [
+   "Engagement gate: simple AI-built casual games may never beat CrazyGames' Basic Launch benchmarks (10+ min playtime, 10–15% D1, 80% conversion), so they are never monetized there. No pass-rate data was found.",
+   "Explicit AI and originality filters: CrazyGames rejects clones and asset flips; Playgama rejects low-quality games built wholly with generative AI and reports AI-art titles perform more than 2x worse.",
+   "Low and uncertain revenue per play (about €0.75 to USD 5 per 1,000 gameplays across sources). Geography mix and ad fill are outside the owner's and the AI's control.",
+   "Hit-driven economics: most revenue concentrates in a few titles, so expected value depends on a low-probability hit.",
+   "Owner bottleneck and ToS risk: submissions, dashboards and messages sit behind the owner's logins. Automating those logins with the owner's credentials is not planned (security and likely ToS risk), so throughput is capped by about 3 h/week.",
+   "Slow cash cycle: 7–21 days unmonetized Basic Launch, monthly payouts, €100 / USD 100 minimums, and NET-60 at GameDistribution push first cash to about Jan 2027.",
+   "Platform discretion and opacity: the CrazyGames revenue-share % is unpublished and games can be removed 'at any time, at its sole discretion'. Terms can change.",
+   "Counterparty risk with aggregators: GameDistribution late payments (2018–2025 reports) and GamePix non-payment (2025).",
+   "Poki exclusivity (5 years by default per docs; 7 per other sources) would lock a game out of other web portals, Discord and YouTube Playables.",
+   "Supply glut: many AI-made games plus Playgama's own Claude Code plugins mean competitors have the same tools. The owner has no edge beyond execution.",
+   "Tax and admin: foreign-currency income must be converted and reported on T2125, with 11.9% self-employed CPP. GST/HST registration is needed once worldwide taxable supplies pass CAD 30k; the zero-rating of licences to non-residents is an interpretation to confirm.",
+   "IP risk if the AI's designs drift toward known games or names; CrazyGames also discourages generic names.",
+   "Compliance if an own site is added: PIPEDA or consent for analytics, and children's-audience issues. Portals set 13+ / PEGI-12."
+  ],
+  "scores": {
+   "p5k_90d": 0.5,
+   "owner_light": 6,
+   "capital_light": 9,
+   "ai_build": 6,
+   "ai_operate": 4,
+   "low_risk": 7
+  },
+  "score_rationale": "p5k_90d = 0.5. Monetization on CrazyGames starts only after an unmonetized 7–21 day Basic Launch plus a Full Launch invite, and payouts are monthly with minimums. So even a good game earns only for ~4–6 weeks inside the window. Averaging CAD 5k would need about 0.7–4M monetized plays a month (ESTIMATE) by December from a brand-new AI portfolio, which is essentially a hit lottery. No evidence of an AI-built non-audience portal game doing this was found.\n\nowner_light = 6. There are no customers, sales or support. But every submission, dashboard read and QA reply needs the owner's login, about 2–3 h/week, and that time directly caps output.\n\ncapital_light = 9. Portals host for free and there are no developer fees for CrazyGames or Playgama. Total spend is about CAD 0–300 plus the existing Claude plan.\n\nai_build = 6. Code, SDK integration, automated QA, procedural levels, and cover/video pipelines are all within reach. Originality, game feel and art quality, which the portals explicitly screen for, are the weak spots (Playgama: AI art is more than 2x worse on metrics).\n\nai_operate = 4. The AI can iterate on builds, but it cannot see metrics, submit games or talk to QA without the owner. The feedback loop per game is 1–3 weeks.\n\nlow_risk = 7. Little money is at risk, the legal and tax picture looks simple (zero-rated export licence, small-supplier threshold), and there are no refunds or liability. Deductions are for platform discretion, opaque revenue share, and aggregator payment history."
+ },
+ "verification": {
+  "problems": [
+   {
+    "claim": "Playgama share is '70-90% on partner network, 50% on playgama.com' (best_variant, unit_economics, facts).",
+    "problem": "Misread source. The cited wiki quote (plixfy evidence.md, from wiki.playgama.com/playgama/faq/payments-and-statistics) says: 'Games played on Playgama and through the Playgama partner network is a fixed 50%.' The 70%→90% tiers ('70% on earnings up to $1,000, escalating to 90% on amounts exceeding $3,000') are a separate arrangement that the packet does not tie to partner-network distribution. It is also not stated whether the tiers are monthly or cumulative. The game-67-idle Playgama packet, re-read today, contains no percentages at all.",
+    "correction": "Use 50% as the developer share for every Playgama channel, including partner portals. Treat 70-90% as 'not found as applicable to this model'. Since the best variant routes most traffic through Playgama, this roughly halves the upside the dossier implies."
+   },
+   {
+    "claim": "Developer revenue per 1,000 gameplays is USD 0.85-1.20 (low), 1.5 (mid), 5 (high), used directly as the owner's net.",
+    "problem": "Gross and net are mixed. The low figure is a developer postmortem (probably net). The mid figure is an assumption. The high figure is unsourced. The portal shares (Playgama 50%, Y8 50%, GameDistribution 33%, CrazyGames unpublished) are listed but never applied. If USD 1.5 is gross, the owner nets about USD 0.75 through Playgama, and the plays and games needed double. The Defold interview also puts YouTube Playables gCPM at USD 1-2 per 1,000 impressions, with about USD 10 gross per 1,000 gameplays only because of several impressions per play on a curated, high-playtime portfolio.",
+    "correction": "State whether each rate is gross or net and apply the share. ESTIMATE: at USD 1.5 gross × 50% = USD 0.75 net per 1,000, USD 3,710 needs 3,710 ÷ 0.75 × 1,000 ≈ 4.95M monetized plays a month. At the mid 90k plays per game that is 4.95M ÷ 90k ≈ 55 live Full-Launch games, not 27."
+   },
+   {
+    "claim": "Playgama 'games average $3.1k/month'; 57M gameplays across ~50 titles; about USD 10 gross per 1,000 plays.",
+    "problem": "Context and consistency. The Playgama speaker says the USD 3.1k is 'inside that restricted test group': YouTube ad-monetization testing that began March 2026 in limited geographies, for selected publishers only. The dossier never reconciles its own numbers. ESTIMATE: 57M ÷ 50 ≈ 1.14M plays per title per month, × USD 10/1k ≈ USD 11.4k gross per title. That is not USD 3.1k, so either the net share is about 3.1 ÷ 11.4 ≈ 27% or the distribution is heavily skewed and the data covers different periods or subsets.",
+    "correction": "Present USD 3.1k as a vendor claim about a curated YouTube test cohort of games already proven elsewhere. It is unreachable for a new portfolio inside 90 days and tells us nothing about a new AI portfolio."
+   },
+   {
+    "claim": "CrazyGames Basic Launch 'targets' of 10+ min playtime, 10-15% D1 and 80% conversion are the pass gate; simple AI games are 'unlikely to hit these'.",
+    "problem": "The source frames these as relative benchmarks ('benchmarked against other games'; games partially below are asked to iterate), not fixed cut-offs. Separately, a proven commercial game (Green Train's Arrow Cube, Defold interview) reports D1 of about 7% on web, below the 10-15% figure. The pass rate is simply unknown, and the 10-30% used in the dossier is an unlabelled guess.",
+    "correction": "Label the 10-30% Basic→Full pass rate as an ESTIMATE with no basis. Note that the benchmark is relative, so the bar rises as competition improves; 7% D1 on a successful game shows the numbers are platform-dependent."
+   },
+   {
+    "claim": "A non-hit monetized game gets 1k-5k plays/day (30k-150k/month).",
+    "problem": "The only source is a speculative plan file with no results (nanoclaw), yet it drives the whole games-needed calculation. Basic Launch ends at only ≥500 plays, so no evidence exists for post-launch volume of a non-hit.",
+    "correction": "Tag it as an unsourced assumption. Also show the low case: 300 plays/day × 30 = 9k/month × USD 0.75 net per 1k ≈ USD 7/month per game, i.e. effectively zero, in line with the counter-evidence of about USD 0.10-0.12/day across 20-30 games."
+   },
+   {
+    "claim": "Summary: CAD 5k needs '0.7M-4M gameplays a month = about 16-80 live monetized non-hit games'.",
+    "problem": "Internally inconsistent range. The 16-82 figure uses only USD 1.5/1k across the per-game play range. Combining the full ranges gives 0.74M ÷ 150k ≈ 5 games (best case) to 3.71M ÷ 30k ≈ 124 games (worst case), before applying any portal share.",
+    "correction": "Report ESTIMATE: 5-124 games before share; after a 50% share, about 10-250. The uncertainty is so large that the model can't guide decisions beyond 'needs a hit'."
+   },
+   {
+    "claim": "'ESTIMATE ≤2-5% of live games earn >USD 1k/month (arithmetic under facts)'; 'many portfolios plateau at CAD 200-1,500/month'; 'realistic month-3 outcome under CAD 700/month'.",
+    "problem": "No such arithmetic appears in the facts. The plateau figure has no source and no tag. The CAD 700 is not derived from the dossier's own USD 90-1,575 range: USD 1,575 ÷ 0.72 ≈ CAD 2,190.",
+    "correction": "Mark all three as unsupported guesses, or derive them. Month-3 realized cash is more plausibly CAD 0-200 (ESTIMATE): the first Full-Launch games earn from about week 6-9, the €100 / USD 100 minimums roll over, and payouts are monthly in arrears."
+   },
+   {
+    "claim": "Owner weekly time is about 2-3 h: 60-75 min to upload about 2 games to CrazyGames AND Playgama, 20 min of metrics, 20 min of playtesting.",
+    "problem": "Hidden owner labour. The dossier's own figure is 30-40 min per upload, so 2 games × 2 portals × 35 min ≈ 140 min for uploads alone. Updates to passing games also need dashboard uploads, and on Playgama they go back through moderation. Metrics copying grows with the portfolio: by week 10, about 20 games × 2 portals. Playtesting 2 builds × 5-10 min × 2 devices = 20-40 min. English dashboards and QA messages add friction because the owner's English level is unknown. ESTIMATE by weeks 8-12: 140 + 30-60 (updates) + 40 (metrics) + 30 (QA) + 30 (testing) ≈ 4.5-5 h/week.",
+    "correction": "Either halve cadence to 1 game/week (fewer shots at a hit) or accept about 4-5 h/week, which breaks the ≤3 h budget. It also contradicts the user's core requirement that the owner not do the work personally: in this model the owner is the upload and analytics clerk."
+   },
+   {
+    "claim": "Money needed is CAD 0-300, excluding the owner's existing Claude subscription.",
+    "problem": "Hidden cost. There is no evidence the owner already holds a plan with enough capacity to run weekly Routines that build games, run Playwright QA and render ffmpeg videos. A Max plan at USD 100-200/month [prior knowledge, unverified, pre-2026-06] ≈ CAD 139-278/month, or CAD 420-830 over 3 months, which exceeds the stated total. The API alternative is about USD 7-17.5 per game build, excluding iteration.",
+    "correction": "Include the Claude plan in the budget. ESTIMATE: CAD 450-1,100 over 3 months all-in, still capital-light but not 'about 0'."
+   },
+   {
+    "claim": "The AI tunes the first 20-40 levels 'against real playtest metrics', and a Playgama Claude Code plugin reduces owner work.",
+    "problem": "The metrics loop runs through a weekly owner CSV, and Basic Launch delivers as little as about 500 plays, too thin for level tuning. The Playgama plugins (verified: playgama-bridge, -unity, -godot, -defold) are SDK integration helpers only. The README mentions no submission or analytics API. Green Train hand-designs its levels with a 3-person team that has years of mobile experience.",
+    "correction": "State that the tuning loop is slow (1-3 weeks per iteration) and low-signal. The plugins save coding time, not owner time."
+   },
+   {
+    "claim": "Counter-evidence: 'one publisher said 30 games yielded USD 0.12/day; another ~20 games USD 0.10/day' (portfolio failure).",
+    "problem": "The source is GamePix Trustpilot complaints from 'publishers'. On GamePix that likely means sites embedding games, not developers, and the complaints concern payout discrepancies. The dossier presents it as a developer-portfolio base rate.",
+    "correction": "Re-label it as publisher-side evidence (relevant to the own-site variant) plus counterparty risk, not a developer revenue base rate."
+   },
+   {
+    "claim": "Scores: p5k_90d 0.5, owner_light 6, ai_build 6, ai_operate 4, low_risk 7, capital_light 9.",
+    "problem": "Too generous against the base rates. The TrustMRR median is USD 148/month in year 0, only 0.9% of products are breaking out, and the target is about 34× the median (cand_saas.json). Steam 2025 shows 65.9% of releases under USD 1k gross. No AI-built, audience-less portal game reaching thousands a month was found. Monetization can't start before about weeks 6-9, and cash arrives in Dec-Jan. The owner time is under-counted, and the relevant Playgama share is 50%, not 70-90%.",
+    "correction": "See adjusted_scores: p5k_90d 0.2, owner_light 5, capital_light 8, ai_build 5, ai_operate 3, low_risk 6."
+   }
+  ],
+  "unlabelled_prior_knowledge": [
+   "Upload time of about 30-40 min per game and 20 min for metrics: presented as fact with no tag or source.",
+   "'Many portfolios plateau at CAD 200-1,500/month': no source or tag.",
+   "'ESTIMATE ≤2-5% of live games >USD 1k/month (arithmetic under facts)': no such arithmetic exists, so it is an untagged guess.",
+   "Basic→Full pass rate of 10-30%: noted as 'no data found' but used as a planning parameter without an ESTIMATE basis.",
+   "Per-game plays of 1k-5k/day: taken from a speculative plan file with no results, but used like a sourced figure.",
+   "CrazyGames payout profile 'via Tipalti': 'per secondary sources', with no URL given.",
+   "'Own-site: Google is demoting scaled AI content' in the summary relies on a search snippet (corpus S103); acceptable, but it should be marked as a snippet everywhere it appears.",
+   "That GST/HST zero-rating applies to ad-revenue-share income: an interpretation, correctly flagged in the facts but stated as 'looks simple' in the summary. The supply could also be characterized as a service (Sch. VI Pt V s.7) rather than a licence; unverified."
+  ],
+  "math_check": "Checked and correct: CAD 5,000 × 0.72 = USD 3,600, and 3,600 ÷ 0.97 ≈ 3,711. 3,710 ÷ 1.5 × 1,000 ≈ 2.47M plays; ÷ 5 → 0.742M; ÷ 1 → 3.71M. 30k-150k plays × 1.5/1k = USD 45-225, mid 90k → USD 135. 3,710 ÷ 135 ≈ 27.5, ÷ 225 ≈ 16.5, ÷ 45 ≈ 82.4. 27 ÷ 0.3 = 90 and 27 ÷ 0.1 = 270 submissions. 90 × 0.5 h = 45 h > 36 h. 24 × 10-30% ≈ 2.4-7.2 games → USD 90-1,575. Sonnet 5 build: 2M × $2 = $4 plus 0.3M × $10 = $3 → $7. Opus 5: $10 + $7.5 = $17.5. CPP self-employed 9.9% + 2.0% = 11.9% matches cross_compliance.json.\n\nErrors and gaps:\n(a) Portal shares are never applied. At the correct Playgama 50% on a USD 1.5 gross rate, net is USD 0.75/1k, so the target needs ≈ 4.95M plays and ≈ 55 mid-case games.\n(b) The '16-80 games' range ignores the per-game play spread. The full range is 3.71M ÷ 30k ≈ 124 down to 0.74M ÷ 150k ≈ 5.\n(c) Month-3 'under CAD 700' is not derived; USD 1,575 ≈ CAD 2,190 at the dossier's own FX.\n(d) The Playgama cohort numbers are internally inconsistent: 57M ÷ 50 × USD 10/1k ≈ USD 11.4k gross per title vs a USD 3.1k average. The dossier does not flag this.\n(e) Owner time: 2 games × 2 portals × 35 min = 140 min of uploads alone, not 60-75, so 3 h/week is exceeded by about weeks 6-8.",
+  "adjusted_scores": {
+   "p5k_90d": 0.2,
+   "owner_light": 5,
+   "capital_light": 8,
+   "ai_build": 5,
+   "ai_operate": 3,
+   "low_risk": 6
+  },
+  "verdict": "DOWNGRADE confirmed and strengthened. The dossier is unusually honest: it already calls CAD 5k in 90 days a hit lottery. But it still overstates the upside in four ways.\n(1) It applies a 70-90% Playgama share that the cited wiki contradicts: partner-network plays pay a fixed 50%.\n(2) It never applies portal shares to its per-play rates, so games needed are about double (ESTIMATE ≈55 mid-case, not 27).\n(3) It under-counts owner labour. Uploads alone are about 140 min/week at its own 35-min figure, rising to about 4-5 h/week as the portfolio grows. The owner is structurally the upload and analytics clerk, since no submission or analytics API exists and the Playgama Claude plugins are SDK helpers only. That conflicts with the user's core requirement of no personal involvement.\n(4) It leaves out the Claude plan (possibly CAD 140-280/month) from capital.\n\nThe 'USD 3.1k average' and 'USD 10/1k gross' figures come from a curated YouTube ad-test cohort of games already proven elsewhere, so they are irrelevant inside 90 days.\n\nRealistic month-3 realized cash is ESTIMATE CAD 0-200, with CAD 5k/month by Dec 2026-Jan 2027 at roughly ≤2%.\n\nKeep this only as a near-zero-capital side bet, with a hard kill rule: no Full Launch invitation among the first 6 games by about week 9. Do not present it as a primary path to the CAD 5k goal."
+ }
+}

@@ -1,0 +1,352 @@
+{
+ "dossier": {
+  "candidate": "Programmatic SEO / free web-tools site monetised by display ads (AdSense, then Journey/Mediavine/Raptive) and affiliate links, built and run by Claude (GitHub repo + scheduled Routines + GitHub Actions)",
+  "summary": "VERDICT: The AI could build and run this with almost no owner time, but on the evidence it will not average CAD 5,000/month by Dec 2026–Jan 2027. The goal is roughly 50–1,000 times what comparable new sites earn at month 3. I would keep it only as a cheap, slow side asset with a 12–36 month horizon, and not rely on it for income.\n\nWhy:\n(1) A new domain takes a long time to rank. Ahrefs (updated 2026-04-27): only 1.74% of newly published pages reach Google's top 10 within a year, 72.9% of top-10 pages are more than 3 years old, and 96.55% of all pages get zero Google traffic.\n(2) The money needs a lot of traffic. ESTIMATE: CAD 5,000 ≈ USD 3,700/month. At USD 8–16 per 1,000 sessions that is about 230,000–450,000 sessions/month, or about 7,700–15,000 a day.\n(3) Real AI-built sites from 2026 whose operation logs are public on GitHub show the typical result:\n- A Claude-built directory made 6 real clicks in its first ~40 days and was rejected by AdSense 3 times for \"Low value content\".\n- HoldLens had about 12 human visitors in 30 days, earned $0.005, and AdSense rejected it after 4,436 thin programmatic pages.\n- CalcLeap has 14% of its pages indexed, was rejected by AdSense, and has never earned anything.\n- Three Claude-built well-water sites got 150 sessions in 30 days after months live.\n- loisirs74.fr lost 96% of its impressions in one day in August 2026.\n(4) Google is enforcing against exactly this. Its spam policy names \"using generative AI tools… to generate many pages without adding value\" as scaled content abuse. Secondary sources report enforcement in the March 2026 core update and the August 2026 spam update.\n(5) AI Overviews cut clicks. Pew measured 8% vs 15% of visits clicking a result; Ahrefs measured position-1 CTR down 58%.\n(6) Affiliate income from tools is tiny: 3% Amazon commission × about 0.02% site-wide conversion.\n\nPositive evidence: the programmatic site Episode Ninja earned USD 2,142/month on 258,845 visitors (2019). Mediavine's Journey program has accepted sites from 1,000 sessions since Jan 2026. Setup costs under CAD 100.\n\nEvidence caveat: most sources are secondary GitHub notes. The AI-site cases are single examples, but each is highly comparable to this model.",
+  "best_variant": "\"Canada money calculators, built from primary sources\" (EN + KO first, FR later). About 15–30 genuinely different tools, not thousands of template pages:\n- EI benefit estimator (EI Act s.14, s.19; EI Regs s.30/s.35)\n- Self-employed CPP contribution calculator (CPP Act s.10, Schedules 1–2)\n- GST/HST small-supplier threshold checker (ETA s.148, s.240)\n- Tax-instalment threshold checker (ITA s.156.1)\n- Ontario HST price and quote helpers\n\nEvery formula is taken from Justice Canada's statute XML on GitHub, cites its section, and has unit tests. The repo's research files already hold much of this verified material (cross_compliance.json).\n\nPrice and money: free for users. AdSense only after about 20 substantive pages. Apply to Journey by Mediavine at ≥1,000 sessions/month. Add finance affiliates only where a Canadian program is verified; there is no Amazon tools affiliate, because 3% is too low. Hosting is a static export on Cloudflare Pages Free.\n\nWhy this variant:\n- Unique computation with primary citations is the opposite of \"scaled content abuse\".\n- Canada is a Tier-1 ad geography: historical AdSense page RPM is about USD 6 for Canada (secondary).\n- Finance is a higher-RPM niche: USD 15–40 per 1,000 sessions, secondary.\n\nIts weaknesses:\n- These are YMYL (\"Your Money or Your Life\") pages, which Google scrutinizes more; HoldLens was flagged partly for YMYL issues.\n- canada.ca and large brands (banks, Wealthsimple, TurboTax, Ratehub) already serve these queries [prior knowledge, unverified, pre-2026-06].\n- Google itself answers many simple calculations [prior knowledge, unverified, pre-2026-06].\n- Search volume for the Korean-language angle: not found.\n\nEven this best variant has an ESTIMATED month-3 revenue of USD 0–50/month.",
+  "unit_economics": "All figures are ESTIMATES. FX ASSUMPTION: 1 CAD = 0.73 USD [prior knowledge, unverified, pre-2026-06].\n\nTARGET: CAD 5,000 × 0.73 = USD 3,650. Adding about USD 25–50/month of costs (domain, Workers, part of a Claude plan) gives about USD 3,700 gross needed.\n\nREVENUE PER 1,000 SESSIONS (sources):\n- AdSense on reference/calculator content: USD 3–10 (acevault, a claim, not measured).\n- Canada AdSense page RPM: about USD 6.04 (historical educational blog, secondary).\n- Journey: USD 12–19 (claim).\n- Personal-finance display: USD 15–40; gaming: USD 2–6 (secondary).\n- Measured programmatic example: Episode Ninja, USD 2,142.19 / 258,845 visitors = USD 8.28 per 1,000 (2019).\n- Modeled blended: 87k visits → about USD 1,392/month, about USD 16 per 1,000.\n\nSESSIONS NEEDED PER MONTH FOR USD 3,700:\n\n| Revenue per 1,000 sessions | Arithmetic | Sessions/month | Per day |\n|---|---|---|---|\n| USD 5 | 3,700/5 × 1,000 | 740,000 | ≈24,700 |\n| USD 8.28 | 3,700/8.28 × 1,000 | 446,860 | ≈14,900 |\n| USD 16 | 3,700/16 × 1,000 | 231,250 | ≈7,700 |\n| USD 30 | 3,700/30 × 1,000 | 123,333 | ≈4,100 |\n\nAFFILIATE (Amazon tools):\n- 3% commission × CAD 120 average order (ASSUMPTION) = CAD 3.60 per sale.\n- Site-wide conversion is about 0.02% (2% click-out × 1% conversion, secondary), so 1,000 visitors × 0.0002 = 0.2 sales = CAD 0.72 per 1,000 visitors.\n- For CAD 5,000: 5,000 / 0.72 × 1,000 ≈ 6.9M visitors/month.\n- Even buying-guide pages at 10% click-out × 5% conversion (ASSUMPTION) give 5 sales × 3.60 = CAD 18 per 1,000, so about 278k visitors/month.\n\nCOSTS:\n- Hosting USD 0 (Cloudflare Pages Free; official limits: 500 builds/month, 20,000 files, no bandwidth cap stated). Optional Workers Paid is USD 5/month (official).\n- Domain: about CAD 15–25/year [prior knowledge, unverified, pre-2026-06].\n- Page generation if billed by API: 300 pages × (6,000 input + 2,500 output tokens) on Sonnet 5 = 1.8M × $2 + 0.75M × $10 = USD 3.60 + 7.50 = USD 11.10. On Opus 5: 1.8 × 5 + 0.75 × 25 = USD 27.75.\n- Work done inside Routines uses the owner's Claude plan instead: about USD 20–200/month [prior knowledge, unverified, pre-2026-06], and it may already be paid.\n\nMARGIN: about 95%+ of ad revenue after costs, but income tax applies, plus self-employed CPP at 11.9% (cross_compliance).\n\nCUSTOMERS NEEDED: none; it takes about 120k–740k sessions/month.\n\nREALISTIC MONTH 3 (Dec 2026–Jan 2027), ESTIMATE:\n- 500–3,000 sessions/month (above the analogs: 6 clicks in 40 days; 12 humans in 30 days; 150 sessions in 30 days).\n- × USD 5–16 per 1,000 = USD 2.50–48/month.\n- That is about 1/75 to 1/1,500 of the target. AdSense may also still be unapproved at that point.",
+  "distribution_plan": "Traffic sources that need no owner work:\n(1) Google organic search. This is slow: 1.74% of new pages reach the top 10 within a year.\n(2) Bing and DuckDuckGo. One Claude-run site saw Bing send traffic before Google (22 Bing referrals vs 0 Google).\n(3) Citations from AI assistants: ChatGPT search reportedly tracks Bing's top results, and Perplexity. Volumes are tiny in every case log found.\n(4) IndexNow pings and sitemaps, handled by the AI.\n\nWhat the AI must not do:\n- post from the owner's personal social accounts (Reddit, Facebook groups, KakaoTalk);\n- buy spammy links, which Google's link-spam policy covers. loisirs74 collapsed over unmarked promotional links.\nPaid ads sent to ad-monetized pages rarely pay back [prior knowledge, unverified, pre-2026-06].\n\nOptional owner boost: one-time posts in 2–3 Korean-Canadian and Canadian personal-finance communities, drafted by the AI (≤1 hour total). This breaks the \"no owner work\" rule, so it is excluded from the base case.\n\nOwner time after setup: ESTIMATE 0.5–1 hour/week (read the weekly AI report, approve YMYL changes, paste ad-dashboard numbers where no API exists; Journey has \"no public API\", per one operator's notes). The weakness of this plan is not owner time. Search-only distribution is simply too slow for the 2–3 month goal.",
+  "timeline": "All ESTIMATES, with the basis in brackets.\n\nBuild: weeks 1–2 (Sep 28 – Oct 11, 2026). The AI builds a static Next.js site with 15–20 calculators, tests, legal pages and an ads.txt file [the repo already has Next.js and Cloudflare static-export know-how].\n\nLaunch and indexing: about Oct 12. Search Console impressions start in weeks 1–6 [Water9977: 20–30 impressions/day in week 1, 100–250/day by week 5; an operator plan puts first impressions about 6 weeks after indexing].\n\nAdSense:\n- Apply around late October, once about 20 substantive pages exist.\n- Review takes a few days to 2–4 weeks [secondary].\n- Rejection for \"Low value content\" is common among AI-built analogs (Water9977 rejected 3 times, SlayerLegendWiki twice, HoldLens and CalcLeap once each), and repeated rejections deactivate the review button for a period.\n- Approval: Nov 2026 – Jan 2027 at best, possibly never.\n\nFirst dollar: Dec 2026 – Feb 2027, cents to tens of dollars. First cash in the bank needs a USD 100 AdSense balance [secondary], so likely spring 2027 or later at the run-rates above.\n\nJourney (1,000 sessions/month): possible in Q1–Q2 2027 if traffic compounds.\n\nCAD 5,000/month:\n- No evidence supports this within 3 months.\n- The positive analog (Episode Ninja) needed about 250k visitors/month for about USD 2k.\n- Ahrefs: the average #1-ranking page is 5 years old.\n- My ESTIMATE: 12–36+ months if ever. Most sites never get there (96.55% of pages get zero Google traffic).\n\nCheckpoints:\n- Month 3: kill or keep, based on impressions and clicks.\n- Month 6: kill switch if under 1,000 sessions/month.",
+  "owner_one_time_tasks": [
+   "Buy the domain (Cloudflare Registrar sells at cost, per official docs; .ca support not confirmed) and create the Cloudflare account; about 0.5 h",
+   "Connect the GitHub repo to Cloudflare Pages and add API tokens as GitHub secrets, following an AI-written checklist; about 0.5 h",
+   "Verify Google Search Console (DNS) and Bing Webmaster Tools, then create a GSC API service account so Routines can read performance data; about 1 h",
+   "Open a DEDICATED Google account for AdSense (not a personal Gmail: an invalid-traffic ban reaches the account holder [prior knowledge, unverified, pre-2026-06]). Apply to AdSense, enter tax info (W-8BEN, per a secondary source) and bank EFT details, and later enter the address-verification PIN that arrives by mail [prior knowledge, unverified, pre-2026-06]; about 1.5 h spread over weeks",
+   "Read and approve the AI-drafted privacy policy, terms, 'not financial/legal advice' disclaimers and the affiliate-disclosure wording (Competition Act s.52/s.74.01 apply to misleading 'general impressions'); about 1 h",
+   "Spot-check 5 calculators against official canada.ca estimators or your own situation, since this is YMYL content; about 1.5 h",
+   "Optional: sign up for 1–2 affiliate programs that the AI has verified exist for Canada (Amazon.ca's 180-day, 3-sale closure rule applies); about 0.5 h",
+   "Decide the EI position: if on EI, declare self-employment earnings and confirm the activity is 'minor in extent' (EI Regs s.30); about 0.5 h",
+   "Later, when the site reaches 1,000 sessions/month: apply to Journey by Mediavine and connect GA4 (the AI drafts it); about 0.5 h",
+   "Total: about 7.5–8.5 h"
+  ],
+  "owner_weekly_tasks": [
+   "Read the AI's weekly report (GSC/Bing clicks, indexed pages, revenue, policy flags) and reply yes or no to its proposals; about 15–20 min",
+   "Approve any new or changed YMYL calculator before it is published; about 15–30 min",
+   "Paste AdSense/Journey dashboard numbers into a GitHub secret or issue where no API exists; about 5 min",
+   "Act on any AdSense, Search Console or affiliate policy email (these accounts are in the owner's name); 0–30 min, only when one arrives",
+   "Total: about 0.5–1 h/week, well under the 3 h budget"
+  ],
+  "ai_build_tasks": [
+   "Static Next.js export (or Astro) on Cloudflare Pages Free, with server-rendered HTML so AdSense's crawler sees content. SlayerLegendWiki was rejected for serving empty client-side-rendered pages to the crawler.",
+   "15–30 calculators. Each formula comes from Justice Canada XML (EI Act, CPP Act, ETA, ITA), cites its section, and has unit tests using worked examples. A yearly-parameters file holds values such as YMPE and maximum insurable earnings, with a source for each.",
+   "A unique explanation per tool: method, worked example, edge cases, sources and a last-verified date. No page swaps only a variable, and the AI enforces a uniqueness and word-count gate in CI.",
+   "EN and KO versions with correct hreflang, then FR later.",
+   "About, Contact (a real mailbox, not an iframe), Privacy (PIPEDA), Terms, a disclaimer, an affiliate-disclosure page, and ads.txt.",
+   "Ad slots only on screens that have publisher content, never on bare tool UIs or navigation pages.",
+   "Schema.org markup, a sitemap, IndexNow, Cloudflare Web Analytics, and a bot-filtered human-traffic metric. At HoldLens, Cloudflare counted 6,315 unique IPs in 7 days against about 12 humans in 30 days.",
+   "Routines scripts that pull the GSC API, Bing API and AdSense Management API [prior knowledge, unverified, pre-2026-06] and write a weekly markdown report.",
+   "A kill-switch dashboard with thresholds for months 3 and 6."
+  ],
+  "ai_recurring_tasks": [
+   "Weekly: pull GSC and Bing data, find queries with impressions but no matching tool, and propose at most 1–3 new tools a month. Build only where the query data shows demand, and never pages per query variation, which Google's 2026-07-10 AI guidance calls scaled content abuse (secondary).",
+   "Weekly: noindex or consolidate pages with 0 impressions after 90 days, to keep the indexed ratio high (CalcLeap was only 14% indexed).",
+   "Monthly: check links (rel=sponsored on all affiliate links), Core Web Vitals and ad density.",
+   "Every January and on statute changes: diff the laws-lois-xml commits and update the rates and thresholds; re-run the tests.",
+   "Watch Google update announcements and traffic cliffs, and write an incident note on any drop of more than 30%.",
+   "Draft the AdSense re-review request and Journey application when thresholds are met (the owner submits them).",
+   "Monthly P&L and kill-switch evaluation against the month-3 and month-6 criteria."
+  ],
+  "money_needed_cad": "ESTIMATE: CAD 20–100 up front, then CAD 0–10/month.\n- Domain: about CAD 15–25/year [prior knowledge, unverified, pre-2026-06].\n- Hosting: Cloudflare Pages Free CAD 0 (official), or Workers Paid USD 5/month ≈ CAD 7.\n- Claude API page generation, if billed: under USD 30 (Sonnet 5 / Opus 5 arithmetic above).\n- The owner's Claude plan for Routines: about USD 20–200/month [prior knowledge, unverified, pre-2026-06], which may already be paid.\n- No inventory and no paid ads.\n\nThe real cost is the living-cost runway. ESTIMATED revenue is about CAD 0–65/month through month 3 and is uncertain after that, so this cannot fund living costs in the 2–3 month window.",
+  "facts": [
+   {
+    "fact": "Google spam policy (mirror of developers.google.com/search/docs/essentials/spam-policies, last updated 2026-04-13): 'Scaled content abuse is when many pages are generated for the primary purpose of manipulating search rankings and not helping users.' Examples include 'Using generative AI tools or other similar tools to generate many pages without adding value for users' and 'Creating multiple sites with the intent of hiding the scaled nature of the content'. Violations lead to lower ranking, removal from results or manual actions.",
+    "source": "https://raw.githubusercontent.com/lesishu/seo-guide-skill/main/references-google/essentials-spam-policies.md"
+   },
+   {
+    "fact": "Same policy: 'Thin affiliation is the practice of publishing content with product affiliate links where the product descriptions and reviews are copied directly from the original merchant without any original content or added value.'",
+    "source": "https://raw.githubusercontent.com/lesishu/seo-guide-skill/main/references-google/essentials-spam-policies.md"
+   },
+   {
+    "fact": "Ahrefs study (published 2025-05-15, updated 2026-04-27; 1M URLs): 'Only 1.74% of newly published pages rank in the top 10 within a year' (5.7% in 2017). 40.82% of those that do rank get there within 1 month. 72.9% of top-10 pages are over 3 years old, and the average #1 page is 5 years old.",
+    "source": "https://raw.githubusercontent.com/0xenzyme/awesome-seo-articles/5ac0776fdb3861e63720797c7d9543096aff7733/ahrefs-blog/data-studies/how-long-does-it-take-to-rank-in-google-and-how-old-are-top-ranking-pages.md"
+   },
+   {
+    "fact": "Ahrefs: 96.55% of pages in its index get zero traffic from Google, and 1.94% get 1–10 monthly visits.",
+    "source": "https://github.com/0xenzyme/awesome-seo-articles/blob/5ac0776fdb3861e63720797c7d9543096aff7733/ahrefs-blog/data-studies/search-traffic-study.md"
+   },
+   {
+    "fact": "Pew Research (2025-07-22; 68,879 searches): users clicked a traditional result in 8% of visits with an AI summary vs 15% without, and clicked a link inside the summary in 1%. Ahrefs (2026-02-04; 300k keywords): position-1 CTR was 58% lower when an AI Overview was present. Seer reported AI Overview CTR recovering from 1.3% to 2.4% (2025-12 to 2026-02); the effect size is contested.",
+    "source": "https://raw.githubusercontent.com/johnkorzhuk/grabient/73c38b29792cd681550c8448d5d5d19751f133fc/seo-research/indexing-and-ai-visibility.md ; https://github.com/AgriciDaniel/claude-blog/blob/2500d4c765034864cede2bf215d00ccd4d7d6fb8/brain/references/claim-ledger.md"
+   },
+   {
+    "fact": "Ad-network thresholds (secondary; the operator cites mediavine.com and help.raptive.com): 'Journey by Mediavine starts at 1K sessions'; Mediavine's main product 'expects a site to already generate at least $5K in annual ad revenue'; the old path was '50K monthly sessions before the January 2026 program changes'; the Raptive Insiders minimum for an additional site is '25K pageviews per month'. Another operator notes the Journey minimum 'dropped 10,000 → 1,000 sessions on Jan 15, 2026'.",
+    "source": "https://raw.githubusercontent.com/ThatGuySam/marvelorder/e707fd55a76988acb355b1c65e2eb8cbb4373d98/docs/research/monetization-growth.md ; https://raw.githubusercontent.com/acevaultorg/sourcescore-org/2af13fba820cce27abc38345ca4d42b0d38756a9/methodology/revenue-maximizer.md"
+   },
+   {
+    "fact": "Ezoic threshold, CONFLICTING: a July 2026 operator note says 'Ezoic: closed to sites under 250k users (Feb 2026)', while an April 2026 note says 'Ezoic Access Now — No traffic floor'.",
+    "source": "https://raw.githubusercontent.com/alexchalu/calcleap/main/MONETIZATION.md ; https://github.com/acevaultorg/holdlens/blob/7c2e0c8245f3290a8949697ca5fef979f31b4318/.claude/state/MONETIZATION_STACK.md"
+   },
+   {
+    "fact": "The AdSense policy behind most rejections is 'Google-served ads on screens without publisher-content or with low-value content'. It is judged per screen, not as a site average. Approval reviews take 'a few days to 2-4 weeks', and a site 'reviewed and rejected several times recently' has its Start review button deactivated for a period (secondary operator research).",
+    "source": "https://raw.githubusercontent.com/BenDol/SlayerLegendWiki/52d9065efc90291d607ce44162fb0aac66b61ae5/.claude/adsense-acceptance-plan.md"
+   },
+   {
+    "fact": "Claude-built niche directory (launched 2026-07-12): impressions rose from about 20–30/day in week 1 to 100–250/day by week 5, with '6 total real clicks' in about 40 days. AdSense rejected it with 'Low value content'; 154 of about 178 pages were templated listings with about 2 boilerplate sentences each.",
+    "source": "https://raw.githubusercontent.com/Water9977/Niche-Directories-Website/b62e2afedee6dd8a4b9c0197d4473821b67c8fc0/architecture.md"
+   },
+   {
+    "fact": "HoldLens (AI-operated 13F data site, launched 2026): AdSense returned 'Low value content' on 2026-04-28/29, about 21 days into review. The cause was 4,436 thin programmatic pages, 80% of the sitemap. Plausible counted about 12 humans in 30 days while Cloudflare counted 6,315 unique IPs in 7 days. Revenue through 2026-04-23 was $0.005.",
+    "source": "https://github.com/acevaultorg/holdlens/blob/7c2e0c8245f3290a8949697ca5fef979f31b4318/.claude/state/ADSENSE_REMEDIATION.md ; https://raw.githubusercontent.com/acevaultorg/holdlens/7c2e0c8245f3290a8949697ca5fef979f31b4318/.claude/state/REVENUE_CALIBRATION.md"
+   },
+   {
+    "fact": "CalcLeap (programmatic calculator/insurance site, plan dated 2026-07-01): 'AdSense: REJECTED for low value content'; about 420 pages indexed (about 14%); zero revenue to date; 154 scraped YMYL pages deleted on 2026-07-10. The operator writes that 'anything projecting $1k/mo in 90 days from a ~420-indexed-page base is unserious'.",
+    "source": "https://raw.githubusercontent.com/alexchalu/calcleap/main/MONETIZATION.md"
+   },
+   {
+    "fact": "Three Claude-built well-water data sites, 'deployed for months', had 150 sessions and 124 active users combined in the 30 days to 2026-04-27.",
+    "source": "https://raw.githubusercontent.com/pw/byclaude/5bb1677c4f64d15302940ace05ea35e742045696/research/well-water-trio-2026-04-27.md"
+   },
+   {
+    "fact": "loisirs74.fr (programmatic guide, about 5,387 indexed pages): on 2026-08-27 impressions fell from 5,095 to 210 in one day, and position went from 10.7 to 37.5. There was no meaningful recovery after 3 weeks, and 610 pages left the index on 2026-09-05. The diagnosed cause was 7,374 unqualified promotional links.",
+    "source": "https://raw.githubusercontent.com/eddie-boop14/Loisir-74/49ed6fa1f7d8e85a95e24f2c40035431e7e63c60/POSTMORTEM-google-collapse-2026-08.md"
+   },
+   {
+    "fact": "Positive analog: Episode Ninja (a programmatic site) earned $1,388.76 on 240,120 unique visitors in 2019 ($1,095.36 from Monumetric ads), and $2,142.19 on 258,845 visitors in Dec 2019 ($1,867.98 from Monumetric).",
+    "source": "https://raw.githubusercontent.com/ThatGuySam/marvelorder/e707fd55a76988acb355b1c65e2eb8cbb4373d98/docs/research/monetization-growth.md"
+   },
+   {
+    "fact": "RPM claims (secondary): AdSense '$3-10 at fleet RPM tiers (reference + calculator content)'; Journey '$12-19 baseline'. Neither is backed by measured data in the source.",
+    "source": "https://raw.githubusercontent.com/acevaultorg/sourcescore-org/2af13fba820cce27abc38345ca4d42b0d38756a9/methodology/revenue-maximizer.md"
+   },
+   {
+    "fact": "A compilation of historical AdSense page RPMs lists about USD 6.04 for Canada and 4.83 for the US (educational blog). India-heavy traffic runs about USD 2.1–2.39. Content-site affiliate conversion is 0.5–1%, and site-wide conversion is about 0.02% at 2% click-through. A realistic model reached about $1,392/month at 87k visits in month 18.",
+    "source": "https://raw.githubusercontent.com/minalGoel/micro-tools/14ec956ab6d7ccfdce06ac11baace814cbb85fb2/project_planning/source_files/3.%20RPM%20and%20Affiliate%20Monetization%20Reality%20for%20a%20Developer%20Utility%20Site.md"
+   },
+   {
+    "fact": "Display ads run '$2–6 session RPM' for gaming versus '$15–40 for personal finance' (secondary, citing a 2026 RPM-by-niche article).",
+    "source": "https://raw.githubusercontent.com/kevynsgrin-a11y/BountyCharts/62d6c8049b58d2b65a0c2f0a78523b918654d5c4/docs/tcg-deep-dive-2026.md"
+   },
+   {
+    "fact": "The AdSense minimum payment threshold is USD 100; the balance rolls over until it is reached (secondary).",
+    "source": "https://github.com/baalvionservice/Baalvion-Project-Infra/blob/e4b76f7995bc76dc0a3f3afaa8f12ccd89dbf62d/Frontend/Imperialpedia-main/scripts/build_21_custom_human_articles.cjs"
+   },
+   {
+    "fact": "Amazon Associates Tools & Home Improvement pays about 3% (Amazon.com schedule; the Amazon.ca rate is unverified). New accounts close without 3 qualifying sales in 180 days.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_content.json"
+   },
+   {
+    "fact": "Corpus S103 (search summary): the March 2026 core update named scaled content abuse; sites with hundreds or thousands of AI pages and no editorial oversight reportedly saw 50–80% traffic drops (agency claim). In May 2026 Google said its spam policies also apply to AI Overviews and AI Mode.",
+    "source": "/home/user/canadian-tool-deals/business/research/evidence-corpus.md (S103)"
+   },
+   {
+    "fact": "Secondary: 'Google's spam policy has covered manipulation of generative AI responses since May 15, 2026; the Aug 18–21, 2026 spam update targeted scaled content.' A 2026-07-10 Google AI guide reportedly says creating pages per query variation 'violates Google's scaled content' policy.",
+    "source": "https://raw.githubusercontent.com/mykpono/ultimate-seo-geo/0e99e117d2da9f338ac7faf80f5586e5c4a65f39/references/programmatic-seo.md ; https://github.com/johnkorzhuk/grabient/blob/73c38b29792cd681550c8448d5d5d19751f133fc/seo-research/indexing-and-ai-visibility.md"
+   },
+   {
+    "fact": "Cloudflare Pages Free (official docs repo): 500 builds/month, 20,000 files, no bandwidth limit stated. Workers Paid costs USD 5/month. Vercel Hobby is quoted as non-commercial only (secondary).",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_tooling.json"
+   },
+   {
+    "fact": "Competition Act s.52(1) bars knowingly or recklessly making a representation to the public that is false or misleading in a material respect. s.52(4): 'the general impression conveyed by a representation as well as its literal meaning shall be taken into account'. On summary conviction the fine is up to $200,000. s.74.01(1)(a) makes the same conduct civilly reviewable. This matters for undisclosed affiliate links and wrong calculator outputs.",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/C-34.xml"
+   },
+   {
+    "fact": "ETA Schedule VI Part V s.8 zero-rates 'A supply of a service of advertising made to a non-resident person who is not registered'. Whether the ad-network entity that pays Canadian publishers is GST-registered: not found. The small-supplier threshold is $30,000 over 4 quarters (s.148).",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml ; /home/user/canadian-tool-deals/business/research/dossiers/cross_compliance.json"
+   },
+   {
+    "fact": "EI Regs s.30(1): a claimant running a business counts as working a full week unless the business is 'minor in extent' (s.30(2)–(3)). Net self-employment earnings must be declared.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_compliance.json (citing SOR-96-332)"
+   },
+   {
+    "fact": "Claude API prices (skill docs cached 2026-06-24, per 1M tokens input/output): Opus 5 $5/$25, Sonnet 5 $2/$10, Haiku 4.5 $1/$5.",
+    "source": "local: Anthropic claude-api skill pricing (as given in task)"
+   },
+   {
+    "fact": "The owner's earlier tool price-comparison site in this repo is archived: 0 price collections since 2026-08-08, and it is not built or deployed. There is no existing domain age or traffic to build on (domain: not found).",
+    "source": "/home/user/canadian-tool-deals/README.md"
+   },
+   {
+    "fact": "Beyond these, it is my own background knowledge that AI Overviews launched in Canada in late 2024, that Google shows native calculators and unit converters for many simple queries, and that the Sept 2023 Helpful Content Update hit many small publishers.",
+    "source": "[prior knowledge, unverified, pre-2026-06]"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Only 1.74% of newly published pages reach Google's top 10 within a year, and 72.9% of top-10 pages are more than 3 years old. A 2–3 month plan from a new domain runs against this base rate.",
+    "source": "https://raw.githubusercontent.com/0xenzyme/awesome-seo-articles/5ac0776fdb3861e63720797c7d9543096aff7733/ahrefs-blog/data-studies/how-long-does-it-take-to-rank-in-google-and-how-old-are-top-ranking-pages.md"
+   },
+   {
+    "fact": "A Claude-built directory launched 2026-07-12 got 6 real clicks in about 40 days and was rejected by AdSense for 'Low value content' (templated pages).",
+    "source": "https://raw.githubusercontent.com/Water9977/Niche-Directories-Website/b62e2afedee6dd8a4b9c0197d4473821b67c8fc0/architecture.md"
+   },
+   {
+    "fact": "The AI-operated HoldLens earned $0.005 in its first month or so, had about 12 human visitors in 30 days, and was rejected by AdSense because 80% of its sitemap was thin programmatic pages.",
+    "source": "https://raw.githubusercontent.com/acevaultorg/holdlens/7c2e0c8245f3290a8949697ca5fef979f31b4318/.claude/state/REVENUE_CALIBRATION.md"
+   },
+   {
+    "fact": "The programmatic calculator site CalcLeap has 14% of its pages indexed, was rejected by AdSense, has earned $0 lifetime, and calls $1k/month in 90 days 'unserious'.",
+    "source": "https://raw.githubusercontent.com/alexchalu/calcleap/main/MONETIZATION.md"
+   },
+   {
+    "fact": "Three Claude-built data sites, live for months, had 150 sessions combined in 30 days.",
+    "source": "https://raw.githubusercontent.com/pw/byclaude/5bb1677c4f64d15302940ace05ea35e742045696/research/well-water-trio-2026-04-27.md"
+   },
+   {
+    "fact": "A programmatic site lost 96% of its Google impressions in one day (2026-08-27) and had not recovered 3 weeks later, while its Bing traffic stayed stable. Single-channel Google dependence can go to zero overnight.",
+    "source": "https://raw.githubusercontent.com/eddie-boop14/Loisir-74/49ed6fa1f7d8e85a95e24f2c40035431e7e63c60/POSTMORTEM-google-collapse-2026-08.md"
+   },
+   {
+    "fact": "Google's spam policy explicitly lists using generative AI 'to generate many pages without adding value for users' as scaled content abuse.",
+    "source": "https://raw.githubusercontent.com/lesishu/seo-guide-skill/main/references-google/essentials-spam-policies.md"
+   },
+   {
+    "fact": "AI summaries roughly halve clicks on traditional results: 8% vs 15% (Pew). Ahrefs measured position-1 CTR 58% lower when an AI Overview appears.",
+    "source": "https://raw.githubusercontent.com/johnkorzhuk/grabient/73c38b29792cd681550c8448d5d5d19751f133fc/seo-research/indexing-and-ai-visibility.md"
+   },
+   {
+    "fact": "Even a positive analog, Episode Ninja, earned only about USD 2,142/month on 258,845 visitors. The CAD 5k target needs about 1.7× that traffic at the same yield.",
+    "source": "https://raw.githubusercontent.com/ThatGuySam/marvelorder/e707fd55a76988acb355b1c65e2eb8cbb4373d98/docs/research/monetization-growth.md"
+   },
+   {
+    "fact": "A realistic tool-site model reaches only about $1,392/month at 87k visits in month 18.",
+    "source": "https://raw.githubusercontent.com/minalGoel/micro-tools/14ec956ab6d7ccfdce06ac11baace814cbb85fb2/project_planning/source_files/3.%20RPM%20and%20Affiliate%20Monetization%20Reality%20for%20a%20Developer%20Utility%20Site.md"
+   },
+   {
+    "fact": "A crowded field: GitHub search shows many AI-built AdSense calculator and tool sites launched in 2026, including an AdSense toolkit, CalcLeap, a Canadian paycheque calculator (Andresgithub3/paycalc) and 30tools. They target the same queries.",
+    "source": "https://github.com/Andresgithub3/paycalc/blob/661a6d74f26bff30b5eef57c3c6cc14ee613b499/PAYCALC_BUILD_SPEC.md"
+   },
+   {
+    "fact": "The previous research round already eliminated content and affiliate as a primary income plan (adjusted probability_5k score 1/10).",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_content.json"
+   }
+  ],
+  "risks": [
+   "Traffic never arrives. 96.55% of pages get zero Google traffic, and every 2026 AI-built analog found had tens to hundreds of sessions per month after 1–6 months.",
+   "Google penalties. Scaled content abuse, thin affiliation or link-spam enforcement can cut traffic 50–96% in a day (loisirs74, March 2026 core update claims). Mitigations: a small number of distinct tools, uniqueness gates, rel=sponsored links, and no page-per-query spam.",
+   "Repeated AdSense 'Low value content' rejections, with the review button deactivated after several rejections. This happened to 4 of the 4 AI-built analogs found that applied.",
+   "Account risk tied to the owner's Google identity: an AdSense invalid-traffic or policy ban [prior knowledge, unverified, pre-2026-06]. Use a dedicated account and never click the ads or buy traffic.",
+   "Bot traffic inflates analytics and misleads decisions (HoldLens: 6,315 unique IPs in 7 days vs about 12 humans in 30 days). Measure humans only.",
+   "AI Overviews, AI Mode and Google's native calculators absorb simple-calculation and informational clicks (Pew 8% vs 15%; Ahrefs −58% position-1 CTR).",
+   "YMYL accuracy and legal exposure. A wrong EI, CPP or HST figure could mislead users, and the Competition Act s.52/s.74.01 'general impression' test applies to representations and undisclosed affiliate links. Mitigations: statute-sourced tests, disclaimers, and owner spot-checks.",
+   "Ad-network rules change without notice: Journey's threshold changed in Jan 2026, and sources conflict on Ezoic's threshold. Journey has no public API, per one operator.",
+   "Affiliate economics: Amazon tools pay about 3% with a 180-day closure rule; site-wide affiliate conversion is about 0.02%.",
+   "Tax and benefits: EI declaration and the 'minor in extent' test (EI Regs s.30). GST/HST registration once over $30k in 4 quarters. Whether ad payouts are zero-rated depends on the payer's registration (not found). US tax forms apply (W-8BEN, secondary).",
+   "Opportunity cost: this cannot pay living costs in the 2–3 month window, so the owner still needs the EI/services plan in decision-memo.md.",
+   "Evidence quality: the analog cases are single sites from GitHub operation logs, and RPM figures are mostly secondary claims. No official AdSense, Mediavine or Google pages could be opened directly (egress blocked); Google's policy text came from a GitHub mirror."
+  ],
+  "scores": {
+   "p5k_90d": 0.5,
+   "owner_light": 8.5,
+   "capital_light": 9.5,
+   "ai_build": 8.5,
+   "ai_operate": 7,
+   "low_risk": 5
+  },
+  "score_rationale": "p5k_90d = 0.5. ESTIMATE: under 1% chance.\n- The target needs about 120k–740k sessions/month at USD 5–30 per 1,000 sessions.\n- New pages rarely rank within a year (1.74% reach the top 10).\n- Every comparable AI-built site from 2026 found on GitHub was at 12–500 sessions/month and USD 0 after 1–6 months.\n- The one positive programmatic analog (Episode Ninja) needed about 250k visitors for about USD 2k/month.\n- AdSense approval alone often takes 1–2+ months, with rejections.\n\nowner_light = 8.5. One-time setup is about 8 hours. After that it is about 0.5–1 hour/week (read the report, approve YMYL changes, paste dashboard numbers). The score is not higher because every revenue account (AdSense, affiliates, Journey) is in the owner's name, and policy emails need a human.\n\ncapital_light = 9.5. Under CAD 100 up front plus CAD 0–10/month, excluding a Claude plan the owner may already pay for.\n\nai_build = 8.5. The AI can build everything: site, calculators, tests, legal pages, monitoring. Only account creation, DNS and ID/tax steps are human.\n\nai_operate = 7. Routines can pull the GSC/Bing/AdSense APIs, prune pages, update statute parameters and write reports. Limits: Journey has no API; AdSense reviews and appeals are the owner's to submit; judgment calls on YMYL accuracy and policy risk should get human sign-off.\n\nlow_risk = 5. Financial downside is tiny. Platform risk is high: Google can cut traffic 96% overnight, and an AdSense ban attaches to the owner's identity. YMYL and Competition Act exposure applies if calculators are wrong or affiliate links undisclosed.\n\nNet: this is the easiest model for the AI to build and run, but it has the weakest fit with the 2–3 month CAD 5k goal. At most, recommend it as a side asset worth under CAD 100 with month-3 and month-6 kill switches, never as the income plan."
+ },
+ "verification": {
+  "problems": [
+   {
+    "claim": "scores.p5k_90d = 0.5, with the rationale 'ESTIMATE: under 1% chance'",
+    "problem": "The score and the stated probability disagree. On a 0–10 likelihood scale, 0.5 means about 5%, while the text says under 1%. The dossier's own numbers support the text, not the score: month-3 revenue of USD 2.50–48 against a USD 3,700 target, AdSense possibly still unapproved, and no cash paid out before the USD 100 threshold.",
+    "correction": "Set p5k_90d to 0.1 or lower. Also state that the chance of any CAD cash in the bank by Jan 2027 is low. At the dossier's own run-rate of USD 2.50–48/month, ESTIMATE: 100/48 ≈ 2.1 months at best and 100/2.5 = 40 months at worst to reach the payout threshold, and that clock only starts after AdSense approval."
+   },
+   {
+    "claim": "Realistic month 3: '500–3,000 sessions/month (above the analogs: 6 clicks in 40 days; 12 humans in 30 days; 150 sessions in 30 days)'",
+    "problem": "This is optimism against the dossier's own base rate. Every analog it cites sits at 6–150 sessions a month, yet the estimate starts 3.3× above the best analog (500/150) and goes up to 20× (3,000/150). The dossier gives no reason why this site would beat all four analogs by month 3, which is only about 11 weeks after an Oct 12 launch.",
+    "correction": "Anchor to the analogs: ESTIMATE 20–300 human sessions/month at month 3. Without AdSense approval that is USD 0. With approval, 20–300 × USD 5–16/1,000 = USD 0.10–4.80/month. Cite 500–3,000 only as an upside case."
+   },
+   {
+    "claim": "MARGIN: about 95%+ of ad revenue after costs",
+    "problem": "This ignores the cost the dossier lists elsewhere: the Claude plan that runs the Routines, USD 20–200/month [prior knowledge, unverified, pre-2026-06]. At the dossier's month-3 revenue of USD 2.50–48, costs exceed revenue whenever even part of the plan is charged to this project. Just the domain (about CAD 1.25–2/month) plus Workers Paid (USD 5) is already 10–200% of revenue at the low end.",
+    "correction": "ESTIMATE: net margin is negative through month 3 and probably through month 12. For example, USD 48 − USD 20 plan − USD 5 Workers − USD 1.50 domain = +USD 21.50 at the best case, and USD 2.50 − USD 26.50 = −USD 24 at the worst. The ~95% margin only applies above roughly USD 1,000/month of revenue."
+   },
+   {
+    "claim": "Target of 'USD 3,650 + about USD 25–50/month of costs (domain, Workers, part of a Claude plan) ≈ USD 3,700', while COSTS lists the Claude plan at USD 20–200/month",
+    "problem": "The two cost figures are inconsistent. The COSTS section implies up to about USD 207/month (200 + 5 + ~1.5), not 25–50.",
+    "correction": "Either state that the Claude plan is sunk, so the cost is USD 1.50–6.50/month and the target is about USD 3,660, or charge the plan to this project, so the target is USD 3,650 + 26.50 to 206.50 = about USD 3,680–3,860. In either case, show which one is used."
+   },
+   {
+    "claim": "The revenue-per-1,000-sessions table mixes AdSense 'page RPM' (Canada USD 6.04), 'session RPM' (finance USD 15–40), 'per unique visitor' (Episode Ninja USD 8.28) and an unmeasured Journey claim (USD 12–19)",
+    "problem": "These metrics use different denominators. Page RPM is per 1,000 pageviews. Calculator sites often have about 1–1.5 pages per session [prior knowledge, unverified, pre-2026-06], so page RPM does not convert 1:1 to session RPM. Unique visitors are fewer than sessions, so 'per visitor' overstates per-session yield. The USD 15–40 finance session RPM describes premium networks (Mediavine/Raptive) on established sites, not AdSense on a new domain.",
+    "correction": "Use one denominator, per 1,000 sessions. Label the new-site AdSense case separately, at about USD 3–10 session RPM (secondary claim), and treat USD 15–40 as reachable only after Journey or Raptive acceptance. That means dropping the USD 30 row from the month-3 view."
+   },
+   {
+    "claim": "Summary: 'The goal is roughly 50–1,000 times what comparable new sites earn at month 3'",
+    "problem": "This does not match the dossier's own arithmetic. 3,700/48 = 77 and 3,700/2.5 = 1,480, which is the '1/75 to 1/1,500' used in unit_economics. The actual AI-built analogs earned USD 0–0.005, which makes the multiple effectively unbounded.",
+    "correction": "Say 'about 75–1,500× the dossier's optimistic month-3 estimate, and effectively infinite versus the observed analogs (USD 0–0.005)'."
+   },
+   {
+    "claim": "'Most sites never get there (96.55% of pages get zero Google traffic)' and '1.74% of new pages reach the top 10'",
+    "problem": "These are PAGE-level statistics from Ahrefs' whole index, which includes junk, duplicate and orphan pages. The dossier uses them as SITE-level base rates. That is directionally fair but statistically misapplied.",
+    "correction": "Label them as page-level. For site-level base rates, rely on the AI-built analog logs (n=4–5; small, and selection-biased toward operators who publish logs) and on the cand_saas TrustMRR data by analogy (year-0 median USD 148/month, opt-in and upward-biased), noting that TrustMRR measures SaaS, not ad sites."
+   },
+   {
+    "claim": "best_variant: 'Every formula is taken from Justice Canada's statute XML... A yearly-parameters file holds values such as YMPE and maximum insurable earnings, with a source for each'; the Routine updates rates 'every January... diff the laws-lois-xml commits'",
+    "problem": "Several key parameters are NOT in the statute text. YMPE is published annually under the CPP Act's computation. EI maximum insurable earnings is set by the Commission. The EI regional unemployment rates and variable best-weeks regions that the EI estimator needs are updated monthly on canada.ca. This environment's egress blocks canada.ca (cross_tooling.json line 125). If Routine sessions share that network policy (not verified), the AI cannot fetch or refresh these values. A statute diff alone will miss parameter changes, and the YMYL outputs will go stale without anyone noticing.",
+    "correction": "Add a hidden dependency: either GitHub Actions (open egress, not verified for this account) scrapes the canada.ca parameter pages, or the owner pastes new parameters every year or month. Lower ai_operate. Drop the EI estimator, or clearly mark it approximate, unless monthly regional data can be fetched automatically."
+   },
+   {
+    "claim": "owner_one_time_tasks total about 7.5–8.5 h; owner weekly about 0.5–1 h",
+    "problem": "This undercounts hidden labour for a Korean-speaking owner whose English level is unknown. (a) The GSC API service account requires Google Cloud console project setup, enabling APIs and a JSON key — non-trivial for a non-developer [prior knowledge, unverified, pre-2026-06]. (b) The AdSense account likely also needs identity verification, payment-profile verification and the mailed PIN [prior knowledge, unverified, pre-2026-06]. (c) Reading and approving English privacy, terms and disclaimer text, and 'spot-checking' EI/CPP/HST calculators, assumes tax and benefits knowledge the owner may not have. The approval becomes a rubber stamp while the legal liability (Competition Act s.52) stays with the owner. (d) A real Contact mailbox means someone has to answer user emails and privacy requests. PIPEDA Schedule 1 principle 4.1 needs an accountable individual [prior knowledge, unverified, pre-2026-06], who is the owner. (e) The dossier says 'paste AdSense numbers where no API exists', but it also lists an AdSense Management API, which is inconsistent. Only Journey lacks an API.",
+    "correction": "ESTIMATE: one-time setup 9–12 h (still within the 10 h budget only if the optional items are skipped), and weekly 1–1.5 h including inbox and privacy duties. owner_light goes from 8.5 to 7.5."
+   },
+   {
+    "claim": "AI must add ads and analytics (Cloudflare Web Analytics, AdSense), serve EN/KO and later FR, and needs no consent layer",
+    "problem": "The dossier misses consent and privacy requirements. AdSense requires a Google-certified CMP for EEA/UK/Swiss visitors [prior knowledge, unverified, pre-2026-06]. Quebec Law 25 imposes consent and privacy-officer obligations for Quebec residents, which matters for the planned FR version [prior knowledge, unverified, pre-2026-06]. Both are unaddressed, and both are a compliance hazard and a possible reason for AdSense limited ads.",
+    "correction": "Add a CMP (Google's own is free [prior knowledge, unverified, pre-2026-06]) to ai_build_tasks, and review for Law 25 before launching FR. Add about 0.5 h of owner approval."
+   },
+   {
+    "claim": "'HoldLens was flagged partly for YMYL issues'",
+    "problem": "This is not supported by the dossier's facts list. The HoldLens facts give the cause as 4,436 thin programmatic pages (80% of the sitemap). A grep of evidence-corpus.md and the dossiers finds no HoldLens YMYL citation.",
+    "correction": "Remove it, or cite the specific line in ADSENSE_REMEDIATION.md. Otherwise mark it 'not found'."
+   },
+   {
+    "claim": "'ChatGPT search reportedly tracks Bing's top results'",
+    "problem": "No source is given, and no match was found in evidence-corpus.md.",
+    "correction": "Tag it [prior knowledge, unverified, pre-2026-06] or delete it. The traffic volume from AI assistants is 'not found' and tiny in every case log."
+   },
+   {
+    "claim": "Unit economics: 'AFFILIATE (Amazon tools): 3% commission'",
+    "problem": "The facts list says the 3% is from the Amazon.com schedule and that the Amazon.ca rate is unverified, but the unit_economics section drops that caveat. The best_variant also excludes Amazon, so this whole block does not apply to the recommended plan. Meanwhile the finance affiliates the plan does rely on have no verified program, rate or approval criteria.",
+    "correction": "Tag it '3% (Amazon.com; Amazon.ca not found)'. For the best variant, write 'Canadian finance affiliate programs, rates and acceptance of new sites: not found; ESTIMATE affiliate revenue = USD 0 in the 90-day window'."
+   },
+   {
+    "claim": "Canada is a Tier-1 geography with page RPM of about USD 6; the Korean-language angle is included",
+    "problem": "The KO pages may attract traffic from South Korea rather than Korean-Canadians. Korean-Canadian search volume is 'not found', as the dossier admits. The Canada RPM figure is historical, from an educational blog. It is applied without noting AI Overview dilution after 2024.",
+    "correction": "Treat KO pages as having an unknown revenue contribution, ESTIMATE ≈ 0 in the 90-day window. State that the RPM figure predates AI Overviews and comes from a different niche."
+   },
+   {
+    "claim": "Positive evidence: Episode Ninja earned USD 2,142/month on 258,845 visitors (2019)",
+    "problem": "The analog is from before the Sept 2023 HCU, before AI Overviews and before the 2026 scaled-content enforcement. It was not AI-built or on a 90-day timeline, and its age at those revenue levels is not stated. The dossier presents it as positive evidence without saying it is not comparable on timing.",
+    "correction": "Say that the site's age when it hit 258k visitors is 'not found', and that it is non-comparable on era and timeline. Keep it only as a yield (RPM) reference."
+   },
+   {
+    "claim": "ai_build = 8.5 and ai_operate = 7",
+    "problem": "The hidden blockers above lower both. Parameter data sits on blocked domains. Korean translations of legal and benefit terms have no verification path. AdSense re-reviews, appeals, the CMP choice and the Journey application are human steps. Traffic acquisition, the step that decides revenue, cannot be automated beyond SEO. Reading the Search Console, Bing and AdSense APIs from Routines is not verified under the egress policy; GitHub Actions is a probable but unverified workaround.",
+    "correction": "ai_build 8.0; ai_operate 6.0."
+   },
+   {
+    "claim": "low_risk = 5",
+    "problem": "This is broadly fair, but the dossier underweights two risks. (1) Bot traffic, which HoldLens showed at thousands of IPs against about 12 humans, can trigger AdSense invalid-traffic deductions or account action tied to the owner's identity [prior knowledge, unverified, pre-2026-06]. (2) Wrong EI or CPP outputs aimed at financially stressed users (possibly including the owner's own community) are a real consumer-harm risk.",
+    "correction": "Keep 5 or lower it to 4.5. Add bot filtering before ads go live, and a prominent line on every YMYL tool: 'verify with the official canada.ca estimator'."
+   },
+   {
+    "claim": "capital_light = 9.5 ('Under CAD 100 up front plus CAD 0–10/month, excluding a Claude plan')",
+    "problem": "Leaving out the Claude plan hides the only material recurring cost. Routines are the plan's whole operating model, so the plan is a required input, not an optional one.",
+    "correction": "capital_light 8.5 if the plan is already paid for other reasons; 7.5 if it has to be bought for this project (ESTIMATE CAD 27–275/month at 0.73)."
+   }
+  ],
+  "unlabelled_prior_knowledge": [
+   "'ChatGPT search reportedly tracks Bing's top results' has no source and no match in evidence-corpus.md.",
+   "'HoldLens was flagged partly for YMYL issues' has no source in the facts list or corpus.",
+   "'Cloudflare Registrar ... .ca support not confirmed' is correctly flagged. But the domain price of 'CAD 15–25/year' appears in money_needed_cad without restating that a .ca price is 'not found'.",
+   "'Rejection for Low value content is common ... repeated rejections deactivate the review button': the 'for a period' duration is unsourced beyond one secondary note.",
+   "'Paid ads sent to ad-monetized pages rarely pay back' is tagged. It is fine but carries weight in the argument.",
+   "'AdSense Management API' existence is tagged, but the plan relies on it for automated reporting without verifying that the API is reachable from Routines.",
+   "The Ahrefs page-level statistics (96.55%, 1.74%) are applied as site-level base rates without saying so; this is an interpretive leap, not a sourced claim.",
+   "'Finance is a higher-RPM niche: USD 15–40 per 1,000 sessions' is applied to AdSense on a new site. The source describes premium-network session RPM, so the application to this case is unsourced.",
+   "'Google itself answers many simple calculations' and 'canada.ca and large brands serve these queries' are tagged. But the existence of official canada.ca EI and payroll (PDOC) estimators, which compete directly with the best variant, is not stated [prior knowledge, unverified, pre-2026-06]."
+  ],
+  "math_check": "I re-checked the arithmetic. Most of it is correct:\n- CAD 5,000 × 0.73 = USD 3,650.\n- 3,700/5 × 1,000 = 740,000 sessions (/30 = 24,667 a day). 3,700/8.28 = 446,860 (14,895 a day). 3,700/16 = 231,250 (7,708 a day). 3,700/30 = 123,333 (4,111 a day).\n- Episode Ninja: 2,142.19/258,845 × 1,000 = 8.276. Blended model: 1,392/87,000 × 1,000 = 16.0.\n- Affiliate: 0.03 × 120 = 3.60; 1,000 × 0.0002 × 3.60 = CAD 0.72; 5,000/0.72 × 1,000 = 6.94M. Buying-guide case: 1,000 × 0.10 × 0.05 = 5 sales × 3.60 = CAD 18; 5,000/18 × 1,000 = 277,778.\n- API cost: 300 × 6,000 = 1.8M input and 300 × 2,500 = 0.75M output tokens. Sonnet 5: 3.60 + 7.50 = USD 11.10. Opus 5: 9.00 + 18.75 = USD 27.75.\n- Month 3: 500–3,000 × 5–16/1,000 = USD 2.50–48. 3,700/48 = 77 and 3,700/2.5 = 1,480, so '1/75–1/1,500' holds. USD 48/0.73 = CAD 65.8, matching 'CAD 0–65'. Episode Ninja multiple: 3,700/2,142 = 1.73×.\n- One-time owner hours sum to 7.5 h, which includes optional items.\n\nErrors and inconsistencies:\n(a) The summary's '50–1,000×' should be about 77–1,480×.\n(b) The costs are stated as USD 25–50/month in one place and up to about USD 207/month in another.\n(c) The '95%+ margin' is false at the modelled revenue. With the Claude plan charged: best case USD 48 − 26.50 = +21.50, worst case 2.50 − 26.50 = −24.\n(d) The revenue-per-1,000 table mixes page RPM, session RPM and per-unique-visitor yields.\n(e) p5k_90d = 0.5 (≈5% on a 0–10 scale) contradicts the stated 'under 1%'.\n(f) The month-3 session range sits 3.3–20× above the best cited analog (150 sessions/30 days) with no justification.\n\nESTIMATE, re-anchored to the analogs: 20–300 human sessions at month 3 × USD 0–16/1,000 = USD 0–4.80/month, about 0.13% of target at best (4.80/3,700). Cash reaching the bank inside the 2–3 month window: about CAD 0, because of the USD 100 payout threshold.",
+  "adjusted_scores": {
+   "p5k_90d": 0.1,
+   "owner_light": 7.5,
+   "capital_light": 8.5,
+   "ai_build": 8,
+   "ai_operate": 6,
+   "low_risk": 5
+  },
+  "verdict": "The dossier's negative conclusion is correct, and on the evidence it is still too generous. It is unusually well sourced, and most of the arithmetic checks out. Its flaws all lean optimistic, which strengthens the verdict to ELIMINATE this as the income plan.\n\n1. The month-3 traffic estimate of 500–3,000 sessions sits 3–20× above every AI-built analog it cites, with no reason given. Re-anchored to those analogs, month-3 revenue is USD 0–5.\n2. The p5k score of 0.5 contradicts its own 'under 1%'. It should be 0.1 or lower.\n3. The '95%+ margin' ignores the Claude plan that the Routines need. Net profit is negative through month 3 and likely month 12.\n4. There are hidden operational blockers. Yearly and monthly parameters (YMPE, EI max insurable earnings, EI regional rates) live on canada.ca, which this environment's egress blocks, so the 'AI updates statutes automatically' claim fails for the parameters that matter. A consent layer (CMP; Quebec Law 25 before the FR version) is also missing.\n5. Owner labour is understated for a Korean-speaking owner of unknown English level. Setting up the Google Cloud service account, AdSense identity and PIN verification, approving English legal text, 'spot-checking' benefit calculators they may not understand, and answering the Contact and privacy inbox add up to about 9–12 h one-time and 1–1.5 h/week. The owner also carries the Competition Act liability for AI-computed YMYL outputs they cannot really audit.\n6. The best variant competes head-on with official canada.ca estimators and large finance brands on YMYL queries, where Google is strictest, and Korean-language search volume is not found.\n\nAdjusted scores: p5k_90d 0.1, owner_light 7.5, capital_light 8.5, ai_build 8, ai_operate 6, low_risk 5.\n\nRecommendation: do not count this toward the Dec 2026–Jan 2027 CAD 5k target, whose expected cash is about CAD 0. At most, run it as a free side asset over 12–36 months with the month-3 and month-6 kill switches, and only if the Claude plan is already paid for another reason."
+ }
+}

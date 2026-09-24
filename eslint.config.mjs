@@ -16,6 +16,8 @@ const eslintConfig = defineConfig([
     "archive/**",
     // Google Apps Script source (runs on Google, not in Node).
     "integrations/**",
+    // Separate product package with its own tooling (products/clb).
+    "products/**",
   ]),
 ]);
 

@@ -1,0 +1,293 @@
+{
+ "dossier": {
+  "candidate": "Messaging bots with paid tiers (Telegram Stars, Discord Premium Apps, KakaoTalk channel chatbots)",
+  "summary": "VERDICT: Of the three platforms, only Telegram can take native payments for a Canada-resident owner today. Build it only as a cheap side bet. Averaging CAD 5,000/month by Dec 2026–Jan 2027 is a long shot (ESTIMATE: 5% or less).\n\nPLATFORM BY PLATFORM\n(1) Discord: blocked for Canada. The official docs (discord-api-docs HEAD 0eb8102, 2026-09-22) list payout setup only for teams \"Based in the United States, European Union, or United Kingdom\". For everyone else they say: \"Premium Apps is not currently available outside of these regions.\" Even where it is available, you need a verified app, an 18+ team owner, 2FA, a ToS, a privacy policy and Stripe payouts, and payouts start only after the first $100 and a review. A Discord bot could still charge through an outside Stripe checkout, but whether the Developer Policy allows that was not found.\n(2) KakaoTalk: no native paid tier. A May 2026 Korean feasibility study (secondary) concludes that a Kakao chatbot brings in no direct revenue (\"직접 매출 X\"). It is useful only for acquisition and retention, and payment has to happen on an outside web page. The same study says business-channel verification needs Korean business credentials (a Kakao e-certificate for a sole proprietor, or a business registration certificate for a corporation), takes 3–5 business days, and bots must answer within 5 seconds. Korean payment options (KakaoPay, Toss) for a Canada-resident owner were not found. [prior knowledge, unverified, pre-2026-06] Kakao and OpenAI partnered to put ChatGPT inside KakaoTalk, so a generic Korean AI \"상담\" (consultation) bot would compete with a free built-in assistant.\n(3) Telegram: technically ready, commercially hard. Official docs (third-party GitHub mirrors) say:\n- Digital goods must be sold for Telegram Stars (currency XTR). Other currencies are not allowed.\n- Users buy Stars through Apple/Google in-app purchase or @PremiumBot.\n- Bots withdraw Stars as Toncoin (TON crypto) through Fragment. The owner's 2FA password is required. Minimum 1,000 Stars, maximum 25M.\n- The example config shows a withdrawal value of $13.00 USD per 1,000 Stars.\n- Subscriptions last 30 days, up to 10,000 Stars.\n- Chargebacks are deducted from the bot's balance.\n- Affiliate programs and ads bought with Stars at a 30% discount give the AI distribution levers it can run without the owner.\nSecondary sources add a 21-day hold before withdrawal.\n\nWHY $5K IS UNLIKELY\nBuilding is not the constraint: one boilerplate advertises a \"Monetized AI Telegram bot in 15 minutes\", and GitHub has 1,950 'chatgpt telegram bot' repositories. The limits are:\n- getting found (Telegram has no organic store for plain chat bots, and the Mini App Store features only apps Telegram picks);\n- competition from free AI;\n- base rates: the median Stripe-verified indie product earns $148/month in year 0 (cand_saas).\n\nESTIMATE: CAD 5k net needs about 575 paying groups at 750 Stars/month, which means roughly 11k–19k active groups.\n\nREALISTIC MONTH-3 REVENUE (ESTIMATE)\n- Typical case: CAD 0–200/month.\n- Good case: CAD 500–1,500/month.\n- Cash lags sales by at least 3–4 weeks and arrives as crypto, which then has to be converted to CAD.",
+  "best_variant": "A Telegram group-assistant bot plus a Mini App, sold per group for Telegram Stars.\n\nWHAT IT DOES\n- On-demand \"catch-up\" summaries of busy groups.\n- Automatic translation in multilingual groups (KO/EN/ES/PT/RU/ID…).\n- Light anti-spam.\n\nWHY THIS VARIANT\n- It is Telegram-native value that a user cannot get by opening the free ChatGPT app.\n- One payer (the group admin) pays for value that many members receive.\n- Every install shows the bot to every group member, and each summary carries a \"summary by @bot\" footer, so it spreads without owner work.\n\nPRICING\n- Free: 1 weekly summary for any group.\n- Group Pro: 750 Stars/month (30-day Stars subscription). The developer receives about USD 9.75. The buyer pays about USD 15 through @PremiumBot, or about USD 18 through the App Store (secondary price data).\n- Personal tier: 250 Stars/month.\n- Defaults to Claude Haiku 4.5. Sonnet 5 only for long summaries on the Pro tier.\n\nDISTRIBUTION\n- A Telegram affiliate program at about 20% commission, so channel owners promote it for Stars.\n- Earned Stars recycled into Telegram Ads at the official 30% discount.\n- SEO landing pages that link to t.me/…?startgroup.\n\nSECONDARY VARIANT (lower API cost)\nA private Telegram channel of AI-generated premium content sold through a Stars subscription invite link. The content is generated once and sold to many, so API cost per subscriber is close to zero. It has the same discovery problem and adds content-quality and copyright risk.\n\nAVOID\n- Discord monetization while Canada is excluded.\n- Kakao-based paid bots.\n- Any \"AI consultation\" on immigration or legal matters. IRPA s.91 bans paid immigration advice by unauthorized people, with fines up to $200,000 and/or 2 years.",
+  "unit_economics": "ESTIMATE, best variant (Group Pro at 750 Stars/month). USD→CAD 1.37 [prior knowledge, unverified, pre-2026-06].\n\nREVENUE PER PAID GROUP\n- ESTIMATE: 750 Stars × $0.013 = USD 9.75/month.\n- Basis: the example config shows stars_usd_withdraw_rate_x1000 = 1300 (official doc mirror), and a secondary source says USD 0.013/Star.\n\nCLAUDE API COST PER PAID GROUP (Haiku 4.5: $1 per 1M input tokens, $5 per 1M output)\n- Summaries: 60/month × (9,000 in × $1/1M = $0.009, plus 500 out × $5/1M = $0.0025) = 60 × $0.0115 = USD 0.69.\n- Translation: 1,500 messages × (250 in × $1/1M = $0.00025, plus 100 out × $5/1M = $0.0005) = 1,500 × $0.00075 = USD 1.13.\n- Total API: USD 1.82.\n\nOTHER COSTS PER PAID GROUP\n- Free-tier subsidy: about 19 free groups per paying group (5% conversion) × 4 weekly summaries × $0.0045 = USD 0.34. Rounded up to USD 0.50.\n- Affiliate commission: 20% on the half of revenue assumed to come from referrals = 10% × 9.75 = USD 0.98.\n- Hosting: Cloudflare Workers Paid is USD 5/month in total (cross_tooling), so close to zero per group.\n\nNET PER PAID GROUP\n- 9.75 − 1.82 − 0.50 − 0.98 = USD 6.45.\n- × 1.37 = CAD 8.84.\n- × 0.985 (assumed about 1.5% TON→CAD spread and fees [prior knowledge, unverified]) = about CAD 8.71.\n- Margin ≈ 6.45 / 9.75 = 66% of the developer's Stars value.\n\nCUSTOMERS NEEDED FOR CAD 5,000/MONTH NET\n- 5,000 / 8.71 ≈ 575 paying groups.\n- At 5% free-to-paid: 575 / 0.05 ≈ 11,500 active groups.\n- At 3%: about 19,000 active groups.\n- The only conversion data found are 0.8–3% for browser extensions (cand_saas), so 5% is optimistic.\n\nCOMPARISON: GENERIC PERSONAL AI CHAT BOT AT 500 STARS\n- Revenue: USD 6.50.\n- Paid user: 400 messages × about $0.0035 = USD 1.40. Per message: 1,500 cached × $0.10/1M + 1,500 × $1/1M + 350 out × $5/1M ≈ $0.0034.\n- Free-user subsidy: 32 free users × 12 messages × $0.0035 = USD 1.34.\n- Net = USD 3.76 ≈ CAD 5.07 → about 990 paying users (about 33,000 monthly active users at 3%). This is worse, because free users cost money and the product competes with free ChatGPT, Claude and Gemini apps.\n\nNOT INCLUDED\n- Apple/Google chargebacks, which Telegram deducts from the bot's balance.\n- Refunds.\n- Income tax.\n- GST/HST once past the CAD 30k small-supplier threshold.",
+  "distribution_plan": "HONEST BASELINE: distribution, not building, is the constraint. Telegram has no organic store for plain chat bots. The Mini App Store \"highlights\" only apps Telegram selects, and it requires a Main Mini App, media previews and Stars payments.\n\nLEVERS THE AI CAN RUN WITHOUT THE OWNER\n(1) Growth inside groups. Each install exposes the bot to every member: summary footers, a /addme deep link (t.me/bot?startgroup), and a free weekly summary that shows off the product.\n(2) Telegram affiliate program: third-party channels and users earn a commission per mille on referred purchases. The owner creates it once in the Telegram app. Its availability flag (starref_program_allowed) appears as false in the example config, so it may not be available to every account.\n(3) Telegram Ads paid with earned Stars at the official 30% discount. This only compounds after revenue exists. The minimum ad budget was not found.\n(4) Programmatic SEO landing pages on Cloudflare Pages, e.g. \"summarize Telegram group\", \"translate Telegram group Korean English\", each ending in a deep link. Expect SEO to take months [prior knowledge, unverified, pre-2026-06].\n(5) Pull requests to GitHub 'awesome-telegram-bots' style lists, and submissions to bot directories.\n\nWHAT IS EXCLUDED\nThe owner posting on personal social accounts; the owner-time budget does not allow it. Cold DMs are also excluded, because promotional instant messages to Canadians fall under CASL (s.1(1) covers an 'instant messaging account').\n\nOWNER HOURS\nAbout 1 h/week after setup: reading the KPI report, approving spend, monthly withdrawal, bookkeeping.",
+  "timeline": "ESTIMATE:\n- Build: 7–14 days (about Sep 28 – Oct 11, 2026). The AI writes the Worker, Stars invoices and subscriptions, the entitlement database, Claude integration, the Mini App, legal pages and a landing page. The owner does the one-time setup in parallel.\n- Launch: about Oct 12–15.\n- First Stars: possible in the first 1–2 weeks after launch, if any groups install and upgrade. Conversion data specific to Telegram: not found.\n- First withdrawable cash: secondary sources say Stars can be withdrawn 21 days after receipt, and withdrawals need at least 1,000 Stars (official), which is about USD 13. Stars earned in mid-October are therefore withdrawable in early to mid November. Then Fragment → TON wallet → exchange → CAD bank adds days (exact times not found). First CAD likely arrives mid-to-late November 2026.\n- CAD 1k/month: no evidence-based date. The base-rate median time to USD 1K MRR is 8 months among survivor products (cand_saas).\n- CAD 5k/month: needs about 575 paying groups by December–January. ESTIMATE of the probability: 5% or less. Basis: median year-0 MRR of USD 148 across 5,079 Stripe-verified products, with 0.9% \"breaking out\" (cand_saas); a saturated category; and no owner audience.\n- Month-3 (December) revenue ESTIMATE: typical CAD 0–200; good case CAD 500–1,500. Cash from December sales lands in January because of the 21-day hold.",
+  "owner_one_time_tasks": [
+   "Set a Telegram account 2FA password. Withdrawals require it (official doc: getStarsRevenueWithdrawalUrl needs the 2FA password). About 15 min.",
+   "In @BotFather: create the bot, pick its username, enable the Main Mini App, and paste the token into Cloudflare and GitHub secrets. The AI cannot do this, because it needs the owner's Telegram account. About 30 min.",
+   "Create an Anthropic Console account, add a billing card, generate an API key and set a hard monthly spend limit (e.g., USD 100). About 30 min.",
+   "Create a Cloudflare account, subscribe to Workers Paid (USD 5/month) and create a scoped API token for GitHub Actions deploys. About 30 min.",
+   "Optional: buy a domain for the landing page and legal pages. About 15 min.",
+   "Approve the Terms of Service and privacy policy, which need the operator's name and a contact under PIPEDA. Choose a business name, or register one if not using the owner's own name. About 30–60 min.",
+   "Create a self-custody TON wallet and link it to Fragment, then do one small test withdrawal once the balance is at least 1,000 Stars. About 1 hour.",
+   "Open a KYC-verified crypto exchange account that can sell TON for CAD and withdraw to a Canadian bank. Whether TON is available on a Canada-registered exchange was not found; check before launch. 1–2 hours.",
+   "Create the Telegram affiliate program in the Telegram app (bot profile → Affiliate program) at about 20%, if the option is available to the account. About 15 min.",
+   "Optional: create a Telegram Ads account for spending earned Stars. About 1 hour.",
+   "One accountant consult on crypto-denominated income and on GST/HST where buyers' locations are unknown (Stars payments collect no buyer name, email or phone). About 1 hour."
+  ],
+  "owner_weekly_tasks": [
+   "Read the AI's weekly KPI and cost report, and approve or deny proposed spend or pricing changes (about 20–30 min).",
+   "Monthly: withdraw Stars to TON through Fragment with the 2FA password, sell TON for CAD, and log the CAD value on receipt for bookkeeping (about 30–45 min a month, or about 10 min a week averaged).",
+   "Anything that needs the owner's Telegram identity, such as BotFather profile changes or affiliate or ads settings (about 0–15 min).",
+   "Rarely: legal or abuse escalations the AI flags (e.g., a takedown request or harmful-content report). About 0–30 min.",
+   "Total target: about 1 h/week."
+  ],
+  "ai_build_tasks": [
+   "Build the bot backend as a Cloudflare Worker webhook, with state in D1 or KV: group and user registry, entitlement table, usage meters and hard per-group caps.",
+   "Build Stars payments: createInvoiceLink with currency XTR, an empty provider_token and subscription_period 2592000; handle pre_checkout within 10 seconds, SuccessfulPayment (is_recurring / is_first_recurring), BotSubscriptionUpdated, refundStarPayment and editUserStarSubscription; reconcile daily with getStarTransactions.",
+   "Integrate Claude: Haiku 4.5 by default with prompt caching on the system prompt, Sonnet 5 only for Pro long summaries, token budgeting, and a queue for large group summaries.",
+   "Build the group features: rolling message buffer (privacy-mode aware), /summary, per-language auto-translate, basic spam heuristics, and a 'summary by @bot' footer with a startgroup deep link.",
+   "Build the Mini App (Telegram WebApp) for settings and upgrades, plus media previews, so the bot qualifies to be considered for the Mini App Store.",
+   "Write the landing page and programmatic SEO pages on Cloudflare Pages; the Terms of Service; a PIPEDA-style privacy policy (data retention, deletion command); a CASL-compliant opt-in for any promotional broadcast.",
+   "Set up safety: content filters, data deletion on bot removal, rate limiting, and an abuse-report command.",
+   "Set up the metrics pipeline: a Worker endpoint plus a GitHub Actions cron that commits daily anonymized KPIs (installs, active groups, conversions, Stars, API spend) to the repo for Routines to analyze.",
+   "Write the CI/CD pipeline (GitHub Actions deploy with wrangler), tests, and a staging bot."
+  ],
+  "ai_recurring_tasks": [
+   "Daily Routine: read the KPI and cost files, check for errors or cost spikes, and adjust caps if API spend per paid group goes above USD 2.",
+   "Weekly Routine: write the owner report (revenue in Stars, estimated USD and CAD, conversion, churn, API cost, cash withdrawable next).",
+   "Run A/B tests of paywall copy, free-tier limits and price points (500 vs 750 vs 1,000 Stars). Ship the winners.",
+   "Ship small features and fixes from user feedback that the bot collects in its /feedback command.",
+   "Handle support automatically inside the bot; issue refunds by policy via refundStarPayment.",
+   "Add and refresh SEO landing pages; open pull requests to bot-directory lists on GitHub.",
+   "When the Stars balance allows, propose Telegram Ads campaigns (paid in Stars at the 30% discount) for owner approval.",
+   "Monthly: prepare a bookkeeping export (Stars in, withdrawals, USD/CAD values, API invoices) for the owner and accountant."
+  ],
+  "money_needed_cad": "ESTIMATE for 3 months: CAD 160–700 without ads.\n\n- Claude API: USD 30–150/month early on ≈ CAD 41–205/month.\n- Cloudflare Workers Paid: USD 5/month ≈ CAD 7/month.\n- Domain: about CAD 15–25/year [prior knowledge, unverified, pre-2026-06].\n- Low end: 3 × (41 + 7) + 20 ≈ CAD 164.\n- High end: 3 × (205 + 7) + 25 ≈ CAD 661.\n- Optional Telegram Ads test: CAD 0–500 (the minimum ad budget was not found). Better funded later from earned Stars at the 30% discount.\n- One accountant consult: about CAD 150–300 [prior knowledge, unverified].\n- No inventory and no platform listing fee. Telegram bots are free to create.",
+  "facts": [
+   {
+    "fact": "Discord's official docs (discord-api-docs HEAD 0eb8102, committed 2026-09-22) give payout setup steps only 'If You are Based in the United States, European Union, or United Kingdom'. For all other locations they state: 'Premium Apps is not currently available outside of these regions. These features will be made available to more regions soon.'",
+    "source": "https://github.com/discord/discord-api-docs/blob/main/developers/monetization/enabling-monetization.mdx"
+   },
+   {
+    "fact": "Discord monetization eligibility checklist: the app must be verified and owned by a developer team; the team owner must be at least 18; the team needs verified emails and 2FA; the app must use slash commands (or have the Message Content intent); it needs ToS and privacy policy links; payouts need a valid payment method; and the owner must agree to the Monetization Terms and Developer Policy. Payouts run through Stripe, 'Once your app has made its first $100 it will become eligible for payout', and a review follows.",
+    "source": "https://github.com/discord/discord-api-docs/blob/main/developers/monetization/enabling-monetization.mdx"
+   },
+   {
+    "fact": "Discord Premium Apps offer monthly subscriptions (per user or per server) and one-time purchases through Discord's built-in checkout. 'Discord handles billing, fraud detection, and receipts', and monetized apps get a store page in the App Directory. The revenue-share percentage is not stated anywhere in the docs repo.",
+    "source": "https://github.com/discord/discord-api-docs/blob/main/developers/platform/app-monetization.mdx"
+   },
+   {
+    "fact": "Discord changelog, 2026-09-22 (age assurance rollout): 'Commerce: Parent-set spending limits may prevent some purchases.'",
+    "source": "https://github.com/discord/discord-api-docs/blob/main/developers/change-log.mdx"
+   },
+   {
+    "fact": "Telegram bot docs (third-party GitHub mirror of core.telegram.org/bots/features, mirror commit 2026-01-28): 'If your bot or mini app sells digital goods and services, be sure to carry out the payment in Telegram Stars by specifying XTR as currency... Telegram does not support the sale of digital goods and services using other currencies.' Users get Stars 'through in-app purchases via Apple and Google or via @PremiumBot'. Bots can 'accept rewards in Toncoin'. Developers can get '50% of the revenue from ads that appear in the chat with their bot'.",
+    "source": "https://github.com/teamgram/tginternals/blob/main/bots/features.md"
+   },
+   {
+    "fact": "Same doc: 'More than 500 million out of Telegram's 950 million users interact with mini apps every month.' Featured Mini App Store apps are 'chosen based on how they enrich the Telegram ecosystem'. To improve the chances, the doc says to enable the Main Mini App, upload media demos and 'accept payments in Telegram Stars'.",
+    "source": "https://github.com/teamgram/tginternals/blob/main/bots/features.md"
+   },
+   {
+    "fact": "Telegram Stars API doc (mirror): the withdrawal method returns a Fragment URL 'where the user will be able to specify and submit the address of the TON wallet where the funds will be sent'. It requires the account's 2FA password and a balance of at least stars_revenue_withdrawal_min. 'By withdrawing one thousand stars, the user will receive the equivalent of stars_usd_withdraw_rate_x1000 US dollars.' Bot and channel owners can also pay for Telegram Ads with Stars 'at a special rate with a 30% discount'.",
+    "source": "https://github.com/teamgram/tginternals/blob/main/api/stars.md"
+   },
+   {
+    "fact": "Example client config in Telegram's config doc (mirror; snapshot date not stated): stars_usd_withdraw_rate_x1000 = 1300 (USD 13.00 per 1,000 Stars withdrawn), stars_usd_sell_rate_x1000 = 1410, stars_revenue_withdrawal_min = 1000, stars_revenue_withdrawal_max = 25000000, stars_subscription_amount_max = 10000, starref_max_commission_permille = 800, starref_program_allowed = false.",
+    "source": "https://github.com/teamgram/tginternals/blob/main/api/config.md"
+   },
+   {
+    "fact": "Bot API spec (scraped from core.telegram.org, Bot API 10.3, dated August 24, 2026): createInvoiceLink.subscription_period 'must always be 2592000 (30 days)' and the currency must be XTR. The subscription price cannot exceed 10,000 Stars. need_name, need_phone_number and need_email are 'Ignored for payments in Telegram Stars'. StarTransaction: if a buyer charges back with Apple or Google, 'the refunded Stars will be deducted from the bot's balance'. AffiliateInfo.commission_per_mille = Stars paid to the affiliate per 1,000 Stars the bot receives.",
+    "source": "https://github.com/PaulSonOfLars/telegram-bot-api-spec/blob/main/api.json"
+   },
+   {
+    "fact": "Bot API changelog: Stars payments (currency XTR) were added May 28, 2024; bot paid subscriptions in Stars on November 17, 2024; affiliate-commission transaction types on December 4, 2024; the maximum paid-media price was raised to 25,000 Stars by December 31, 2025.",
+    "source": "https://github.com/teamgram/tginternals/blob/main/bots/api-changelog.md"
+   },
+   {
+    "fact": "Telegram affiliate programs doc (mirror): developers can open affiliate programs 'allowing content creators, other mini app developers and any Telegram user to promote it and earn commissions'. The commission and duration can only be raised after creation. All affiliate-program UI must be hidden when the starref_program_allowed config is false.",
+    "source": "https://github.com/teamgram/tginternals/blob/main/api/bots/referrals.md"
+   },
+   {
+    "fact": "SECONDARY: retail price is about USD 0.016/Star (varies by region and platform), and the bot creator's withdrawal value is about USD 0.013 'fixed by Telegram', 'determined at its sole discretion'. Withdrawal goes only through Fragment to TON, with a minimum of 1,000 Stars.",
+    "source": "https://github.com/POWERFULMOVES/PMOVES.AI/blob/main/research/telegram_bot_api_star_payments_xtr_reference.md"
+   },
+   {
+    "fact": "SECONDARY: Star withdrawal is '$0.013/Star via TON (Fragment), available 21 days after receiving'. Through @PremiumBot Stars cost '$0.02/Star'; the App Store and Google Play add about 30% (e.g., 100 Stars for $2.39 vs $2.00). A second secondary source also says Stars charge-back protection 'runs 21 days (Telegram rule)'.",
+    "source": "https://github.com/POWERFULMOVES/PMOVES.AI/blob/main/research/telegram_premium_research_2025_2026.md ; https://github.com/Open-Source-Studio/stars-cash-flow/blob/main/docs/pricing.md"
+   },
+   {
+    "fact": "SECONDARY (Korean feasibility study dated 2026-05-06): a KakaoTalk chatbot is a KakaoTalk Channel plus a Kakao i Open Builder bot calling an outside skill server. There is a 5-second response limit (longer answers need a callback, whose URL is valid 1 minute and usable once). Chatbot conversations have been free since 2022-09, and Event API pushes cost 15 KRW each. Business-channel verification uses a Kakao e-certificate for sole proprietors or a business registration certificate for corporations, with review taking 3–5 business days. Conclusion: '자체 수익화 모델 없음' (no built-in monetization); a Kakao chatbot is an acquisition and retention tool, not direct revenue.",
+    "source": "https://github.com/endurance-ai/ai-server/blob/main/docs/research/26-05-06-kakao-chatbot-feasibility.md"
+   },
+   {
+    "fact": "SECONDARY: a Kakao generative-AI chatbot needs an 'AI 챗봇 전환 심사' (AI chatbot conversion review) that takes 2–3 business days and requires public ToS and privacy policy URLs. Korean business registration (사업자등록) is 'strongly recommended' because it raises approval odds and prepares for paid features. Another project notes that without business verification and a Kakao Developers app link, the user identifier (appUserId) is not passed to the bot.",
+    "source": "https://github.com/jungwoo-ahn/sensei-bot-kakao/blob/main/README.md ; https://github.com/Woongi9/numbers_baseball/blob/main/PLAN.md"
+   },
+   {
+    "fact": "Saturation signal: a GitHub repository search for 'chatgpt telegram bot' returns 1,950 repositories. father-bot/chatgpt_telegram_bot has 5,533 stars and 1,916 forks. A July 2026 template sells itself as 'Monetized AI Telegram bot in 15 minutes: aiogram 3, Telegram Stars payments, subscription tiers, referrals'.",
+    "source": "https://github.com/father-bot/chatgpt_telegram_bot ; https://github.com/AndreySukhanov/summarix-ai (GitHub repository search run 2026-09-24)"
+   },
+   {
+    "fact": "Base rates (from the repo's SaaS dossier): across 5,079 Stripe-verified products, median MRR is about $148/month in year 0 and 0.9% are 'breaking out'. Among 28 survivor products, the median time to $1K MRR was 8 months. Browser-extension free-to-paid conversion is about 0.8–3%.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+   },
+   {
+    "fact": "Claude API prices per 1M tokens (official skill docs cached 2026-06-24, as provided in the task): Haiku 4.5 $1 input / $5 output; Sonnet 5 $2 / $10; Opus 5 $5 / $25. Prompt-cache reads cost about 0.1× the input price.",
+    "source": "task brief (official Claude API skill docs, cached 2026-06-24)"
+   },
+   {
+    "fact": "CASL: 'electronic address' includes an 'instant messaging account', and sending a commercial electronic message needs consent plus sender identification and an unsubscribe. The maximum penalty is $1,000,000 for an individual. This applies to promotional broadcasts from a Canada-run bot.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_compliance.json (citing https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-1.6.xml)"
+   },
+   {
+    "fact": "GST/HST: the small-supplier threshold is $30,000 in taxable supplies over four calendar quarters (ETA s.148). ETA Schedule VI Part V s.7 zero-rates a service supplied to a non-resident person, but not one made to an individual who is in Canada when in contact with the supplier, and not 'an advisory, consulting or professional service'. s.10.1 zero-rates intangible personal property supplied to non-residents, but not to an individual unless the individual is outside Canada.",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml"
+   },
+   {
+    "fact": "IRPA s.91(1): no person shall knowingly 'represent or advise a person for consideration — or offer to do so' in connection with an application under the Act, unless authorized (lawyer, paralegal, notary, or licensed consultant). s.91(9) penalties: on indictment, a fine up to $200,000 and/or up to 2 years; on summary conviction, up to $40,000 and/or 6 months.",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/I-2.5.xml"
+   },
+   {
+    "fact": "Cloudflare Workers Paid costs USD 5/month and includes 10M requests; the free tier allows 100,000 requests/day (official Cloudflare docs repo).",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_tooling.json (citing https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/workers/platform/pricing.mdx)"
+   },
+   {
+    "fact": "The 2021 Census counted 218,140 Korean Canadians (search-result summary; the StatCan page could not be opened). This is a small home market for a Korean-language paid bot.",
+    "source": "/home/user/canadian-tool-deals/business/research/evidence-corpus.md (S072)"
+   },
+   {
+    "fact": "[prior knowledge, unverified, pre-2026-06] Discord's Premium Apps split was reported as 70/30 at launch (2023). Telegram said it passed 1 billion monthly users in 2025. KakaoTalk dominates messaging in Korea and Telegram is a minority app there. Kakao and OpenAI announced a partnership in 2025 to bring ChatGPT inside KakaoTalk.",
+    "source": "[prior knowledge, unverified, pre-2026-06]"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Discord Premium Apps payouts are not available to teams based outside the US, EU or UK, so a Canada-based owner cannot use Discord's native paid tiers as of the 2026-09-22 docs.",
+    "source": "https://github.com/discord/discord-api-docs/blob/main/developers/monetization/enabling-monetization.mdx"
+   },
+   {
+    "fact": "Kakao chatbots have no built-in monetization, and business-channel verification assumes Korean business credentials. A Korean team concluded the chatbot is '직접 매출 X' (no direct revenue).",
+    "source": "https://github.com/endurance-ai/ai-server/blob/main/docs/research/26-05-06-kakao-chatbot-feasibility.md"
+   },
+   {
+    "fact": "Telegram pays out only as Toncoin through Fragment, at a rate Telegram sets 'at its sole discretion' (about USD 0.013/Star). Stars reportedly become withdrawable 21 days after receipt, and Apple/Google chargebacks are deducted from the bot's balance.",
+    "source": "https://github.com/POWERFULMOVES/PMOVES.AI/blob/main/research/telegram_bot_api_star_payments_xtr_reference.md ; https://github.com/PaulSonOfLars/telegram-bot-api-spec/blob/main/api.json"
+   },
+   {
+    "fact": "A practitioner building a Claude/LLM Telegram bot budgets a 35% 'Telegram withdrawal fee' (k1 = 0.35) on top of the $0.013 rate. This shows developers find the effective take uncertain, and it squeezes margins if accurate.",
+    "source": "https://github.com/trxxxxkov/chxxxxbot/blob/main/docs/phase-2.1-payment-system.md"
+   },
+   {
+    "fact": "The build barrier is close to zero: 1,950 'chatgpt telegram bot' repos and 15-minute monetized-bot templates mean many near-identical competitors.",
+    "source": "https://github.com/father-bot/chatgpt_telegram_bot ; https://github.com/AndreySukhanov/summarix-ai"
+   },
+   {
+    "fact": "Typical outcome for new indie software is about $148/month MRR in year 0, with 0.9% breaking out. More than 54% of products tracked in 2022 earned $0.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+   },
+   {
+    "fact": "The Mini App Store is curated: featured apps are 'chosen' by Telegram, and inclusion is not guaranteed. The affiliate-program UI is hidden when starref_program_allowed is false, and the example config shows false.",
+    "source": "https://github.com/teamgram/tginternals/blob/main/bots/features.md ; https://github.com/teamgram/tginternals/blob/main/api/config.md"
+   },
+   {
+    "fact": "Stars payments give the developer no buyer name, email or phone. That limits retention marketing and makes it hard to prove non-resident status for GST/HST zero-rating later.",
+    "source": "https://github.com/PaulSonOfLars/telegram-bot-api-spec/blob/main/api.json ; https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml"
+   },
+   {
+    "fact": "Free AI assistants built into messengers (ChatGPT in KakaoTalk, Meta AI in WhatsApp; a reported Telegram–xAI Grok deal in 2025 whose final status is unknown) cut willingness to pay for generic chatbot bots.",
+    "source": "[prior knowledge, unverified, pre-2026-06]"
+   },
+   {
+    "fact": "Discord will increasingly block some purchases through parent-set spending limits, part of the global age-assurance rollout.",
+    "source": "https://github.com/discord/discord-api-docs/blob/main/developers/change-log.mdx"
+   }
+  ],
+  "risks": [
+   "Distribution risk (the main one): no owner audience, no organic bot store, a crowded category. The likely outcome is a working product with few users.",
+   "Crypto payout risk: revenue arrives as TON at a rate Telegram sets, and TON's price can move between withdrawal and sale. Whether TON can be sold on a Canada-registered exchange was not found. Fragment's KYC requirements were not found.",
+   "Cash-timing risk: the reported 21-day hold plus a 1,000-Star minimum means month-3 sales turn into CAD only in month 4.",
+   "Chargeback and refund risk: Apple/Google chargebacks on Star purchases are deducted from the bot's balance after the product has been delivered.",
+   "Platform policy risk: Telegram can change the Stars rate, fees, the affiliate flag or bot rules. Digital goods cannot be sold for non-Stars currencies, so routing users to Stripe instead would breach the rules. Discord could open Canada later, but the timing is unknown.",
+   "API cost risk: heavy users or large groups can exceed plan revenue unless the AI enforces hard caps. A bug or abuse could run up Claude bills, so the owner must set an Anthropic spend limit.",
+   "Tax and compliance risk: crypto-denominated business income must be valued in CAD [prior knowledge, unverified]. GST/HST registration applies past CAD 30k, and buyers' locations are unknown. PIPEDA applies to stored chat content. CASL applies to promotional broadcasts.",
+   "Content and legal liability: group message processing is sensitive data. AI summaries or translations can be wrong. Never offer paid immigration, legal, medical or financial 'consultation' (IRPA s.91 penalties up to $200,000 and/or 2 years).",
+   "Reputation risk: Telegram hosts scam and spam ecosystems, and affiliate promoters may use spammy tactics that get the bot reported or restricted.",
+   "Evidence risk: Telegram documentation here comes from third-party GitHub mirrors (the tginternals mirror is dated 2026-01-28). The 21-day hold and USD 0.013 rate rest partly on secondary sources, and Telegram-specific conversion rates were not found."
+  ],
+  "scores": {
+   "p5k_90d": 1,
+   "owner_light": 8,
+   "capital_light": 8.5,
+   "ai_build": 8,
+   "ai_operate": 6.5,
+   "low_risk": 4.5
+  },
+  "score_rationale": "p5k_90d = 1: CAD 5k net needs about 575 paying groups (or about 990 personal subscribers) within about 10 weeks of launch, with no audience, in a saturated category. Base rates are a median of $148 MRR in year 0 and 0.9% breaking out, and the 21-day hold pushes cash later still. Discord (Canada excluded) and Kakao (no native payments, Korean business credentials) remove two of the three platforms.\n\nowner_light = 8: after about 6–9 hours of setup (BotFather, API keys, TON wallet, exchange KYC, legal pages), recurring owner work is about 1 h/week, mostly the monthly withdrawal that needs the owner's 2FA password.\n\ncapital_light = 8.5: about CAD 160–700 over 3 months; no inventory and no listing fees.\n\nai_build = 8: the Bot API, Stars subscriptions, Mini App, Cloudflare deploy and Claude integration are all code the AI can write and ship. Only bot creation and secrets need the owner.\n\nai_operate = 6.5: the bot runs serverless, and the AI can handle support, refunds, A/B tests and SEO through Routines and Actions. It cannot solve distribution alone, cannot withdraw funds, and needs owner approval for ad spend and affiliate setup.\n\nlow_risk = 4.5: financial downside is small, but revenue is crypto at a rate the platform sets, with chargeback clawbacks, heavy platform dependency, privacy and CASL duties, and ongoing GST/HST and crypto-tax work."
+ },
+ "verification": {
+  "problems": [
+   {
+    "claim": "Free-tier subsidy is 19 free groups × 4 weekly summaries × USD 0.0045 = USD 0.34, rounded to USD 0.50 per paid group.",
+    "problem": "This is inconsistent in two ways. (a) It uses 5% conversion, although the dossier itself calls 5% optimistic and makes 3% its base case. (b) A USD 0.0045 summary means about 2,000 input tokens, or roughly 50 short messages a week. But the paid-group model assumes 1,500 messages a month (about 375 a week), and a paid catch-up summary costs USD 0.0115. A weekly digest of an active group cannot cost less than half of one catch-up summary.",
+    "correction": "ESTIMATE: at 375 messages/week × about 40 tokens ≈ 15,000 input tokens, one weekly summary costs 15,000 × $1/1M + 500 × $5/1M = $0.015 + $0.0025 = $0.0175. At 3% conversion there are 1/0.03 − 1 ≈ 32 free groups per paid group, so the subsidy is 32 × 4 × $0.0175 = USD 2.24. Net = 9.75 − 1.82 − 2.24 − 0.98 = USD 4.71, × 1.37 × 0.985 = CAD 6.36. That needs 5,000 / 6.36 ≈ 786 paying groups, or 786 / 0.03 ≈ 26,200 active groups, not 575 and 11.5k–19k. Show a sensitivity row for this."
+   },
+   {
+    "claim": "Net per paid group is USD 6.45 → CAD 8.71, so about 575 paying groups are needed.",
+    "problem": "The dossier cites the chxxxxbot practitioner's 35% 'Telegram withdrawal commission' as counter-evidence but never feeds it into the unit economics. I checked the source: that project applies k1 = 0.35 on top of the $0.013/Star rate (100 Stars × $0.013 × (1 − 0.35 − 0.15) = $0.65 credited). This is one developer's conservative internal assumption, not an official fee, but it is unresolved counter-evidence. Also missing: Sonnet 5 calls for long Pro summaries (never costed), churn, and Apple/Google chargebacks.",
+    "correction": "ESTIMATE, stress case: revenue 9.75 × 0.65 = USD 6.34. Net = 6.34 − 1.82 − 2.24 − 0.98 = USD 1.30, × 1.37 × 0.985 = CAD 1.75, so 5,000 / 1.75 ≈ 2,860 paying groups. Show the net as a range of CAD 1.75–8.71 per group instead of a single point. Also say that 0.013 is Telegram's 'sole discretion' rate taken from an undated example config."
+   },
+   {
+    "claim": "CAD 5k needs about 575 paying groups by December–January.",
+    "problem": "This treats 575 as a stock of paying groups and ignores monthly churn on 30-day subscriptions. It also ignores cash timing: because of the 21-day hold, December's cash comes from November's sales. If the owner means 'averaging CAD 5k/month' across months 2–3, the cumulative requirement is higher still.",
+    "correction": "State that about 575–786 is the needed stock of active paying groups in December. ESTIMATE: at an assumed 10% monthly churn [prior knowledge, unverified, pre-2026-06, typical consumer subscription range], holding that stock needs about 58–79 new paying groups a month on top. To bank CAD 5k of withdrawable cash in December, those groups must already be paying in November, about 3–5 weeks after launch."
+   },
+   {
+    "claim": "The good case for month 3 is CAD 500–1,500/month.",
+    "problem": "CAD 1,500 ≈ USD 1,095. That is above the p75 (USD 800) of TrustMRR products of all ages (cand_saas.json) and about 7× the year-0 median of USD 148, yet here it is reached about 10 weeks after launch. At 3–5% conversion it needs 1,500 / 8.71 ≈ 172 paying groups, or 3,400–5,700 active groups, with no audience and no organic store. Calling that a 'good case' is optimistic.",
+    "correction": "Relabel it: typical case CAD 0–100; good case (roughly p75) CAD 200–500; top-decile case CAD 1,000–1,500. Say plainly that even these assume the Mini App Store or the affiliate channel works, and neither is guaranteed."
+   },
+   {
+    "claim": "Group translation is 'Telegram-native value that a user cannot get by opening the free ChatGPT app'.",
+    "problem": "This ignores Telegram's own built-in features. Telegram Premium includes whole-chat translation [prior knowledge, unverified, pre-2026-06]. Telegram may also have added native AI summaries or AI features [prior knowledge, unverified, pre-2026-06; status not found]. There is also the privacy-mode barrier: a bot sees all group messages only if privacy mode is turned off in BotFather or the bot is made a group admin [prior knowledge, unverified, pre-2026-06]. Many admins will refuse to let a third-party bot read everything and send it to a US AI provider.",
+    "correction": "Add Telegram-native translation and summaries as a direct competitor, and the admin-trust barrier to installing as an adoption-friction risk. Lower the assumed install-to-active and conversion rates."
+   },
+   {
+    "claim": "The owner's recurring work is about 1 h/week, and setup is about 6–9 h.",
+    "problem": "The owner's work is understated. (1) The owner's personal Telegram account owns the bot and holds the Stars balance, so it is a single point of failure (lost access or a ban means lost revenue and a lost product), and every BotFather, affiliate, ads and withdrawal action needs the owner. (2) Crypto bookkeeping: each TON receipt probably has to be valued in CAD as income and each sale is a disposition [prior knowledge, unverified, pre-2026-06]. (3) Whether TON can be sold on a Canada-registered exchange was not found. If it cannot, the owner must bridge through another token or use an unregistered offshore platform, which adds time and risk. (4) The recurring Claude subscription that runs the Routines is not counted at all.",
+    "correction": "Put setup at 8–10 h, including testing the exchange route before launch and turning off BotFather privacy mode. Put recurring work at 1–2 h/week, with month-end withdrawal and bookkeeping at about 1–1.5 h. Add a Claude plan line to the costs [prior knowledge, unverified, pre-2026-06: roughly USD 20–200/month depending on plan], or note that it is shared across candidates."
+   },
+   {
+    "claim": "Money needed is CAD 160–700 for 3 months.",
+    "problem": "The arithmetic is correct (3 × (41 + 7) + 20 = 164; 3 × (205 + 7) + 25 = 661), but it leaves out the Claude subscription that runs the Routines and the accountant consult (CAD 150–300), even though the accountant consult is listed as a task.",
+    "correction": "ESTIMATE: CAD 314–961, plus the Claude plan if it is not already paid for (164 + 150 = 314; 661 + 300 = 961). Telegram Ads stay optional."
+   },
+   {
+    "claim": "The affiliate program at about 20% and Telegram Ads at a 30% discount are levers the AI can run without the owner.",
+    "problem": "The example config shows starref_program_allowed = false, and the dossier's own evidence says the affiliate UI is hidden in that case. The Telegram Ads minimum budget was not found. Both levers need the owner's Telegram identity. Ads compound only after revenue exists, so they cannot drive growth before month 3.",
+    "correction": "Rate both levers as unconfirmed for this account. Distribution before month 3 then rests on in-group virality, directory PRs and SEO. The dossier itself says SEO takes months, and the others are unproven, so the AI's ability to operate the business should drop."
+   },
+   {
+    "claim": "The privacy and legal section covers PIPEDA and CASL.",
+    "problem": "It misses several points. Group members who never consented have their messages processed and sent to a US provider (Anthropic), which needs cross-border transfer disclosure under PIPEDA. Quebec Law 25 and GDPR may apply to Quebec or EU group members [prior knowledge, unverified, pre-2026-06]. Telegram's bot-developer terms for payments expect support and payment-support handling [prior knowledge, unverified, pre-2026-06]. The 'summary by @bot' promotional footer sent into group chats may itself count as a commercial electronic message under CASL. The GST/HST treatment is also unclear because the payer of record is Telegram, not the end user: not found.",
+    "correction": "Add these as risks. Make the AI build per-member opt-out, data minimisation (no storage of raw messages beyond the rolling buffer) and the required support commands, and flag them for the accountant or lawyer."
+   },
+   {
+    "claim": "Retail Star prices: the buyer pays about USD 15 via @PremiumBot (USD 0.02/Star), and another source gives about USD 0.016/Star.",
+    "problem": "The two secondary sources disagree (0.016 vs 0.02 per Star), and the dossier uses the higher one when presenting buyer price without flagging the conflict. This matters for willingness to pay but not for developer revenue.",
+    "correction": "Say: 'buyer pays about USD 12–15 (secondary sources conflict: 0.016–0.02/Star), or about USD 18 through the App Store'."
+   },
+   {
+    "claim": "The generic personal-bot comparison nets USD 3.76.",
+    "problem": "It leaves out the 10% affiliate share that the group variant includes, so the comparison is not like-for-like.",
+    "correction": "ESTIMATE: 6.50 − 1.40 − 1.34 − 0.65 = USD 3.11, × 1.37 × 0.985 = CAD 4.20, so 5,000 / 4.20 ≈ 1,190 paying users, or about 39,700 monthly active users at 3%."
+   }
+  ],
+  "unlabelled_prior_knowledge": [
+   "'Telegram has no organic store for plain chat bots' is presented as fact. Only the Mini App Store curation is sourced; the absence of any bot search or discovery surface is not. It should be tagged prior knowledge, or sourced.",
+   "'Expect SEO to take months' is tagged, which is fine. But the claim that summary footers and startgroup deep links 'spread without owner work' (a virality mechanism) is asserted as fact without any evidence.",
+   "'Telegram hosts scam and spam ecosystems, and affiliate promoters may use spammy tactics' is not tagged.",
+   "'crypto-denominated business income must be valued in CAD' is tagged [prior knowledge, unverified] but without the pre-2026-06 date.",
+   "The TON→CAD spread and fees of about 1.5% are tagged [prior knowledge, unverified] but without the date, and it is not stated that no Canadian exchange listing for TON was verified.",
+   "The 10-second limit for answering pre_checkout_query is stated as fact without a source; it is probably prior knowledge of the Bot API docs.",
+   "The Mini App Store requirements (Main Mini App, media previews) are sourced, but the claim that the Mini App 'qualifies to be considered' after the AI builds it implies a submission process that was not sourced.",
+   "Accountant consult CAD 150–300 is tagged [prior knowledge, unverified] but without the date.",
+   "The claim that the owner's 2FA password is needed every month is sourced, but that no Fragment KYC is needed is implied rather than stated: listed as not found under risks, yet the 1 h/week figure assumes there is none."
+  ],
+  "math_check": "Arithmetic I re-ran:\n- 750 × 0.013 = 9.75 ✓\n- Summaries: 60 × (0.009 + 0.0025) = 0.69 ✓\n- Translation: 1,500 × 0.00075 = 1.125 ✓\n- API total 1.815 ≈ 1.82 ✓\n- Free subsidy at 5%: 19 × 4 × 0.0045 = 0.342 ✓\n- Affiliate: 0.10 × 9.75 = 0.975 ✓\n- Net: 9.75 − 1.82 − 0.50 − 0.98 = 6.45 ✓; × 1.37 = 8.84; × 0.985 = 8.71 ✓\n- Groups needed: 5,000 / 8.71 = 574 ✓; 574 / 0.05 = 11,480 ✓; 574 / 0.03 = 19,130 ✓\n- Generic bot: 1,500 × 0.1/1M + 1,500 × 1/1M + 350 × 5/1M = 0.00015 + 0.0015 + 0.00175 = 0.0034 ✓; net 6.50 − 1.40 − 1.34 = 3.76 ✓; × 1.37 × 0.985 = 5.07 ✓; 5,000 / 5.07 = 986; / 0.03 ≈ 32.9k ✓\n- Money needed: 3 × (41 + 7) + 20 = 164 ✓; 3 × (205 + 7) + 25 = 661 ✓\n- Owner setup tasks: minimum ≈ 5.5 h, maximum ≈ 8.25 h, which matches the stated 6–9 h.\n\nSo the arithmetic is correct, but the inputs are inconsistent:\n- The free-tier summary cost ($0.0045) implies about 50 messages a week, against 375 a week for paid groups.\n- The subsidy uses 5% conversion while the dossier's base case is 3%.\n- The chxxxxbot 35% haircut is cited but never modelled.\n- Sonnet 5 usage, churn and chargebacks are left out.\n\nCorrected ESTIMATE range:\n- Net per paid group: CAD 6.36 (3% conversion, realistic free-summary cost) down to CAD 1.75 (with the 35% haircut).\n- Paying groups needed: about 786 to about 2,860.\n- Active groups needed at 3%: about 26k to about 95k.\n\nThe dossier's month-3 good case of CAD 1,500 is above the all-ages p75 on TrustMRR, so it is not a realistic good case for a product 10 weeks old.",
+  "adjusted_scores": {
+   "p5k_90d": 0.5,
+   "owner_light": 7,
+   "capital_light": 8,
+   "ai_build": 7.5,
+   "ai_operate": 5,
+   "low_risk": 4
+  },
+  "verdict": "The dossier is mostly honest and well sourced. It correctly rules out Discord (Canada is excluded, per the official docs of 2026-09-22) and Kakao (no native payments, and it needs Korean business credentials). Its arithmetic is correct. Its unit economics still lean optimistic:\n- The free-tier cost is understated, being inconsistent with the paid-group message volume.\n- It uses 5% conversion even though its own base case is 3%.\n- It does not model the practitioner's 35% withdrawal haircut, which it cites itself.\n- It ignores churn and Sonnet usage.\n\nCorrected, CAD 5k needs roughly 786–2,860 paying groups (26k–95k active groups) within about 10 weeks of launch, with no audience. The only growth levers the AI can run are in-group virality, SEO (slow) and an affiliate program that may be switched off for the account.\n\nTelegram's own translation and summary features and the admin-trust barrier to installing are further headwinds the dossier leaves out. Owner work is somewhat understated:\n- the owner's personal Telegram account is a single point of failure;\n- the TON→CAD exchange route is unverified;\n- crypto bookkeeping adds work;\n- the Claude subscription that runs the Routines is not costed.\n\nKeep the verdict: at most a cheap side bet. Probability of averaging CAD 5k/month by Dec 2026–Jan 2027 is ESTIMATE ≤3%. A realistic month-3 range is CAD 0–100 typical and 200–500 good. This fits the owner's hands-off requirement better than most candidates, but it does not meet the income target."
+ }
+}

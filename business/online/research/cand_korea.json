@@ -1,0 +1,349 @@
+{
+ "dossier": {
+  "candidate": "Korea-market AI products: Korean-language AI web or app products sold from Canada to consumers in South Korea (e.g., AI saju/운세, study helpers, 자기소개서 tools, AI consultation bots, games)",
+  "summary": "VERDICT: Selling from Canada is technically possible and legally workable without a Korean company. It is a weak bet for averaging CAD 5,000/month by Dec 2026–Jan 2027. ESTIMATE: about a 5–10% chance that any single month reaches C$5k, and a lower chance of a sustained average. It works only as a low-cost side experiment the AI runs with 2–3 owner hours a week, not as the income plan.\n\nWHAT IS SOLVED (verified from official or near-official GitHub sources):\n(1) Payments without a Korean entity. Stripe's own docs (mirrored on GitHub) say Stripe can \"accept wallets and all local cards in South Korea without a local entity\". Stripe's official OpenAPI spec (version 2026-09-30) includes Korean cards (22 issuers, e.g. Kookmin, Shinhan, Samsung, Hyundai, Toss Bank), Kakao Pay and Naver Pay. All three can be saved for subscriptions; PAYCO and Samsung Pay are single-use. Not verified: whether a Canada-based Stripe account is eligible for these methods, and what Stripe charges for them.\nPolar is a merchant of record (MoR: it legally sells for you and handles sales tax). Its official docs show Kakao Pay and Naver Pay in KRW, including recurring subscriptions, a Korean-language checkout, payouts to Canada, and Polar carrying the sales-tax liability.\nKorean payment gateways such as Toss Payments need a Korean business registration (secondary source plus prior knowledge). A Paddle page says Stripe Managed Payments (Stripe's MoR service) does not cover South Korea.\n(2) Korean VAT. The Korean VAT Act, art. 53-2 (verified from law text), applies to a foreign seller of 'electronic services' (software used online counts) to Korean consumers. The seller must complete a simplified foreign-business registration (간편사업자등록) online within 20 days of the first sale and file 10% VAT roughly quarterly. Late registration costs 1% of sales as a penalty. When an app store or an MoR collects the payment, that platform is treated as the supplier and handles the VAT instead.\n\nWHAT BREAKS THE BULL CASE:\n(a) The three 'known strong' categories hit platform rules. Polar's Acceptable Use Policy (effective March 25, 2026) prohibits fortune-telling and horoscopes, services aimed at minors, and medical or health advice. It puts resume, hiring and exam tools, AI content generators, chatbots, and spiritual or astrology services under closer review. Apple's review guideline 4.3(b) names fortune telling as a saturated category (secondary source).\n(b) The AI saju market is crowded and losing ground to free ChatGPT. AI readings sell for as little as 880–990원. 사주GPT reports 250,000 monthly active users. Market leader 점신 fell from 1,131,000 to 875,000 monthly active users (−22.6%) over two years. A 2026 Korean AI-saju startup's repo records zero external traffic after launch, and a user saying its ₩4,900 answer was 'what GPT would say'.\n(c) Distribution. Naver holds a 62.86% search share (2025 average). The AI cannot post on Naver, Instagram or KakaoTalk as the owner. The team's own paid-click cost estimates imply acquiring one buyer costs more than one sale earns.\n(d) Base rates. The median new product earns US$148/month in year 0. Reaching C$5k needs about 621 sales of ₩9,900 or about 1,350 subscribers at ₩4,900 each month.\n(e) Compliance. Korea's AI Basic Act (in force 2026-01-22, and applying to foreign sellers) requires telling users up front that the service uses generative AI and labelling its outputs, with fines up to ₩30M. The E-commerce Act (in force 2026-07-21) requires a free preview or trial if refunds are to be refused on digital content, consent before a free trial turns into a paid subscription, and no dark patterns.\n\nThe owner's other ideas are weaker. A game faces a saturated Korean market plus rating and loot-box probability-disclosure rules (prior knowledge). An 'AI 상담 봇' drifts toward health advice or AI-relationship services, which Polar prohibits.\n\nThe repo's evidence corpus contained no Korea-market data; this dossier is built from GitHub-hosted sources gathered today.",
+  "best_variant": "'2027 신년운세 + 궁합' AI web report for Koreans aged 20–39, timed to the Dec–Feb New Year / 설날 demand spike. The seasonal spike is secondary evidence; the date of 설날 2027 (around Feb 6) is [prior knowledge, unverified, pre-2026-06].\n\nFormat: a Korean mobile-first web app with no app-store dependency. A deterministic 만세력 calendar engine does the calculations, and Claude writes the prose.\n\nPricing:\n- Free preview (needed so refunds can be refused under E-commerce Act art. 17(6)).\n- ₩9,900 one-time full 2027 report.\n- ₩4,900/month add-on for monthly and daily readings, with consent collected before any trial converts to paid (art. 13(6), 30-day window).\n\nCheckout: Stripe Canada with kr_card, Kakao Pay and Naver Pay, plus Korean VAT simplified registration within 20 days of the first sale.\n\nHARD GATE before building payments: the owner must get written confirmation from Stripe that fortune/entertainment readings are allowed on their account and that a Canadian account can enable the Korean payment methods. Polar is ruled out for this category (its policy item #31 prohibits it). If Stripe says no, the fallback is Google Play in-app billing, where Google is the deemed VAT supplier and takes a 15% cut (secondary source), but that adds a 2–3 week delay.\n\nA compliant but worse-timed alternative is an AI 자소서/면접 coach sold through Polar at ₩9,900. Polar restricts this category but does not prohibit it. Its peak season (the fall 공채 hiring round) is ending, so Dec–Jan is off-season [prior knowledge, unverified, pre-2026-06].",
+  "unit_economics": "ESTIMATE (all currency conversions use [prior knowledge, unverified, pre-2026-06] rates: C$1 ≈ ₩1,000 and US$1 ≈ C$1.37).\n\nA) ₩9,900 one-time report, price includes VAT (Korea requires the total price to be shown up front):\n- Korean VAT: 9,900 × 10/110 = ₩900, leaving ₩9,000 (C$9.00).\n- Stripe fees on a Canadian account (secondary rates): 2.9% + 0.8% international + 2% currency conversion = 5.7%. 5.7% × C$9.90 = C$0.564, plus C$0.30 = C$0.864. Stripe's Korean-card-specific fee: not found.\n- Claude Sonnet 5 at $2/$10 per million tokens: 5k input tokens = $0.010, 5k output tokens = $0.050. Total $0.060 ≈ C$0.082.\n- Net per sale: 9.00 − 0.864 − 0.082 = C$8.05.\n- Sales needed for C$5,000 net: 5,000 / 8.05 = 621 per month (about 21 per day).\n- Visitors needed: at an assumed 2% conversion, 31,050 per month; at 1%, 62,100.\n- Paid ads: CPC of ₩300–600 (an unmeasured estimate from a Korean AI-saju team) at 2% conversion means ₩15,000–30,000 to acquire one buyer, against ₩8,054 net per sale, so a loss. At a ₩450 CPC, break-even needs 450 / 8,054 = 5.6% conversion.\n\nB) ₩4,900/month subscription:\n- VAT ₩445, leaving ₩4,455 (C$4.45).\n- Stripe: 0.057 × 4.90 + 0.30 = C$0.58.\n- Claude Haiku 4.5: 30 daily readings × (1k input × $1/M + 600 output × $5/M) = 30 × $0.004 = $0.12 ≈ C$0.16.\n- Net per subscriber: C$3.71.\n- Subscribers needed: 5,000 / 3.71 = 1,348.\n\nC) Blend: 300 reports × 8.05 = C$2,415, plus 700 subscribers × 3.71 = C$2,597, totals C$5,012.\n\nD) Polar route (non-fortune variant, ₩9,900):\n- Polar fee: (5% + 1.5% international) × C$9.90 = 0.64, plus US$0.50 ≈ C$0.69, so about C$1.33 in total.\n- Polar remits VAT of C$0.90.\n- Net: 9.90 − 0.90 − 1.33 − 0.08 = C$7.59, so 659 sales per month.\n\nFixed costs: Cloudflare Workers Paid US$5/month (official) ≈ C$6.85, plus a domain at about C$20/year [prior knowledge]. Total about C$9/month.\n\nGross margin before customer acquisition: about 81% on reports and about 76% on subscriptions. The binding constraint is acquisition, not cost.\n\nBase rate: the TrustMRR year-0 median is US$148 MRR. C$5,000 is about 34× that (5,000 / 148 = 33.8, currency ignored).",
+  "distribution_plan": "Channels, in the order the AI can run them without the owner:\n\n1) Google SEO. Google has a 28.7% search share in Korea (March 2026) and, per [prior knowledge, unverified, pre-2026-06], external sites rank there more easily than on Naver. The AI builds and refreshes substantive Korean pages: 12 띠 × 2027, 60 일주 × 2027, 궁합 combinations, and a free 만세력 calculator. It keeps the page count moderate because of Google's scaled-content policies [prior knowledge, unverified, pre-2026-06]. A Korean competitor, 운세위키, reportedly grows through dozens to hundreds of programmatic SEO landing pages (secondary).\n\n2) Naver. Naver has a 62.86% share (2025). The owner registers the site once with Naver Search Advisor, and the AI submits sitemaps. Each week the AI writes 2–3 Naver blog posts and the owner pastes them in (about 45 minutes). Automating posts risks account sanctions (secondary), and whether Naver's blog-write API still works is not verified.\n\n3) A share loop. The AI builds result cards with a KakaoTalk share button, which needs a Kakao Developers app registered by the owner once, plus a 'compare with a friend' 궁합 invite.\n\n4) Paid ads (optional). A capped Meta test of C$300–1,000, with the owner creating the ad account. By the numbers above it is likely unprofitable unless conversion is at least 5.6%. Google Ads reportedly restricts fortune-telling content (secondary).\n\n5) Instagram/Threads. The AI drafts 3 posts a week and the owner posts them (about 30 minutes).\n\nOwner time: ESTIMATE about 2–3 hours/week in Nov–Jan, falling to about 1 hour/week if the owner drops Naver and social posting and relies on Google SEO plus sharing alone (lower traffic).\n\nThere is no evidence any of these channels can deliver about 1,000 visitors a day within 60–90 days from zero audience. The one comparable 2026 Korean AI-saju launch found in the repo research recorded zero external traffic.",
+  "timeline": "ESTIMATE:\n- Build, Sep 28–Oct 23: the AI builds the 만세력 engine with tests, the Claude prompts, the Stripe checkout, the Korean legal pages, the AI notices and about 100 SEO pages. The owner finishes the Stripe category-approval gate in week 1. If Stripe refuses, switch to the Google Play build, adding 2–3 weeks: [prior knowledge, unverified, pre-2026-06] new personal Play accounts must run a closed test with about 12 testers for 14 days.\n- Launch: about Oct 26–Nov 2.\n- First revenue: possible within days of launch if any traffic arrives. Stripe's first payout comes 7–14 days after the first charge (cand_saas / INDEX), so first cash in the bank is mid-to-late November at the earliest.\n- Korean VAT: simplified registration is due within 20 days of the first sale (art. 53-2(1)). The first VAT filing is due within 25 days after the quarter ends (art. 48, via art. 53-2(4)), so around January 2027.\n- Peak window: about Dec 1, 2026 to Feb 10, 2027 (New Year and 설날). Seasonal spike: secondary source; dates: [prior knowledge, unverified, pre-2026-06].\n- C$5k/month: ESTIMATE ≤10% chance that one peak month (Dec or Jan) reaches it, and a much lower chance of averaging it. After February, seasonal demand should drop.\n- Basis: TrustMRR year-0 median of US$148; a comparable Korean AI-saju startup with zero external traffic; about 621 paid reports needed per month.",
+  "owner_one_time_tasks": [
+   "Confirm you are allowed to be self-employed in Canada, and decide which taxes apply: T2125, CPP, and GST/HST once sales pass $30k. See cross_compliance.json. (0.5h)",
+   "Get a free CRA Business Number. Korea's simplified VAT registration asks for the foreign business's registration country, address and number (Enforcement Decree art. 96-2(3)). (1h)",
+   "Open a Stripe Canada account with ID and a bank account. Enable Korean cards, Kakao Pay and Naver Pay. Email Stripe support for written confirmation that AI fortune/entertainment readings are allowed and that these methods work on a Canadian account. This is a GO/NO-GO gate. (1.5h)",
+   "After the first Korean sale, complete the Korean simplified VAT registration (간편사업자등록) online at NTS Hometax within 20 days. The AI prepares every answer. (1h)",
+   "Buy the domain through Cloudflare Registrar, open a Cloudflare account (Workers Paid, US$5/month), open an Anthropic Console account with billing, and store the API keys as GitHub/Cloudflare secrets. (1h)",
+   "Verify the site in Google Search Console and Naver Search Advisor using DNS records the AI provides. (0.5h)",
+   "Create the brand accounts the AI cannot create: a Naver ID and blog, Instagram/Threads, and a Kakao Developers app for the share button. Optionally create a Meta ad account with a capped C$300–1,000 budget. (1.5h)",
+   "Read and approve the Korean 이용약관, 개인정보처리방침 (including the cross-border transfer disclosure under Korea's privacy act, PIPA art. 28-8), the refund policy, and the AI-use notice required by the AI Basic Act art. 31. Also check the quality of the Korean copy. (1.5h)",
+   "Fallback only if Stripe refuses the category: open a Google Play developer account (US$25 plus ID check) and recruit closed-test users. (+1–2h)"
+  ],
+  "owner_weekly_tasks": [
+   "Paste 2–3 AI-written Naver blog posts and 3 Instagram/Threads posts the AI has drafted (about 1–1.25h). This is optional, but without it traffic depends on Google alone.",
+   "Read the AI's weekly dashboard (visits, conversion, revenue, API spend, refunds, disputes) and approve or reject its proposed changes (about 20 min).",
+   "Handle escalations: Stripe disputes and refund requests the AI flags, and the few support emails that need a human (about 20 min).",
+   "Quarterly, not weekly: file the Korean VAT return on Hometax using figures the AI prepares (about 1h per quarter), and set aside Canadian income tax and CPP."
+  ],
+  "ai_build_tasks": [
+   "A deterministic 만세력 engine: solar terms, true solar time options, and 야자시/조자시 settings. The AI unit-tests it against known reference charts, so the LLM writes prose only and never calculates.",
+   "Claude prompts and output schemas for the 2027 신년운세, 궁합 and monthly readings, with safety rules: no medical, financial or legal certainty; 'tendency' language; an entertainment disclaimer. Use prompt caching for the long system prompt.",
+   "A Next.js static front end on Cloudflare Pages plus a Worker API. Build it from the existing repo stack, reading node_modules/next/dist/docs first as AGENTS.md requires.",
+   "Stripe Checkout and Billing with kr_card, kakao_pay and naver_pay, KRW prices shown VAT-inclusive, webhooks, and magic-link email access instead of Korean ID verification. The free-to-paid flow collects consent within the 30-day window (E-commerce Act art. 13(6), Decree art. 20-2).",
+   "A free preview for every paid product, so refunds on digital content can lawfully be limited (art. 17(2)5 and 17(6); Decree art. 21-2).",
+   "Compliance UI: an up-front notice that the service uses generative AI and an 'AI-generated' label on outputs (AI Basic Act art. 31); a first-screen total price and cancellation as easy as sign-up (E-commerce Act art. 21-2); seller identity disclosures (art. 10 and 13); privacy consent and cross-border transfer disclosure (PIPA art. 28-8).",
+   "About 100 SEO pages (띠, 일주, 궁합 × 2027), a free 만세력 calculator, sitemaps, and structured data.",
+   "Share cards (OG images) and the KakaoTalk share button, plus a friend-invite 궁합 loop.",
+   "Analytics and a weekly-report generator: visits, funnel, revenue, API spend, disputes. Also a Korean VAT ledger export by quarter in KRW, using the conversion rule in Decree art. 96-2(7).",
+   "Korean support macros, a refund policy, and FAQ.",
+   "Google Play wrapper (TWA) and Play Billing integration, only if the Stripe gate fails."
+  ],
+  "ai_recurring_tasks": [
+   "Weekly: add or refresh 5–10 substantive SEO pages. Check index coverage in Search Console and Naver exports when the owner shares access.",
+   "Weekly: draft 2–3 Naver blog posts and 3 social posts, in Korean and on-brand, for the owner to paste.",
+   "Weekly: funnel and price experiments (e.g., ₩7,900 vs ₩9,900 vs a bundle) with auto-generated readouts. Pause any paid campaign where acquisition cost exceeds net revenue per sale.",
+   "Daily: monitor for errors, API spend caps, and Stripe webhook failures. Run automated quality checks on a sample of generated readings.",
+   "Draft replies to support emails within 24 hours in Korean. Process routine refunds under the published policy, if the owner allows API-key refunds. Otherwise queue them for the owner.",
+   "Quarterly: prepare the Korean VAT return figures (sales, VAT, exchange-rate conversion) and the Canadian T2125 bookkeeping summary.",
+   "Monthly: audit compliance copy against the current legalize-kr text of the VAT Act, E-commerce Act, AI Basic Act and PIPA. Watch competitor prices using whatever web access the Routine has."
+  ],
+  "money_needed_cad": "ESTIMATE: C$60–150 to launch without ads: domain about C$20/year [prior knowledge]; Cloudflare Workers US$5/month ≈ C$7/month (official); Claude API credits C$30–100 for building and testing plus early traffic. Stripe has no monthly fee. Add C$35 for Google Play (US$25) only in the fallback. An optional Meta ad test is capped at C$300–1,000. Total C$60–1,150. No inventory and no Korean entity costs. The owner also needs savings to live on, because the realistic outcome by January is C$0–500/month.",
+  "facts": [
+   {
+    "fact": "Stripe docs page 'Regions with special payment method requirements': 'South Korean payment methods: Accept wallets and all local cards in South Korea without a local entity.' (GitHub mirror of docs.stripe.com/payments/local-markets.md; which merchant countries are eligible is not stated)",
+    "source": "https://github.com/Eyre921/ofiicial-developer-docs/blob/main/dev-platforms/stripe/pages/payments/local-markets.md"
+   },
+   {
+    "fact": "Stripe's official OpenAPI spec (version 2026-09-30.endive) defines kr_card with 22 issuer brands (e.g., kookmin, shinhan, samsung, hyundai, lotte, kakaobank, tossbank, woori), plus kakao_pay, naver_pay, payco and samsung_pay. kr_card, kakao_pay and naver_pay support setup_future_usage=off_session and mandates, so they can be reused for subscriptions. PAYCO and Samsung Pay are described as 'single-use'.",
+    "source": "https://github.com/stripe/openapi/blob/master/openapi/spec3.json"
+   },
+   {
+    "fact": "Stripe's docs index lists guides titled 'Set up a subscription with local South Korean cards', '...with Kakao Pay' and '...with Naver Pay'.",
+    "source": "https://raw.githubusercontent.com/Service-Pool/llms-txt-generator/main/apps/ui/static/gists/llms-https___docs.stripe.com__clustered.txt"
+   },
+   {
+    "fact": "Stripe Tax table: KR, digital products, VAT. 'Your business location: Not supported; Your customer location: Supported', since 8/17/2023. For listed Asia-Pacific countries outside Stripe's home markets, Stripe calculates tax only for digital products sold by remote sellers.",
+    "source": "https://github.com/Eyre921/ofiicial-developer-docs/blob/main/dev-platforms/stripe/pages/tax/supported-countries.md"
+   },
+   {
+    "fact": "Polar docs: Stripe Tax automates collecting tax but not remitting it. 'Stripe Tax does not do this, i.e the merchant is liable to register, file and pay taxes'. Polar as MoR 'take[s] on the liability of international sales taxes'.",
+    "source": "https://github.com/polarsource/polar/blob/main/docs/merchant-of-record/introduction.mdx"
+   },
+   {
+    "fact": "Polar Checkout local payment methods: Kakao Pay (South Korea, KRW, one-time and recurring subscriptions), Naver Pay (South Korea, KRW, one-time and recurring), Samsung Pay (KRW, one-time). PayPal is not supported.",
+    "source": "https://github.com/polarsource/polar/blob/main/docs/features/checkout/payment-methods.mdx"
+   },
+   {
+    "fact": "Polar pays out via Stripe Connect Express to residents or businesses in listed countries, which include Canada. It accepts payments globally except from US-sanctioned countries.",
+    "source": "https://github.com/polarsource/polar/blob/main/docs/merchant-of-record/supported-countries.mdx"
+   },
+   {
+    "fact": "Polar fees: Starter 5% + 50¢ per transaction, plus 1.5% on international (non-US) cards. Its worked example applies the fee to the total including VAT. Organizations created after May 27, 2026 start on Starter.",
+    "source": "https://github.com/polarsource/polar/blob/main/docs/merchant-of-record/fees.mdx"
+   },
+   {
+    "fact": "Polar changelog: 'Checkout is now translated into Korean.'",
+    "source": "https://github.com/polarsource/polar/blob/main/docs/changelog/recent.mdx"
+   },
+   {
+    "fact": "Polar review process: the first payout review takes up to 14 days and requires KYC (ID plus selfie). Polar holds accounts to a 0.4% chargeback rate and expects merchants to answer looped-in support threads within 48 hours.",
+    "source": "https://github.com/polarsource/polar/blob/main/docs/merchant-of-record/account-reviews.mdx"
+   },
+   {
+    "fact": "Korean VAT Act art. 53-2(1), in force 2026-01-01: a foreign business supplying 'electronic services' (games, audio or video files, software, etc.) to Korea, other than to registered Korean businesses, must complete simplified business registration (간편사업자등록) within 20 days of starting. Art. 53-2(2): when supplied through an open market or intermediary that collects the payment, that third party is deemed the supplier and must register.",
+    "source": "https://github.com/legalize-kr/legalize-kr/blob/main/kr/부가가치세법/법률.md"
+   },
+   {
+    "fact": "Korean VAT Enforcement Decree art. 96-2: electronic services include works or software 'used in real time without being stored'. Registration and filing are done online via the NTS portal and require the foreign registration country, address and number. Tax is paid into a foreign-exchange bank account, and foreign-currency sales may be converted at the period-end base rate.",
+    "source": "https://github.com/legalize-kr/legalize-kr/blob/main/kr/부가가치세법/시행령.md"
+   },
+   {
+    "fact": "Korean VAT rate is 10% (art. 30). Late simplified registration adds a penalty of 1% of sales from the start date (art. 60(1)1-2). Simplified registrants file under art. 48/49: interim returns for Jan–Mar and Jul–Sep, each due within 25 days, plus final returns (art. 53-2(4)).",
+    "source": "https://github.com/legalize-kr/legalize-kr/blob/main/kr/부가가치세법/법률.md"
+   },
+   {
+    "fact": "E-commerce Act (전자상거래법, in force 2026-07-21): art. 12 requires online-seller (통신판매업) registration unless below an FTC-notice threshold. Art. 13(6) with Decree art. 20-2 requires consumer consent, within 30 days before the change, when a free subscription converts to paid or a price rises. Art. 17(2)5 and 17(6) with Decree art. 21-2: withdrawal from digital content can be refused only if clearly disclosed and a preview, time-limited trial or limited version is offered. Art. 21-2 bans showing only part of the price on the first screen and making cancellation harder than sign-up.",
+    "source": "https://github.com/legalize-kr/legalize-kr/blob/main/kr/전자상거래등에서의소비자보호에관한법률/법률.md"
+   },
+   {
+    "fact": "E-commerce Act art. 20-5 with Decree art. 25-4: a foreign seller must appoint a Korean domestic agent only if prior-year revenue is ≥₩1조 or monthly Korean visitors average ≥1,000,000 (effective 2027-01-01), so it does not apply at this scale.",
+    "source": "https://github.com/legalize-kr/legalize-kr/blob/main/kr/전자상거래등에서의소비자보호에관한법률/시행령.md"
+   },
+   {
+    "fact": "Secondary (a Korean startup's tax memo): online-seller registration is exempt below 50 transactions or for 간이과세자 (simplified taxpayers), per the FTC exemption notice.",
+    "source": "https://github.com/rlflrrlflr/BINARI/blob/f0b7964282f83e6fc91d7d504e3fd3555b725af9/01_기획전략/비나리_기획전략_세무결제판정_v01.md"
+   },
+   {
+    "fact": "AI Basic Act (in force 2026-01-22). Art. 4: applies to acts abroad that affect the Korean market or users. Art. 2(7): 'AI business operators' include those providing services built on another company's AI. Art. 31: must notify users in advance that a service is operated with generative AI and label outputs as AI-generated. Art. 43: fine up to ₩30,000,000 for failing the art. 31(1) notice. Art. 36: a domestic agent is required only above decree thresholds.",
+    "source": "https://github.com/legalize-kr/legalize-kr/blob/main/kr/인공지능발전과신뢰기반조성등에관한기본법/법률.md"
+   },
+   {
+    "fact": "PIPA art. 28-8: personal data may be transferred abroad with separate consent, or, when needed to perform the contract, if the items, country, recipient and purpose are disclosed in the privacy policy. Art. 31-2: a foreign processor must appoint a domestic agent only above decree thresholds.",
+    "source": "https://github.com/legalize-kr/legalize-kr/blob/main/kr/개인정보보호법/법률.md"
+   },
+   {
+    "fact": "Naver's 2025 average domestic search share was 62.86% (InternetTrend, up 4.7 points), 63.8% in March 2026. Google's was 28.7% in March 2026 (secondary news digest).",
+    "source": "https://github.com/eiaserinnys/seosoyoung-blog/blob/main/content/digest/mk-zero-click-illusion-veo.md"
+   },
+   {
+    "fact": "Korean saju app prices and reach (secondary research dated 2026-06-26; the repo marks it superseded for its India strategy): 유어사주 AI saju at ₩990 per reading; 운빨 사주 subscriptions at ₩9,900 / 29,900 / 49,900 / 99,000 per month; 천명 human-reader marketplace with 20–40% commission; 사주GPT at 250,000 monthly active users; paid human consultations ₩5,000–20,000 per 5–10 minutes.",
+    "source": "https://github.com/harishconti/saju-engine/blob/6610b40f53f6ebb59f1de8535d62fede8789db2e/misc/market_research/03-competitor-landscape.md"
+   },
+   {
+    "fact": "A Korean AI-saju startup's working notes (2026) cite news reports that AI saju service 'Plot' did 180,000 readings in one month, 60% from people in their 20s–30s (secondary). This shows demand exists.",
+    "source": "https://github.com/VIRTUKCH/chaeho-mbti/blob/main/.claude/docs/04_심리_컨텐츠_시장_조사/05_이제는_사람들이_어떤_것들에_목마를까.md"
+   },
+   {
+    "fact": "Secondary: the fortune category has seasonal spikes (New Year fortunes 신년운세 and the holidays 명절), with young women (MZ) as core users.",
+    "source": "https://github.com/budlove-billy/typing/blob/main/성장전략-분석.md"
+   },
+   {
+    "fact": "Stripe Canada card fees are 2.9% + C$0.30, plus about 0.8% for international cards (one source says +1.0%) and 2% for currency conversion (secondary, several 2026 GitHub sources). Stripe's first payout arrives 7–14 days after the first payment.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_tooling.json ; /home/user/canadian-tool-deals/business/research/dossiers/INDEX.md"
+   },
+   {
+    "fact": "Cloudflare Workers Paid costs US$5/month with 10M requests included, and static assets are free (official Cloudflare docs repo).",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_tooling.json"
+   },
+   {
+    "fact": "Canada's GST/HST Act (ETA), Schedule VI Part V (Exports): a supply of a service, or of intangible personal property, to a non-resident is zero-rated, with exceptions (e.g., services to individuals while they are in Canada, and advisory/consulting/professional services).",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml"
+   },
+   {
+    "fact": "Claude API prices per 1M input/output tokens: Sonnet 5 $2/$10, Haiku 4.5 $1/$5. Cached input costs about 0.1× the input price.",
+    "source": "task brief (official skill docs cached 2026-06-24)"
+   },
+   {
+    "fact": "Apple and Google cut app-store commission to 15% for small developers under US$1M in annual proceeds (secondary).",
+    "source": "https://github.com/austintheriot/dotfiles/blob/main/.claude/rules/platform-payments.md"
+   },
+   {
+    "fact": "The existing evidence corpus (196 searches) contains no Korea-market data on Korean payments, 운세 apps, or Korean law. Its Korean content covers only Korean-Canadian demographics and translation services.",
+    "source": "/home/user/canadian-tool-deals/business/research/evidence-corpus.md (S072–S083)"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Polar Acceptable Use Policy (effective March 25, 2026) prohibits 'Digital services associated with pseudo-science including ... horoscopes, fortune-telling' (#31), 'Services used by, intended for, or advertised towards minors' (#10), 'Medical and Health advice' (#32), 'Human services' and 'AI relationship services'. It puts 'AI Content Generation tools', 'Resume, hiring, or exam tools', 'Spiritual & Astrology services' and chatbot generators under closer review. So AI saju and study helpers for students cannot use the one verified MoR that supports Kakao Pay and Naver Pay.",
+    "source": "https://github.com/polarsource/polar/blob/main/server/polar/organization_review/acceptable-use-policy.fallback.mdx"
+   },
+   {
+    "fact": "Paddle's page (search snippet): 'In its current iteration, Stripe Managed Payments does not support key established and emerging countries like South Korea...'",
+    "source": "https://github.com/critecnic/nossy-site/blob/main/download/smp_brazil.json"
+   },
+   {
+    "fact": "Apple App Store guideline 4.3(b), secondary summary: fortune telling is named with dating, flashlight and similar apps as an established category that needs a 'meaningfully different or improved experience'. Repeated low-effort submissions can put the developer account at risk.",
+    "source": "https://github.com/tszaks/Preflight/blob/main/packages/shared/src/engine/knowledge-base/guidelines.ts"
+   },
+   {
+    "fact": "A Korean AI-saju startup (2026) notes: 점신's monthly active users fell from 1.131M to 875K (−22.6%) over two years while Naver Expert paid human fortune consultations grew 123.4%. It calls free ChatGPT, not other apps, the main competitor. Market leader 포스텔러 already advertises a 만세력 'even Chat-GPT can't imitate'.",
+    "source": "https://github.com/rlflrrlflr/BINARI/blob/f0b7964282f83e6fc91d7d504e3fd3555b725af9/전략로그.md"
+   },
+   {
+    "fact": "Same startup: the paid AI-saju price floor is already ₩880–990 (팔자냥, 사주아이), and below that the substitute is free (portals, ChatGPT). A real user said its ₩4,900 answer was 'what you'd hear by asking GPT; no differentiation'.",
+    "source": "https://github.com/rlflrrlflr/BINARI/blob/f0b7964282f83e6fc91d7d504e3fd3555b725af9/CLAUDE.md"
+   },
+   {
+    "fact": "Same startup: after launch, all traffic was direct or team-internal, with zero external social or search inflow. Of 8 small AI-saju competitors, 6 depend on one-off payments plus ad spend, and at least 3 pay users for reviews, a sign reviews do not come organically. Its paid funnel showed 2 users seeing the price, 2 intending to buy and 1 letter written.",
+    "source": "https://github.com/rlflrrlflr/BINARI/blob/f0b7964282f83e6fc91d7d504e3fd3555b725af9/전략로그.md"
+   },
+   {
+    "fact": "Survey figures cited in the same strategy log (secondary): 46% of people in their 20s have used AI fortune-telling, but only 27% trust 점/사주, and only 8% of men in their 20s have paid for it.",
+    "source": "https://github.com/rlflrrlflr/BINARI/blob/f0b7964282f83e6fc91d7d504e3fd3555b725af9/전략로그.md"
+   },
+   {
+    "fact": "Across 5,079 Stripe-verified products, median MRR is US$148 in year 0 and US$334 in year 1. Only 0.9% were 'breaking out'. Fast launches mostly came from founders who already had audiences.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+   },
+   {
+    "fact": "Korean payment gateways (Toss Payments, Kakao Pay/Naver Pay direct merchant contracts) are described as requiring a Korean business ('한국 사업자 필수'). This is a search snippet; the file could not be fetched at HEAD.",
+    "source": "https://github.com/YawnsDuzin/vibecoiding_google_AIService/blob/main/md/07_Stripe_Toss.md"
+   },
+   {
+    "fact": "A low-grade, apparently AI-written setup guide claims Kakao Pay and Naver Pay on Stripe need Korean business verification, a registration number and a Korean bank account. This conflicts with Stripe's 'without a local entity' statement. Whether a Canadian Stripe account is eligible is therefore unresolved.",
+    "source": "https://github.com/brandonlacoste9-tech/korean-AI-compliance-/blob/main/saas/KOREAN_PAYMENTS.md"
+   },
+   {
+    "fact": "Secondary: Google Ads prohibits 'Destiny, fortune telling, spiritual, or psychic content', and Meta has similar restrictions, which limits paid acquisition for saju.",
+    "source": "https://github.com/harishconti/saju-engine/blob/6610b40f53f6ebb59f1de8535d62fede8789db2e/misc/market_research/10-risks-and-do-not-do.md"
+   },
+   {
+    "fact": "Automated posting to Naver blogs is rated a HIGH risk of account sanctions by a Korean blog-automation project. The AI therefore cannot safely run Naver distribution itself; the owner must post.",
+    "source": "https://github.com/KIMSANGHYEON93/blog-automation/blob/main/docs/pipeline_c_naver_blog.md"
+   },
+   {
+    "fact": "Korean fortune-market size figures conflict: ₩4.6조 (2018 Economist estimate) vs ₩1.4조 for 'digital fortune' in 2025. Both come from a Perplexity-generated summary. The same startup notes that a widely cited '점신 ₩99억' revenue figure was actually 포스텔러's.",
+    "source": "https://github.com/lee3Q/pullim/blob/38dfa6c0e7baaaeb12fdf54623dc76f604d98869/리서치/시장분석_Perplexity_2026-03-19.md ; https://github.com/rlflrrlflr/BINARI/blob/f0b7964282f83e6fc91d7d504e3fd3555b725af9/CLAUDE.md"
+   },
+   {
+    "fact": "Many Korean-issued cards are domestic-only, so checkout without local methods loses buyers. Naver ranks its own blog, cafe and 지식iN content ahead of external sites. Korea is 13–14 hours ahead of Toronto, which complicates support.",
+    "source": "[prior knowledge, unverified, pre-2026-06]"
+   }
+  ],
+  "risks": [
+   "Payment-processor category risk, the biggest: Polar prohibits fortune-telling. Stripe's stance on astrology or fortune-telling, and whether a Canadian account can use Korean payment methods, are not verified. The consequences could be account closure, held funds, or forced refunds after launch. Mitigation: get written Stripe confirmation before building, and keep the Google Play fallback ready.",
+   "Demand-substitution risk: free ChatGPT and portal fortunes, a ₩880–990 AI price floor, and the market leader's −22.6% user decline (secondary). A new foreign brand without the leaders' 만세력 credibility may convert far below the 2% assumed.",
+   "Distribution risk: there is no audience, and the AI cannot post as the owner on Naver, Instagram or Kakao. Automated Naver posting risks sanctions. Paid ads are loss-making below about 5.6% conversion at a ₩450 cost per click (ESTIMATE), and Google/Meta reportedly restrict fortune ads. SEO usually needs months, not weeks.",
+   "Seasonality risk: the New Year and 설날 spike (Dec–Feb) could produce one good month followed by a cliff. That does not meet the goal of AVERAGING C$5k per month.",
+   "Korean compliance risk for a foreign seller: simplified VAT registration within 20 days and quarterly filings (1% late penalty); E-commerce Act disclosures, trial/preview, consent before paid conversion, and dark-pattern rules; AI Basic Act notice and labelling (fine up to ₩30M; any enforcement grace period is [prior knowledge, unverified, pre-2026-06]); PIPA cross-border consent for birth data sent to Canadian and US servers and Anthropic. Several of these, such as how a foreign seller with no 사업자등록번호 shows online-seller registration, are ambiguous and were not verified against Korean FTC or NTS guidance.",
+   "Refund and chargeback risk on subjective products ('this doesn't apply to me'). Korean consumers can cancel within 7 days unless trial and disclosure rules are met, and Polar's 0.4% chargeback line shows how tightly MoRs police this.",
+   "Fee and currency stacking: international card fee plus 2% currency conversion plus VAT consume about 19% of a ₩9,900 sale before any acquisition cost (ESTIMATE: (900 + 864) / 9,900 = 17.8%, plus API cost ≈ 18.6%).",
+   "Quality and reputational risk: saju schools disagree (e.g., 야자시 handling). One visible takedown by a Korean practitioner or community can sink a small brand (secondary source).",
+   "Owner-side risks: self-employment authorization in Canada is unconfirmed; Canadian tax and CPP apply; and GST/HST registration is required once worldwide taxable supplies pass $30k, even though export sales are zero-rated (ETA; see cross_compliance.json).",
+   "Evidence-quality risk: Korean law text comes from the legalize-kr GitHub mirror of law.go.kr, not the official site. Stripe docs come from a third-party mirror. Market figures come from Korean startups' notes and AI-generated research. Nothing here was confirmed on stripe.com, nts.go.kr or ftc.go.kr."
+  ],
+  "scores": {
+   "p5k_90d": 1,
+   "owner_light": 6,
+   "capital_light": 8.5,
+   "ai_build": 8,
+   "ai_operate": 6,
+   "low_risk": 3.5
+  },
+  "score_rationale": "p5k_90d = 1. Reaching C$5k needs about 621 paid reports or about 1,350 subscribers a month, from zero audience, within about 60 days of launch. The base-rate median is US$148 MRR in year 0. The one comparable 2026 Korean AI-saju launch found recorded zero external traffic. The New Year spike raises the chance of one strong month, not of a sustained average.\n\nowner_light = 6. Setup fits in about 9–10 hours. Afterwards the owner must still paste Naver and social posts (the AI cannot post as them), handle disputes, and file Korean VAT quarterly. Dropping the posting makes it lighter but starves traffic.\n\ncapital_light = 8.5. About C$60–150 without ads. No entity, inventory or licences are needed.\n\nai_build = 8. The AI can build the calendar engine, prompts, Stripe checkout with Korean payment methods, legal pages and SEO pages. It cannot open the accounts or obtain Stripe's category approval.\n\nai_operate = 6. The AI can run content, experiments, monitoring, support drafts and VAT figures. It cannot post on Naver, Instagram or Kakao, file taxes, or resolve disputes on its own.\n\nlow_risk = 3.5. Money at risk is small. But the fortune category is prohibited by Polar and unverified on Stripe, Korean cross-border VAT, consumer and AI-law duties apply extraterritorially, and chargeback risk is high for subjective products."
+ },
+ "verification": {
+  "problems": [
+   {
+    "claim": "Summary: 'about a 5–10% chance that any single month reaches C$5k'. Timeline: '≤10% chance that one peak month reaches it'.",
+    "problem": "This probability is labelled ESTIMATE but shows no arithmetic. The dossier's own evidence argues for much less: (1) the one comparable 2026 Korean AI-saju launch had zero external traffic; (2) paid ads lose money below 5.6% conversion; (3) Google/Meta reportedly restrict fortune ads; (4) a new domain has about 5–8 weeks to rank before the peak; (5) the base rate is a US$148 year-0 median with 0.9% 'breaking out' (cand_saas.json). Five to ten percent is a guess, and a generous one.",
+    "correction": "ESTIMATE: one peak month reaching C$5k net is about 1–3%, and averaging C$5k over Dec–Jan is below 1%. Anchor: 0.9% of 5,079 TrustMRR products were 'breaking out' (>US$10k MRR and >50% growth), and those were mostly founders who already had audiences. This owner has none. Score p5k_90d at 0.5, not 1."
+   },
+   {
+    "claim": "Unit economics A: net C$8.05 per ₩9,900 report, so 621 sales are needed.",
+    "problem": "The free preview's LLM cost is missing, and the dossier itself makes the preview mandatory (E-commerce Act art. 17(6)). At 1–2% conversion, every buyer comes with 50–100 non-buyers who each generate a preview.",
+    "correction": "ESTIMATE: a preview on Sonnet 5 of about 3k input tokens (cached, roughly 0.1×) plus 1.5k output tokens costs about 0.003×$0.2 + 1.5k×$10/M ≈ $0.016, call it $0.02. That is C$0.027 per preview. At 2% conversion: 50 × 0.027 = C$1.37 per sale, so net 8.05 − 1.37 = C$6.68 and 5,000 / 6.68 = 749 sales. At 1%: 100 × 0.027 = C$2.74, so net C$5.31 and 5,000 / 5.31 = 942 sales. The fixes are to make the preview deterministic (만세력 output only, no LLM) or to cache previews per 일주/띠. Rate-limiting is also needed, because a free Korean LLM endpoint invites abuse."
+   },
+   {
+    "claim": "Stripe fee = 2.9% + 0.8% + 2% FX + C$0.30, applied to every Korean payment method.",
+    "problem": "No source gives Stripe's price for kr_card, Kakao Pay or Naver Pay on a Canadian account; the dossier itself says 'not found'. The fees for refunds, disputes and Billing are also left out. [prior knowledge, unverified, pre-2026-06]: Stripe does not return the processing fee on refunds, charges about C$15 per dispute, and Stripe Billing adds about 0.7% of recurring volume.",
+    "correction": "Add a fee line of 'unknown, assumed 5.7–8%' for local methods. Add Billing at 0.7% × C$4.90 = C$0.034 per subscriber (net 3.71 → about 3.68). Also: ESTIMATE: at a 3% refund rate and a 0.5% dispute rate, per-sale loss ≈ 0.03 × 9.90 + 0.005 × (9.90 + 15) = 0.297 + 0.125 = C$0.42."
+   },
+   {
+    "claim": "Blend C: 300 reports + 700 subscribers = C$5,012, presented as an easier path.",
+    "problem": "The blend needs 1,000 paying customers, which is more than the 621 of scenario A, so it is not easier. Also, 700 active subscribers about 60 days after launch means acquiring at least 350 new subscribers a month even with zero churn. Consumer subscription churn is typically 10–20% a month [prior knowledge, unverified, pre-2026-06]. If subscribers come from report buyers, 300 reports a month cannot produce 700 subscribers in two months.",
+    "correction": "Say plainly that the blend increases the acquisition burden. ESTIMATE with 15% monthly churn: ending at 700 after 2 months needs N new per month where N(1 + 0.85) = 700, so N ≈ 378 new subscribers a month, on top of 300 report buyers. That is about 678 new paying customers a month."
+   },
+   {
+    "claim": "Base rate: C$5,000 is about 34× the US$148 year-0 median ('currency ignored').",
+    "problem": "Leaving out the currency conversion inflates the multiple. It also compares a net target (after VAT and fees) with MRR, and TrustMRR is a SaaS-subscription sample, not one-off seasonal reports.",
+    "correction": "ESTIMATE: US$148 × 1.37 = C$203, and 5,000 / 203 ≈ 24.7×. Note too that the sample is opt-in and skewed upward (cand_saas.json), so the real gap is larger than 25×."
+   },
+   {
+    "claim": "Distribution: Google SEO with about 100 programmatic 띠/일주/궁합 × 2027 pages will catch the Dec–Feb peak.",
+    "problem": "This depends on a new domain launched about Nov 1 ranking within 4–8 weeks, which is unsupported. 'SEO usually needs months' appears in the risks section without a label. The dossier also leaves out that Naver (62.86% share) and the incumbents (포스텔러, 점신) already offer free 신년운세 directly on the search results page [prior knowledge, unverified, pre-2026-06], so the free substitute sits right at the query. The 100 templated pages are also exactly the pattern Google's scaled-content-abuse policy targets [prior knowledge, unverified, pre-2026-06].",
+    "correction": "Treat organic SEO traffic in Dec 2026 as near zero, and 2027 pages as an asset for 2028 at best. Label 'SEO usually needs months' as prior knowledge. The plan has no channel that evidence shows can deliver about 1,000 visitors a day by December."
+   },
+   {
+    "claim": "The owner's weekly load is 2–3 h. The AI 'operates' support, refunds and monitoring.",
+    "problem": "Hidden owner labour is undercounted, and the variant conflicts with the user's explicit request not to work personally. (1) The weekly Naver and social pasting is the main traffic channel, and dropping it 'starves traffic', so the plan is not hands-off. (2) Korean customers write during KST, 13–14 hours ahead of Toronto. Routines are scheduled sessions, not real-time support. (3) Stripe disputes need evidence submitted by the account holder, and at C$15 each (prior knowledge) they cannot be ignored. (4) VAT is paid from abroad through a foreign-exchange bank account (Decree art. 96-2), so the owner must send an international wire each filing period. (5) The owner must answer the Stripe risk review and any Hometax/NTS letters in Korean.",
+    "correction": "Re-estimate owner time at 2.5–4 h/week in Nov–Jan (ESTIMATE: posting 1.25 h + dashboard 0.3 h + disputes and escalations 0.5–1.5 h + VAT/wire 1 h per quarter ≈ 0.1 h/week + Stripe or platform correspondence 0.3–0.5 h). Drop owner_light to 5."
+   },
+   {
+    "claim": "The online-seller registration (통신판매업) exemption applies at this scale, and the risks section calls it 'ambiguous'.",
+    "problem": "The cited exemption covers fewer than 50 transactions (secondary source). The C$5k goal needs about 621+ transactions a month, so it would be crossed in the first days of success. The owner has no Korean business registration number or Korean address, and whether a foreign individual can register as a 통신판매업 seller at all was not verified. This is a legal blocker that shows up exactly when the plan works, yet it is missing from owner_one_time_tasks and money_needed.",
+    "correction": "Add a one-time task: get written advice from a Korean tax/e-commerce professional (세무사) on 통신판매업 registration and the disclosure duties of a foreign seller that holds only a simplified VAT registration. Cost: not found. ESTIMATE placeholder C$300–1,000 [prior knowledge, unverified, pre-2026-06]. Include it in the capital figure and treat it as a GO/NO-GO gate alongside the Stripe one."
+   },
+   {
+    "claim": "Seller identity disclosures (E-commerce Act art. 10 and 13) are listed as a routine compliance-UI item.",
+    "problem": "These disclosures mean publishing the seller's name, address, phone and email on the site. For a sole proprietor in the GTA, that is the owner's home address shown to the Korean public: a hidden privacy cost, or a hidden cost for a virtual office. [prior knowledge, unverified, pre-2026-06] on the exact items required.",
+    "correction": "Add either a virtual business address (cost: not found) or an explicit owner decision to publish their home address. Add it to the one-time tasks."
+   },
+   {
+    "claim": "The 궁합 'compare with a friend' invite loop is a growth feature.",
+    "problem": "The paying user enters a third party's name and birth date and time, and that data goes to servers in Canada and the US and to Anthropic. PIPA consent and cross-border disclosure (art. 28-8) covers the data subject, but the friend or partner never consented. This PIPA exposure is not assessed.",
+    "correction": "Flag it as a PIPA risk. Design mitigations: process third-party birth data without storing it, avoid names, and show an explicit notice. Get legal confirmation before launch. This lowers low_risk."
+   },
+   {
+    "claim": "The HARD GATE is solved by getting 'written confirmation from Stripe' that fortune readings are allowed on a Canadian account with Korean payment methods.",
+    "problem": "[prior knowledge, unverified, pre-2026-06]: Stripe support rarely pre-approves a category in writing, and it reviews risk after processing begins, so the gate may produce an ambiguous answer after 1–2 weeks. Stripe's page-level statement ('without a local entity') does not name the eligible merchant countries. I checked the payment-method-support page in the same GitHub mirror and found no kr_card, Kakao Pay or Naver Pay entries, and no Canada listing for Samsung Pay. Eligibility of a Canadian account is still not found.",
+    "correction": "Plan for an ambiguous result. Set a hard deadline, e.g. 10 days, after which the owner defaults to the Google Play fallback or abandons the category. Add 2–3 weeks to the median timeline, pushing launch toward mid-to-late November, which is after most of the SEO lead time is gone."
+   },
+   {
+    "claim": "Money needed: C$60–150 without ads.",
+    "problem": "The following costs are missing: professional Korean tax/legal advice (above), international wire fees for VAT payments [prior knowledge, unverified, pre-2026-06: about C$15–50 per wire], preview API spend (about C$1.4–2.7 per sale above, spent before revenue arrives), dispute fees, and a possible virtual address.",
+    "correction": "ESTIMATE: C$60–150 + advice C$300–1,000 + wires 2 × C$15–50 = C$30–100 + API preview buffer C$50–150 ≈ C$440–1,400 before ads. Lower capital_light to about 7.5–8."
+   },
+   {
+    "claim": "Canadian side: the dossier shows C$5,000/month 'net' as the target outcome.",
+    "problem": "This figure is net of VAT and payment fees only. It is before Canadian income tax and self-employed CPP (both contributions; cross_compliance.json) and before any ad spend, so it is not take-home income. If the user means C$5k they can live on, the required sales are materially higher.",
+    "correction": "State whether the C$5k target is pre-tax business profit. If the user means take-home, gross it up. Rates: not verified in this review; use cross_compliance.json."
+   },
+   {
+    "claim": "The Claude cost for a full 2027 report is about 5k output tokens (C$0.082).",
+    "problem": "Korean text uses more tokens per character than English [prior knowledge, unverified, pre-2026-06]. A 12-month report plus 궁합 section could easily run 8–12k output tokens, and regenerations or retries on QA failure are not modelled. The error is small in dollars but the assumption is unstated.",
+    "correction": "ESTIMATE: at 10k output tokens, 10k × $10/M + 5k × $2/M = $0.10 + $0.01 = $0.11 ≈ C$0.15, which lowers net per sale by about C$0.07. Measure it with count_tokens on real Korean output before pricing."
+   },
+   {
+    "claim": "Timeline: the AI builds a tested 만세력 engine, Stripe with Korean payment methods, compliance UI and about 100 SEO pages in 4 weeks.",
+    "problem": "Testing 'against known reference charts' needs an authoritative reference dataset (e.g., KASI 절기 times), and the dossier names none. Schools disagree on 야자시 and true-solar-time rules, so correctness cannot simply be declared. Getting a chart wrong is the main reputational risk the dossier names itself.",
+    "correction": "Name the reference source, or budget owner review of sample charts. Lower ai_build slightly, to 7.5."
+   },
+   {
+    "claim": "Korean consumers can cancel within 7 days unless trial and disclosure rules are met. Also: SEO usually needs months, not weeks.",
+    "problem": "Both are stated as fact with no label. The 7-day right comes from E-commerce Act art. 17(1), which the dossier cites for other clauses but never quotes for this one.",
+    "correction": "Cite art. 17(1) from the legalize-kr mirror, or tag the claim [prior knowledge, unverified, pre-2026-06]. Tag the SEO timing claim the same way."
+   }
+  ],
+  "unlabelled_prior_knowledge": [
+   "Korean consumers can cancel within 7 days (E-commerce Act art. 17(1) is not quoted in facts)",
+   "SEO usually needs months, not weeks (risks section)",
+   "The 1% and 2% visitor-to-paid conversion rates are presented as 'assumed' with no base-rate source",
+   "The '5–10%' and '≤10%' chances of a C$5k month are called ESTIMATE but carry no arithmetic",
+   "The 'about 45 minutes', 'about 30 minutes' and '2–3 h/week' owner-time figures are not derived",
+   "Seller disclosures under art. 10/13 are treated as easy UI text; that they require a public address and phone was not verified",
+   "The Stripe fee structure is assumed to apply unchanged to kr_card, Kakao Pay and Naver Pay (the dossier admits the price is not found but still computes with it)",
+   "Omitted from the economics (the first two are reviewer prior knowledge): Stripe's non-refundable processing fee on refunds, the dispute fee, the Stripe Billing fee, and consumer subscription churn",
+   "The claim that the Kakao share button needs only a Kakao Developers app registered once by the owner, with no business verification (not tagged)",
+   "The implied (not stated) assumption that a new domain's 2027 pages can rank on Google Korea before the Dec–Jan peak"
+  ],
+  "math_check": "The core arithmetic is correct as stated.\n- A: 9,900 × 10/110 = 900; 0.057 × 9.90 + 0.30 = 0.864; ($0.01 + $0.05) × 1.37 = C$0.082; net 8.054; 5,000 / 8.054 = 620.8, so 621 sales; 621 / 30 = 20.7 a day; 621 / 0.02 = 31,050 visitors.\n- CPC: 300 / 0.02 = ₩15,000 and 600 / 0.02 = ₩30,000 per buyer; break-even conversion = 450 / 8,054 = 5.59%.\n- B: 4,900 × 10/110 = 445.5; 0.057 × 4.90 + 0.30 = 0.579; 30 × ($0.001 + $0.003) = $0.12 ≈ C$0.164; net 3.71; 5,000 / 3.71 = 1,348 subscribers.\n- C: 300 × 8.05 + 700 × 3.71 = 2,415 + 2,597 = 5,012.\n- D: 0.065 × 9.90 = 0.644, plus US$0.50 × 1.37 = 0.685, total 1.33; net 9.90 − 0.90 − 1.33 − 0.08 = 7.59; 5,000 / 7.59 = 659 sales.\n- Margins: 8.05 / 9.90 = 81.3% and 3.71 / 4.90 = 75.7%. Fee stack: (900 + 864) / 9,900 = 17.8%; with API, 1,846 / 9,900 = 18.6%.\n\nErrors and omissions:\n(1) 5,000 / 148 = 33.8× ignores currency. Converted, it is 5,000 / (148 × 1.37 = 203) = 24.7×.\n(2) The blend needs 1,000 paying customers, versus 621 for A. It is presented as an alternative but is harder. With 15% monthly churn, 700 subscribers at month 2 needs about 378 new subscribers a month.\n(3) Free-preview LLM cost is missing: about C$0.027 per preview × 50–100 previews per sale = C$1.37–2.74 per sale. Net falls to C$6.68 or C$5.31, so 749–942 sales a month are needed, not 621.\n(4) Missing fees: Billing 0.7% on subscriptions, dispute and refund losses of about C$0.42 per sale (ESTIMATE), and Korean-method pricing (not found).\n(5) FX rates C$1 ≈ ₩1,000 and US$1 ≈ C$1.37 are correctly tagged as prior knowledge. A ±5% FX move changes the sales required by about ±5%.\n\nCorrected realistic range: ESTIMATE of about 750–950 paid reports a month (roughly 25–32 a day) to net C$5k pre-tax, needing about 37,000–95,000 monthly visitors at 2%/1% conversion.",
+  "adjusted_scores": {
+   "p5k_90d": 0.5,
+   "owner_light": 5,
+   "capital_light": 7.5,
+   "ai_build": 7.5,
+   "ai_operate": 5,
+   "low_risk": 3
+  },
+  "verdict": "The dossier's direction is right: this is a weak bet and should not be the income plan. It is still too generous in four areas.\n\n1. **Chance of success.** It puts the chance of a C$5k month at 5–10% with no arithmetic. Its own evidence points lower: a comparable launch with zero external traffic, paid acquisition that loses money below 5.6% conversion, fortune ads restricted on Google and Meta, SEO that cannot rank a new domain by December, Naver giving free 운세 on the search page (prior knowledge), and 0.9% of products 'breaking out'. That supports about 1–3% for one peak month and under 1% for a sustained average.\n\n2. **Unit economics.** They leave out the cost of the mandatory free preview. That adds C$1.4–2.7 per sale and raises the sales needed from 621 to about 750–950 a month. They also leave out dispute and refund fees and the Billing fee, and the Korean-method pricing is unknown. The blend scenario needs more customers than the single-product case, not fewer.\n\n3. **Hidden owner labour and cost.** The only real traffic channel is the owner pasting Naver and social posts, which contradicts the user's hands-off requirement. Other hidden items: disputes and support in KST, international wires to pay Korean VAT, answering Stripe risk reviews, a public seller address, and professional Korean legal/tax advice.\n\n4. **Blockers found only when the plan works.** Passing 50 transactions triggers 통신판매업 registration, which a foreign individual without a Korean business number may not be able to complete (not verified). The 궁합 feature sends third parties' birth data abroad without their consent under PIPA. The Stripe 'written confirmation' gate may never give a clear yes, and eligibility of a Canadian account for kr_card, Kakao Pay and Naver Pay is still not found: the GitHub Stripe mirror's payment-method-support page lists none of them.\n\n**Recommendation:** at most a capped side experiment, with explicit GO/NO-GO gates on Stripe category approval and 통신판매업 status before any build beyond a deterministic free calculator. It should not be counted toward the C$5k/month by Dec 2026–Jan 2027 goal."
+ }
+}

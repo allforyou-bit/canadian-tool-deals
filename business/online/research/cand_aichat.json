@@ -1,0 +1,377 @@
+{
+ "dossier": {
+  "candidate": "Vertical AI chat/consultation web app with paid subscription (Claude API), built and run by Claude from a GitHub repo using Routines and GitHub Actions. Four non-regulated niches are compared.",
+  "summary": "VERDICT: The AI can build this almost entirely, and the API cost per user is low. But reaching an average of CAD 5,000/month by Dec 2026–Jan 2027 without the owner doing distribution is very unlikely. My judgement, which is not a measurement, is roughly 5–10%. Building and API cost are not the constraint. Getting customers is: a brand-new domain with no audience, no owner-run social posting, and paid ads whose economics look negative in comparable consumer apps.\n\nTHE FOUR NICHES. All figures are ESTIMATE unless sourced. FX assumption: 1 USD = 1.37 CAD [prior knowledge, unverified, pre-2026-06]. Contribution is price minus payment fee, minus blended API cost, minus the cost of free samples.\n\nA) Korean conversation tutor for learners abroad (TOPIK / K-culture).\n- Who pays: adults learning Korean abroad. Duolingo's 2025 report ranks Korean the #6 most-studied language, but Duolingo teaches it for free.\n- Price: US$9.99–14.99/month. Comparable apps (secondary source): Talkpal $9.99, Praktika $8, Speak $20, Duolingo Max $29.99.\n- Why pay instead of using ChatGPT: a TOPIK-level curriculum, corrections specific to Korean (particles, speech levels, spacing), and spaced review of the learner's own mistakes. This is a weak moat. Speak has raised $162M, and the free tier of ChatGPT includes unlimited text.\n- API cost per active paying user: US$1.69/month at 12 sessions and US$5.62/month at 40 sessions (Sonnet 5 with caching, plus voice).\n- Margin and volume: about 57% at US$9.99. About 675 subscribers needed.\n- Channel: no workable channel without owner labour. SEO on Korean grammar terms is crowded and slow.\n\nB) Canadian job-search and resume coach for Korean newcomers (Korean/English).\n- Price: C$19–29/month.\n- Why pay instead of using ChatGPT: explanations in Korean of Canadian resume norms, mapping Korean job titles to Canadian ones, and interview drills.\n- API cost: US$1.11–2.55/month (Sonnet 5), or US$2.78–6.39/month (Opus 5).\n- Margin and volume: 76–82%. About 238–336 subscribers needed.\n- Demand is the weakest of the four:\n  - the market is small (74,975 people of Korean origin in the Toronto CMA, 2021 census);\n  - free settlement and job services funded by IRCC and Employment Ontario already exist;\n  - users churn once they find a job;\n  - users constantly ask immigration questions, and paid immigration advice requires a CICC licence.\n\nC) Saju (Korean four-pillars fortune) entertainment in English for K-culture fans.\n- Price: US$6.99/month, or US$9.99 per reading. Comparables: Co-Star Pro $8.99/month, MagicWay $8.99/month.\n- Why pay instead of using ChatGPT: the calendar math is done in code (deterministic), the interpretation framework stays consistent, there are shareable result cards, and a daily reading.\n- API cost: about US$0.40 per subscriber per month, the cheapest of the four.\n- Margin and volume: about 77%. About 706 subscribers, or about 437 readings per month.\n- Channel: share cards plus the New Year season (in Korea, the 3 New Year months bring 45–50% of annual revenue).\n- Against it:\n  - the Korean-language market is saturated with free AI saju, including a free ChatGPT-store saju app claiming 3M+ users (운세박사 GPT);\n  - in Korea, the cost to acquire a user is higher than average revenue per paying user;\n  - Apple's App Store guideline 4.3(b) names fortune telling as a saturated category;\n  - English-language demand for saju: not found.\n\nD) CELPIP / IELTS-General writing and speaking grader for people immigrating to Canada.\n- Who pays: permanent-residence and citizenship applicants chasing a CLB score.\n- Price: C$29/month, or a C$39 30-day pass or C$79 90-day pass.\n- Why pay instead of using ChatGPT: realistic task formats with timers, scoring calibrated to the rubric using anchor samples at each CLB level, and progress tracking.\n- API cost: US$2.21–4.42/month (Sonnet 5), or US$3.17–6.34/month (Opus 5 for writing).\n- Margin and volume: 72–78%. About 231 subscribers, or about 168 C$39 passes per month.\n- Channel: people searching with clear intent to buy, plus a paid search test with a capped budget.\n- Against it: already contested. An open-source competitor (CELPIPAce) already has AI scoring and a paid tier.\n\nRANKING: D first (highest willingness to pay, deadline-driven buyers, strongest search intent). C second (a cheap seasonal side bet). A and B are not recommended.\n\nBASE RATES that argue against hitting the target:\n- TrustMRR: median MRR in year 0 is $148.\n- RevenueCat 2026 (secondary): median download-to-paid is 2.1% for freemium apps and 10.7% with a hard paywall. For AI apps, only 6.1% of monthly subscribers are still paying after 12 months.\n- Ahrefs (2026 update): only 1.74% of newly published pages reach Google's top 10 within a year.\n- Comparable success stories got their early growth from the founder's own viral posts, which this owner will not do.",
+  "best_variant": "'CLB Coach' (working name). A web app, deliberately not a mobile app: this avoids Apple's 4.3(b) review risk and the 15–30% store commission, at the cost of app-store discovery. It grades practice responses in the style of CELPIP-General: Writing Tasks 1–2 and Speaking Tasks 1–8, plus an IELTS-General writing mode. Sonnet 5 is the default grader; Opus 5 writes the final mock-exam reports.\n\nFeatures:\n- Grades against a rubric calibrated with anchor samples at CLB 5, 7 and 9.\n- Timed task simulation.\n- A dashboard of errors that recur for each learner.\n- Explanations can be switched to Korean, Punjabi, Tagalog, Hindi, Farsi, Chinese or Spanish. Korean is the owner's community hook but not the market.\n\nPricing (ESTIMATE):\n- Free: 1 graded writing task plus 1 graded speaking task, then a hard paywall. RevenueCat 2026 medians: 10.7% of users pay by day 35 with a hard paywall, versus 2.1% with freemium.\n- C$39 for a 30-day pass that does not auto-renew. This suits exam deadlines and reduces cancellation disputes.\n- C$79 for a 90-day pass.\n- C$29/month as an optional subscription.\n\nPayments: through a merchant of record (Stripe Managed Payments, which is open to Canadian businesses and has covered AI services since 2026-06-02 according to secondary sources, or Polar at 5% + 50¢). The merchant of record handles foreign VAT/GST on sales to buyers abroad.\n\nGuardrails:\n- Never called 'official', no score guarantees, a clear refund policy.\n- The chatbot discloses that it is AI in every session (required by Anthropic's usage policy).\n- A hard refusal on immigration or CRS-strategy questions, with a referral to CICC-licensed consultants or lawyers.\n\nTarget by month 3 (ESTIMATE): about 168 C$39 passes/month, or about 231 active C$29 subscribers, for C$5,000 net after fees, API and fixed costs. The realistic base case is far below that (see timeline).\n\nFallback if Nov 30 numbers fail: move the remaining effort to niche C, an English 'Korean Saju 2027 New Year reading' at US$9.99 one-time, launched in early December for the Lunar New Year season. Lunar New Year 2027 falls on 2027-02-06 [prior knowledge, unverified, pre-2026-06].",
+  "unit_economics": "All ESTIMATE. Assumptions:\n- FX: 1 USD = 1.37 CAD [prior knowledge, unverified, pre-2026-06].\n- Claude prices (skill, cached 2026-06-24), per 1M tokens: Sonnet 5 $2 in / $10 out, Opus 5 $5 / $25, Haiku 4.5 $1 / $5.\n- Caching: reads cost 0.1× the input price; writes cost 1.25× (5-minute cache).\n- Minimum cacheable prefix: 1,024 tokens on Sonnet 5, 4,096 on Haiku 4.5.\n- Batch API: 50% off.\n\nHOW A CHAT TURN IS COSTED: cached prefix read + new tokens written to cache + output.\n\nWorked example, one Korean-tutor session on Sonnet 5 (20 turns, 3,000-token cached system prompt, 40 tokens in and 200 out per turn; Korean text tokenizes heavily [prior knowledge]):\n- Cache reads: 20×3,000 + 240×190 = 105,600 tokens × $0.20/M = $0.021\n- Cache writes: 20×240 + 3,000 = 7,800 tokens × $2.50/M = $0.020\n- Output: 4,000 tokens × $10/M = $0.040\n- Total: $0.081 per session. Without caching: $0.253. Haiku 4.5: $0.045 (the prompt must be at least 4,096 tokens to cache). Opus 5: $0.20.\n- Voice adds about $0.06 per session: text-to-speech 2,400 characters × $15/M characters, plus speech-to-text 4 min × $0.006/min [prior knowledge prices].\n\nAPI COST PER ACTIVE PAYING USER PER MONTH:\n- A (tutor, Sonnet 5 + voice): $1.69 at 12 sessions; $5.62 at 40 sessions.\n- B (job coach):\n  - one application package: $0.022 (4,000 cached + 2,300 new input tokens, 1,700 output);\n  - one interview session: $0.083 (15 turns);\n  - typical month (20 packages + 8 interviews): $1.11; heavy month: $2.55;\n  - on Opus 5: $2.78 typical / $6.39 heavy.\n- C (saju):\n  - full reading: $0.033 (8,000 cached + 500 input tokens, 3,000 output);\n  - daily fortune: $0.0064, or $0.0032 through the Batch API;\n  - follow-up chat: $0.069;\n  - subscriber (30 daily fortunes + 4 chats + 1 reading): $0.40.\n- D (CELPIP grader):\n  - one writing grade: $0.016 on Sonnet 5 / $0.040 on Opus 5 (6,000 cached rubric tokens + 400 input, 1,400 output);\n  - one speaking grade: $0.020, including 1.5 min of speech-to-text;\n  - typical month (40 writing + 80 speaking): $2.21 on Sonnet 5 / $3.17 with Opus 5 for writing; heavy users about 2×.\n\nCONTRIBUTION PER PAYING CUSTOMER. Defined as price, minus payment fee, minus blended API cost (70% typical users, 30% heavy), minus the free-sample cost. At a 10.7% hard-paywall conversion rate, each payer carries 8.35 free users, and that cost is spread over the expected paid lifetime.\n- A, US$9.99/month (C$13.69), via Polar at 5% + 1.5% international + $0.50: fee C$1.57, API C$3.93, free samples C$0.42 → C$7.76 (57%). At US$14.99 → C$14.16 (69%).\n- B, C$19/month, via Stripe Canada (2.9% + C$0.30, plus 0.7% Billing fee): fee C$0.98, API C$2.11, free samples C$0.34 → C$15.56 (82%).\n- C:\n  - US$6.99/month (C$9.58): fee C$1.31, API C$0.79 → C$7.41 (77%);\n  - US$9.99 one-time reading: C$11.97 net per sale.\n- D:\n  - C$29/month via Stripe Managed Payments (2.9% + C$0.30, plus 3.5%; whether the Billing fee also applies was not verified): fee C$2.16, API C$3.94 → C$22.68 (78%). With Opus 5 for writing: C$20.82 (72%);\n  - C$39 30-day pass: C$31.18 net per sale;\n  - C$79 90-day pass: C$59.93 net per sale.\n\nFIXED MONTHLY COSTS: about US$171 ≈ C$234.\n- Cloudflare Workers Paid: $5 (official docs).\n- Claude Max 5x to run the Routines: $100 (secondary source, checked 2026-09-01).\n- Database: about $25.\n- Transactional email: about $20.\n- Domain: about $1.\n- Monitoring and other: $20.\n- The database, email and domain prices are prior knowledge.\n\nCUSTOMERS NEEDED for C$5,000/month net of everything above. Formula: (5,000 + 234) ÷ contribution.\n- A: 675 subscribers at US$9.99, or 370 at US$14.99.\n- B: 336 at C$19, or 238 at C$29 (on Opus 5).\n- C: 706 subscribers, or 437 one-time readings per month.\n- D: 231 subscribers, or 168 C$39 passes, or 87 C$79 passes per month.\n\nRAMP:\n- Retention assumption: 57% renew after month 1, then about 82% per month. The 82% is back-solved from RevenueCat's 8% of monthly subscribers still paying at 12 months.\n- Each month's new cohort therefore contributes 1 + 0.57 + 0.47 = 2.04 active subscriptions by month 3.\n- So D needs about 113 new payers every month from launch.\n- At 10.7% conversion that is about 1,060 free sign-ups per month.\n- At an assumed 15–25% visitor-to-sign-up rate, that is about 4,200–7,000 relevant visitors per month.\n- Paid search break-even:\n  - lifetime value is about C$22.68 × 1.8 months ≈ C$41;\n  - at 2% of visitors paying, the break-even cost per click is about C$0.82;\n  - actual CELPIP keyword costs per click: not found.",
+  "distribution_plan": "For niche D. Designed so customers arrive without the owner working. Owner time: about 2–3 hours/week, mostly approvals.\n\n1) FREE TOOL AT THE TOP OF THE FUNNEL. A 'CELPIP Writing Score Checker': the first check needs no sign-up, then 1 free check per day with an email address.\n- The detailed report is sent by email.\n- Email marketing uses express consent collected at sign-up, as CASL requires. Every email carries the business name, a mailing address and a one-click unsubscribe.\n\n2) GUIDE PAGES FOR SEARCH. The AI publishes 2–3 genuinely useful pages per week, about 30–40 by January. Examples:\n- a guide for each task type;\n- graded sample answers at CLB 5, 7 and 9, with explanations;\n- common mistakes by first language (Korean, Punjabi, Tagalog, and others).\nEach page passes a quality checklist. The AI does not mass-produce thin pages: Google's scaled-content-abuse policy, and the March 2026 core update, penalize that. Expect little from this channel before month 3: per Ahrefs, only 1.74% of new pages (6.11% for non-empty English content) reach the top 10 within a year, though 40.82% of the pages that do rank get there within their first month.\n\n3) PAID SEARCH TEST WITH A HARD CAP. The only fast channel.\n- Google Ads and/or Microsoft Ads, on high-intent keywords such as 'CELPIP practice test' and 'CELPIP writing task 1'.\n- Budget: C$20–30/day, approved by the owner.\n- The AI builds the campaigns and adjusts bids and negative keywords through the API or Google Ads Editor import files.\n- Kill rule: stop if the cost to acquire a customer exceeds first-sale net revenue (about C$31) for 14 days.\n- Actual cost per click: not found.\n- Counter-evidence: a comparable consumer palm-reading app plan estimated losing half to two-thirds of its ad spend at US$2–3 per install.\n\n4) REFERRAL AND AFFILIATE PROGRAM. 30% revenue share for tutors and immigration-prep YouTubers.\n- The AI can email conspicuously published business addresses when the message is relevant to the recipient's role (CASL s.10(9)(b)).\n- Uptake: not found.\n\n5) OPTIONAL, NOT REQUIRED: one owner post in Korean community channels.\n\nWHAT DOES NOT WORK HANDS-OFF:\n- TikTok API posts stay private (SELF_ONLY) until TikTok approves an audit.\n- YouTube's 'inauthentic content' policy blocks templated, mass-produced channels from monetizing.\n- Reddit and Facebook groups need the owner's accounts.\n- Product Hunt needs the owner to post the launch.\n\nNet effect: the channels that work without the owner are slow (search) or cost cash (ads).",
+  "timeline": "ESTIMATE, from Thu 2026-09-24:\n\n- Sep 28 – Oct 9: owner one-time setup (at most 10 hours), running in parallel with the build.\n- Sep 28 – Oct 18: the AI builds the product (about 3 weeks). Basis: a solo founder built a comparable IELTS speaking app with Claude Code in under 80 days. This product is narrower, and the grading calibration set is the slowest part.\n- About Oct 19–26: soft launch, with the free score checker live, 10–15 guide pages, and the paid-search test starting.\n- First money: plausible within 1–3 weeks of launch if paid search runs; a search-only launch may take months.\n- Cash in the bank: Stripe usually pays out 7–14 days after the first charge (secondary source), so early to mid November. Merchant-of-record payout schedules differ.\n- Nov 15 checkpoint: ad economics. Stop the ads if the cost to acquire a customer is above first-sale net revenue.\n- Nov 30 checkpoint:\n  - under C$500 net in November and no improving trend: switch the AI to the saju New Year product for Dec–Feb, or stop;\n  - C$500–2,000: continue.\n- C$5,000/month: the base case does NOT reach it by Jan 2027. Month-3 net is about C$0–1,000 in the base case and C$1,500–3,000 in the optimistic case, which assumes cost per click below about C$0.82 and 10%+ paywall conversion.\n- Basis:\n  - TrustMRR: median MRR in year 0 is $148.\n  - RevenueCat (secondary, provenance flagged): only 17.3% of apps reach $1K/month, with a median of 58 days for those that do.\n  - Reaching C$5k probably takes 6–18 months, if it happens at all.",
+  "owner_one_time_tasks": [
+   "0.5 h: Confirm you are legally allowed to be self-employed in Canada (Gate 0 in the decision memo). If you are on EI, confirm with Service Canada how running a business affects benefits (the 'minor in extent' test in EI Regulations s.30).",
+   "0.5 h: Create a dedicated business Google account and email address, and give the AI access to the GitHub repo.",
+   "0.5 h: Create an Anthropic Console account, add a card and API key, and set a monthly spend limit (for example US$150) plus alerts.",
+   "1–1.5 h: Open a Stripe Canada account (ID check, bank account, SIN/BN) and request Stripe Managed Payments, or open Polar as the merchant of record. Approve the product and refund policy.",
+   "0.5–1 h: Open a Cloudflare account, buy the domain through Cloudflare Registrar, subscribe to Workers Paid (US$5/month), and create a scoped API token for the AI.",
+   "0.5 h: Set up transactional email (for example Resend or Postmark) and add the DNS records, or let the AI add them with the Cloudflare token. Set up Google Search Console and Bing Webmaster verification.",
+   "1–2 h: Open a Google Ads account (and optionally Microsoft Ads), add billing, set a hard daily cap, and give the AI API or Editor access. The API developer token needs Google's approval [prior knowledge].",
+   "1 h: Get a mailing address that can appear in marketing emails and on the site (PO box or virtual mailbox), because CASL requires one. Review and approve the AI-drafted privacy policy (PIPEDA), terms, refund policy and 'not official / no guarantee' disclaimers.",
+   "0.5–1 h: Choose the brand name. If it is a trade name, register it with the province (Ontario fee not found).",
+   "0.25 h: Keep or upgrade the Claude plan used for Routines (Max 5x US$100/month per a secondary source; whether Pro's quota is enough: not found).",
+   "TOTAL: about 6.5–9.25 h"
+  ],
+  "owner_weekly_tasks": [
+   "30 min: Read the AI's weekly KPI and cost report: sign-ups, conversion, revenue, API spend, ad spend and cost per customer, refunds, disputes.",
+   "30–45 min: Spot-check 5–10 graded outputs and 5 support replies for accuracy and tone. The AI flags uncertain ones.",
+   "15–30 min: Approve anything above the AI's limits: ad budget changes, refunds above policy, dispute evidence, price changes.",
+   "15 min: Check that payouts arrived. The AI prepares the bookkeeping export by T2125 expense category and tracks the C$30k GST/HST small-supplier threshold.",
+   "Optional, 0–60 min: one community post or reply. The plan does not depend on it.",
+   "TOTAL: about 1.5–2 h/week (up to 3 h with the optional post)"
+  ],
+  "ai_build_tasks": [
+   "App foundation on Cloudflare Workers/Pages (Vercel's free Hobby plan is non-commercial only): magic-link login, a database, per-user limits on API usage, and automatic deploys from GitHub Actions. Read the Next.js docs in node_modules/next/dist/docs/ before reusing the repo's Next.js stack.",
+   "Payments: checkout for passes and subscriptions through Stripe Managed Payments or Polar, webhooks that grant and revoke access, a refund flow, and a customer portal.",
+   "Grading engine: rubric prompts for each CELPIP-style task type, an anchor set of sample answers at CLB 5/7/9, structured-output scoring, a cached system prefix (at least 1,024 tokens on Sonnet 5), Opus 5 for final mock reports, and Batch API processing for anything not urgent.",
+   "An evaluation set of 100–200 responses with target scores, plus a consistency test run before every prompt change, so grades do not drift.",
+   "Speaking: browser audio recording, a speech-to-text provider (the owner opens that account), timers, and practice modes for each task.",
+   "Free score checker with rate limits and bot protection. The first check needs no sign-up; later checks send the detailed report by email.",
+   "Safety and legal guardrails: an 'AI' disclosure at the start of every session (Anthropic's usage policy), an age gate (18+ or follow Anthropic's rules for minors), refusing immigration and CRS-strategy questions with a referral to CICC consultants or lawyers, no 'official' wording or score guarantees, a PIPEDA privacy notice, and a breach log.",
+   "CASL-compliant email: consent capture, sender identification, mailing address, and one-click unsubscribe honoured within 10 business days. Onboarding and exam-countdown email sequences.",
+   "An initial 10–15 substantive guide pages, sitemap, structured data, analytics (Cloudflare Web Analytics), and a conversion dashboard.",
+   "Paid-search campaign files (keywords, negative keywords, ad copy, conversion tracking) ready for the owner to import or connect through the API.",
+   "Admin dashboard: cost per user, cache hit rate, API spend alerts, dispute and refund queue, and the KPI report generator."
+  ],
+  "ai_recurring_tasks": [
+   "Daily: check error logs, uptime, API spend against revenue, and cache hit rate; throttle heavy users over their limits; roll back bad deploys.",
+   "Daily: answer support email from a knowledge base, disclosing that replies come from AI. Handle refunds within the policy; send anything else to the owner.",
+   "Daily or several times a week: adjust ad bids and negative keywords within the owner's cap, and pause ads automatically when the kill rule triggers.",
+   "Weekly: publish 2–3 substantive guide pages that pass the quality checklist (no mass production); refresh sitemaps; review Search Console queries and improve pages close to ranking.",
+   "Weekly: run the grading evaluation; review a sample of low-rated or disputed grades; update the anchor samples.",
+   "Weekly: run A/B tests on paywall and pricing copy; write the KPI report for the owner (English and Korean).",
+   "Weekly: email partner pitches only to business addresses that are published and relevant to the recipient's role (CASL s.10(9)(b)), and track referral payouts.",
+   "Monthly: dependency and security updates, a privacy and breach-log review, the GST/HST C$30k threshold tracker, and a bookkeeping export for T2125.",
+   "Nov 30 (one-off): prepare the go/pivot memo. If pivoting, build and launch the saju New Year one-time reading product in early December."
+  ],
+  "money_needed_cad": "ESTIMATE:\n- Minimum over 3 months without ads: about C$900–1,300.\n  - Fixed costs: about US$171/month ≈ C$234/month × 3 = C$702. This includes Claude Max 5x at about C$137/month to run the Routines, Cloudflare Workers at US$5, and database, email, domain and monitoring at about US$66.\n  - API usage during building and testing: about C$70–200.\n  - Domain and business-name registration: about C$20–100 (fee not found; prior knowledge).\n  - Virtual mailbox: about C$0–90 over 3 months [prior knowledge].\n- With a capped paid-search test (C$20–30/day for about 10 weeks, about C$1,400–2,100): about C$2,400–3,500 in total.\n- Hard ceiling: the Anthropic spend limit set by the owner.\n- Revenue from the first paying customers offsets part of this, but the base case assumes little offset before December.",
+  "facts": [
+   {
+    "fact": "Claude API list prices per 1M tokens (input/output): Opus 5 $5/$25, Sonnet 5 $2/$10, Haiku 4.5 $1/$5 (skill model table cached 2026-06-24).",
+    "source": "local: claude-api skill SKILL.md 'Current Models (cached: 2026-06-24)'"
+   },
+   {
+    "fact": "Cache reads cost about 0.1× the base input price. Cache writes cost 1.25× (5-minute TTL) or 2× (1-hour TTL). The minimum cacheable prefix is 512 tokens on Opus 5, 1,024 on Sonnet 5 and 4,096 on Haiku 4.5; shorter prompts are silently not cached.",
+    "source": "local: claude-api skill shared/prompt-caching.md"
+   },
+   {
+    "fact": "The Batch API gives 50% off every token in the request, including cache reads and writes, for traffic nobody is waiting on.",
+    "source": "local: claude-api skill shared/cost-optimization.md"
+   },
+   {
+    "fact": "Anthropic Usage Policy: all consumer-facing chatbots must tell users they are talking to AI, at least at the beginning of each chat session. Products serving minors must follow additional guidelines.",
+    "source": "https://github.com/OpenTermsArchive/genai-contrib-versions/blob/main/Claude.ai/Acceptable%20Use%20Policy.md"
+   },
+   {
+    "fact": "RevenueCat State of Subscription Apps 2026 (as summarized in a 2026-08-29 secondary doc): median share of downloads that pay by day 35 is 2.1% for freemium apps, 2.4% for AI apps and 10.7% for hard-paywall apps. 53–61% of monthly subscribers renew after the first month. After 12 months, 8% of monthly subscribers are still paying (6.1% for AI apps, 9.5% for non-AI); for annual plans it is 28% (21.1% for AI apps).",
+    "source": "https://raw.githubusercontent.com/garydbutler/molehills/dd6ec89771bcf4b74ef0b6d3799b0c7375db9ea6/docs/conversion-economics.md"
+   },
+   {
+    "fact": "RevenueCat Education category (the compiler flags some of these figures as not independently cited): median monthly price $9.99 and yearly $44.99; 56% first monthly renewal; 3.1% download-to-paid by day 35. Across all apps: 17.3% reach $1K/month, and the median time to $1K MRR is 58 days.",
+    "source": "https://raw.githubusercontent.com/Teamz-Lab-LTD/teamz-company-automation/be5909d2f677d0fcae8935d66af5f94d5714e926/claude-config/knowledge/RevenueCat_Benchmarks_2026.md"
+   },
+   {
+    "fact": "TrustMRR (n=5,079 products with Stripe-verified revenue): median MRR is $148 in year 0 and $334 in year 1. Only 0.9% were 'breaking out'.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json (citing indiehackers.com via pfurini/furiai-skills)"
+   },
+   {
+    "fact": "Duolingo 2025 Language Report (official blog, archived): Korean became the #6 most popular language studied globally in 2025, passing Italian. Duolingo's courses are free.",
+    "source": "https://github.com/cracrazjf/EaseofRetrieval/blob/03675145df3663a27a0196b1c181d8e5ba744a39/data/raw/items/c20_langapp_real/sources_archive/official_https_blog_duolingo_com_2025_duolingo_language_report_.html"
+   },
+   {
+    "fact": "AI language-tutor prices (secondary, May 2026, dates of the underlying sources unclear): Speak $20/month or $99/year ($162M raised, 10M users); Duolingo Max $29.99/month, with Max reportedly at '9%' of Duolingo's paid users; Talkpal $9.99/month; Praktika $8/month; ChatGPT Plus $20.",
+    "source": "https://raw.githubusercontent.com/bruno77176/my-language-coach-agentical-rebuild/2e2bd4b0a5fc6e737c11b347c9f8985b438ba0d8/docs/superpowers/brainstorming/2026-05-30-strategy-round-2.md"
+   },
+   {
+    "fact": "Consumer AI plans (rechecked 2026-09-01): ChatGPT Free has 'everyday text unlimited', with voice and tools capped; ChatGPT Go US$8; ChatGPT Plus $20; Claude Pro $20; Claude Max 5x $100; Claude Max 20x $200.",
+    "source": "https://raw.githubusercontent.com/FeiZhuLulu/real-api-pricing/07b7a3adcda253f76fc4daea6851c361c759420d/data/subscription-quotas.json"
+   },
+   {
+    "fact": "Korean fortune apps (Mobile Index, Feb 2025, via a 2026-08-22 secondary report): 점신 has 950k MAU (46.5% share) and 포스텔러 570k (28%); the top 3 hold over 80%. Free AI saju already exists (운세박사 GPT '3M+ users', 뤼튼 운세). The 3 New Year months bring 45–50% of annual revenue. The report's own gap list: cost per acquisition of ₩28K–200K exceeds the average revenue per paying user of ₩12.5K. An AI saju app, Saju Ping, reported about 8% paid conversion (800 of 10k users) in its first 3 months.",
+    "source": "https://raw.githubusercontent.com/hot14/saju-report/898a5414e70608aec4c7b29c4b899184d67a4086/2026-08-22_%EC%82%AC%EC%A3%BC%EC%82%AC%EC%97%85%ED%99%94-%EB%B2%A4%EC%B9%98%EB%A7%88%ED%82%B9/%EC%82%AC%EC%A3%BC%EC%82%AC%EC%97%85%ED%99%94_%EB%8D%B0%EC%9D%B4%ED%84%B0.json"
+   },
+   {
+    "fact": "Secondary: Korea's app revenue per download is $1.69 versus Japan's $18.58. Co-Star charges $8.99/month for Pro-Star. Korea's KFTC dark-pattern rules apply from 2025 (hidden renewals, repeated nagging), and Korea's AI Basic Act has been in force since 2026-01-22 (users must be notified when AI is used).",
+    "source": "https://raw.githubusercontent.com/ajitta/Game-Engagement-Retention-Skills/ce25a7286d4deda6ab305fe944828284170cd673/docs/features/engagement-retention-v2/02h-research-korea.md"
+   },
+   {
+    "fact": "Apple App Store guideline 4.3(b) names 'fortune telling' among established categories where Apple 'will not accept new submissions unless they offer a meaningfully different or improved experience'.",
+    "source": "https://raw.githubusercontent.com/HelpMe-Pls/Life-Engineering/a6bc68de23b1a5adbada9e6eaebfc2f93554c778/Notes/q4-research/S3-palm-app-exact-steps.md"
+   },
+   {
+    "fact": "Palm-reading app benchmark (planning notes, 2026-09-21): MagicWay charges $4.99/week, $8.99/month or $24.99/year. The notes assume 10–15% of installs start a trial and 35–45% of trials convert. At US$2–3 per install, 'roughly half to two-thirds of ad spend is lost'.",
+    "source": "https://raw.githubusercontent.com/HelpMe-Pls/Life-Engineering/a6bc68de23b1a5adbada9e6eaebfc2f93554c778/Notes/q4-research/S3-palm-app-exact-steps.md"
+   },
+   {
+    "fact": "Criminal Code s.365 reads '[Repealed, 2018, c. 29, s. 41]' (consolidation current to 2026-07-21). The Code no longer contains the old offence of pretending to tell fortunes. That the repealed section was that offence is prior knowledge.",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/C-46.xml"
+   },
+   {
+    "fact": "Excise Tax Act Schedule VI Part V s.7: a service supplied to a non-resident is zero-rated (0% GST/HST), except (a) a service to an individual who is in Canada when in contact with the supplier, (a.1) a service rendered to an individual while in Canada, (b) an advisory, consulting or professional service, and other listed exceptions (consolidation current to 2026-06-21). Whether an AI chat subscription legally counts as a 'service' or as intangible property was not determined.",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml"
+   },
+   {
+    "fact": "GST/HST small-supplier threshold: C$30,000 of taxable supplies over four consecutive calendar quarters (ETA s.148). Registration is due within 30 days after exceeding it (s.240(2.1)).",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_compliance.json"
+   },
+   {
+    "fact": "CASL: commercial emails need consent, sender identification, a mailing address and a working unsubscribe (valid for 60 days, honoured within 10 business days). The maximum penalty is C$1M for an individual. PIPEDA applies to an Ontario sole proprietor, and breach records must be kept for 24 months.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_compliance.json"
+   },
+   {
+    "fact": "Only CICC consultants, lawyers/paralegals and Quebec notaries may be paid for immigration advice ('If you pay a representative or compensate them in any way ... they must be authorized').",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_korean.json (canada.ca, snippet level)"
+   },
+   {
+    "fact": "2021 Census (via a Wikipedia snippet): 218,140 Korean Canadians, including 74,975 in the Toronto CMA and 62,885 in the Vancouver CMA. Recent growth is driven by working-holiday youth, per YTN 2026 (snippet).",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_korean.json"
+   },
+   {
+    "fact": "Free job services for newcomers exist. For example, ISSofBC 'provides free settlement, employment, and language services to newcomers in BC', and JVS Toronto offers newcomer employment services (resource list last verified 2026-05-09).",
+    "source": "https://github.com/kiankhooban/Arrive/blob/bcedf901c4bfc55922cf1591deeb5cca275af8e3/design-reference/resources-source.md"
+   },
+   {
+    "fact": "Resume-tool price anchors (secondary): Teal $29/month, Jobscan $49.95/month.",
+    "source": "https://github.com/Harshodai/tayari-skill-boost/blob/0dd432ac8de87e4e7d83831e4ded75c8428d5cdf/docs/research/market/competitor_landscape.md"
+   },
+   {
+    "fact": "An open-source CELPIP prep product already exists (CELPIPAce): '1,190+ CELPIP-style question items', '8 full mock exams', 'Real-time Writing and Speaking scoring with CLB-level feedback', and a premium subscription through Stripe.",
+    "source": "https://github.com/clintviegas/celpipace/blob/69fcd12d401bf5e73b42e051c988eafd103ef60c/README.md"
+   },
+   {
+    "fact": "Joe Speaking: the founder's IELTS Speaking Simulator GPT (Dec 2023) cites '50,000+ learners'. He built the standalone app with Claude Code in 'less than 80 days' (from mid-Nov 2025). Growth came from the founder's own viral RedNote posts and word of mouth. Revenue is not disclosed.",
+    "source": "https://raw.githubusercontent.com/hubeiqiao/joe-os/0675cf074a973eb58a55f0a485fd801029291115/sources/product/joe-speaking-about-en.md"
+   },
+   {
+    "fact": "Ahrefs study (updated 2026-04-27): 'Only 1.74% of newly published pages rank in the top 10 within a year' (6.11% for non-empty English pages). 40.82% of the pages that ranked did so within 1 month. 72.9% of top-10 pages are more than 3 years old.",
+    "source": "https://raw.githubusercontent.com/0xenzyme/awesome-seo-articles/5ac0776fdb3861e63720797c7d9543096aff7733/ahrefs-blog/data-studies/how-long-does-it-take-to-rank.md"
+   },
+   {
+    "fact": "Google's scaled-content-abuse policy targets many pages generated mainly to manipulate rankings, however they were made. An agency claims the March 2026 core update cut traffic 50–80% for sites with mass AI pages that lacked editorial oversight (snippet).",
+    "source": "/home/user/canadian-tool-deals/business/research/evidence-corpus.md (S103)"
+   },
+   {
+    "fact": "TikTok Content Posting API: 'All content posted by unaudited clients will be restricted to private viewing mode' until the API client passes an audit.",
+    "source": "https://github.com/lukris-98/Luxio-Project-Manager/blob/772926e6c1e0b9949105ada52ee1369fd7d5c1be/koleksi%20dokumentasi%20api/tiktok-docs/reference/direct-post.md"
+   },
+   {
+    "fact": "YouTube renamed its 'repetitious content' policy to 'inauthentic content' on 2025-07-15. Mass-produced or templated content cannot earn in the YouTube Partner Program (secondary).",
+    "source": "https://github.com/tiger3homs/ancestral-healing/blob/9c79d4707270d43f4a37d01bd64105a18c837092/ah-autopilot/04-policy-and-risk.md"
+   },
+   {
+    "fact": "Payment fees (secondary sources, cross-checked in the SaaS dossier):\n- Stripe Canada: 2.9% + C$0.30, plus 0.7% for Stripe Billing. The first payout comes 7–14 days after the first payment.\n- Polar Starter: 5% + 50¢, plus 1.5% on international cards.\n- Stripe Managed Payments: an extra 3.5%, open to Canadian businesses, and AI services have been eligible since 2026-06-02.\n- Paddle: products under $10 need a custom arrangement.\n- Selling directly (no merchant of record) means charging EU VAT from the first EU sale.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+   },
+   {
+    "fact": "Cloudflare Workers Paid costs US$5/month with 10M requests included, and static asset requests are free. Vercel's free Hobby plan is non-commercial only.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cross_tooling.json"
+   },
+   {
+    "fact": "USD→CAD ≈ 1.37 (used for all conversions).",
+    "source": "[prior knowledge, unverified, pre-2026-06]"
+   },
+   {
+    "fact": "Speech prices assumed: text-to-speech about US$15 per 1M characters (OpenAI tts-1 / Google Neural2 range); speech-to-text about US$0.006/min (Whisper API). Korean text uses more tokens per character than English. The browser's built-in speech recognition is free, but quality varies.",
+    "source": "[prior knowledge, unverified, pre-2026-06]"
+   },
+   {
+    "fact": "IRCC accepts CELPIP-General (as well as IELTS General Training and others) as language proof for economic immigration and citizenship. Express Entry CRS points increase with the CLB level. CELPIP is a trademark of Paragon Testing Enterprises.",
+    "source": "[prior knowledge, unverified, pre-2026-06]"
+   },
+   {
+    "fact": "Ontario's Working for Workers Act amendments to the ESA ban recruiters from charging job seekers fees, and recruiters need a licence from July 2024. A resume coach that does not find or match jobs is probably not a 'recruiter', but job-matching features could be.",
+    "source": "[prior knowledge, unverified, pre-2026-06]"
+   },
+   {
+    "fact": "Lunar New Year 2027 (Seollal) falls on 2027-02-06.",
+    "source": "[prior knowledge, unverified, pre-2026-06]"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Users can get a general assistant for free. ChatGPT Free offers 'everyday text unlimited', and Go costs US$8, so a vertical app at C$13–39 has to beat a free substitute. Duolingo Max, the premium AI tier of the category leader, reportedly has only '9%' adoption (secondary).",
+    "source": "https://raw.githubusercontent.com/FeiZhuLulu/real-api-pricing/07b7a3adcda253f76fc4daea6851c361c759420d/data/subscription-quotas.json ; https://raw.githubusercontent.com/bruno77176/my-language-coach-agentical-rebuild/2e2bd4b0a5fc6e737c11b347c9f8985b438ba0d8/docs/superpowers/brainstorming/2026-05-30-strategy-round-2.md"
+   },
+   {
+    "fact": "AI apps keep monthly subscribers worse than non-AI apps: 6.1% still paying after 12 months versus 9.5% (RevenueCat 2026, secondary).",
+    "source": "https://raw.githubusercontent.com/garydbutler/molehills/dd6ec89771bcf4b74ef0b6d3799b0c7375db9ea6/docs/conversion-economics.md"
+   },
+   {
+    "fact": "Typical indie product outcome: US$148 median MRR in year 0 (TrustMRR). Over 54% of tracked Indie Hackers products make $0 (2022). C$5k/month is about 34× the year-0 median.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+   },
+   {
+    "fact": "Search is slow for new sites: only 1.74% of new pages reach Google's top 10 within a year, and 72.9% of top-10 pages are over 3 years old.",
+    "source": "https://raw.githubusercontent.com/0xenzyme/awesome-seo-articles/5ac0776fdb3861e63720797c7d9543096aff7733/ahrefs-blog/data-studies/how-long-does-it-take-to-rank.md"
+   },
+   {
+    "fact": "Paid acquisition looks negative in a comparable consumer AI fortune app: at US$2–3 per install, 'roughly half to two-thirds of ad spend is lost'. In Korean saju, cost per acquisition (₩28K–200K) exceeds average revenue per paying user (₩12.5K).",
+    "source": "https://raw.githubusercontent.com/HelpMe-Pls/Life-Engineering/a6bc68de23b1a5adbada9e6eaebfc2f93554c778/Notes/q4-research/S3-palm-app-exact-steps.md ; hot14/saju-report 2026-08-22 JSON"
+   },
+   {
+    "fact": "The known fast-growth AI tutor story (Joe Speaking, IELTS) grew through the founder's own viral RedNote posts, which is exactly the owner labour this plan excludes. The fast SaaS launch stories in the SaaS dossier also came from founders who already had audiences.",
+    "source": "https://raw.githubusercontent.com/hubeiqiao/joe-os/0675cf074a973eb58a55f0a485fd801029291115/sources/product/joe-speaking-about-en.md ; /home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json"
+   },
+   {
+    "fact": "The CELPIP niche is already contested. An open-source competitor (CELPIPAce) already has 1,190+ items, 8 mock exams, AI scoring and a paid tier, which shows how easy entry is.",
+    "source": "https://github.com/clintviegas/celpipace/blob/69fcd12d401bf5e73b42e051c988eafd103ef60c/README.md"
+   },
+   {
+    "fact": "The Korean-language tutor space has heavily funded competitors (Speak: $162M raised, 10M users) and cheap ones (Talkpal $9.99, Praktika $8), and Duolingo's Korean course is free.",
+    "source": "https://raw.githubusercontent.com/bruno77176/my-language-coach-agentical-rebuild/2e2bd4b0a5fc6e737c11b347c9f8985b438ba0d8/docs/superpowers/brainstorming/2026-05-30-strategy-round-2.md"
+   },
+   {
+    "fact": "Korean saju is saturated: the top 3 apps hold over 80% of monthly users, there is free AI saju with 3M+ users, and Korea's app revenue per download is only US$1.69.",
+    "source": "https://raw.githubusercontent.com/ajitta/Game-Engagement-Retention-Skills/ce25a7286d4deda6ab305fe944828284170cd673/docs/features/engagement-retention-v2/02h-research-korea.md"
+   },
+   {
+    "fact": "The Korean-newcomer job-coach niche is small (74,975 people of Korean origin in the Toronto CMA, 2021) and competes with free newcomer employment services funded by IRCC and the provinces.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_korean.json ; https://github.com/kiankhooban/Arrive/blob/bcedf901c4bfc55922cf1591deeb5cca275af8e3/design-reference/resources-source.md"
+   },
+   {
+    "fact": "Social distribution cannot be automated: TikTok API posts stay private until TikTok audits the app, and YouTube demonetizes templated, mass-produced content.",
+    "source": "https://github.com/lukris-98/Luxio-Project-Manager/blob/772926e6c1e0b9949105ada52ee1369fd7d5c1be/koleksi%20dokumentasi%20api/tiktok-docs/reference/direct-post.md ; https://github.com/tiger3homs/ancestral-healing/blob/9c79d4707270d43f4a37d01bd64105a18c837092/ah-autopilot/04-policy-and-risk.md"
+   },
+   {
+    "fact": "Apple's guideline 4.3(b) explicitly names fortune telling as a saturated category, which blocks the easiest discovery route (the App Store) for niche C.",
+    "source": "https://raw.githubusercontent.com/HelpMe-Pls/Life-Engineering/a6bc68de23b1a5adbada9e6eaebfc2f93554c778/Notes/q4-research/S3-palm-app-exact-steps.md"
+   },
+   {
+    "fact": "The positive saju figures (for example 8% paid conversion at Saju Ping) are self-reported numbers from a single startup, compiled in a secondary Korean research note. No data was found on English-language saju demand, CELPIP test-taker volumes, or CELPIP keyword costs per click.",
+    "source": "hot14/saju-report 2026-08-22 JSON; not found"
+   }
+  ],
+  "risks": [
+   "Distribution (decisive): the channels that need no owner labour are slow (search) or burn cash (ads). The likely month-3 result is C$0–1,000 net, not C$5,000.",
+   "Being wrong about unit economics: CELPIP keyword costs per click, English saju demand, and test-taker volumes were all not found. The paywall and retention benchmarks come from mobile apps (RevenueCat), and web funnels may differ.",
+   "Free substitutes: ChatGPT Free (unlimited text) and free Duolingo courses keep improving. The moat for a thin wrapper is weak, and churn at AI apps is worse than average (6.1% of monthly subscribers left after 12 months).",
+   "Grading accuracy and liability: if AI scores do not match real CELPIP results, expect refund requests, chargebacks and complaints. Claims of 'accurate CLB prediction' could be misleading advertising. Mitigate with a calibration evaluation, no guarantees, and a clear refund policy.",
+   "Regulatory adjacency: niches B and D attract immigration questions. Paid immigration advice without a CICC licence can bring fines. Guardrails are needed, plus a written refusal policy. Using the 'CELPIP' name risks a trademark issue if it implies an official product.",
+   "Minors: Korean-learning and K-pop/saju audiences include teenagers. Anthropic's usage policy requires extra safeguards for products that serve minors, so use an 18+ gate or comply with those guidelines. Collecting a friend's birth date for saju compatibility raises PIPEDA consent issues.",
+   "Tax and merchant: selling directly to foreign consumers can trigger EU VAT from the first sale, and possibly other countries' digital-services taxes (not verified). A merchant of record is recommended. Canadian HST applies once past C$30k over four quarters. The Polar and Stripe fee schedules and any account holds were not verified on official pages.",
+   "Platform and account risk: the Anthropic API account, the Google Ads account, or Stripe could suspend or hold funds. Model prices and behaviour change, so re-run the grading evaluation on every model change.",
+   "Cost blow-outs: heavy users, abuse or bots can push API costs up. Mitigate with per-user caps, spend alerts, the owner's Anthropic spend limit, and bot protection on the free checker.",
+   "Security and privacy of AI-built code (reports of missing row-level security in AI-built apps). A breach of chat logs or voice recordings brings PIPEDA duties (report the breach, notify affected users, keep records for 24 months).",
+   "Owner-specific: legal right to be self-employed (Gate 0) is unconfirmed. If the owner is on EI, a business that is more than 'minor in extent' can cost full weeks of benefits (EI Regulations s.30).",
+   "Opportunity cost: the owner needs income. This plan's likely cash in the first 3 months is below its operating cost plus ad spend, so it should not be the only income source.",
+   "Evidence quality: most market numbers are secondary GitHub compilations. Only the statute text (Justice Canada XML), the Anthropic prices and the Cloudflare prices were read from primary or official sources."
+  ],
+  "scores": {
+   "p5k_90d": 1,
+   "owner_light": 7,
+   "capital_light": 7,
+   "ai_build": 8,
+   "ai_operate": 6,
+   "low_risk": 6
+  },
+  "score_rationale": "p5k_90d = 1.\n- The best niche (D) needs about 231 active C$29 subscribers, or about 168 C$39 passes, per month by month 3. Getting there means about 113 new payers every month from launch, about 1,060 free sign-ups per month at the 10.7% hard-paywall median, and about 4,200–7,000 relevant visitors per month.\n- The evidence says a new domain gets little search traffic within 3 months (1.74% of new pages reach the top 10 within a year).\n- Comparable paid acquisition loses 50–67% of spend.\n- The base-rate median for new products is US$148 MRR in year 0.\n- Niches A and C need about 675–706 subscribers at lower prices. Niche B's market is too small.\n\nowner_light = 7. After about 6.5–9.25 hours of setup, 1.5–3 hours/week is feasible. But anything touching the owner's identity stays with the owner: KYC, ad-account billing, disputes, payouts, legal decisions. And the one lever that would help most, the owner's own posting, is excluded.\n\ncapital_light = 7. About C$900–1,300 over 3 months without ads. The largest fixed item is the Claude Max plan that runs the Routines. A useful ads test raises the total to about C$2,400–3,500.\n\nai_build = 8. Claude can build the whole web app, payments, grading engine, evaluation set, SEO pages and ad files. Points off because accounts (Stripe, Anthropic, Ads, speech-to-text, DNS) need the owner once, and calibrating the grading takes care.\n\nai_operate = 6. Routines can handle monitoring, support, content, ad tuning, evaluations and reports. Humans are still needed for money movement, dispute escalation, ad-account and policy events, quality spot-checks, and any community distribution.\n\nlow_risk = 6. Little capital is at risk and there is no physical risk. Main exposures:\n- immigration-advice adjacency (CICC) in B and D;\n- misleading-score claims and refunds;\n- minors (A and C);\n- PIPEDA duties for chat and voice data;\n- merchant or ad-account suspensions;\n- foreign tax, handled by using a merchant of record.\nFortune-telling is no longer a Criminal Code offence (s.365 repealed in 2018)."
+ },
+ "verification": {
+  "problems": [
+   {
+    "claim": "Summary: my judgement is that the chance of averaging C$5,000/month by Dec 2026–Jan 2027 is roughly 5–10%.",
+    "problem": "This contradicts the dossier's own numbers. The timeline says the base case does NOT reach C$5k, and even the optimistic case gives C$1,500–3,000 in month 3. If the optimistic case falls short, the probability cannot be 5–10%. The base rates point the same way. TrustMRR, which is opt-in and skews upward, shows a year-0 median of $148. Only 0.9% of those products were 'breaking out'. The cand_saas.json research adds that 'the median product does not reach $1k MRR by year 2' and that survivors took a median 8 months to reach $1K MRR. The adversarial review in cand_saas.json already cut a comparable SaaS probability to 0.5/10.",
+    "correction": "Judgement, not a measurement: well under 2%. Make the summary match p5k_90d, and remove the '5–10%' figure."
+   },
+   {
+    "claim": "Free tier is '1 graded writing task plus 1 graded speaking task, then a hard paywall', so the RevenueCat hard-paywall median of 10.7% applies. The distribution plan offers '1 free check per day with an email address'.",
+    "problem": "A free check every day is freemium, not a hard paywall. The two sections contradict each other. The freemium median is 2.1%, and the cost of free users also rises: up to 30 checks a month at US$0.016 each is about US$0.48 per active free user, instead of one sample.",
+    "correction": "Choose one design. With the daily free check, use the 2.1% freemium rate. ESTIMATE: 113 ÷ 0.021 ≈ 5,380 sign-ups/month, and at 15–25% visitor-to-sign-up, 5,380 ÷ 0.25 to 5,380 ÷ 0.15 ≈ 21,500–35,900 relevant visitors/month. Also recompute the free-sample cost: 46.6 free users per payer × up to US$0.48. Otherwise, drop the daily free check."
+   },
+   {
+    "claim": "The ramp needs 113 new payers per month: 231 subscribers ÷ 2.04, using retention of 57% after month 1 and then 82% per month.",
+    "problem": "The best variant pushes non-renewing C$39/C$79 passes as the main product, but the ramp applies subscription retention. Pass revenue does not stack from month to month unless buyers repurchase, and the repurchase rate was not found. Exam-prep buyers also churn after their test date, so an all-category 82%/month retention figure is optimistic for this category. The C$29/month subscription is cheaper than the C$39 30-day pass, so most buyers would pick the subscription and cancel after the exam.",
+    "correction": "If passes dominate, ESTIMATE: about 168 new pass buyers/month from launch. That means 168 ÷ 0.107 ≈ 1,570 sign-ups, or about 6,300–10,500 visitors/month at 15–25%. Either price the pass below the subscription or drop one of them."
+   },
+   {
+    "claim": "LTV ≈ C$22.68 × 1.8 months ≈ C$41, so paid search breaks even at a cost per click of about C$0.82.",
+    "problem": "The 1.8-month lifetime conflicts with the dossier's own retention model. ESTIMATE: 1 + 0.57 + 0.57×0.82/(1−0.82) = 1 + 0.57 + 2.60 ≈ 4.17 months (≈3.81 months truncated at 12). The kill rule also uses first-sale net of C$31, not C$41. That implies a break-even of C$31 × 2% ≈ C$0.62 per click. Three different lifetime assumptions are in use.",
+    "correction": "Use one lifetime figure. The conservative choice for deadline-driven buyers is the first sale only, about C$31, which gives a break-even cost per click of about C$0.62 at 2% visitor-to-paid. State that actual CELPIP cost per click was not found."
+   },
+   {
+    "claim": "Paid search at C$20–30/day is 'the only fast channel', with a target of 4,200–7,000 relevant visitors per month.",
+    "problem": "The budget cannot buy that traffic. ESTIMATE: C$600–900/month ÷ 4,200–7,000 visitors requires a cost per click of about C$0.09–0.21. Education and immigration keywords are typically above C$1 per click [prior knowledge, unverified, pre-2026-06]. At C$1–2 per click, the capped budget buys about 300–900 clicks/month. At 15–25% sign-up and 10.7% conversion, that is about 5–24 payers per month, against the 113–168 needed.",
+    "correction": "State plainly that the capped ad test can prove or disprove the funnel but cannot deliver the target volume. Reaching the target through ads alone would need roughly C$3,500–5,000/month of ad spend (113–168 payers × about C$31 CAC). That burns all the contribution."
+   },
+   {
+    "claim": "The customer counts use (5,000 + 234) ÷ contribution, described as 'net after fees, API and fixed costs'.",
+    "problem": "Ad spend is left out of the formula, even though ads are the only fast channel in the plan. Income tax is also left out; the owner will think of 'C$5k' as money they keep.",
+    "correction": "Use (5,000 + 234 + monthly ad spend) ÷ contribution. With the C$600–900 ad cap, D needs about 257–270 subscribers, or about 188–197 C$39 passes. ESTIMATE: (5,234 + 600) ÷ 22.68 = 257; (5,234 + 900) ÷ 22.68 = 270; 5,834 ÷ 31.18 = 187; 6,134 ÷ 31.18 = 197."
+   },
+   {
+    "claim": "The 10.7% paid rate is applied to a web sign-up funnel, with an assumed 15–25% visitor-to-sign-up rate.",
+    "problem": "RevenueCat measures download-to-paid in mobile apps. An app install is a stronger intent signal than giving an email for a free score check. The 15–25% visitor-to-sign-up rate has no source or tag. Typical landing-page sign-up rates are often in single digits [prior knowledge, unverified, pre-2026-06].",
+    "correction": "Label 15–25% as an unsourced assumption, and show a sensitivity case at 5%. ESTIMATE: 1,060 ÷ 0.05 ≈ 21,200 visitors/month."
+   },
+   {
+    "claim": "Grading is calibrated with anchor samples at CLB 5/7/9 and an evaluation set of 100–200 responses with target scores, built by the AI in about 3 weeks.",
+    "problem": "The plan has no ground truth. Official CELPIP samples belong to Paragon, and whether they may be used was not verified. Targets labelled by the AI make the evaluation circular. Real calibration needs responses scored by certified or experienced human raters, which is a hidden cost and hidden labour. The owner's English level is unknown, so the weekly spot-check of grades may not be meaningful. Grading speaking from a speech-to-text transcript cannot assess pronunciation or fluency.",
+    "correction": "Add a budget line for human-rated calibration samples (cost: not found), or downgrade the product claim to 'practice feedback' with no CLB estimate. Lower ai_build. Note that the owner's quality check depends on their English level."
+   },
+   {
+    "claim": "Owner one-time total: about 6.5–9.25 h.",
+    "problem": "The listed items sum to 6.25–8.75 h. ESTIMATE, minimum: 0.5+0.5+0.5+1+0.5+0.5+1+1+0.5+0.25 = 6.25. Maximum: 0.5+0.5+0.5+1.5+1+0.5+2+1+1+0.25 = 8.75. Several tasks are missing from the list: the speech-to-text provider account (ai_build says 'the owner opens that account'), Google Ads advertiser identity verification [prior knowledge, unverified, pre-2026-06], the wait for approval of the Google Ads API developer token, Stripe Managed Payments eligibility review, and a second round of setup if the plan pivots to saju.",
+    "correction": "Correct the sum to 6.25–8.75 h, and add about 1–2 h for the missing items, for about 7.25–10.75 h. That can exceed the 10 h budget."
+   },
+   {
+    "claim": "The AI adjusts bids and negative keywords through the API or Google Ads Editor import files.",
+    "problem": "Editor imports are done by a human, so they are owner labour. API access needs Google to approve a developer token, which is not guaranteed and has no known timeline [prior knowledge, unverified, pre-2026-06]. Until approval, 'daily bid adjustment by AI' becomes an owner task every week.",
+    "correction": "List ad operations as owner labour (about 15–30 min/week) until the API token is approved. Lower ai_operate."
+   },
+   {
+    "claim": "Money needed without ads: about C$900–1,300; with ads: about C$2,400–3,500.",
+    "problem": "The components add up differently. ESTIMATE: 702 + (70–200) + (20–100) + (0–90) = C$792–1,092 without ads. With ads: 792 + 1,400 to 1,092 + 2,100 = C$2,192–3,192. The difference is not explained. Also missing: calibration labelling, Stripe dispute fees (US$15 per dispute on Stripe's US page, Canadian fee not found), and 5-minute cache misses at low traffic, when the first request after expiry pays the cache-write rate. For example, a D rubric of 6,000 tokens × $2.50/M = $0.015 per cold write, about as much as the whole grade.",
+    "correction": "Show the sum as C$800–1,100 plus contingency. Add a line for calibration and disputes. Note that low-traffic caching may roughly double the per-grade cost at launch."
+   },
+   {
+    "claim": "Fixed costs include Claude Max 5x (US$100) 'to run the Routines'.",
+    "problem": "Whether Max 5x usage covers daily Routines for monitoring, support, content, bids and evaluations: not found. The database at $25 and email at $20 are prior knowledge and may be overestimates, since Cloudflare D1 is bundled with Workers Paid [prior knowledge, unverified, pre-2026-06].",
+    "correction": "Tag the Routine quota as 'not found'. Show a range of US$120–220 fixed if usage pushes the plan to Max 20x."
+   },
+   {
+    "claim": "RevenueCat: 17.3% of apps reach $1K/month, with a median of 58 days for those that do.",
+    "problem": "This is cited to show a quick path, but it comes from a secondary compilation the compiler flags as 'not independently cited'. The Indie Hackers survivor data in cand_saas.json gives a median of 8 months to $1K MRR. The dossier uses the faster figure without noting the conflict.",
+    "correction": "Show both figures and weight the 8-month survivor median. Even $1K, a fifth of the target, typically takes months."
+   },
+   {
+    "claim": "The CELPIP niche has the strongest search intent, and the plan is to bid on keywords like 'CELPIP practice test'.",
+    "problem": "CELPIP is Paragon's trademark [prior knowledge, unverified, pre-2026-06]. Google Ads may restrict trademarks in ad text, and the brand owner can complain [prior knowledge, unverified, pre-2026-06]. Naming the free tool 'CELPIP Writing Score Checker' risks implying an official product. The dossier lists the trademark issue as a risk but does not reflect it in the channel plan.",
+    "correction": "Use descriptive names such as 'CLB writing practice'. Treat trademark ad restrictions as a possible blocker for the one fast channel."
+   },
+   {
+    "claim": "Contribution for D at C$39 pass: C$31.18; at C$79 pass: C$59.93.",
+    "problem": "Rough recomputation gives slightly different numbers. ESTIMATE: 39 − 6.4% × 39 − 0.30 − 3.94 API ≈ C$32.26 before the free-sample cost, and 79 − 5.36 − (3 × 3.94) ≈ C$61.82. The unexplained gaps of about C$0.7–1.9 suggest undocumented deductions. The differences are small, but the method is not shown.",
+    "correction": "Show the pass arithmetic line by line, including how the free-sample cost and any Billing fee are deducted."
+   }
+  ],
+  "unlabelled_prior_knowledge": [
+   "The worked example says 'Korean text tokenizes heavily' but uses only 40 input and 200 output tokens per turn. The tag is there, but the token counts it drives are not tested for sensitivity.",
+   "'Stripe usually pays out 7–14 days after the first charge' comes from a secondary source, and whether it applies to Stripe Managed Payments payout timing is not stated.",
+   "The C$1,400–2,100 ad budget and the whole ad channel assume Google Ads will accept an immigration-test-prep advertiser without restriction. No source or tag.",
+   "'Typical month (40 writing + 80 speaking)' task volume for a CELPIP learner is an untagged assumption. It drives the API cost.",
+   "'Users constantly ask immigration questions' (niche B) is untagged.",
+   "Speech-to-text at US$0.006/min is used as the provider for D, but no specific account or provider is sourced.",
+   "'Database about $25, email about $20, monitoring $20' are said to be prior knowledge in the text, but the tag is missing from the fixed-cost line items.",
+   "'Ontario trade-name fee not found' and 'C$20–100' for the domain and name registration are mixed together.",
+   "The claim that the merchant of record removes all foreign tax obligations is not tagged. The ETA question of whether this is a 'service' or intangible property is still open.",
+   "The 15–25% visitor-to-sign-up rate is an assumption with no tag or source."
+  ],
+  "math_check": "Checked and correct:\n- Sonnet worked session: cache reads 60,000 + 45,600 = 105,600 × $0.20/M = $0.021; cache writes 7,800 × $2.50/M = $0.0195; output 4,000 × $10/M = $0.04; total $0.081. Without caching: 106,400 × $2/M + $0.04 = $0.253. Opus: $0.0528 + $0.0488 + $0.10 = $0.20.\n- Voice: 2,400 × $15/M = $0.036, plus 4 × $0.006 = $0.024, total $0.06.\n- A: 12 × $0.141 = $1.69; 40 × $0.141 ≈ $5.64.\n- A contribution: 13.69 − 1.575 − 3.93 − 0.42 = 7.76.\n- B: 3.6% × 19 + 0.30 = 0.98; API 0.7 × 1.11 + 0.3 × 2.55 = $1.54 → C$2.11; contribution C$15.56. 5,234 ÷ 15.56 = 336.\n- C: batch daily readings 30 × 0.0032 + 4 × 0.069 + 0.033 = $0.405.\n- D: writing grade 0.0012 + 0.0008 + 0.014 = $0.016; month 40 × 0.016 + 80 × 0.02 = $2.24 (dossier says $2.21); fee 6.4% × 29 + 0.30 = 2.16; API blended $2.87 → C$3.94; 5,234 ÷ 22.68 = 231; 5,234 ÷ 31.18 = 168.\n- Ramp: 231 ÷ 2.04 = 113; 113 ÷ 0.107 = 1,056; 1,056 ÷ 0.25 to 1,056 ÷ 0.15 = 4,224–7,040.\n- Fixed costs: 5 + 100 + 25 + 20 + 1 + 20 = US$171 → C$234.\n- Weekly owner time: 90–120 min.\n\nWrong or inconsistent:\n1. Owner one-time hours sum to 6.25–8.75, not 6.5–9.25.\n2. Money without ads sums to C$792–1,092, not 900–1,300. With ads it is C$2,192–3,192, not 2,400–3,500.\n3. LTV uses 1.8 months, but the stated retention implies about 4.17 months (1 + 0.57 + 0.4674 ÷ 0.18). The kill rule uses C$31. Three lifetimes are in use.\n4. Free-sample amortization for A (C$0.42 per month) implies a lifetime of about 3.8 months, but D's LTV uses 1.8 months.\n5. Saju API is shown as C$0.79, but US$0.40 × 1.37 = C$0.55. The blend is not shown.\n6. The pass contributions are C$0.7–1.9 below a straight recomputation, with the deductions not documented.\n7. Structural errors:\n   - The target formula leaves out ad spend.\n   - The freemium daily check makes 10.7% the wrong benchmark: 2.1% implies about 5,380 sign-ups and 21.5k–36k visitors per month.\n   - The C$20–30/day ad cap would need a cost per click of C$0.09–0.21 to deliver the stated traffic.\n   - The pass model does not stack like subscriptions, so 168 new buyers per month are needed rather than 113.",
+  "adjusted_scores": {
+   "p5k_90d": 0.5,
+   "owner_light": 6,
+   "capital_light": 6,
+   "ai_build": 7,
+   "ai_operate": 5,
+   "low_risk": 5
+  },
+  "verdict": "The build side and the API-cost side hold up. Most token arithmetic checks out, and API cost really is small next to price. But the dossier is too optimistic in its headline and inconsistent in its funnel math.\n\nHeadline:\n- The '5–10%' chance of hitting the target contradicts its own base and optimistic cases, neither of which reaches C$5k.\n- Base rates imply under 2% (judgement): TrustMRR year-0 median $148, survivors take a median 8 months to reach $1K, 0.9% break out.\n\nFunnel math:\n- The daily free check makes this freemium, so the paid rate falls from 10.7% to 2.1% and the traffic needed rises to about 21–36k relevant visitors per month.\n- Non-renewing passes do not stack like subscriptions, so it takes about 168 new buyers every month rather than 113.\n- Ad spend is left out of the C$5k net target.\n- The C$20–30/day ad cap can buy only about 300–900 clicks at realistic costs per click [prior knowledge], which means about 5–24 payers per month.\n- Three different customer lifetimes are used (1.8 months, the C$31 first sale, and about 4.2 months implied by the retention model).\n\nHidden labour and costs:\n- Calibrating grades needs human-rated ground truth.\n- The owner's English level limits their spot-checks.\n- Ad operations stay with the owner until Google approves the API token.\n- Additional missing account setups (speech-to-text, ad verification) push the one-time setup to about 7–11 hours.\n- Cache misses at low traffic raise the per-grade cost.\n- Trademark limits on 'CELPIP' in ads could block the only fast channel.\n\nRecommendation: treat this as a low-cost experiment to validate the funnel (about C$800–1,100 without ads, or about C$2.2–3.2k with the ad test), not as a plan to earn C$5k/month in 2–3 months. It should not be the owner's income source in that window. p5k_90d is about 0.5/10."
+ }
+}

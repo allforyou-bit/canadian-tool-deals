@@ -1,0 +1,274 @@
+{
+ "dossier": {
+  "candidate": "API / agent marketplaces and white-label AI (RapidAPI, GPT Store-style assistant stores incl. ChatGPT Apps / Claude connectors / Poe, paid MCP servers, Apify Store, and done-once white-label chatbots for SMBs)",
+  "summary": "VERDICT: this model will not reach an average of CAD 5,000/month by Dec 2026–Jan 2027. One sub-variant, a portfolio of pay-per-event Apify Actors, is worth keeping as a low-cost side asset that the AI can mostly run itself. It is not a primary income plan.\n\nWhat the evidence shows, sub-channel by sub-channel:\n\n(1) RapidAPI. Several 2026 GitHub sources that cite docs.rapidapi.com (one read on 2026-09-08) say the fee is now a flat 25%, not the older 20%, and that payouts go through PayPal only. A dated 2026-08-31 channel assessment rates the trend as \"declining\". It reports search clutter and spam, provider complaints about payout delays, and no public sales data. The only earnings evidence is from before the acquisition: one API at about $1,500/month.\n\n(2) Assistant stores:\n- GPT Store: the builder revenue program pays US builders only. This is prior knowledge, plus a low-confidence secondary source dated 2026-09-23. No Canadian eligibility was found.\n- ChatGPT Apps (Apps SDK): apps reach ChatGPT users outside the EEA, Switzerland and the UK, so Canada is included. OpenAI discloses no revenue share. The in-ChatGPT payment sheet is limited to physical goods, so selling means sending users to your own external checkout (verified 2026-07-07, secondary).\n- Anthropic's Connectors Directory has no revenue share and no payment rail.\n- Poe lists Canada as an eligible creator country (per-message pricing, paid through Stripe, $10 minimum, US withholding of 0–30%). No creator earnings data was found.\n\n(3) Paid MCP servers. MCP has no native payment rail yet. The payments proposal (SEP-2007) is still a draft. The official registry is in preview and has no monetization. No MCP marketplace (Smithery, MCPize, Glama and others) publishes fee terms. No operator has audited revenue; the only claims are self-reported (21st.dev \"$10K MRR in 6 weeks\", flagged as unverified).\n\n(4) Apify Store is the strongest channel:\n- Official docs and the Store terms (last updated 2026-09-15) give creators 80% of revenue minus platform costs.\n- Payouts are monthly, with a $20 minimum via PayPal or Wise, after an ID/KYC check.\n- Actors can be sold to AI agents through x402 and Skyfire.\n- A secondary source reports that Apify pays creators about $1.5M/month across roughly 3,900 community developers.\n- But the r/apify anecdotes show slow ramps: about $10 in the first month, 7 months to a first $100, and $1,000+/month from an 18-Actor portfolio.\n\n(5) White-label SMB chatbots. This is the only variant whose math reaches CAD 5,000 with plausible prices (about 37 clients at CAD 149/month). But it depends on selling, which the owner excludes. The dossier's own funnel assumptions imply about 18,000 cold emails that each have to be checked for CASL compliance. Buyers can get the same thing directly for $20–$99/month (My AI Front Desk, GoodCall, Chatbase Hobby). And Moffatt v. Air Canada holds the business liable for what its chatbot says.\n\nESTIMATE, realistic month-3 revenue for the best variant: CAD 0–400/month; optimistic about CAD 1,000–1,500. Probability of averaging CAD 5,000 by month 3: under 5%.",
+  "best_variant": "A portfolio of 8–15 pay-per-event (PPE) Actors on the Apify Store, built and maintained by Claude.\n\n- Agent access: each Actor is also callable by AI agents through Apify's MCP server, with x402/Skyfire payments (\"allowsAgenticUsers\").\n- Niches: under-served sources where Western incumbents are thin and personal data is minimal. Examples are Korean-language e-commerce and product data, and Canadian public datasets such as government tenders, product recalls and grant listings. Each source's ToS and legality must be checked first.\n- Avoid: the most crowded categories (general social-media and lead-gen scrapers) and anything that collects personal information.\n- Price: about US$2–5 per 1,000 results on PPE, or US$15–30/month on rental. These are assumptions, not sourced market rates.\n- Optional add-on: mirror 1–2 AI-backed utility APIs (for example Korean↔English honorific-aware translation, or Canadian address/postal-code normalization) on RapidAPI at US$10–30/month. Accept the 25% fee and PayPal-only payouts.\n\nExplicitly not recommended as the main bet:\n- GPT Store: no Canadian payouts found.\n- Claude Connectors Directory: no revenue share.\n- ChatGPT Apps: can only be a free funnel to your own external checkout.\n- Poe: Canada is eligible, but there is no earnings evidence.\n- Paid MCP marketplaces: no fee or payment terms published.\n- White-label SMB chatbots: need a salesperson.",
+  "unit_economics": "ASSUMPTION used throughout: 1 USD ≈ 1.37 CAD [prior knowledge, unverified, pre-2026-06]. So CAD 5,000 ≈ US$3,650 net.\n\n(A) Apify rental. Profit per renter = 0.8 × price; renters pay their own platform usage. Apify's official doc example is $30 → $24.\n- ESTIMATE: at US$25/month, 0.8 × 25 = $20/renter.\n- 3,650 / 20 ≈ 183 paying renters, before PayPal/Wise payout fees (amount not found).\n\n(B) Apify pay-per-event (PPE). Official formula: profit = 0.8 × revenue − platform costs.\n- ASSUMPTION: platform costs = 20% of revenue, so profit = 0.6R.\n- ESTIMATE: R = 3,650 / 0.6 ≈ US$6,083/month in gross billings from paid-plan users only. Free-plan users bring $0 (official docs).\n- Base-rate check, ESTIMATE: US$1.5M/month ÷ 3,900 community developers ≈ US$385/month MEAN per developer (secondary source; the median is unknown and certainly lower). The target is 3,650 / 385 ≈ 9.5× that mean.\n\n(C) RapidAPI. The provider keeps 75%.\n- ESTIMATE: at US$20/month, 0.75 × 20 = $15/subscriber.\n- 3,650 / 15 ≈ 244 paying subscribers, before PayPal fees.\n\n(D) Poe, per-message pricing.\n- ASSUMPTION: price US$0.01/message.\n- Haiku 4.5 inference per message ESTIMATE: 2,000 input × $1/M = $0.002, plus 300 output × $5/M = $0.0015, so $0.0035.\n- Net ≈ $0.0065/message before 0–30% US withholding.\n- 3,650 / 0.0065 ≈ 561,500 paid messages/month, about 18,700/day.\n\n(E) White-label SMB chatbot at CAD 149/month.\n- Stripe: 0.029 × 149 + 0.30 = C$4.62.\n- Claude Haiku 4.5 per client ESTIMATE: 2,500 turns/month × (3,500 cached input × $0.10/M + 500 fresh input × $1/M + 300 output × $5/M) = 2,500 × $0.00235 = US$5.88 ≈ C$8.05.\n- Hosting: about C$1 (Cloudflare Workers free tier, or US$5/month shared).\n- Net ≈ 149 − 4.62 − 8.05 − 1 = C$135.3/client. 5,000 / 135.3 ≈ 37 clients.\n- Using the dossier's (unsourced) ~486 cold emails per closed deal: 37 × 486 ≈ 18,000 CASL-vetted emails, and that funnel assumed the owner makes the follow-up calls.\n\nGross margins are high in every variant (about 60–90%). The binding constraint is customer volume, not cost.",
+  "distribution_plan": "Rely only on discovery inside the marketplaces; the owner does no posting or selling.\n\n1. Apify Store search and ranking. Readme SEO is written by the AI. Store pages are publicly indexable [prior knowledge, unverified, pre-2026-06].\n2. Apify's MCP server and agentic payments (x402/Skyfire). AI agents can find and pay for Actors without an Apify account (official docs).\n3. Apify's integrations with Make, n8n and Zapier (official academy doc).\n4. The RapidAPI Hub listing, for the optional API.\n5. Public GitHub repos and docs pages that link to each Actor. The AI can publish these through the repo; the owner does nothing.\n\nChannels deliberately not used: cold email (CASL onus falls on the owner as sender; penalties up to $1M per violation for an individual), and social posting (needs the owner's accounts).\n\nEvidence caveat: Apify community reports say new Actors can stay \"largely invisible even when technically good\", and that external promotion helps. Skipping owner-driven promotion is therefore a real handicap.\n\nOwner hours/week, ESTIMATE: 0.5–1. That covers reading the weekly AI report (15 minutes), approving spend (5 minutes), pasting AI-drafted replies into Apify Issues if the API cannot post them (not verified; 0–30 minutes), and weekly EI earnings reporting if the owner is on EI.",
+  "timeline": "Basis: official Apify payout rules plus anecdotes from r/apify (secondary, 2026-09-01).\n\n- Weeks 0–1 (by about 2026-10-02): the owner does the one-time setup. That means the Apify account and ID/KYC, PayPal or Wise, API tokens stored as GitHub secrets, and an Anthropic key with a spend cap.\n- Weeks 1–4 (October): the AI builds and publishes the first 3–5 Actors, then works up to 10–15 by mid-November. It also enables PPE pricing and agentic users.\n- First dollar: the anecdotes range from about $10 to about $380 in a first month, and one creator took 7 months to reach $100. ESTIMATE: first revenue in November 2026 at the earliest.\n- First cash: payout invoices are generated on the 11th for the previous month and auto-approved on the 14th, with a $20 minimum on PayPal/Wise. Below the minimum, earnings roll over. ESTIMATE: first cash about 2026-12-14, and only if November paid usage was at least $20; otherwise January 2027 or later.\n- CAD 5,000/month: not expected within the 2–3 month window. The best sourced anecdote is $1,000+/month from 18 Actors (time taken not stated). ESTIMATE: for a strong portfolio, 6–18+ months, if it happens at all. The base case plateaus at a few hundred dollars a month.",
+  "owner_one_time_tasks": [
+   "Create a dedicated Google/email identity for the business so that platform suspensions cannot touch personal accounts (0.5 h)",
+   "Open an Apify account (Creator plan, US$1/month per the official academy doc) and complete identity verification/KYC: full legal name and an ID or driver's licence photo. Without it, earnings roll over (official monthly-payouts doc) (1 h)",
+   "Open and verify a PayPal or Wise account for payouts. Apify recommends PayPal: $20 minimum and lower fees than SWIFT, where intermediaries typically take $10–$50 (1 h)",
+   "Generate API tokens (Apify, Anthropic with a hard monthly spend cap, Cloudflare) and store them as GitHub Actions secrets, following AI-written step-by-step instructions (1 h)",
+   "Optional: create a RapidAPI provider account and link PayPal (0.5 h)",
+   "Optional: create a Poe creator account (Stripe onboarding plus W-8BEN for US withholding) (1 h)",
+   "Read and accept the Apify Store Publishing Terms (updated 2026-09-15). Approve the AI-drafted privacy and ToS text and the source-by-source legality checklist (1 h)",
+   "If on EI or planning to claim: confirm with Service Canada how this activity is treated. Under EI Regs s.30, an activity that is more than 'minor in extent' counts as a full working week (0.5–1 h)",
+   "Set up simple record-keeping for T2125 self-employment income (the AI builds the ledger; the owner confirms) (0.5 h). Total ESTIMATE: about 7–8 hours"
+  ],
+  "owner_weekly_tasks": [
+   "Read the AI's weekly revenue and health report and approve any spend above the cap (15–20 min)",
+   "Paste AI-drafted replies into Apify Issues, or approve them, if the AI cannot post through the API (not verified). The terms require a response within 14 days, and failing to answer direct requests within 3 business days can lower the Actor Quality Score (0–30 min)",
+   "Monthly: check the payout invoice. It auto-approves on the 14th if no action is taken, so this is optional (5 min/month)",
+   "If on EI: declare net self-employment earnings on the bi-weekly report (10 min)"
+  ],
+  "ai_build_tasks": [
+   "Research Apify Store demand (the apify.com/ideas board, category saturation, competitor Actors' users and ratings) and pick 10–15 niches with thin incumbents and minimal personal data (Korean-language product/market data, Canadian public data)",
+   "Build each Actor: input/output schemas, pay-per-event charging calls, graceful free-plan limits (required by official docs), README/SEO copy, example outputs and tests",
+   "Set up a GitHub Actions CI/CD pipeline that pushes Actors to Apify with a token secret [Apify CLI 'push' — prior knowledge, unverified, pre-2026-06], plus scheduled smoke tests that mirror Apify's QA. Apify flags an Actor 'under maintenance' after 3 consecutive days of failing runs and 'deprecated' after about 30 days (official)",
+   "Enable agentic users (x402/Skyfire through Apify's MCP server) where eligible, and write MCP-friendly tool descriptions",
+   "Optional: build 1–2 AI-backed utility APIs on Cloudflare Workers (free tier: 100k requests/day) using Claude Haiku 4.5, and list them on RapidAPI with Free/Basic/Pro plans; validate the RapidAPI proxy secret server-side",
+   "Build a revenue and usage dashboard from the Apify API, and keep a per-source legality/ToS log (PIPEDA: avoid collecting personal information)",
+   "Write public GitHub docs pages or repos that link to each Actor, for search discovery"
+  ],
+  "ai_recurring_tasks": [
+   "Daily (Routine): run health checks on every Actor and API; fix breakages from site changes before the 3-day 'under maintenance' threshold",
+   "Weekly: pull Store analytics (runs, paying users, revenue, platform costs); adjust PPE prices within Apify's limit of one price increase per month, effective after 14 days' notice",
+   "Weekly: draft responses to user Issues for the owner to paste if needed, and update READMEs",
+   "Every 1–2 weeks: ship one new Actor into an under-served niche and retire dead ones",
+   "Monthly: reconcile the payout invoice (generated on the 11th), update the income ledger for T2125, and track cumulative taxable supplies against the $30,000 GST/HST small-supplier threshold",
+   "Monthly: write a go/no-go report against kill criteria, for example: if paid usage is under US$100/month by the end of January 2027, stop adding Actors and switch to maintenance only"
+  ],
+  "money_needed_cad": "ESTIMATE: CAD 30–250 over the first 3 months. Arithmetic:\n- Apify Creator plan: US$1/month × 3 = US$3 ≈ CAD 4 (official academy doc).\n- Claude API for testing and for any AI-backed Actors/APIs: US$20–150 ≈ CAD 27–205 (Haiku 4.5 at $1/$5 per million tokens).\n- Cloudflare Workers: CAD 0 on the free tier, or US$5/month × 3 = US$15 ≈ CAD 21.\n- Optional domain: about CAD 15–25 [prior knowledge, unverified, pre-2026-06].\n- Apify platform usage by free-plan users is covered by Apify (official), so there is little risk of runaway costs from free users.\n\nNOT included:\n- The cost of the Claude plan that runs the scheduled Routines (not verified here).\n- PayPal/Wise payout fees (not found).\n- The owner's living costs. Revenue will not cover them within 3 months.",
+  "facts": [
+   {
+    "fact": "Apify Store creators receive 80% of the fees users pay for their Actor, minus platform usage costs; Apify keeps 20%. Terms last updated September 15, 2026. Creators must be over 18 and complete identity verification/KYC to be paid.",
+    "source": "https://raw.githubusercontent.com/apify/apify-docs/master/sources/legal/latest/terms/store-publishing-terms-and-conditions.md"
+   },
+   {
+    "fact": "Apify pay-per-event: 'You receive 80% of this revenue'; only paid-plan users count toward profit; Apify covers free-plan users' platform costs. The docs example: a US$30 rental yields US$24 to the creator.",
+    "source": "https://github.com/apify/apify-docs/blob/master/sources/platform/actors/monetizing/pay_per_event.mdx ; https://github.com/apify/apify-docs/blob/master/sources/platform/actors/monetizing/rental.mdx"
+   },
+   {
+    "fact": "Apify payouts: invoices are generated on the 11th of each month for the previous month and auto-approved on the 14th. Minimum payout is $20 via PayPal or Wise and $100 for other methods; lower amounts roll over. SWIFT intermediary fees are typically $10–$50. Unverified identity means earnings roll over.",
+    "source": "https://raw.githubusercontent.com/apify/apify-docs/master/sources/platform/actors/monetizing/monthly-payouts.mdx"
+   },
+   {
+    "fact": "Apify supports 'agentic payments': AI agents can discover and run Actors via x402 and Skyfire without an Apify account. Eligible Actors are flagged allowsAgenticUsers=true.",
+    "source": "https://raw.githubusercontent.com/apify/apify-docs/master/sources/platform/actors/monetizing/index.mdx"
+   },
+   {
+    "fact": "Apify Creator plan costs $1/month and lets developers build and test their own Actors.",
+    "source": "https://github.com/apify/apify-docs/blob/master/sources/academy/build-and-publish/apify-store-basics/how_actor_monetization_works.md"
+   },
+   {
+    "fact": "SECONDARY (July 2026): 'Apify states that it pays about $1.5M per month to creators' and has '3,900 community developers'; independent creators earn above $1,000/month and top creators above $10,000 MRR. The same assessment says earnings are 'certainly concentrated' and the distribution is private.",
+    "source": "https://raw.githubusercontent.com/adunato/SideGig/main/research/channels/apify/overview.md"
+   },
+   {
+    "fact": "SECONDARY, anecdotal (r/apify, compiled 2026-09-01): ~$10 in the first month; ~$10/month in the second; ~$380 in a first month (another creator); seven months to reach a first $100; more than $1,000/month from a portfolio of 18 public Actors.",
+    "source": "https://raw.githubusercontent.com/adunato/SideGig/main/research/apify-community-search-pilot.md"
+   },
+   {
+    "fact": "RapidAPI marketplace fee is a flat 25% (providers keep 75%) plus PayPal payout fees; payouts are PayPal-only. Several independent 2026 GitHub docs cite docs.rapidapi.com/docs/payouts-and-finance, one read on 2026-09-08. One secondary source says payout comes in the first week of the month, about 30 days after billing. An older figure of about 20% appears in other docs.",
+    "source": "https://github.com/athompson83/data-foundry/blob/fabd85d71b257eeeb7e9a6c4adb1b0effdd6e7e6/docs/product/hvac-equipment-offer.md ; https://github.com/brocketdesign/rapidapi-agent-skill/blob/dda19a2b20a5c6af29673bab7b846f98cd321bc8/setup/credentials.example.md"
+   },
+   {
+    "fact": "SECONDARY (2026-08-31): RapidAPI historical provider evidence: 'an API reaching about $1,500/month' and 'ten providers collectively generating more than $50,000/month' (pre-acquisition). A July 2026 provider report says users renewed for 2nd and 3rd months. Trend rated 'Declining'.",
+    "source": "https://raw.githubusercontent.com/adunato/SideGig/main/research/channels/rapidapi/overview.md"
+   },
+   {
+    "fact": "SECONDARY (copy of Poe help pages gathered 2026-08-18): Poe creators earn the per-message price they set, up to $10,000 per 1,000 messages. Canada is explicitly listed among 23 eligible countries. Payment is via Stripe, $10 minimum, 30–45 days after month end. Non-US creators must file Form W-8 and face 0–30% withholding depending on treaty.",
+    "source": "https://raw.githubusercontent.com/jamalmazrui/AppHelpGuides/main/Poe.htm"
+   },
+   {
+    "fact": "SECONDARY (verified 2026-07-07 against developers.openai.com): curated ChatGPT apps reach all logged-in ChatGPT users outside the EEA, Switzerland and the UK. Developers monetize via external checkout. The ChatGPT payment sheet is private beta and limited to physical goods; subscriptions and digital goods are not yet approved. No revenue-share percentage is disclosed.",
+    "source": "https://raw.githubusercontent.com/pavel-rp/second-memory-mcp/b3ea9b02cdf67d78510506356b6453ac39668267/docs/research/results/04-monetization-market-research.md"
+   },
+   {
+    "fact": "GPT Store builder revenue: engagement-based payout pool for US builders (secondary, rated low confidence by its author, 2026-09-23). No source found showing Canadian eligibility. OpenAI's Jan 2024 GPT Store launch said US builders would be paid on engagement [prior knowledge, unverified, pre-2026-06].",
+    "source": "https://github.com/intochat/digitalbrain/blob/4d43b8d0f51d33d7982ea88bd53540b400ebd7d8/docs/product/research/2026-09-23-I-marketplace-app-format.md"
+   },
+   {
+    "fact": "Anthropic's Connectors Directory offers no revenue share or payment rail to connector developers (support.claude.com verified 2026-07-07, secondary). Submission requires a Team/Enterprise Claude.ai org.",
+    "source": "https://raw.githubusercontent.com/pavel-rp/second-memory-mcp/b3ea9b02cdf67d78510506356b6453ac39668267/docs/research/results/04-monetization-market-research.md"
+   },
+   {
+    "fact": "The official MCP Registry is a preview release that 'provides MCP clients with a list of MCP servers, like an app store'. Its README does not mention payments or monetization.",
+    "source": "https://raw.githubusercontent.com/modelcontextprotocol/registry/main/README.md"
+   },
+   {
+    "fact": "SECONDARY: MCP has no native payment rail. SEP-2007 'Payment Support for MCP Servers' is a Draft (created 2025-12-23) and missed the 2026-07-28 release candidate. x402 (Linux Foundation since April 2026) self-reports 169M payments, 590,000 buyers and 100,000 sellers in its first year (Coinbase/Chainalysis, unaudited).",
+    "source": "https://raw.githubusercontent.com/pavel-rp/second-memory-mcp/b3ea9b02cdf67d78510506356b6453ac39668267/docs/research/results/04-monetization-market-research.md"
+   },
+   {
+    "fact": "SECONDARY (July 2026 competitor-pricing registry): Stammer AI white-label agency plan $197/month for '20+ chat/voice agents, white-label, unlimited clients' and $497/month SaaS mode. Chatbase: Hobby $40/month ($32 annual) and Standard $150/month ($120 annual). GoHighLevel $97/$297/$497. My AI Front Desk $20–$99/month. GoodCall from $79/month.",
+    "source": "https://raw.githubusercontent.com/seldonframe/seldonframe/3f386a221849843a1a535f442e210bf9d293fff9/packages/crm/src/lib/seo/competitor-pricing.ts"
+   },
+   {
+    "fact": "Claude API prices per 1M tokens (input/output): Haiku 4.5 $1/$5, Sonnet 5 $2/$10, Opus 5 $5/$25; prompt-cache reads ≈0.1× input.",
+    "source": "Anthropic claude-api skill docs, cached 2026-06-24 (given in task)"
+   },
+   {
+    "fact": "GST/HST small supplier: no registration needed until taxable supplies exceed $30,000 over four consecutive calendar quarters, or within a single quarter (ETA s.148, s.240).",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-15.xml (via /home/user/canadian-tool-deals/business/research/dossiers/cross_compliance.json)"
+   },
+   {
+    "fact": "Cloudflare Workers Free: 100,000 requests/day; Workers Paid: US$5/month with 10M requests included.",
+    "source": "https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/docs/workers/platform/pricing.mdx (via cross_tooling.json)"
+   }
+  ],
+  "counter_evidence": [
+   {
+    "fact": "Apify community reports: 'new Actors can remain largely invisible even when technically good'; 'hundreds of monthly users but almost no revenue, largely because of free users'; earning a developed-world full-time income purely from public Actor revenue 'is unusual and likely concentrated among a small minority'.",
+    "source": "https://raw.githubusercontent.com/adunato/SideGig/main/research/apify-community-search-pilot.md"
+   },
+   {
+    "fact": "Apify QA: an Actor that fails runs for 3 consecutive days is labelled 'under maintenance' and is deprecated if failures continue (about 30 days total). Creators must respond to user Issues within 14 days; failing to answer direct requests within 3 business days can cut the Actor Quality Score. This is a real ongoing operating burden, not 'passive'.",
+    "source": "https://github.com/apify/apify-docs/blob/master/sources/platform/actors/publishing/testing.mdx ; https://raw.githubusercontent.com/apify/apify-docs/master/sources/legal/latest/terms/store-publishing-terms-and-conditions.md"
+   },
+   {
+    "fact": "Apify's high-demand categories (social media, lead generation, marketing) have 'powerful incumbents' and heavy maintenance, because platforms 'aggressively resist automation'. The creator is 'solely responsible' for data-protection compliance.",
+    "source": "https://raw.githubusercontent.com/adunato/SideGig/main/research/channels/apify/overview.md ; Apify Store terms (2026-09-15)"
+   },
+   {
+    "fact": "RapidAPI: trend 'Declining'. Provider reports cite 'payout delays, support responsiveness, failed payments, overages and refund handling', and 'substantial search clutter, spam and low-quality listings'. No public sales-per-listing data exists.",
+    "source": "https://raw.githubusercontent.com/adunato/SideGig/main/research/channels/rapidapi/overview.md"
+   },
+   {
+    "fact": "No MCP server operator has publicly disclosed audited revenue. The only claims are self-reported (Ref: 'hundreds of subscribers'; 21st.dev: '$10K MRR in six weeks', flagged unverified). The research concludes the paid-MCP market 'has not yet proven high willingness-to-pay'.",
+    "source": "https://raw.githubusercontent.com/pavel-rp/second-memory-mcp/b3ea9b02cdf67d78510506356b6453ac39668267/docs/research/results/04-monetization-market-research.md"
+   },
+   {
+    "fact": "No revenue share from OpenAI (ChatGPT Apps), none from Anthropic (Connectors Directory), and none from the MCP Registry. GPT Store builder pay was found only for US builders. The 'assistant store pays you' route is essentially closed to a Canadian builder, except Poe, for which no earnings data was found.",
+    "source": "https://raw.githubusercontent.com/pavel-rp/second-memory-mcp/b3ea9b02cdf67d78510506356b6453ac39668267/docs/research/results/04-monetization-market-research.md ; https://github.com/intochat/digitalbrain/blob/4d43b8d0f51d33d7982ea88bd53540b400ebd7d8/docs/product/research/2026-09-23-I-marketplace-app-format.md"
+   },
+   {
+    "fact": "Indie software base rates: TrustMRR year-0 median MRR is $148/month (n=5,079, opt-in and upward-biased); more than 54% of tracked Indie Hackers products earn $0; median time to $1K MRR among survivors is 8 months.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_saas.json (citing https://raw.githubusercontent.com/pfurini/furiai-skills/main/research/idea-validation-b2b-benchmarks/capture.md)"
+   },
+   {
+    "fact": "White-label SMB AI: a (vendor-hosted, weak) summary of Reddit threads says most people who start an AI automation agency never reach meaningful revenue. The earlier AI-SMB dossier's own 60-day scenario averages only about $3k/month and assumes the owner closes sales in person or by phone.",
+    "source": "/home/user/canadian-tool-deals/business/research/dossiers/cand_aismb.json (citing https://ciela.ai/blogs/is-starting-an-ai-automation-agency-worth-it-reddit)"
+   },
+   {
+    "fact": "Moffatt v. Air Canada, 2024 BCCRT 149: a business is liable for negligent misrepresentation by its website chatbot (award CA$812.02). The tribunal rejected the argument that the chatbot was a 'separate entity'. A white-label bot operator and its SMB clients carry this exposure.",
+    "source": "https://github.com/jjjsood/agentic-ai-production-readiness/blob/ba4f4723e0957f098f88470b5a3ea540d987fd8d/docs/case-studies/air-canada-chatbot.md (citing CanLII 2024bccrt149)"
+   },
+   {
+    "fact": "SMBs can buy AI chat or receptionist tools directly for $20–$99/month (My AI Front Desk, GoodCall, Chatbase Hobby $40), which caps what a reseller can charge. Stammer AI's $197/month white-label plan with unlimited clients makes reselling trivially easy to copy.",
+    "source": "https://raw.githubusercontent.com/seldonframe/seldonframe/3f386a221849843a1a535f442e210bf9d293fff9/packages/crm/src/lib/seo/competitor-pricing.ts"
+   },
+   {
+    "fact": "CASL: consent is implied for conspicuously published business addresses only when the message is relevant to the recipient's business role. Penalties run up to $1,000,000 per violation for an individual. The sender bears the onus, so automated AI outreach from the owner's identity puts the legal risk on the owner.",
+    "source": "https://github.com/justicecanada/laws-lois-xml/blob/main/eng/acts/E-1.6.xml (via cross_compliance.json)"
+   }
+  ],
+  "risks": [
+   "Distribution risk (dominant): marketplace discovery is weak for new listings (Apify 'largely invisible'; RapidAPI search clutter), and the owner will not promote. The likely outcome is CAD 0–400/month at month 3.",
+   "Timing risk: Apify pays monthly on about the 14th for the previous month, with a $20 minimum; RapidAPI pays about 30 days after billing; Poe pays 30–45 days after month end. Even a good November produces cash only in mid-December.",
+   "Maintenance risk: scrapers break when target sites change. Apify flags a failing Actor after 3 days and can deprecate it. The 14-day issue-response rule means the business is never fully hands-off.",
+   "Legal/ToS risk: scraping may breach a target site's terms. Collecting personal information triggers PIPEDA duties, and the creator is solely responsible under the Apify terms. Korean-site scraping law was not researched.",
+   "Platform dependency: Apify can change terms with 30 days' notice. RapidAPI is in decline (Nokia acquired Rapid's technology/R&D unit, per a cited nokia.com release). PayPal is the only RapidAPI payout path.",
+   "Assistant-store risk: no Canadian revenue share from GPT Store, ChatGPT Apps or Claude. Poe terms or eligibility can change, and Poe earnings are subject to US withholding (0–30%).",
+   "x402/crypto risk if agentic payments settle in stablecoins: Canadian tax treatment, KYC and volatility were not researched here.",
+   "White-label SMB variant: needs sales, which the owner excludes. CASL exposure on automated outreach (up to $1M per violation for an individual), chatbot misstatement liability (Moffatt v. Air Canada), churn to cheaper direct tools, and ongoing support that contradicts 'done-once'.",
+   "EI interaction: an active business may count as full working weeks under EI Regs s.30 unless 'minor in extent'. Undeclared earnings can be fully clawed back (EI Act s.19(3)).",
+   "Opportunity cost: this cannot replace income by January 2027. Treat it as a side asset alongside another income source.",
+   "Evidence risk: RapidAPI fee/payout facts, the Apify $1.5M/month figure, Poe eligibility and OpenAI monetization status all come from secondary GitHub-hosted copies, because primary sites were egress-blocked and WebSearch was exhausted. Only the Apify fee, payout and terms facts come from official repos."
+  ],
+  "scores": {
+   "p5k_90d": 0.5,
+   "owner_light": 7,
+   "capital_light": 9,
+   "ai_build": 8,
+   "ai_operate": 6,
+   "low_risk": 5
+  },
+  "score_rationale": "p5k_90d = 0.5. Reaching the target needs about 183 Apify renters at US$25, or about US$6,083/month in PPE billings, or about 244 RapidAPI subscribers at US$20, or about 37 SMB chatbot clients. The best sourced Apify anecdote is $1,000+/month from an 18-Actor portfolio, and others took 7 months to reach $100. ESTIMATE: the target is about 9.5× Apify's mean creator payout of US$1.5M ÷ 3,900 ≈ $385/month, and the median is lower. The assistant stores pay Canadians nothing, except Poe, which has no earnings evidence. Paid MCP has no native payments and no disclosed revenue. The only variant with plausible CAD 5k math, white-label SMB bots, needs sales the owner rules out.\n\nowner_light = 7. Setup is about 7–8 hours, then 0.5–1 hour/week. It is not a 9–10 because issue responses (14-day rule), KYC and payouts need the owner's identity, and replies might have to be pasted by hand (API posting not verified). The white-label SMB variant alone would score about 2.\n\ncapital_light = 9. The Apify Creator plan is US$1/month, listing on RapidAPI and Poe is free, and Cloudflare has a free tier. The main variable cost is Claude API usage, which is a small share of revenue (ESTIMATE: about US$6 per SMB client per month on Haiku 4.5).\n\nai_build = 8. Actors, APIs, MCP servers, READMEs, CI/CD and dashboards are all code the AI can write and deploy with tokens. Only account creation and KYC need the owner.\n\nai_operate = 6. Scheduled Routines can monitor, fix and publish. But scrapers break unpredictably, marketplace issue threads may need the owner's login, and none of this growth work solves discovery.\n\nlow_risk = 5. Financial risk is small. The rest: scraping ToS and PIPEDA exposure (with the creator solely responsible), platform dependency (RapidAPI declining, Apify terms can change), crypto rails for x402, and, in the SMB variant, CASL and chatbot-liability exposure.\n\nEvidence quality: the Apify fee, payout and terms facts are official (apify/apify-docs, terms updated 2026-09-15). Most other channel facts are dated 2026 secondary copies on GitHub. Prior-knowledge claims are tagged."
+ },
+ "verification": {
+  "problems": [
+   {
+    "claim": "Best variant pricing 'US$15–30/month on rental'; unit economics (A) 'Apify rental ... 3,650 / 20 ≈ 183 paying renters'; the rental doc example is used as evidence.",
+    "problem": "This sub-variant no longer exists. The official partial included at the top of both rental.mdx and the academy monetization page (raw.githubusercontent.com/apify/apify-docs/master/sources/_partials/_rental-sunsetting.mdx) says: 'Apify is sunsetting the rental pricing model... April 1 [2026] - You can no longer publish new rental Actors or change pricing on existing ones. October 1 - Rental Actors are fully retired.' Today is 2026-09-24, so new rental Actors have been impossible for about 6 months and the model ends in 7 days. The dossier read rental.mdx but missed the <RentalSunset/> component.",
+    "correction": "Delete path (A) and every mention of rental pricing. PPE is the only Apify model. It is also the only one eligible for agentic payments (_agentic-payments-eligibility.mdx: 'Rental and pay-per-usage Actors are not supported')."
+   },
+   {
+    "claim": "(E) SMB bot Haiku 4.5 cost: '3,500 cached input × $0.10/M ... = US$5.88 ≈ C$8.05' per client per month.",
+    "problem": "The claude-api skill docs (shared/prompt-caching.md) give Haiku 4.5's minimum cacheable prefix as 4,096 tokens. A 3,500-token prefix 'silently won't cache', so every turn pays full input price. Separately, cache writes cost 1.25× and the TTL is 5 minutes, so low-traffic SMB bots would miss the cache often even with a longer prefix. The estimate also ignores conversation history growing across turns.",
+    "correction": "ESTIMATE, no caching: (4,000 input × $1/M = $0.004) + (300 output × $5/M = $0.0015) = $0.0055/turn × 2,500 turns = US$13.75 ≈ C$18.84/client (×1.37). Net = 149 − 4.62 − 18.84 − 1 = C$124.54. Clients needed = 5,000 / 124.54 ≈ 40.1, so 41 (not 37). Emails at ~486 per deal = 41 × 486 ≈ 19,900."
+   },
+   {
+    "claim": "Summary: 'ESTIMATE, realistic month-3 revenue ... CAD 0–400/month; optimistic ~CAD 1,000–1,500.'",
+    "problem": "No arithmetic is shown, and the optimistic figure contradicts the dossier's own evidence. Month 3 is December 2026, and the dossier itself says the earliest first revenue is November. The sourced anecdotes are $10 in month 1, $10 in month 2, and 7 months to a first $100. The single $380 first month is an outlier. The best portfolio anecdote ($1,000+/month from 18 Actors) has no stated time-to-reach. CAD 1,000–1,500 ≈ US$730–1,095, which is 1.9–2.8× the mean payout of ALL Apify community developers ($385, most of them mature). TrustMRR's year-0 median is $148/month across all indie software.",
+    "correction": "ESTIMATE: realistic December 2026 paid usage CAD 0–100. Optimistic CAD 150–550 (upper end = one $380 first-month outlier × 1.37 ≈ CAD 520). Label both as anecdote-anchored, not modelled."
+   },
+   {
+    "claim": "money_needed_cad 'CAD 30–250' excludes 'the cost of the Claude plan that runs the scheduled Routines (not verified here)'.",
+    "problem": "The whole operating model depends on Routines, so this cost cannot be left out. It is probably the largest cash outlay, and leaving it out makes capital_light = 9 overstated.",
+    "correction": "[prior knowledge, unverified, pre-2026-06] Claude Pro ≈ US$20/month; Max ≈ US$100 or US$200/month. ESTIMATE for 3 months: US$60–600 ≈ CAD 82–822. Revised 3-month cash need ≈ CAD 113–1,077. Separately, the dossier's own itemisation gives a high end of 4 + 205.5 + 20.6 + 25 = CAD 255, not 250."
+   },
+   {
+    "claim": "(B) PPE: 'ASSUMPTION: platform costs = 20% of revenue, so profit = 0.6R' → R ≈ US$6,083/month.",
+    "problem": "The arithmetic is right, but the assumption does not match either official reference point, and the dossier never turns R into volume. (i) Apify's academy example puts platform costs at about 10% of revenue ($0.365 on $3.65; $0.162 on $1.625). That same official example is internally wrong: it states profit $4.748, but 0.8 × 5.275 − 0.527 = $3.693. So Apify's docs are not arithmetic-reliable. (ii) Agentic-payment eligibility requires 'Charge only for events, not for platform usage', so the creator absorbs every proxy and browser cost. Scraping bot-protected Korean e-commerce sites needs residential proxies and browsers, which could push costs well above 20%. (iii) The official academy page says 'most prices on Apify Store range between $1-10 per 1,000 results'. The dossier's US$2–5 assumption falls inside that range, but it says 'not sourced' when a source exists.",
+    "correction": "Show the range. At 10% costs: R = 3,650 / 0.7 ≈ US$5,214. At 40% costs (proxy-heavy): R = 3,650 / 0.4 = US$9,125. Volume ESTIMATE at US$3 per 1,000 results: 6,083 / 3 × 1,000 ≈ 2.03M paid results/month from paid-plan users only."
+   },
+   {
+    "claim": "Best variant niche: 'Canadian public datasets such as government tenders, product recalls and grant listings' as under-served sources with thin incumbents.",
+    "problem": "Low willingness to pay. Several of these sources already publish free official feeds, so a paid scraper competes against free. No demand evidence (apify.com/ideas, search volume or competitor user counts) was gathered for any named niche; 'thin incumbents' is asserted, not shown.",
+    "correction": "[prior knowledge, unverified, pre-2026-06] Health Canada / CFIA recalls are available through open.canada.ca datasets and a recalls API, and CanadaBuys publishes tender notices as open-data CSV. Mark Canadian-public-data niches as 'demand not found; free official substitutes likely'. Pick niches only after the AI pulls competitor user counts via the Apify Store API (itself not verified to be reachable)."
+   },
+   {
+    "claim": "Korean-language e-commerce data as an under-served niche; 'Korean-site scraping law was not researched.'",
+    "problem": "The dossier names this as a lead niche while admitting the legal research is missing. The biggest targets are aggressively bot-protected and prohibit crawling in their terms, which also raises maintenance cost.",
+    "correction": "[prior knowledge, unverified, pre-2026-06] Korea's Unfair Competition Prevention Act gained a data-misappropriation clause in the early 2020s, and Korean courts have heard crawling disputes (e.g. Yanolja v. Yeogi-eottae), so civil exposure exists even where criminal charges failed. Coupang and Naver are reputed to use strong anti-bot measures. Downgrade this niche to 'unverified legal and technical feasibility' and add it to low_risk."
+   },
+   {
+    "claim": "owner_one_time_tasks total 'about 7–8 hours'; owner_weekly '0.5–1 h'.",
+    "problem": "Hidden owner steps are missing: (i) the Routine/cloud environment needs network allowlisting for api.apify.com and any test target hosts, which only the owner can change in environment settings (this session's own egress is limited to github.com); (ii) the Claude subscription and Routine setup under the owner's account; (iii) GitHub repo and secrets ownership. Signing off a 'source-by-source legality checklist' is professional-judgment labour, not a 1-hour click. The owner's English level is unknown, while Apify KYC, the terms and user Issues are in English. The listed items sum to 7–7.5 h including the optional 1.5 h, so the arithmetic is fine, but the list is incomplete.",
+    "correction": "ESTIMATE: one-time 8.5–10 h (+0.5 h network allowlist, +0.5–1 h Claude plan and Routine setup, +0.5 h repo ownership). Weekly 0.75–1.5 h, including reviewing new-source legality notes. Still within budget, but closer to the 10 h cap."
+   },
+   {
+    "claim": "Risk: 'x402/crypto risk if agentic payments settle in stablecoins: Canadian tax treatment, KYC and volatility were not researched.'",
+    "problem": "The risk is probably misattributed. The docs say agents pay Apify via x402/Skyfire and that creator KYC is a precondition, which suggests creators are still paid by Apify's normal monthly fiat payout. Nothing found shows creators receiving crypto.",
+    "correction": "Restate: 'Creator payout rail for agentic revenue: not found; probably the standard Apify payout (unverified).' Remove it as a separate crypto-tax risk unless a source shows otherwise. Also note: x402 usage figures are self-reported by Coinbase and give no evidence of agent demand for any specific Actor."
+   },
+   {
+    "claim": "Apify base rate: 'US$1.5M/month ÷ 3,900 community developers ≈ US$385/month MEAN'.",
+    "problem": "The arithmetic is correct (1,500,000 / 3,900 = 384.6). But both inputs are Apify's own marketing figures relayed by a secondary source, and whether $1.5M is gross or net of platform costs is not stated. The dossier treats the mean as a useful upper anchor, but for a 2–3-month-old portfolio the relevant base rate is the new-creator ramp, which the anecdotes put at around $10/month.",
+    "correction": "Keep the figure, add 'vendor-reported, gross/net unknown', and anchor month-3 expectations to the new-creator anecdotes rather than the all-creator mean."
+   },
+   {
+    "claim": "(E) '~486 cold emails per closed deal' described as '(unsourced)'.",
+    "problem": "Minor misstatement. cand_aismb.json derives 486 = 1 / (0.0343 × 0.30 × 0.20): the 3.43% reply rate is sourced, and the 30% positive and 20% close rates are assumed.",
+    "correction": "Describe it as 'partly sourced (3.43% reply rate); 30% positive and 20% close are assumptions'."
+   },
+   {
+    "claim": "Facts cite 'Nokia acquired Rapid's technology/R&D unit, per a cited nokia.com release' and 'Apify's integrations with Make, n8n and Zapier (official academy doc)'.",
+    "problem": "Neither has a URL in the facts list, so neither can be checked from the dossier.",
+    "correction": "Add the source URLs, or tag them '[secondary, URL not recorded]'."
+   }
+  ],
+  "unlabelled_prior_knowledge": [
+   "'Store pages are publicly indexable' is tagged, but the claim that Apify Issues replies may not be postable via API is left as 'not verified' with no attempt to check the Apify API docs in apify/apify-docs.",
+   "Stripe 2.9% + C$0.30 used in (E) is not sourced or tagged [prior knowledge].",
+   "'Moffatt v. Air Canada award CA$812.02' is sourced only via a third-party GitHub case study, not CanLII (secondary, not prior knowledge, but not labelled secondary).",
+   "'Apify CLI push' is tagged; 'GitHub Actions CI/CD pushes Actors with a token secret' as a working pipeline is not verified.",
+   "'Korean↔English honorific-aware translation' and 'Canadian address/postal-code normalization' as sellable RapidAPI products: no demand evidence and no tag.",
+   "'2,500 turns/month per SMB client' and '3,500 cached + 500 fresh input tokens per turn' are unsourced assumptions that are not labelled ASSUMPTION.",
+   "'intermediaries typically take $10–$50' for SWIFT is attributed to the Apify payouts doc (fine), but PayPal/Wise fee levels are 'not found' while PayPal is still described as having 'lower fees', which relies on Apify's wording, not on data."
+  ],
+  "math_check": "Verified correct:\n- CAD 5,000 / 1.37 = US$3,649.6.\n- 3,650 / 20 = 182.5 (but the rental path is invalid; see problems).\n- 3,650 / 0.6 = 6,083.\n- 1.5M / 3,900 = 384.6, and 3,650 / 385 = 9.48.\n- 0.75 × 20 = 15, and 3,650 / 15 = 243.3.\n- Poe: 2,000 × $1/M + 300 × $5/M = $0.0035. Net $0.0065. 3,650 / 0.0065 = 561,538/month ≈ 18,718/day.\n- Stripe: 0.029 × 149 + 0.30 = 4.621.\n- (E) as written: 3,500 × 0.1/M + 500 × 1/M + 300 × 5/M = $0.00235 × 2,500 = $5.875 ≈ C$8.05. Net 135.33, and 5,000 / 135.33 = 36.9.\n- 37 × 486 = 17,982.\n- Money: 3 × US$1 ≈ CAD 4.1; US$20–150 ≈ CAD 27.4–205.5; US$15 ≈ CAD 20.6.\n\nErrors:\n(1) The (E) caching premise is invalid. Haiku 4.5's minimum cacheable prefix is 4,096 tokens (claude-api skill, prompt-caching.md), so 3,500 tokens never caches. ESTIMATE: (4,000 × $1/M + 300 × $5/M) × 2,500 = $13.75 ≈ C$18.84. Net = 149 − 4.62 − 18.84 − 1 = C$124.54, so about 41 clients and about 19,900 emails.\n(2) The money high end sums to 4 + 205.5 + 20.6 + 25 = CAD 255, not 250. The Claude subscription is omitted: ESTIMATE US$20–200/month × 3 × 1.37 = CAD 82–822.\n(3) Path (A) rental is arithmetically fine but factually void (rental retired; new rental Actors blocked since 2026-04-01).\n(4) The PPE sensitivity range is not shown. At 10% platform costs, R = 3,650 / 0.7 = 5,214. At 40%, R = 3,650 / 0.4 = 9,125. At US$3 per 1,000 results, 6,083 → about 2.03M paid results/month.\n(5) The optimistic month-3 figure of CAD 1,000–1,500 has no arithmetic and exceeds the dossier's own anecdote-based ramp.\n(6) Apify's own academy PPE example misstates profit: it gives $4.748, but 0.8 × 5.275 − 0.527 = $3.693. Treat Apify doc arithmetic with care.",
+  "adjusted_scores": {
+   "p5k_90d": 0.2,
+   "owner_light": 6,
+   "capital_light": 7,
+   "ai_build": 7,
+   "ai_operate": 5,
+   "low_risk": 4
+  },
+  "verdict": "The dossier's main conclusion is correct and, if anything, too generous: this category will not average CAD 5,000/month by Dec 2026 – Jan 2027. I checked the Apify docs repo myself and found two material errors. First, Apify's rental model, one of the dossier's four routes to the target (183 renters at US$25), is already dead. New rental Actors have been blocked since 2026-04-01, and rental is fully retired on 2026-10-01 (official _rental-sunsetting.mdx). Second, the SMB-bot cost model relies on prompt caching that cannot happen on Haiku 4.5 below 4,096 tokens, so the AI cost per client is about 2.3× what the dossier states (≈C$18.84, not C$8.05), and about 41 clients are needed rather than 37. The 'optimistic CAD 1,000–1,500 at month 3' has no arithmetic behind it and contradicts the dossier's own anecdotes: $10 in month 1, 7 months to a first $100, a $385/month mean across mostly mature creators, and a TrustMRR year-0 median of $148. A defensible month-3 range is CAD 0–100 realistic and about CAD 150–550 optimistic. Hidden costs and labour are understated. The Claude subscription that runs the Routines (ESTIMATE CAD 82–822 over 3 months) is left out; network allowlisting and Routine setup are owner-only steps; and legality sign-off for Korean and Canadian scraping targets is real judgment work. The 'Canadian public data' niches likely compete with free official open-data feeds [prior knowledge, unverified, pre-2026-06]. The Korean e-commerce niche has unresearched legal and anti-bot risk. Keep the Apify PPE portfolio only as a low-cost, low-expectation side asset with the dossier's kill criterion (under US$100/month paid usage by end of Jan 2027 → maintenance only). It should not be presented to the owner as a path to replacing their income within 2–3 months."
+ }
+}
