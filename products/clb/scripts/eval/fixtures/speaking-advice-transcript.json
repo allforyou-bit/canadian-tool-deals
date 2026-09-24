@@ -1,0 +1,168 @@
+{
+  "id": "speaking-advice-transcript",
+  "note": "Hand-written for the offline harness test. The text is original (no user data) and the three outputs are hand-written examples in the GradeResult shape, not responses captured from a model.",
+  "kind": "speaking",
+  "category": "sample",
+  "taskId": "advice",
+  "promptIndex": 0,
+  "explanationLang": "en",
+  "text": "Okay so first I think your friend should make a resume in Canadian style because here the resume is different than in my country, it don't have a photo and it is more short. Second he can go to a settlement agency, they help newcomer to find job and they have a workshop about interview. Third networking is very important, many job is not posted online so he should talk with people, maybe do some volunteer work. And don't worry too much, it take time but he will find something.",
+  "outputs": [
+    {
+      "refused": false,
+      "criteria": [
+        {
+          "name": "Content and task completion",
+          "strengths": "You gave three practical suggestions and explained each one.",
+          "improve": "Add a short example for one suggestion, such as a place to volunteer."
+        },
+        {
+          "name": "Organisation and coherence",
+          "strengths": "First, second and third make your answer easy to follow.",
+          "improve": "Finish with a short summary sentence that links back to your friend's worry."
+        },
+        {
+          "name": "Vocabulary range and precision",
+          "strengths": "'Settlement agency' and 'networking' are precise and useful words here.",
+          "improve": "Use a wider range of verbs than 'go' and 'have', for example 'contact' or 'offer'."
+        },
+        {
+          "name": "Grammar (from the transcript)",
+          "strengths": "Most of your sentences are complete and clear in the transcript.",
+          "improve": "Check subject and verb agreement with 'it' and with plural nouns."
+        }
+      ],
+      "topErrors": [
+        {
+          "kind": "grammar",
+          "original": "it don't have a photo",
+          "correction": "it doesn't have a photo",
+          "why": "Use 'doesn't' with 'it', 'he' and 'she'."
+        },
+        {
+          "kind": "grammar",
+          "original": "many job is not posted online",
+          "correction": "many jobs are not posted online",
+          "why": "After 'many', use a plural noun and a plural verb."
+        },
+        {
+          "kind": "vocabulary",
+          "original": "it is more short",
+          "correction": "it is shorter",
+          "why": "Short adjectives take -er in comparisons instead of 'more'."
+        }
+      ],
+      "rewrites": [
+        "Many jobs are not posted online, so he should talk to people and maybe do some volunteer work."
+      ],
+      "nextStep": "Record the answer again and focus on 'doesn't' and plural nouns after 'many'.",
+      "explanationLang": "en",
+      "bandShown": false,
+      "transcript": "Okay so first I think your friend should make a resume in Canadian style because here the resume is different than in my country, it don't have a photo and it is more short. Second he can go to a settlement agency, they help newcomer to find job and they have a workshop about interview. Third networking is very important, many job is not posted online so he should talk with people, maybe do some volunteer work. And don't worry too much, it take time but he will find something."
+    },
+    {
+      "refused": false,
+      "criteria": [
+        {
+          "name": "Content and task completion",
+          "strengths": "You gave three practical suggestions and explained each one.",
+          "improve": "Add a short example for one suggestion, such as a place to volunteer."
+        },
+        {
+          "name": "Organisation and coherence",
+          "strengths": "First, second and third make your answer easy to follow.",
+          "improve": "Finish with a short summary sentence that links back to your friend's worry."
+        },
+        {
+          "name": "Vocabulary range and precision",
+          "strengths": "'Settlement agency' and 'networking' are precise and useful words here.",
+          "improve": "Use a wider range of verbs than 'go' and 'have', for example 'contact' or 'offer'."
+        },
+        {
+          "name": "Grammar (from the transcript)",
+          "strengths": "Most of your sentences are complete and clear in the transcript.",
+          "improve": "Check subject and verb agreement with 'it' and with plural nouns."
+        }
+      ],
+      "topErrors": [
+        {
+          "kind": "grammar",
+          "original": "many job is not posted online",
+          "correction": "many jobs are not posted online",
+          "why": "After 'many', use a plural noun and a plural verb."
+        },
+        {
+          "kind": "grammar",
+          "original": "it don't have a photo",
+          "correction": "it doesn't have a photo",
+          "why": "Use 'doesn't' with 'it', 'he' and 'she'."
+        },
+        {
+          "kind": "vocabulary",
+          "original": "it is more short",
+          "correction": "it is shorter",
+          "why": "Short adjectives take -er in comparisons instead of 'more'."
+        }
+      ],
+      "rewrites": [
+        "The Canadian resume is different: it doesn't have a photo and it is shorter."
+      ],
+      "nextStep": "Practise three sentences that compare two things with -er forms.",
+      "explanationLang": "en",
+      "bandShown": false,
+      "transcript": "Okay so first I think your friend should make a resume in Canadian style because here the resume is different than in my country, it don't have a photo and it is more short. Second he can go to a settlement agency, they help newcomer to find job and they have a workshop about interview. Third networking is very important, many job is not posted online so he should talk with people, maybe do some volunteer work. And don't worry too much, it take time but he will find something."
+    },
+    {
+      "refused": false,
+      "criteria": [
+        {
+          "name": "Content and task completion",
+          "strengths": "You gave three practical suggestions and explained each one.",
+          "improve": "Add a short example for one suggestion, such as a place to volunteer."
+        },
+        {
+          "name": "Organisation and coherence",
+          "strengths": "First, second and third make your answer easy to follow.",
+          "improve": "Finish with a short summary sentence that links back to your friend's worry."
+        },
+        {
+          "name": "Vocabulary range and precision",
+          "strengths": "'Settlement agency' and 'networking' are precise and useful words here.",
+          "improve": "Use a wider range of verbs than 'go' and 'have', for example 'contact' or 'offer'."
+        },
+        {
+          "name": "Grammar (from the transcript)",
+          "strengths": "Most of your sentences are complete and clear in the transcript.",
+          "improve": "Check subject and verb agreement with 'it' and with plural nouns."
+        }
+      ],
+      "topErrors": [
+        {
+          "kind": "grammar",
+          "original": "it don't have a photo",
+          "correction": "it doesn't have a photo",
+          "why": "Use 'doesn't' with 'it', 'he' and 'she'."
+        },
+        {
+          "kind": "vocabulary",
+          "original": "it is more short",
+          "correction": "it is shorter",
+          "why": "Short adjectives take -er in comparisons instead of 'more'."
+        },
+        {
+          "kind": "grammar",
+          "original": "many job is not posted online",
+          "correction": "many jobs are not posted online",
+          "why": "After 'many', use a plural noun and a plural verb."
+        }
+      ],
+      "rewrites": [
+        "Many jobs are not posted online, so he should talk to people and maybe do some volunteer work."
+      ],
+      "nextStep": "Record the answer again with a one-sentence summary at the end.",
+      "explanationLang": "en",
+      "bandShown": false,
+      "transcript": "Okay so first I think your friend should make a resume in Canadian style because here the resume is different than in my country, it don't have a photo and it is more short. Second he can go to a settlement agency, they help newcomer to find job and they have a workshop about interview. Third networking is very important, many job is not posted online so he should talk with people, maybe do some volunteer work. And don't worry too much, it take time but he will find something."
+    }
+  ]
+}

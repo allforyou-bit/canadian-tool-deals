@@ -1,0 +1,20 @@
+{
+  "id": "evt_fixture_charge_refunded",
+  "object": "event",
+  "type": "charge.refunded",
+  "livemode": false,
+  "created": 1790000000,
+  "data": {
+    "object": {
+      "id": "ch_fixture",
+      "object": "charge",
+      "amount": 3900,
+      "amount_refunded": 3900,
+      "currency": "cad",
+      "payment_intent": "pi_fixture",
+      "refunded": true,
+      "disputed": false,
+      "status": "succeeded"
+    }
+  }
+}

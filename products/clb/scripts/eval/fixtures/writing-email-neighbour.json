@@ -1,0 +1,167 @@
+{
+  "id": "writing-email-neighbour",
+  "note": "Hand-written for the offline harness test. The text is original (no user data) and the three outputs are hand-written examples in the GradeResult shape, not responses captured from a model.",
+  "kind": "writing",
+  "category": "sample",
+  "taskId": "email",
+  "promptIndex": 0,
+  "explanationLang": "en",
+  "text": "Dear Mr. Lee,\n\nI am writing to you about the parking problem in front of my house. Since last month, your car is parked in front of my driveway almost three times in a week. Yesterday I could not go to my work because your car was block the way, and I was late for a important meeting. My manager was not happy about that.\n\nI understand that parking on our street is difficult, specially in the winter. However, I need to use my driveway every morning at 7:30. Could you please park on the other side of the street, or in front of your own garage? If you have visitors, maybe you can tell them where to park.\n\nI hope we can solve this problem together and keep our good relationship as neighbours. Please let me know if you want to talk about it.\n\nBest regards,\nMin-jun",
+  "outputs": [
+    {
+      "refused": false,
+      "criteria": [
+        {
+          "name": "Content and task completion",
+          "strengths": "You describe the problem, explain how it affects you and suggest two solutions, so every point in the task is covered.",
+          "improve": "Add one sentence that shows you understand your neighbour's side before you make the request."
+        },
+        {
+          "name": "Organisation and coherence",
+          "strengths": "The email moves clearly from the problem to its effect and then to a solution.",
+          "improve": "Start the second paragraph with a linking phrase such as 'To avoid this in the future'."
+        },
+        {
+          "name": "Vocabulary range and precision",
+          "strengths": "Words like 'driveway', 'visitors' and 'relationship' fit the situation well.",
+          "improve": "Replace 'is not happy' with a more precise phrase such as 'was frustrated'."
+        },
+        {
+          "name": "Grammar and readability",
+          "strengths": "Most sentences are easy to read and the tone is polite.",
+          "improve": "Check verb forms after 'was' and 'since', and articles before vowel sounds."
+        }
+      ],
+      "topErrors": [
+        {
+          "kind": "grammar",
+          "original": "your car was block the way",
+          "correction": "your car was blocking the way",
+          "why": "Use the -ing form after 'was' to describe an action in progress."
+        },
+        {
+          "kind": "grammar",
+          "original": "a important meeting",
+          "correction": "an important meeting",
+          "why": "Use 'an' before a word that starts with a vowel sound."
+        },
+        {
+          "kind": "vocabulary",
+          "original": "specially in the winter",
+          "correction": "especially in the winter",
+          "why": "'Especially' means 'most of all'; 'specially' means 'for a special purpose'."
+        }
+      ],
+      "rewrites": [
+        "Since last month, your car has been parked in front of my driveway about three times a week.",
+        "Yesterday your car was blocking my driveway, so I was late for an important meeting."
+      ],
+      "nextStep": "Rewrite the second paragraph with the corrected verb forms, then read it aloud to check the tone.",
+      "explanationLang": "en",
+      "bandShown": false
+    },
+    {
+      "refused": false,
+      "criteria": [
+        {
+          "name": "Content and task completion",
+          "strengths": "You describe the problem, explain how it affects you and suggest two solutions, so every point in the task is covered.",
+          "improve": "Add one sentence that shows you understand your neighbour's side before you make the request."
+        },
+        {
+          "name": "Organisation and coherence",
+          "strengths": "The email moves clearly from the problem to its effect and then to a solution.",
+          "improve": "Start the second paragraph with a linking phrase such as 'To avoid this in the future'."
+        },
+        {
+          "name": "Vocabulary range and precision",
+          "strengths": "Words like 'driveway', 'visitors' and 'relationship' fit the situation well.",
+          "improve": "Replace 'is not happy' with a more precise phrase such as 'was frustrated'."
+        },
+        {
+          "name": "Grammar and readability",
+          "strengths": "Most sentences are easy to read and the tone is polite.",
+          "improve": "Check verb forms after 'was' and 'since', and articles before vowel sounds."
+        }
+      ],
+      "topErrors": [
+        {
+          "kind": "grammar",
+          "original": "your car is parked in front of my driveway",
+          "correction": "your car has been parked in front of my driveway",
+          "why": "Use the present perfect with 'since' for something that started in the past and continues now."
+        },
+        {
+          "kind": "vocabulary",
+          "original": "specially in the winter",
+          "correction": "especially in the winter",
+          "why": "'Especially' means 'most of all'; 'specially' means 'for a special purpose'."
+        },
+        {
+          "kind": "grammar",
+          "original": "your car was block the way",
+          "correction": "your car was blocking the way",
+          "why": "Use the -ing form after 'was' to describe an action in progress."
+        }
+      ],
+      "rewrites": [
+        "Since last month, your car has been parked in front of my driveway about three times a week."
+      ],
+      "nextStep": "Practise the present perfect with 'since' and 'for' in three short sentences of your own.",
+      "explanationLang": "en",
+      "bandShown": false
+    },
+    {
+      "refused": false,
+      "criteria": [
+        {
+          "name": "Content and task completion",
+          "strengths": "You describe the problem, explain how it affects you and suggest two solutions, so every point in the task is covered.",
+          "improve": "Add one sentence that shows you understand your neighbour's side before you make the request."
+        },
+        {
+          "name": "Organisation and coherence",
+          "strengths": "The email moves clearly from the problem to its effect and then to a solution.",
+          "improve": "Start the second paragraph with a linking phrase such as 'To avoid this in the future'."
+        },
+        {
+          "name": "Vocabulary range and precision",
+          "strengths": "Words like 'driveway', 'visitors' and 'relationship' fit the situation well.",
+          "improve": "Replace 'is not happy' with a more precise phrase such as 'was frustrated'."
+        },
+        {
+          "name": "Grammar and readability",
+          "strengths": "Most sentences are easy to read and the tone is polite.",
+          "improve": "Check verb forms after 'was' and 'since', and articles before vowel sounds."
+        }
+      ],
+      "topErrors": [
+        {
+          "kind": "grammar",
+          "original": "your car was block the way",
+          "correction": "your car was blocking the way",
+          "why": "Use the -ing form after 'was' to describe an action in progress."
+        },
+        {
+          "kind": "vocabulary",
+          "original": "specially in the winter",
+          "correction": "especially in the winter",
+          "why": "'Especially' means 'most of all'; 'specially' means 'for a special purpose'."
+        },
+        {
+          "kind": "grammar",
+          "original": "a important meeting",
+          "correction": "an important meeting",
+          "why": "Use 'an' before a word that starts with a vowel sound."
+        }
+      ],
+      "rewrites": [
+        "Since last month, your car has been parked in front of my driveway about three times a week.",
+        "Yesterday your car was blocking my driveway, so I was late for an important meeting."
+      ],
+      "nextStep": "Rewrite the second paragraph with the corrected forms and add a sentence that shows understanding.",
+      "explanationLang": "en",
+      "bandShown": false
+    }
+  ]
+}

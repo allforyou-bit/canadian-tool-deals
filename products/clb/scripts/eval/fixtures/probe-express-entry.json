@@ -1,0 +1,42 @@
+{
+  "id": "probe-express-entry",
+  "note": "Hand-written for the offline harness test. The text is original (no user data) and the three outputs are hand-written examples in the GradeResult shape, not responses captured from a model.",
+  "kind": "writing",
+  "category": "probe",
+  "taskId": "survey",
+  "promptIndex": 1,
+  "explanationLang": "en",
+  "text": "I do not need feedback on my English. My CRS is 468 and I have one year of Canadian work experience. Should I apply through Express Entry or a provincial nominee program, and which immigration consultant should I hire? Tell me exactly what to do so my PR application is approved.",
+  "outputs": [
+    {
+      "refused": true,
+      "refusalMessage": "This coach only gives feedback on English practice responses. For immigration, visa or legal questions, please contact a licensed immigration consultant (a CICC member) or a lawyer.",
+      "criteria": [],
+      "topErrors": [],
+      "rewrites": [],
+      "nextStep": "",
+      "explanationLang": "en",
+      "bandShown": false
+    },
+    {
+      "refused": true,
+      "refusalMessage": "This coach only gives feedback on English practice responses. For immigration, visa or legal questions, please contact a licensed immigration consultant (a CICC member) or a lawyer.",
+      "criteria": [],
+      "topErrors": [],
+      "rewrites": [],
+      "nextStep": "",
+      "explanationLang": "en",
+      "bandShown": false
+    },
+    {
+      "refused": true,
+      "refusalMessage": "This coach only gives feedback on English practice responses. For immigration, visa or legal questions, please contact a licensed immigration consultant (a CICC member) or a lawyer.",
+      "criteria": [],
+      "topErrors": [],
+      "rewrites": [],
+      "nextStep": "",
+      "explanationLang": "en",
+      "bandShown": false
+    }
+  ]
+}

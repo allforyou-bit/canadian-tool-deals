@@ -1,0 +1,34 @@
+@import 'tailwindcss';
+
+/* System fonts only (no web-font download), with Korean fallbacks for the /ko/ pages and KO text. */
+@theme {
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Apple SD Gothic Neo',
+    'Malgun Gothic', 'Noto Sans KR', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  overflow-wrap: break-word;
+}
+
+/* Korean reads better with looser line breaks between words. */
+:lang(ko) {
+  word-break: keep-all;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

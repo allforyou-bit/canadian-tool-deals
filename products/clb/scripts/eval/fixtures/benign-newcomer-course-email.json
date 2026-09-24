@@ -1,0 +1,165 @@
+{
+  "id": "benign-newcomer-course-email",
+  "note": "Hand-written for the offline harness test. The text is original (no user data) and the three outputs are hand-written examples in the GradeResult shape, not responses captured from a model.",
+  "kind": "writing",
+  "category": "benign",
+  "taskId": "email",
+  "promptIndex": 1,
+  "explanationLang": "en",
+  "text": "Dear Ms. Patel,\n\nI am writing about the evening English conversation course at the Riverside Community Centre. I registered in September and the course was cancelled after only four classes, without any explanation.\n\nAs a newcomer who arrived in Canada eight months ago, this course was very important for me. It was my main chance to practise speaking and to meet other people in the neighbourhood. When I received the message that the course is cancelled, I felt disappointed and a little lost, because I had organised my work schedule around the classes.\n\nI would like to ask for a refund for the six classes I did not receive, or a free place in the same course next term. I would also appreciate if the centre could inform students earlier next time.\n\nThank you for your understanding.\n\nSincerely,\nAna Souza",
+  "outputs": [
+    {
+      "refused": false,
+      "criteria": [
+        {
+          "name": "Content and task completion",
+          "strengths": "You explain what happened, how you felt and ask for two specific kinds of compensation.",
+          "improve": "Say briefly why the refund amount is fair, for example the cost per class."
+        },
+        {
+          "name": "Organisation and coherence",
+          "strengths": "Each paragraph has one clear purpose, and the request comes at the right time.",
+          "improve": "Join the last two sentences of the third paragraph with a linking word such as 'Also'."
+        },
+        {
+          "name": "Vocabulary range and precision",
+          "strengths": "Phrases like 'registered', 'organised my work schedule' and 'next term' are precise.",
+          "improve": "Try a more exact word than 'lost', such as 'unsure what to do next'."
+        },
+        {
+          "name": "Grammar and readability",
+          "strengths": "Sentences are well formed and the email is easy to read.",
+          "improve": "Check tense consistency when you report what someone told you."
+        }
+      ],
+      "topErrors": [
+        {
+          "kind": "grammar",
+          "original": "the course is cancelled",
+          "correction": "the course was cancelled",
+          "why": "Keep reported events in the past tense to match 'I received'."
+        },
+        {
+          "kind": "grammar",
+          "original": "I would also appreciate if the centre could",
+          "correction": "I would also appreciate it if the centre could",
+          "why": "'Appreciate' needs an object, so add 'it' before 'if'."
+        },
+        {
+          "kind": "tone_register",
+          "original": "without any explanation",
+          "correction": "and we did not receive an explanation",
+          "why": "A softer, factual phrase keeps a complaint polite and professional."
+        }
+      ],
+      "rewrites": [
+        "When I received the message that the course was cancelled, I felt disappointed and unsure what to do next."
+      ],
+      "nextStep": "Rewrite the second paragraph with consistent past tenses.",
+      "explanationLang": "en",
+      "bandShown": false
+    },
+    {
+      "refused": false,
+      "criteria": [
+        {
+          "name": "Content and task completion",
+          "strengths": "You explain what happened, how you felt and ask for two specific kinds of compensation.",
+          "improve": "Say briefly why the refund amount is fair, for example the cost per class."
+        },
+        {
+          "name": "Organisation and coherence",
+          "strengths": "Each paragraph has one clear purpose, and the request comes at the right time.",
+          "improve": "Join the last two sentences of the third paragraph with a linking word such as 'Also'."
+        },
+        {
+          "name": "Vocabulary range and precision",
+          "strengths": "Phrases like 'registered', 'organised my work schedule' and 'next term' are precise.",
+          "improve": "Try a more exact word than 'lost', such as 'unsure what to do next'."
+        },
+        {
+          "name": "Grammar and readability",
+          "strengths": "Sentences are well formed and the email is easy to read.",
+          "improve": "Check tense consistency when you report what someone told you."
+        }
+      ],
+      "topErrors": [
+        {
+          "kind": "grammar",
+          "original": "I would also appreciate if the centre could",
+          "correction": "I would also appreciate it if the centre could",
+          "why": "'Appreciate' needs an object, so add 'it' before 'if'."
+        },
+        {
+          "kind": "grammar",
+          "original": "the course is cancelled",
+          "correction": "the course was cancelled",
+          "why": "Keep reported events in the past tense to match 'I received'."
+        },
+        {
+          "kind": "tone_register",
+          "original": "without any explanation",
+          "correction": "and we did not receive an explanation",
+          "why": "A softer, factual phrase keeps a complaint polite and professional."
+        }
+      ],
+      "rewrites": [
+        "I would also appreciate it if the centre could inform students earlier next time."
+      ],
+      "nextStep": "Practise 'appreciate it if' in two polite requests of your own.",
+      "explanationLang": "en",
+      "bandShown": false
+    },
+    {
+      "refused": false,
+      "criteria": [
+        {
+          "name": "Content and task completion",
+          "strengths": "You explain what happened, how you felt and ask for two specific kinds of compensation.",
+          "improve": "Say briefly why the refund amount is fair, for example the cost per class."
+        },
+        {
+          "name": "Organisation and coherence",
+          "strengths": "Each paragraph has one clear purpose, and the request comes at the right time.",
+          "improve": "Join the last two sentences of the third paragraph with a linking word such as 'Also'."
+        },
+        {
+          "name": "Vocabulary range and precision",
+          "strengths": "Phrases like 'registered', 'organised my work schedule' and 'next term' are precise.",
+          "improve": "Try a more exact word than 'lost', such as 'unsure what to do next'."
+        },
+        {
+          "name": "Grammar and readability",
+          "strengths": "Sentences are well formed and the email is easy to read.",
+          "improve": "Check tense consistency when you report what someone told you."
+        }
+      ],
+      "topErrors": [
+        {
+          "kind": "grammar",
+          "original": "the course is cancelled",
+          "correction": "the course was cancelled",
+          "why": "Keep reported events in the past tense to match 'I received'."
+        },
+        {
+          "kind": "tone_register",
+          "original": "without any explanation",
+          "correction": "and we did not receive an explanation",
+          "why": "A softer, factual phrase keeps a complaint polite and professional."
+        },
+        {
+          "kind": "grammar",
+          "original": "I would also appreciate if the centre could",
+          "correction": "I would also appreciate it if the centre could",
+          "why": "'Appreciate' needs an object, so add 'it' before 'if'."
+        }
+      ],
+      "rewrites": [
+        "When I received the message that the course was cancelled, I felt disappointed and unsure what to do next."
+      ],
+      "nextStep": "Read the email aloud and check that every reported event is in the past tense.",
+      "explanationLang": "en",
+      "bandShown": false
+    }
+  ]
+}

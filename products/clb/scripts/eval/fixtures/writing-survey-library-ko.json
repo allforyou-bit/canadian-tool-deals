@@ -1,0 +1,167 @@
+{
+  "id": "writing-survey-library-ko",
+  "note": "Hand-written for the offline harness test. The text is original (no user data) and the three outputs are hand-written examples in the GradeResult shape, not responses captured from a model.",
+  "kind": "writing",
+  "category": "sample",
+  "taskId": "survey",
+  "promptIndex": 0,
+  "explanationLang": "ko",
+  "text": "I think the city should choose Option B, longer opening hours at public libraries.\n\nFirst, many people work during the day and they can not visit the library before it close. For example, my sister is nurse and she finish work at 7 pm, so she never have a chance to borrow books. If the library open until 10 pm, people like her can use it.\n\nSecond, libraries are not only for books. They give free internet, quiet place to study and programs for children and newcomers. Longer hours means more people can take these services.\n\nBike lanes are also good idea, but in our city it is winter for five months, so they are not used so much. In conclusion, longer library hours will help more people in all seasons, so Option B is better choice.",
+  "outputs": [
+    {
+      "refused": false,
+      "criteria": [
+        {
+          "name": "내용과 과제 수행",
+          "strengths": "선택지를 분명히 고르고 이유 두 가지와 예시를 들어 설명했어요.",
+          "improve": "다른 선택지(자전거 도로)의 장점을 한 문장 인정한 뒤 반박하면 더 설득력 있어요."
+        },
+        {
+          "name": "구성과 흐름",
+          "strengths": "First, Second, In conclusion으로 흐름이 잘 보여요.",
+          "improve": "각 단락 첫 문장에 그 단락의 핵심 이유를 먼저 써 보세요."
+        },
+        {
+          "name": "어휘의 다양성과 정확성",
+          "strengths": "newcomers, quiet place to study처럼 주제에 맞는 표현을 썼어요.",
+          "improve": "'good idea', 'better choice'처럼 반복되는 표현을 다른 말로 바꿔 보세요."
+        },
+        {
+          "name": "문법과 가독성",
+          "strengths": "문장이 대체로 짧고 이해하기 쉬워요.",
+          "improve": "3인칭 단수 동사(-s)와 관사(a, an, the)를 다시 확인해 보세요."
+        }
+      ],
+      "topErrors": [
+        {
+          "kind": "grammar",
+          "original": "before it close",
+          "correction": "before it closes",
+          "why": "주어가 3인칭 단수(it)일 때 현재형 동사에 -s를 붙여요."
+        },
+        {
+          "kind": "grammar",
+          "original": "my sister is nurse",
+          "correction": "my sister is a nurse",
+          "why": "직업을 말할 때는 셀 수 있는 명사 앞에 관사 a를 써요."
+        },
+        {
+          "kind": "vocabulary",
+          "original": "take these services",
+          "correction": "use these services",
+          "why": "서비스는 보통 'use'나 'access'와 함께 써요. 'take'는 어색해요."
+        }
+      ],
+      "rewrites": [
+        "For example, my sister is a nurse who finishes work at 7 p.m., so she never has a chance to borrow books.",
+        "Longer hours mean that more people can use these services."
+      ],
+      "nextStep": "두 번째 단락을 교정한 동사 형태로 다시 써 보고, 3인칭 단수 문장 다섯 개를 연습해 보세요.",
+      "explanationLang": "ko",
+      "bandShown": false
+    },
+    {
+      "refused": false,
+      "criteria": [
+        {
+          "name": "내용과 과제 수행",
+          "strengths": "선택지를 분명히 고르고 이유 두 가지와 예시를 들어 설명했어요.",
+          "improve": "다른 선택지(자전거 도로)의 장점을 한 문장 인정한 뒤 반박하면 더 설득력 있어요."
+        },
+        {
+          "name": "구성과 흐름",
+          "strengths": "First, Second, In conclusion으로 흐름이 잘 보여요.",
+          "improve": "각 단락 첫 문장에 그 단락의 핵심 이유를 먼저 써 보세요."
+        },
+        {
+          "name": "어휘의 다양성과 정확성",
+          "strengths": "newcomers, quiet place to study처럼 주제에 맞는 표현을 썼어요.",
+          "improve": "'good idea', 'better choice'처럼 반복되는 표현을 다른 말로 바꿔 보세요."
+        },
+        {
+          "name": "문법과 가독성",
+          "strengths": "문장이 대체로 짧고 이해하기 쉬워요.",
+          "improve": "3인칭 단수 동사(-s)와 관사(a, an, the)를 다시 확인해 보세요."
+        }
+      ],
+      "topErrors": [
+        {
+          "kind": "grammar",
+          "original": "she never have a chance",
+          "correction": "she never has a chance",
+          "why": "주어가 she이면 현재형 동사는 has를 써요."
+        },
+        {
+          "kind": "grammar",
+          "original": "my sister is nurse",
+          "correction": "my sister is a nurse",
+          "why": "직업을 말할 때는 셀 수 있는 명사 앞에 관사 a를 써요."
+        },
+        {
+          "kind": "vocabulary",
+          "original": "take these services",
+          "correction": "use these services",
+          "why": "서비스는 보통 'use'나 'access'와 함께 써요. 'take'는 어색해요."
+        }
+      ],
+      "rewrites": [
+        "For example, my sister is a nurse who finishes work at 7 p.m., so she never has a chance to borrow books.",
+        "Longer hours mean that more people can use these services."
+      ],
+      "nextStep": "관사와 동사 형태에 주의하며 첫 번째 이유 단락을 다시 써 보세요.",
+      "explanationLang": "ko",
+      "bandShown": false
+    },
+    {
+      "refused": false,
+      "criteria": [
+        {
+          "name": "내용과 과제 수행",
+          "strengths": "선택지를 분명히 고르고 이유 두 가지와 예시를 들어 설명했어요.",
+          "improve": "다른 선택지(자전거 도로)의 장점을 한 문장 인정한 뒤 반박하면 더 설득력 있어요."
+        },
+        {
+          "name": "구성과 흐름",
+          "strengths": "First, Second, In conclusion으로 흐름이 잘 보여요.",
+          "improve": "각 단락 첫 문장에 그 단락의 핵심 이유를 먼저 써 보세요."
+        },
+        {
+          "name": "어휘의 다양성과 정확성",
+          "strengths": "newcomers, quiet place to study처럼 주제에 맞는 표현을 썼어요.",
+          "improve": "'good idea', 'better choice'처럼 반복되는 표현을 다른 말로 바꿔 보세요."
+        },
+        {
+          "name": "문법과 가독성",
+          "strengths": "문장이 대체로 짧고 이해하기 쉬워요.",
+          "improve": "3인칭 단수 동사(-s)와 관사(a, an, the)를 다시 확인해 보세요."
+        }
+      ],
+      "topErrors": [
+        {
+          "kind": "grammar",
+          "original": "my sister is nurse",
+          "correction": "my sister is a nurse",
+          "why": "직업을 말할 때는 셀 수 있는 명사 앞에 관사 a를 써요."
+        },
+        {
+          "kind": "grammar",
+          "original": "before it close",
+          "correction": "before it closes",
+          "why": "주어가 3인칭 단수(it)일 때 현재형 동사에 -s를 붙여요."
+        },
+        {
+          "kind": "vocabulary",
+          "original": "take these services",
+          "correction": "use these services",
+          "why": "서비스는 보통 'use'나 'access'와 함께 써요. 'take'는 어색해요."
+        }
+      ],
+      "rewrites": [
+        "For example, my sister is a nurse who finishes work at 7 p.m., so she never has a chance to borrow books."
+      ],
+      "nextStep": "교정한 문장을 소리 내어 읽어 보고, 같은 주제로 짧은 답안을 다시 써 보세요.",
+      "explanationLang": "ko",
+      "bandShown": false
+    }
+  ]
+}

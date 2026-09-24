@@ -54,3 +54,4 @@ products/*/out
 products/**/.wrangler
 products/*/next-env.d.ts
 products/*/*.tsbuildinfo
+products/*/.cache

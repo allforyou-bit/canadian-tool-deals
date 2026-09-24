@@ -1,0 +1,526 @@
+// Small UI string table for the interactive pages. Korean uses 해요체. Every string must pass
+// findClaims (shared/content-rules.ts); the two disclaimer sentences are exact ALLOWED_PHRASES.
+import type { Lang } from '../shared/api'
+
+const en = {
+  // chrome
+  'nav.practice': 'Practice',
+  'nav.pricing': 'Pricing',
+  'nav.help': 'Help',
+  'nav.account': 'Account',
+  'nav.signIn': 'Sign in',
+  'nav.korean': '한국어',
+  'nav.label': 'Main',
+  'skip': 'Skip to main content',
+  'footer.links': 'Site information',
+  'footer.privacy': 'Privacy',
+  'footer.terms': 'Terms',
+  'footer.refunds': 'Refunds',
+  'footer.ai': 'AI disclosure',
+  'footer.notAffiliated': 'Not affiliated',
+  'footer.help': 'Help',
+  'footer.status': 'Status',
+
+  // common
+  'common.loading': 'Loading…',
+  'common.tryAgain': 'Try again',
+  'common.network': 'We could not reach the server. Check your connection and try again.',
+  'common.generic': 'Something went wrong. Please try again in a moment.',
+  'common.signIn': 'Sign in',
+  'common.seePricing': 'See pricing',
+  'common.cancel': 'Cancel',
+  'common.language': 'Language',
+
+  // API error codes (practice context)
+  'err.payment_required': 'You have used your free sample. Get a pass to keep practising with feedback.',
+  'err.free_unavailable': 'Free samples are not available right now. Sign in or get a pass to continue.',
+  'err.grading_paused':
+    'Feedback is paused for maintenance. Please try again later. Active passes are extended by the length of the pause.',
+  'err.rate_limited':
+    'You have reached the fair-use limit for now ({w} writing and {s} speaking tasks a day, {t} in 30 days). Please try again later.',
+  'err.turnstile_failed': 'The security check did not pass. Please complete it again and resubmit.',
+  'err.unauthorized': 'Please sign in to continue.',
+  'err.too_large': 'Your answer is too long. Please shorten it and try again.',
+  'err.bad_request': 'The request was not accepted. Please check your answer and try again.',
+  'err.region_not_supported': 'Passes are sold only to people who live in Canada outside Quebec.',
+  'err.checkout_unavailable': 'Purchases open soon.',
+
+  // practice index
+  'practice.title': 'Practice tasks',
+  'practice.intro':
+    'Timed practice tasks with feedback on content, organisation, vocabulary and grammar. Your first writing task is free without an account.',
+  'practice.writing': 'Writing',
+  'practice.speaking': 'Speaking',
+  'practice.words': '{min}–{max} words',
+  'practice.speakTime': '{prep} s to prepare, {speak} s to speak',
+  'practice.backToList': 'All practice tasks',
+
+  // shared practice controls
+  'p.prompt': 'Choose a prompt',
+  'p.promptN': 'Prompt {n}',
+  'p.instructions': 'What to do',
+  'p.explanationLang': 'Explanation language',
+  'p.submit': 'Get feedback',
+  'p.submitting': 'Getting feedback… this can take up to a minute.',
+  'p.securityCheck': 'Security check',
+  'p.securityNeeded': 'Please complete the security check first.',
+  'p.freeWriting': 'Free sample: one writing task without an account. The security check below helps us stop abuse.',
+  'p.freeUsed': 'You have used your free writing sample. Get a pass to receive more feedback.',
+  'p.passActive': 'Pass active until {date}.',
+  'p.paused': 'Feedback is paused for maintenance right now. You can still practise with the timer.',
+
+  // writing
+  'w.answer': 'Your answer',
+  'w.words': '{n} words',
+  'w.target': 'Target: {min}–{max} words',
+  'w.under': '{n} more words to reach the target.',
+  'w.over': '{n} words over the target. Try to tighten your answer.',
+  'w.inRange': 'Within the target range.',
+  'w.empty': 'Write your answer before asking for feedback.',
+  'w.tooLong': 'Your answer is longer than {max} characters. Please shorten it.',
+
+  // timer
+  't.label': 'Practice timer',
+  't.start': 'Start timer',
+  't.pause': 'Pause',
+  't.resume': 'Resume',
+  't.reset': 'Reset',
+  't.done': 'Time is up. You can still finish and submit.',
+  't.note': 'The timer is for practice only and never blocks submission.',
+
+  // speaking
+  's.signIn': 'Sign in to practise speaking. Your first speaking task is free after you verify your email.',
+  's.notice':
+    'Pronunciation and fluency are not assessed: the feedback is based on a transcript of your recording.',
+  's.privacy': 'Your recording is used only to make a transcript and is never stored.',
+  's.unsupported':
+    'This browser cannot record audio. Please use a recent version of Chrome, Edge, Firefox or Safari.',
+  's.micDenied': 'Microphone access was blocked. Allow the microphone in your browser settings, then try again.',
+  's.noMic': 'No microphone was found. Connect a microphone and try again.',
+  's.micError': 'The microphone could not be started. Close other apps that use it and try again.',
+  's.timing': '{prep} seconds to prepare, then up to {speak} seconds to speak.',
+  's.start': 'Start: preparation time',
+  's.prep': 'Preparation time',
+  's.skipPrep': 'Start speaking now',
+  's.recording': 'Recording',
+  's.stop': 'Stop recording',
+  's.secondsLeft': '{n} s left',
+  's.review': 'Listen to your answer before you send it.',
+  's.reRecord': 'Record again',
+  's.duration': 'Length: {n} s',
+  's.tooLarge': 'The recording is larger than {mb} MB. Please record a shorter answer.',
+  's.tooShort': 'The recording is too short. Please record again.',
+  's.freeSpeaking': 'Your free speaking sample is available.',
+  's.noFreeSpeaking': 'You have used your free speaking sample. Get a pass to receive more feedback.',
+
+  // result
+  'r.title': 'Your feedback',
+  'r.disclaimer': 'Feedback is not a score and does not predict test results.',
+  'r.strengths': 'Strengths',
+  'r.improve': 'To improve',
+  'r.topErrors': 'Most important errors',
+  'r.original': 'You wrote',
+  'r.originalSpoken': 'You said',
+  'r.correction': 'Better',
+  'r.why': 'Why',
+  'r.rewrites': 'Improved versions',
+  'r.nextStep': 'Next step',
+  'r.transcript': 'Transcript (what we heard)',
+  'r.wordCount': '{n} words',
+  'r.refused': 'We could not give feedback on this answer.',
+  'r.again': 'Practise again',
+  'r.freeDone': 'That was your free sample. Passes give you feedback on every practice task.',
+
+  // error kinds
+  'kind.grammar': 'Grammar',
+  'kind.vocabulary': 'Vocabulary',
+  'kind.spelling': 'Spelling',
+  'kind.punctuation': 'Punctuation',
+  'kind.sentence_structure': 'Sentence structure',
+  'kind.organization': 'Organisation',
+  'kind.coherence': 'Coherence',
+  'kind.task_fulfillment': 'Task completion',
+  'kind.tone_register': 'Tone and register',
+  'kind.fluency': 'Fluency',
+
+  // buy pass
+  'b.days': '{n} days of practice feedback',
+  'b.oneTime': 'One-time payment in Canadian dollars. No subscription and no auto-renewal.',
+  'b.notQuebec': 'Not available in Quebec',
+  'b.attest': 'I live in Canada, outside Quebec',
+  'b.buy': 'Buy the {name}',
+  'b.signInToBuy': 'Sign in to buy',
+  'b.soon': 'Purchases open soon',
+  'b.region':
+    'Passes are sold only in Canada outside Quebec. Your connection does not appear to come from that area, so we cannot sell a pass right now.',
+  'b.redirecting': 'Opening secure checkout…',
+  'b.hasPass': 'Your pass is active until {date}. Buying another pass adds its days to your current pass.',
+  'b.stripe': 'Payment is handled by Stripe.',
+
+  // login
+  'l.title': 'Sign in',
+  'l.intro': 'We will email you a sign-in link. No password needed.',
+  'l.email': 'Email address',
+  'l.adult': 'I am 18 or older.',
+  'l.optional': 'Optional:',
+  'l.submit': 'Email me a sign-in link',
+  'l.sending': 'Sending…',
+  'l.sentTitle': 'Check your email',
+  'l.sentBody':
+    'We sent a sign-in link to {email}. It works once, for 15 minutes. If you do not see it, check your spam folder.',
+  'l.again': 'Use a different email',
+  'l.rateLimited': 'Too many sign-in links were requested for this address. Please wait an hour and try again.',
+  'l.badEmail': 'Please enter a valid email address that can receive mail.',
+
+  // verify
+  'v.title': 'Signing you in',
+  'v.working': 'Signing you in…',
+  'v.missing': 'This sign-in link is incomplete. Please request a new link.',
+  'v.failed': 'This sign-in link has expired or was already used. Please request a new link.',
+  'v.newLink': 'Request a new link',
+  'v.done': 'You are signed in.',
+
+  // account
+  'a.title': 'Your account',
+  'a.signedInAs': 'Signed in as {email}',
+  'a.signInPrompt': 'Sign in to see your pass, history and settings.',
+  'a.pass': 'Your pass',
+  'a.passActive': '{name}: from {start} to {end}',
+  'a.noPass': 'You do not have an active pass.',
+  'a.usage': 'Fair-use limits',
+  'a.writingToday': 'Writing tasks today',
+  'a.speakingToday': 'Speaking tasks today',
+  'a.graded30d': 'Tasks with feedback in the last 30 days',
+  'a.usageNote': 'Daily limits reset at 00:00 UTC.',
+  'a.free': 'Free samples',
+  'a.freeWriting': 'Writing sample',
+  'a.freeSpeaking': 'Speaking sample',
+  'a.available': 'Available',
+  'a.used': 'Used or unavailable',
+  'a.history': 'Your practice history',
+  'a.noHistory': 'No practice tasks with feedback yet.',
+  'a.recurring': 'Recurring error types',
+  'a.recurringCount': '{n} times',
+  'a.marketing': 'Email preferences',
+  'a.marketingIntro':
+    'We only send marketing emails if you agree. Sign-in links and receipts are always sent.',
+  'a.marketingWithdraw': 'Stop marketing emails',
+  'a.marketingOptIn': 'Save my choice',
+  'a.marketingWithdrawn': 'Done. You will not receive marketing emails.',
+  'a.marketingSaved': 'Thanks. Your consent has been saved.',
+  'a.marketingTick': 'Tick the box to agree, or use the button above to stop marketing emails.',
+  'a.refund': 'Refund',
+  'a.refundPolicy':
+    'You can request a refund within {days} days of purchase if you have used {max} or fewer tasks with feedback. Self-serve refunds are available once per person and per card.',
+  'a.refundButton': 'Request a refund',
+  'a.refundConfirm': 'Your pass will end as soon as the refund is made. Continue?',
+  'a.refundYes': 'Yes, refund my pass',
+  'a.refundDone': 'Refunded {amount}. It can take 5–10 business days to reach your card.',
+  'a.support': 'Contact support',
+  'a.supportLabel': 'Your message',
+  'a.supportHint': 'Please do not include card numbers or passwords.',
+  'a.supportSend': 'Send message',
+  'a.supportSent': 'Thanks. We will reply by email.',
+  'a.delete': 'Delete account',
+  'a.deleteInfo':
+    'This removes your essays, transcripts, history and profile. Records of payments are kept for tax and accounting purposes.',
+  'a.deleteButton': 'Delete my account',
+  'a.deleteConfirm': 'This cannot be undone. Delete your account now?',
+  'a.deleteYes': 'Yes, delete permanently',
+  'a.deleted': 'Your account has been deleted.',
+  'a.signOut': 'Sign out',
+
+  // checkout
+  'c.successTitle': 'Thank you',
+  'c.waiting': 'Confirming your payment…',
+  'c.active': 'Your {name} is active until {date}.',
+  'c.start': 'Start practising',
+  'c.slow':
+    'Your payment is still being confirmed. This page will update if you refresh it in a minute. If your pass does not appear, contact support from your account page.',
+  'c.signedOut': 'Sign in with the email you used at checkout to see your pass.',
+  'c.cancelTitle': 'Payment cancelled',
+  'c.cancelBody': 'You were not charged. You can buy a pass whenever you are ready.',
+
+  // status
+  'st.title': 'Service status',
+  'st.api': 'Service',
+  'st.ok': 'Working',
+  'st.down': 'Not reachable',
+  'st.version': 'Version {v}',
+  'st.grading': 'Feedback',
+  'st.checkout': 'Purchases',
+  'st.on': 'On',
+  'st.off': 'Paused',
+  'st.notice': 'Notice',
+  'st.checked': 'Checked at {time}',
+} as const
+
+export type UiKey = keyof typeof en
+
+const ko: Record<UiKey, string> = {
+  'nav.practice': '연습',
+  'nav.pricing': '요금',
+  'nav.help': '도움말',
+  'nav.account': '계정',
+  'nav.signIn': '로그인',
+  'nav.korean': '한국어',
+  'nav.label': '주 메뉴',
+  'skip': '본문으로 건너뛰기',
+  'footer.links': '사이트 정보',
+  'footer.privacy': '개인정보',
+  'footer.terms': '이용약관',
+  'footer.refunds': '환불',
+  'footer.ai': 'AI 안내',
+  'footer.notAffiliated': '제휴 없음',
+  'footer.help': '도움말',
+  'footer.status': '서비스 상태',
+
+  'common.loading': '불러오는 중이에요…',
+  'common.tryAgain': '다시 시도',
+  'common.network': '서버에 연결하지 못했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.',
+  'common.generic': '문제가 생겼어요. 잠시 후 다시 시도해 주세요.',
+  'common.signIn': '로그인',
+  'common.seePricing': '요금 보기',
+  'common.cancel': '취소',
+  'common.language': '언어',
+
+  'err.payment_required': '무료 체험을 이미 사용했어요. 피드백을 계속 받으려면 이용권을 구매해 주세요.',
+  'err.free_unavailable': '지금은 무료 체험을 이용할 수 없어요. 로그인하거나 이용권을 구매해 주세요.',
+  'err.grading_paused': '점검 중이라 피드백이 잠시 멈췄어요. 나중에 다시 시도해 주세요. 멈춘 시간만큼 이용권 기간이 늘어나요.',
+  'err.rate_limited':
+    '지금은 공정 사용 한도에 도달했어요(하루 쓰기 {w}개, 말하기 {s}개, 30일 동안 {t}개). 나중에 다시 시도해 주세요.',
+  'err.turnstile_failed': '보안 확인을 통과하지 못했어요. 다시 확인한 뒤 제출해 주세요.',
+  'err.unauthorized': '계속하려면 로그인해 주세요.',
+  'err.too_large': '답안이 너무 길어요. 줄여서 다시 시도해 주세요.',
+  'err.bad_request': '요청을 처리하지 못했어요. 답안을 확인하고 다시 시도해 주세요.',
+  'err.region_not_supported': '이용권은 퀘벡을 제외한 캐나다에 사는 분께만 판매해요.',
+  'err.checkout_unavailable': '곧 구매할 수 있어요.',
+
+  'practice.title': '연습 과제',
+  'practice.intro': '시간을 재며 연습하고 내용, 구성, 어휘, 문법에 대한 피드백을 받아요. 첫 쓰기 과제는 계정 없이 무료예요.',
+  'practice.writing': '쓰기',
+  'practice.speaking': '말하기',
+  'practice.words': '{min}–{max}단어',
+  'practice.speakTime': '준비 {prep}초, 말하기 {speak}초',
+  'practice.backToList': '전체 연습 과제',
+
+  'p.prompt': '문제 고르기',
+  'p.promptN': '문제 {n}',
+  'p.instructions': '할 일',
+  'p.explanationLang': '설명 언어',
+  'p.submit': '피드백 받기',
+  'p.submitting': '피드백을 만드는 중이에요… 1분 정도 걸릴 수 있어요.',
+  'p.securityCheck': '보안 확인',
+  'p.securityNeeded': '먼저 보안 확인을 완료해 주세요.',
+  'p.freeWriting': '무료 체험: 계정 없이 쓰기 과제 1개를 해 볼 수 있어요. 아래 보안 확인은 악용을 막기 위한 거예요.',
+  'p.freeUsed': '무료 쓰기 체험을 이미 사용했어요. 피드백을 더 받으려면 이용권을 구매해 주세요.',
+  'p.passActive': '{date}까지 이용권을 쓸 수 있어요.',
+  'p.paused': '지금은 점검 중이라 피드백을 받을 수 없어요. 타이머로 연습은 계속할 수 있어요.',
+
+  'w.answer': '내 답안',
+  'w.words': '{n}단어',
+  'w.target': '목표: {min}–{max}단어',
+  'w.under': '목표까지 {n}단어 남았어요.',
+  'w.over': '목표보다 {n}단어 많아요. 조금 줄여 보세요.',
+  'w.inRange': '목표 범위 안에 있어요.',
+  'w.empty': '피드백을 받기 전에 답안을 써 주세요.',
+  'w.tooLong': '답안이 {max}자보다 길어요. 줄여 주세요.',
+
+  't.label': '연습 타이머',
+  't.start': '타이머 시작',
+  't.pause': '일시 정지',
+  't.resume': '계속',
+  't.reset': '처음으로',
+  't.done': '시간이 끝났어요. 마무리해서 제출해도 돼요.',
+  't.note': '타이머는 연습용이라 제출을 막지 않아요.',
+
+  's.signIn': '말하기 연습은 로그인 후 이용할 수 있어요. 이메일 인증 후 첫 말하기 과제는 무료예요.',
+  's.notice': '발음과 유창성은 평가하지 않아요. 피드백은 녹음을 받아쓴 내용을 바탕으로 해요.',
+  's.privacy': '녹음은 받아쓰기에만 쓰이고 저장되지 않아요.',
+  's.unsupported': '이 브라우저에서는 녹음할 수 없어요. 최신 Chrome, Edge, Firefox, Safari를 사용해 주세요.',
+  's.micDenied': '마이크 사용이 차단됐어요. 브라우저 설정에서 마이크를 허용한 뒤 다시 시도해 주세요.',
+  's.noMic': '마이크를 찾지 못했어요. 마이크를 연결하고 다시 시도해 주세요.',
+  's.micError': '마이크를 시작하지 못했어요. 마이크를 쓰는 다른 앱을 닫고 다시 시도해 주세요.',
+  's.timing': '준비 {prep}초, 그다음 최대 {speak}초 동안 말해요.',
+  's.start': '시작: 준비 시간',
+  's.prep': '준비 시간',
+  's.skipPrep': '지금 말하기 시작',
+  's.recording': '녹음 중',
+  's.stop': '녹음 끝내기',
+  's.secondsLeft': '{n}초 남음',
+  's.review': '보내기 전에 답변을 들어 보세요.',
+  's.reRecord': '다시 녹음',
+  's.duration': '길이: {n}초',
+  's.tooLarge': '녹음 파일이 {mb}MB보다 커요. 더 짧게 녹음해 주세요.',
+  's.tooShort': '녹음이 너무 짧아요. 다시 녹음해 주세요.',
+  's.freeSpeaking': '무료 말하기 체험을 이용할 수 있어요.',
+  's.noFreeSpeaking': '무료 말하기 체험을 이미 사용했어요. 피드백을 더 받으려면 이용권을 구매해 주세요.',
+
+  'r.title': '피드백',
+  'r.disclaimer': '피드백은 점수가 아니며 시험 결과를 예측하지 않습니다.',
+  'r.strengths': '잘한 점',
+  'r.improve': '고칠 점',
+  'r.topErrors': '가장 중요한 오류',
+  'r.original': '쓴 문장',
+  'r.originalSpoken': '말한 문장',
+  'r.correction': '더 나은 표현',
+  'r.why': '이유',
+  'r.rewrites': '고쳐 쓴 예시',
+  'r.nextStep': '다음 단계',
+  'r.transcript': '받아쓴 내용',
+  'r.wordCount': '{n}단어',
+  'r.refused': '이 답안에는 피드백을 드릴 수 없어요.',
+  'r.again': '다시 연습하기',
+  'r.freeDone': '무료 체험이 끝났어요. 이용권이 있으면 모든 연습 과제에서 피드백을 받을 수 있어요.',
+
+  'kind.grammar': '문법',
+  'kind.vocabulary': '어휘',
+  'kind.spelling': '철자',
+  'kind.punctuation': '문장 부호',
+  'kind.sentence_structure': '문장 구조',
+  'kind.organization': '구성',
+  'kind.coherence': '흐름',
+  'kind.task_fulfillment': '과제 수행',
+  'kind.tone_register': '어조와 격식',
+  'kind.fluency': '유창성',
+
+  'b.days': '{n}일 동안 연습 피드백',
+  'b.oneTime': '캐나다 달러로 한 번만 결제해요. 구독이나 자동 갱신은 없어요.',
+  'b.notQuebec': '퀘벡에서는 이용할 수 없어요',
+  'b.attest': '퀘벡을 제외한 캐나다에 살고 있어요',
+  'b.buy': '{name} 구매하기',
+  'b.signInToBuy': '로그인하고 구매하기',
+  'b.soon': '곧 구매할 수 있어요',
+  'b.region':
+    '이용권은 퀘벡을 제외한 캐나다에서만 판매해요. 지금 접속한 위치가 이 지역이 아닌 것으로 보여 이용권을 판매할 수 없어요.',
+  'b.redirecting': '안전한 결제 페이지로 이동하는 중이에요…',
+  'b.hasPass': '{date}까지 이용권이 있어요. 이용권을 더 사면 남은 기간에 일수가 더해져요.',
+  'b.stripe': '결제는 Stripe가 처리해요.',
+
+  'l.title': '로그인',
+  'l.intro': '로그인 링크를 이메일로 보내 드려요. 비밀번호는 필요 없어요.',
+  'l.email': '이메일 주소',
+  'l.adult': '만 18세 이상이에요.',
+  'l.optional': '선택:',
+  'l.submit': '로그인 링크 받기',
+  'l.sending': '보내는 중이에요…',
+  'l.sentTitle': '이메일을 확인해 주세요',
+  'l.sentBody': '{email}(으)로 로그인 링크를 보냈어요. 링크는 15분 동안 한 번만 쓸 수 있어요. 보이지 않으면 스팸함을 확인해 주세요.',
+  'l.again': '다른 이메일 사용하기',
+  'l.rateLimited': '이 주소로 로그인 링크를 너무 많이 요청했어요. 한 시간 뒤에 다시 시도해 주세요.',
+  'l.badEmail': '메일을 받을 수 있는 올바른 이메일 주소를 입력해 주세요.',
+
+  'v.title': '로그인하는 중',
+  'v.working': '로그인하는 중이에요…',
+  'v.missing': '로그인 링크가 완전하지 않아요. 새 링크를 요청해 주세요.',
+  'v.failed': '로그인 링크가 만료되었거나 이미 사용됐어요. 새 링크를 요청해 주세요.',
+  'v.newLink': '새 링크 받기',
+  'v.done': '로그인했어요.',
+
+  'a.title': '내 계정',
+  'a.signedInAs': '{email}(으)로 로그인했어요',
+  'a.signInPrompt': '이용권, 기록, 설정을 보려면 로그인해 주세요.',
+  'a.pass': '이용권',
+  'a.passActive': '{name}: {start}부터 {end}까지',
+  'a.noPass': '사용 중인 이용권이 없어요.',
+  'a.usage': '공정 사용 한도',
+  'a.writingToday': '오늘 쓰기 과제',
+  'a.speakingToday': '오늘 말하기 과제',
+  'a.graded30d': '최근 30일 동안 피드백을 받은 과제',
+  'a.usageNote': '하루 한도는 UTC 00:00에 초기화돼요.',
+  'a.free': '무료 체험',
+  'a.freeWriting': '쓰기 체험',
+  'a.freeSpeaking': '말하기 체험',
+  'a.available': '이용 가능',
+  'a.used': '사용했거나 이용 불가',
+  'a.history': '연습 기록',
+  'a.noHistory': '아직 피드백을 받은 연습 과제가 없어요.',
+  'a.recurring': '자주 나오는 오류 유형',
+  'a.recurringCount': '{n}번',
+  'a.marketing': '이메일 수신 설정',
+  'a.marketingIntro': '동의한 경우에만 마케팅 이메일을 보내요. 로그인 링크와 영수증은 항상 보내요.',
+  'a.marketingWithdraw': '마케팅 이메일 그만 받기',
+  'a.marketingOptIn': '선택 저장하기',
+  'a.marketingWithdrawn': '완료했어요. 마케팅 이메일을 보내지 않을게요.',
+  'a.marketingSaved': '고마워요. 동의가 저장됐어요.',
+  'a.marketingTick': '동의하려면 상자를 체크하고, 그만 받으려면 위 버튼을 눌러 주세요.',
+  'a.refund': '환불',
+  'a.refundPolicy':
+    '구매 후 {days}일 안에, 피드백을 받은 과제가 {max}개 이하라면 환불을 요청할 수 있어요. 직접 환불은 한 사람과 한 카드당 한 번만 가능해요.',
+  'a.refundButton': '환불 요청하기',
+  'a.refundConfirm': '환불되면 이용권이 바로 끝나요. 계속할까요?',
+  'a.refundYes': '네, 환불해 주세요',
+  'a.refundDone': '{amount}을(를) 환불했어요. 카드에 반영되기까지 영업일 기준 5–10일이 걸릴 수 있어요.',
+  'a.support': '문의하기',
+  'a.supportLabel': '문의 내용',
+  'a.supportHint': '카드 번호나 비밀번호는 적지 말아 주세요.',
+  'a.supportSend': '보내기',
+  'a.supportSent': '고마워요. 이메일로 답변드릴게요.',
+  'a.delete': '계정 삭제',
+  'a.deleteInfo': '에세이, 받아쓴 내용, 기록, 프로필이 삭제돼요. 결제 기록은 세금과 회계 목적으로 보관해요.',
+  'a.deleteButton': '계정 삭제하기',
+  'a.deleteConfirm': '되돌릴 수 없어요. 지금 계정을 삭제할까요?',
+  'a.deleteYes': '네, 영구 삭제할게요',
+  'a.deleted': '계정이 삭제됐어요.',
+  'a.signOut': '로그아웃',
+
+  'c.successTitle': '고마워요',
+  'c.waiting': '결제를 확인하는 중이에요…',
+  'c.active': '{name}을(를) {date}까지 쓸 수 있어요.',
+  'c.start': '연습 시작하기',
+  'c.slow':
+    '결제를 아직 확인하는 중이에요. 1분 뒤에 새로 고치면 업데이트돼요. 이용권이 보이지 않으면 계정 페이지에서 문의해 주세요.',
+  'c.signedOut': '결제할 때 쓴 이메일로 로그인하면 이용권을 볼 수 있어요.',
+  'c.cancelTitle': '결제가 취소됐어요',
+  'c.cancelBody': '요금이 청구되지 않았어요. 준비되면 언제든지 이용권을 구매할 수 있어요.',
+
+  'st.title': '서비스 상태',
+  'st.api': '서비스',
+  'st.ok': '정상',
+  'st.down': '연결 안 됨',
+  'st.version': '버전 {v}',
+  'st.grading': '피드백',
+  'st.checkout': '구매',
+  'st.on': '켜짐',
+  'st.off': '일시 중지',
+  'st.notice': '공지',
+  'st.checked': '{time} 확인',
+}
+
+export const UI: Record<Lang, Record<UiKey, string>> = { en, ko }
+
+export type Vars = Record<string, string | number>
+
+/** Replace {name} placeholders; unknown placeholders are left as they are. */
+export function fill(template: string, vars: Vars = {}): string {
+  return template.replace(/\{(\w+)\}/g, (m, name: string) => (name in vars ? String(vars[name]) : m))
+}
+
+/** Translate a UI key. */
+export function t(lang: Lang, key: UiKey, vars?: Vars): string {
+  return fill(UI[lang][key], vars)
+}
+
+export function errorKindLabel(lang: Lang, kind: string): string {
+  const key = `kind.${kind}` as UiKey
+  return key in UI[lang] ? UI[lang][key] : kind.replace(/_/g, ' ')
+}
+
+/** Canadian-dollar price, e.g. "C$39" or "C$39.50". */
+export function formatCad(cents: number): string {
+  const whole = cents % 100 === 0
+  return `C$${(cents / 100).toFixed(whole ? 0 : 2)}`
+}
+
+/** Countdown clock, e.g. 27:00 or 0:05 (partial seconds round up). */
+export function formatClock(totalSeconds: number): string {
+  const s = Math.max(0, Math.ceil(totalSeconds))
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
+}
+
+/** Calendar date in the viewer's time zone, e.g. "Oct 24, 2026" / "2026. 10. 24.". */
+export function formatDate(iso: string, lang: Lang): string {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return iso
+  return new Intl.DateTimeFormat(lang === 'ko' ? 'ko-KR' : 'en-CA', { dateStyle: 'medium' }).format(d)
+}

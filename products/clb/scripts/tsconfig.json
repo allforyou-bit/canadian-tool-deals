@@ -1,0 +1,21 @@
+{
+  // Type-checks the ops scripts (run with Node via scripts/run.mjs) and their vitest tests.
+  // Run from products/clb: npx tsc -p scripts/tsconfig.json
+  // Worker types are included because the eval runner imports the grading module
+  // (worker/src/grading/claude.ts → worker/src/env.ts uses D1Database, KVNamespace, ...).
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "types": ["node", "@cloudflare/workers-types"],
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "include": ["./**/*.ts", "../shared/**/*.ts"]
+}

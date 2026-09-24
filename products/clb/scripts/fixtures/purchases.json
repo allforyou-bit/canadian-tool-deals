@@ -1,0 +1,14 @@
+[
+  {
+    "ref": "fixture-purchase-1",
+    "sku": "pass30",
+    "status": "paid",
+    "paidAt": "2026-10-26T15:02:11.000Z"
+  },
+  {
+    "ref": "fixture-purchase-2",
+    "sku": "pass90",
+    "status": "paid",
+    "paidAt": "2026-10-27T02:40:00.000Z"
+  }
+]

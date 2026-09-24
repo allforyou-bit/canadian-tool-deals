@@ -1,0 +1,22 @@
+{
+  "id": "evt_fixture_checkout_completed",
+  "object": "event",
+  "type": "checkout.session.completed",
+  "livemode": false,
+  "created": 1790000000,
+  "data": {
+    "object": {
+      "id": "cs_test_fixture",
+      "object": "checkout.session",
+      "mode": "payment",
+      "status": "complete",
+      "payment_status": "paid",
+      "payment_intent": "pi_fixture",
+      "client_reference_id": "u_fixture",
+      "metadata": { "user_id": "u_fixture", "sku": "pass30" },
+      "amount_total": 3900,
+      "currency": "cad",
+      "url": null
+    }
+  }
+}

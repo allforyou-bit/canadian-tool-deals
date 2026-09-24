@@ -1,0 +1,19 @@
+{
+  "id": "evt_fixture_dispute_created",
+  "object": "event",
+  "type": "charge.dispute.created",
+  "livemode": false,
+  "created": 1790000000,
+  "data": {
+    "object": {
+      "id": "dp_fixture",
+      "object": "dispute",
+      "amount": 3900,
+      "currency": "cad",
+      "charge": "ch_fixture",
+      "payment_intent": "pi_fixture",
+      "reason": "fraudulent",
+      "status": "needs_response"
+    }
+  }
+}

@@ -1,7 +1,7 @@
-// STUB — replaced by the owning build agent (see products/clb/CONTRACT.md).
-import type { Ctx } from '../env'
-import { error } from '../lib/http'
-
-export const checkout = (_req: Request, _ctx: Ctx): Promise<Response> => Promise.resolve(error('internal', 'not implemented'))
-export const webhook = (_req: Request, _ctx: Ctx): Promise<Response> => Promise.resolve(error('internal', 'not implemented'))
-export const refundRequest = (_req: Request, _ctx: Ctx): Promise<Response> => Promise.resolve(error('internal', 'not implemented'))
+// Billing handlers (memo B6), routed from worker/src/index.ts:
+//   POST /api/checkout        → checkout       (Stripe Checkout Session for a pass)
+//   POST /api/stripe/webhook  → webhook        (grant / region refund / revoke)
+//   POST /api/refund-request  → refundRequest  (self-serve refund, once per email and card)
+export { checkout } from './checkout'
+export { refundRequest } from './refund'
+export { webhook } from './webhook'

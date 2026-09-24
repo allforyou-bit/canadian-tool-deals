@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "day": "2026-10-27",
+  "source": "d1.metrics_daily",
+  "computedAt": "2026-10-28T05:00:01.870Z",
+  "metrics": {
+    "day": "2026-10-27",
+    "events": {
+      "checkout_start": 2,
+      "landing": 55,
+      "purchase": 1,
+      "sample_done": 7,
+      "sample_start": 9,
+      "signup": 3
+    },
+    "grades": {
+      "writing": 9,
+      "speaking": 6,
+      "free": 6,
+      "refused": 1
+    },
+    "costUsd": 0.3871,
+    "purchases": {
+      "paid": 1,
+      "grossCents": 7900
+    },
+    "refunds": {
+      "count": 0,
+      "cents": 0
+    },
+    "disputes": 0
+  }
+}
