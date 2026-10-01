@@ -5,17 +5,16 @@
     {
       "store": "Walmart Canada",
       "storeLogo": "walmart",
-      "lastUpdated": "2026-09-30T14:38:11.159Z",
-      "price": 0,
+      "price": 93.99,
       "inStock": true,
-      "url": "https://www.walmart.ca/search?q=DeWalt%2020V%20drill",
-      "name": "Search \"DeWalt 20V drill\" on Walmart Canada",
-      "checkManually": true
+      "url": "https://www.walmart.ca/en/ip/Cordless-Hammer-Drill-DEWALT-20V-MAX-XR-1-2-w-8AH-Batt/1816CDGTHKD5?classType=REGULAR",
+      "name": "Cordless Hammer Drill DEWALT 20V MAX XR 1/2'' w/ 8AH Batt",
+      "lastUpdated": "2026-10-01T15:06:31.194Z"
     },
     {
       "store": "Home Depot Canada",
       "storeLogo": "homedepot",
-      "lastUpdated": "2026-09-30T14:38:11.159Z",
+      "lastUpdated": "2026-10-01T15:06:44.606Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.homedepot.ca/search?q=DeWalt%2020V%20drill",
@@ -25,7 +24,7 @@
     {
       "store": "Amazon Canada",
       "storeLogo": "amazon",
-      "lastUpdated": "2026-09-30T14:38:11.159Z",
+      "lastUpdated": "2026-10-01T15:06:44.606Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.amazon.ca/s?k=DeWalt%2020V%20drill&i=tools&tag=canadiantool-20",
@@ -35,7 +34,7 @@
     {
       "store": "RONA",
       "storeLogo": "rona",
-      "lastUpdated": "2026-09-30T14:38:11.159Z",
+      "lastUpdated": "2026-10-01T15:06:44.606Z",
       "price": 0,
       "inStock": true,
       "url": "https://www.rona.ca/en/search?q=DeWalt%2020V%20drill",
@@ -45,7 +44,7 @@
     {
       "store": "Canadian Tire",
       "storeLogo": "canadiantire",
-      "lastUpdated": "2026-09-30T14:38:11.159Z",
+      "lastUpdated": "2026-10-01T15:06:44.606Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.canadiantire.ca/en/search-results.html?q=DeWalt%2020V%20drill",
@@ -55,7 +54,7 @@
     {
       "store": "Princess Auto",
       "storeLogo": "princessauto",
-      "lastUpdated": "2026-09-30T14:38:11.159Z",
+      "lastUpdated": "2026-10-01T15:06:44.606Z",
       "price": 0,
       "inStock": false,
       "url": "https://www.princessauto.com/en/search#q=DeWalt%2020V%20drill",
@@ -63,5 +62,5 @@
       "notCarried": true
     }
   ],
-  "fetchedAt": "2026-09-30T14:38:11.159Z"
+  "fetchedAt": "2026-10-01T15:06:44.606Z"
 }

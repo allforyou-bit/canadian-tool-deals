@@ -7,7 +7,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:36:33.897Z"
+    "fetchedAt": "2026-10-01T15:05:07.389Z"
   },
   {
     "query": "Milwaukee M18 circular saw",
@@ -17,7 +17,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:36:50.152Z"
+    "fetchedAt": "2026-10-01T15:05:23.593Z"
   },
   {
     "query": "Milwaukee M12",
@@ -27,7 +27,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:37:06.353Z"
+    "fetchedAt": "2026-10-01T15:05:39.795Z"
   },
   {
     "query": "Milwaukee M18 impact driver",
@@ -37,7 +37,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:37:22.555Z"
+    "fetchedAt": "2026-10-01T15:05:55.998Z"
   },
   {
     "query": "Milwaukee Packout",
@@ -47,7 +47,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:37:38.756Z"
+    "fetchedAt": "2026-10-01T15:06:12.202Z"
   },
   {
     "query": "Milwaukee M18 grinder",
@@ -57,57 +57,57 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:37:54.959Z"
+    "fetchedAt": "2026-10-01T15:06:28.405Z"
   },
   {
     "query": "DeWalt 20V drill",
     "slug": "dewalt-20v-drill",
     "brand": "dewalt",
-    "lowestPrice": null,
-    "lowestStore": null,
+    "lowestPrice": 93.99,
+    "lowestStore": "Walmart Canada",
     "discount": null,
-    "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:38:11.159Z"
+    "priceCount": 1,
+    "fetchedAt": "2026-10-01T15:06:44.606Z"
   },
   {
     "query": "DeWalt circular saw",
     "slug": "dewalt-circular-saw",
     "brand": "dewalt",
-    "lowestPrice": null,
-    "lowestStore": null,
+    "lowestPrice": 398,
+    "lowestStore": "Walmart Canada",
     "discount": null,
-    "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:38:27.361Z"
+    "priceCount": 1,
+    "fetchedAt": "2026-10-01T15:07:00.809Z"
   },
   {
     "query": "DeWalt table saw",
     "slug": "dewalt-table-saw",
     "brand": "dewalt",
-    "lowestPrice": null,
-    "lowestStore": null,
+    "lowestPrice": 455.99,
+    "lowestStore": "Walmart Canada",
     "discount": null,
-    "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:38:43.562Z"
+    "priceCount": 1,
+    "fetchedAt": "2026-10-01T15:07:17.010Z"
   },
   {
     "query": "DeWalt impact driver",
     "slug": "dewalt-impact-driver",
     "brand": "dewalt",
-    "lowestPrice": null,
-    "lowestStore": null,
+    "lowestPrice": 198,
+    "lowestStore": "Walmart Canada",
     "discount": null,
-    "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:38:59.764Z"
+    "priceCount": 1,
+    "fetchedAt": "2026-10-01T15:07:33.212Z"
   },
   {
     "query": "DeWalt jigsaw",
     "slug": "dewalt-jigsaw",
     "brand": "dewalt",
-    "lowestPrice": null,
-    "lowestStore": null,
+    "lowestPrice": 249,
+    "lowestStore": "Walmart Canada",
     "discount": null,
-    "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:39:15.967Z"
+    "priceCount": 1,
+    "fetchedAt": "2026-10-01T15:07:49.414Z"
   },
   {
     "query": "Makita 18V drill",
@@ -117,7 +117,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:39:32.168Z"
+    "fetchedAt": "2026-10-01T15:08:05.615Z"
   },
   {
     "query": "Makita impact driver",
@@ -127,7 +127,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:39:48.371Z"
+    "fetchedAt": "2026-10-01T15:08:21.818Z"
   },
   {
     "query": "Makita circular saw",
@@ -137,7 +137,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:40:04.573Z"
+    "fetchedAt": "2026-10-01T15:08:38.020Z"
   },
   {
     "query": "Mastercraft drill",
@@ -147,7 +147,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:40:06.241Z"
+    "fetchedAt": "2026-10-01T15:08:39.336Z"
   },
   {
     "query": "Mastercraft socket set",
@@ -157,7 +157,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:40:07.706Z"
+    "fetchedAt": "2026-10-01T15:08:40.673Z"
   },
   {
     "query": "Mastercraft wrench set",
@@ -167,7 +167,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:40:09.170Z"
+    "fetchedAt": "2026-10-01T15:08:41.975Z"
   },
   {
     "query": "Maximum drill",
@@ -177,7 +177,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:40:10.833Z"
+    "fetchedAt": "2026-10-01T15:08:43.238Z"
   },
   {
     "query": "Maximum circular saw",
@@ -187,7 +187,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:40:12.536Z"
+    "fetchedAt": "2026-10-01T15:08:44.560Z"
   },
   {
     "query": "Ryobi 18V drill",
@@ -197,7 +197,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:40:28.739Z"
+    "fetchedAt": "2026-10-01T15:09:00.764Z"
   },
   {
     "query": "Ryobi circular saw",
@@ -207,7 +207,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:40:44.941Z"
+    "fetchedAt": "2026-10-01T15:09:16.966Z"
   },
   {
     "query": "Husky wrench set",
@@ -217,7 +217,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:41:01.141Z"
+    "fetchedAt": "2026-10-01T15:09:33.167Z"
   },
   {
     "query": "Husky socket set",
@@ -227,7 +227,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:41:17.341Z"
+    "fetchedAt": "2026-10-01T15:09:49.368Z"
   },
   {
     "query": "Husky tool set",
@@ -237,47 +237,47 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:41:33.542Z"
+    "fetchedAt": "2026-10-01T15:10:05.571Z"
   },
   {
     "query": "Stanley screwdriver set",
     "slug": "stanley-screwdriver-set",
     "brand": "stanley",
-    "lowestPrice": null,
-    "lowestStore": null,
+    "lowestPrice": 19.98,
+    "lowestStore": "Walmart Canada",
     "discount": null,
-    "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:41:35.203Z"
+    "priceCount": 1,
+    "fetchedAt": "2026-10-01T15:10:09.010Z"
   },
   {
     "query": "Stanley hand tools",
     "slug": "stanley-hand-tools",
     "brand": "stanley",
-    "lowestPrice": null,
-    "lowestStore": null,
+    "lowestPrice": 29.99,
+    "lowestStore": "Walmart Canada",
     "discount": null,
-    "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:41:36.920Z"
+    "priceCount": 1,
+    "fetchedAt": "2026-10-01T15:10:12.056Z"
   },
   {
     "query": "Craftsman socket set",
     "slug": "craftsman-socket-set",
     "brand": "craftsman",
-    "lowestPrice": null,
-    "lowestStore": null,
+    "lowestPrice": 29.99,
+    "lowestStore": "Walmart Canada",
     "discount": null,
-    "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:41:38.465Z"
+    "priceCount": 1,
+    "fetchedAt": "2026-10-01T15:10:15.039Z"
   },
   {
     "query": "Craftsman wrench",
     "slug": "craftsman-wrench",
     "brand": "craftsman",
-    "lowestPrice": null,
-    "lowestStore": null,
+    "lowestPrice": 58.99,
+    "lowestStore": "Walmart Canada",
     "discount": null,
-    "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:41:39.991Z"
+    "priceCount": 1,
+    "fetchedAt": "2026-10-01T15:10:18.088Z"
   },
   {
     "query": "GearWrench ratchet",
@@ -287,7 +287,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:41:41.812Z"
+    "fetchedAt": "2026-10-01T15:10:19.877Z"
   },
   {
     "query": "GearWrench socket set",
@@ -297,7 +297,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:41:43.349Z"
+    "fetchedAt": "2026-10-01T15:10:21.243Z"
   },
   {
     "query": "Bosch drill",
@@ -307,7 +307,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:41:59.550Z"
+    "fetchedAt": "2026-10-01T15:10:37.445Z"
   },
   {
     "query": "Bosch laser level",
@@ -317,7 +317,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:42:15.753Z"
+    "fetchedAt": "2026-10-01T15:10:53.647Z"
   },
   {
     "query": "Powerfist air compressor",
@@ -327,7 +327,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:42:17.535Z"
+    "fetchedAt": "2026-10-01T15:10:55.032Z"
   },
   {
     "query": "Powerfist socket set",
@@ -337,7 +337,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:42:19.073Z"
+    "fetchedAt": "2026-10-01T15:10:56.329Z"
   },
   {
     "query": "Lincoln grease gun",
@@ -347,7 +347,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:42:20.991Z"
+    "fetchedAt": "2026-10-01T15:10:57.638Z"
   },
   {
     "query": "Lincoln electric welder",
@@ -357,7 +357,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:42:22.962Z"
+    "fetchedAt": "2026-10-01T15:10:58.931Z"
   },
   {
     "query": "Fluke multimeter",
@@ -367,7 +367,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:42:24.948Z"
+    "fetchedAt": "2026-10-01T15:11:00.148Z"
   },
   {
     "query": "Jobmate drill",
@@ -377,7 +377,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:42:26.501Z"
+    "fetchedAt": "2026-10-01T15:11:01.458Z"
   },
   {
     "query": "Jobmate socket set",
@@ -387,7 +387,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:42:27.974Z"
+    "fetchedAt": "2026-10-01T15:11:02.724Z"
   },
   {
     "query": "Hart drill",
@@ -397,7 +397,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:42:29.500Z"
+    "fetchedAt": "2026-10-01T15:11:05.316Z"
   },
   {
     "query": "Hart impact driver",
@@ -407,7 +407,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:42:30.883Z"
+    "fetchedAt": "2026-10-01T15:11:07.914Z"
   },
   {
     "query": "Greenworks lawn mower",
@@ -417,7 +417,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:42:47.086Z"
+    "fetchedAt": "2026-10-01T15:11:24.114Z"
   },
   {
     "query": "Greenworks 40V",
@@ -427,7 +427,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:43:03.288Z"
+    "fetchedAt": "2026-10-01T15:11:40.316Z"
   },
   {
     "query": "Dremel rotary tool",
@@ -437,7 +437,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:43:19.489Z"
+    "fetchedAt": "2026-10-01T15:11:56.518Z"
   },
   {
     "query": "Dremel kit",
@@ -447,7 +447,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:43:35.691Z"
+    "fetchedAt": "2026-10-01T15:12:12.719Z"
   },
   {
     "query": "Leatherman multi-tool",
@@ -457,27 +457,27 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:43:37.675Z"
+    "fetchedAt": "2026-10-01T15:12:14.153Z"
   },
   {
     "query": "Worx drill",
     "slug": "worx-drill",
     "brand": "worx",
-    "lowestPrice": null,
-    "lowestStore": null,
+    "lowestPrice": 219.99,
+    "lowestStore": "Walmart Canada",
     "discount": null,
-    "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:43:39.618Z"
+    "priceCount": 1,
+    "fetchedAt": "2026-10-01T15:12:16.845Z"
   },
   {
     "query": "Worx circular saw",
     "slug": "worx-circular-saw",
     "brand": "worx",
-    "lowestPrice": null,
-    "lowestStore": null,
+    "lowestPrice": 186.99,
+    "lowestStore": "Walmart Canada",
     "discount": null,
-    "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:43:41.717Z"
+    "priceCount": 1,
+    "fetchedAt": "2026-10-01T15:12:19.565Z"
   },
   {
     "query": "RIDGID shop vac",
@@ -487,7 +487,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:43:57.919Z"
+    "fetchedAt": "2026-10-01T15:12:35.767Z"
   },
   {
     "query": "RIDGID wet dry vac",
@@ -497,7 +497,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:44:14.122Z"
+    "fetchedAt": "2026-10-01T15:12:51.969Z"
   },
   {
     "query": "EGO lawn mower",
@@ -507,7 +507,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:44:30.322Z"
+    "fetchedAt": "2026-10-01T15:13:08.171Z"
   },
   {
     "query": "EGO 56V",
@@ -517,7 +517,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:44:46.525Z"
+    "fetchedAt": "2026-10-01T15:13:24.373Z"
   },
   {
     "query": "Klein screwdriver set",
@@ -527,7 +527,7 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:45:02.727Z"
+    "fetchedAt": "2026-10-01T15:13:40.575Z"
   },
   {
     "query": "Klein pliers",
@@ -537,6 +537,6 @@
     "lowestStore": null,
     "discount": null,
     "priceCount": 0,
-    "fetchedAt": "2026-09-30T14:45:18.929Z"
+    "fetchedAt": "2026-10-01T15:13:56.776Z"
   }
 ]
