@@ -23,7 +23,7 @@ report.
 - `ops/metrics/<YYYY-MM-DD>.json` for 2026-09-28 to 2026-11-30
 - `ops/config/anthropic-limit.json`, `ops/books/expenses.json` (if present), `ops/owner/hours.json` (if present)
 - `ops/reports/kpi/*.md` (the weekly verdicts so far)
-- `business/online/decision-memo.md` §1.1, §2.2, §6 and §7.2
+- `business/online/decision-memo.md` §1.1, §2.2, §6, §7.2 and §7.3 (online only: never propose in-person or phone work)
 - Definitions and constants: `ops/routines/kpi.md` (use them exactly; do not invent new ones)
 
 Never query live services or read user text.

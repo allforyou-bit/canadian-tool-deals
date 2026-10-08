@@ -21,7 +21,7 @@ removed with them and are not evaluated.
 | `ops/owner/hours.json` (optional: `[{"week": "2026-W44", "hours": 2.5, "supportHours": 0.5}]` plus an optional `{"setupHours": 9.5}` entry) | K2 (`hours`, `setupHours`) and K11 (`supportHours`) |
 | GitHub issues titled `Platform: …` (open and closed) | K9 |
 | The digest issues `KPI digest <week>` and their comments by the repository owner | the owner's yes/no answers, last week's hours, and which drafts of `business/online/launch-kit-ko.md` were posted (for example "10/27 네이버 카페에 글 A 올림") |
-| `business/online/decision-memo.md` §6 and §7.2 | the rules, for wording |
+| `business/online/decision-memo.md` §6, §7.2 and §7.3 | the rules, for wording (§7.3: the owner does no in-person or phone work) |
 
 Never query D1, Stripe, Cloudflare or Anthropic; never read user text.
 
@@ -71,7 +71,7 @@ counts, not per-person conversions: events are not linked to people. Say so when
 
 | Rule | Evaluate | FIRED when | Action to propose |
 |---|---|---|---|
-| K1 schedule | from 2026-11-02 (PENDING before) | no daily file dated ≤ 2026-11-01 has `events.checkout_start ≥ 1` or `purchases.paid ≥ 1` | stop and return to the home-services plan |
+| K1 schedule | from 2026-11-02 (PENDING before) | no daily file dated ≤ 2026-11-01 has `events.checkout_start ≥ 1` or `purchases.paid ≥ 1` | stop this product (the home-services plan is paused since 2026-10-08, memo §7.3; propose no in-person work) |
 | K2 owner hours | every week | `ops/owner/hours.json` shows `hours` > 3 in any two weeks, or `setupHours` > 12 (NEEDS-OWNER if the file is missing) | cut to the core: propose which optional owner work to drop (community posts, outreach, new features); the automatic parts and support stay |
 | K5 samples by Nov 15 | first run on or after 2026-11-15 (PENDING before; report progress) | all-time `samples` up to and including 2026-11-15 < **10** | review channels: list which drafts in `business/online/launch-kit-ko.md` the owner has not posted yet (from the owner's comments on the digest issues) and propose at most two other free channels from it. No ads, no automated posting |
 | K6 November | first run on or after 2026-12-01 (PENDING before) | November `net` < C$500 **and** `net` of Nov 24–30 ≤ `net` of Nov 17–23 | maintenance mode: no new features and **no second product**; credits are bought only to serve paying customers |

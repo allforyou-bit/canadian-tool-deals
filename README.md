@@ -1,5 +1,7 @@
 # 우리동네 홈케어 (Neighbourhood Home Care) — 1인 홈서비스 사업 키트
 
+> **보류 (2026-10-08, 오너 지시):** 오너는 사람을 직접 만나는 일을 하지 않기로 했어요. 이 홈서비스 계획은 멈췄고, 파일은 참고용으로만 남겨요. 지금 진행 중인 온라인 사업은 [`business/online/`](business/online/)과 [`products/clb/`](products/clb/)이고, 오너 안내서는 [`business/online/owner-setup.md`](business/online/owner-setup.md)예요.
+
 2026-09-23 기준. "다음 주부터 일이 없고, 한 달 안에 수입이 필요하며, 목표는 월 평균 CAD 5,000"이라는 가정에서 시작해
 13개 사업 모델을 조사·검증·비교한 뒤 고른 사업과, 그 사업을 바로 시작할 수 있는 웹사이트·영업 도구·운영 문서입니다.
 

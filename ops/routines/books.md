@@ -41,7 +41,7 @@ add other rows by hand.
 | `category` | What | Counted as |
 |---|---|---|
 | `anthropic-credits` | a prepaid Anthropic credit purchase (the eval, staging and production spend all come out of these credits) | cash paid in advance for API use; the use itself is the metrics' `costUsd`, so it is **not** deducted a second time |
-| any other value, for example `paid-plan`, `registration`, `other` | a paid plan bought for this product (Workers Paid, a domain, a Claude plan used only for the Routines), a business-name registration fee if ServiceOntario says one is needed [unverified], or another cost | an expense in the month and week it is dated |
+| any other value, for example `paid-plan`, `registration`, `other` | a paid plan bought for this product (Workers Paid, a domain, a Claude plan used only for the Routines), a business-name registration fee if the owner registers the name online (owner-setup 9-9; C$60 for 5 years), or another cost | an expense in the month and week it is dated |
 
 A Claude subscription the owner already pays for their own use is not a product cost: leave it out.
 There are no ads (memo §7.2), so there is no ad spend.

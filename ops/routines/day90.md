@@ -13,7 +13,7 @@ run summary "too early".
 - `ops/metrics/<YYYY-MM-DD>.json` (all days)
 - `ops/config/anthropic-limit.json`, `ops/books/*.md` and `ops/books/expenses.json` (if present),
   `ops/owner/hours.json` (if present), `ops/reports/kpi/*.md`, `ops/reports/nov30.md`
-- `business/online/decision-memo.md` §0, §6 and §7.2
+- `business/online/decision-memo.md` §0, §6, §7.2 and §7.3 (online only: never propose in-person or phone work)
 - Definitions and constants: `ops/routines/kpi.md` (use them exactly)
 
 Never query live services or read user text.

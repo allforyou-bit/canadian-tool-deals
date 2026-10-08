@@ -7,7 +7,8 @@
 //   - the workflow names and inputs the owner is told to click exist;
 //   - no ads (memo §7.2 Z1), no terminal commands for the owner (the one-time Cloudflare setup is a workflow);
 //   - the sections other files point to (Gate B, 위험 수용, privacy requests, breach log, end_pass, Stripe
-//     customer emails off, ServiceOntario) exist, and old section numbers cited elsewhere are mapped.
+//     customer emails off, ServiceOntario online step) exist, and old section numbers cited elsewhere are mapped;
+//   - online only (memo §7.3): no step asks the owner to phone or meet anyone, except the EI-only Service Canada contact.
 import { describe, expect, it } from 'vitest'
 import anthropicLimitText from '../../../ops/config/anthropic-limit.json?raw'
 import dailyRoutine from '../../../ops/routines/daily.md?raw'
@@ -429,7 +430,7 @@ describe('owner-setup.md: sections other files and the memo point to', () => {
     expect(s).toMatch(/Link.*후불 결제/)
   })
 
-  it('has the ServiceOntario call (business name) and the PIPEDA address question marked unverified', () => {
+  it('has the online business-name step (ServiceOntario, no call) and the PIPEDA address question marked unverified', () => {
     expect(section(/ServiceOntario/)).toMatch(/Business Names Act/)
     expect(section(/책임자 주소/)).toMatch(/\[미확인\]/)
   })
@@ -465,5 +466,21 @@ describe('owner-setup.md: renders on GitHub', () => {
       }
     }
     expect(bad).toEqual([])
+  })
+})
+
+describe('owner-setup.md: online only (memo §7.3, owner instruction 2026-10-08)', () => {
+  it('never tells the owner to phone or meet anyone; every such mention is a "no call" note or the EI-only exception', () => {
+    const bad = guide
+      .split('\n')
+      .filter((l) => /전화|통화|만나|방문해/.test(l))
+      .filter((l) => !/없|않|말고|EI|예외|Service Canada/.test(l))
+    expect(bad).toEqual([])
+  })
+
+  it('states the rule near the top and keeps the home-services plan out of the owner path', () => {
+    expect(section(/만나지 않고, 전화하지 않아요/)).toMatch(/컴퓨터·온라인·이메일/)
+    expect(section(/9-9\./)).toMatch(/전화 없음/)
+    expect(section(/9-9\./)).toMatch(/C\$60/)
   })
 })

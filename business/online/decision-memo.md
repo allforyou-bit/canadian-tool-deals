@@ -15,6 +15,9 @@
 
 > **Revised 2026-09-24:** the owner chose a zero-capital launch (no ads, no extra capital). Section 7.2 replaces the ad
 > plan, the cost lines and kill rules K3/K4/K10/K11 below where they conflict.
+>
+> **Revised 2026-10-08:** the owner does no in-person or phone work. Section 7.3 replaces every part of this memo that
+> conflicts with it; the home-services plan is paused and is no longer the income floor or the fallback.
 
 1. **Build one product only if the gates pass.** The product is a web tool that gives feedback on writing and speaking practice. It is for adults in Canada preparing for an English test for immigration or citizenship.
    - Tasks follow the *formats* of Canadian test tasks. Feedback covers descriptive criteria. The product is **not calibrated against official scores** and **never predicts a score or level**.
@@ -507,7 +510,7 @@ Architecture (cross_operator): the Worker runs time-critical jobs, GitHub Action
   - Static export cannot use request-dependent Route Handlers, cookies, Proxy or Server Actions (local docs, `01-app/02-guides/static-exports.md`).
   - Cloudflare's integration is "not a verified adapter" (`01-app/01-getting-started/17-deploying.md`).
   - Static asset requests on Workers are free and unlimited (official, cross_operator).
-- **The home-services site stays reachable (not archived).** The root app and `out/` are untouched, along with whatever deployment it already has. It is the owner's fallback plan.
+- **The home-services site stays reachable (not archived).** The root app and `out/` are untouched, along with whatever deployment it already has. It was the owner's fallback plan; since 2026-10-08 it is paused (§7.3), and whether the site stays online is the owner's call.
 - There is no `.github/workflows` today, so CI for the root site is new work (B11).
 
 **Acceptance levels:** A = checked in this session (mocked services). B = checked in Actions after the owner adds secrets.
@@ -629,6 +632,48 @@ Minus the one-time Anthropic credit purchase (≈ C$7–14). Dropping ads **impr
 roughly 25,000 visits a month at base conversion; nothing in the research shows a path to that by January. The chance
 of averaging C$5,000/month stays **well below 1%** (judgement). What improves is the downside: cash at risk falls from
 about C$1,500 to about C$15–100.
+
+### 7.3 Online-only constraint (owner, 2026-10-08)
+
+The owner asked that no task on their list require meeting people in person or phoning them. Computer, online and
+email work is fine. This replaces the parts of §0, §1.3, §4.1, §6, §7 (including the fallback line in §7.1), §7.2 and §8 that conflict with it. Sources: research
+notes of 2026-10-08. The official pages (ontario.ca, canada.ca, ircc.canada.ca, priv.gc.ca) were read through search
+excerpts only, because this session could not open them; each should be opened once before it is relied on.
+
+- **No in-person or phone work for the owner.** Claude drafts every email (inquiries, support replies); the owner reads
+  and sends it. Claude still sends nothing to learners (§7.2, no learner email).
+- **Exceptions:** (1) Service Canada contact, only if the owner receives EI; (2) the Red Seal exam itself.
+- **Gate 0 becomes a document check the owner does alone** (owner-setup 3-1). Employer-specific permit: "will only
+  allow you to work for the employer on the permit" (IRCC Help Centre) → stop. Open permit: "lets you work for any
+  employer"; no canada.ca sentence found that explicitly allows self-employment [미확인]; read the permit's conditions.
+  Permanent residents can live, work or study anywhere in Canada (canada.ca).
+- **EI.** The canada.ca reporting duties apply "while receiving" EI benefits. An employed owner who is not on EI skips
+  the EI steps; this is a reading of those pages, not a sentence found on canada.ca. If on EI: declare the activity on
+  the application and on every bi-weekly report, which can be filed online (Internet Reporting Service, which takes
+  self-employment hours and earnings). The Service Canada "minor in extent" call (§1.3 Gate 0 item 3, §4.1 task 9, §6
+  W2) is no longer a default task: no written channel was found (the eServiceCanada form leads to a phone callback
+  within 2 business days, or a Service Canada Centre appointment). Without a ruling, decision-memo.md §5.4 applies
+  (declare every period's net). "No Stripe before the call" becomes "no Stripe before the activity is declared to EI"
+  (EI only).
+- **Business name** (§4.1 task 10; §7.2 "Seller identity"). The ServiceOntario call is replaced by an online decision
+  (owner-setup 9-9). Business Names Act s.2(2): "No individual shall carry on business or identify his or her business
+  to the public under a name other than his or her own name unless the name is registered by that individual." No
+  product-name or brand-name exception was found, so whether "sold by <legal name>" is enough stays [미확인]; Ministry
+  information "is not legal advice", so a call would not settle it. Options: register online (C$60, valid 5 years,
+  renewal C$60; the name and an address go on the public record), or identify the business by the full legal name
+  only (a product change). A breach "without reasonable cause" risks a fine of up to C$2,000 (s.10), and court
+  proceedings about the business need leave (s.7(1)). With registration, required cash is about C$73.70 (ESTIMATE),
+  still under K10.
+- **PIPEDA address** (owner-setup 9-10). The P.O. Box option is dropped: renting one needs a post-office visit
+  [미확인]. Questions can go to the OPC's online form.
+- **Home-services plan paused** (`business/README.md`, 2026-10-08): it is in-person work. It is no longer the owner's
+  income floor (§0 item 3) or the fallback after K1, and "home services wins" no longer applies. Whether its site is
+  still deployed, and whether to take it down, is [미확인] and the owner's call.
+- **Hours rule** (§1.3). Home-services hours are now zero. The online product's target of ≤3 h/week after setup stays;
+  on EI the ≤15 h/week threshold (ESTIMATE, not a legal test) now applies to the product alone. The owner's job and
+  Red Seal study win every conflict (judgement).
+- **Red Seal.** The owner appears to be employed and wants a Red Seal to raise their hourly wage. That is the owner's
+  own career track, outside this product's plan, budget and kill rules. Claude may build study tooling for it online.
 
 ## 8. Risks, mitigations and unknowns
 
